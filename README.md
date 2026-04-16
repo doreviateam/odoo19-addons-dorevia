@@ -1,5 +1,7 @@
 # odoo19-addons-dorevia
 
+**Dépôt GitHub** : [doreviateam/odoo19-addons-dorevia](https://github.com/doreviateam/odoo19-addons-dorevia)
+
 ## Objet
 
 Ce répertoire contient les modules Odoo Dorevia retenus pour la **source Odoo 19 locale de démonstration** utilisée dans la chaîne :
