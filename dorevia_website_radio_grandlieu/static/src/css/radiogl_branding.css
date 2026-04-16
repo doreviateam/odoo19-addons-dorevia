@@ -1,0 +1,16 @@
+/* Accent proche violet / indigo (démo, sans écraser tout le thème Odoo) */
+.radiogl-site .btn-primary {
+    --bs-btn-bg: #5b3c9d;
+    --bs-btn-border-color: #4a3182;
+    --bs-btn-hover-bg: #432d7a;
+    --bs-btn-hover-border-color: #3a2769;
+}
+
+.radiogl-site .display-4 {
+    letter-spacing: -0.02em;
+}
+
+.radiogl-site h2,
+.radiogl-site .h3 {
+    color: #2d1b4e;
+}

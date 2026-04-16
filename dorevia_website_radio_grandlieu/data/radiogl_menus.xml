@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="website.menu_home" model="website.menu">
+        <field name="name">Accueil</field>
+    </record>
+    <record id="website.menu_contactus" model="website.menu">
+        <field name="name">Contact</field>
+    </record>
+
+    <record id="menu_qui_sommes_root" model="website.menu">
+        <field name="name">Qui sommes-nous ?</field>
+        <field name="url">#</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">20</field>
+    </record>
+    <record id="menu_qui_sommes_page" model="website.menu">
+        <field name="name">Présentation</field>
+        <field name="page_id" ref="page_qui_sommes"/>
+        <field name="parent_id" ref="menu_qui_sommes_root"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">21</field>
+    </record>
+    <record id="menu_partenaires" model="website.menu">
+        <field name="name">Partenaires</field>
+        <field name="page_id" ref="page_partenaires"/>
+        <field name="parent_id" ref="menu_qui_sommes_root"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">22</field>
+    </record>
+
+    <record id="menu_radio_root" model="website.menu">
+        <field name="name">RADIO</field>
+        <field name="url">#</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">30</field>
+    </record>
+    <record id="menu_radio_direct" model="website.menu">
+        <field name="name">Écouter le Direct</field>
+        <field name="url">https://radiograndlieu.fr/</field>
+        <field name="new_window" eval="True"/>
+        <field name="parent_id" ref="menu_radio_root"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">31</field>
+    </record>
+    <record id="menu_radio_events" model="website.menu">
+        <field name="name">Événements publics</field>
+        <field name="page_id" ref="page_evenements"/>
+        <field name="parent_id" ref="menu_radio_root"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">32</field>
+    </record>
+    <record id="menu_radio_grille" model="website.menu">
+        <field name="name">Grille des programmes</field>
+        <field name="url">https://radiograndlieu.fr/grille-des-programmes/</field>
+        <field name="new_window" eval="True"/>
+        <field name="parent_id" ref="menu_radio_root"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">33</field>
+    </record>
+    <record id="menu_radio_app" model="website.menu">
+        <field name="name">Application mobile</field>
+        <field name="url">https://radiograndlieu.fr/</field>
+        <field name="new_window" eval="True"/>
+        <field name="parent_id" ref="menu_radio_root"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">34</field>
+    </record>
+
+    <record id="menu_podcasts" model="website.menu">
+        <field name="name">Podcasts</field>
+        <field name="page_id" ref="page_podcasts"/>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">40</field>
+    </record>
+
+    <record id="menu_prestations_root" model="website.menu">
+        <field name="name">Prestations</field>
+        <field name="url">#</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">45</field>
+    </record>
+    <record id="menu_presta_col" model="website.menu">
+        <field name="name">Collectivités</field>
+        <field name="page_id" ref="page_presta_col"/>
+        <field name="parent_id" ref="menu_prestations_root"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">46</field>
+    </record>
+    <record id="menu_presta_pro" model="website.menu">
+        <field name="name">Professionnels</field>
+        <field name="page_id" ref="page_presta_pro"/>
+        <field name="parent_id" ref="menu_prestations_root"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">47</field>
+    </record>
+</odoo>

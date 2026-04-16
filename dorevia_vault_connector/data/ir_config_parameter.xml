@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="icp_dorevia_vault_connector_enabled" model="ir.config_parameter">
+            <field name="key">dorevia_vault_connector.enabled</field>
+            <field name="value">False</field>
+        </record>
+        <record id="icp_dorevia_vault_connector_target_url" model="ir.config_parameter">
+            <field name="key">dorevia_vault_connector.target_url</field>
+            <field name="value"/>
+        </record>
+        <record id="icp_dorevia_vault_connector_token" model="ir.config_parameter">
+            <field name="key">dorevia_vault_connector.token</field>
+            <field name="value"/>
+        </record>
+        <record id="icp_dorevia_vault_connector_timeout_seconds" model="ir.config_parameter">
+            <field name="key">dorevia_vault_connector.timeout_seconds</field>
+            <field name="value">10</field>
+        </record>
+        <record id="icp_dorevia_vault_connector_tenant" model="ir.config_parameter">
+            <field name="key">dorevia_vault_connector.tenant</field>
+            <field name="value">default</field>
+        </record>
+    </data>
+</odoo>

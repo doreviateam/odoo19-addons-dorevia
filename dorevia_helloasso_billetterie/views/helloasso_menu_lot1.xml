@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action adhésions : liste métier dédiée (vue helloasso_partner_membership_views.xml) -->
+    <record id="action_helloasso_partner_adherents" model="ir.actions.act_window">
+        <field name="name">Adhésion</field>
+        <field name="res_model">res.partner</field>
+        <field name="search_view_id" ref="dorevia_helloasso_billetterie.view_res_partner_filter_helloasso_memberships"/>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="mobile_view_mode">kanban</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('dorevia_helloasso_billetterie.view_res_partner_kanban_helloasso_memberships')}),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('dorevia_helloasso_billetterie.view_res_partner_tree_helloasso_memberships')}),
+            ]"
+        />
+        <field name="domain" eval="[('helloasso_external_id', '!=', False), ('helloasso_form_type', '=', 'Membership')]"/>
+        <!-- Annule active_* injecté par les boutons type=action depuis Aide (transient) : sinon chargement instable / repli app défaut. -->
+        <field name="context" eval="{'active_id': False, 'active_ids': False, 'active_model': False}"/>
+        <field name="path">helloasso-adhesion</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune adhésion HelloAsso synchronisée pour l’instant.
+            </p>
+            <p>
+                Pour <strong>tenir la liste à jour</strong> avec HelloAsso : <strong>Paramètres généraux</strong> (bloc HelloAsso adhérent) → <strong>Synchroniser les adhérents</strong>, ou le <strong>planificateur</strong> si vous l’avez activé.
+            </p>
+        </field>
+    </record>
+
+    <!-- Vue legacy admin : conservée pour compatibilité, non exposée comme entrée principale -->
+    <record id="view_dorevia_helloasso_landing_form" model="ir.ui.view">
+        <field name="name">dorevia.helloasso.landing.form.legacy</field>
+        <field name="model">dorevia.helloasso.landing</field>
+        <field name="arch" type="xml">
+            <form string="Synthèse connecteur HelloAsso (legacy admin)" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>HelloAsso (legacy admin)</h1>
+                        <p class="text-muted">
+                            Vue conservée pour compatibilité. Utiliser la landing HelloAsso du menu pour le suivi par société active.
+                        </p>
+                    </div>
+                    <group string="Configuration (Paramètres)">
+                        <field name="env_label"/>
+                        <field name="org_slug"/>
+                        <field name="api_ready"/>
+                    </group>
+                    <group string="Synthèse des flux synchronisés">
+                        <field name="count_adherents"/>
+                        <field name="count_billetterie_orders"/>
+                        <field name="last_adherent_sync_at"/>
+                        <field name="last_billetterie_sync_at"/>
+                    </group>
+                    <group string="Raccourcis">
+                        <div colspan="2">
+                            <button
+                                name="action_helloasso_open_adhesion"
+                                type="object"
+                                string="Adhésion"
+                                class="btn-primary"
+                            />
+                            <button
+                                name="action_helloasso_open_billetteries"
+                                type="object"
+                                string="Billetteries"
+                                class="btn-secondary"
+                            />
+                            <button
+                                name="action_helloasso_open_commandes"
+                                type="object"
+                                string="Commandes"
+                                class="btn-secondary"
+                            />
+                        </div>
+                    </group>
+                    <group string="Information">
+                        <field name="help_text" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dorevia_helloasso_landing" model="ir.actions.act_window">
+        <field name="name">Synthèse connecteur (legacy admin)</field>
+        <field name="res_model">dorevia.helloasso.landing</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Accueil applicatif HelloAsso (landing) : synthèse + actions + aide courte -->
+    <record id="view_dorevia_helloasso_form_guide_form" model="ir.ui.view">
+        <field name="name">dorevia.helloasso.form.guide.form</field>
+        <field name="model">dorevia.helloasso.form.guide</field>
+        <field name="arch" type="xml">
+            <form string="HelloAsso" edit="false" create="false" delete="false" duplicate="false">
+                <sheet class="pb-5">
+                    <div class="oe_title mb-4">
+                        <h1 class="mb-2">HelloAsso</h1>
+                        <p class="lead text-muted mb-0">
+                            Suivi HelloAsso pour la société active dans Odoo :
+                            contacts adhérents, événements, commandes et paiements.
+                        </p>
+                        <div class="mt-3">
+                            <div class="small text-muted mb-1">
+                                <strong>Société active :</strong>
+                                <field name="company_label" readonly="1" class="oe_inline"/>
+                            </div>
+                            <div class="small text-muted">
+                                <strong>Statut :</strong>
+                                <field name="status_label" readonly="1" class="oe_inline"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="text-uppercase text-muted fw-semibold small mb-3">Aperçu</h6>
+                    <div class="mb-4">
+                        <field name="landing_stats_html" nolabel="1" readonly="1" colspan="2"/>
+                    </div>
+
+                    <h6 class="text-uppercase text-muted fw-semibold small mb-3">Actions rapides</h6>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <button
+                            name="action_helloasso_open_adhesion"
+                            type="object"
+                            string="Voir les adhérents"
+                            class="btn-primary"
+                            icon="fa-users"
+                        />
+                        <button
+                            name="action_helloasso_open_billetteries"
+                            type="object"
+                            string="Voir les billetteries"
+                            class="btn-outline-primary"
+                            icon="fa-ticket"
+                        />
+                        <button
+                            name="action_helloasso_open_commandes"
+                            type="object"
+                            string="Voir les commandes"
+                            class="btn-outline-primary"
+                            icon="fa-shopping-cart"
+                        />
+                        <button
+                            name="action_helloasso_open_payments"
+                            type="object"
+                            string="Voir les paiements"
+                            class="btn-outline-primary"
+                            icon="fa-credit-card"
+                        />
+                        <button
+                            name="action_helloasso_open_settings"
+                            type="object"
+                            string="Paramètres HelloAsso"
+                            class="btn-outline-secondary"
+                            icon="fa-cog"
+                        />
+                    </div>
+
+                    <div class="rounded-3 bg-light border p-3 mb-4">
+                        <h6 class="text-uppercase text-muted fw-semibold small mb-3">État de connexion</h6>
+                        <group>
+                            <group>
+                                <field name="company_label" string="Société"/>
+                                <field name="env_label" string="Environnement"/>
+                                <field name="org_slug" string="Organisation"/>
+                                <field name="api_ready_label" string="API"/>
+                            </group>
+                            <group>
+                                <field name="last_adherent_sync_at" string="Dernière synchro adhésions"/>
+                                <field name="last_billetterie_sync_at" string="Dernière synchro billetterie"/>
+                                <field name="last_payment_sync_at" string="Dernier import paiements"/>
+                            </group>
+                        </group>
+                    </div>
+
+                    <div class="border-top pt-3">
+                        <h6 class="text-uppercase text-muted fw-semibold small mb-3">Points à vérifier</h6>
+                        <div class="mb-4">
+                            <field name="checks_html" nolabel="1" readonly="1" colspan="2"/>
+                        </div>
+
+                        <h6 class="text-uppercase text-muted fw-semibold small mb-3">Aide rapide</h6>
+                        <ul class="small text-muted mb-0 ps-3">
+                            <li class="mb-2">
+                                <strong>Adhérents</strong> : consulte les contacts synchronisés pour la société active.
+                            </li>
+                            <li class="mb-2">
+                                <strong>Billetteries</strong> : consulte les campagnes importées pour la société active.
+                            </li>
+                            <li class="mb-2">
+                                <strong>Commandes</strong> : consulte les commandes importées pour la société active.
+                            </li>
+                            <li class="mb-2">
+                                <strong>Paiements</strong> : consulte les paiements importés pour la société active.
+                            </li>
+                            <li>
+                                <strong>Paramètres</strong> : vérifie la connexion HelloAsso de la société active.
+                            </li>
+                        </ul>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dorevia_helloasso_form_guide" model="ir.actions.act_window">
+        <field name="name">HelloAsso</field>
+        <field name="res_model">dorevia.helloasso.form.guide</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'create': False}</field>
+        <!-- Path URL : évite action-789 sans contexte et aide le routage client (/odoo/helloasso). -->
+        <field name="path">helloasso</field>
+    </record>
+
+    <!--
+        Entrée app : action « Aide » (modèle dédié, droits simples) + path helloasso.
+        Le client web ignore le clic si actionID est absent (cache localStorage webclient_menus) :
+        forcer un rechargement complet après upgrade ; en dernier recours vider le stockage du site.
+    -->
+    <menuitem
+        id="menu_dorevia_helloasso_root"
+        name="HelloAsso"
+        web_icon="dorevia_helloasso_billetterie,static/description/icon.png"
+        sequence="35"
+        action="action_dorevia_helloasso_form_guide"
+    />
+    <menuitem
+        id="menu_helloasso_contacts"
+        name="Contact"
+        parent="menu_dorevia_helloasso_root"
+        sequence="5"
+    />
+    <record id="menu_helloasso_contacts" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+    </record>
+    <menuitem
+        id="menu_helloasso_adherents"
+        name="Adhérents"
+        parent="menu_helloasso_contacts"
+        action="action_helloasso_partner_adherents"
+        sequence="5"
+    />
+    <!-- Rubrique Billetterie : inventaire des campagnes + commandes (sous-domaine fonctionnel) -->
+    <menuitem
+        id="menu_helloasso_billetterie"
+        name="Billetterie"
+        parent="menu_dorevia_helloasso_root"
+        sequence="15"
+    />
+    <!-- Dossier sans action : une action résiduelle en base cassait la résolution enfant → premier écran. -->
+    <record id="menu_helloasso_billetterie" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+    </record>
+    <menuitem
+        id="menu_helloasso_billetterie_forms"
+        name="Billetteries"
+        parent="menu_helloasso_billetterie"
+        action="action_dorevia_helloasso_billetterie_form"
+        sequence="5"
+    />
+    <menuitem
+        id="menu_helloasso_billetterie_orders"
+        name="Commandes"
+        parent="menu_helloasso_billetterie"
+        action="action_dorevia_helloasso_billetterie_order"
+        sequence="15"
+    />
+    <menuitem
+        id="menu_helloasso_payment"
+        name="Paiement"
+        parent="menu_dorevia_helloasso_root"
+        sequence="25"
+    />
+    <record id="menu_helloasso_payment" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+    </record>
+    <menuitem
+        id="menu_helloasso_payments"
+        name="Paiements"
+        parent="menu_helloasso_payment"
+        action="dorevia_helloasso_payment.action_dorevia_helloasso_payment"
+        sequence="5"
+    />
+    <menuitem
+        id="menu_helloasso_configuration"
+        name="Configuration"
+        parent="menu_dorevia_helloasso_root"
+        sequence="35"
+    />
+    <record id="menu_helloasso_configuration" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+    </record>
+    <menuitem
+        id="menu_helloasso_payment_configuration"
+        name="Paiements"
+        parent="menu_helloasso_configuration"
+        sequence="10"
+    />
+    <record id="menu_helloasso_payment_configuration" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+    </record>
+    <menuitem
+        id="menu_helloasso_payments_csv_import"
+        name="Importer un CSV"
+        parent="menu_helloasso_payment_configuration"
+        action="dorevia_helloasso_payment.action_dorevia_helloasso_payment_csv_wizard"
+        sequence="15"
+    />
+    <menuitem
+        id="menu_helloasso_payments_api_import"
+        name="Importer via l'API"
+        parent="menu_helloasso_payment_configuration"
+        action="dorevia_helloasso_payment.action_dorevia_helloasso_payment_api_import_wizard"
+        sequence="20"
+    />
+    <menuitem
+        id="menu_helloasso_payments_api_preview"
+        name="Observer payload API"
+        parent="menu_helloasso_payment_configuration"
+        action="dorevia_helloasso_payment.action_dorevia_helloasso_payment_api_preview_wizard"
+        sequence="30"
+    />
+</odoo>

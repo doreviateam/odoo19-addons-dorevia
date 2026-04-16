@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sections : Membre > Membres ; Adhésion > Adhésions ; puis Analyse et Configuration. -->
+    <menuitem
+        id="menu_dorevia_membre_section"
+        name="Membre"
+        parent="membership.menu_association"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_dorevia_adhesion_section"
+        name="Adhésion"
+        parent="membership.menu_association"
+        sequence="20"
+    />
+
+    <record id="membership.menu_association" model="ir.ui.menu">
+        <field name="name">AssoHello</field>
+    </record>
+
+    <record id="membership.menu_membership" model="ir.ui.menu">
+        <field name="name">Membres</field>
+        <field name="parent_id" ref="dorevia_membership_adhesions.menu_dorevia_membre_section"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="membership.action_membership_members" model="ir.actions.act_window">
+        <field name="name">Membres</field>
+    </record>
+
+    <record id="membership.menu_report_membership" model="ir.ui.menu">
+        <field name="name">Analyse</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="membership.action_report_membership_tree" model="ir.actions.act_window">
+        <field name="name">Analyse</field>
+    </record>
+
+    <record id="membership.menu_marketing_config_association" model="ir.ui.menu">
+        <field name="name">Configuration</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="membership.menu_membership_products" model="ir.ui.menu">
+        <field name="name">Produits d’adhésion</field>
+    </record>
+
+    <record id="membership.action_membership_products" model="ir.actions.act_window">
+        <field name="name">Produits d’adhésion</field>
+    </record>
+</odoo>

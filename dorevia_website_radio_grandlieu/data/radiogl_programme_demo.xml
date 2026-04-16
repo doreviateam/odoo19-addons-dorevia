@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="radiogl_slot_demo_1" model="radiogl.programme.slot">
+        <field name="sequence">10</field>
+        <field name="day_label">Lundi</field>
+        <field name="slot_time">18h – 19h</field>
+        <field name="title">Le journal du Grand Lieu (démo)</field>
+    </record>
+    <record id="radiogl_slot_demo_2" model="radiogl.programme.slot">
+        <field name="sequence">20</field>
+        <field name="day_label">Lundi</field>
+        <field name="slot_time">20h – 21h</field>
+        <field name="title">Les contes du soir (démo)</field>
+    </record>
+    <record id="radiogl_slot_demo_3" model="radiogl.programme.slot">
+        <field name="sequence">30</field>
+        <field name="day_label">Mercredi</field>
+        <field name="slot_time">19h – 20h</field>
+        <field name="title">Musiques du terroir (démo)</field>
+    </record>
+    <record id="radiogl_slot_demo_4" model="radiogl.programme.slot">
+        <field name="sequence">40</field>
+        <field name="day_label">Samedi</field>
+        <field name="slot_time">10h – 12h</field>
+        <field name="title">Matinale week-end (démo)</field>
+    </record>
+</odoo>

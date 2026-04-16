@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ckreyol_view_espace_pro" model="ir.ui.view">
+        <field name="name">C-Kreyol — Espace professionnels</field>
+        <field name="key">dorevia_website_c_kreyol.page_espace_professionnels</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Espace professionnels" t-name="dorevia_website_c_kreyol.page_espace_professionnels">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure ckreyol-site">
+                        <section class="container py-5">
+                            <p class="ckreyol-label mb-2">B2B</p>
+                            <h1 class="ckreyol-font-display display-6 mb-4">Espace professionnels</h1>
+                            <p class="lead text-secondary">
+                                Page stub — documentation tarifaire, conditions logistiques, échantillons et ouverture de compte revendeur
+                                (à brancher sur portail / CRM selon votre cadrage).
+                            </p>
+                            <p class="mb-4">
+                                <a href="/shop" class="btn btn-dark">Accéder à la boutique</a>
+                            </p>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="ckreyol_page_espace_pro" model="website.page">
+        <field name="name">Espace professionnels</field>
+        <field name="url">/espace-professionnels</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckreyol_view_espace_pro"/>
+    </record>
+
+    <record id="ckreyol_view_revendeurs" model="ir.ui.view">
+        <field name="name">C-Kreyol — Revendeurs &amp; points de vente</field>
+        <field name="key">dorevia_website_c_kreyol.page_revendeurs</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Revendeurs" t-name="dorevia_website_c_kreyol.page_revendeurs">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure ckreyol-site">
+                        <section class="container py-5">
+                            <p class="ckreyol-label mb-2">Consommateurs</p>
+                            <h1 class="ckreyol-font-display display-6 mb-4">Où trouver nos produits</h1>
+                            <p class="lead text-secondary">
+                                Page stub — carte ou liste des épicer fines et boutiques partenaires (France / Europe).
+                            </p>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="ckreyol_page_revendeurs" model="website.page">
+        <field name="name">Revendeurs</field>
+        <field name="url">/revendeurs</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckreyol_view_revendeurs"/>
+    </record>
+
+    <record id="ckreyol_view_notre_histoire" model="ir.ui.view">
+        <field name="name">C-Kreyol — La Platine &amp; le manioc</field>
+        <field name="key">dorevia_website_c_kreyol.page_notre_histoire</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Notre histoire" t-name="dorevia_website_c_kreyol.page_notre_histoire">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure ckreyol-site">
+                        <section class="container py-5">
+                            <p class="ckreyol-label mb-2">Origine</p>
+                            <h1 class="ckreyol-font-display display-6 mb-4">La Platine &amp; le manioc</h1>
+                            <p class="lead text-secondary">
+                                Page stub — récit atelier Sainte-Anne, savoir-faire, filière manioc (contenu à rédiger).
+                            </p>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="ckreyol_page_notre_histoire" model="website.page">
+        <field name="name">La Platine &amp; le manioc</field>
+        <field name="url">/notre-histoire</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckreyol_view_notre_histoire"/>
+    </record>
+</odoo>

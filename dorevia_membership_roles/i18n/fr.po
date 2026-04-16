@@ -1,0 +1,142 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * dorevia_membership_roles
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-14 12:00+0000\n"
+"PO-Revision-Date: 2026-04-14 12:00+0000\n"
+"Language-Team: Dorevia\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#. module: dorevia_membership_roles
+#: model:ir.module.module,summary:base.module_dorevia_membership_roles
+msgid "Rôles associatifs sur les contacts, indépendants de l'adhésion."
+msgstr "Rôles associatifs sur les contacts, indépendants de l'adhésion."
+
+#. module: dorevia_membership_roles
+#: model:ir.module.module,shortdesc:base.module_dorevia_membership_roles
+msgid "Dorevia — Rôles de membre"
+msgstr "Dorevia — Rôles de membre"
+
+#. module: dorevia_membership_roles
+#: model:ir.model,name:dorevia_membership_roles.model_membership_role
+msgid "Rôle de membre associatif"
+msgstr "Rôle de membre associatif"
+
+#. module: dorevia_membership_roles
+#: model:ir.model.fields,field_description:dorevia_membership_roles.field_membership_role__name
+msgid "Libellé"
+msgstr "Libellé"
+
+#. module: dorevia_membership_roles
+#: model:ir.model.fields,field_description:dorevia_membership_roles.field_membership_role__sequence
+msgid "Séquence"
+msgstr "Séquence"
+
+#. module: dorevia_membership_roles
+#: model:ir.model.fields,field_description:dorevia_membership_roles.field_membership_role__active
+msgid "Actif"
+msgstr "Actif"
+
+#. module: dorevia_membership_roles
+#: model:ir.model.fields,field_description:dorevia_membership_roles.field_membership_role__company_id
+msgid "Société"
+msgstr "Société"
+
+#. module: dorevia_membership_roles
+#: model:ir.actions.act_window,name:dorevia_membership_roles.membership_role_action
+#: model:ir.model.fields,field_description:dorevia_membership_roles.field_res_partner__membership_role_ids
+#: model:ir.model.fields,field_description:dorevia_membership_roles.field_res_users__membership_role_ids
+#: model:ir.ui.menu,name:dorevia_membership_roles.menu_membership_role
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.membership_role_search_view
+msgid "Rôles de membre"
+msgstr "Rôles de membre"
+
+#. module: dorevia_membership_roles
+#: model:ir.model.fields,help:dorevia_membership_roles.field_res_partner__membership_role_ids
+#: model:ir.model.fields,help:dorevia_membership_roles.field_res_users__membership_role_ids
+msgid "Rôles fonctionnels (hors statut d'adhésion)."
+msgstr "Rôles fonctionnels (hors statut d'adhésion)."
+
+#. module: dorevia_membership_roles
+#. odoo-python
+#: code:addons/dorevia_membership_roles/models/membership_role.py:0
+msgid ""
+"Un rôle portant le même nom existe déjà pour ce périmètre (société). "
+"Choisissez un autre libellé ou une autre société."
+msgstr ""
+"Un rôle portant le même nom existe déjà pour ce périmètre (société). "
+"Choisissez un autre libellé ou une autre société."
+
+#. module: dorevia_membership_roles
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.membership_role_form_view
+msgid "Rôle de membre"
+msgstr "Rôle de membre"
+
+#. module: dorevia_membership_roles
+#: model:ir.rule,name:dorevia_membership_roles.membership_role_company_rule
+msgid "Rôles de membre : règle multi-sociétés"
+msgstr "Rôles de membre : règle multi-sociétés"
+
+#. module: dorevia_membership_roles
+#: model:ir.model.access,name:dorevia_membership_roles.access_membership_role_manager
+msgid "Gestion rôles de membre (facturation)"
+msgstr "Gestion rôles de membre (facturation)"
+
+#. module: dorevia_membership_roles
+#: model:ir.model.access,name:dorevia_membership_roles.access_membership_role_user_read
+msgid "Lecture rôle de membre (utilisateur)"
+msgstr "Lecture rôle de membre (utilisateur)"
+
+#. module: dorevia_membership_roles
+#: model:ir.model.fields,field_description:dorevia_membership_roles.field_membership_role__partner_count
+msgid "Nombre de contacts"
+msgstr "Nombre de contacts"
+
+#. module: dorevia_membership_roles
+#. odoo-python
+#: code:addons/dorevia_membership_roles/models/membership_role.py:0
+msgid "Contacts avec ce rôle"
+msgstr "Contacts avec ce rôle"
+
+#. module: dorevia_membership_roles
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.membership_role_search_view
+msgid "Actifs"
+msgstr "Actifs"
+
+#. module: dorevia_membership_roles
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.membership_role_search_view
+msgid "Archivés"
+msgstr "Archivés"
+
+#. module: dorevia_membership_roles
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.membership_role_search_view
+msgid "Par société"
+msgstr "Par société"
+
+#. module: dorevia_membership_roles
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.membership_role_form_view
+msgid "Contacts"
+msgstr "Contacts"
+
+#. module: dorevia_membership_roles
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.view_res_partner_filter_membership_roles
+msgid "Avec rôle de membre"
+msgstr "Avec rôle de membre"
+
+#. module: dorevia_membership_roles
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.view_res_partner_filter_membership_roles
+msgid "Sans rôle de membre"
+msgstr "Sans rôle de membre"
+
+#. module: dorevia_membership_roles
+#: model_terms:ir.ui.view,arch_db:dorevia_membership_roles.view_res_partner_filter_membership_roles
+msgid "Par rôle de membre"
+msgstr "Par rôle de membre"

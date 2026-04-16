@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="membership_role_tree_view" model="ir.ui.view">
+        <field name="name">membership.role.tree</field>
+        <field name="model">membership.role</field>
+        <field name="arch" type="xml">
+            <list editable="top">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="membership_role_search_view" model="ir.ui.view">
+        <field name="name">membership.role.search</field>
+        <field name="model">membership.role</field>
+        <field name="arch" type="xml">
+            <search string="Rôles de membre">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <separator/>
+                <filter name="filter_active" string="Actifs" domain="[('active', '=', True)]"/>
+                <filter name="filter_inactive" string="Archivés" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter
+                    name="group_by_company"
+                    string="Par société"
+                    context="{'group_by': 'company_id'}"
+                    groups="base.group_multi_company"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="membership_role_form_view" model="ir.ui.view">
+        <field name="name">membership.role.form</field>
+        <field name="model">membership.role</field>
+        <field name="arch" type="xml">
+            <form string="Rôle de membre">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_open_contacts_with_role"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-users"
+                        >
+                            <field name="partner_count" widget="statinfo" string="Contacts"/>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="membership_role_action" model="ir.actions.act_window">
+        <field name="name">Rôles de membre</field>
+        <field name="res_model">membership.role</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="search_view_id" ref="membership_role_search_view"/>
+    </record>
+
+    <menuitem
+        id="menu_membership_role"
+        name="Rôles de membre"
+        parent="membership.menu_marketing_config_association"
+        action="membership_role_action"
+        sequence="30"
+    />
+</odoo>

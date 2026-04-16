@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_helloasso" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.helloasso</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='companies']" position="after">
+                <block title="HelloAsso" name="dorevia_helloasso_settings_block">
+                    <setting>
+                        <field
+                            name="company_id"
+                            string="Société"
+                            class="w-100"
+                            options="{'no_create': True}"
+                        />
+                    </setting>
+                    <setting help="Client ID : HelloAsso → Mon compte → Intégrations et API.">
+                        <field
+                            name="helloasso_client_id"
+                            string="ID"
+                            class="w-100 text-monospace"
+                            placeholder="Coller l’identifiant client"
+                        />
+                    </setting>
+                    <setting help="Secret HelloAsso (Intégrations et API). Affichage masqué : saisir une nouvelle valeur pour la remplacer ; enregistrer sans toucher au champ conserve la clé déjà stockée.">
+                        <field
+                            name="helloasso_oauth_key"
+                            string="Clé"
+                            password="True"
+                            class="w-100 text-monospace"
+                            placeholder="••••••••"
+                        />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

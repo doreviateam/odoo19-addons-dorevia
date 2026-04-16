@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="membership_role_benevole" model="membership.role">
+        <field name="name">Bénévole</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="membership_role_ca" model="membership.role">
+        <field name="name">Membre du CA</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="membership_role_president" model="membership.role">
+        <field name="name">Président</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="membership_role_tresorier" model="membership.role">
+        <field name="name">Trésorier</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="membership_role_secretaire" model="membership.role">
+        <field name="name">Secrétaire</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="membership_role_salarie" model="membership.role">
+        <field name="name">Salarié</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="membership_role_intervenant" model="membership.role">
+        <field name="name">Intervenant</field>
+        <field name="sequence">70</field>
+    </record>
+</odoo>

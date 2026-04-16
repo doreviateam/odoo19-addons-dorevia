@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_partner_filter_membership_roles" model="ir.ui.view">
+        <field name="name">res.partner.search.membership.roles</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <field name="membership_role_ids"/>
+                <separator/>
+                <filter
+                    name="filter_with_membership_role"
+                    string="Avec rôle de membre"
+                    domain="[('membership_role_ids', '!=', False)]"
+                />
+                <filter
+                    name="filter_without_membership_role"
+                    string="Sans rôle de membre"
+                    domain="[('membership_role_ids', '=', False)]"
+                />
+                <separator/>
+                <filter
+                    name="group_by_membership_role"
+                    string="Par rôle de membre"
+                    context="{'group_by': 'membership_role_ids'}"
+                />
+            </search>
+        </field>
+    </record>
+</odoo>

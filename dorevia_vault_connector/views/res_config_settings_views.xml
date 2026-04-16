@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_dorevia_vault" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.dorevia_vault_connector</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Dorevia Vault" name="dorevia_vault_connector">
+                    <block title="Connecteur source (V1)" name="dorevia_vault_connector_block">
+                        <setting
+                            id="dorevia_vault_connector_enabled"
+                            string="Activer l'envoi vers Vault"
+                            help="Si activé, les factures clients validées déclenchent un POST HTTP vers l'URL cible."
+                        >
+                            <field name="dorevia_vault_connector_enabled"/>
+                        </setting>
+                        <setting
+                            id="dorevia_vault_connector_target_url"
+                            string="URL cible"
+                            help="Endpoint HTTP acceptant un POST JSON (ex. adaptateur local)."
+                        >
+                            <field name="dorevia_vault_connector_target_url" placeholder="https://..."/>
+                        </setting>
+                        <setting id="dorevia_vault_connector_token" string="Jeton (optionnel)">
+                            <field name="dorevia_vault_connector_token" widget="password"/>
+                        </setting>
+                        <setting id="dorevia_vault_connector_timeout" string="Timeout (s)">
+                            <field name="dorevia_vault_connector_timeout_seconds"/>
+                        </setting>
+                        <setting id="dorevia_vault_connector_tenant" string="Tenant par défaut">
+                            <field name="dorevia_vault_connector_tenant"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

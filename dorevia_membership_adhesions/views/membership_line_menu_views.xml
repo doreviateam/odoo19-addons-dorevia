@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Liste alignée sur l’onglet Adhésion du contact (membership_extension) : colonnes et libellés FR. -->
+    <record id="view_membership_line_list" model="ir.ui.view">
+        <field name="name">membership.membership_line.list.dorevia</field>
+        <field name="model">membership.membership_line</field>
+        <field name="arch" type="xml">
+            <list string="Adhésions" multi_edit="1">
+                <!-- Par défaut : Contact, Date d'adhésion, Société, Validité, Adhésion, Statut. -->
+                <field name="partner" string="Contact"/>
+                <field name="date" string="Date d'adhésion"/>
+                <field name="company_id" string="Société"/>
+                <field
+                    name="validite_adhesion"
+                    string="Validité"
+                    widget="badge"
+                    decoration-success="validite_adhesion == 'en_cours'"
+                    decoration-danger="validite_adhesion == 'depasse'"
+                />
+                <field name="membership_id" string="Adhésion"/>
+                <field
+                    name="state"
+                    string="Statut de l'adhésion"
+                    widget="badge"
+                    decoration-info="state == 'waiting'"
+                    decoration-success="state in ('invoiced', 'free', 'paid')"
+                    decoration-muted="state in ('canceled', 'old', 'none')"
+                />
+                <field name="date_from" string="De" optional="hide"/>
+                <field name="date_to" string="Au" optional="hide"/>
+                <field name="date_cancel" string="Date d'annulation" optional="hide"/>
+                <field name="category_id" string="Catégorie de l'adhésion" optional="hide"/>
+                <field name="member_price" string="Frais d'adhésion" optional="hide"/>
+                <field name="account_invoice_id" string="Facture" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_membership_line_form" model="ir.ui.view">
+        <field name="name">membership.membership_line.form.dorevia</field>
+        <field name="model">membership.membership_line</field>
+        <field name="arch" type="xml">
+            <form string="Adhésion">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner"/>
+                            <field name="membership_id"/>
+                            <field name="category_id"/>
+                            <field name="state"/>
+                            <field name="validite_adhesion"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="date_cancel"/>
+                            <field name="member_price"/>
+                            <field name="account_invoice_id"/>
+                            <field name="company_id" string="Société"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_membership_line_search" model="ir.ui.view">
+        <field name="name">membership.membership_line.search.dorevia</field>
+        <field name="model">membership.membership_line</field>
+        <field name="arch" type="xml">
+            <search string="Adhésions">
+                <field name="partner"/>
+                <field name="membership_id"/>
+                <field name="category_id"/>
+                <field name="account_invoice_id"/>
+                <field name="company_id"/>
+                <field name="validite_adhesion"/>
+                <field name="state"/>
+                <separator/>
+                <filter string="Payée" name="paid" domain="[('state', '=', 'paid')]"/>
+                <filter string="Facturée" name="invoiced" domain="[('state', '=', 'invoiced')]"/>
+                <filter string="En attente" name="waiting" domain="[('state', '=', 'waiting')]"/>
+                <filter string="Annulée" name="canceled" domain="[('state', '=', 'canceled')]"/>
+                <separator/>
+                <filter string="Produit d'adhésion" name="group_membership" context="{'group_by': 'membership_id'}"/>
+                <filter string="Contact" name="group_partner" context="{'group_by': 'partner'}"/>
+                <filter string="Catégorie" name="group_category" context="{'group_by': 'category_id'}"/>
+                <filter string="Société" name="group_company" context="{'group_by': 'company_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_membership_line" model="ir.actions.act_window">
+        <field name="name">Adhésions</field>
+        <field name="path">adhesions</field>
+        <field name="res_model">membership.membership_line</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_membership_line_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune adhésion pour l’instant.
+            </p>
+            <p>
+                Les lignes sont créées lors de la facturation d’un produit d’adhésion,
+                ou vous pouvez en ajouter comme sur la fiche contact.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_membership_lines"
+        name="Adhésions"
+        parent="dorevia_membership_adhesions.menu_dorevia_adhesion_section"
+        action="action_membership_line"
+        sequence="10"
+    />
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- URL directe du flux (ex. .mp3, .aac). Vide = lecteur masqué, lien vers le player du site public. -->
+    <record id="ir_config_parameter_stream_url" model="ir.config_parameter">
+        <field name="key">dorevia_website_radio_grandlieu.stream_url</field>
+        <field name="value"/>
+    </record>
+</odoo>

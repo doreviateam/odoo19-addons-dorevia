@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dorevia_helloasso_logentry_user,dorevia.helloasso.logentry user,model_dorevia_helloasso_logentry,base.group_user,1,0,0,0
+access_dorevia_helloasso_logentry_erp,dorevia.helloasso.logentry erp,model_dorevia_helloasso_logentry,base.group_erp_manager,1,0,0,1
+access_dorevia_helloasso_logentry_system,dorevia.helloasso.logentry system,model_dorevia_helloasso_logentry,base.group_system,1,1,1,1

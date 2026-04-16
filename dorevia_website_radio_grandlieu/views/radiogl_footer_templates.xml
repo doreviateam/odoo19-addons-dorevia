@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="radiogl_footer_copyright" inherit_id="website.layout" name="Radio GL — copyright &amp; lien légal" priority="25">
+        <xpath expr="//footer//span[hasclass('o_footer_copyright_name')]" position="replace">
+            <span class="o_footer_copyright_name me-2 small">
+                © Radio Grand Lieu — vitrine démo Odoo —
+                <a href="/qui-sommes-nous" class="text-muted">Association &amp; contact</a>
+            </span>
+        </xpath>
+    </template>
+</odoo>

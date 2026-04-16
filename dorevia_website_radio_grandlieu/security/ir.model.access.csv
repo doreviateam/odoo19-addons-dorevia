@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_radiogl_programme_slot_designer,radiogl.programme.slot designer,model_radiogl_programme_slot,website.group_website_designer,1,1,1,1
+access_radiogl_programme_slot_system,radiogl.programme.slot system,model_radiogl_programme_slot,base.group_system,1,1,1,1

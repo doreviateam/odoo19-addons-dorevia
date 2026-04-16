@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dorevia_helloasso_account_tree_membership_bridge" model="ir.ui.view">
+        <field name="name">dorevia.helloasso.account.list.membership.bridge</field>
+        <field name="model">dorevia.helloasso.account</field>
+        <field name="inherit_id" ref="dorevia_helloasso_members.view_dorevia_helloasso_account_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='use_for_members']" position="after">
+                <field name="membership_pont_rail" optional="show"/>
+                <field name="membership_bridge_enabled" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

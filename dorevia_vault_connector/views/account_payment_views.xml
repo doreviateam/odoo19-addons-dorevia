@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_payment_form_dorevia_vault" model="ir.ui.view">
+        <field name="name">account.payment.form.dorevia_vault_connector</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook[@name='payment_notebook']" position="inside">
+                <page string="Dorevia Vault" name="dorevia_vault_payment_tab">
+                    <group>
+                        <group>
+                            <field name="dorevia_vault_status"/>
+                            <field name="dorevia_vault_last_attempt_at"/>
+                            <field name="dorevia_vault_remote_ref"/>
+                        </group>
+                        <group>
+                            <field name="dorevia_vault_error_message" colspan="2"/>
+                        </group>
+                    </group>
+                    <group>
+                        <button
+                            name="action_retry_dorevia_vault_send"
+                            type="object"
+                            string="Réessayer l'envoi Vault"
+                            class="btn-secondary"
+                            invisible="state not in ('in_process', 'paid') or dorevia_vault_status not in ('failed', 'todo')"
+                        />
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

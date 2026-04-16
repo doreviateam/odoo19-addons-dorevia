@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dorevia_helloasso_payment_form_membership_v2" model="ir.ui.view">
+        <field name="name">dorevia.helloasso.payment.form.membership.v2</field>
+        <field name="model">dorevia.helloasso.payment</field>
+        <field name="inherit_id" ref="dorevia_helloasso_payment.view_dorevia_helloasso_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group[1]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button
+                        name="action_open_membership_v2_invoice"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o"
+                        invisible="helloasso_account_id.membership_pont_rail != 'v2_accounting' or not membership_v2_out_invoice_id"
+                        help="Ouvrir la facture client (constatation V2)"
+                    >
+                        <field
+                            name="membership_v2_out_invoice_id"
+                            widget="statinfo"
+                            string="Facture V2"
+                        />
+                    </button>
+                    <button
+                        name="action_open_membership_v2_account_payment"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-money"
+                        invisible="helloasso_account_id.membership_pont_rail != 'v2_accounting' or not membership_v2_account_payment_id"
+                        help="Ouvrir le paiement enregistré (constatation V2)"
+                    >
+                        <field
+                            name="membership_v2_account_payment_id"
+                            widget="statinfo"
+                            string="Paiement enregistré"
+                        />
+                    </button>
+                </div>
+            </xpath>
+            <!-- Odoo 19 : pas de sélecteur @string sur les groupes ; cible le groupe « Source » par champ. -->
+            <xpath expr="//group[field[@name='source_payload']]" position="before">
+                <group
+                    string="Adhésion — constatation (rail V2)"
+                    invisible="helloasso_account_id.membership_pont_rail != 'v2_accounting'"
+                >
+                    <group string="Statut">
+                        <field
+                            name="membership_v2_processing_state"
+                            string="État"
+                            widget="badge"
+                            readonly="1"
+                        />
+                        <field
+                            name="write_date"
+                            string="Dernière mise à jour du pivot"
+                            readonly="1"
+                        />
+                        <field
+                            name="payment_method"
+                            string="Moyen HelloAsso (pivot)"
+                            readonly="1"
+                        />
+                    </group>
+                    <group string="Pièces comptables">
+                        <field
+                            name="membership_v2_out_invoice_id"
+                            string="Facture client"
+                            readonly="1"
+                        />
+                        <field
+                            name="membership_v2_account_payment_id"
+                            string="Paiement enregistré"
+                            readonly="1"
+                        />
+                    </group>
+                    <group
+                        string="Message d’erreur (constatation)"
+                        colspan="2"
+                        invisible="membership_v2_processing_state != 'error' or not membership_v2_error_message"
+                    >
+                        <field
+                            name="membership_v2_error_message"
+                            nolabel="1"
+                            readonly="1"
+                        />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_dorevia_helloasso_payment_tree_membership_v2" model="ir.ui.view">
+        <field name="name">dorevia.helloasso.payment.tree.membership.v2</field>
+        <field name="model">dorevia.helloasso.payment</field>
+        <field name="inherit_id" ref="dorevia_helloasso_payment.view_dorevia_helloasso_payment_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_offline_payment']" position="after">
+                <field
+                    name="membership_v2_processing_state"
+                    string="État pont V2"
+                    optional="show"
+                />
+                <field
+                    name="membership_v2_out_invoice_id"
+                    string="Facture V2"
+                    optional="hide"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_dorevia_helloasso_payment_search_membership_v2" model="ir.ui.view">
+        <field name="name">dorevia.helloasso.payment.search.membership.v2</field>
+        <field name="model">dorevia.helloasso.payment</field>
+        <field name="inherit_id" ref="dorevia_helloasso_payment.view_dorevia_helloasso_payment_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='group_account']" position="after">
+                <separator/>
+                <filter
+                    string="Pont V2 — erreur"
+                    name="filter_membership_v2_error"
+                    domain="[('membership_v2_processing_state', '=', 'error')]"
+                />
+                <filter
+                    string="Pont V2 — à traiter"
+                    name="filter_membership_v2_to_process"
+                    domain="[('membership_v2_processing_state', '=', 'to_process')]"
+                />
+                <filter
+                    string="Pont V2 — traité"
+                    name="filter_membership_v2_processed"
+                    domain="[('membership_v2_processing_state', '=', 'processed')]"
+                />
+                <filter
+                    string="Pont V2 — déjà traité (noop)"
+                    name="filter_membership_v2_noop"
+                    domain="[('membership_v2_processing_state', '=', 'noop')]"
+                />
+                <filter
+                    string="Pont V2 — sans facture"
+                    name="filter_membership_v2_no_invoice"
+                    domain="[('helloasso_account_id.membership_pont_rail', '=', 'v2_accounting'), ('membership_v2_out_invoice_id', '=', False)]"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

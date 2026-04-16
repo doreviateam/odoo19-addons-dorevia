@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vues QWeb (requis : website.page hérite de ir.ui.view via view_id) -->
+    <record id="radiogl_view_qui_sommes" model="ir.ui.view">
+        <field name="name">Radio GL — Qui sommes-nous</field>
+        <field name="key">dorevia_website_radio_grandlieu.page_qui_sommes</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Qui sommes-nous ?" t-name="dorevia_website_radio_grandlieu.page_qui_sommes">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure">
+                        <section class="container py-5">
+                            <h1>Qui sommes-nous ?</h1>
+                            <p class="lead">
+                                Page d’entraînement Odoo — Radio Grand Lieu est une association
+                                basée à Saint-Aignan-de-Grand-Lieu (Loire-Atlantique).
+                            </p>
+                            <p>
+                                Contenu de référence sur le site public :
+                                <a href="https://radiograndlieu.fr/qui-sommes-nous/" target="_blank" rel="noopener noreferrer">radiograndlieu.fr</a>.
+                            </p>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="page_qui_sommes" model="website.page">
+        <field name="name">Qui sommes-nous ?</field>
+        <field name="url">/qui-sommes-nous</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="radiogl_view_qui_sommes"/>
+    </record>
+
+    <record id="radiogl_view_partenaires" model="ir.ui.view">
+        <field name="name">Radio GL — Partenaires</field>
+        <field name="key">dorevia_website_radio_grandlieu.page_partenaires</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Partenaires" t-name="dorevia_website_radio_grandlieu.page_partenaires">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure">
+                        <section class="container py-5">
+                            <h1>Partenaires</h1>
+                            <p>Page stub — à compléter ou à lier vers la page officielle des partenaires.</p>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="page_partenaires" model="website.page">
+        <field name="name">Partenaires</field>
+        <field name="url">/partenaires</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="radiogl_view_partenaires"/>
+    </record>
+
+    <record id="radiogl_view_evenements" model="ir.ui.view">
+        <field name="name">Radio GL — Événements publics</field>
+        <field name="key">dorevia_website_radio_grandlieu.page_evenements</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Événements publics" t-name="dorevia_website_radio_grandlieu.page_evenements">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure">
+                        <section class="container py-5">
+                            <h1>Événements publics</h1>
+                            <p class="lead">Démo locale — calendrier et détails sur le site public.</p>
+                            <a class="btn btn-primary" href="https://radiograndlieu.fr/evenements-publics/" target="_blank" rel="noopener noreferrer">Voir les événements (site officiel)</a>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="page_evenements" model="website.page">
+        <field name="name">Événements publics</field>
+        <field name="url">/evenements-publics</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="radiogl_view_evenements"/>
+    </record>
+
+    <record id="radiogl_view_podcasts" model="ir.ui.view">
+        <field name="name">Radio GL — Podcasts</field>
+        <field name="key">dorevia_website_radio_grandlieu.page_podcasts</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Podcasts" t-name="dorevia_website_radio_grandlieu.page_podcasts">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure">
+                        <section class="container py-5">
+                            <h1>Podcasts</h1>
+                            <p>À venir sur cette démo : intégration des flux ou liens vers les épisodes.</p>
+                            <a class="btn btn-primary" href="https://radiograndlieu.fr/podcasts/" target="_blank" rel="noopener noreferrer">Podcasts sur radiograndlieu.fr</a>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="page_podcasts" model="website.page">
+        <field name="name">Podcasts</field>
+        <field name="url">/podcasts</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="radiogl_view_podcasts"/>
+    </record>
+
+    <record id="radiogl_view_presta_col" model="ir.ui.view">
+        <field name="name">Radio GL — Prestations collectivités</field>
+        <field name="key">dorevia_website_radio_grandlieu.page_presta_col</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Prestations collectivités" t-name="dorevia_website_radio_grandlieu.page_presta_col">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure">
+                        <section class="container py-5">
+                            <h1>Prestations — Collectivités</h1>
+                            <p>Page stub d’entraînement.</p>
+                            <a class="btn btn-outline-primary" href="https://radiograndlieu.fr/prestations/" target="_blank" rel="noopener noreferrer">Prestations (site officiel)</a>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="page_presta_col" model="website.page">
+        <field name="name">Prestations — Collectivités</field>
+        <field name="url">/prestations-collectivites</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="radiogl_view_presta_col"/>
+    </record>
+
+    <record id="radiogl_view_presta_pro" model="ir.ui.view">
+        <field name="name">Radio GL — Prestations professionnels</field>
+        <field name="key">dorevia_website_radio_grandlieu.page_presta_pro</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t name="Prestations professionnels" t-name="dorevia_website_radio_grandlieu.page_presta_pro">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure">
+                        <section class="container py-5">
+                            <h1>Prestations — Professionnels</h1>
+                            <p>Page stub d’entraînement.</p>
+                            <a class="btn btn-outline-primary" href="https://radiograndlieu.fr/prestations/" target="_blank" rel="noopener noreferrer">Prestations (site officiel)</a>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="page_presta_pro" model="website.page">
+        <field name="name">Prestations — Professionnels</field>
+        <field name="url">/prestations-professionnels</field>
+        <field name="website_indexed" eval="True"/>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="radiogl_view_presta_pro"/>
+    </record>
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="radiogl_programme_slot_action" model="ir.actions.act_window">
+        <field name="name">Créneaux grille (démo)</field>
+        <field name="res_model">radiogl.programme.slot</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Ajoutez des lignes : elles apparaissent sur l’accueil du site (section Grille).
+            </p>
+        </field>
+    </record>
+
+    <record id="view_radiogl_programme_slot_list" model="ir.ui.view">
+        <field name="name">radiogl.programme.slot.list</field>
+        <field name="model">radiogl.programme.slot</field>
+        <field name="arch" type="xml">
+            <list string="Créneaux">
+                <field name="sequence"/>
+                <field name="day_label"/>
+                <field name="slot_time"/>
+                <field name="title"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_radiogl_programme_slot_form" model="ir.ui.view">
+        <field name="name">radiogl.programme.slot.form</field>
+        <field name="model">radiogl.programme.slot</field>
+        <field name="arch" type="xml">
+            <form string="Créneau">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="day_label"/>
+                            <field name="slot_time"/>
+                            <field name="title"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_radiogl_programme_slots"
+        name="Créneaux grille (démo)"
+        parent="website.menu_site"
+        action="radiogl_programme_slot_action"
+        sequence="25"
+    />
+</odoo>

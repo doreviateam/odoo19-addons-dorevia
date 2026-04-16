@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dorevia_helloasso_account_form_membership_bridge" model="ir.ui.view">
+        <field name="name">dorevia.helloasso.account.form.membership.bridge</field>
+        <field name="model">dorevia.helloasso.account</field>
+        <field name="inherit_id" ref="dorevia_helloasso_members.view_dorevia_helloasso_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[.//field[@name='use_for_members']]" position="after">
+                <group string="Pont HelloAsso → Adhésion Odoo (Membership)">
+                    <field name="membership_pont_rail"/>
+                    <field name="membership_bridge_enabled"/>
+                    <field
+                        name="membership_bridge_product_id"
+                        invisible="not membership_bridge_enabled"
+                        options="{'no_create': True}"
+                    />
+                    <field
+                        name="membership_bridge_require_member_type"
+                        invisible="not membership_bridge_enabled or membership_pont_rail != 'v1_line'"
+                    />
+                </group>
+                <div
+                    class="alert alert-info"
+                    role="alert"
+                    invisible="not membership_bridge_enabled"
+                >
+                    <strong>Rappel métier (pont)</strong>
+                    <ul class="mb-0 ps-3">
+                        <li>
+                            Les paiements HelloAsso importés peuvent générer une adhésion Odoo
+                            (rail V1 : ligne sans facture ; rail V2 : facture + paiement), selon ce compte.
+                        </li>
+                        <li>
+                            Le pont <strong>refuse</strong> avec un message explicite si, entre autres :
+                            l’enregistrement pivot est <strong>archivé</strong> ; le contact payeur est
+                            <strong>archivé</strong> ; l’e-mail payeur est absent ou correspond à plusieurs
+                            contacts ; le produit ou les dates d’adhésion ne conviennent pas ; en rail
+                            <strong>V1</strong>, si l’option <strong>typologie exigée</strong> est activée
+                            sur le compte et que le contact n’a pas de <strong>type d’adhésion</strong>.
+                        </li>
+                        <li>
+                            <strong>Action</strong> : corriger dans Odoo (réactiver le contact ou le pivot,
+                            compléter les données), puis relancer le traitement — sans modifier le miroir
+                            HelloAsso depuis ce module.
+                        </li>
+                    </ul>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

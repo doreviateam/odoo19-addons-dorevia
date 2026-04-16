@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Fragments QWeb : définis AVANT l’hérit de homepage pour enregistrement fiable du key (t-call). -->
+    <template id="radiogl_row_programme" name="Radio GL — ligne grille (fragment)">
+        <div class="d-flex justify-content-between py-2 border-bottom">
+            <span class="text-muted" t-esc="line_heure"/>
+            <strong t-esc="line_titre"/>
+        </div>
+    </template>
+
+    <template id="radiogl_site_hint" name="Radio GL — infos site (fragment)">
+        <p class="small text-muted mb-0">
+            <span t-esc="request.website.name"/> — société :
+            <span t-esc="request.website.company_id.name"/>
+        </p>
+    </template>
+
+    <template id="radiogl_homepage_inherit" inherit_id="website.homepage" name="Radio Grand Lieu — accueil démo">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure radiogl-site">
+                <section class="o_cc o_cc3 pt80 pb80" style="background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #0f172a 100%);">
+                    <div class="container text-center text-white">
+                        <h1 class="display-4 fw-bold mb-3">Bienvenue sur Radio Grand Lieu !</h1>
+                        <p class="lead mb-4">
+                            La radio qui conte — associative, à Saint-Aignan-de-Grand-Lieu (44).
+                            Média de proximité du bassin du Grand Lieu : direct, événements et podcasts.
+                        </p>
+                        <a href="https://radiograndlieu.fr/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg me-2 mb-2">
+                            Écouter le direct
+                        </a>
+                        <a href="/contactus" class="btn btn-outline-light btn-lg mb-2">Nous contacter</a>
+                    </div>
+                </section>
+
+                <t t-set="radiogl_stream_url" t-value="(request.env['ir.config_parameter'].sudo().get_param('dorevia_website_radio_grandlieu.stream_url') or '').strip()"/>
+                <section class="py-4">
+                    <div class="container">
+                        <div class="mx-auto rounded-4 p-4 p-md-5 text-center text-white shadow" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); max-width: 720px;">
+                            <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 gap-md-3 mb-3">
+                                <span class="badge rounded-pill bg-danger px-3 py-2">● EN DIRECT</span>
+                                <h3 class="h4 mb-0">Radio Grand Lieu — le direct</h3>
+                            </div>
+                            <audio t-if="radiogl_stream_url" controls="controls" preload="none" class="w-100 rounded-pill" style="max-height: 54px;">
+                                <source t-att-src="radiogl_stream_url"/>
+                                Votre navigateur ne lit pas le flux audio.
+                            </audio>
+                            <div t-if="not radiogl_stream_url" class="py-2">
+                                <p class="mb-3 small opacity-75">
+                                    Aucune URL de flux configurée en local. Renseignez le paramètre système
+                                    <code class="text-white-50">dorevia_website_radio_grandlieu.stream_url</code>
+                                    (Réglages → Technique → Paramètres du système) avec l’URL du flux, ou ouvrez le player officiel.
+                                </p>
+                                <a href="https://radiograndlieu.fr/player/" target="_blank" rel="noopener noreferrer" class="btn btn-light btn-lg">
+                                    Ouvrir le player (site officiel)
+                                </a>
+                            </div>
+                            <p class="small mt-3 mb-0 opacity-75">24h/24 — 7j/7 — La radio du bassin du Grand Lieu</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-5 bg-light">
+                    <div class="container">
+                        <h2 class="h3 fw-bold text-center mb-4">En images</h2>
+                        <div id="radioglCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#radioglCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"/>
+                                <button type="button" data-bs-target="#radioglCarousel" data-bs-slide-to="1" aria-label="Slide 2"/>
+                                <button type="button" data-bs-target="#radioglCarousel" data-bs-slide-to="2" aria-label="Slide 3"/>
+                            </div>
+                            <div class="carousel-inner rounded shadow-sm overflow-hidden">
+                                <div class="carousel-item active">
+                                    <div class="d-flex align-items-center justify-content-center bg-secondary text-white" style="min-height: 220px;">
+                                        <div class="text-center p-4">
+                                            <i class="fa fa-microphone fa-3x mb-3" title=""/>
+                                            <p class="h5 mb-0">Le studio — démo locale Odoo</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="d-flex align-items-center justify-content-center o_cc o_cc2" style="min-height: 220px;">
+                                        <div class="text-center p-4">
+                                            <i class="fa fa-headphones fa-3x mb-3" title=""/>
+                                            <p class="h5 mb-0">Podcasts &amp; replays</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="d-flex align-items-center justify-content-center bg-dark text-white" style="min-height: 220px;">
+                                        <div class="text-center p-4">
+                                            <i class="fa fa-users fa-3x mb-3" title=""/>
+                                            <p class="h5 mb-0">Bénévoles &amp; territoire</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#radioglCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"/>
+                                <span class="visually-hidden">Précédent</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#radioglCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"/>
+                                <span class="visually-hidden">Suivant</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-5">
+                    <div class="container">
+                        <h2 class="h3 fw-bold mb-3">Événements à venir</h2>
+                        <p class="lead text-muted mb-0">
+                            Placeholder d’entraînement : remplacez ce texte par vos annonces réelles
+                            (mode <strong>Modifier</strong> sur le site). Pour le contenu officiel, voir les
+                            <a href="https://radiograndlieu.fr/evenements-publics/" target="_blank" rel="noopener noreferrer">événements publics</a>
+                            sur le site de la radio.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="py-5 bg-white border-top border-bottom">
+                    <div class="container">
+                        <h2 class="h3 fw-bold mb-2">Exemples QWeb (tout est dans le code du module)</h2>
+                        <p class="text-muted small mb-4">
+                            Pas d’éditeur WYSIWYG ici : sections générées par
+                            <code>views/radiogl_homepage_templates.xml</code> (fragments + accueil).
+                        </p>
+                        <div class="row g-4">
+                            <div class="col-lg-4">
+                                <h3 class="h6 text-uppercase text-muted">t-call + t-set</h3>
+                                <t t-call="dorevia_website_radio_grandlieu.radiogl_site_hint"/>
+                            </div>
+                            <div class="col-lg-4">
+                                <h3 class="h6 text-uppercase text-muted">t-if (visiteur vs connecté)</h3>
+                                <p t-if="request.env.user._is_public()" class="small mb-0">
+                                    Vous êtes en navigation <strong>publique</strong>
+                                    (<code>_is_public()</code>).
+                                </p>
+                                <p t-else="" class="small alert alert-info mb-0 py-2">
+                                    Compte <strong>connecté</strong> (interne, portail ou public identifié).
+                                </p>
+                            </div>
+                            <div class="col-lg-4">
+                                <h3 class="h6 text-uppercase text-muted">Paramètre système (déjà utilisé pour le flux)</h3>
+                                <p class="small mb-0">
+                                    <span class="text-muted">URL flux :</span>
+                                    <code class="d-block text-break mt-1">
+                                        <t t-esc="(request.env['ir.config_parameter'].sudo().get_param('dorevia_website_radio_grandlieu.stream_url') or '(vide)')"/>
+                                    </code>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-lg-8 mx-auto">
+                                <h3 class="h6 text-uppercase text-muted">Grille (données Odoo)</h3>
+                                <p class="small text-muted mb-2">
+                                    Lignes du modèle <code>radiogl.programme.slot</code> — menu backend
+                                    <strong>Site → Créneaux grille (démo)</strong>.
+                                </p>
+                                <t t-set="radiogl_slots" t-value="request.env['radiogl.programme.slot'].sudo().search([('active', '=', True)], order='sequence, id') if 'radiogl.programme.slot' in request.env else []"/>
+                                <div class="bg-light rounded p-3 shadow-sm">
+                                    <t t-if="not radiogl_slots">
+                                        <p class="small mb-0 text-muted">Aucun créneau actif : en ajouter dans le backend.</p>
+                                    </t>
+                                    <t t-foreach="radiogl_slots" t-as="slot">
+                                        <t t-set="line_heure" t-value="'%s · %s' % (slot.day_label, slot.slot_time)"/>
+                                        <t t-set="line_titre" t-value="slot.title"/>
+                                        <t t-call="dorevia_website_radio_grandlieu.radiogl_row_programme"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="small text-muted mt-4 mb-0">
+                            Le fragment <code>radiogl_row_programme</code> sert encore pour le rendu ligne ;
+                            les valeurs viennent des enregistrements, pas d’une liste Python dans le XML.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="py-5 o_colored_level o_cc o_cc1">
+                    <div class="container">
+                        <h2 class="h3 fw-bold mb-3">Podcasts</h2>
+                        <p class="mb-4">
+                            Espace démo : la page <a href="/podcasts">Podcasts</a> résume l’idée ;
+                            le catalogue officiel est sur
+                            <a href="https://radiograndlieu.fr/podcasts/" target="_blank" rel="noopener noreferrer">radiograndlieu.fr</a>.
+                        </p>
+                        <a href="/podcasts" class="btn btn-primary">Découvrir nos podcasts (démo)</a>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>
