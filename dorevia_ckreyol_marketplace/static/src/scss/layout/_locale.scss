@@ -1,0 +1,325 @@
+// ============================================================================
+// C-Kreyol - Bloc locale header (langue + devise)
+// ============================================================================
+// On style UNIQUEMENT les placeholders natifs Odoo reinjectes dans le header :
+//   * website.placeholder_header_language_selector (variante inline + code)
+//   * website_sale.pricelist_list
+//
+// Aucun template custom : les selecteurs sont ceux du standard Odoo, on se
+// contente d habiller leur rendu pour l aligner avec la charte C-Kreyol.
+//
+// Garde-fous natifs :
+//   * langue : masque auto si len(frontend_languages) <= 1
+//   * devise : masque auto si len(website_sale_pricelists) <= 1
+// ============================================================================
+
+.ckr-header {
+
+    // --- Conteneur desktop -------------------------------------------------
+    &__locale {
+        align-items: center;
+        gap: $ckr-space-md;
+        padding-right: $ckr-space-md;
+        margin-right: $ckr-space-xs;
+        border-right: 1px solid $ckr-border;
+        // Reserve simplement la place, la visibilite est pilotee par
+        // d-none d-lg-flex dans le markup + par les garde-fous natifs.
+    }
+
+    // --- Selecteur de langue (inline + codes) ------------------------------
+    //
+    // Le rendu natif :
+    //   <li class="o_header_language_selector ckr-header__lang-item">
+    //     <div class="js_language_selector small o_prevent_link_editor ...">
+    //       <div class="list-inline" role="menu">
+    //         <a class="list-inline-item js_change_lang active"><span>FR</span></a>
+    //         <span class="list-inline-item">|</span>
+    //         <a class="list-inline-item js_change_lang"><span>EN</span></a>
+    //         ...
+    //       </div>
+    //     </div>
+    //   </li>
+    &__lang {
+        display: inline-flex;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+
+        .o_header_language_selector {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .js_language_selector {
+            display: inline-flex;
+            align-items: center;
+            font-family: $ckr-font-sans;
+            font-size: 0.8rem;
+            font-weight: $ckr-weight-medium;
+            letter-spacing: 0.04em;
+            line-height: 1;
+        }
+
+        .list-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: $ckr-space-xs;
+            margin: 0;
+            padding: 0;
+        }
+
+        // Items de langue (a.list-inline-item) + separateurs "|" (span.list-inline-item)
+        .list-inline-item {
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        // Liens langues
+        a.list-inline-item,
+        a.js_change_lang {
+            color: $ckr-text-muted;
+            text-decoration: none;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: color $ckr-transition-fast, background-color $ckr-transition-fast;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary;
+                text-decoration: none;
+                background-color: $ckr-bg-soft;
+                outline: none;
+            }
+
+            &.active {
+                color: $ckr-primary;
+                font-weight: $ckr-weight-semibold;
+                pointer-events: none;
+                cursor: default;
+            }
+        }
+
+        // Separateurs "|" (spans entre langues)
+        span.list-inline-item {
+            color: $ckr-border;
+            padding: 0;
+        }
+    }
+
+    // --- Selecteur de devise (dropdown pricelist) --------------------------
+    //
+    // Le rendu natif :
+    //   <div class="o_pricelist_dropdown dropdown ckr-header__pricelist">
+    //     <a class="dropdown-toggle btn px-2" data-bs-toggle="dropdown">
+    //       <small>Pricelist:</small>
+    //       <span>EUR</span>
+    //     </a>
+    //     <div class="dropdown-menu">
+    //       <a class="dropdown-item active">EUR</a>
+    //       <a class="dropdown-item">GBP</a>
+    //     </div>
+    //   </div>
+    &__pricelist {
+
+        &.o_pricelist_dropdown {
+            font-family: $ckr-font-sans;
+        }
+
+        > .dropdown-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            font-weight: $ckr-weight-medium;
+            color: $ckr-text-muted;
+            background: transparent;
+            border: none;
+            border-radius: $ckr-radius-md;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            transition: color $ckr-transition-fast, background-color $ckr-transition-fast;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary;
+                background-color: $ckr-bg-soft;
+                text-decoration: none;
+                outline: none;
+            }
+
+            // Flèche dropdown Bootstrap : on laisse le caret par défaut mais
+            // on le teinte pour rester cohérent avec la couleur de texte.
+            &::after {
+                border-top-color: currentColor;
+            }
+
+            small {
+                font-weight: $ckr-weight-medium;
+                opacity: 0.8;
+            }
+        }
+
+        > .dropdown-menu {
+            min-width: 9rem;
+            padding: $ckr-space-xs 0;
+            margin-top: $ckr-space-xs;
+            background-color: $ckr-bg;
+            border: 1px solid $ckr-border;
+            border-radius: $ckr-radius-md;
+            box-shadow: $ckr-shadow-md;
+            font-size: 0.875rem;
+
+            .dropdown-item {
+                padding: $ckr-space-sm $ckr-space-md;
+                color: $ckr-text;
+                font-weight: $ckr-weight-medium;
+                transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
+
+                &:hover,
+                &:focus-visible {
+                    background-color: $ckr-bg-soft;
+                    color: $ckr-primary;
+                    outline: none;
+                }
+
+                &.active,
+                &:active {
+                    background-color: rgba(160, 82, 45, 0.08);
+                    color: $ckr-primary;
+                    font-weight: $ckr-weight-semibold;
+                }
+            }
+        }
+    }
+}
+
+// ============================================================================
+// Drawer mobile : mêmes principes, plus aéré
+// ============================================================================
+.ckr-drawer {
+
+    &__locale {
+        display: flex;
+        flex-direction: column;
+        gap: $ckr-space-md;
+        padding: $ckr-space-lg $ckr-space-lg $ckr-space-md;
+        margin-top: $ckr-space-md;
+        border-top: 1px solid $ckr-border;
+    }
+
+    &__lang {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .o_header_language_selector {
+            display: block;
+        }
+
+        .js_language_selector {
+            display: flex;
+            align-items: center;
+            font-family: $ckr-font-sans;
+            font-size: 0.95rem;
+            font-weight: $ckr-weight-medium;
+        }
+
+        .list-inline {
+            display: flex;
+            align-items: center;
+            gap: $ckr-space-sm;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        .list-inline-item {
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        a.list-inline-item,
+        a.js_change_lang {
+            color: $ckr-text;
+            text-decoration: none;
+            padding: $ckr-space-xs $ckr-space-sm;
+            border-radius: $ckr-radius-md;
+            transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
+
+            &:hover,
+            &:focus-visible {
+                background-color: $ckr-bg-soft;
+                color: $ckr-primary;
+                outline: none;
+            }
+
+            &.active {
+                color: $ckr-primary;
+                font-weight: $ckr-weight-semibold;
+                background-color: $ckr-bg-soft;
+            }
+        }
+
+        span.list-inline-item {
+            color: $ckr-border;
+        }
+    }
+
+    &__pricelist.o_pricelist_dropdown {
+        font-family: $ckr-font-sans;
+
+        > .dropdown-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: $ckr-space-xs;
+            padding: $ckr-space-sm $ckr-space-md;
+            font-size: 0.95rem;
+            font-weight: $ckr-weight-medium;
+            color: $ckr-text;
+            background-color: $ckr-bg-soft;
+            border: 1px solid $ckr-border;
+            border-radius: $ckr-radius-md;
+            text-decoration: none;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary;
+                outline: none;
+            }
+
+            &::after {
+                border-top-color: currentColor;
+            }
+        }
+
+        > .dropdown-menu {
+            min-width: 9rem;
+            padding: $ckr-space-xs 0;
+            background-color: $ckr-bg;
+            border: 1px solid $ckr-border;
+            border-radius: $ckr-radius-md;
+            box-shadow: $ckr-shadow-md;
+
+            .dropdown-item {
+                padding: $ckr-space-sm $ckr-space-md;
+                color: $ckr-text;
+
+                &:hover,
+                &:focus-visible {
+                    background-color: $ckr-bg-soft;
+                    color: $ckr-primary;
+                    outline: none;
+                }
+
+                &.active {
+                    background-color: rgba(160, 82, 45, 0.08);
+                    color: $ckr-primary;
+                    font-weight: $ckr-weight-semibold;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Collections C-Kreyol (`ckr.shop.collection`)                -->
+    <!-- SPEC_IMPL_COLLECTIONS.md §2.1 — §2.3                        -->
+    <!--                                                            -->
+    <!-- Menus (patron Origines) :                                  -->
+    <!-- * Site web > Configuration > C-Kreyol > Collections        -->
+    <!--   (administrateurs site)                                   -->
+    <!-- * Site web > eCommerce > Produits > C-Kreyol > Collections -->
+    <!--   (concepteurs de site)                                    -->
+    <!-- ========================================================== -->
+
+    <record id="view_ckr_shop_collection_search" model="ir.ui.view">
+        <field name="name">ckr.shop.collection.search</field>
+        <field name="model">ckr.shop.collection</field>
+        <field name="arch" type="xml">
+            <search string="Collections C-Kreyol">
+                <field name="name"/>
+                <field name="slug"/>
+                <field name="product_template_ids"
+                       string="Produit rattaché"
+                       filter_domain="[('product_template_ids', 'ilike', self)]"/>
+                <filter name="filter_active"
+                        string="Actives"
+                        domain="[('active', '=', True)]"/>
+                <filter name="filter_archived"
+                        string="Archivées"
+                        domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="filter_in_period"
+                        string="En période"
+                        domain="[
+                            '|', ('date_start', '=', False), ('date_start', '&lt;=', context_today().strftime('%Y-%m-%d')),
+                            '|', ('date_end',   '=', False), ('date_end',   '&gt;=', context_today().strftime('%Y-%m-%d')),
+                        ]"/>
+                <filter name="filter_expired"
+                        string="Expirées"
+                        domain="[('date_end', '!=', False), ('date_end', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_upcoming"
+                        string="À venir"
+                        domain="[('date_start', '!=', False), ('date_start', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="group_website"
+                            string="Site web"
+                            context="{'group_by': 'website_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_ckr_shop_collection_tree" model="ir.ui.view">
+        <field name="name">ckr.shop.collection.list</field>
+        <field name="model">ckr.shop.collection</field>
+        <field name="arch" type="xml">
+            <list string="Collections C-Kreyol" default_order="sequence, name">
+                <field name="sequence" widget="handle"/>
+                <field name="slug"/>
+                <field name="name"/>
+                <field name="product_template_count" string="Produits"/>
+                <field name="date_start" optional="show"/>
+                <field name="date_end" optional="show"/>
+                <field name="website_id" optional="hide"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ckr_shop_collection_form" model="ir.ui.view">
+        <field name="name">ckr.shop.collection.form</field>
+        <field name="model">ckr.shop.collection</field>
+        <field name="arch" type="xml">
+            <form string="Collection éditoriale">
+                <sheet>
+                    <widget name="web_ribbon"
+                            title="Archivée"
+                            bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name" string="Titre affiché"/>
+                        <h1>
+                            <field name="name" placeholder="ex. Collection Noël"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Identité URL">
+                            <field name="slug" placeholder="ex. noel"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Publication">
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="website_id"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group string="Période de validité (optionnelle)">
+                        <group>
+                            <field name="date_start"/>
+                        </group>
+                        <group>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="page_products" string="Produits rattachés">
+                            <field name="product_template_ids" widget="many2many">
+                                <list string="Produits">
+                                    <field name="name"/>
+                                    <field name="default_code" optional="show"/>
+                                    <field name="list_price"/>
+                                    <field name="is_published" optional="show"
+                                           widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ckr_shop_collection" model="ir.actions.act_window">
+        <field name="name">Collections</field>
+        <field name="res_model">ckr.shop.collection</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_ckr_shop_collection_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez une collection éditoriale (sélection / thème / saison)
+                et rattachez-y les produits du catalogue.
+            </p>
+            <p>
+                La collection est rendue visible au visiteur sur
+                <code>/collections/&lt;slug&gt;</code> dès qu’elle est
+                <b>active</b> et, si renseigné, dans sa <b>période de
+                validité</b>. Le rattachement produit est porté par la
+                relation M2M Collections ↔ Produits (source de vérité CK).
+            </p>
+        </field>
+    </record>
+
+    <!-- Branche Configuration (administrateurs) -->
+    <menuitem id="menu_ckreyol_configuration_collections"
+              name="Collections"
+              parent="menu_ckreyol_configuration_root"
+              action="action_ckr_shop_collection"
+              sequence="20"/>
+
+    <!-- Branche eCommerce > Produits (concepteurs de site) -->
+    <menuitem id="menu_ckreyol_catalog_collections"
+              name="Collections"
+              parent="menu_ckreyol_catalog_root"
+              action="action_ckr_shop_collection"
+              sequence="20"
+              groups="website.group_website_designer"/>
+
+</odoo>

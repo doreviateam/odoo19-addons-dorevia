@@ -1,0 +1,36 @@
+// ============================================================================
+// C-Kreyol - Tokens couleurs (Charte Phase 1 § 4)
+// Direction A - Epicerie fine tropicale
+//
+// Note : on evite darken()/lighten() (deprecies en Dart Sass moderne) en
+// pre-calculant les nuances en hex ; on evite aussi de redefinir le map
+// $o-color-palette d Odoo (structure interne specifique).
+// ============================================================================
+
+// --- Palette primaire --------------------------------------------------------
+$ckr-primary:        #A0522D;   // Deep terracotta / baked clay - CTA, accents marque
+$ckr-secondary:      #87A878;   // Sage green / dried foliage - accents secondaires
+$ckr-accent:         #D4A373;   // Golden amber - ponctuation, micro-accents
+
+// --- Neutres -----------------------------------------------------------------
+$ckr-bg:             #F5F1E8;   // Warm off-white - fond principal
+$ckr-text:           #2C2C2C;   // Charcoal - texte / contraste fort
+
+// --- Derives (hex precomputes) -----------------------------------------------
+$ckr-primary-dark:   #8A4626;   // #A0522D - 8%
+$ckr-primary-light:  #B56037;   // #A0522D + 6%
+$ckr-accent-dark:    #C68D58;   // #D4A373 - 8%
+$ckr-secondary-dark: #738F64;   // #87A878 - 8%
+
+// Neutres intermediaires
+$ckr-bg-soft:        #EDE8DB;   // fond secondaire / separateurs doux
+$ckr-bg-accent:      #E8D9B8;   // fond chaleureux (blocs hover entries)
+$ckr-border:         #D9D0BA;   // bordures fines
+$ckr-text-muted:     #707070;   // texte secondaire
+
+// --- Bootstrap / Odoo : variables minimales ---------------------------------
+// Scope restreint pour limiter l impact sur le back-office et les modules tiers.
+$primary:    $ckr-primary;
+$secondary:  $ckr-secondary;
+$body-bg:    $ckr-bg;
+$body-color: $ckr-text;

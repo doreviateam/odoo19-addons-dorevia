@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Page : Contact -->
+    <template id="ckr_page_contact" name="C-Kreyol: Contact">
+        <t t-call="website.layout">
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <h1>Nous contacter</h1>
+                        <p class="ckr-lead">
+                            Une question sur un produit, une commande ou le projet ?
+                            Ecrivez-nous, nous repondons avec soin.
+                        </p>
+
+                        <div class="ckr-contact-grid" style="display:grid;grid-template-columns:1fr;gap:1.5rem;margin-top:2rem;">
+                            <div>
+                                <h3>Par e-mail</h3>
+                                <p>
+                                    <a href="mailto:contact@c-kreyol.fr">contact@c-kreyol.fr</a>
+                                </p>
+                            </div>
+                            <div>
+                                <h3>Adresse</h3>
+                                <p>
+                                    C-Kreyol / Dorevia<br/>
+                                    Nantes (France)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+</odoo>

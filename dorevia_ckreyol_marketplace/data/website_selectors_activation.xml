@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ========================================================== -->
+    <!-- Activation des variantes natives du selecteur de langue    -->
+    <!--                                                            -->
+    <!-- Cible V1 : rendu "inline + codes" (FR | EN | ES), sans     -->
+    <!-- drapeaux, sans dropdown.                                   -->
+    <!--                                                            -->
+    <!-- Les deux vues ci-dessous sont fournies par website, mais   -->
+    <!-- livrees avec active=False. On les bascule a True via data. -->
+    <!--                                                            -->
+    <!-- Garde-fous natifs conserves :                              -->
+    <!--   * le selecteur ne s affiche que si                       -->
+    <!--     len(frontend_languages) > 1                            -->
+    <!--   * le pricelist_list ne s affiche que si                  -->
+    <!--     len(website_sale_pricelists) > 1                       -->
+    <!--                                                            -->
+    <!-- Cote back-office : prerequis decrits dans                  -->
+    <!--   docs/EXPLOITATION_I18N_DEVISES.md                        -->
+    <!-- ========================================================== -->
+
+    <!-- Inline : supprime le dropdown, affiche les langues en ligne -->
+    <record id="website.header_language_selector_inline" model="ir.ui.view">
+        <field name="active" eval="True"/>
+    </record>
+
+    <!-- Codes : affiche "FR / EN / ES" a la place des noms complets -->
+    <record id="website.header_language_selector_code" model="ir.ui.view">
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>

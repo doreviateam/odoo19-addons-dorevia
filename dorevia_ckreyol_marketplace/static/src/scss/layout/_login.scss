@@ -1,0 +1,159 @@
+// ============================================================================
+// Page /web/login (website) — charte C-Kreyol, lecture « Mon compte ».
+// ============================================================================
+
+main .ckr-login-page,
+.ckr-login-page {
+    width: 100%;
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: $ckr-space-md;
+    padding-bottom: $ckr-space-lg;
+}
+
+.ckr-login-page__head {
+    margin-bottom: $ckr-space-md;
+}
+
+.ckr-login-page__title {
+    font-family: $ckr-font-serif;
+    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+    font-weight: $ckr-weight-semibold;
+    color: $ckr-text;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0;
+}
+
+// Composant technique (choix utilisateur pré-saisi).
+.ckr-login-page owl-component {
+    display: none !important;
+}
+
+// Passkey (module auth_passkey) : hors périmètre client.
+.ckr-login-page .passkey_login_link,
+.ckr-login-page a.passkey_login_link {
+    display: none !important;
+}
+
+// OAuth / passkey : masquer tout le bloc s'il n'y a aucun mode alternatif
+// réellement utile (évite le « — ou — » orphelin). Réaffiche si OAuth tiers.
+.ckr-login-page .o_login_auth:not(:has(a.list-group-item-action:not(.passkey_login_link))) {
+    display: none !important;
+}
+
+.ckr-login-page .oe_login_form {
+    padding: $ckr-space-xl $ckr-space-lg;
+    background-color: $ckr-bg;
+    border: 1px solid $ckr-border;
+    border-radius: $ckr-radius-lg;
+    box-shadow: $ckr-shadow-md;
+}
+
+.ckr-login-page .form-control {
+    border-color: $ckr-border;
+    border-radius: $ckr-radius-md;
+    transition: border-color $ckr-transition-base, box-shadow $ckr-transition-base;
+
+    &:hover:not(:focus):not(:disabled) {
+        border-color: rgba(160, 82, 45, 0.35);
+    }
+
+    &:focus {
+        border-color: $ckr-primary;
+        box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.15);
+    }
+
+    &:focus:not(:focus-visible) {
+        box-shadow: none;
+    }
+
+    &:focus-visible {
+        border-color: $ckr-primary;
+        box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.2);
+    }
+}
+
+// Libellé « Mot de passe » seul sur la ligne (comme « Adresse e-mail »), sans lien à droite.
+.ckr-login-page .o_caps_lock_warning > .d-flex {
+    display: block;
+}
+
+.ckr-login-page .o_caps_lock_warning > .d-flex .form-label {
+    margin-bottom: $ckr-space-xs;
+}
+
+.ckr-login-page .btn-link {
+    color: $ckr-primary;
+    font-weight: $ckr-weight-medium;
+    text-decoration: none;
+    transition: color $ckr-transition-base;
+
+    &:hover {
+        color: $ckr-primary-dark;
+        text-decoration: underline;
+        text-underline-offset: 0.15em;
+    }
+
+    &:focus {
+        color: $ckr-primary-dark;
+    }
+
+    &:focus-visible {
+        color: $ckr-primary-dark;
+        outline: 2px solid rgba(160, 82, 45, 0.45);
+        outline-offset: 2px;
+        border-radius: $ckr-radius-sm;
+    }
+}
+
+.ckr-login__submit.btn.btn-primary,
+.ckr-login-page .oe_login_buttons .btn-primary {
+    background-color: $ckr-primary !important;
+    border-color: $ckr-primary !important;
+    color: $ckr-bg !important;
+    font-weight: $ckr-weight-semibold;
+    letter-spacing: 0.02em;
+    padding: 0.65rem 1.25rem;
+    border-radius: $ckr-radius-md;
+    box-shadow: 0 4px 12px rgba(160, 82, 45, 0.22);
+    transition: background-color $ckr-transition-base,
+                border-color $ckr-transition-base,
+                box-shadow $ckr-transition-base,
+                transform $ckr-transition-fast;
+
+    &:hover,
+    &:focus {
+        background-color: $ckr-primary-dark !important;
+        border-color: $ckr-primary-dark !important;
+        color: $ckr-bg !important;
+        box-shadow: 0 6px 16px rgba(138, 70, 38, 0.28);
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &:focus-visible {
+        background-color: $ckr-primary-dark !important;
+        border-color: $ckr-primary-dark !important;
+        box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.35), 0 6px 16px rgba(138, 70, 38, 0.28) !important;
+    }
+}
+
+.ckr-login-page .input-group .o_show_password:focus-visible {
+    border-color: $ckr-primary !important;
+    box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.15);
+}
+
+.ckr-login__link-secondary {
+    font-size: 0.95rem !important;
+}
+
+// Mode debug uniquement : masqué pour l’expérience client (ne pas retirer en base).
+.ckr-login-page button[name="redirect"][value="/web/become"],
+.ckr-login-page button[value="/web/become"] {
+    display: none !important;
+}

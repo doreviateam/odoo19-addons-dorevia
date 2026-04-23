@@ -1,0 +1,181 @@
+// ============================================================================
+// C-Kreyol - Point d entree SCSS (frontend)
+// ============================================================================
+// Ce fichier sert de marqueur de fin de chaine pour le bundle
+// web.assets_frontend. Les tokens, layouts et composants sont charges
+// avant (voir __manifest__.py `assets`).
+//
+// Regles globales minimales, scopees pour eviter toute pollution du back-office
+// et des vues non C-Kreyol.
+// ============================================================================
+
+// --- Racine C-Kreyol : typographie et couleurs de fond ----------------------
+// On n applique les tokens qu a l interieur des zones que ce module controle
+// (pages C-Kreyol). Le header et le footer ont leur propre SCSS : ne pas les
+// cibler ici — sinon `background-color` + `color` de page ecrasent le fond
+// sombre du footer et le wordmark crème (charte §9.3) devient illisible.
+
+.ckr-root:not(.ckr-footer):not(.ckr-header),
+.ckr-page {
+    font-family: $ckr-font-sans;
+    color: $ckr-text;
+    background-color: $ckr-bg;
+    line-height: $ckr-line-height;
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: $ckr-font-serif;
+        color: $ckr-text;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: -0.01em;
+    }
+
+    h1 { font-size: $ckr-h1-size; line-height: 1.15; }
+    h2 { font-size: $ckr-h2-size; line-height: 1.2; }
+    h3 { font-size: $ckr-h3-size; line-height: 1.3; }
+
+    .ckr-lead {
+        font-size: $ckr-lead-size;
+        color: $ckr-text;
+        line-height: 1.55;
+    }
+
+    // Couleur de lien par defaut, sauf boutons (standard Odoo .btn
+    // ou nos CTA .ckr-btn) dont la couleur est definie par leur propre
+    // composant via _buttons.scss.
+    a:not(.btn):not(.ckr-btn) {
+        color: $ckr-primary;
+        text-decoration: none;
+        transition: color $ckr-transition-fast;
+
+        &:hover,
+        &:focus {
+            color: $ckr-primary-dark;
+            text-decoration: underline;
+        }
+    }
+}
+
+// --- Section reutilisable ---------------------------------------------------
+.ckr-section {
+    padding-top:    $ckr-section-py-mobile;
+    padding-bottom: $ckr-section-py-mobile;
+
+    @media (min-width: 768px) {
+        padding-top:    $ckr-section-py-desktop;
+        padding-bottom: $ckr-section-py-desktop;
+    }
+
+    &--soft {
+        background-color: $ckr-bg-soft;
+    }
+
+    &--dark {
+        background-color: $ckr-text;
+        color: $ckr-bg;
+
+        h1, h2, h3, h4, h5, h6 {
+            color: $ckr-bg;
+        }
+    }
+}
+
+// --- Container --------------------------------------------------------------
+.ckr-container {
+    width: 100%;
+    max-width: $ckr-container-max;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left:  $ckr-container-px;
+    padding-right: $ckr-container-px;
+}
+
+// --- Titre de section -------------------------------------------------------
+.ckr-section-title {
+    font-family: $ckr-font-serif;
+    font-size: $ckr-h2-size;
+    margin-bottom: $ckr-space-lg;
+
+    &__eyebrow {
+        display: block;
+        font-family: $ckr-font-sans;
+        font-size: 0.85rem;
+        font-weight: $ckr-weight-medium;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $ckr-secondary;
+        margin-bottom: $ckr-space-xs;
+    }
+
+    // Sous-titre optionnel sous le h2 (ex. bloc Explorer Phase 2).
+    &__intro {
+        font-family: $ckr-font-sans;
+        font-size: 1rem;
+        font-weight: $ckr-weight-regular;
+        line-height: 1.55;
+        color: $ckr-text-muted;
+        max-width: 58ch;
+        margin: $ckr-space-sm 0 0 0;
+    }
+
+}
+
+// --- Titre de section centre horizontalement (snippet Explorer homepage) ----
+// Spécificité élevée pour battre les règles Bootstrap / Odoo éventuelles
+// (ex : .text-start sur h2 ou p, règles de .ckr-root, etc.).
+.ckr-root .ckr-section-title.ckr-section-title--center,
+.ckr-section-title.ckr-section-title--center {
+    text-align: center;
+
+    .ckr-section-title__eyebrow,
+    h2,
+    .ckr-section-title__intro {
+        text-align: center;
+    }
+
+    .ckr-section-title__intro {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: $ckr-space-sm;
+        margin-bottom: 0;
+    }
+}
+
+// --- Filet amber sur le sureligne de section (fil rouge V1) ------------------
+// Ref : docs/crea/PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md (§9 + fil rouge)
+// Signature visuelle discrete (1 px x 48 px), posee au-dessus du sureligne
+// (porte par le surtitre, pas par le titre). Une section peut surcharger
+// la hauteur du filet localement pour un micro-accent de presence.
+.ckr-section-title__eyebrow--rule {
+    position: relative;
+    display: inline-block;
+    padding-top: calc(#{$ckr-space-sm} + 2px);
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 48px;
+        height: 1px;
+        background-color: $ckr-accent;
+    }
+}
+
+// Centrage du filet dans un titre de section centre horizontalement.
+.ckr-section-title--center .ckr-section-title__eyebrow--rule::before {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+// --- Garde prefers-reduced-motion (scopee au perimetre C-Kreyol) ------------
+// Desactive les transitions et transformations a l interieur des racines CK
+// uniquement. N ecrase pas les comportements standard Odoo hors perimetre
+// (header / footer non-CK, portail natif, boutique native).
+@media (prefers-reduced-motion: reduce) {
+    .ckr-root *,
+    .ckr-page * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        transform: none !important;
+    }
+}

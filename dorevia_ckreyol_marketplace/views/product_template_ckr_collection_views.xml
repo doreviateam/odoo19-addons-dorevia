@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Rattachement Collections dans la fiche produit BO           -->
+    <!-- SPEC_IMPL_COLLECTIONS.md §2.1 / RC-01 / RC-02               -->
+    <!--                                                            -->
+    <!-- Place le champ ``ckr_collection_ids`` immédiatement après   -->
+    <!-- ``ckr_origin_value_ids`` pour offrir une continuité         -->
+    <!-- éditoriale : les deux axes « Origine » (attribut catalogue) -->
+    <!-- et « Collection » (curation CK) sont édités côte à côte     -->
+    <!-- dans l'onglet Ventes / groupe Boutique e-commerce.          -->
+    <!-- ========================================================== -->
+    <record id="product_template_form_view_ckr_collection" model="ir.ui.view">
+        <field name="name">product.template.form.ckr.collection</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id"
+               ref="dorevia_ckreyol_marketplace.product_template_form_view_ckr_origin"/>
+        <field name="arch" type="xml">
+            <field name="ckr_origin_value_ids" position="after">
+                <field name="ckr_collection_ids"
+                       widget="many2many_tags"
+                       string="Collections"
+                       options="{'no_create_edit': True}"
+                       invisible="not sale_ok"
+                       placeholder="Sélectionnez une ou plusieurs collections…"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

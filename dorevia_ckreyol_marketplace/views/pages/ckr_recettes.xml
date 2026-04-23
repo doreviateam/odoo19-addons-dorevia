@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Page : Recettes (stub Phase 1) -->
+    <template id="ckr_page_recettes" name="C-Kreyol: Recettes">
+        <t t-call="website.layout">
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <span class="ckr-section-title__eyebrow">C-Kreyol</span>
+                        <h1>Recettes</h1>
+                        <p class="ckr-lead">
+                            Des usages et des idees simples pour mettre en scene les produits du
+                            catalogue - en cuisine, au petit-dejeuner, pour un encas ou un dessert.
+                        </p>
+
+                        <div style="margin-top:3rem;padding:2rem;background:#F5F1E8;border-radius:12px;">
+                            <h3 style="margin-top:0;">Bientot disponible</h3>
+                            <p style="margin-bottom:0;">
+                                Nos premieres recettes sont en cours d ecriture. En attendant, les
+                                fiches produits donnent deja des pistes d usage - direction la
+                                <a href="/shop">boutique</a>.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+</odoo>

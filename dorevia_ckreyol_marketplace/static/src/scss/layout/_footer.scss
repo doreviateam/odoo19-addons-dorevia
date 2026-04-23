@@ -1,0 +1,152 @@
+// ============================================================================
+// C-Kreyol - Footer personnalise (Charte § 9.3, ADR-CKR-003)
+// ============================================================================
+
+.ckr-footer {
+    background-color: $ckr-text;
+    color: $ckr-bg;
+    font-family: $ckr-font-sans;
+    font-size: 0.9rem;
+    padding-top:    $ckr-space-2xl;
+    padding-bottom: $ckr-space-lg;
+
+    &__inner {
+        max-width: $ckr-container-max;
+        margin: 0 auto;
+        padding: 0 $ckr-container-px;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $ckr-space-xl;
+
+        @media (min-width: 576px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (min-width: 992px) {
+            grid-template-columns: 1.2fr repeat(3, 1fr);
+        }
+    }
+
+    &__brand {
+        display: flex;
+        flex-direction: column;
+        gap: $ckr-space-sm;
+
+        p {
+            margin: 0;
+            line-height: 1.55;
+            max-width: 28ch;
+            color: rgba(245, 241, 232, 0.75);
+        }
+    }
+
+    // Wordmark marque (HTML) : taille lisible sur fond charcoal (charte §9.3).
+    &__wordmark {
+        align-self: flex-start;
+        margin: 0 0 $ckr-space-sm 0;
+        font-family: $ckr-font-serif;
+        font-weight: $ckr-weight-semibold;
+        font-size: unquote("clamp(2rem, 4.5vw, 2.75rem)");
+        line-height: 1.08;
+        letter-spacing: 0.05em;
+        color: $ckr-bg;
+    }
+
+    &__wordmark-inner {
+        display: inline-block;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    &__wordmark-c,
+    &__wordmark-k {
+        color: $ckr-bg;
+    }
+
+    &__wordmark-hyphen {
+        color: $ckr-accent;
+        margin: 0 0.04em;
+    }
+
+    &__col {
+        display: flex;
+        flex-direction: column;
+        gap: $ckr-space-sm;
+    }
+
+    &__title {
+        font-family: $ckr-font-serif;
+        font-size: 1rem;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: 0.02em;
+        color: $ckr-bg;
+        margin: 0 0 $ckr-space-xs 0;
+    }
+
+    a {
+        color: rgba(245, 241, 232, 0.85);
+        text-decoration: none;
+        transition: color $ckr-transition-fast;
+
+        &:hover,
+        &:focus {
+            color: $ckr-accent;
+            text-decoration: none;
+        }
+    }
+
+    &__legal {
+        margin-top: $ckr-space-xl;
+        padding-top: $ckr-space-md;
+        border-top: 1px solid rgba(245, 241, 232, 0.15);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: $ckr-space-sm;
+        font-size: 0.8rem;
+        color: rgba(245, 241, 232, 0.6);
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: $ckr-space-md;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Odoo Website / Bootstrap : regles souvent plus specifiques sur #wrapwrap
+// (couleur des liens, :visited mauve, titres herites). On re-ancre sur #footer.
+// ---------------------------------------------------------------------------
+#footer.ckr-footer {
+    h3.ckr-footer__title {
+        color: $ckr-bg !important;
+    }
+
+    a:link,
+    a:visited {
+        color: rgba(245, 241, 232, 0.92) !important;
+        text-decoration: none !important;
+    }
+
+    a:hover,
+    a:focus {
+        color: $ckr-accent !important;
+    }
+
+    .ckr-footer__wordmark,
+    .ckr-footer__wordmark-c,
+    .ckr-footer__wordmark-k {
+        color: $ckr-bg !important;
+    }
+
+    .ckr-footer__wordmark-hyphen {
+        color: $ckr-accent !important;
+    }
+}

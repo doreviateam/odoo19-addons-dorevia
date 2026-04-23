@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ========================================================== -->
+    <!-- Nettoyage du stub /kits (porte Kits front / Pack back)      -->
+    <!--                                                            -->
+    <!-- Motivation : mise en service du contrat d'URL Hybride H1    -->
+    <!-- (CONTRAT_URL_PACKS.md §12) — la route /kits est desormais   -->
+    <!-- portee par le controleur Python                             -->
+    <!-- WebsiteSaleCKRKitsAlias (controllers/website_sale_ckr.py)   -->
+    <!-- qui effectue une redirection HTTP 301 vers                  -->
+    <!-- /shop?ckr_mode=pack.                                        -->
+    <!--                                                            -->
+    <!-- Objectif de ce fichier : retirer le stub CMS historique     -->
+    <!-- (website.page et template QWeb associes) dans les bases     -->
+    <!-- deja installees, pour eviter toute collision de routage.    -->
+    <!--                                                            -->
+    <!-- Strategie : suppression par recherche sur l'URL (plus       -->
+    <!-- robuste que par ref XML, qui peut ne plus etre resolue      -->
+    <!-- une fois le record retire du data set).                    -->
+    <!-- ========================================================== -->
+
+    <!-- 1. Retrait de la website.page stub /kits -->
+    <delete model="website.page" search="[('url', '=', '/kits')]"/>
+
+    <!-- 2. Retrait du template QWeb stub ckr_page_compositions -->
+    <!-- Note : la reference XML pointe vers le XML ID que le module -->
+    <!-- dorevia_ckreyol_marketplace exposait jusqu'en v19.0.1.0.29. -->
+    <delete model="ir.ui.view"
+            search="[('key', '=', 'dorevia_ckreyol_marketplace.ckr_page_compositions')]"/>
+
+</odoo>

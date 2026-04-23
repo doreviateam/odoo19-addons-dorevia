@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Snippet : Bloc 3 — Explorer / Par où commencer             -->
+    <!-- Libellés front (pluriel) : Promotions, Collections, Kits,  -->
+    <!-- Catégories, Origines — doctrine ADR-008.                   -->
+    <!--                                                            -->
+    <!-- Règle cible universelle (ADR-007) :                        -->
+    <!--   Les cinq cartes convergent vers la Boutique /shop ;      -->
+    <!--   aucune exception. Ce qui change d'une porte à l'autre    -->
+    <!--   n'est pas la destination, mais le mode de lecture        -->
+    <!--   (filtre / contexte / paramètre).                         -->
+    <!--                                                            -->
+    <!-- État actuel des href (version 19.0.1.3.0) :                 -->
+    <!--   * Promotions  -> /promotions   (REDIRECTION 301 portee   -->
+    <!--                                   par le controleur CK     -->
+    <!--                                   vers /shop?ckr_mode=promo;-->
+    <!--                                   contrat d'URL Hybride H1 -->
+    <!--                                   acte - CONTRAT_URL_       -->
+    <!--                                   PROMOTIONS.md §12 ;      -->
+    <!--                                   source de verite A2 =    -->
+    <!--                                   product.pricelist.item    -->
+    <!--                                   datee, strictement       -->
+    <!--                                   reducteur sur pricelist   -->
+    <!--                                   courante du visiteur)     -->
+    <!--   * Collections -> /collections  (STUB transitoire)         -->
+    <!--   * Kits        -> /kits         (REDIRECTION 301 portee   -->
+    <!--                                   par le controleur CK     -->
+    <!--                                   vers /shop?ckr_mode=pack ;-->
+    <!--                                   contrat d'URL Hybride H1 -->
+    <!--                                   acte - CONTRAT_URL_PACKS  -->
+    <!--                                   .md §12 / ADR-CKR-008)    -->
+    <!--   * Catégories  -> /categories   (REDIRECTION 301 portee   -->
+    <!--                                   vers /shop/category/id-    -->
+    <!--                                   slug ; H1 cible native —   -->
+    <!--                                   CONTRAT_URL_CATEGORIES.md  -->
+    <!--                                   §12 ; resolution via       -->
+    <!--                                   product.public.category +  -->
+    <!--                                   parametre systeme optionnel) -->
+    <!--   * Origines    -> /origines     (STUB transitoire)         -->
+    <!-- Cible finale : toutes les cartes -> /shop + contexte.      -->
+    <!-- Les stubs restants seront supprimés, redirigés (301/302)   -->
+    <!-- ou convertis en façade stricte selon le contrat retenu par -->
+    <!-- porte (voir SPEC_SHOP_PORTES.md).                           -->
+    <!--                                                            -->
+    <!-- Règle de bi-lexique front / back-office (ADR-008) :         -->
+    <!--   * Grille front / visiteur  : « Kits »                    -->
+    <!--     (univers alimentaire : kit colombo, kit apéritif…)     -->
+    <!--   * Grille back-office / source de vérité : « Pack »        -->
+    <!--     (module OCA product_pack : case « Est un pack ? » =    -->
+    <!--      booléen product.template.pack_ok, onglet Pack).       -->
+    <!--                                                            -->
+    <!-- Ordre d’affichage : Promotions → Collections → Kits →      -->
+    <!-- Catégories → Origines                                      -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_snippet_entries" name="C-Kreyol: Entrees d exploration">
+        <section id="explorer-catalogue"
+                 class="ckr-section ckr-root"
+                 aria-labelledby="ckr-explorer-heading">
+            <div class="ckr-container">
+
+                <header class="ckr-section-title ckr-section-title--center">
+                    <span class="ckr-section-title__eyebrow">Explorer</span>
+                    <h2 id="ckr-explorer-heading">Par où commencer</h2>
+                    <p class="ckr-section-title__intro">
+                        Cinq façons d’explorer l’offre : avantages du moment, sélections éditoriales,
+                        kits et assortiments, familles de produits, et origines.
+                    </p>
+                </header>
+
+                <div class="ckr-entries__carousel"
+                     role="region"
+                     aria-roledescription="carrousel"
+                     aria-labelledby="ckr-explorer-heading">
+                    <div class="ckr-entries__carousel-inner">
+                        <button type="button"
+                                class="ckr-entries__nav ckr-entries__nav--prev"
+                                aria-controls="ckr-explorer-track"
+                                aria-label="Voir les cartes précédentes">
+                            <svg class="ckr-entries__nav-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                            </svg>
+                        </button>
+                        <div id="ckr-explorer-track"
+                             class="ckr-entries__viewport"
+                             dir="ltr"
+                             tabindex="0"
+                             role="group"
+                             aria-label="Portes d’exploration du catalogue">
+                            <div class="ckr-entries__track">
+
+                                <a href="/promotions" class="ckr-entries__card">
+                                    <h3>Promotions</h3>
+                                    <p>Offres du moment : produits dont le prix est effectivement réduit par la liste de prix en cours — l’avantage s’applique automatiquement à la caisse.</p>
+                                    <span class="ckr-entries__card__arrow">Voir les promotions &#8594;</span>
+                                </a>
+
+                                <a href="/collections" class="ckr-entries__card">
+                                    <h3>Collections</h3>
+                                    <p>Sélections par saison, usage ou envie — angle éditorial pour découvrir l’offre.</p>
+                                    <span class="ckr-entries__card__arrow">Voir les collections &#8594;</span>
+                                </a>
+
+                                <a href="/kits" class="ckr-entries__card">
+                                    <h3>Kits</h3>
+                                    <p>Kits colombo, apéritif, découverte… coffrets et assortiments prêts à partager, construits à partir de la logique pack en back-office.</p>
+                                    <span class="ckr-entries__card__arrow">Découvrir les kits &#8594;</span>
+                                </a>
+
+                                <a href="/categories" class="ckr-entries__card">
+                                    <h3>Catégories</h3>
+                                    <p>Grandes familles de produits : biscuits, boissons, épicerie… structuration du catalogue.</p>
+                                    <span class="ckr-entries__card__arrow">Parcourir par catégorie &#8594;</span>
+                                </a>
+
+                                <a href="/origines" class="ckr-entries__card">
+                                    <h3>Origines</h3>
+                                    <p>Territoires et provenances — Antilles, Caraïbe, selon ce que porte le catalogue.</p>
+                                    <span class="ckr-entries__card__arrow">Explorer par origine &#8594;</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <button type="button"
+                                class="ckr-entries__nav ckr-entries__nav--next"
+                                aria-controls="ckr-explorer-track"
+                                aria-label="Voir les cartes suivantes">
+                            <svg class="ckr-entries__nav-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </template>
+
+</odoo>

@@ -1,0 +1,34 @@
+// ============================================================================
+// C-Kreyol - Tokens typographie (Charte Phase 1 § 5)
+// Titres : Playfair Display (serif editoriale)
+// Corps  : Inter (sans-serif retail-ready)
+// ============================================================================
+
+// --- Stacks ------------------------------------------------------------------
+$ckr-font-serif:  'Playfair Display', Georgia, 'Times New Roman', serif;
+$ckr-font-sans:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                  Roboto, Helvetica, Arial, sans-serif;
+
+// --- Corps de page (Bootstrap / Odoo) ----------------------------------------
+$font-family-base:     $ckr-font-sans;
+$headings-font-family: $ckr-font-serif;
+
+// --- Echelle typographique ---------------------------------------------------
+$ckr-font-size-base:   1rem;       // 16px
+$ckr-line-height:      1.6;
+
+// Note : on quote clamp() pour forcer Sass a l emettre tel quel en CSS
+// (sinon Dart Sass tente math.clamp() et echoue sur les unites vw/rem).
+$ckr-h1-size:          unquote("clamp(2rem, 4.5vw, 3.25rem)");
+$ckr-h2-size:          unquote("clamp(1.5rem, 3vw, 2.25rem)");
+$ckr-h3-size:          unquote("clamp(1.25rem, 2vw, 1.625rem)");
+$ckr-lead-size:        unquote("clamp(1rem, 1.5vw, 1.125rem)");
+
+// --- Poids -------------------------------------------------------------------
+$ckr-weight-regular:   400;
+$ckr-weight-medium:    500;
+$ckr-weight-semibold:  600;
+$ckr-weight-bold:      700;
+
+// Titres Playfair : l effet editorial passe mieux en 600/700, pas en 900.
+$headings-font-weight: $ckr-weight-semibold;

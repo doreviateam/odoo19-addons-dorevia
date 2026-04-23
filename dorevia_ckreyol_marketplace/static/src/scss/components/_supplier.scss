@@ -1,0 +1,62 @@
+// ============================================================================
+// C-Kreyol - Bloc 4 : Mise en avant fournisseur / origine (WIREFRAME § 3)
+// Regle : ancrer l offre dans un fournisseur reel (La Platine) sans inverser
+// la hierarchie visuelle C-Kreyol > fournisseur.
+// ============================================================================
+
+.ckr-supplier {
+    background-color: $ckr-bg-soft;
+
+    &__inner {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $ckr-space-xl;
+        // Plane V1 : alignement haut sur desktop pour une composition sobre
+        // (gel §9.2 PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md 2026-04-23,
+        // etait "center"). Evite l effet flottant quand le texte est court.
+        align-items: start;
+
+        @media (min-width: 992px) {
+            grid-template-columns: 1fr 1.1fr;
+            gap: $ckr-space-3xl;
+            align-items: start;
+        }
+    }
+
+    &__visual {
+        border-radius: $ckr-radius-lg;
+        overflow: hidden;
+        aspect-ratio: unquote("4 / 3");
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+    }
+
+    &__content {
+        // Micro-accent de presence (gel §9.2) : le filet amber du surtitre
+        // passe de 1 px (regle generique ckr_main.scss) a 2 px localement.
+        // Signe le bloc "partenaire artisan credible" sans le gonfler.
+        .ckr-section-title__eyebrow--rule::before {
+            height: 2px;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: $ckr-space-md;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: $ckr-space-md;
+        }
+
+        strong {
+            color: $ckr-primary;
+            font-weight: $ckr-weight-semibold;
+        }
+    }
+}

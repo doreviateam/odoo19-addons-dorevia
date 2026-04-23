@@ -1,0 +1,191 @@
+// ============================================================================
+// C-Kreyol - Bloc 3 : Explorer / Par où commencer (Phase 2, ADR-008)
+// Cinq portes catalogue — carrousel (4 cartes / page en largeur, pas à pas manuel + rail scrollable)
+// ============================================================================
+
+.ckr-entries {
+    &__carousel {
+        margin-top: $ckr-space-sm;
+    }
+
+    &__carousel-inner {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: $ckr-space-xs;
+        align-items: center;
+
+        @media (min-width: 768px) {
+            gap: $ckr-space-md;
+        }
+    }
+
+    &__viewport {
+        // Scroll horizontal stable (scrollLeft croissant = avance) meme si la page est en RTL.
+        direction: ltr;
+        min-width: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: $ckr-space-xs;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        outline: none;
+        // Largeur réelle du rail : base du calcul « 4 cartes par page » (100cqi).
+        container-type: inline-size;
+        container-name: ckr-explorer;
+
+        &:focus-visible {
+            box-shadow: 0 0 0 2px $ckr-bg, 0 0 0 4px rgba($ckr-primary, 0.45);
+            border-radius: $ckr-radius-md;
+        }
+
+        // Défilement par page (JS) : éviter le snap carte par carte en zone large.
+        @media (min-width: 992px) {
+            scroll-snap-type: none;
+        }
+    }
+
+    &__track {
+        display: flex;
+        gap: $ckr-space-md;
+        padding-bottom: $ckr-space-xs;
+
+        .ckr-entries__card {
+            scroll-snap-align: start;
+            // Mobile / tablette : une carte lisible + aperçu du suivant.
+            // unquote : éviter que Sass traite min() comme sa fonction compile-time
+            // (incompatible avec les unités cqi du navigateur).
+            flex: 0 0 #{unquote("min(22rem, calc(100cqi * 0.88))")};
+        }
+    }
+
+    &__nav {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 2.625rem;
+        height: 2.625rem;
+        padding: 0;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-pill;
+        background-color: $ckr-bg;
+        color: $ckr-primary;
+        box-shadow: $ckr-shadow-sm;
+        cursor: pointer;
+        transition: background-color $ckr-transition-base,
+                    border-color $ckr-transition-base,
+                    color $ckr-transition-base,
+                    box-shadow $ckr-transition-base,
+                    opacity $ckr-transition-fast;
+
+        @media (min-width: 768px) {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        &:hover:not(:disabled),
+        &:focus-visible:not(:disabled) {
+            background-color: $ckr-bg-accent;
+            border-color: rgba(160, 82, 45, 0.35);
+            color: $ckr-primary-dark;
+            box-shadow: $ckr-shadow-md;
+        }
+
+        &:disabled {
+            opacity: 0.38;
+            cursor: not-allowed;
+        }
+    }
+
+    &__nav-icon {
+        display: block;
+    }
+
+    &__card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: $ckr-space-md;
+        padding: $ckr-space-xl $ckr-space-lg;
+        background-color: $ckr-bg;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-lg;
+        color: $ckr-text;
+        text-decoration: none;
+        min-height: 188px;
+        box-shadow: $ckr-shadow-sm;
+        transition: transform $ckr-transition-base,
+                    background-color $ckr-transition-base,
+                    border-color $ckr-transition-base,
+                    box-shadow $ckr-transition-base;
+
+        // Accent marque discret en tete de carte (désirabilité sans bruit).
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: $ckr-space-lg;
+            right: $ckr-space-lg;
+            height: 3px;
+            border-radius: 0 0 $ckr-radius-sm $ckr-radius-sm;
+            background: linear-gradient(90deg, $ckr-primary 0%, $ckr-accent 100%);
+            opacity: 0.85;
+        }
+
+        &:hover,
+        &:focus {
+            transform: translateY(-5px);
+            background-color: $ckr-bg-accent;
+            border-color: rgba(160, 82, 45, 0.35);
+            box-shadow: $ckr-shadow-lg;
+            text-decoration: none;
+            color: $ckr-text;
+
+            .ckr-entries__card__arrow {
+                color: $ckr-primary-dark;
+            }
+        }
+
+        h3 {
+            font-family: $ckr-font-serif;
+            font-size: unquote("clamp(1.35rem, 2.2vw, 1.6rem)");
+            font-weight: $ckr-weight-semibold;
+            margin: $ckr-space-sm 0 0 0;
+            color: $ckr-text;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            margin: 0;
+            flex: 1;
+            color: $ckr-text-muted;
+            font-size: 0.98rem;
+            line-height: 1.58;
+            max-width: none;
+        }
+
+        &__arrow {
+            margin-top: auto;
+            padding-top: $ckr-space-xs;
+            color: $ckr-primary;
+            font-weight: $ckr-weight-semibold;
+            letter-spacing: 0.03em;
+            font-size: 0.9rem;
+        }
+    }
+}
+
+// 4 cartes entières visibles (non tronquées) quand la zone de défilement ≥ 900px.
+@container ckr-explorer (min-width: 900px) {
+    .ckr-entries__track .ckr-entries__card {
+        flex: 0 0 #{unquote("calc((100cqi - 3 * #{$ckr-space-md}) / 4)")};
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ckr-entries__viewport {
+        scroll-behavior: auto;
+    }
+}

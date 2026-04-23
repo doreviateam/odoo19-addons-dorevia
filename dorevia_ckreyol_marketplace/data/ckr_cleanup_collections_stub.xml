@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ========================================================== -->
+    <!-- Nettoyage du stub /collections (porte Collections front)    -->
+    <!--                                                            -->
+    <!-- Motivation : mise en service du contrat d URL URLs nobles   -->
+    <!-- (CONTRAT_URL_COLLECTIONS.md §4.1/§4.2/§4.6 + SPEC_IMPL_      -->
+    <!-- COLLECTIONS.md §3, MOA 2026-04-22) — la route /collections  -->
+    <!-- est desormais portee par un controleur Python dedie :       -->
+    <!--                                                            -->
+    <!--   * /collections                       → vue generale        -->
+    <!--   * /collections/<slug>                → vue unitaire         -->
+    <!--   * /collections/union/<s1>/<s2>/…     → lecture union S1     -->
+    <!--                                                            -->
+    <!-- Toutes trois assurees par                                   -->
+    <!-- WebsiteSaleCKR.ckr_collections_*                            -->
+    <!-- (controllers/website_sale_ckr.py) qui pose le contexte      -->
+    <!-- request._ckr_collection_ctx puis delegue a self.shop() en   -->
+    <!-- coulisse — sans redirection visible vers                    -->
+    <!-- /shop?ckr_mode=collection (CONTRAT §4.3).                    -->
+    <!--                                                            -->
+    <!-- Objectif de ce fichier : retirer le stub CMS historique     -->
+    <!-- (website.page et template QWeb ckr_page_collections) dans   -->
+    <!-- les bases deja installees, pour eviter toute collision de   -->
+    <!-- routage avec les nouvelles routes Python.                   -->
+    <!--                                                            -->
+    <!-- Strategie : suppression par recherche sur l URL (plus       -->
+    <!-- robuste que par ref XML, qui peut ne plus etre resolue      -->
+    <!-- une fois le record retire du data set — meme patron que     -->
+    <!-- data/ckr_cleanup_origines_stub.xml).                         -->
+    <!-- ========================================================== -->
+
+    <!-- 1. Retrait de la website.page stub /collections -->
+    <delete model="website.page" search="[('url', '=', '/collections')]"/>
+
+    <!-- 2. Retrait du template QWeb stub ckr_page_collections -->
+    <!-- Note : la reference XML pointe vers le XML ID que le module -->
+    <!-- dorevia_ckreyol_marketplace exposait jusqu en v19.0.1.5.0.  -->
+    <delete model="ir.ui.view"
+            search="[('key', '=', 'dorevia_ckreyol_marketplace.ckr_page_collections')]"/>
+
+</odoo>

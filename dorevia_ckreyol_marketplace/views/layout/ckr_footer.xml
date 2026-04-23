@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Footer C-Kreyol                                            -->
+    <!--                                                            -->
+    <!-- Heritage de website.layout : on ne remplace PAS le         -->
+    <!-- <footer> complet (cela casse le contrat avec les autres   -->
+    <!-- vues heritees qui ciblent <div id="footer">). On remplace -->
+    <!-- uniquement le contenu du <div id="footer"> en preservant  -->
+    <!-- cet identifiant structurant.                               -->
+    <!-- Coherence charte § 9.3 et ADR-CKR-003.                    -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_footer"
+              inherit_id="website.layout"
+              name="C-Kreyol: footer personnalise"
+              priority="99">
+
+        <!-- Masquer la bande native "Copyright / Genere par odoo" qui     -->
+        <!-- est sibling de #footer et livree par website.layout.          -->
+        <!-- On la laisse dans le DOM pour ne rien casser ailleurs mais on -->
+        <!-- la rend invisible (eviter d effacer un contrat d heritage).   -->
+        <xpath expr="//div[hasclass('o_footer_copyright')]" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
+
+        <xpath expr="//div[@id='footer']" position="replace">
+            <div id="footer" class="ckr-footer ckr-root" role="contentinfo">
+                <div class="ckr-footer__inner">
+
+                    <div class="ckr-footer__grid">
+
+                        <!-- Bloc marque : wordmark HTML (Playfair deja chargee) — le SVG text
+                             / tspan etait peu fiable selon navigateur ; ici contraste et taille assures. -->
+                        <div class="ckr-footer__brand">
+                            <div class="ckr-footer__wordmark" role="img" aria-label="C-Kreyol">
+                                <span class="ckr-footer__wordmark-inner" aria-hidden="true">
+                                    <span class="ckr-footer__wordmark-c">C</span><span class="ckr-footer__wordmark-hyphen">-</span><span class="ckr-footer__wordmark-k">Kreyol</span>
+                                </span>
+                            </div>
+                            <p>Canal e-commerce spécialisé : biscuits, douceurs et épicerie des Antilles,
+                               sélectionnés avec soin.</p>
+                        </div>
+
+                        <!-- Explorer -->
+                        <div class="ckr-footer__col">
+                            <h3 class="ckr-footer__title">Explorer</h3>
+                            <a href="/shop">Boutique</a>
+                            <a href="/collections">Collections</a>
+                            <a href="/offrir">Offrir</a>
+                            <a href="/recettes">Recettes</a>
+                        </div>
+
+                        <!-- Informations -->
+                        <div class="ckr-footer__col">
+                            <h3 class="ckr-footer__title">Informations</h3>
+                            <a href="/a-propos">A propos</a>
+                            <a href="/shop">Livraison</a>
+                            <a href="/contact">Nous contacter</a>
+                        </div>
+
+                        <!-- Contact : donnees res.company (site courant) pour     -->
+                        <!-- alignement footer / e-mails transactionnels / PDF.   -->
+                        <div class="ckr-footer__col">
+                            <h3 class="ckr-footer__title">Contact</h3>
+                            <a href="/contact">Formulaire de contact</a>
+                            <a t-if="res_company.email"
+                               t-attf-href="mailto:#{res_company.email}">
+                                <t t-out="res_company.email"/>
+                            </a>
+                            <a t-if="res_company.phone"
+                               class="ckr-footer__tel"
+                               t-attf-href="tel:#{res_company.phone.replace(' ', '').replace('.', '').replace('-', '')}">
+                                <t t-out="res_company.phone"/>
+                            </a>
+                            <a t-if="res_company.website"
+                               class="ckr-footer__web"
+                               t-att-href="res_company.website if res_company.website.startswith(('http://', 'https://')) else ('https://' + res_company.website)"
+                               target="_blank" rel="noopener noreferrer">
+                                <t t-out="res_company.website"/>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="ckr-footer__legal">
+                        <span class="ckr-footer__copyright">
+                            &#169; <t t-out="res_company.name"/>
+                            <t t-if="res_company.city or res_company.country_id">
+                                <span class="ckr-footer__copyright-sep"> — </span>
+                                <t t-if="res_company.city"><t t-out="res_company.city"/></t>
+                                <t t-if="res_company.city and res_company.country_id">, </t>
+                                <t t-if="res_company.country_id"><t t-out="res_company.country_id.name"/></t>
+                            </t>
+                        </span>
+                        <ul>
+                            <li><a href="/terms">Mentions legales</a></li>
+                            <li><a href="/terms">CGV</a></li>
+                            <li><a href="/privacy">Confidentialite</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

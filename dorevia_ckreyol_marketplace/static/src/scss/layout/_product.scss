@@ -1,0 +1,678 @@
+// ============================================================================
+// C-Kreyol - Fiche produit e-commerce (`website_sale.product`)
+// ============================================================================
+// Scope : uniquement `.ckr-product` (classe ajoutee sur `#wrap` par
+// `views/pages/ckr_product.xml`). On ne touche pas au markup natif Odoo.
+//
+// Objectifs V1 :
+// * harmoniser typo / couleurs / CTA avec la charte
+// * adoucir les residus Bootstrap / theme Odoo (violet, gris froids)
+// * tenue correcte en largeur intermediaire (992px ~ 1200px) : min-width 0,
+//   padding lateral, tailles fluides (clamp) sur le titre.
+// ============================================================================
+
+.ckr-product {
+
+    // --- Rythme global & largeurs intermediaires ---------------------------
+    // `min-width: 0` evite les debordements flex/grid sur colonnes 50/50.
+    #product_detail_main {
+        min-width: 0;
+
+        > [class*="col"] {
+            min-width: 0;
+        }
+    }
+
+    // Respiration horizontale sur ecrans "compacts desktop" (entre lg et xl).
+    @media (min-width: 992px) and (max-width: 1399.98px) {
+        section#product_detail.o_wsale_container_lg {
+            // `unquote` : Dart Sass ne peut pas additionner vw + rem dans `clamp()`.
+            padding-left: unquote("clamp(#{$ckr-space-md}, 2.5vw, #{$ckr-space-xl})");
+            padding-right: unquote("clamp(#{$ckr-space-md}, 2.5vw, #{$ckr-space-xl})");
+        }
+
+        #product_details {
+            padding-left: $ckr-space-sm;
+
+            @media (min-width: 1200px) {
+                padding-left: $ckr-space-md;
+            }
+        }
+    }
+
+    // --- Breadcrumb --------------------------------------------------------
+    .o_wsale_breadcrumb.breadcrumb {
+        font-family: $ckr-font-sans;
+        font-size: 0.8125rem;
+
+        .breadcrumb-item {
+            a {
+                color: $ckr-text-muted;
+                text-decoration: none;
+                transition: color $ckr-transition-fast;
+
+                &:hover,
+                &:focus-visible {
+                    color: $ckr-primary;
+                    outline: none;
+                }
+            }
+
+            &.active span {
+                color: $ckr-text;
+                font-weight: $ckr-weight-medium;
+            }
+        }
+
+        .oi-chevron-left {
+            color: $ckr-text-muted;
+        }
+    }
+
+    // Barre haute desktop : pricelist deja harmonisee dans _locale ; on
+    // aligne legerement avec le breadcrumb.
+    .o_wsale_product_top_bar_desktop {
+        .o_pricelist_dropdown > .dropdown-toggle {
+            font-size: 0.8125rem;
+        }
+    }
+
+    // --- Colonne details : respiration verticale (titre -> prix -> CTA) ---
+    #o_wsale_product_details_content {
+        .o_wsale_product_details_content_section_title {
+            margin-bottom: $ckr-space-md;
+        }
+
+        .o_wsale_product_details_content_section_price {
+            margin-bottom: $ckr-space-lg !important;
+        }
+
+        .o_wsale_product_details_content_section_attributes {
+            margin-bottom: $ckr-space-lg !important;
+        }
+    }
+
+    // --- Titre produit + description courte + tags -----------------------
+    .o_wsale_product_details_content_section_title {
+        h1 {
+            font-family: $ckr-font-serif;
+            // `unquote` : `2.2vw + 0.5rem` declenche "Incompatible units" si Sass evalue `clamp`.
+            font-size: unquote("clamp(1.35rem, 2.2vw + 0.5rem, 2rem)");
+            font-weight: $ckr-weight-semibold;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            color: $ckr-text;
+            margin-bottom: $ckr-space-sm;
+        }
+
+        // Description e-commerce (snippet sous le titre)
+        .oe_structure.text-muted,
+        .oe_structure.mb-3 {
+            font-family: $ckr-font-sans;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: $ckr-text-muted !important;
+            margin-bottom: $ckr-space-md;
+        }
+    }
+
+    // Tags produit (natif `o_product_tags`)
+    .o_product_tags {
+        .o_product_tag_img {
+            border-radius: $ckr-radius-sm;
+        }
+
+        .small.text-nowrap {
+            font-family: $ckr-font-sans;
+            font-size: 0.75rem !important;
+            font-weight: $ckr-weight-medium;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+    }
+
+    // --- Prix --------------------------------------------------------------
+    .product_price {
+        .oe_price {
+            font-family: $ckr-font-sans;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+        }
+
+        .oe_default_price,
+        del.oe_compare_list_price,
+        .text-muted.oe_default_price {
+            color: $ckr-text-muted !important;
+        }
+
+        // Badge / indication promo residuelle : ton ambre charte plutot que rouge.
+        .badge,
+        .text-bg-danger {
+            background-color: rgba(212, 163, 115, 0.25) !important;
+            color: $ckr-accent-dark !important;
+            font-weight: $ckr-weight-semibold;
+            border-radius: $ckr-radius-sm;
+        }
+    }
+
+    // --- Variantes ---------------------------------------------------------
+    .o_wsale_product_page_variants {
+        .attribute_name {
+            font-family: $ckr-font-sans;
+            font-size: 0.7rem;
+            font-weight: $ckr-weight-semibold;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: $ckr-text-muted;
+            margin-bottom: $ckr-space-xs;
+        }
+    }
+
+    .css_attribute_select.form-select {
+        font-family: $ckr-font-sans;
+        border-color: $ckr-border;
+        border-radius: $ckr-radius-md;
+        color: $ckr-text;
+        transition: border-color $ckr-transition-fast, box-shadow $ckr-transition-fast;
+
+        &:hover:not(:focus):not(:disabled) {
+            border-color: rgba(160, 82, 45, 0.35);
+        }
+
+        &:focus {
+            border-color: $ckr-primary;
+            box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.15);
+        }
+
+        &:focus:not(:focus-visible) {
+            box-shadow: none;
+        }
+
+        &:focus-visible {
+            border-color: $ckr-primary;
+            box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.2);
+        }
+    }
+
+    .o_wsale_product_attribute {
+        .form-check-input {
+            border-color: $ckr-border;
+            accent-color: $ckr-primary;
+
+            &:focus {
+                box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.15);
+            }
+
+            &:focus-visible {
+                outline: 2px solid rgba(160, 82, 45, 0.45);
+                outline-offset: 2px;
+            }
+        }
+
+        .form-check-label,
+        .radio_input_value {
+            font-family: $ckr-font-sans;
+            font-size: 0.9375rem;
+            color: $ckr-text;
+        }
+    }
+
+    // Pills variantes (border-primary / bg-primary-subtle du theme Odoo)
+    .o_variant_pills {
+        border-color: $ckr-border !important;
+        border-radius: $ckr-radius-md !important;
+        transition: border-color $ckr-transition-fast, background-color $ckr-transition-fast, color $ckr-transition-fast;
+
+        &:not(.active):hover {
+            border-color: rgba(160, 82, 45, 0.45) !important;
+            background-color: $ckr-bg-soft !important;
+        }
+
+        &.active {
+            border-color: $ckr-primary !important;
+            background-color: rgba(160, 82, 45, 0.1) !important;
+            color: $ckr-primary-dark !important;
+        }
+    }
+
+    // Badge "+X €" sur options (natif `text-bg-primary`)
+    .badge.text-bg-primary {
+        background-color: rgba(212, 163, 115, 0.35) !important;
+        color: $ckr-text !important;
+        font-weight: $ckr-weight-medium;
+    }
+
+    // --- CTA panier + quantite ---------------------------------------------
+    #o_wsale_cta_wrapper {
+        gap: $ckr-space-sm !important;
+        align-items: stretch;
+    }
+
+    #add_to_cart_wrap {
+        display: flex;
+        align-items: stretch;
+        min-width: 0;
+    }
+
+    #add_to_cart {
+        font-family: $ckr-font-sans;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: 0.02em;
+        border-radius: $ckr-radius-md;
+        border: 2px solid $ckr-primary;
+        background-color: $ckr-primary;
+        color: $ckr-bg;
+        padding: $ckr-space-md $ckr-space-lg;
+        transition: background-color $ckr-transition-base,
+                    border-color $ckr-transition-base,
+                    color $ckr-transition-base,
+                    box-shadow $ckr-transition-fast;
+
+        &:hover,
+        &:focus {
+            background-color: $ckr-primary-dark;
+            border-color: $ckr-primary-dark;
+            color: $ckr-bg;
+        }
+
+        &:focus-visible {
+            outline: 3px solid rgba(160, 82, 45, 0.35);
+            outline-offset: 2px;
+        }
+
+        .fa-shopping-cart {
+            opacity: 0.95;
+        }
+    }
+
+    // Bouton liste de souhaits (module `website_sale_wishlist`, injecte dans
+    // `#product_option_block` a cote du CTA). On aligne hauteur / rayon avec
+    // le CTA et on retire le `btn-outline-primary` trop "Bootstrap / violet".
+    #product_option_block {
+        display: flex;
+        align-items: stretch;
+        flex-shrink: 0;
+
+        .o_add_wishlist_dyn {
+            flex-grow: 0 !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            align-self: stretch;
+            min-width: 3rem;
+            padding: $ckr-space-md $ckr-space-md;
+            margin: 0;
+            font-size: 1.05rem;
+            line-height: 1;
+            color: $ckr-text-muted !important;
+            text-decoration: none;
+            white-space: nowrap;
+            border: 1px solid $ckr-border !important;
+            border-radius: $ckr-radius-md;
+            background-color: $ckr-bg !important;
+            box-shadow: none !important;
+            transition: border-color $ckr-transition-fast,
+                        color $ckr-transition-fast,
+                        background-color $ckr-transition-fast,
+                        box-shadow $ckr-transition-fast;
+
+            .fa-heart-o,
+            .fa-heart {
+                margin: 0 !important;
+                color: inherit;
+            }
+
+            // Libelle "Ajouter a la liste..." : garde le comportement natif
+            // (visible surtout sur mobile) mais typographie charte.
+            > span {
+                font-family: $ckr-font-sans;
+                font-size: 0.8125rem;
+                font-weight: $ckr-weight-medium;
+                color: inherit;
+            }
+
+            &:hover:not([disabled]),
+            &:focus:not([disabled]) {
+                color: $ckr-primary !important;
+                border-color: rgba(160, 82, 45, 0.45) !important;
+                background-color: $ckr-bg-soft !important;
+                text-decoration: none;
+            }
+
+            &:focus-visible {
+                outline: 2px solid rgba(160, 82, 45, 0.35);
+                outline-offset: 2px;
+            }
+
+            &[disabled],
+            &.disabled {
+                opacity: 0.85;
+                color: $ckr-primary;
+                border-color: rgba(160, 82, 45, 0.35);
+                background-color: rgba(160, 82, 45, 0.06);
+                cursor: default;
+                pointer-events: none;
+            }
+        }
+    }
+
+    .css_quantity.input-group {
+        border-color: $ckr-border !important;
+        border-radius: $ckr-radius-md;
+        overflow: hidden;
+        max-width: 11rem;
+
+        .form-control.quantity {
+            font-family: $ckr-font-sans;
+            font-weight: $ckr-weight-medium;
+            color: $ckr-text;
+        }
+
+        .btn-link.js_add_cart_json {
+            color: $ckr-text-muted;
+            text-decoration: none;
+            transition: color $ckr-transition-fast, background-color $ckr-transition-fast;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary;
+                background-color: $ckr-bg-soft;
+                outline: none;
+            }
+        }
+    }
+
+    // --- Accordéons --------------------------------------------------------
+    #product_accordion.accordion-flush {
+        .accordion-item {
+            border-color: $ckr-border;
+            background-color: transparent;
+        }
+
+        .accordion-button {
+            font-family: $ckr-font-sans;
+            font-size: 0.95rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+            background-color: transparent;
+            box-shadow: none;
+
+            &:not(.collapsed) {
+                color: $ckr-primary;
+                background-color: $ckr-bg-soft;
+            }
+
+            &:focus {
+                box-shadow: none;
+                border-color: $ckr-border;
+            }
+
+            &:focus-visible {
+                outline: 2px solid rgba(160, 82, 45, 0.35);
+                outline-offset: 2px;
+            }
+
+            &::after {
+                filter: opacity(0.55);
+            }
+        }
+
+        .accordion-body {
+            font-family: $ckr-font-sans;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            color: $ckr-text-muted;
+        }
+    }
+
+    // --- Galerie (carrousel + miniatures gauche) ---------------------------
+    #o-carousel-product {
+        border-radius: $ckr-radius-md;
+        box-shadow: $ckr-shadow-sm;
+
+        .carousel-inner {
+            border-radius: $ckr-radius-md;
+            overflow: hidden;
+        }
+    }
+
+    .o_carousel_product_outer {
+        border-radius: $ckr-radius-md;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        .oi {
+            border-color: $ckr-border !important;
+            color: $ckr-text !important;
+            border-radius: $ckr-radius-sm;
+            transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
+        }
+
+        &:hover .oi,
+        &:focus-visible .oi {
+            background-color: $ckr-bg-soft !important;
+            color: $ckr-primary !important;
+        }
+    }
+
+    .o_carousel_product_indicators {
+        .carousel-indicators {
+            gap: $ckr-space-xs;
+
+            li {
+                border-radius: $ckr-radius-sm;
+                border: 1px solid $ckr-border;
+                overflow: hidden;
+                opacity: 0.65;
+                transition: opacity $ckr-transition-fast, box-shadow $ckr-transition-fast;
+
+                &.active {
+                    opacity: 1;
+                    box-shadow: 0 0 0 2px rgba(160, 82, 45, 0.35);
+                }
+            }
+        }
+    }
+
+    .product_detail_img,
+    .o_product_detail_img_wrapper img {
+        border-radius: $ckr-radius-sm;
+    }
+
+    // Grille images (layout grid)
+    #o-grid-product {
+        .o_product_detail_img_wrapper {
+            border-radius: $ckr-radius-md;
+            overflow: hidden;
+        }
+    }
+
+    // --- Ruban / badge produit (`product.ribbon`, classes `o_ribbons` +     ---
+    //     `o_wsale_ribbon` ou `o_wsale_badge`)                               ---
+    // Les couleurs par defaut viennent des champs `bg_color` / `text_color`
+    // (souvent bleu vif). On re-harmonise avec la charte C-Kreyol : fond
+    // terracotta discret, texte creme, typo sans-serif ; `!important` pour
+    // prendre le pas sur les styles inline Odoo (sans modifier le modele).
+    .o_ribbons.o_wsale_ribbon,
+    .o_ribbons.o_wsale_badge {
+        font-family: $ckr-font-sans !important;
+        font-weight: $ckr-weight-semibold !important;
+        font-size: 0.68rem !important;
+        letter-spacing: 0.07em !important;
+        text-transform: uppercase !important;
+        line-height: 1.2 !important;
+        background-color: $ckr-primary !important;
+        color: $ckr-bg !important;
+        box-shadow: 0 2px 10px rgba(44, 44, 44, 0.12);
+        border: none !important;
+        text-shadow: none !important;
+    }
+
+    // Style "badge" (tag) : coins charte, un peu plus doux que le ruban diagonal
+    .o_ribbons.o_wsale_badge {
+        border-radius: $ckr-radius-sm !important;
+        padding: 0.35rem 0.55rem !important;
+        box-shadow: $ckr-shadow-sm;
+    }
+
+    // --- Table attributs simples + documents -----------------------------
+    #product_attributes_simple table.table-sm {
+        font-family: $ckr-font-sans;
+        font-size: 0.875rem;
+        color: $ckr-text-muted;
+
+        td {
+            border-color: $ckr-border;
+            padding-top: $ckr-space-xs;
+            padding-bottom: $ckr-space-xs;
+        }
+    }
+
+    #product_documents {
+        strong {
+            font-family: $ckr-font-sans;
+            font-size: 0.75rem;
+            font-weight: $ckr-weight-semibold;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: $ckr-text-muted;
+        }
+
+        .list-group-item {
+            border-color: $ckr-border;
+            color: $ckr-text;
+            font-family: $ckr-font-sans;
+            font-size: 0.9rem;
+            transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
+
+            &:hover,
+            &:focus-visible {
+                background-color: $ckr-bg-soft;
+                color: $ckr-primary;
+            }
+        }
+    }
+
+    // Champs extra website (reference, etc.) : bloc text-muted apres <hr/>
+    #product_details > hr + p.text-muted {
+        font-family: $ckr-font-sans;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        color: $ckr-text-muted !important;
+
+        b {
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+        }
+    }
+
+    // --- Produits alternatifs (snippet dynamique) --------------------------
+    .o_wsale_alternative_products.s_dynamic_snippet_products {
+        .s_dynamic_snippet_title h4 {
+            font-family: $ckr-font-serif;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+            letter-spacing: -0.01em;
+        }
+
+        .s_dynamic_snippet_title .lead {
+            font-family: $ckr-font-sans;
+            font-size: 0.95rem;
+            color: $ckr-text-muted;
+        }
+
+        // Cartes / liens produits generiques du snippet
+        a[href*="/shop/"] {
+            border-radius: $ckr-radius-md;
+            transition: box-shadow $ckr-transition-fast, transform $ckr-transition-fast;
+
+            &:hover,
+            &:focus-visible {
+                box-shadow: $ckr-shadow-sm;
+                outline: none;
+            }
+        }
+
+        img {
+            border-radius: $ckr-radius-sm;
+        }
+    }
+
+    // --- Description pleine page + structures ------------------------------
+    #product_full_description {
+        font-family: $ckr-font-sans;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: $ckr-text;
+
+        h1, h2, h3, h4 {
+            font-family: $ckr-font-serif;
+            color: $ckr-text;
+        }
+    }
+
+    // --- Alertes + CGV -----------------------------------------------------
+    .alert-warning {
+        background-color: rgba(212, 163, 115, 0.18);
+        border-color: rgba(212, 163, 115, 0.45);
+        color: $ckr-text;
+        border-radius: $ckr-radius-md;
+        font-family: $ckr-font-sans;
+    }
+
+    // Bloc CTA + mentions (CGV, garantie, livraison) : fermeture visuelle
+    // avant accordéon / description longue, moins de "vide" perçu en bas de bloc.
+    .o_wsale_product_details_content_section_cta {
+        margin-bottom: $ckr-space-xl !important;
+        padding-bottom: $ckr-space-lg;
+        border-bottom: 1px solid rgba(217, 208, 186, 0.75);
+
+        small {
+            display: block;
+            max-width: 36rem;
+            font-family: $ckr-font-sans;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            color: $ckr-text-muted;
+        }
+
+        small a {
+            color: $ckr-primary;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary-dark;
+                outline: none;
+            }
+        }
+    }
+
+    // Bouton contact (prix zero / sur devis) : meme lecture que Ajouter au panier
+    #contact_us_wrapper .btn_cta.btn-primary {
+        font-family: $ckr-font-sans;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: 0.02em;
+        border-radius: $ckr-radius-md;
+        border: 2px solid $ckr-primary;
+        background-color: $ckr-primary;
+        color: $ckr-bg;
+        padding: $ckr-space-md $ckr-space-lg;
+        transition: background-color $ckr-transition-base,
+                    border-color $ckr-transition-base,
+                    color $ckr-transition-base,
+                    box-shadow $ckr-transition-fast;
+
+        &:hover,
+        &:focus {
+            background-color: $ckr-primary-dark;
+            border-color: $ckr-primary-dark;
+            color: $ckr-bg;
+        }
+
+        &:focus-visible {
+            outline: 3px solid rgba(160, 82, 45, 0.35);
+            outline-offset: 2px;
+        }
+    }
+}

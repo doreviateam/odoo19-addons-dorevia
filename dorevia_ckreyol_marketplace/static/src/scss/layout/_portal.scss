@@ -1,0 +1,106 @@
+// ============================================================================
+// Portail client (/my, etc.) — cohérence C-Kreyol sans surcouche lourde.
+// Dépend de la classe `ckr-portal` posée sur #wrap (voir ckr_portal.xml).
+// ============================================================================
+
+.ckr-portal.o_portal_wrap > .container {
+    padding-top: $ckr-space-md;
+    padding-bottom: $ckr-space-lg !important;
+}
+
+.ckr-portal__page-title {
+    font-family: $ckr-font-serif;
+    font-weight: $ckr-weight-semibold;
+    font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+    color: $ckr-text;
+    letter-spacing: -0.02em;
+}
+
+.ckr-portal .o_portal_my_home {
+    margin-top: $ckr-space-sm;
+}
+
+.ckr-portal .o_portal_docs.row {
+    --bs-gutter-y: #{$ckr-space-md};
+}
+
+.ckr-portal .o_portal_index_card > a {
+    border: 1px solid $ckr-border !important;
+    border-radius: $ckr-radius-lg !important;
+    box-shadow: $ckr-shadow-sm;
+    background-color: $ckr-bg !important;
+    transition: border-color $ckr-transition-base,
+                box-shadow $ckr-transition-base,
+                transform $ckr-transition-fast;
+
+    &:hover,
+    &:focus {
+        border-color: rgba(160, 82, 45, 0.45) !important;
+        box-shadow: $ckr-shadow-md;
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+}
+
+.ckr-portal .o_portal_index_card .fs-5 {
+    font-family: $ckr-font-serif !important;
+    font-weight: $ckr-weight-semibold !important;
+    color: $ckr-text;
+    letter-spacing: -0.01em;
+}
+
+.ckr-portal .o_portal_index_card .opacity-75 {
+    color: $ckr-text-muted !important;
+    opacity: 1 !important;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin-top: 2px;
+}
+
+.ckr-portal .o_portal_icon {
+    flex-shrink: 0;
+    width: 48px;
+    min-width: 48px;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 48px;
+        object-fit: contain;
+        opacity: 0.92;
+        filter: contrast(1.05);
+    }
+}
+
+.ckr-portal .row.justify-content-between {
+    align-items: flex-start;
+}
+
+.ckr-portal .o_portal_content {
+    margin-bottom: $ckr-space-lg !important;
+}
+
+.ckr-portal .col-lg-4 > .mt-3.mw-100 {
+    margin-top: 0 !important;
+    padding: $ckr-space-lg;
+    border: 1px solid $ckr-border;
+    border-radius: $ckr-radius-lg;
+    background-color: $ckr-bg;
+    box-shadow: $ckr-shadow-sm;
+}
+
+.ckr-portal .col-lg-4 h5 {
+    font-family: $ckr-font-serif;
+    font-weight: $ckr-weight-semibold;
+}
+
+.ckr-portal .col-lg-4 .btn-link {
+    color: $ckr-primary;
+    font-weight: $ckr-weight-medium;
+
+    &:hover,
+    &:focus {
+        color: $ckr-primary-dark;
+    }
+}
