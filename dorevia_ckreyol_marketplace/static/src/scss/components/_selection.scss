@@ -25,13 +25,17 @@
         padding: $ckr-space-md;
         text-decoration: none;
         color: $ckr-text;
+        // Ombre legere au repos : ancre visuellement la carte sans bruit,
+        // complete la montee d ombre au hover (Phase A — TICKET_HOMEPAGE_
+        // APPETENCE_PARTITION_V1.md, gel §9.4 inchange).
+        box-shadow: $ckr-shadow-sm;
         transition: border-color $ckr-transition-fast,
                     box-shadow $ckr-transition-base,
                     transform $ckr-transition-fast;
 
         &:hover {
             border-color: $ckr-accent;
-            box-shadow: $ckr-shadow-sm;
+            box-shadow: $ckr-shadow-md;
             transform: translateY(-2px);
             color: $ckr-text;
             text-decoration: none;
@@ -43,7 +47,7 @@
             outline: 2px solid $ckr-accent;
             outline-offset: 2px;
             border-color: $ckr-accent;
-            box-shadow: $ckr-shadow-sm;
+            box-shadow: $ckr-shadow-md;
             transform: translateY(-2px);
             color: $ckr-text;
             text-decoration: none;
@@ -61,7 +65,18 @@
                 height: 100%;
                 object-fit: cover;
                 display: block;
+                // Micro zoom au hover de la carte : signe de desir marchand
+                // sans bouger la carte elle-meme (Phase A appetence).
+                // Desactive par prefers-reduced-motion (garde scopee
+                // ckr_main.scss).
+                transform: scale(1);
+                transition: transform $ckr-transition-base;
             }
+        }
+
+        &:hover &__img img,
+        &:focus-visible &__img img {
+            transform: scale(1.04);
         }
 
         // Garde-fou responsive titre / prix (gel §9.4 + ajustement MOA

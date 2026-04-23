@@ -142,3 +142,4 @@ Rapprocher la homepage de :
 | 2026-04-23 | Lien vers [BRIEF_CRÉA_PHASE_A_HOMEPAGE.md](BRIEF_CRÉA_PHASE_A_HOMEPAGE.md) dans la section Phase A — brief créatif opérationnel pour l’équipe créa / intégration. |
 | 2026-04-23 | Livrables §7 : renvoi explicite vers [PV_RECETTE_PHASE_A_HOMEPAGE_CK.md](PV_RECETTE_PHASE_A_HOMEPAGE_CK.md) comme trame de recette Phase A. |
 | 2026-04-23 | Ajout **§0 Prêt pour dev — Phase A** : checklist MOA / pilotage (8 points) avant ouverture PR. |
+| 2026-04-23 | **Phase A — Lot 1 SCSS (PR draft `feat/homepage-phase-a`)** : polish cartes sélection (ombre sobre au repos, montée d’ombre au hover, micro zoom image `scale(1.04)` hover/focus-visible). Aucun changement QWeb, aucun déplacement de bloc, aucune modification copy hero. Bump `__manifest__.py` **19.0.1.6.16 → 19.0.1.6.17** (bundle frontend modifié). Médias hero / supplier / sélection, copy hors hero et consignes BO : en attente livrables MOA (§0 checklist, points 3–5). |
