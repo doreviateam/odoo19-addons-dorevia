@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Page homepage C-Kreyol                                     -->
+    <!--                                                            -->
+    <!-- Approche standard Odoo 19 CE :                             -->
+    <!--   website.homepage est le template utilise par la          -->
+    <!--   website.page "/" livree par Odoo (website.homepage_page).-->
+    <!--   Son body est <div id="wrap" class="oe_structure          -->
+    <!--   oe_empty"/> intentionnellement vide.                     -->
+    <!--                                                            -->
+    <!--   On herite ce template et on remplace le contenu de       -->
+    <!--   #wrap par l assemblage de la variante "retail enrichie". -->
+    <!--   => pas de duplication de website.page sur "/",           -->
+    <!--      pas de conflit d URL, on reste dans le rail standard. -->
+    <!--                                                            -->
+    <!-- Reference : WIREFRAME_HOMEPAGE, SPEC_HERO_HOMEPAGE.         -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_page_homepage"
+              inherit_id="website.homepage"
+              name="C-Kreyol: Homepage (retail enrichie)"
+              priority="99">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="ckr-page ckr-root">
+
+                <!-- Bloc 2 : Hero (copy gele SPEC § 7) -->
+                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_hero"/>
+
+                <!-- Bloc 3 : Entrees d exploration -->
+                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_entries"/>
+
+                <!-- Bloc 4 : Mise en avant fournisseur / origine -->
+                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_supplier"/>
+
+                <!-- Bloc 5 : Selection produits -->
+                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_selection"/>
+
+                <!-- Bloc 6 : Bloc editorial -->
+                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_editorial"/>
+
+                <!-- Bloc 7 : Bloc confiance -->
+                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_trust"/>
+
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

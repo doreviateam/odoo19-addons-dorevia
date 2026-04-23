@@ -1,0 +1,122 @@
+// ============================================================================
+// C-Kreyol - Hero homepage (SPEC_HERO_HOMEPAGE § 7 - gel)
+// Composition : texte a gauche, visuel a droite (desktop) ;
+//               visuel au-dessus, texte en-dessous (mobile).
+// ============================================================================
+
+.ckr-hero {
+    position: relative;
+    // Padding vertical : en bas, meme unite que les `.ckr-section` pour un ecart
+    // hero -> premier bloc identique aux ecarts entre sections (#wrap.ckr-page).
+    padding: $ckr-space-2xl 0 $ckr-section-py-mobile 0;
+    background-color: $ckr-bg;
+
+    @media (min-width: 768px) {
+        padding: $ckr-section-py-desktop 0 $ckr-section-py-desktop 0;
+    }
+
+    &__inner {
+        max-width: $ckr-container-max;
+        margin: 0 auto;
+        padding: 0 $ckr-container-px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $ckr-space-xl;
+
+        @media (min-width: 992px) {
+            // Ratio 60/40 (visuel / texte) : gel §9.1 PROPOSITION_HOMEPAGE_
+            // MONTEE_EN_GAMME_V1.md 2026-04-23. Remplace l ancien 1.05fr 1fr
+            // (quasi 50/50, lisait hesitant). Tolerance doctrinale : 55/45
+            // max si le bloc texte devient trop long a l implementation reelle
+            // (fallback : 9fr 11fr). 50/50 strict exclu doctrinalement.
+            grid-template-columns: 4fr 6fr;
+            align-items: center;
+            gap: $ckr-space-3xl;
+        }
+    }
+
+    &__content {
+        order: 2;
+
+        @media (min-width: 992px) {
+            order: 1;
+        }
+    }
+
+    &__eyebrow {
+        display: inline-block;
+        font-family: $ckr-font-sans;
+        font-size: 0.85rem;
+        font-weight: $ckr-weight-medium;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: $ckr-secondary;
+        margin-bottom: $ckr-space-md;
+    }
+
+    &__title {
+        font-family: $ckr-font-serif;
+        font-size: unquote("clamp(2.25rem, 5vw, 3.5rem)");
+        font-weight: $ckr-weight-semibold;
+        line-height: 1.12;
+        letter-spacing: -0.015em;
+        color: $ckr-text;
+        margin: 0 0 $ckr-space-lg 0;
+    }
+
+    &__subtitle {
+        font-family: $ckr-font-sans;
+        font-size: unquote("clamp(1.05rem, 1.5vw, 1.2rem)");
+        line-height: 1.55;
+        color: $ckr-text;
+        max-width: 52ch;
+        margin: 0 0 $ckr-space-xl 0;
+    }
+
+    &__cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $ckr-space-md;
+    }
+
+    &__visual {
+        order: 1;
+        position: relative;
+        border-radius: $ckr-radius-lg;
+        overflow: hidden;
+        aspect-ratio: unquote("4 / 3");
+        box-shadow: $ckr-shadow-md,
+                    inset 0 0 0 1px rgba(44, 44, 44, 0.06);
+
+        @media (min-width: 992px) {
+            order: 2;
+            aspect-ratio: unquote("5 / 4");
+        }
+
+        // Moins "banque d images" : cadrage plus serre sur la matiere + leger voile chaud charte.
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background: linear-gradient(
+                125deg,
+                rgba(245, 241, 232, 0.45) 0%,
+                rgba(212, 163, 115, 0.12) 42%,
+                transparent 68%
+            );
+            opacity: 0.65;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 52% 42%;
+            display: block;
+            transform: scale(1.04);
+            transform-origin: center center;
+        }
+    }
+}

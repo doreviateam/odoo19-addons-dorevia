@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="ckr_portal_layout"
+              inherit_id="portal.portal_layout"
+              name="C-Kreyol: portail (scope + titres)">
+        <xpath expr="//div[@id='wrap'][hasclass('o_portal_wrap')]" position="attributes">
+            <attribute name="class" add="ckr-portal" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('wrapper')][hasclass('col-12')][hasclass('justify-content-between')]" position="attributes">
+            <attribute name="class" remove="align-items-center" separator=" "/>
+            <attribute name="class" add="align-items-start" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('wrapper')][hasclass('col-12')]//h3[hasclass('my-3')]" position="attributes">
+            <attribute name="class" add="ckr-portal__page-title" separator=" "/>
+        </xpath>
+    </template>
+
+</odoo>

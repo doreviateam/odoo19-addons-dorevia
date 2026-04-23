@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Page : A propos -->
+    <template id="ckr_page_about" name="C-Kreyol: A propos">
+        <t t-call="website.layout">
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <h1>A propos de C-Kreyol</h1>
+                        <p class="ckr-lead">
+                            C-Kreyol est un canal e-commerce specialise, porte par Dorevia a Nantes,
+                            dedie aux produits agro transformes des Antilles.
+                        </p>
+                        <p>
+                            Nous selectionnons des biscuits, des douceurs et des produits d epicerie
+                            avec une exigence simple : des origines lisibles, des savoir-faire reels,
+                            des saveurs authentiques. Au demarrage, notre premier fournisseur partenaire
+                            est La Platine.
+                        </p>
+                        <p>
+                            La demarche est volontairement sobre : pas de folklore, pas de carte postale,
+                            juste des produits selectionnes et une boutique qui respecte votre temps.
+                        </p>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+</odoo>

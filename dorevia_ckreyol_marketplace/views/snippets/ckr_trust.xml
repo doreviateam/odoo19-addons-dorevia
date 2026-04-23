@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Snippet : Bloc 7 - Bloc confiance (WIREFRAME § 3)         -->
+    <!-- 3 axes exactement : Achat / Livraison / Contact.          -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_snippet_trust" name="C-Kreyol: Bloc confiance">
+        <section class="ckr-section ckr-trust ckr-root ckr-section--soft">
+            <div class="ckr-container">
+
+                <header class="ckr-section-title">
+                    <span class="ckr-section-title__eyebrow ckr-section-title__eyebrow--rule">Engagements</span>
+                    <h2>Acheter en confiance</h2>
+                </header>
+
+                <div class="ckr-trust__grid">
+
+                    <div class="ckr-trust__item">
+                        <span class="ckr-trust__item__icon" aria-hidden="true">
+                            <i class="fa fa-lock"></i>
+                        </span>
+                        <h3>Achat</h3>
+                        <p>
+                            Paiement securise par nos prestataires bancaires standards.
+                            Vos donnees restent protegees a chaque etape.
+                        </p>
+                    </div>
+
+                    <div class="ckr-trust__item">
+                        <span class="ckr-trust__item__icon" aria-hidden="true">
+                            <i class="fa fa-truck"></i>
+                        </span>
+                        <h3>Livraison</h3>
+                        <p>
+                            Expedition depuis Nantes, delais communiques avec prudence.
+                            Pas de promesse que nous ne pourrions tenir.
+                        </p>
+                    </div>
+
+                    <div class="ckr-trust__item">
+                        <span class="ckr-trust__item__icon" aria-hidden="true">
+                            <i class="fa fa-envelope-o"></i>
+                        </span>
+                        <h3>Contact</h3>
+                        <p>
+                            Un SAV humain, joignable par e-mail, pour repondre a toutes
+                            vos questions sur les produits ou les commandes.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </template>
+
+</odoo>

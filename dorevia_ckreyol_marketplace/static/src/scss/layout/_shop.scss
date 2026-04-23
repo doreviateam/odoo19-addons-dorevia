@@ -1,0 +1,555 @@
+// ============================================================================
+// C-Kreyol - Page boutique /shop (`website_sale.products`)
+// ============================================================================
+// Scope : `.ckr-shop` (classe sur `#wrap` via `views/pages/ckr_shop.xml`).
+// Natif Odoo : grille, filtres, tri, pagination, offcanvas — uniquement
+// habillage (tokens charte, lisibilite, coherence avec fiche produit).
+// ============================================================================
+
+.ckr-shop {
+
+    // --- Grille principale & largeurs intermediaires -----------------------
+    .o_wsale_products_main_row {
+        min-width: 0;
+
+        > * {
+            min-width: 0;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1399.98px) {
+        #o_wsale_container.oe_website_sale {
+            padding-left: unquote("clamp(#{$ckr-space-md}, 2.5vw, #{$ckr-space-xl})");
+            padding-right: unquote("clamp(#{$ckr-space-md}, 2.5vw, #{$ckr-space-xl})");
+        }
+    }
+
+    // --- En-tete boutique / categorie -------------------------------------
+    #o_wsale_products_header {
+        .o_wsale_shop_title,
+        .o_wsale_category_title {
+            font-family: $ckr-font-serif;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+            letter-spacing: -0.02em;
+        }
+
+        .o_wsale_shop_title {
+            font-size: unquote("clamp(1.25rem, 1.5vw + 0.75rem, 1.65rem)");
+        }
+
+        .o_wsale_category_title.fs-3 {
+            font-size: unquote("clamp(1.35rem, 2vw + 0.5rem, 1.85rem)") !important;
+        }
+
+        .o_wsale_category_title_is_search .text-muted {
+            color: $ckr-text-muted !important;
+        }
+
+        // Badges recherche / categorie (natifs `text-bg-info`, `text-bg-primary`)
+        .badge.text-bg-info,
+        .badge.text-bg-primary {
+            font-family: $ckr-font-sans;
+            font-weight: $ckr-weight-medium;
+            background-color: $ckr-bg-soft !important;
+            color: $ckr-text !important;
+            border: 1px solid $ckr-border;
+
+            .link-info {
+                color: $ckr-primary !important;
+            }
+        }
+
+        .o_wsale_category_description,
+        #oe_structure_products_header_shop {
+            font-family: $ckr-font-sans;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: $ckr-text-muted;
+        }
+    }
+
+    // Fil d'Ariane categorie (template products_breadcrumb)
+    .o_wsale_breadcrumb.breadcrumb {
+        font-family: $ckr-font-sans;
+        font-size: 0.8125rem;
+
+        a {
+            color: $ckr-text-muted;
+            text-decoration: none;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary;
+            }
+        }
+
+        .active,
+        .breadcrumb-item.active span {
+            color: $ckr-text;
+            font-weight: $ckr-weight-medium;
+        }
+    }
+
+    // --- Barre outils : recherche, pricelist, tri, filtres ----------------
+    .products_header {
+        .btn {
+            font-family: $ckr-font-sans;
+            border-radius: $ckr-radius-md;
+        }
+
+        .o_wsale_products_header_search_form_container {
+            .form-control {
+                border-color: $ckr-border;
+                border-radius: $ckr-radius-md;
+                font-family: $ckr-font-sans;
+
+                &:focus {
+                    border-color: $ckr-primary;
+                    box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.12);
+                }
+            }
+        }
+
+        .o_sortby_dropdown,
+        .o_pricelist_dropdown {
+            > .dropdown-toggle {
+                font-family: $ckr-font-sans;
+                font-size: 0.8125rem;
+                font-weight: $ckr-weight-medium;
+                color: $ckr-text-muted;
+                border: 1px solid transparent;
+                border-radius: $ckr-radius-md;
+
+                &:hover,
+                &:focus-visible {
+                    color: $ckr-primary;
+                    background-color: $ckr-bg-soft;
+                }
+            }
+
+            .dropdown-menu {
+                border: 1px solid $ckr-border;
+                border-radius: $ckr-radius-md;
+                box-shadow: $ckr-shadow-md;
+                font-family: $ckr-font-sans;
+
+                .dropdown-item {
+                    &.active,
+                    &:active {
+                        background-color: rgba(160, 82, 45, 0.1);
+                        color: $ckr-primary;
+                    }
+
+                    &:hover {
+                        background-color: $ckr-bg-soft;
+                        color: $ckr-primary;
+                    }
+                }
+            }
+        }
+
+        // Pastille "filtres actifs" sur le bouton filtres (natif `bg-danger`)
+        .btn span.bg-danger {
+            background-color: $ckr-primary !important;
+        }
+    }
+
+    // --- Colonne filtres (desktop) -----------------------------------------
+    #products_grid_before {
+        font-family: $ckr-font-sans;
+
+        .products_categories,
+        .products_attributes_filters {
+            font-size: 0.9rem;
+        }
+
+        .accordion-button {
+            font-family: $ckr-font-sans;
+            font-size: 0.875rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+
+            &:not(.collapsed) {
+                color: $ckr-primary;
+                background-color: $ckr-bg-soft;
+            }
+        }
+
+        .form-check-input {
+            border-color: $ckr-border;
+            accent-color: $ckr-primary;
+        }
+
+        .form-select.css_attribute_select {
+            border-color: $ckr-border;
+            border-radius: $ckr-radius-md;
+            font-family: $ckr-font-sans;
+        }
+
+        .border-bottom {
+            border-color: $ckr-border !important;
+        }
+    }
+
+    // --- Grille produits & tuiles ------------------------------------------
+    #o_wsale_products_grid_table_wrapper {
+        padding-top: $ckr-space-sm;
+    }
+
+    .oe_product_cart {
+        font-family: $ckr-font-sans;
+        background-color: $ckr-bg;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-md;
+        overflow: hidden;
+        box-shadow: $ckr-shadow-sm;
+        transition: border-color $ckr-transition-fast,
+                    box-shadow $ckr-transition-base,
+                    transform $ckr-transition-fast;
+
+        &:hover {
+            border-color: rgba(135, 167, 120, 0.55);
+            box-shadow: $ckr-shadow-md;
+        }
+    }
+
+    .oe_product_image {
+        background-color: $ckr-bg-soft;
+    }
+
+    .o_wsale_products_item_title {
+        font-family: $ckr-font-serif;
+        font-size: 1.05rem;
+        font-weight: $ckr-weight-semibold;
+        line-height: 1.25;
+
+        a {
+            color: $ckr-text;
+            text-decoration: none;
+            transition: color $ckr-transition-fast;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary;
+            }
+        }
+    }
+
+    .oe_subdescription,
+    .oe_subdescription.text-muted {
+        color: $ckr-text-muted !important;
+        line-height: 1.45;
+    }
+
+    .o_wsale_product_sub {
+        border-top: 1px solid rgba(217, 208, 186, 0.65);
+        padding-top: $ckr-space-sm;
+        margin-top: $ckr-space-sm;
+
+        .product_price {
+            font-family: $ckr-font-sans;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+            font-size: 1rem;
+
+            del,
+            .text-muted {
+                color: $ckr-text-muted !important;
+            }
+        }
+    }
+
+    .o_wsale_product_btn_primary.btn-primary {
+        background-color: $ckr-primary;
+        border-color: $ckr-primary;
+        color: $ckr-bg;
+        font-weight: $ckr-weight-semibold;
+        border-radius: $ckr-radius-md;
+        font-size: 0.8125rem;
+        padding: $ckr-space-sm $ckr-space-md;
+
+        &:hover,
+        &:focus {
+            background-color: $ckr-primary-dark;
+            border-color: $ckr-primary-dark;
+            color: $ckr-bg;
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgba(160, 82, 45, 0.35);
+            outline-offset: 2px;
+        }
+    }
+
+    // --- Rubans sur tuiles (meme lecture que fiche produit) ---------------
+    .o_ribbons.o_wsale_ribbon,
+    .o_ribbons.o_wsale_badge {
+        font-family: $ckr-font-sans !important;
+        font-weight: $ckr-weight-semibold !important;
+        font-size: 0.68rem !important;
+        letter-spacing: 0.07em !important;
+        text-transform: uppercase !important;
+        line-height: 1.2 !important;
+        background-color: $ckr-primary !important;
+        color: $ckr-bg !important;
+        box-shadow: 0 2px 10px rgba(44, 44, 44, 0.12);
+        border: none !important;
+        text-shadow: none !important;
+    }
+
+    .o_ribbons.o_wsale_badge {
+        border-radius: $ckr-radius-sm !important;
+        padding: 0.35rem 0.55rem !important;
+        box-shadow: $ckr-shadow-sm;
+    }
+
+    // --- Pagination --------------------------------------------------------
+    #o_wsale_pager.products_pager {
+        .pagination {
+            font-family: $ckr-font-sans;
+
+            .page-link {
+                color: $ckr-text;
+                border-color: $ckr-border;
+
+                &:hover {
+                    color: $ckr-primary;
+                    background-color: $ckr-bg-soft;
+                    border-color: $ckr-border;
+                }
+            }
+
+            .page-item.active .page-link {
+                background-color: $ckr-primary;
+                border-color: $ckr-primary;
+                color: $ckr-bg;
+            }
+        }
+    }
+
+    // --- Alertes (recherche, vide) -----------------------------------------
+    .alert-warning {
+        background-color: rgba(212, 163, 115, 0.18);
+        border-color: rgba(212, 163, 115, 0.45);
+        color: $ckr-text;
+        border-radius: $ckr-radius-md;
+        font-family: $ckr-font-sans;
+    }
+
+    // --- Offcanvas filtres (mobile) ----------------------------------------
+    #o_wsale_offcanvas.o_website_offcanvas {
+        font-family: $ckr-font-sans;
+
+        .o_wsale_offcanvas_title {
+            font-size: 0.9rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+
+            &:not(.collapsed) {
+                color: $ckr-primary;
+                background-color: $ckr-bg-soft;
+            }
+        }
+
+        .list-group-item {
+            border-color: rgba(217, 208, 186, 0.5);
+        }
+
+        .form-check-input {
+            accent-color: $ckr-primary;
+        }
+    }
+}
+
+// ============================================================================
+// Bandeau porte « Kits » sur /shop?ckr_mode=pack
+// ----------------------------------------------------------------------------
+// Injecte par `views/pages/ckr_shop.xml::ckr_shop_pack_banner`, conditionne
+// au flag `ckr_pack_mode` que le controleur herite positionne via
+// `_get_additional_shop_values`. Bi-lexique ADR-CKR-008 : libelle visiteur
+// « Kits » / source de verite back-office « Pack » (product_pack.pack_ok).
+// ============================================================================
+.ckr-shop-pack-banner {
+    padding: $ckr-space-xl 0 $ckr-space-md;
+    border-bottom: 1px solid rgba(217, 208, 186, 0.6);
+    background-color: transparent;
+
+    .ckr-section-title {
+        margin-bottom: 0;
+    }
+
+    .ckr-shop-pack-banner__title {
+        font-family: $ckr-font-serif;
+        font-weight: $ckr-weight-semibold;
+        color: $ckr-text;
+        letter-spacing: -0.02em;
+        font-size: unquote("clamp(1.5rem, 2vw + 0.75rem, 2.1rem)");
+        margin-top: 0.25rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+// ============================================================================
+// Bandeau porte « Promotions » sur /shop?ckr_mode=promo
+// ----------------------------------------------------------------------------
+// Injecte par `views/pages/ckr_shop.xml::ckr_shop_promo_banner`, conditionne
+// au flag `ckr_promo_mode` (cf. WebsiteSaleCKR._get_additional_shop_values).
+// Source de verite A2 (CONTRAT_URL_PROMOTIONS.md §5) : product.pricelist.item
+// date et strictement reducteur sur la pricelist courante du visiteur.
+// Variante `--empty` : etat vide dedie (aucune promo active).
+// ============================================================================
+.ckr-shop-promo-banner {
+    padding: $ckr-space-xl 0 $ckr-space-md;
+    border-bottom: 1px solid rgba(217, 208, 186, 0.6);
+    background-color: transparent;
+
+    .ckr-section-title {
+        margin-bottom: 0;
+    }
+
+    .ckr-shop-promo-banner__title {
+        font-family: $ckr-font-serif;
+        font-weight: $ckr-weight-semibold;
+        color: $ckr-text;
+        letter-spacing: -0.02em;
+        font-size: unquote("clamp(1.5rem, 2vw + 0.75rem, 2.1rem)");
+        margin-top: 0.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    // Variante "etat vide" : ton plus sourd, pas d'inquietude pour le visiteur.
+    &--empty {
+        .ckr-shop-promo-banner__empty-msg {
+            color: $ckr-text-muted;
+            font-style: italic;
+        }
+    }
+}
+
+// ============================================================================
+// Bandeau porte « Origines » sur /shop?ckr_mode=origin
+// ----------------------------------------------------------------------------
+// Injecte par `views/pages/ckr_shop.xml::ckr_shop_origin_banner`, conditionne
+// au flag `ckr_origin_mode` (cf. WebsiteSaleCKR._get_additional_shop_values).
+// Source de verite : socle standard Odoo (A1 — product.attribute.value pour
+// le rattachement produit) + couche CK legere `ckr.shop.origin` pour les
+// metadonnees editoriales §3.1 (nom visiteur, phrase, slug, ordre, publication).
+// SPEC_IMPL_ORIGINES.md §6.1 : titre dynamique (name_visitor si 1 origine,
+// sinon « Origines »), copy S2 figee (aucune / 1 / plusieurs), variante
+// `--empty` (origines valides mais 0 produit + rebonds /shop).
+// ============================================================================
+.ckr-shop-origin-banner {
+    padding: $ckr-space-xl 0 $ckr-space-md;
+    border-bottom: 1px solid rgba(217, 208, 186, 0.6);
+    background-color: transparent;
+
+    .ckr-section-title {
+        margin-bottom: 0;
+    }
+
+    .ckr-shop-origin-banner__title {
+        font-family: $ckr-font-serif;
+        font-weight: $ckr-weight-semibold;
+        color: $ckr-text;
+        letter-spacing: -0.02em;
+        font-size: unquote("clamp(1.5rem, 2vw + 0.75rem, 2.1rem)");
+        margin-top: 0.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    // Rebonds de l'etat vide : liens sobres aligne avec la charte.
+    .ckr-shop-origin-banner__empty-rebounds {
+        margin-top: $ckr-space-md;
+        display: flex;
+        flex-wrap: wrap;
+        gap: $ckr-space-md;
+    }
+
+    .ckr-shop-origin-banner__empty-cta {
+        font-family: $ckr-font-sans;
+        font-weight: $ckr-weight-semibold;
+        font-size: 0.875rem;
+        color: $ckr-primary;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color $ckr-transition-fast,
+                    color $ckr-transition-fast;
+
+        &:hover,
+        &:focus-visible {
+            color: $ckr-primary-dark;
+            border-bottom-color: $ckr-primary-dark;
+        }
+
+        &--secondary {
+            color: $ckr-text-muted;
+            font-weight: $ckr-weight-medium;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary;
+                border-bottom-color: $ckr-primary;
+            }
+        }
+    }
+
+    // Variante "etat vide" : ton plus sourd, pas d'inquietude pour le visiteur.
+    &--empty {
+        .ckr-shop-origin-banner__empty-msg {
+            color: $ckr-text-muted;
+            font-style: italic;
+        }
+    }
+}
+
+// ============================================================================
+// Bloc "Origines" sur la fiche produit (SPEC_IMPL §7)
+// ----------------------------------------------------------------------------
+// Injecte par `views/pages/ckr_product.xml::ckr_product_origins_block`.
+// Affiche les libelles visiteur (name_visitor) des profils `ckr.shop.origin`
+// publies associes au template. Forme simple v1 : liste a puces horizontale
+// cliquable (lien vers /shop?ckr_mode=origin&ckr_origin=<slug>).
+// ============================================================================
+.ckr-product-origins {
+    margin-top: $ckr-space-md;
+    padding-top: $ckr-space-sm;
+    border-top: 1px solid rgba(217, 208, 186, 0.5);
+    font-family: $ckr-font-sans;
+    font-size: 0.875rem;
+
+    &__label {
+        font-weight: $ckr-weight-semibold;
+        color: $ckr-text;
+        margin-right: $ckr-space-xs;
+    }
+
+    &__list {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: $ckr-space-xs;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    &__item {
+        &:not(:last-child)::after {
+            content: "\00b7";
+            margin-left: $ckr-space-xs;
+            color: $ckr-text-muted;
+        }
+    }
+
+    &__link {
+        color: $ckr-primary;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color $ckr-transition-fast;
+
+        &:hover,
+        &:focus-visible {
+            border-bottom-color: $ckr-primary;
+        }
+    }
+}

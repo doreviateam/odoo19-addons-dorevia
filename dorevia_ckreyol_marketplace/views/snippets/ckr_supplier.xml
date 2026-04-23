@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Snippet : Bloc 4 - Mise en avant fournisseur / origine    -->
+    <!-- La Platine = premier fournisseur, sans absorber C-Kreyol. -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_snippet_supplier" name="C-Kreyol: Mise en avant fournisseur">
+        <section class="ckr-section ckr-supplier ckr-root">
+            <div class="ckr-container">
+                <div class="ckr-supplier__inner">
+
+                    <div class="ckr-supplier__visual">
+                        <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_crackers.png"
+                             alt="Crackers de manioc - exemple de produit reel du catalogue"/>
+                    </div>
+
+                    <div class="ckr-supplier__content">
+                        <span class="ckr-section-title__eyebrow ckr-section-title__eyebrow--rule">Origines reelles</span>
+                        <h2>Des produits sélectionnés chez nos partenaires</h2>
+                        <p>
+                            Nous travaillons avec des transformateurs antillais engages dans des
+                            savoir-faire artisanaux. Notre premier fournisseur partenaire est
+                            <strong>La Platine</strong>, qui porte une partie du catalogue au
+                            demarrage du canal.
+                        </p>
+                        <p>
+                            Chaque fiche produit affiche clairement son <strong>origine</strong> :
+                            pas de folklore, pas de promesses approximatives, juste ce qui est
+                            reellement disponible.
+                        </p>
+                        <a href="/a-propos" class="ckr-btn ckr-btn--ghost">
+                            En savoir plus &#8594;
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>

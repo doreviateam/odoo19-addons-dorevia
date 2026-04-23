@@ -1,0 +1,87 @@
+// ============================================================================
+// C-Kreyol - Bloc 6 : Bloc editorial (variante SOBRE V1)
+// Gel §9.3 PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md 2026-04-23.
+//
+// Bandeau centre : sureligne sauge + phrase Playfair + lien souligne amber.
+// Pas d image de fond, pas d overlay sombre, pas de tuiles multiples.
+//
+// La variante pleine largeur (ex-dark-overlay grid) est archivee et reste
+// documentee pour V1.1 sous 3 conditions cumulees (contenu nommable,
+// visuel paysage 21:9 dedie, phrase validee marque).
+// ============================================================================
+
+.ckr-editorial {
+    background-color: $ckr-bg;
+
+    &__bandeau {
+        max-width: 720px;
+        margin: 0 auto;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $ckr-space-sm;
+    }
+
+    &__eyebrow {
+        font-family: $ckr-font-sans;
+        font-size: 0.85rem;
+        font-weight: $ckr-weight-medium;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $ckr-secondary;
+        position: relative;
+        padding-top: calc(#{$ckr-space-sm} + 2px);
+
+        // Filet amber 1 px x 48 px centre au-dessus du sureligne.
+        // Variante locale du fil rouge V1 : le bandeau editorial a sa propre
+        // trame verticale etroite (max-width 720px), donc l eyebrow porte
+        // son filet inline plutot que de dependre de la regle generique
+        // .ckr-section-title__eyebrow--rule.
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 48px;
+            height: 1px;
+            background-color: $ckr-accent;
+        }
+    }
+
+    &__line {
+        font-family: $ckr-font-serif;
+        font-size: unquote("clamp(1.15rem, 2vw, 1.5rem)");
+        line-height: 1.4;
+        color: $ckr-text;
+        margin: 0;
+        max-width: 42ch;
+    }
+
+    &__link {
+        font-family: $ckr-font-sans;
+        font-size: 0.95rem;
+        font-weight: $ckr-weight-medium;
+        color: $ckr-primary;
+        text-decoration: underline;
+        text-decoration-color: $ckr-accent;
+        text-underline-offset: 4px;
+        transition: color $ckr-transition-fast,
+                    text-decoration-color $ckr-transition-fast;
+
+        &:hover,
+        &:focus-visible {
+            color: $ckr-primary-dark;
+            text-decoration-color: $ckr-primary-dark;
+        }
+
+        // Focus visible clavier : anneau amber 2 px + offset 3 px
+        // (doctrine §4 accessibilite + gel §9.3).
+        &:focus-visible {
+            outline: 2px solid $ckr-accent;
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+    }
+}

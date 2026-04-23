@@ -1,0 +1,488 @@
+// ============================================================================
+// C-Kreyol - Header / menu principal (Charte § 9.2, ADR-CKR-003)
+// ============================================================================
+
+// Specificite renforcee (header#top.ckr-header) pour gagner sur les
+// regles standard Odoo (.o_header_standard, .o_header_is_scrolled...)
+// sans recourir uniquement a !important.
+header#top.ckr-header,
+.ckr-header {
+    // Le drawer (fixed) vit dans le header : tout overflow hidden herite
+    // d Odoo casserait le panneau ou le voile sur mobile.
+    overflow: visible !important;
+    position: sticky;
+    top: 0;
+    // z-index > Bootstrap 1030 (fixed top) pour rester au-dessus
+    // des visuels hero / snippets au scroll, sans empieter sur les
+    // modales 1055+.
+    z-index: 1040;
+    // background opaque garanti (defense contre une regle heritee
+    // de .o_header_standard qui rendrait le fond translucide).
+    background-color: $ckr-bg !important;
+    background-image: none !important;
+    border-bottom: 1px solid $ckr-border;
+    box-shadow: 0 1px 0 rgba(44, 44, 44, 0.04),
+                0 4px 16px rgba(44, 44, 44, 0.06);
+    font-family: $ckr-font-sans;
+    // Neutralisation d un backdrop-filter standard qui laisserait
+    // passer le visuel au scroll.
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.ckr-header {
+
+    &__inner {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: $ckr-space-md;
+        max-width: $ckr-container-max;
+        margin: 0 auto;
+        padding: $ckr-space-md $ckr-container-px;
+        overflow: visible;
+
+        @media (max-width: 991.98px) {
+            // Rapprocher logo et actions : padding lateral serre, pas de gap inutile
+            // entre les deux blocs (le cluster + burger forment l alignement a droite).
+            gap: $ckr-space-xs;
+            padding: $ckr-space-sm 10px;
+            min-height: 52px;
+        }
+    }
+
+    // --- Logo ---------------------------------------------------------------
+    &__brand {
+        display: inline-flex;
+        align-items: center;
+        gap: $ckr-space-sm;
+        color: $ckr-text;
+        text-decoration: none;
+        flex-shrink: 0;
+
+        .ckr-wordmark {
+            height: 36px;
+            width: auto;
+            display: block;
+        }
+
+        @media (max-width: 991.98px) {
+            min-width: 0;
+            flex-shrink: 1;
+
+            .ckr-wordmark {
+                height: 30px;
+                // min() CSS natif : unquote obligatoire (sinon Dart Sass min()
+                // melange vw et px et echoue a la compilation du bundle).
+                max-width: unquote("min(172px, 52vw)");
+            }
+        }
+
+        &:hover, &:focus {
+            text-decoration: none;
+            color: $ckr-primary;
+        }
+    }
+
+    // --- Menu principal (desktop) -------------------------------------------
+    &__nav {
+        display: none;
+        align-items: center;
+        gap: $ckr-space-lg;
+
+        @media (min-width: 992px) {
+            display: flex;
+        }
+
+        a {
+            color: $ckr-text;
+            font-size: 0.95rem;
+            font-weight: $ckr-weight-medium;
+            letter-spacing: 0.01em;
+            text-decoration: none;
+            padding: $ckr-space-xs 0;
+            border-bottom: 2px solid transparent;
+            transition: color $ckr-transition-fast, border-color $ckr-transition-fast;
+
+            &:hover,
+            &:focus,
+            &.active {
+                color: $ckr-primary;
+                border-bottom-color: $ckr-primary;
+                text-decoration: none;
+            }
+        }
+    }
+
+    // --- Utilitaires (cluster + burger) -------------------------------------
+    // Important : on restreint les styles "icone-bouton" aux enfants directs
+    // du cluster pour ne pas les appliquer aux <a> du menu déroulant compte
+    // (qui doivent rester affichés en pile verticale, pas en pastille 40x40).
+    &__utils {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        gap: $ckr-space-sm;
+        overflow: visible;
+
+        @media (max-width: 991.98px) {
+            gap: 6px;
+        }
+    }
+
+    // Sous-bloc : recherche / compte / panier regroupes (mobile surtout).
+    &__action-cluster {
+        display: inline-flex;
+        align-items: center;
+        gap: 0;
+        overflow: visible;
+        position: relative;
+
+        // Icônes d'action : enfants directs uniquement.
+        > a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: $ckr-radius-pill;
+            color: $ckr-text;
+            text-decoration: none;
+            transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
+
+            &:hover,
+            &:focus {
+                background-color: $ckr-bg-soft;
+                color: $ckr-primary;
+                text-decoration: none;
+            }
+
+            i {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            padding: 2px 4px;
+            gap: 0;
+            background-color: $ckr-bg-soft;
+            border: 1px solid $ckr-border;
+            border-radius: $ckr-radius-pill;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+            > a,
+            .ckr-header__user-toggle {
+                width: 44px;
+                height: 44px;
+                min-width: 44px;
+                min-height: 44px;
+
+                &:hover,
+                &:focus {
+                    background-color: rgba(255, 255, 255, 0.45);
+                }
+            }
+        }
+    }
+
+    // --- Menu compte : CSS pur via <details> (pas de Popper, pas de clipping) ---
+    &__user-menu {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        > summary {
+            list-style: none;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &::marker {
+                display: none;
+            }
+        }
+
+        &[open] .ckr-header__user-toggle {
+            background-color: $ckr-bg-soft;
+            color: $ckr-primary;
+        }
+
+        &[open] .ckr-header__user-dropdown {
+            display: block;
+        }
+    }
+
+    &__user-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: $ckr-radius-pill;
+        color: $ckr-text;
+        text-decoration: none;
+        background: transparent;
+        cursor: pointer;
+        user-select: none;
+        transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
+
+        &:hover,
+        &:focus {
+            background-color: $ckr-bg-soft;
+            color: $ckr-primary;
+            text-decoration: none;
+            outline: none;
+        }
+
+        i {
+            font-size: 1.1rem;
+        }
+    }
+
+    &__user-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + #{$ckr-space-xs});
+        right: 0;
+        left: auto;
+        z-index: 1070;
+        min-width: 14rem;
+        padding: $ckr-space-sm 0;
+        margin: 0;
+        background-color: $ckr-bg;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-md;
+        box-shadow: $ckr-shadow-lg;
+        text-align: start;
+    }
+
+    &__user-item {
+        display: block;
+        padding: $ckr-space-md $ckr-space-lg;
+        color: $ckr-text;
+        text-decoration: none;
+        font-family: $ckr-font-sans;
+        font-size: 0.95rem;
+        font-weight: $ckr-weight-medium;
+        white-space: nowrap;
+        text-align: start;
+        transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
+
+        &:hover,
+        &:focus {
+            background-color: $ckr-bg-soft;
+            color: $ckr-primary;
+            text-decoration: none;
+            outline: none;
+        }
+
+        &:active {
+            background-color: rgba(160, 82, 45, 0.12);
+            color: $ckr-primary-dark;
+        }
+    }
+
+    // --- Bouton burger (mobile) ---------------------------------------------
+    &__burger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: none;
+        color: $ckr-text;
+        cursor: pointer;
+        padding: 0;
+
+        @media (max-width: 991.98px) {
+            // Meme hauteur que les icones du cluster (cibles 44px, HDR-03).
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
+            border-radius: $ckr-radius-pill;
+            background-color: $ckr-bg-soft;
+            border: 1px solid $ckr-border;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        @media (min-width: 992px) {
+            display: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $ckr-primary;
+            outline-offset: 2px;
+        }
+
+        i {
+            font-size: 1.35rem;
+        }
+    }
+}
+
+// #wrapwrap (website Odoo) : overflow-x hidden rogne les menus du header.
+// Important : CSS refuse `overflow-x: visible` si overflow-y != visible,
+// il faut donc forcer les deux axes simultanément.
+#wrapwrap {
+    overflow: visible !important;
+}
+
+// ============================================================================
+// Drawer mobile (off-canvas simple, sans JS lourd - utilise input:checked)
+// ============================================================================
+.ckr-drawer {
+    &__toggle {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+        overflow: hidden;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    &__panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        // unquote : laisse Sass emettre min() en CSS natif
+        // (sinon il tente math.min() sur vw + px et echoue).
+        width: unquote("min(320px, 88vw)");
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: $ckr-bg;
+        box-shadow: $ckr-shadow-lg;
+        transform: translateX(100%);
+        transition: transform $ckr-transition-base;
+        // Au-dessus du header sticky (1040) et des drop-downs courants.
+        z-index: 1060;
+        display: flex;
+        flex-direction: column;
+        padding: calc(#{$ckr-space-lg} + env(safe-area-inset-top, 0px))
+                 calc(#{$ckr-space-lg} + env(safe-area-inset-right, 0px))
+                 calc(#{$ckr-space-lg} + env(safe-area-inset-bottom, 0px))
+                 calc(#{$ckr-space-lg} + env(safe-area-inset-left, 0px));
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    &__backdrop {
+        position: fixed;
+        inset: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: rgba(44, 44, 44, 0.45);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity $ckr-transition-base, visibility $ckr-transition-base;
+        z-index: 1055;
+    }
+
+    &__close {
+        align-self: flex-end;
+        background: transparent;
+        border: none;
+        color: $ckr-text;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: $ckr-space-xs;
+
+        &:hover,
+        &:focus {
+            color: $ckr-primary;
+        }
+    }
+
+    &__nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: $ckr-space-md;
+
+        a {
+            display: flex;
+            align-items: center;
+            min-height: 48px;
+            font-family: $ckr-font-serif;
+            font-size: 1.2rem;
+            color: $ckr-text;
+            padding: $ckr-space-sm 0;
+            border-bottom: 1px solid $ckr-border;
+            text-decoration: none;
+
+            &:hover,
+            &:focus,
+            &.active {
+                color: $ckr-primary;
+                text-decoration: none;
+            }
+
+            &:focus-visible {
+                outline: 2px solid $ckr-primary;
+                outline-offset: 2px;
+            }
+        }
+    }
+
+    &__account {
+        margin-top: auto;
+        padding-top: $ckr-space-lg;
+        border-top: 1px solid $ckr-border;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    &__account-link {
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        font-family: $ckr-font-sans;
+        font-size: 0.95rem;
+        font-weight: $ckr-weight-medium;
+        color: $ckr-text;
+        padding: $ckr-space-sm 0;
+        border-bottom: 1px solid $ckr-border;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            color: $ckr-primary;
+            text-decoration: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $ckr-primary;
+            outline-offset: 2px;
+        }
+
+        &--logout {
+            color: $ckr-text-muted;
+        }
+    }
+
+    &__toggle:checked ~ &__backdrop {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    &__toggle:checked ~ &__panel {
+        transform: translateX(0);
+    }
+}
+
+// Verrouillage du scroll page quand le drawer est ouvert (classe posee par JS).
+html.ckr-drawer-open,
+body.ckr-drawer-open {
+    overflow: hidden;
+}

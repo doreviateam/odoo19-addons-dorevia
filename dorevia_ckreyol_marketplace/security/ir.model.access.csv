@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ckr_shop_origin_user,ckr.shop.origin employee read,model_ckr_shop_origin,base.group_user,1,0,0,0
+access_ckr_shop_origin_manager,ckr.shop.origin website designer CRUD,model_ckr_shop_origin,website.group_website_designer,1,1,1,1
+access_ckr_shop_collection_user,ckr.shop.collection employee read,model_ckr_shop_collection,base.group_user,1,0,0,0
+access_ckr_shop_collection_manager,ckr.shop.collection website designer CRUD,model_ckr_shop_collection,website.group_website_designer,1,1,1,1
+access_ckr_shop_collection_portal,ckr.shop.collection portal read,model_ckr_shop_collection,base.group_portal,1,0,0,0
+access_ckr_shop_collection_public,ckr.shop.collection public read,model_ckr_shop_collection,base.group_public,1,0,0,0

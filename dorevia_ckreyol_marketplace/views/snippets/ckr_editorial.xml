@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Snippet : Bloc 6 - Bloc editorial (variante SOBRE V1)      -->
+    <!-- Gel §9.3 PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md         -->
+    <!-- 2026-04-23. Bandeau centre : sureligne sauge + phrase       -->
+    <!-- Playfair + lien souligne amber. Pas d image de fond, pas    -->
+    <!-- d overlay sombre, pas de tuiles multiples.                  -->
+    <!--                                                             -->
+    <!-- La variante pleine largeur (ex-dark-overlay grid) est       -->
+    <!-- archivee et reste documentee pour V1.1 sous 3 conditions    -->
+    <!-- cumulees :                                                  -->
+    <!--   - contenu nommable (collection / saison / cadeau actif)   -->
+    <!--   - visuel paysage 21:9 dedie, produit ou recadre           -->
+    <!--   - phrase d accroche validee par le responsable marque     -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_snippet_editorial" name="C-Kreyol: Bloc editorial (sobre V1)">
+        <section class="ckr-section ckr-editorial ckr-root">
+            <div class="ckr-container">
+
+                <div class="ckr-editorial__bandeau">
+                    <span class="ckr-editorial__eyebrow">Collection</span>
+                    <p class="ckr-editorial__line">
+                        Des selections courtes, par saison ou par usage &#8212;
+                        pour decouvrir l offre sans la parcourir en entier.
+                    </p>
+                    <a href="/collections" class="ckr-editorial__link">
+                        Voir les collections &#8594;
+                    </a>
+                </div>
+
+            </div>
+        </section>
+    </template>
+
+</odoo>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Fiche produit e-commerce : scope charte C-Kreyol           -->
+    <!--                                                            -->
+    <!-- V1 : aucune restructuration du template natif              -->
+    <!-- `website_sale.product`. On ajoute uniquement des classes   -->
+    <!-- sur `#wrap` pour appliquer le SCSS `layout/_product.scss` -->
+    <!-- (typo, couleurs, CTA, variantes, galerie, etc.).          -->
+    <!--                                                            -->
+    <!-- Prerequis test : un produit publie dans Odoo (pas de data  -->
+    <!-- demo injectee par le module).                              -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_product_page_scope"
+              inherit_id="website_sale.product"
+              name="C-Kreyol: fiche produit (scope charte)"
+              priority="30">
+        <xpath expr="//div[@id='wrap'][hasclass('o_wsale_product_page')]" position="attributes">
+            <attribute name="class" add="ckr-product ckr-root ckr-page" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Fiche produit : bloc « Origines »                          -->
+    <!--                                                            -->
+    <!-- SPEC_IMPL_ORIGINES.md §7 : visibilite simple des origines   -->
+    <!-- associees au produit (affichage de tous les libelles        -->
+    <!-- visiteur). Resolution via le helper                         -->
+    <!-- `product.template._ckr_get_origin_profiles(website)` qui   -->
+    <!-- intersecte les product.attribute.value du template avec    -->
+    <!-- les profils `ckr.shop.origin` publies.                      -->
+    <!--                                                            -->
+    <!-- Rendu : liste a puces horizontale, chaque libelle cliquable -->
+    <!-- vers la lecture contextualisee /shop?ckr_mode=origin&       -->
+    <!-- ckr_origin=<slug> (boucle de lecture entree -> produit ->   -->
+    <!-- famille).                                                   -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_product_origins_block"
+              inherit_id="website_sale.product"
+              name="C-Kreyol: fiche produit - bloc Origines"
+              priority="31">
+        <xpath expr="//div[@id='product_details']" position="inside">
+            <t t-set="ckr_product_tmpl"
+               t-value="product.product_tmpl_id if product._name == 'product.product' else product"/>
+            <t t-set="ckr_origins"
+               t-value="ckr_product_tmpl._ckr_get_origin_profiles(website=website)"/>
+            <section t-if="ckr_origins"
+                     class="ckr-product-origins"
+                     aria-label="Origines du produit">
+                <span class="ckr-product-origins__label">Origines :</span>
+                <ul class="ckr-product-origins__list">
+                    <li t-foreach="ckr_origins"
+                        t-as="ckr_origin"
+                        class="ckr-product-origins__item">
+                        <a t-att-href="'/shop?ckr_mode=origin&amp;ckr_origin=%s' % ckr_origin.slug"
+                           class="ckr-product-origins__link"
+                           t-esc="ckr_origin.display_name_visitor"/>
+                    </li>
+                </ul>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Fiche produit : bloc « Collections »                        -->
+    <!--                                                            -->
+    <!-- CONTRAT_URL_COLLECTIONS.md §11, SPEC_IMPL_COLLECTIONS.md    -->
+    <!-- §10 - MOA 2026-04-22 : affichage simple des collections     -->
+    <!-- editoriales C-Kreyol auxquelles le produit est rattache.    -->
+    <!--                                                            -->
+    <!-- Resolution via le helper                                    -->
+    <!-- product.template._ckr_get_visible_collections(website) qui  -->
+    <!-- filtre le M2M ``ckr_collection_ids`` sur la visibilite      -->
+    <!-- navigation publique (active + fenetre date_start/end +       -->
+    <!-- website courant — SPEC_IMPL §2.2 / RC-03).                   -->
+    <!--                                                            -->
+    <!-- Rendu : liste a puces horizontale, chaque libelle cliquable -->
+    <!-- vers la lecture contextualisee /collections/<slug> UNIQUEMENT -->
+    <!-- (pas de lien /collections/union/... depuis la fiche - § V1    -->
+    <!-- par defaut, CONTRAT §11).                                    -->
+    <!--                                                            -->
+    <!-- Preuve auto : PV RC-13 -                                    -->
+    <!-- TestCkrCollectionsPVHttp.test_ckr_col_rc13_product_page_     -->
+    <!-- collection_links (liens /collections/<slug> presents ;      -->
+    <!-- aucun /collections/union/... ni /shop?ckr_mode=collection).  -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_product_collections_block"
+              inherit_id="website_sale.product"
+              name="C-Kreyol: fiche produit - bloc Collections"
+              priority="32">
+        <xpath expr="//div[@id='product_details']" position="inside">
+            <t t-set="ckr_product_tmpl_col"
+               t-value="product.product_tmpl_id if product._name == 'product.product' else product"/>
+            <t t-set="ckr_collections_block"
+               t-value="ckr_product_tmpl_col._ckr_get_visible_collections(website=website)"/>
+            <section t-if="ckr_collections_block"
+                     class="ckr-product-collections"
+                     aria-label="Collections du produit">
+                <span class="ckr-product-collections__label">Collections :</span>
+                <ul class="ckr-product-collections__list">
+                    <li t-foreach="ckr_collections_block"
+                        t-as="ckr_collection"
+                        class="ckr-product-collections__item">
+                        <a t-att-href="'/collections/%s' % ckr_collection.slug"
+                           class="ckr-product-collections__link"
+                           t-esc="ckr_collection.name"/>
+                    </li>
+                </ul>
+            </section>
+        </xpath>
+    </template>
+
+</odoo>

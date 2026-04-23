@@ -1,0 +1,120 @@
+// ============================================================================
+// C-Kreyol - Bloc 5 : Selection produits (WIREFRAME § 3)
+// Grille courte, pas de carrousel principal.
+// ============================================================================
+
+.ckr-selection {
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: $ckr-space-md;
+
+        @media (min-width: 768px) {
+            grid-template-columns: repeat(4, 1fr);
+            gap: $ckr-space-lg;
+        }
+    }
+
+    &__card {
+        display: flex;
+        flex-direction: column;
+        gap: $ckr-space-sm;
+        background-color: $ckr-bg;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-md;
+        padding: $ckr-space-md;
+        text-decoration: none;
+        color: $ckr-text;
+        transition: border-color $ckr-transition-fast,
+                    box-shadow $ckr-transition-base,
+                    transform $ckr-transition-fast;
+
+        &:hover {
+            border-color: $ckr-accent;
+            box-shadow: $ckr-shadow-sm;
+            transform: translateY(-2px);
+            color: $ckr-text;
+            text-decoration: none;
+        }
+
+        // Focus visible clavier : duplique le comportement hover + anneau
+        // amber (accessibilite - gel §9.4 + doctrine §4 accessibilite).
+        &:focus-visible {
+            outline: 2px solid $ckr-accent;
+            outline-offset: 2px;
+            border-color: $ckr-accent;
+            box-shadow: $ckr-shadow-sm;
+            transform: translateY(-2px);
+            color: $ckr-text;
+            text-decoration: none;
+        }
+
+        &__img {
+            width: 100%;
+            aspect-ratio: unquote("1 / 1");
+            background-color: $ckr-bg-soft;
+            border-radius: $ckr-radius-sm;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+        }
+
+        // Garde-fou responsive titre / prix (gel §9.4 + ajustement MOA
+        // 2026-04-23) : titre + prix alignes baseline sur UNE seule ligne,
+        // le prix ne se casse jamais, le titre absorbe la contrainte de
+        // largeur via ellipsis 2 lignes.
+        &__head {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: $ckr-space-sm;
+            min-width: 0;
+        }
+
+        h3 {
+            font-family: $ckr-font-serif;
+            font-size: 1.05rem;
+            font-weight: $ckr-weight-semibold;
+            margin: 0;
+            color: $ckr-text;
+            // Cles pour que text-overflow fonctionne dans un flex child :
+            // min-width: 0 debloque le calcul de largeur du flex item.
+            min-width: 0;
+            flex: 1 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        &__origin {
+            font-size: 0.8rem;
+            letter-spacing: 0.02em;
+            color: $ckr-secondary;
+            margin: 0;
+        }
+
+        &__price {
+            font-family: $ckr-font-sans;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-primary;
+            margin: 0;
+            // Le prix ne se cesure jamais et ne retrecit pas sous pression
+            // (garde-fou responsive §9.4).
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+    }
+
+    &__cta {
+        text-align: center;
+        margin-top: $ckr-space-xl;
+    }
+}

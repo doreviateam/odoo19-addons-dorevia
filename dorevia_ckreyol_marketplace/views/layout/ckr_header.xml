@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Header C-Kreyol                                            -->
+    <!--                                                            -->
+    <!-- Heritage de website.layout : on remplace le contenu du    -->
+    <!-- header natif par un header propre (logo + menu Option B   -->
+    <!-- + utilitaires + burger mobile), conforme ADR-CKR-003.     -->
+    <!--                                                            -->
+    <!-- On preserve :                                             -->
+    <!--   * id="top" sur <header> (attendu par d autres vues)     -->
+    <!--   * class o_header_standard (compatibilite configurator)  -->
+    <!--                                                            -->
+    <!-- Reference : STRUCTURE_MENU_PRINCIPAL.md, CHARTE § 9.2     -->
+    <!-- ========================================================== -->
+
+    <!-- Chargement des polices Google (Playfair Display + Inter) -->
+    <template id="ckr_fonts_head"
+              inherit_id="website.layout"
+              name="C-Kreyol: fonts (Playfair + Inter)"
+              priority="99">
+        <xpath expr="//head" position="inside">
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
+            <link rel="stylesheet"
+                  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap"/>
+        </xpath>
+    </template>
+
+    <!-- Remplacement du header : on emet <header id="top"> pour -->
+    <!-- preserver ce selecteur attendu par d autres vues.        -->
+    <template id="ckr_header"
+              inherit_id="website.layout"
+              name="C-Kreyol: header personnalise"
+              priority="99">
+        <xpath expr="//header" position="replace">
+            <header id="top" class="ckr-header ckr-root o_header_standard">
+
+                <!-- Hook de compatibilite : le JS standard                 -->
+                <!-- (website/static/src/js/content/auto_hide_menu.js, ~340) -->
+                <!-- fait `header.querySelector('.top_menu')` et plante si   -->
+                <!-- null. On expose une UL vide avec la bonne classe pour  -->
+                <!-- que le script sorte tot via son early return.          -->
+                <ul class="top_menu ckr-header__top-menu-hook"
+                    style="display:none"
+                    aria-hidden="true"/>
+
+                <!-- Toggle mobile (checkbox hors ecran ; labels for= pilotent l etat) -->
+                <input type="checkbox" id="ckr_drawer_toggle" class="ckr-drawer__toggle" tabindex="-1"/>
+
+                <div class="ckr-header__inner">
+
+                    <!-- Logo / brand (SVG inline : Playfair deja charge dans le head) -->
+                    <a href="/" class="ckr-header__brand" aria-label="C-Kreyol - Accueil">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="ckr-wordmark ckr-wordmark--header"
+                             viewBox="0 0 220 40"
+                             preserveAspectRatio="xMinYMid meet"
+                             focusable="false"
+                             aria-hidden="true">
+                            <text x="0" y="30"
+                                  font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+                                  font-size="26"
+                                  font-weight="600"
+                                  letter-spacing="0.04em">
+                                <tspan fill="#2C2C2C">C</tspan><tspan fill="#A0522D">-</tspan><tspan fill="#2C2C2C">Kreyol</tspan>
+                            </text>
+                        </svg>
+                    </a>
+
+                    <!-- Menu principal desktop (itere sur les enfants du Top Menu du website courant) -->
+                    <nav class="ckr-header__nav" aria-label="Menu principal">
+                        <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                            <a t-att-href="submenu.url" t-esc="submenu.name"/>
+                        </t>
+                    </nav>
+
+                    <!-- Utilitaires : locale (langue + devise) + cluster + burger -->
+                    <div class="ckr-header__utils">
+
+                        <!-- =============================================== -->
+                        <!-- Bloc locale : langue (natif) + devise (natif)  -->
+                        <!--                                                 -->
+                        <!-- On reinjecte les placeholders natifs Odoo :    -->
+                        <!--   * website.placeholder_header_language_selector-->
+                        <!--     (avec variantes inline + code activees     -->
+                        <!--     via data/website_selectors_activation.xml) -->
+                        <!--   * website_sale.pricelist_list                -->
+                        <!--                                                 -->
+                        <!-- Garde-fous natifs : aucun rendu si une seule   -->
+                        <!-- langue publiee ou une seule pricelist visible. -->
+                        <!-- Desktop uniquement : masque sous 992px (drawer -->
+                        <!-- mobile reprend le relai).                      -->
+                        <!-- =============================================== -->
+                        <div class="ckr-header__locale d-none d-lg-flex">
+                            <ul class="ckr-header__lang list-inline m-0">
+                                <t t-call="website.placeholder_header_language_selector">
+                                    <t t-set="_item_class" t-value="'ckr-header__lang-item'"/>
+                                </t>
+                            </ul>
+                            <t t-call="website_sale.pricelist_list">
+                                <t t-set="_classes" t-value="'ckr-header__pricelist'"/>
+                            </t>
+                        </div>
+
+                        <div class="ckr-header__action-cluster">
+                            <a href="/shop" title="Rechercher un produit" aria-label="Rechercher">
+                                <i class="fa fa-search" aria-hidden="true"/>
+                            </a>
+                            <details t-if="website.user_id != user_id"
+                                     class="ckr-header__user-menu">
+                                <summary class="ckr-header__user-toggle"
+                                         role="button"
+                                         title="Mon compte"
+                                         aria-label="Menu Mon compte">
+                                    <i class="fa fa-user-o" aria-hidden="true"/>
+                                </summary>
+                                <div class="ckr-header__user-dropdown" role="menu">
+                                    <a class="ckr-header__user-item" role="menuitem" href="/my">Mon compte</a>
+                                    <a class="ckr-header__user-item" role="menuitem"
+                                       href="/web/session/logout?redirect=/">Déconnexion</a>
+                                </div>
+                            </details>
+                            <a t-else=""
+                               href="/web/login?redirect=/my"
+                               title="Connexion"
+                               aria-label="Connexion">
+                                <i class="fa fa-user-o" aria-hidden="true"/>
+                            </a>
+                            <a href="/shop/cart" title="Mon panier" aria-label="Mon panier">
+                                <i class="fa fa-shopping-bag" aria-hidden="true"/>
+                            </a>
+                        </div>
+
+                        <!-- Burger mobile -->
+                        <label for="ckr_drawer_toggle"
+                               id="ckr_drawer_burger"
+                               class="ckr-header__burger"
+                               role="button"
+                               aria-controls="ckr_drawer_panel"
+                               aria-expanded="false"
+                               aria-label="Ouvrir le menu"
+                               tabindex="0">
+                            <i class="fa fa-bars" aria-hidden="true"/>
+                        </label>
+                    </div>
+
+                </div>
+
+                <!-- Drawer mobile -->
+                <label for="ckr_drawer_toggle" class="ckr-drawer__backdrop" aria-hidden="true"></label>
+                <aside id="ckr_drawer_panel" class="ckr-drawer__panel" aria-label="Menu mobile">
+                    <label for="ckr_drawer_toggle"
+                           class="ckr-drawer__close"
+                           role="button"
+                           aria-label="Fermer le menu"
+                           tabindex="0">&#215;</label>
+
+                    <nav class="ckr-drawer__nav" aria-label="Menu principal (mobile)">
+                        <t t-foreach="website.menu_id.child_id" t-as="submenu_m">
+                            <a t-att-href="submenu_m.url" t-esc="submenu_m.name"/>
+                        </t>
+                    </nav>
+
+                    <div t-if="website.user_id != user_id" class="ckr-drawer__account">
+                        <a href="/my" class="ckr-drawer__account-link">Mon compte</a>
+                        <a href="/web/session/logout?redirect=/"
+                           class="ckr-drawer__account-link ckr-drawer__account-link--logout">Déconnexion</a>
+                    </div>
+                    <div t-else="" class="ckr-drawer__account">
+                        <a href="/web/login?redirect=/my" class="ckr-drawer__account-link">Connexion</a>
+                    </div>
+
+                    <!-- Bloc locale mobile : mêmes t-call natifs, même garde-fous -->
+                    <div class="ckr-drawer__locale">
+                        <ul class="ckr-drawer__lang list-inline m-0">
+                            <t t-call="website.placeholder_header_language_selector">
+                                <t t-set="_item_class" t-value="'ckr-drawer__lang-item'"/>
+                            </t>
+                        </ul>
+                        <t t-call="website_sale.pricelist_list">
+                            <t t-set="_classes" t-value="'ckr-drawer__pricelist'"/>
+                        </t>
+                    </div>
+                </aside>
+
+            </header>
+        </xpath>
+    </template>
+
+</odoo>

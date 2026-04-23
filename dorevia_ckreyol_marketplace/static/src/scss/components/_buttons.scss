@@ -1,0 +1,100 @@
+// ============================================================================
+// C-Kreyol - Boutons / CTA (Charte § 6)
+// CTA principal : terracotta contraste, sobre, hover visible.
+// ============================================================================
+
+.ckr-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $ckr-space-xs;
+    font-family: $ckr-font-sans;
+    font-size: 1rem;
+    font-weight: $ckr-weight-semibold;
+    line-height: 1.2;
+    padding: $ckr-space-md $ckr-space-xl;
+    border-radius: $ckr-radius-md;
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: background-color $ckr-transition-base,
+                border-color $ckr-transition-base,
+                color $ckr-transition-base,
+                transform $ckr-transition-fast;
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 3px solid rgba(160, 82, 45, 0.35);
+        outline-offset: 2px;
+    }
+
+    // --- CTA principal ------------------------------------------------------
+    &--primary {
+        background-color: $ckr-primary;
+        color: $ckr-bg;
+        border-color: $ckr-primary;
+
+        &:hover,
+        &:focus {
+            background-color: $ckr-primary-dark;
+            border-color: $ckr-primary-dark;
+            color: $ckr-bg;
+        }
+
+        &:active {
+            transform: translateY(1px);
+        }
+    }
+
+    // Variante hero / CTA principal plus assume (presence + relief, sans criard).
+    &--lg {
+        font-size: 1.0625rem;
+        letter-spacing: 0.02em;
+        padding: 0.95rem 1.85rem;
+        box-shadow: 0 4px 14px rgba(160, 82, 45, 0.28);
+
+        &:hover,
+        &:focus {
+            box-shadow: 0 6px 20px rgba(138, 70, 38, 0.35);
+            transform: translateY(-2px);
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(160, 82, 45, 0.25);
+        }
+    }
+
+    // --- CTA secondaire (discret) -------------------------------------------
+    &--secondary {
+        background-color: transparent;
+        color: $ckr-text;
+        border-color: $ckr-text;
+
+        &:hover,
+        &:focus {
+            background-color: $ckr-text;
+            color: $ckr-bg;
+        }
+    }
+
+    // --- CTA lien editorial (sans fond) -------------------------------------
+    &--ghost {
+        background-color: transparent;
+        color: $ckr-primary;
+        border-color: transparent;
+        padding-left: 0;
+        padding-right: 0;
+
+        &:hover,
+        &:focus {
+            color: $ckr-primary-dark;
+            text-decoration: underline;
+        }
+    }
+}

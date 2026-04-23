@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Page boutique /shop : scope charte C-Kreyol                -->
+    <!--                                                            -->
+    <!-- V1 : un seul heritage sur `website_sale.products`.         -->
+    <!-- On ajoute des classes sur `#wrap` pour le SCSS             -->
+    <!-- `layout/_shop.scss` (cartes, filtres, titres, etc.).       -->
+    <!--                                                            -->
+    <!-- Pas de refonte structurelle : grille, filtres et tri      -->
+    <!-- restent ceux du standard Odoo 19.                          -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_shop_page_scope"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: boutique /shop (scope charte)"
+              priority="30">
+        <xpath expr="//div[@id='wrap'][hasclass('o_wsale_products_page')]" position="attributes">
+            <attribute name="class" add="ckr-shop ckr-root ckr-page" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Bandeau porte « Kits » sur /shop?ckr_mode=pack             -->
+    <!--                                                            -->
+    <!-- Contrat d'URL Hybride H1 (CONTRAT_URL_PACKS.md §12) :       -->
+    <!--   * URL visiteur /kits -> 301 -> /shop?ckr_mode=pack        -->
+    <!--   * libelle visiteur « Kits » (bi-lexique ADR-CKR-008)     -->
+    <!--   * filtre technique product.template.pack_ok = True        -->
+    <!--                                                            -->
+    <!-- Le bandeau est conditionnel : il n'apparait que quand le   -->
+    <!-- flag `ckr_pack_mode` est injecte par le controleur herite   -->
+    <!-- (voir controllers/website_sale_ckr.py ::                    -->
+    <!-- WebsiteSaleCKR._get_additional_shop_values).                -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_shop_pack_banner"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: bandeau porte Kits (/shop?ckr_mode=pack)"
+              priority="31">
+        <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
+            <section t-if="ckr_pack_mode"
+                     id="ckr-shop-pack-banner"
+                     class="ckr-shop-pack-banner ckr-root"
+                     aria-labelledby="ckr-shop-pack-banner-heading">
+                <div class="ckr-container">
+                    <header class="ckr-section-title ckr-section-title--compact">
+                        <span class="ckr-section-title__eyebrow">Explorer</span>
+                        <h1 id="ckr-shop-pack-banner-heading"
+                            class="ckr-shop-pack-banner__title"
+                            t-esc="ckr_pack_title or 'Kits'"/>
+                        <p class="ckr-section-title__intro">
+                            Kits colombo, apéritif, découverte… coffrets et assortiments prêts à partager.
+                            Une lecture dédiée de la boutique, filtrée sur les produits identifiés comme
+                            <strong>packs</strong> en back-office.
+                        </p>
+                    </header>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Bandeau porte « Promotions » sur /shop?ckr_mode=promo      -->
+    <!--                                                            -->
+    <!-- Contrat d'URL Hybride H1 (CONTRAT_URL_PROMOTIONS.md §12) : -->
+    <!--   * URL visiteur /promotions -> 301 -> /shop?ckr_mode=promo -->
+    <!--   * source de verite A2 : product.pricelist.item datee,     -->
+    <!--     strictement reducteur, sur la pricelist courante        -->
+    <!--   * etat vide dedie : si la source retourne 0 produit, on   -->
+    <!--     rend un message explicite plutot qu'une page vide       -->
+    <!--     susceptible de laisser croire a une rupture catalogue   -->
+    <!--                                                            -->
+    <!-- Flags injectes par le controleur                             -->
+    <!-- (controllers/website_sale_ckr.py ::                          -->
+    <!-- WebsiteSaleCKR._get_additional_shop_values) :                -->
+    <!--   * ckr_promo_mode  : True ssi /shop?ckr_mode=promo          -->
+    <!--   * ckr_promo_title : libelle visiteur « Promotions »        -->
+    <!--   * ckr_promo_empty : True ssi aucune promo active           -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_shop_promo_banner"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: bandeau porte Promotions (/shop?ckr_mode=promo)"
+              priority="32">
+        <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
+            <section t-if="ckr_promo_mode"
+                     id="ckr-shop-promo-banner"
+                     t-attf-class="ckr-shop-promo-banner ckr-root#{' ckr-shop-promo-banner--empty' if ckr_promo_empty else ''}"
+                     aria-labelledby="ckr-shop-promo-banner-heading">
+                <div class="ckr-container">
+                    <header class="ckr-section-title ckr-section-title--compact">
+                        <span class="ckr-section-title__eyebrow">Explorer</span>
+                        <h1 id="ckr-shop-promo-banner-heading"
+                            class="ckr-shop-promo-banner__title"
+                            t-esc="ckr_promo_title or 'Promotions'"/>
+                        <p t-if="not ckr_promo_empty"
+                           class="ckr-section-title__intro">
+                            Offres du moment : une lecture de la boutique filtrée sur les produits
+                            dont le prix est <strong>effectivement réduit</strong> par la liste de prix
+                            en cours. Les avantages s’appliquent automatiquement à la caisse.
+                        </p>
+                        <p t-if="ckr_promo_empty"
+                           class="ckr-section-title__intro ckr-shop-promo-banner__empty-msg">
+                            Aucune offre en cours pour le moment. Revenez bientôt :
+                            de nouvelles promotions peuvent être activées à tout moment côté catalogue.
+                        </p>
+                    </header>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Bandeau porte « Origines » sur /shop?ckr_mode=origin       -->
+    <!--                                                            -->
+    <!-- Contrat d'URL Hybride H1                                    -->
+    <!-- (CONTRAT_URL_ORIGINES.md §13 + SPEC_IMPL_ORIGINES.md) :     -->
+    <!--   * URL visiteur /origines -> 301 -> /shop?ckr_mode=origin -->
+    <!--     (catalogue complet + bandeau)                           -->
+    <!--   * ckr_origin=<slug> repetable (filtre OU sur              -->
+    <!--     product.attribute.value via ckr.shop.origin publies)    -->
+    <!--   * slug inconnu / orphelin -> 302 /shop nu (§3.3)          -->
+    <!--   * canonical multi-slugs : dedupe + tri lexicographique    -->
+    <!--     (§3.4)                                                  -->
+    <!--                                                            -->
+    <!-- Titre dynamique (SPEC_IMPL §6.1) :                          -->
+    <!--   * exactement 1 origine active -> name_visitor             -->
+    <!--   * 0 ou plusieurs            -> « Origines » (repli)      -->
+    <!--                                                            -->
+    <!-- Copy S2 figee (SPEC_IMPL §6.1 - §10 clos) :                 -->
+    <!--   * aucune origine filtree    -> « Parcourez le             -->
+    <!--                                   catalogue par origine. » -->
+    <!--   * 1 origine avec phrase     -> context_phrase du profil   -->
+    <!--   * 1 origine sans phrase     -> « Produits issus de {n}. » -->
+    <!--   * plusieurs origines         -> « Produits issus des      -->
+    <!--                                   origines selectionnees. » -->
+    <!--                                                            -->
+    <!-- Variante empty (etat vide) : origines valides mais 0       -->
+    <!-- produit. Message sobre + rebond /shop (+ /shop?ckr_mode=    -->
+    <!-- origin optionnel). Copy figee.                              -->
+    <!--                                                            -->
+    <!-- Flags injectes par WebsiteSaleCKR._get_additional_shop_values: -->
+    <!--   * ckr_origin_mode          : True ssi /shop?ckr_mode=origin -->
+    <!--   * ckr_origin_title         : S1 (dynamique ou repli)        -->
+    <!--   * ckr_origin_context_phrase: phrase du profil (1 origine)   -->
+    <!--   * ckr_origin_filtered      : True ssi >=1 origine resolue   -->
+    <!--   * ckr_origin_profiles      : recordset des profils actifs   -->
+    <!--   * ckr_origin_empty         : True ssi filtre + 0 produit    -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_shop_origin_banner"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: bandeau porte Origines (/shop?ckr_mode=origin)"
+              priority="33">
+        <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
+            <section t-if="ckr_origin_mode"
+                     id="ckr-shop-origin-banner"
+                     t-attf-class="ckr-shop-origin-banner ckr-root#{' ckr-shop-origin-banner--empty' if ckr_origin_empty else ''}"
+                     aria-labelledby="ckr-shop-origin-banner-heading">
+                <div class="ckr-container">
+                    <header class="ckr-section-title ckr-section-title--compact">
+                        <span class="ckr-section-title__eyebrow">Explorer</span>
+                        <h1 id="ckr-shop-origin-banner-heading"
+                            class="ckr-shop-origin-banner__title"
+                            t-esc="ckr_origin_title or 'Origines'"/>
+
+                        <!-- S2 : phrase de contexte (copy figee SPEC_IMPL §6.1) -->
+                        <t t-if="not ckr_origin_empty">
+                            <!-- Aucune origine filtree : catalogue complet + bandeau. -->
+                            <p t-if="not ckr_origin_filtered"
+                               class="ckr-section-title__intro">
+                                Parcourez le catalogue par origine.
+                            </p>
+                            <!-- Une seule origine active, avec phrase dediee. -->
+                            <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) == 1 and ckr_origin_context_phrase"
+                               class="ckr-section-title__intro"
+                               t-esc="ckr_origin_context_phrase"/>
+                            <!-- Une seule origine active, sans phrase : repli neutre. -->
+                            <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) == 1 and not ckr_origin_context_phrase"
+                               class="ckr-section-title__intro">
+                                Produits issus de <t t-esc="ckr_origin_title"/>.
+                            </p>
+                            <!-- Plusieurs origines actives (filtre OU) : phrase generique. -->
+                            <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) &gt; 1"
+                               class="ckr-section-title__intro">
+                                Produits issus des origines sélectionnées.
+                            </p>
+                        </t>
+
+                        <!-- Variante empty : copy figee + rebonds. -->
+                        <t t-if="ckr_origin_empty">
+                            <p class="ckr-section-title__intro ckr-shop-origin-banner__empty-msg">
+                                Cette origine n’a pas encore de produit disponible.
+                            </p>
+                            <p class="ckr-shop-origin-banner__empty-rebounds">
+                                <a href="/shop" class="ckr-shop-origin-banner__empty-cta">
+                                    Voir tout le catalogue &#8594;
+                                </a>
+                                <a href="/shop?ckr_mode=origin"
+                                   class="ckr-shop-origin-banner__empty-cta ckr-shop-origin-banner__empty-cta--secondary">
+                                    Parcourir les origines
+                                </a>
+                            </p>
+                        </t>
+                    </header>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Bandeau porte « Collections » sur /collections[/…]          -->
+    <!--                                                            -->
+    <!-- Contrat d'URL URLs nobles (CONTRAT_URL_COLLECTIONS.md §4.1  -->
+    <!-- §4.2 §4.6 ; SPEC_IMPL_COLLECTIONS.md §3 §8 - MOA 2026-04-22):-->
+    <!--   * URL visiteur /collections (vue generale) ;              -->
+    <!--   * /collections/<slug> (vue unitaire) ;                    -->
+    <!--   * /collections/union/<a>/<b>/… (union S1, n >= 2,         -->
+    <!--     tri lexicographique + 301 normalisation).               -->
+    <!--                                                            -->
+    <!-- En coulisse : le contrôleur WebsiteSaleCKR.ckr_collections_* -->
+    <!-- pose request._ckr_collection_ctx puis delegue a self.shop()  -->
+    <!-- (SPEC_IMPL §4 — sous-requete interne, pas de redirection     -->
+    <!-- /shop?ckr_mode=collection…).                                 -->
+    <!--                                                            -->
+    <!-- Flags QWeb injectes par                                      -->
+    <!-- WebsiteSaleCKR._get_additional_shop_values :                 -->
+    <!--   * ckr_collection_mode     : True ssi contexte Collections  -->
+    <!--   * ckr_collection_kind     : general | single | union        -->
+    <!--   * ckr_collection_title    : titre affiche (figures §8)     -->
+    <!--   * ckr_collection_subtext  : copy §8 figee selon kind       -->
+    <!--   * ckr_collection_empty    : True ssi kind=single + 0 produit-->
+    <!--                               (etat vide dedie §12 A contrat) -->
+    <!--   * ckr_collection_flash    : message one-shot consomme de la-->
+    <!--                               session (§8 CONTRAT, §7 SPEC)   -->
+    <!--   * ckr_collection_base_path: '/collections' (lien retour)    -->
+    <!--                                                            -->
+    <!-- Copies figees MOA 2026-04-22 (SPEC_IMPL §8) verrouillees par -->
+    <!-- test automatique (PV RC-10 test_ckr_col_rc10_fixed_copies_    -->
+    <!-- smoke). Toute modification de formulation = mise a jour      -->
+    <!-- croisee PV + SPEC_IMPL + template.                           -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_shop_collection_banner"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: bandeau porte Collections (/collections[/…])"
+              priority="34">
+        <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
+            <section t-if="ckr_collection_mode"
+                     id="ckr-shop-collection-banner"
+                     t-attf-class="ckr-shop-collection-banner ckr-root#{' ckr-shop-collection-banner--empty' if ckr_collection_empty else ''}"
+                     aria-labelledby="ckr-shop-collection-banner-heading">
+                <div class="ckr-container">
+                    <!-- Message flash one-shot (consomme de la session apres un 302
+                         de repli « collection non disponible » - CONTRAT §8).
+                         Pas de ?ckr_notice= sur la Location (verifie par RC-09). -->
+                    <div t-if="ckr_collection_flash"
+                         class="ckr-shop-collection-banner__flash"
+                         role="status"
+                         aria-live="polite"
+                         t-esc="ckr_collection_flash"/>
+
+                    <header class="ckr-section-title ckr-section-title--compact">
+                        <span class="ckr-section-title__eyebrow">Explorer</span>
+                        <h1 id="ckr-shop-collection-banner-heading"
+                            class="ckr-shop-collection-banner__title"
+                            t-esc="ckr_collection_title or 'Collections'"/>
+
+                        <!-- Bandeau normal (copies §8 figees) : affiche tant que
+                             l'on n'est pas sur un etat vide §12 A (vue unitaire
+                             valide mais sans produit). -->
+                        <p t-if="not ckr_collection_empty"
+                           class="ckr-section-title__intro"
+                           t-esc="ckr_collection_subtext"/>
+
+                        <!-- Etat vide §12 A contrat : collection **valide** mais
+                             aucun produit visible. Copy figee MOA 2026-04-22
+                             (SPEC_IMPL §8) + lien « Retour aux collections ». -->
+                        <t t-if="ckr_collection_empty">
+                            <p class="ckr-section-title__intro ckr-shop-collection-banner__empty-msg">
+                                Aucun produit n’est affiché pour cette collection pour le moment.
+                            </p>
+                            <p class="ckr-shop-collection-banner__empty-rebounds">
+                                <a t-att-href="ckr_collection_base_path or '/collections'"
+                                   class="ckr-shop-collection-banner__empty-cta">
+                                    Retour aux collections
+                                </a>
+                            </p>
+                        </t>
+                    </header>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+</odoo>

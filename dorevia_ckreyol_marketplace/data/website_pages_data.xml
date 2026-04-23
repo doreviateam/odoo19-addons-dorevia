@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ========================================================== -->
+    <!-- Pages website.page pour les templates Phase 1              -->
+    <!--                                                            -->
+    <!-- On cree les entrees website.page pointant vers les        -->
+    <!-- templates qweb correspondants : ces URL doivent exister    -->
+    <!-- avant la creation du menu principal (references par URL). -->
+    <!-- ========================================================== -->
+
+    <!-- Note : pas de website.page pour "/" : la homepage reste portee   -->
+    <!-- par website.homepage_page (standard Odoo). Notre surcharge de    -->
+    <!-- contenu passe par l heritage de website.homepage (voir           -->
+    <!-- views/pages/ckr_homepage.xml, xpath sur #wrap).                  -->
+
+    <!-- A propos -->
+    <record id="website_page_about" model="website.page">
+        <field name="name">A propos</field>
+        <field name="url">/a-propos</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_about"/>
+    </record>
+
+    <!-- Contact -->
+    <record id="website_page_contact" model="website.page">
+        <field name="name">Contact</field>
+        <field name="url">/contact</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_contact"/>
+    </record>
+
+    <!-- Collections (porte Explorer - URL noble dediee, MOA 2026-04-22) :  -->
+    <!-- La page stub historique /collections (website_page_collections,    -->
+    <!-- template ckr_page_collections) est RETIREE. La route /collections  -->
+    <!-- est desormais portee par un controleur Python dedie qui rend        -->
+    <!-- directement la lecture editoriale :                                 -->
+    <!--   * /collections                       → vue generale                -->
+    <!--   * /collections/<slug>                → vue unitaire                 -->
+    <!--   * /collections/union/<s1>/<s2>/…     → lecture union S1            -->
+    <!-- (contrat d URL URLs nobles acte le 2026-04-22, cf.                 -->
+    <!-- docs/phase_2/CONTRAT_URL_COLLECTIONS.md §4.1-§4.6 et                -->
+    <!-- docs/phase_2/SPEC_IMPL_COLLECTIONS.md §3).                          -->
+    <!-- Pas de redirection vers /shop?ckr_mode=collection cote visiteur    -->
+    <!-- (CONTRAT §4.3) : le rendu reutilise /shop en coulisse via           -->
+    <!-- request._ckr_collection_ctx et les hooks natifs WebsiteSale.        -->
+    <!-- Nettoyage des installations existantes :                            -->
+    <!-- data/ckr_cleanup_collections_stub.xml.                              -->
+
+    <!-- Offrir (stub) -->
+    <record id="website_page_offrir" model="website.page">
+        <field name="name">Offrir</field>
+        <field name="url">/offrir</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_offrir"/>
+    </record>
+
+    <!-- Recettes (stub) -->
+    <record id="website_page_recettes" model="website.page">
+        <field name="name">Recettes</field>
+        <field name="url">/recettes</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_recettes"/>
+    </record>
+
+    <!-- Kits (porte Explorer, libellé visiteur ADR-CKR-008) :              -->
+    <!-- La page stub historique /kits (website_page_compositions,          -->
+    <!-- template ckr_page_compositions) est RETIREE. La route /kits        -->
+    <!-- est desormais portee par un controleur Python qui effectue une     -->
+    <!-- redirection HTTP 301 vers la destination canonique                 -->
+    <!-- /shop?ckr_mode=pack (contrat d'URL Hybride H1, acte le 2026-04-21, -->
+    <!-- cf. docs/phase_2/CONTRAT_URL_PACKS.md §12 et                       -->
+    <!-- controllers/website_sale_ckr.py).                                   -->
+    <!-- Nettoyage des installations existantes : data/ckr_cleanup_kits_stub.xml. -->
+
+    <!-- Origines (porte Origine Explorer, libellé visiteur ADR-CKR-008) :  -->
+    <!-- La page stub historique /origines (website_page_origines,          -->
+    <!-- template ckr_page_origines) est RETIREE. La route /origines        -->
+    <!-- est desormais portee par un controleur Python qui effectue une     -->
+    <!-- redirection HTTP 301 vers la destination canonique                 -->
+    <!-- /shop?ckr_mode=origin (contrat d'URL Hybride H1, acte le           -->
+    <!-- 2026-04-22, cf. docs/phase_2/CONTRAT_URL_ORIGINES.md §13 et        -->
+    <!-- docs/phase_2/SPEC_IMPL_ORIGINES.md).                               -->
+    <!-- Nettoyage des installations existantes :                           -->
+    <!-- data/ckr_cleanup_origines_stub.xml.                                -->
+
+</odoo>

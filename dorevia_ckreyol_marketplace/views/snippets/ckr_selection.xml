@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================== -->
+    <!-- Snippet : Bloc 5 - Selection produits (WIREFRAME § 3)     -->
+    <!-- Grille courte - pas de carrousel principal.               -->
+    <!-- Phase 1 : packshots en placeholder ; a terme on branche   -->
+    <!-- sur product.template (selection manuelle ou tag).         -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_snippet_selection" name="C-Kreyol: Selection produits">
+        <section class="ckr-section ckr-selection ckr-root">
+            <div class="ckr-container">
+
+                <header class="ckr-section-title">
+                    <span class="ckr-section-title__eyebrow ckr-section-title__eyebrow--rule">Selection</span>
+                    <h2>Quelques produits reperes</h2>
+                </header>
+
+                <div class="ckr-selection__grid">
+
+                    <a href="/shop" class="ckr-selection__card">
+                        <div class="ckr-selection__card__img">
+                            <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_maniocookies.png"
+                                 alt="Maniocookies - biscuits au manioc"/>
+                        </div>
+                        <div class="ckr-selection__card__head">
+                            <h3>Maniocookies</h3>
+                            <span class="ckr-selection__card__price">Voir en boutique</span>
+                        </div>
+                        <!--
+                            V1 : origine rendue en statique (placeholder homepage).
+                            V1.x (bascule donnee reelle) : remplacer ce <p> par un rendu
+                            conditionnel t-if="product.x_ckr_origin" + verification de
+                            couverture globale >= 80 % sur la selection (regle §9.4 du
+                            document gele), pilotee au niveau du template parent ou du
+                            controleur qui resout la selection. Si couverture < 80 %,
+                            masquer la ligne sur TOUTES les cartes - jamais de melange.
+                        -->
+                        <p class="ckr-selection__card__origin">Guadeloupe</p>
+                    </a>
+
+                    <a href="/shop" class="ckr-selection__card">
+                        <div class="ckr-selection__card__img">
+                            <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_crackers.png"
+                                 alt="Crackers sales de manioc"/>
+                        </div>
+                        <div class="ckr-selection__card__head">
+                            <h3>Manioc Crakers sale</h3>
+                            <span class="ckr-selection__card__price">Voir en boutique</span>
+                        </div>
+                        <!-- §9.4 : origine statique V1 (voir doctrine sur carte 1) -->
+                        <p class="ckr-selection__card__origin">Sainte-Anne</p>
+                    </a>
+
+                    <a href="/shop" class="ckr-selection__card">
+                        <div class="ckr-selection__card__img">
+                            <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_pates.png"
+                                 alt="Pates de manioc"/>
+                        </div>
+                        <div class="ckr-selection__card__head">
+                            <h3>Manio Pates</h3>
+                            <span class="ckr-selection__card__price">Voir en boutique</span>
+                        </div>
+                        <!-- §9.4 : origine statique V1 (voir doctrine sur carte 1) -->
+                        <p class="ckr-selection__card__origin">Mayotte</p>
+                    </a>
+
+                    <a href="/shop" class="ckr-selection__card">
+                        <div class="ckr-selection__card__img">
+                            <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_crackers.png"
+                                 alt="Manio Crakers sucres"/>
+                        </div>
+                        <div class="ckr-selection__card__head">
+                            <h3>Manio Crakers sucre</h3>
+                            <span class="ckr-selection__card__price">Voir en boutique</span>
+                        </div>
+                        <!-- §9.4 : origine statique V1 (voir doctrine sur carte 1) -->
+                        <p class="ckr-selection__card__origin">Guadeloupe</p>
+                    </a>
+
+                </div>
+
+                <div class="ckr-selection__cta">
+                    <a href="/shop" class="ckr-btn ckr-btn--secondary">
+                        Voir tous les produits
+                    </a>
+                </div>
+
+            </div>
+        </section>
+    </template>
+
+</odoo>

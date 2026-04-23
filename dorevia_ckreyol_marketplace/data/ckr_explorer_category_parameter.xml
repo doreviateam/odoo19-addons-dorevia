@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Paramètre optionnel : id explicite de product.public.category pour
+         l'entrée Explorer « Catégories » (sinon : première racine du site).
+         Voir CONTRAT_URL_CATEGORIES.md §12.2 et models/product_public_category.py.
+    -->
+    <record id="ir_config_parameter_ckr_explorer_public_category" model="ir.config_parameter" forcecreate="1">
+        <field name="key">dorevia_ckreyol_marketplace.explorer_public_category_id</field>
+        <field name="value">0</field>
+    </record>
+</odoo>
