@@ -3,7 +3,7 @@
 **Objet** : constater les résultats de la **Phase A** du ticket [TICKET_HOMEPAGE_APPETENCE_PARTITION_V1.md](TICKET_HOMEPAGE_APPETENCE_PARTITION_V1.md) sur la homepage CK, à structure de page constante.
 
 **Date** : 2026-04-23  
-**Statut** : trame de recette / procès-verbal à compléter après livraison créa + intégration.
+**Statut** : **PV rempli — verdict MOA : GO avec réserves / Recette validée avec réserves** (lot 1 SCSS cartes sélection, PR `feat/homepage-phase-a`). Les sections de détail §4–§8 restent non cochées : la décision MOA est portée par le verdict global §3 et la décision finale §13, qui prévalent pour ce lot.
 
 **Périmètre** : homepage uniquement (`website.homepage` / `ckr_page_homepage`) — **Phase A** : médias, copy hors gel, micro-ajustements visuels / SCSS.
 
@@ -55,15 +55,14 @@ tout en respectant :
 ### Verdict global
 
 - [ ] **GO**
-- [ ] **GO avec réserves**
+- [x] **GO avec réserves**
 - [ ] **NO GO**
 
 ### Appréciation synthétique MOA
 
-Quelques lignes maximum sur la perception d’ensemble :
+La homepage gagne en tenue, en cohérence et en qualité perçue sur le bloc travaillé. Le rendu desktop comme mobile est propre, lisible et plus crédible. Le lot 1 améliore bien la sensation de finition sans casser la charpente ni dégrader la sobriété CK.
 
-> Exemple :  
-> La homepage conserve la sobriété CK tout en gagnant nettement en matière visuelle, en cohérence entre blocs et en désirabilité des sélections. Le gain est perceptible, sans rupture de charpente ni glissement vers un registre promotionnel ou folklorique.
+En revanche, le gain d’**appétence perçue** reste **partiel** : la homepage demeure globalement assez sage et l’écart principal avec l’ambition du cadrage reste situé dans le **rythme de page**, la **densité hiérarchisée** et la **partition d’ensemble**, non traités dans ce lot.
 
 ---
 
@@ -283,17 +282,11 @@ Le gain d’appétence a-t-il été obtenu sans glisser vers la surcharge, la su
 
 ### Avant
 
-Quelques lignes maximum :
-
-> Exemple :  
-> Homepage jugée sobre mais encore froide, avec peu de matière sensible, une réassurance tardive et une désirabilité insuffisante sur les blocs visuels existants.
+Homepage sobre et sérieuse, mais encore un peu froide, avec une désirabilité limitée et peu de montée en intensité perceptive au-delà du hero.
 
 ### Après
 
-Quelques lignes maximum :
-
-> Exemple :  
-> Homepage perçue comme plus habitée, plus cohérente et plus commerçante, sans perte de tenue ni dérive promotionnelle. La structure n’a pas changé mais la page « emmène » davantage.
+Homepage plus propre, plus finie et légèrement plus désirable sur les cartes sélection, sans rupture de structure ni glissement promotionnel. Le gain est réel mais reste localisé ; il ne suffit pas à lui seul à combler l’écart d’appétence globale identifié dans le ticket.
 
 ---
 
@@ -320,9 +313,8 @@ Lister ici ce qui reste **hors Phase A** et ne doit pas être rouvert impropreme
 
 | ID | Sujet | Niveau | Action demandée | Ticket / suite |
 |----|-------|--------|-----------------|----------------|
-| R1 | | Mineur / Majeur / Bloquant | | |
-| R2 | | Mineur / Majeur / Bloquant | | |
-| R3 | | Mineur / Majeur / Bloquant | | |
+| R1 | Gain d’appétence limité au périmètre cartes sélection | Majeur | Ne pas considérer le ticket comme clos sur le fond ; conserver ouverte la question du rythme vertical / densité / partition pour un lot suivant. | Lot 2 ou Phase B selon arbitrage |
+| R2 | Écart principal non traité sur la progression perceptive de la homepage | Majeur | Documenter explicitement dans le PV que le lot 1 est un polish ciblé et non une réponse complète à l’ambition design du ticket. | À rattacher au ticket mère `HOMEPAGE-APPETENCE-PARTITION-V1` |
 
 ---
 
@@ -339,12 +331,12 @@ Lister ici ce qui reste **hors Phase A** et ne doit pas être rouvert impropreme
 ## 13. Décision finale
 
 - [ ] **Recette validée**
-- [ ] **Recette validée avec réserves**
+- [x] **Recette validée avec réserves**
 - [ ] **Recette refusée**
 
 ### Commentaire de décision
 
-Quelques lignes maximum.
+Le lot 1 peut être accepté comme amélioration ciblée, propre et sans régression visible. Il ne clôt toutefois pas le sujet d’appétence homepage au sens du cadrage design, qui reste dépendant de travaux complémentaires sur les contenus et/ou sur la partition visuelle d’ensemble.
 
 ---
 
@@ -353,3 +345,4 @@ Quelques lignes maximum.
 | Date | Changement |
 |------|------------|
 | 2026-04-23 | Création — trame de PV de recette pour la Phase A du ticket `HOMEPAGE-APPETENCE-PARTITION-V1`. |
+| 2026-04-23 | **Remplissage verdict MOA lot 1** — GO avec réserves (R1 majeur : gain d’appétence limité au périmètre cartes sélection ; R2 majeur : écart principal sur progression perceptive non traité). Décision finale §13 : **recette validée avec réserves**. Les questions rythme vertical / densité / partition restent ouvertes pour un lot 2 ou Phase B. |
