@@ -27,7 +27,7 @@
               inherit_id="website_sale.products"
               name="C-Kreyol: hero boutique Vague 1"
               priority="25">
-        <xpath expr="//div[@id='o_wsale_container']/div[contains(@class,'o_wsale_products_main_row')]" position="before">
+        <xpath expr="//div[@id='o_wsale_container']/div[hasclass('o_wsale_products_main_row')]" position="before">
             <section t-if="not search"
                      class="ckr-shop-hero ckr-shop-hero--asset ckr-root"
                      aria-labelledby="ckr-shop-hero-heading">
@@ -489,7 +489,7 @@
               inherit_id="website_sale.products_item"
               name="C-Kreyol: carte produit V1 (classe ckr-product-card)"
               priority="55">
-        <xpath expr="//form[hasclass('oe_product_cart')]" position="attributes">
+        <xpath expr="//form[contains(@t-attf-class, 'oe_product_cart') or hasclass('oe_product_cart')]" position="attributes">
             <attribute name="class" add="ckr-product-card" separator=" "/>
         </xpath>
     </template>
