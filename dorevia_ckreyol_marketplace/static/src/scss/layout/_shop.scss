@@ -155,13 +155,48 @@
         }
     }
 
-    // --- Colonne filtres (desktop) -----------------------------------------
+    // --- MVP2.2 Vague 1 — Lot E0 : sidebar / filtres natifs (habillage seul) --
+    // Panneau `website_sale` uniquement : lisibilite retail, coherence cartes.
+    // Pas de nouvelle logique facettes ni blocs metier CK.
+
     #products_grid_before {
         font-family: $ckr-font-sans;
+        padding-right: $ckr-space-md;
+        z-index: 1;
+
+        .o_wsale_products_grid_before_rail {
+            padding: $ckr-space-md;
+            background-color: $ckr-bg-soft;
+            border: 1px solid $ckr-border;
+            border-radius: $ckr-radius-md;
+            box-shadow: $ckr-shadow-sm;
+            max-height: calc(100vh - 5.5rem);
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(160, 82, 45, 0.35) transparent;
+        }
 
         .products_categories,
         .products_attributes_filters {
             font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        .accordion {
+            --bs-accordion-bg: transparent;
+            --bs-accordion-border-color: #{$ckr-border};
+            --bs-accordion-btn-focus-box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.12);
+        }
+
+        .accordion-item {
+            background-color: rgba(255, 255, 255, 0.35);
+            border: 1px solid rgba(217, 208, 186, 0.85);
+            border-radius: $ckr-radius-sm !important;
+            margin-bottom: $ckr-space-sm;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
 
         .accordion-button {
@@ -169,11 +204,48 @@
             font-size: 0.875rem;
             font-weight: $ckr-weight-semibold;
             color: $ckr-text;
+            padding-top: $ckr-space-sm;
+            padding-bottom: $ckr-space-sm;
+            box-shadow: none;
 
             &:not(.collapsed) {
                 color: $ckr-primary;
-                background-color: $ckr-bg-soft;
+                background-color: rgba(255, 255, 255, 0.55);
             }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.15);
+            }
+        }
+
+        .accordion-body {
+            padding-top: 0.25rem;
+            padding-bottom: $ckr-space-md;
+        }
+
+        // Liens categories (liste / arbre natif)
+        .products_categories .nav-link,
+        .products_categories a:not(.accordion-button) {
+            border-radius: $ckr-radius-sm;
+            color: $ckr-text;
+            text-decoration: none;
+            padding: 0.3rem $ckr-space-sm;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary;
+                background-color: rgba(255, 255, 255, 0.6);
+            }
+        }
+
+        .form-check {
+            margin-bottom: 0.4rem;
+        }
+
+        .form-check-label {
+            cursor: pointer;
+            line-height: 1.35;
+            color: $ckr-text;
         }
 
         .form-check-input {
@@ -185,10 +257,37 @@
             border-color: $ckr-border;
             border-radius: $ckr-radius-md;
             font-family: $ckr-font-sans;
+            font-size: 0.875rem;
+        }
+
+        // Filtre prix (range natif)
+        #o_wsale_price_range_option {
+            .accordion-button.bg-transparent {
+                background-color: transparent !important;
+            }
+
+            .form-range {
+                accent-color: $ckr-primary;
+
+                &::-webkit-slider-thumb {
+                    background: $ckr-primary;
+                }
+
+                &::-moz-range-thumb {
+                    background: $ckr-primary;
+                }
+            }
         }
 
         .border-bottom {
             border-color: $ckr-border !important;
+        }
+
+        // Bouton « effacer les filtres »
+        .border-bottom .btn {
+            border-radius: $ckr-radius-md;
+            font-size: 0.8125rem;
+            font-weight: $ckr-weight-medium;
         }
     }
 
@@ -460,18 +559,59 @@
         font-family: $ckr-font-sans;
     }
 
-    // --- Offcanvas filtres (mobile) ----------------------------------------
+    // --- Offcanvas filtres (mobile) — meme lecture retail que sidebar E0 -----
     #o_wsale_offcanvas.o_website_offcanvas {
         font-family: $ckr-font-sans;
+        border-left: 1px solid $ckr-border;
+        box-shadow: $ckr-shadow-md;
+
+        .offcanvas-header {
+            border-bottom: 1px solid $ckr-border;
+            background-color: $ckr-bg-soft;
+        }
+
+        .offcanvas-title {
+            font-family: $ckr-font-serif;
+            font-weight: $ckr-weight-semibold;
+            font-size: 1.05rem;
+            color: $ckr-text;
+        }
+
+        .offcanvas-body {
+            padding: $ckr-space-md;
+            background-color: $ckr-bg;
+        }
+
+        .accordion {
+            --bs-accordion-bg: transparent;
+            --bs-accordion-border-color: #{$ckr-border};
+            --bs-accordion-btn-focus-box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.12);
+        }
+
+        .accordion-item {
+            border: 1px solid rgba(217, 208, 186, 0.85);
+            border-radius: $ckr-radius-sm !important;
+            margin-bottom: $ckr-space-sm;
+            background-color: rgba(255, 255, 255, 0.45);
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
 
         .o_wsale_offcanvas_title {
             font-size: 0.9rem;
             font-weight: $ckr-weight-semibold;
             color: $ckr-text;
+            box-shadow: none;
 
             &:not(.collapsed) {
                 color: $ckr-primary;
                 background-color: $ckr-bg-soft;
+            }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.15);
             }
         }
 
@@ -480,6 +620,15 @@
         }
 
         .form-check-input {
+            border-color: $ckr-border;
+            accent-color: $ckr-primary;
+        }
+
+        .form-check-label {
+            line-height: 1.35;
+        }
+
+        .form-range {
             accent-color: $ckr-primary;
         }
     }
