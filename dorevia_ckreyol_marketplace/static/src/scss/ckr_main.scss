@@ -42,7 +42,7 @@
     // Couleur de lien par defaut, sauf boutons (standard Odoo .btn
     // ou nos CTA .ckr-btn) dont la couleur est definie par leur propre
     // composant via _buttons.scss.
-    a:not(.btn):not(.ckr-btn) {
+    a:not(.btn):not(.ckr-btn):not(.ckr-shop-shortcuts__link) {
         color: $ckr-primary;
         text-decoration: none;
         transition: color $ckr-transition-fast;

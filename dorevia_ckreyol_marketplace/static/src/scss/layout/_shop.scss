@@ -517,19 +517,92 @@
         flex-direction: column;
         flex: 1 1 auto !important;
         min-height: 0;
-        padding: $ckr-space-md;
+        padding: $ckr-space-sm;
+    }
+
+    // Titre tuile : hors hiérarchie .ckr-root h2 (clamp trop grand) ; 2 lignes max.
+    form.ckr-product-card :is(h2, h6).o_wsale_products_item_title {
+        font-family: $ckr-font-sans !important;
+        font-size: 0.875rem !important;
+        font-weight: $ckr-weight-semibold !important;
+        line-height: 1.3 !important;
+        letter-spacing: 0 !important;
+        margin: 0 0 0.2rem !important;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        word-break: break-word;
+
+        a {
+            color: $ckr-text !important;
+        }
+    }
+
+    // Thème type classic_store : micro-catégorie au-dessus du nom ; prix poussé en bas du bloc texte.
+    form.ckr-product-card .o_wsale_product_information_text.flex-grow-1:first-of-type {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        min-height: 0;
+
+        & > h6.o_wsale_products_item_title,
+        & > h2.o_wsale_products_item_title {
+            order: 2;
+        }
+
+        & > div:has(.fa-folder-open) {
+            order: 1;
+            margin: 0 !important;
+            font-size: 0.6875rem;
+            line-height: 1.25;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: $ckr-weight-medium;
+            color: $ckr-text-muted;
+
+            a {
+                color: inherit;
+                text-decoration: none;
+
+                &:hover,
+                &:focus-visible {
+                    color: $ckr-primary;
+                }
+            }
+        }
+
+        & > .o_wsale_product_price {
+            order: 3;
+            margin-top: auto !important;
+            padding-top: 0.35rem;
+        }
+    }
+
+    form.ckr-product-card .o_wsale_product_price {
+        font-size: 0.9375rem;
+    }
+
+    form.ckr-product-card .shop-list-group-item .fa-star,
+    form.ckr-product-card .shop-list-group-item .fa-star-half-o {
+        font-size: 0.75rem !important;
+    }
+
+    form.ckr-product-card .shop-list-group-item {
+        margin-top: 0.25rem !important;
     }
 
     // Bloc prix + actions natif (standard Odoo) : colle en bas de la carte
     form.ckr-product-card .o_wsale_product_sub {
         margin-top: auto;
         align-items: flex-end;
+        padding-top: $ckr-space-xs;
     }
 
     // Theme classic_store : quick add sous le bloc information
     form.ckr-product-card .o_quick_add_btn {
         margin-top: auto;
-        padding: 0 $ckr-space-md $ckr-space-md;
+        padding: 0 $ckr-space-sm $ckr-space-sm;
         align-self: flex-end;
         width: 100%;
         display: flex;
@@ -580,11 +653,11 @@
         background-color: $ckr-bg-soft;
     }
 
-    .o_wsale_products_item_title {
-        font-family: $ckr-font-serif;
-        font-size: 1.05rem;
+    :is(h2, h6).o_wsale_products_item_title {
+        font-family: $ckr-font-sans;
+        font-size: 0.875rem;
         font-weight: $ckr-weight-semibold;
-        line-height: 1.25;
+        line-height: 1.3;
 
         a {
             color: $ckr-text;
@@ -601,19 +674,24 @@
     .oe_subdescription,
     .oe_subdescription.text-muted {
         color: $ckr-text-muted !important;
-        line-height: 1.45;
+        line-height: 1.35;
+        font-size: 0.75rem !important;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 
     .o_wsale_product_sub {
         border-top: 1px solid rgba(217, 208, 186, 0.65);
-        padding-top: $ckr-space-sm;
-        margin-top: $ckr-space-sm;
+        padding-top: $ckr-space-xs;
+        margin-top: $ckr-space-xs;
 
         .product_price {
             font-family: $ckr-font-sans;
             font-weight: $ckr-weight-semibold;
             color: $ckr-text;
-            font-size: 1rem;
+            font-size: 0.9375rem;
 
             del,
             .text-muted {
@@ -951,7 +1029,7 @@
 // MVP2.2 Vague 1 — Lot B : barre commerciale (chips) — boutique /shop
 // ----------------------------------------------------------------------------
 .ckr-shop-shortcuts {
-    padding: $ckr-space-md 0 $ckr-space-sm;
+    padding: $ckr-space-sm 0;
     border-bottom: 1px solid rgba(217, 208, 186, 0.65);
     margin-bottom: $ckr-space-sm;
 

@@ -138,7 +138,7 @@
               inherit_id="website_sale.products"
               name="C-Kreyol: barre commerciale boutique (Explorer)"
               priority="29">
-        <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
+        <xpath expr="//div[@id='products_grid']/div[hasclass('o_wsale_products_grid_table_wrapper')]" position="before">
             <t t-set="ckr_shop_bar_show_all"
                t-value="not ckr_shop_shortcut_mode and not category and not search and not ckr_collection_mode"/>
             <nav class="ckr-shop-shortcuts ckr-root" role="navigation" aria-label="Offres boutique">
