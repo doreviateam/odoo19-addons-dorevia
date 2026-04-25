@@ -33,6 +33,14 @@
     h2 { font-size: $ckr-h2-size; line-height: 1.2; }
     h3 { font-size: $ckr-h3-size; line-height: 1.3; }
 
+    // Grille boutique : le thème rend le nom en h6 + parfois <b> (t-field) ;
+    // hors exception, les h6 héritent du serif éditorial ci-dessus.
+    form.oe_product_cart :is(h2, h6).o_wsale_products_item_title {
+        font-family: $ckr-font-sans;
+        font-weight: $ckr-weight-medium;
+        letter-spacing: 0.01em;
+    }
+
     .ckr-lead {
         font-size: $ckr-lead-size;
         color: $ckr-text;
