@@ -484,6 +484,7 @@
         flex: 0 0 auto !important;
         width: 100% !important;
         aspect-ratio: 1 / 1;
+        max-height: clamp(7rem, 26vw, 9.25rem);
     }
 
     form.ckr-product-card .oe_product_image_link,
@@ -539,12 +540,13 @@
         }
     }
 
-    // Thème type classic_store : micro-catégorie au-dessus du nom ; prix poussé en bas du bloc texte.
+    // Thème type classic_store : micro-catégorie → nom → prix (prix en bas du bloc texte).
     form.ckr-product-card .o_wsale_product_information_text.flex-grow-1:first-of-type {
         display: flex;
         flex-direction: column;
-        gap: 0.2rem;
+        gap: 0.12rem;
         min-height: 0;
+        flex: 1 1 auto;
 
         & > h6.o_wsale_products_item_title,
         & > h2.o_wsale_products_item_title {
@@ -554,10 +556,10 @@
         & > div:has(.fa-folder-open) {
             order: 1;
             margin: 0 !important;
-            font-size: 0.6875rem;
-            line-height: 1.25;
+            font-size: 0.625rem;
+            line-height: 1.2;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
             font-weight: $ckr-weight-medium;
             color: $ckr-text-muted;
 
@@ -575,21 +577,30 @@
         & > .o_wsale_product_price {
             order: 3;
             margin-top: auto !important;
-            padding-top: 0.35rem;
+            padding-top: 0.2rem;
         }
     }
 
     form.ckr-product-card .o_wsale_product_price {
-        font-size: 0.9375rem;
+        font-size: 0.8125rem;
+        line-height: 1.2;
     }
 
-    form.ckr-product-card .shop-list-group-item .fa-star,
-    form.ckr-product-card .shop-list-group-item .fa-star-half-o {
-        font-size: 0.75rem !important;
-    }
-
+    // Grille retail : pas de description longue ni bloc notes — garde prix / CTA visibles.
+    form.ckr-product-card .oe_subdescription_wrapper,
+    form.ckr-product-card .oe_subdescription,
+    form.ckr-product-card .o_wsale_product_rating_wrapper,
     form.ckr-product-card .shop-list-group-item {
-        margin-top: 0.25rem !important;
+        display: none !important;
+    }
+
+    form.ckr-product-card .o_wsale_product_information_text:empty {
+        display: none !important;
+    }
+
+    // Thème 2 colonnes texte : la seconde ne sert souvent qu’aux étoiles — masquée en grille retail.
+    form.ckr-product-card .o_wsale_product_information > .o_wsale_product_information_text ~ .o_wsale_product_information_text {
+        display: none !important;
     }
 
     // Bloc prix + actions natif (standard Odoo) : colle en bas de la carte
@@ -602,11 +613,17 @@
     // Theme classic_store : quick add sous le bloc information
     form.ckr-product-card .o_quick_add_btn {
         margin-top: auto;
-        padding: 0 $ckr-space-sm $ckr-space-sm;
+        padding: 0 0.45rem 0.35rem;
         align-self: flex-end;
         width: 100%;
         display: flex;
         justify-content: flex-end;
+
+        .btn {
+            font-size: 0.75rem !important;
+            padding: 0.2rem 0.45rem !important;
+            line-height: 1.2;
+        }
     }
 
     // Wishlist (theme) : positionner sur la carte, pas sur le bloc texte seul
@@ -655,9 +672,10 @@
 
     :is(h2, h6).o_wsale_products_item_title {
         font-family: $ckr-font-sans;
-        font-size: 0.875rem;
-        font-weight: $ckr-weight-semibold;
-        line-height: 1.3;
+        font-size: 0.75rem;
+        font-weight: $ckr-weight-medium;
+        line-height: 1.2;
+        letter-spacing: 0.01em;
 
         a {
             color: $ckr-text;
@@ -675,7 +693,7 @@
     .oe_subdescription.text-muted {
         color: $ckr-text-muted !important;
         line-height: 1.35;
-        font-size: 0.75rem !important;
+        font-size: 0.6875rem !important;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
@@ -684,14 +702,15 @@
 
     .o_wsale_product_sub {
         border-top: 1px solid rgba(217, 208, 186, 0.65);
-        padding-top: $ckr-space-xs;
-        margin-top: $ckr-space-xs;
+        padding-top: 0.2rem;
+        margin-top: 0.2rem;
 
         .product_price {
             font-family: $ckr-font-sans;
             font-weight: $ckr-weight-semibold;
             color: $ckr-text;
-            font-size: 0.9375rem;
+            font-size: 0.8125rem;
+            line-height: 1.2;
 
             del,
             .text-muted {
@@ -700,14 +719,21 @@
         }
     }
 
+    form.ckr-product-card .o_wsale_product_sub .o_wsale_product_btn .btn,
+    form.ckr-product-card .o_wsale_product_btn .btn {
+        font-size: 0.75rem !important;
+        padding: 0.25rem 0.5rem !important;
+        line-height: 1.2;
+    }
+
     .o_wsale_product_btn_primary.btn-primary {
         background-color: $ckr-primary;
         border-color: $ckr-primary;
         color: $ckr-bg;
         font-weight: $ckr-weight-semibold;
         border-radius: $ckr-radius-md;
-        font-size: 0.8125rem;
-        padding: $ckr-space-sm $ckr-space-md;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.55rem;
 
         &:hover,
         &:focus {
