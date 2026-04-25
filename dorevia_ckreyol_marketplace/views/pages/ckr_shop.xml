@@ -21,20 +21,38 @@
         </xpath>
     </template>
 
-    <!-- Raccourcis portes Explorer (MVP2.2 boutique) -->
+    <!-- MVP2.2 Vague 1 — Lot B : barre commerciale (chips + compteur léger) -->
     <template id="ckr_shop_explorer_shortcuts"
               inherit_id="website_sale.products"
-              name="C-Kreyol: raccourcis Explorer (boutique)"
+              name="C-Kreyol: barre commerciale boutique (Explorer)"
               priority="29">
         <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
-            <nav class="ckr-shop-shortcuts ckr-root" aria-label="Raccourcis Explorer">
+            <t t-set="ckr_shop_bar_show_all"
+               t-value="not ckr_shop_shortcut_mode and not category and not search and not ckr_collection_mode"/>
+            <nav class="ckr-shop-shortcuts ckr-root" role="navigation" aria-label="Offres boutique">
                 <div class="ckr-container ckr-shop-shortcuts__inner">
-                    <a href="/incontournables"
-                       t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'featured' else ''}">Incontournables</a>
-                    <a href="/promotions"
-                       t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'promo' else ''}">Promotions</a>
-                    <a href="/kits"
-                       t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'pack' else ''}">Kits</a>
+                    <div class="ckr-shop-shortcuts__chips">
+                        <a href="/shop"
+                           t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_bar_show_all else ''}">
+                            Toute la boutique
+                        </a>
+                        <a href="/promotions"
+                           t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'promo' else ''}">
+                            Promotions
+                        </a>
+                        <a href="/incontournables"
+                           t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'featured' else ''}">
+                            Incontournables
+                        </a>
+                        <a href="/kits"
+                           t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'pack' else ''}">
+                            Kits
+                        </a>
+                    </div>
+                    <p t-if="search_count" class="ckr-shop-shortcuts__count">
+                        <span class="ckr-shop-shortcuts__count-n" t-out="search_count"/>
+                        <span class="ckr-shop-shortcuts__count-label"> produits</span>
+                    </p>
                 </div>
             </nav>
         </xpath>

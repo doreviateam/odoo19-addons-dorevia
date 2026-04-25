@@ -92,6 +92,17 @@
     }
 
     // --- Barre outils : recherche, pricelist, tri, filtres ----------------
+    // --- MVP2.2 Vague 1 — Lot B : barre outils native (tri / recherche inchangés) -
+    #o_wsale_products_header .products_header.btn-toolbar {
+        flex-wrap: wrap;
+        row-gap: $ckr-space-sm;
+
+        .o_sortby_dropdown,
+        .o_pricelist_dropdown {
+            flex-shrink: 0;
+        }
+    }
+
     .products_header {
         .btn {
             font-family: $ckr-font-sans;
@@ -776,38 +787,95 @@
 }
 
 // ============================================================================
-// Raccourcis Explorer (Incontournables / Promotions / Kits) — boutique /shop
+// MVP2.2 Vague 1 — Lot B : barre commerciale (chips) — boutique /shop
 // ----------------------------------------------------------------------------
 .ckr-shop-shortcuts {
-    padding: $ckr-space-md 0 0;
+    padding: $ckr-space-md 0 $ckr-space-sm;
+    border-bottom: 1px solid rgba(217, 208, 186, 0.65);
+    margin-bottom: $ckr-space-sm;
 
     &__inner {
         display: flex;
         flex-wrap: wrap;
-        gap: $ckr-space-sm $ckr-space-md;
         align-items: center;
+        justify-content: space-between;
+        gap: $ckr-space-sm $ckr-space-md;
         font-family: $ckr-font-sans;
         font-size: 0.8125rem;
     }
 
+    &__chips {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: $ckr-space-xs $ckr-space-sm;
+        min-width: 0;
+        flex: 1 1 auto;
+
+        @media (max-width: 575.98px) {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(160, 82, 45, 0.35) transparent;
+            padding-bottom: 2px;
+        }
+    }
+
+    &__count {
+        margin: 0;
+        flex: 0 0 auto;
+        font-size: 0.8125rem;
+        color: $ckr-text-muted;
+        white-space: nowrap;
+    }
+
+    &__count-n {
+        font-weight: $ckr-weight-semibold;
+        color: $ckr-text;
+    }
+
+    &__count-label {
+        font-weight: $ckr-weight-medium;
+    }
+
     &__link {
+        display: inline-flex;
+        align-items: center;
         color: $ckr-text-muted;
         text-decoration: none;
         font-weight: $ckr-weight-medium;
-        border-bottom: 1px solid transparent;
+        padding: 0.35rem 0.75rem;
+        border: 1px solid rgba(217, 208, 186, 0.9);
+        border-radius: $ckr-radius-pill;
+        background-color: rgba(255, 255, 255, 0.45);
+        white-space: nowrap;
         transition: color $ckr-transition-fast,
-                    border-color $ckr-transition-fast;
+                    border-color $ckr-transition-fast,
+                    background-color $ckr-transition-fast,
+                    box-shadow $ckr-transition-fast;
 
         &:hover,
         &:focus-visible {
             color: $ckr-primary;
-            border-bottom-color: $ckr-primary;
+            border-color: rgba(160, 82, 45, 0.45);
+            background-color: $ckr-bg-soft;
         }
 
         &--active {
-            color: $ckr-text;
+            color: $ckr-bg;
             font-weight: $ckr-weight-semibold;
-            border-bottom-color: rgba(160, 82, 45, 0.45);
+            background-color: $ckr-primary;
+            border-color: $ckr-primary;
+            box-shadow: $ckr-shadow-sm;
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-bg;
+                background-color: $ckr-primary-dark;
+                border-color: $ckr-primary-dark;
+            }
         }
     }
 }
