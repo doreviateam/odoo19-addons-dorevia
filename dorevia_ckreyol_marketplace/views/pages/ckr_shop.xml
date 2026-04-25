@@ -21,6 +21,25 @@
         </xpath>
     </template>
 
+    <!-- Raccourcis portes Explorer (MVP2.2 boutique) -->
+    <template id="ckr_shop_explorer_shortcuts"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: raccourcis Explorer (boutique)"
+              priority="29">
+        <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
+            <nav class="ckr-shop-shortcuts ckr-root" aria-label="Raccourcis Explorer">
+                <div class="ckr-container ckr-shop-shortcuts__inner">
+                    <a href="/incontournables"
+                       t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'featured' else ''}">Incontournables</a>
+                    <a href="/promotions"
+                       t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'promo' else ''}">Promotions</a>
+                    <a href="/kits"
+                       t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_shortcut_mode == 'pack' else ''}">Kits</a>
+                </div>
+            </nav>
+        </xpath>
+    </template>
+
     <!-- ========================================================== -->
     <!-- Bandeau porte « Kits » sur /shop?ckr_mode=pack             -->
     <!--                                                            -->
@@ -242,11 +261,46 @@
     <!-- smoke). Toute modification de formulation = mise a jour      -->
     <!-- croisee PV + SPEC_IMPL + template.                           -->
     <!-- ========================================================== -->
+    <!-- Bandeau porte « Incontournables » sur /shop?ckr_mode=featured -->
+    <!-- SPEC_SHOP_PORTES §4.6 — filtre = même mécanique que Collections. -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_shop_featured_banner"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: bandeau Incontournables (/shop?ckr_mode=featured)"
+              priority="34">
+        <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
+            <section t-if="ckr_featured_mode"
+                     id="ckr-shop-featured-banner"
+                     t-attf-class="ckr-shop-featured-banner ckr-root#{' ckr-shop-featured-banner--empty' if ckr_featured_empty else ''}"
+                     aria-labelledby="ckr-shop-featured-banner-heading">
+                <div class="ckr-container">
+                    <header class="ckr-section-title ckr-section-title--compact">
+                        <span class="ckr-section-title__eyebrow">Explorer</span>
+                        <h1 id="ckr-shop-featured-banner-heading"
+                            class="ckr-shop-featured-banner__title"
+                            t-esc="ckr_featured_title or 'Incontournables'"/>
+                        <p t-if="not ckr_featured_empty"
+                           class="ckr-section-title__intro">
+                            Une sélection issue de la collection éditoriale
+                            <strong t-esc="ckr_featured_collection and ckr_featured_collection.name or 'Incontournables'"/>.
+                        </p>
+                        <p t-if="ckr_featured_empty"
+                           class="ckr-section-title__intro ckr-shop-featured-banner__empty-msg">
+                            Cette sélection ne contient pas encore de produit visible.
+                        </p>
+                    </header>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
 
     <template id="ckr_shop_collection_banner"
               inherit_id="website_sale.products"
               name="C-Kreyol: bandeau porte Collections (/collections[/…])"
-              priority="34">
+              priority="35">
         <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
             <section t-if="ckr_collection_mode"
                      id="ckr-shop-collection-banner"
@@ -292,6 +346,21 @@
                     </header>
                 </div>
             </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- MVP2.2 Vague 1 — Lot D : carte produit V1 (classe ancre)   -->
+    <!-- Grille dense + colonne retail : SCSS `layout/_shop.scss`.   -->
+    <!-- priority > theme_classic_store (40) pour conserver la forme. -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_shop_product_tile_v1"
+              inherit_id="website_sale.products_item"
+              name="C-Kreyol: carte produit V1 (classe ckr-product-card)"
+              priority="55">
+        <xpath expr="//form[hasclass('oe_product_cart')]" position="attributes">
+            <attribute name="class" add="ckr-product-card" separator=" "/>
         </xpath>
     </template>
 

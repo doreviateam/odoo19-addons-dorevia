@@ -197,6 +197,129 @@
         padding-top: $ckr-space-sm;
     }
 
+    // --- MVP2.2 Vague 1 — Lot C : grille responsive dense --------------------
+    // Presentation uniquement : surcharge CSS grid natif (pas de ppr / moteur).
+    // Cibles : 4 cols XL, 3 cols LG, 2 cols tablette & mobile, 1 col tres etroit.
+    #o_wsale_products_grid.o_wsale_products_grid_table {
+        --ckr-shop-grid-gap: #{$ckr-space-sm};
+        gap: var(--ckr-shop-grid-gap) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        align-items: stretch;
+
+        @media (max-width: 379.98px) {
+            grid-template-columns: minmax(0, 1fr) !important;
+        }
+
+        @media (min-width: 992px) {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        }
+
+        @media (min-width: 1400px) {
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        }
+
+        > .oe_product {
+            grid-column: span 1 !important;
+            grid-row: auto !important;
+            min-width: 0;
+            width: 100% !important;
+            max-width: none !important;
+        }
+
+        > .oe_product > .o_wsale_product_grid_wrapper {
+            min-height: 100%;
+        }
+    }
+
+    // --- MVP2.2 Vague 1 — Lot D : carte produit V1 ---------------------------
+    // Colonne retail (Odoo natif = flex row image + texte), image homogene,
+    // ruban haut gauche, wishlist theme haut droite sur la tuile, CTA bas.
+
+    form.ckr-product-card.oe_product_cart {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        min-height: 100%;
+    }
+
+    form.ckr-product-card .oe_product_image {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        aspect-ratio: 1 / 1;
+    }
+
+    form.ckr-product-card .oe_product_image_link,
+    form.ckr-product-card .oe_product_image_img_wrapper {
+        height: 100% !important;
+        min-height: 0;
+    }
+
+    form.ckr-product-card .oe_product_image img,
+    form.ckr-product-card .oe_product_image .oe_product_image_img {
+        object-fit: cover !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    // Ruban / badge tuile : lecture haut gauche (MOA-5)
+    form.ckr-product-card .oe_product_image .o_ribbons {
+        position: absolute !important;
+        top: $ckr-space-sm !important;
+        left: $ckr-space-sm !important;
+        right: auto !important;
+        bottom: auto !important;
+        z-index: 3;
+        max-width: calc(100% - 2 * #{$ckr-space-sm});
+        text-align: left;
+        pointer-events: none;
+    }
+
+    form.ckr-product-card .o_wsale_product_information {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto !important;
+        min-height: 0;
+        padding: $ckr-space-md;
+    }
+
+    // Bloc prix + actions natif (standard Odoo) : colle en bas de la carte
+    form.ckr-product-card .o_wsale_product_sub {
+        margin-top: auto;
+        align-items: flex-end;
+    }
+
+    // Theme classic_store : quick add sous le bloc information
+    form.ckr-product-card .o_quick_add_btn {
+        margin-top: auto;
+        padding: 0 $ckr-space-md $ckr-space-md;
+        align-self: flex-end;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    // Wishlist (theme) : positionner sur la carte, pas sur le bloc texte seul
+    .o_wsale_product_grid_wrapper .o_wsale_product_information.position-relative {
+        position: static;
+    }
+
+    .o_wsale_product_grid_wrapper .wishlist-above-title {
+        position: absolute;
+        top: $ckr-space-sm;
+        right: $ckr-space-sm;
+        z-index: 5;
+    }
+
+    .o_wsale_product_grid_wrapper .wishlist-above-title .btn {
+        border-radius: $ckr-radius-md;
+        box-shadow: $ckr-shadow-sm;
+        pointer-events: auto;
+    }
+
+    // Micro-info categorie (theme : lien + icone dossier)
+    form.ckr-product-card .o_wsale_product_information_text .fa-folder-open {
+        opacity: 0.85;
+    }
+
     .oe_product_cart {
         font-family: $ckr-font-sans;
         background-color: $ckr-bg;
@@ -497,6 +620,73 @@
     // Variante "etat vide" : ton plus sourd, pas d'inquietude pour le visiteur.
     &--empty {
         .ckr-shop-origin-banner__empty-msg {
+            color: $ckr-text-muted;
+            font-style: italic;
+        }
+    }
+}
+
+// ============================================================================
+// Raccourcis Explorer (Incontournables / Promotions / Kits) — boutique /shop
+// ----------------------------------------------------------------------------
+.ckr-shop-shortcuts {
+    padding: $ckr-space-md 0 0;
+
+    &__inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $ckr-space-sm $ckr-space-md;
+        align-items: center;
+        font-family: $ckr-font-sans;
+        font-size: 0.8125rem;
+    }
+
+    &__link {
+        color: $ckr-text-muted;
+        text-decoration: none;
+        font-weight: $ckr-weight-medium;
+        border-bottom: 1px solid transparent;
+        transition: color $ckr-transition-fast,
+                    border-color $ckr-transition-fast;
+
+        &:hover,
+        &:focus-visible {
+            color: $ckr-primary;
+            border-bottom-color: $ckr-primary;
+        }
+
+        &--active {
+            color: $ckr-text;
+            font-weight: $ckr-weight-semibold;
+            border-bottom-color: rgba(160, 82, 45, 0.45);
+        }
+    }
+}
+
+// ============================================================================
+// Bandeau porte « Incontournables » sur /shop?ckr_mode=featured
+// ----------------------------------------------------------------------------
+.ckr-shop-featured-banner {
+    padding: $ckr-space-xl 0 $ckr-space-md;
+    border-bottom: 1px solid rgba(217, 208, 186, 0.6);
+    background-color: transparent;
+
+    .ckr-section-title {
+        margin-bottom: 0;
+    }
+
+    .ckr-shop-featured-banner__title {
+        font-family: $ckr-font-serif;
+        font-weight: $ckr-weight-semibold;
+        color: $ckr-text;
+        letter-spacing: -0.02em;
+        font-size: unquote("clamp(1.5rem, 2vw + 0.75rem, 2.1rem)");
+        margin-top: 0.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    &--empty {
+        .ckr-shop-featured-banner__empty-msg {
             color: $ckr-text-muted;
             font-style: italic;
         }
