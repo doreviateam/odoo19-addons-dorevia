@@ -92,6 +92,135 @@
     }
 
     // --- Barre outils : recherche, pricelist, tri, filtres ----------------
+    // --- MVP2.2 Vague 1 — Lot A : hero (pleine largeur conteneur boutique) -----
+    .ckr-shop-hero {
+        position: relative;
+        margin-bottom: $ckr-space-md;
+        border-radius: $ckr-radius-md;
+        overflow: hidden;
+        border: 1px solid $ckr-border;
+        box-shadow: $ckr-shadow-sm;
+        background: linear-gradient(
+            135deg,
+            rgba(160, 82, 45, 0.14) 0%,
+            rgba(135, 167, 120, 0.12) 45%,
+            $ckr-bg-soft 100%
+        );
+
+        &__bg {
+            position: absolute;
+            inset: 0;
+            background-color: transparent;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.22;
+            pointer-events: none;
+        }
+
+        &--asset .ckr-shop-hero__bg {
+            background-image: url("/dorevia_ckreyol_marketplace/static/src/img/hero_macro.png");
+            opacity: 0.35;
+        }
+
+        &__inner {
+            position: relative;
+            z-index: 1;
+            padding: $ckr-space-lg $ckr-container-px;
+        }
+
+        &__flash {
+            margin-bottom: $ckr-space-sm;
+            padding: $ckr-space-sm $ckr-space-md;
+            border-radius: $ckr-radius-sm;
+            background-color: rgba(255, 255, 255, 0.75);
+            border: 1px solid $ckr-border;
+            font-size: 0.9rem;
+            color: $ckr-text;
+        }
+
+        &__eyebrow {
+            display: block;
+            font-family: $ckr-font-sans;
+            font-size: 0.7rem;
+            font-weight: $ckr-weight-semibold;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: $ckr-primary;
+            margin-bottom: 0.35rem;
+        }
+
+        &__title {
+            font-family: $ckr-font-serif;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+            letter-spacing: -0.02em;
+            font-size: unquote("clamp(1.45rem, 2vw + 0.85rem, 2.15rem)");
+            margin: 0 0 $ckr-space-sm;
+            line-height: 1.2;
+            max-width: 42rem;
+        }
+
+        &__intro {
+            font-family: $ckr-font-sans;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: $ckr-text;
+            max-width: 40rem;
+
+            p {
+                margin: 0 0 $ckr-space-sm;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+
+            &--muted {
+                color: $ckr-text-muted;
+                font-style: italic;
+            }
+        }
+
+        &__category-desc {
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: $ckr-text-muted;
+        }
+
+        &__rebounds {
+            margin: $ckr-space-sm 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: $ckr-space-sm $ckr-space-md;
+        }
+
+        &__cta {
+            font-family: $ckr-font-sans;
+            font-size: 0.875rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-primary;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(160, 82, 45, 0.35);
+
+            &:hover,
+            &:focus-visible {
+                color: $ckr-primary-dark;
+                border-bottom-color: $ckr-primary-dark;
+            }
+
+            &--secondary {
+                font-weight: $ckr-weight-medium;
+                color: $ckr-text-muted;
+                border-bottom-color: rgba(217, 208, 186, 0.9);
+
+                &:hover,
+                &:focus-visible {
+                    color: $ckr-primary;
+                }
+            }
+        }
+    }
+
     // --- MVP2.2 Vague 1 — Lot B : barre outils native (tri / recherche inchangés) -
     #o_wsale_products_header .products_header.btn-toolbar {
         flex-wrap: wrap;
@@ -642,6 +771,38 @@
         .form-range {
             accent-color: $ckr-primary;
         }
+    }
+}
+
+// --- MVP2.2 Vague 1 — Lot A : pas de double titre / bandeau + hero ----------
+// Hors recherche : le hero porte H1 + copy ; bandeaux texte porte masqués.
+#wrap.o_wsale_products_page.ckr-page:has(.ckr-shop-hero) {
+    #o_wsale_products_header {
+        h1.o_wsale_shop_title,
+        h1.o_wsale_category_title {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            clip-path: inset(50%) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+    }
+
+    #o_wsale_products_header #category_header {
+        display: none !important;
+    }
+
+    #ckr-shop-pack-banner,
+    #ckr-shop-promo-banner,
+    #ckr-shop-origin-banner,
+    #ckr-shop-featured-banner,
+    #ckr-shop-collection-banner {
+        display: none !important;
     }
 }
 

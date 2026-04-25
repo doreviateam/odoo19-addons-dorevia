@@ -794,9 +794,25 @@ class WebsiteSaleCKR(WebsiteSale):
                     "ckr_collection_base_path": CKR_COLLECTION_BASE_PATH,
                 }
             )
-        # QWeb barre commerciale (Vague 1) : évite une clé absente hors
-        # contexte Collections sur les expressions `not ckr_collection_mode`.
-        result.setdefault("ckr_collection_mode", False)
+        # QWeb Vague 1 (barre B + hero A) : booléens / recordsets optionnels
+        # toujours définis pour éviter les NameError dans les `t-if` / `len`.
+        for _k, _d in (
+            ("ckr_collection_mode", False),
+            ("ckr_pack_mode", False),
+            ("ckr_promo_mode", False),
+            ("ckr_featured_mode", False),
+            ("ckr_origin_mode", False),
+            ("ckr_promo_empty", False),
+            ("ckr_featured_empty", False),
+            ("ckr_origin_empty", False),
+            ("ckr_collection_empty", False),
+            ("ckr_origin_filtered", False),
+        ):
+            result.setdefault(_k, _d)
+        if "ckr_origin_profiles" not in result:
+            result["ckr_origin_profiles"] = request.env["ckr.shop.origin"].browse(
+                []
+            )
         result["ckr_shop_shortcut_mode"] = mode
         return result
 

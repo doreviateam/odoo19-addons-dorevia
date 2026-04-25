@@ -21,6 +21,118 @@
         </xpath>
     </template>
 
+    <!-- MVP2.2 Vague 1 — Lot A : hero pleine largeur (au-dessus sidebar + grille) -->
+    <!-- Copy alignée sur les bandeaux porte existants ; image module optionnelle. -->
+    <template id="ckr_shop_hero_wave1"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: hero boutique Vague 1"
+              priority="25">
+        <xpath expr="//div[@id='o_wsale_container']/div[contains(@class,'o_wsale_products_main_row')]" position="before">
+            <section t-if="not search"
+                     class="ckr-shop-hero ckr-shop-hero--asset ckr-root"
+                     aria-labelledby="ckr-shop-hero-heading">
+                <div class="ckr-shop-hero__bg" aria-hidden="true"/>
+                <div class="ckr-container ckr-shop-hero__inner">
+                    <div t-if="ckr_collection_flash"
+                         class="ckr-shop-hero__flash"
+                         role="status"
+                         aria-live="polite"
+                         t-esc="ckr_collection_flash"/>
+                    <header class="ckr-shop-hero__header">
+                        <span class="ckr-shop-hero__eyebrow">Explorer</span>
+                        <h1 id="ckr-shop-hero-heading" class="ckr-shop-hero__title">
+                            <t t-if="ckr_pack_mode" t-out="ckr_pack_title or 'Kits'"/>
+                            <t t-elif="ckr_promo_mode" t-out="ckr_promo_title or 'Promotions'"/>
+                            <t t-elif="ckr_featured_mode" t-out="ckr_featured_title or 'Incontournables'"/>
+                            <t t-elif="ckr_origin_mode" t-out="ckr_origin_title or 'Origines'"/>
+                            <t t-elif="ckr_collection_mode" t-out="ckr_collection_title or 'Collections'"/>
+                            <t t-elif="category" t-out="category.name"/>
+                            <t t-else="" t-out="website.name"/>
+                        </h1>
+                        <!-- Intro : réemploi des formulations des bandeaux porte (MOA-3). -->
+                        <div class="ckr-shop-hero__intro">
+                            <t t-if="ckr_pack_mode">
+                                <p>
+                                    Kits colombo, apéritif, découverte… coffrets et assortiments prêts à partager.
+                                    Une lecture dédiée de la boutique, filtrée sur les produits identifiés comme
+                                    <strong>packs</strong> en back-office.
+                                </p>
+                            </t>
+                            <t t-elif="ckr_promo_mode">
+                                <p t-if="not ckr_promo_empty">
+                                    Offres du moment : une lecture de la boutique filtrée sur les produits
+                                    dont le prix est <strong>effectivement réduit</strong> par la liste de prix
+                                    en cours. Les avantages s’appliquent automatiquement à la caisse.
+                                </p>
+                                <p t-if="ckr_promo_empty" class="ckr-shop-hero__intro--muted">
+                                    Aucune offre en cours pour le moment. Revenez bientôt :
+                                    de nouvelles promotions peuvent être activées à tout moment côté catalogue.
+                                </p>
+                            </t>
+                            <t t-elif="ckr_featured_mode">
+                                <p t-if="not ckr_featured_empty">
+                                    Une sélection issue de la collection éditoriale
+                                    <strong t-out="ckr_featured_collection and ckr_featured_collection.name or 'Incontournables'"/>.
+                                </p>
+                                <p t-if="ckr_featured_empty" class="ckr-shop-hero__intro--muted">
+                                    Cette sélection ne contient pas encore de produit visible.
+                                </p>
+                            </t>
+                            <t t-elif="ckr_origin_mode">
+                                <t t-if="not ckr_origin_empty">
+                                    <p t-if="not ckr_origin_filtered">
+                                        Parcourez le catalogue par origine.
+                                    </p>
+                                    <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) == 1 and ckr_origin_context_phrase"
+                                       t-esc="ckr_origin_context_phrase"/>
+                                    <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) == 1 and not ckr_origin_context_phrase">
+                                        Produits issus de <t t-out="ckr_origin_title"/>.
+                                    </p>
+                                    <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) &gt; 1">
+                                        Produits issus des origines sélectionnées.
+                                    </p>
+                                </t>
+                                <t t-if="ckr_origin_empty">
+                                    <p class="ckr-shop-hero__intro--muted">
+                                        Cette origine n’a pas encore de produit disponible.
+                                    </p>
+                                    <p class="ckr-shop-hero__rebounds">
+                                        <a href="/shop" class="ckr-shop-hero__cta">Voir tout le catalogue</a>
+                                        <a href="/shop?ckr_mode=origin" class="ckr-shop-hero__cta ckr-shop-hero__cta--secondary">Parcourir les origines</a>
+                                    </p>
+                                </t>
+                            </t>
+                            <t t-elif="ckr_collection_mode">
+                                <p t-if="not ckr_collection_empty"
+                                   t-esc="ckr_collection_subtext"/>
+                                <t t-if="ckr_collection_empty">
+                                    <p class="ckr-shop-hero__intro--muted">
+                                        Aucun produit n’est affiché pour cette collection pour le moment.
+                                    </p>
+                                    <p class="ckr-shop-hero__rebounds">
+                                        <a t-att-href="ckr_collection_base_path or '/collections'"
+                                           class="ckr-shop-hero__cta">Retour aux collections</a>
+                                    </p>
+                                </t>
+                            </t>
+                            <t t-elif="category">
+                                <div t-if="category.website_description"
+                                     class="ckr-shop-hero__category-desc"
+                                     t-field="category.website_description"/>
+                            </t>
+                            <t t-else="">
+                                <p>
+                                    Découvrez notre catalogue : épicerie fine et spécialités
+                                    aux saveurs des Antilles, avec le même soin qu’en boutique.
+                                </p>
+                            </t>
+                        </div>
+                    </header>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
     <!-- MVP2.2 Vague 1 — Lot B : barre commerciale (chips + compteur léger) -->
     <template id="ckr_shop_explorer_shortcuts"
               inherit_id="website_sale.products"
