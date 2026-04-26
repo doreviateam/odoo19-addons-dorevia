@@ -5,3 +5,5 @@ access_ckr_shop_collection_user,ckr.shop.collection employee read,model_ckr_shop
 access_ckr_shop_collection_manager,ckr.shop.collection website designer CRUD,model_ckr_shop_collection,website.group_website_designer,1,1,1,1
 access_ckr_shop_collection_portal,ckr.shop.collection portal read,model_ckr_shop_collection,base.group_portal,1,0,0,0
 access_ckr_shop_collection_public,ckr.shop.collection public read,model_ckr_shop_collection,base.group_public,1,0,0,0
+access_ckr_circle_subscriber_user,ckr.circle.subscriber employee read,model_ckr_circle_subscriber,base.group_user,1,0,0,0
+access_ckr_circle_subscriber_manager,ckr.circle.subscriber website designer CRUD,model_ckr_circle_subscriber,website.group_website_designer,1,1,1,1

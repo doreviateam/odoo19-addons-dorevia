@@ -9,11 +9,11 @@
 - [PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md](PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md) — §9 Arbitrages gelés le 2026-04-23.
 
 **Cadre doctrinal** :
-- [ARCHITECTURE_DECISION_RECORD.md](../ARCHITECTURE_DECISION_RECORD.md) (ADR-001, 002, 003, 005, 007, 008)
-- [WIREFRAME_HOMEPAGE.md](../WIREFRAME_HOMEPAGE.md)
-- [SPEC_HERO_HOMEPAGE.md](../SPEC_HERO_HOMEPAGE.md) (gel §7)
-- [CHARTE_GRAPHIQUE_PHASE1.md](../CHARTE_GRAPHIQUE_PHASE1.md) (Direction A gelée §3–§11)
-- [DESIGN.md](../DESIGN.md) §7
+- [ARCHITECTURE_DECISION_RECORD.md](../direction/ARCHITECTURE_DECISION_RECORD.md) (ADR-001, 002, 003, 005, 007, 008)
+- [WIREFRAME_HOMEPAGE.md](../direction/WIREFRAME_HOMEPAGE.md)
+- [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) (gel §7)
+- [CHARTE_GRAPHIQUE_PHASE1.md](../direction/CHARTE_GRAPHIQUE_PHASE1.md) (Direction A gelée §3–§11)
+- [DESIGN.md](../direction/DESIGN.md) §7
 
 ---
 
@@ -94,7 +94,7 @@ Convention interne non connue avec certitude → bump **patch** par lot : `.12 �
 
 ### Documents (après chaque lot)
 - Entrée d'historique dans `docs/crea/PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md`.
-- Éventuellement : entrée d'historique dans `docs/WIREFRAME_HOMEPAGE.md` et `docs/DESIGN.md` après Lot C (refonte Editorial → variante sobre = état V1).
+- Éventuellement : entrée d'historique dans `docs/direction/WIREFRAME_HOMEPAGE.md` et `docs/direction/DESIGN.md` après Lot C (refonte Editorial → variante sobre = état V1).
 
 ### Fichiers NON touchés (confirmé)
 - `views/snippets/ckr_hero.xml` (copy gelé SPEC §7)
@@ -714,7 +714,7 @@ Convention interne non connue avec certitude → bump **patch** par lot pour res
 ## 10. Hors périmètre — tickets séparés
 
 - **Sous-titre hero `__subtitle-accent`** : **résolu en v.16** — Ticket 1 clôturé, retrait de `__subtitle-accent` pour alignement Hero / SPEC §7 (sans amendement du gel).
-- **Chemin du document gelé dans les `prompt_*.md`** : les prompts référencent `docs/phase_2/PROPOSITION_MONTEE_EN_GAMME_HOMEPAGE_V1.md`, fichier réel `docs/crea/PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md`. À corriger dans `prompt_creative.md`, `prompt_dev.md`, `prompt_ticket.md`.
+- **Chemin du document gelé dans les `prompt_*.md`** : les prompts vivent sous **`docs/prompting/`** ; la proposition homepage V1 gelée est **`docs/crea/PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md`** (pas de chemin fantôme type ancien `phase_2` / nom de fichier erroné). Vérifier la cohérence dans `docs/prompting/prompt_creative.md`, `docs/prompting/prompt_dev.md`, `docs/prompting/prompt_ticket.md`.
 - **Explorer suréligne « Porte 0x »** : exclue de V1 ; à réévaluer en V1.1 / V2 si besoin de lisibilité éditoriale renforcée apparaît au vu de la V1 en situation.
 - **Alternance des fonds de section** (`--bg-warm` / `--bg-soft`) évoquée dans la proposition créative : non incluse en V1 (les fonds actuels suffisent à marquer la respiration). À réévaluer après Lot C si l'ensemble paraît trop uniforme.
 

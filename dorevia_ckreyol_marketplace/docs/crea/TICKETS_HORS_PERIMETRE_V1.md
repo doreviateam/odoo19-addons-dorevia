@@ -37,24 +37,24 @@
 
 ## Ticket 2 — [P1] Ajout de la référence au document V1 homepage dans les prompts pertinents
 
-**Statut** : **CLÔTURÉ le 2026-04-23**. Exécuté sur les 3 prompts retenus (`prompt_creative.md`, `prompt_dev.md`, `prompt_ticket.md`), `prompt_session.md` non modifié comme convenu. Pas de bump module (fichiers hors assets Odoo). Reformulation initiale documentée ci-dessous pour traçabilité de l'audit.
+**Statut** : **CLÔTURÉ le 2026-04-23**. Exécuté sur les 3 prompts retenus (`docs/prompting/prompt_creative.md`, `docs/prompting/prompt_dev.md`, `docs/prompting/prompt_ticket.md`), `docs/prompting/prompt_session.md` non modifié comme convenu. Pas de bump module (fichiers hors assets Odoo). Reformulation initiale documentée ci-dessous pour traçabilité de l'audit.
 
 **Note** : le ticket a été **reformulé le 2026-04-23** après audit. La formulation initiale (« correction de chemins erronés ») partait d'une fausse hypothèse — l'audit a confirmé qu'**aucun chemin n'est erroné** dans les 4 `prompt_*.md`. Le vrai besoin est ailleurs : garantir qu'un futur développeur, créatif ou chat IA qui reprendrait un sujet homepage soit systématiquement orienté vers le document V1 gelé, pour ne pas rouvrir implicitement les arbitrages §9.
 
-**Origine** : depuis le 2026-04-23, la homepage est en état **V1 implémentée et gelée** (module `dorevia_ckreyol_marketplace` version `19.0.1.6.15`, arbitrages §9 non négociables sans ticket explicite). Les 4 prompts templates de la racine module ne font **aucune mention** de ce document ni de ce statut.
+**Origine** : depuis le 2026-04-23, la homepage est en état **V1 implémentée et gelée** (module `dorevia_ckreyol_marketplace` version `19.0.1.6.15`, arbitrages §9 non négociables sans ticket explicite). Les 4 prompts templates (`docs/prompting/prompt_*.md`, alors en racine du module) ne font **aucune mention** de ce document ni de ce statut.
 
 **Risque latent si non traité** : une nouvelle session de travail sur la homepage (design ou dev) repart sans connaissance de l'état gelé → propositions qui réouvrent ce qui a déjà été tranché (hero 60/40, supplier plane, editorial sobre sans h2, selection garde-fou, fil rouge amber), retour en arrière sur des décisions MOA, perte de temps en ré-arbitrage.
 
 **Portée retenue** (validée MOA 2026-04-23) :
-- `prompt_creative.md` : **ajout** des 3 références V1 + mini-règle « ne pas rouvrir §9 sans ticket explicite ».
-- `prompt_dev.md` : **ajout** des 3 références V1 + mini-règle dans les principes d'architecture.
-- `prompt_ticket.md` : **mention ciblée homepage** uniquement (léger, pas un pavé).
-- `prompt_session.md` : **non modifié** (volontairement court et focalisé sur la reprise de session).
+- `docs/prompting/prompt_creative.md` : **ajout** des 3 références V1 + mini-règle « ne pas rouvrir §9 sans ticket explicite ».
+- `docs/prompting/prompt_dev.md` : **ajout** des 3 références V1 + mini-règle dans les principes d'architecture.
+- `docs/prompting/prompt_ticket.md` : **mention ciblée homepage** uniquement (léger, pas un pavé).
+- `docs/prompting/prompt_session.md` : **non modifié** (volontairement court et focalisé sur la reprise de session).
 
 **Livrables attendus** :
-- Dans `prompt_creative.md` : 3 lignes dans "Références à parcourir avant de proposer" + 1 ligne dans "Doctrine produit à respecter".
-- Dans `prompt_dev.md` : 3 lignes dans le tableau "Ordre de lecture recommandé" + 1 principe d'architecture supplémentaire.
-- Dans `prompt_ticket.md` : 1 ligne conditionnelle « si ticket homepage » après la liste de références.
+- Dans `docs/prompting/prompt_creative.md` : 3 lignes dans "Références à parcourir avant de proposer" + 1 ligne dans "Doctrine produit à respecter".
+- Dans `docs/prompting/prompt_dev.md` : 3 lignes dans le tableau "Ordre de lecture recommandé" + 1 principe d'architecture supplémentaire.
+- Dans `docs/prompting/prompt_ticket.md` : 1 ligne conditionnelle « si ticket homepage » après la liste de références.
 - Pas de bump module (fichiers hors assets Odoo).
 
 **Forme des 3 références** (validée MOA) :
@@ -155,7 +155,7 @@
 |------|------------|
 | 2026-04-23 | Création : 4 tickets déportés hors périmètre V1 lors de la montée en gamme homepage. 2 P1 (arbitrage copy Hero + chemins prompts erronés), 2 P3 (Explorer suréligne + alternance fonds section). Ordre suggéré et méthodes de décision documentés. |
 | 2026-04-23 | **Reformulation du Ticket 2** après audit réel des 4 `prompt_*.md` : aucun chemin erroné n'existe (hypothèse initiale infondée). Le ticket devient « ajout de la référence V1 homepage dans les prompts pertinents » — même priorité P1, effort ré-estimé à 20 min, portée validée MOA sur 3 prompts (`creative.md`, `dev.md`, `ticket.md` en mention ciblée, `session.md` non modifié). Forme des 3 références et mini-règle « ne pas rouvrir §9 sans ticket explicite » validées. |
-| 2026-04-23 | **Ticket 2 clôturé.** Exécuté : `prompt_creative.md` (8e puce doctrine + 3 références), `prompt_dev.md` (principe 6 + 3 lignes tableau), `prompt_ticket.md` (mention ciblée homepage légère). `prompt_session.md` non modifié. Pas de bump module. Récapitulatif mis à jour avec colonne `Statut`. |
+| 2026-04-23 | **Ticket 2 clôturé.** Exécuté : `docs/prompting/prompt_creative.md` (8e puce doctrine + 3 références), `docs/prompting/prompt_dev.md` (principe 6 + 3 lignes tableau), `docs/prompting/prompt_ticket.md` (mention ciblée homepage légère). `docs/prompting/prompt_session.md` non modifié. Pas de bump module. Récapitulatif mis à jour avec colonne `Statut`. |
 | 2026-04-23 | **Ticket 1 clôturé.** Option A retenue : retrait `ckr-hero__subtitle-accent` (QWeb + SCSS), bump **19.0.1.6.16**, SPEC §7 inchangée. Contexte document + récapitulatif mis à jour. |
 | 2026-04-23 | **Ticket 5 ouvert** — Homepage appétence perçue & partition vs [CADRAGE_DESIGN_CREATION_CK_V1.md](CADRAGE_DESIGN_CREATION_CK_V1.md). Fiche détaillée [TICKET_HOMEPAGE_APPETENCE_PARTITION_V1.md](TICKET_HOMEPAGE_APPETENCE_PARTITION_V1.md). Récapitulatif enrichi. |
 | 2026-04-23 | **Brief Phase A** — création [BRIEF_CRÉA_PHASE_A_HOMEPAGE.md](BRIEF_CRÉA_PHASE_A_HOMEPAGE.md) ; lien depuis le ticket Phase A et le ticket 5 (récap). |

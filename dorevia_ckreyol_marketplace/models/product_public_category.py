@@ -8,7 +8,7 @@ standard (taxonomie ``product.public.category``).
 
 Le point d’entrée **URL courte visiteur** ``/categories`` est résolu en
 **redirection HTTP 301** vers cette URL native — voir
-``docs/phase_2/CONTRAT_URL_CATEGORIES.md`` §12 (**Hybride H1 — cible
+``docs/mvp_01/CONTRAT_URL_CATEGORIES.md`` §12 (**Hybride H1 — cible
 native**).
 """
 from odoo import api, models

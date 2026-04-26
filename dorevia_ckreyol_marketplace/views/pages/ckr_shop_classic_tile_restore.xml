@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ====================================================================== -->
+    <!-- Theme Classic Store remplace `o_wsale_product_information` par une     -->
+    <!-- colonne sans `o_wsale_product_sub` (prix dans le texte, panier dans     -->
+    <!-- `o_quick_add_btn`). Les surcharges CK (filet, ligne prix+panier) ne    -->
+    <!-- matchent plus le DOM — d’où wishlist / séparateur / alignement cassés. -->
+    <!-- Ici : structure officielle `website_sale.products_item` + wishlist     -->
+    <!-- dans la média + micro-cat CK. Quick-add thème : masqué en SCSS          -->
+    <!-- (`.ckr-shop … .o_quick_add_btn`) — pas d’xpath QWeb : le nœud peut     -->
+    <!-- être absent (autre thème / arch Odoo) → ParseError à la mise à jour.   -->
+    <!-- ====================================================================== -->
+
+    <!-- Wishlist sur la média (coin image) : le bloc info n’est pas un ancêtre fiable
+         pour `position:absolute` (thème, overflow). -->
+    <template id="ckr_shop_wishlist_on_product_media"
+              inherit_id="website_sale.products_item"
+              name="C-Kreyol: wishlist — zone image (oe_product_image)"
+              priority="69">
+        <xpath expr="//form[contains(@t-attf-class, 'oe_product_cart') or hasclass('oe_product_cart')]//div[contains(@t-attf-class, 'oe_product_image')]"
+               position="inside">
+            <t t-set="is_wishlist_page"
+               t-value="request and request.httprequest.path == '/shop/wishlist'"/>
+            <t t-if="not is_wishlist_page">
+                <div class="o_wsale_product_btn wishlist-above-title">
+                    <t t-set="in_wish"
+                       t-value="product in (products_in_wishlist or [])"/>
+                    <t t-set="product_variant_id"
+                       t-value="product._get_first_possible_variant_id() or (product.product_variant_ids[0].id if product.product_variant_ids else False)"/>
+                    <button t-if="product_variant_id"
+                            type="button"
+                            class="btn btn-sm o_add_wishlist ckr-wishlist-ghost #{'btn-danger' if in_wish else 'btn-light'}"
+                            data-action="o_wishlist"
+                            t-att-data-product-template-id="product.id"
+                            t-att-data-product-product-id="product_variant_id"
+                            t-att-title="'Retirer de la liste' if in_wish else 'Ajouter à la liste'"
+                            aria-label="Liste de souhaits">
+                        <i t-attf-class="fa fa-heart #{'text-white' if in_wish else ''}"/>
+                    </button>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="ckr_shop_restore_standard_product_information"
+              inherit_id="website_sale.products_item"
+              name="C-Kreyol: tuile /shop — structure Odoo standard (remplace layout thème)"
+              priority="68">
+        <xpath expr="//div[hasclass('o_wsale_product_information')]" position="replace">
+            <div class="o_wsale_product_information flex-grow-1 flex-shrink-1 ckr-product-card__info">
+                <div class="o_wsale_product_info_attributes_wrapper">
+                    <t t-if="product_ptavs_data" t-call="website_sale.product_variant_preview"/>
+                    <div class="o_wsale_product_information_text flex-grow-1 ckr-product-card__text-stack">
+                        <t t-set="ckr_tile_website" t-value="website or (request and request.website)"/>
+                        <t t-set="ckr_tile_meta" t-value="product._ckr_get_shop_tile_meta_line(ckr_tile_website)"/>
+                        <p t-attf-class="ckr-product-card__meta text-break mb-0 #{'ckr-product-card__meta--empty' if not ckr_tile_meta else ''}">
+                            <span t-if="ckr_tile_meta" class="ckr-product-card__meta-txt" t-out="ckr_tile_meta"/>
+                            <span t-else="" class="ckr-product-card__meta-placeholder" aria-hidden="true">&#8203;</span>
+                        </p>
+                        <h2 class="o_wsale_products_item_title text-break">
+                            <a class="text-decoration-none"
+                               itemprop="name"
+                               t-att-href="product_href"
+                               t-att-content="product.name">
+                                <span t-field="product.name"/>
+                                <t t-if="product_variant"
+                                   t-set="combination_name"
+                                   t-value="product_variant.product_template_attribute_value_ids._get_combination_name()"/>
+                                <span t-if="combination_name" t-out="'('+combination_name+')'"/>
+                            </a>
+                            <a t-if="not product.website_published"
+                               role="button"
+                               t-att-href="product_href"
+                               class="btn btn-sm btn-danger"
+                               title="Produit non publié.">
+                                Non publié
+                            </a>
+                        </h2>
+                        <t t-set="ckr_tile_subtitle" t-value="product._ckr_get_shop_tile_subtitle(ckr_tile_website)"/>
+                        <p t-attf-class="ckr-product-card__subtitle text-break mb-0 #{'ckr-product-card__subtitle--empty' if not ckr_tile_subtitle else ''}">
+                            <span t-if="ckr_tile_subtitle" class="ckr-product-card__subtitle-txt" t-out="ckr_tile_subtitle"/>
+                            <span t-else="" class="ckr-product-card__subtitle-placeholder" aria-hidden="true">&#8203;</span>
+                        </p>
+                        <t t-call="website_sale.product_tile_element_visibility">
+                            <t t-set="visible_element_class" t-value="'o_wsale_products_opt_has_description'"/>
+                            <div class="oe_subdescription_wrapper">
+                                <div class="oe_subdescription text-muted small"
+                                     contenteditable="false">
+                                    <div t-field="product.description_sale"/>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="is_view_active('website_sale.product_comment')"
+                           t-call="website_sale.product_tile_element_visibility">
+                            <t t-set="visible_element_class" t-value="'o_wsale_products_opt_has_rating'"/>
+                            <div class="o_wsale_product_rating_wrapper">
+                                <t t-call="portal_rating.rating_widget_stars_static">
+                                    <t t-set="rating_avg" t-value="product.sudo().rating_avg"/>
+                                    <t t-set="rating_count" t-value="product.rating_count"/>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-if="product_extra_information" t-out="product_extra_information"/>
+                    </div>
+                </div>
+                <!-- Rangée interne : grille 2 cols prix | CTA (inline + SCSS — stable avec `t-out` / `shop_product_buttons`). -->
+                <div class="o_wsale_product_sub ckr-product-card__footer">
+                    <div class="ckr-product-card__footer-row"
+                         style="display:grid !important;grid-template-columns:minmax(0,1fr) max-content !important;align-items:center !important;column-gap:0.45rem;width:100%;">
+                        <div class="ckr-product-card__footer-price"
+                             style="display:flex;flex:1 1 auto;align-items:center;justify-content:flex-start;min-width:0;margin-left:0;text-align:left;">
+                            <t t-if="product_price" t-out="product_price"/>
+                            <t t-else="">
+                                <t t-set="template_price_vals" t-value="get_product_prices(product)"/>
+                                <div class="product_price" aria-label="Price information">
+                                    <span class="mb-0 fw-bold"
+                                          aria-label="Sale price"
+                                          t-if="template_price_vals['price_reduce'] or not website.prevent_zero_price_sale"
+                                          t-out="template_price_vals['price_reduce']"
+                                          t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                    <t t-if="'base_price' in template_price_vals and (template_price_vals['base_price'] &gt; template_price_vals['price_reduce']) and (template_price_vals['price_reduce'] or not website.prevent_zero_price_sale)"
+                                       name="product_base_price">
+                                        <del aria-label="Original price"
+                                             t-attf-class="text-muted me-1 mb-0"
+                                             style="white-space: nowrap;">
+                                            <small t-esc="template_price_vals['base_price']"
+                                                   t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                        </del>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="ckr-product-card__footer-cta"
+                             style="display:flex;align-items:center;justify-content:flex-end;min-width:0;">
+                            <div class="o_wsale_product_btn"
+                                 style="display:flex;align-items:center;justify-content:flex-end;min-width:0;">
+                                <t t-if="product_actions" t-out="product_actions"/>
+                                <t t-else="" t-call="website_sale.shop_product_buttons"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <t t-if="extra_actions" t-out="extra_actions"/>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

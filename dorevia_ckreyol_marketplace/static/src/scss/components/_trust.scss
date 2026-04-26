@@ -1,6 +1,6 @@
 // ============================================================================
-// C-Kreyol - Bloc 7 : Bloc confiance (WIREFRAME § 3)
-// 3 axes exactement : Achat / Livraison / Contact.
+// C-Kreyol — Bloc 7 : Réassurance (MVP2, 4 repères)
+// Mobile : colonne unique ; tablette : 2 colonnes ; desktop : 4 colonnes.
 // ============================================================================
 
 .ckr-trust {
@@ -12,7 +12,11 @@
         gap: $ckr-space-xl;
 
         @media (min-width: 768px) {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (min-width: 1024px) {
+            grid-template-columns: repeat(4, 1fr);
         }
     }
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_website_form_inherit_ckr_homepage_featured" model="ir.ui.view">
+        <field name="name">website.form.inherit.ckr.homepage.featured.products</field>
+        <field name="model">website</field>
+        <field name="inherit_id" ref="website.view_website_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook" position="before">
+                <group
+                    name="ckr_homepage_featured"
+                    string="C-Kreyol — Sélection accueil (4 produits)"
+                    col="1">
+                    <p class="text-muted" colspan="1">
+                        Produits affichés sur le bloc « Sélection » de la page d'accueil
+                        (prix dynamiques, lien fiche — DECISION_PRODUITS_HOMEPAGE_MVP21).
+                    </p>
+                    <group col="1">
+                        <field name="ckr_homepage_featured_1" options="{'no_create': True}"/>
+                        <field name="ckr_homepage_featured_2" options="{'no_create': True}"/>
+                        <field name="ckr_homepage_featured_3" options="{'no_create': True}"/>
+                        <field name="ckr_homepage_featured_4" options="{'no_create': True}"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

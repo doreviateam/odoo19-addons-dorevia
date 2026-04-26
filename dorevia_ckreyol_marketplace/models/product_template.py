@@ -5,15 +5,15 @@ Consomme les options injectées par ``controllers/website_sale_ckr.py``
 dans les options passées à ``website._search_with_fuzzy`` :
 
 * ``ckr_pack_only`` → porte **Kits/Pack** (voir
-  ``docs/phase_2/CONTRAT_URL_PACKS.md`` §12). Restriction aux produits
+  ``docs/mvp_01/CONTRAT_URL_PACKS.md`` §12). Restriction aux produits
   dont ``pack_ok = True`` (module OCA ``product_pack``).
 * ``ckr_promo_only`` → porte **Promotions** (voir
-  ``docs/phase_2/CONTRAT_URL_PROMOTIONS.md`` §12). Restriction aux
+  ``docs/mvp_01/CONTRAT_URL_PROMOTIONS.md`` §12). Restriction aux
   ``product.template.id`` retournés par
   ``product.pricelist._ckr_get_promo_template_ids`` (source de vérité
   A2 : pricelist datée avec remise).
 * ``ckr_origin_only`` + ``ckr_origin_attribute_value_ids`` → porte
-  **Origines** (voir ``docs/phase_2/SPEC_IMPL_ORIGINES.md`` §5).
+  **Origines** (voir ``docs/mvp_01/SPEC_IMPL_ORIGINES.md`` §5).
   Restriction aux ``product.template`` qui portent **au moins une**
   des valeurs d'attribut cibles (logique **OU**) dans leurs lignes
   d'attribut standard. Si ``ckr_origin_only`` est vrai sans ids de
@@ -30,13 +30,81 @@ catalogue « Origine » (``data/ckr_product_attribute_origin.xml``),
 synchronisé avec ``attribute_line_ids`` — évite de chercher l'onglet
 « Attributs & variantes » réservé au groupe Variantes.
 """
+import re
+
 from odoo import api, fields, models
 from odoo.fields import Command
+from odoo.http import request
+from odoo.tools import html2plaintext
 
 
 # Sentinel : ``id = 0`` est la manière canonique Odoo de forcer
 # « aucun résultat » dans un domaine sans déclencher d'exception.
 _CKR_EMPTY_DOMAIN = [("id", "=", 0)]
+
+# Libellés e-commerce trop génériques — exclus de la ligne méta tuile /shop (Lot 1 carte CK).
+_CKR_SHOP_TILE_META_WEAK_NAMES = frozenset(
+    name.strip().lower()
+    for name in (
+        "goods",
+        "good",
+        "all",
+        "miscellaneous",
+        "misc",
+        "other",
+        "default",
+        "general",
+        "non classé",
+        "non classe",
+        "divers",
+        "produits",
+        "articles",
+        "saleable",
+        "vente",
+        "collection",
+        "collections",
+        "promotion",
+        "promotions",
+        "incontournable",
+        "incontournables",
+        "boutique",
+        "selection",
+        "sélection",
+    )
+)
+
+# Séparateur méta tuile : espace insécable + point médian (évite césure ; lisible vs un simple tiret).
+_CKR_SHOP_TILE_META_SEP = "\u00a0·\u00a0"
+
+_CKR_SHOP_TILE_WEAK_UOM = frozenset(
+    name.strip().lower()
+    for name in (
+        "units",
+        "unit",
+        "unit(s)",
+        "unité",
+        "unité(s)",
+        "unités",
+        "unite",
+        "unite(s)",
+        "unites",
+        "pcs",
+        "pc",
+        "pièce",
+        "pièces",
+        "piece",
+        "pieces",
+        "udm",
+        "un",
+        "u",
+    )
+)
+
+_CKR_SHOP_TILE_FORMAT_RE = re.compile(
+    r"(?i)\b(?:\d+\s?[xX]\s?\d+(?:[.,]\d+)?\s?(?:kg|g|mg|l|cl|ml)|"
+    r"\d+(?:[.,]\d+)?\s?(?:kg|g|mg|l|cl|ml)|"
+    r"\d+\s?(?:pi[eè]ces?|pcs?))\b"
+)
 
 
 class ProductTemplate(models.Model):
@@ -71,7 +139,7 @@ class ProductTemplate(models.Model):
         help=(
             "Collections éditoriales C-Kreyol auxquelles ce produit est "
             "rattaché. Source de vérité de la porte /collections (voir "
-            "docs/phase_2/SPEC_IMPL_COLLECTIONS.md §2.1). Un produit "
+            "docs/mvp_01/SPEC_IMPL_COLLECTIONS.md §2.1). Un produit "
             "peut appartenir à plusieurs collections (RC-02) : la vue "
             "/collections/<slug> filtre par appartenance, "
             "/collections/union/<a>/<b>/… applique le OU."
@@ -260,3 +328,251 @@ class ProductTemplate(models.Model):
         # les collections au visiteur non authentifié sinon.
         collections = self.ckr_collection_ids.sudo()
         return collections.filtered(lambda c: c._ckr_is_visible(website=website))
+
+    # ------------------------------------------------------------------
+    # Homepage — sélection produits MVP2.1 (DECISION_PRODUITS_HOMEPAGE_MVP21)
+    # ------------------------------------------------------------------
+
+    def _ckr_get_homepage_origin_short_label(self, website):
+        """Libellé court pour carte accueil (profil CK ou valeur attribut)."""
+        self.ensure_one()
+        profiles = self._ckr_get_origin_profiles(website=website)
+        if not profiles:
+            return ""
+        p0 = profiles[0]
+        return (p0.name_visitor or p0.attribute_value_id.name or "").strip()
+
+    def _ckr_get_homepage_combination_info(self):
+        """Prix catalogue / pricelist courant pour la grille (sans panier)."""
+        self.ensure_one()
+        if not request:
+            return {}
+        return self.sudo()._get_combination_info(
+            only_template=True,
+            add_qty=1.0,
+        )
+
+    def _ckr_has_homepage_listing_image(self):
+        """Vrai si un binaire visuel exploitable (fiche / une variante) pour la grille."""
+        self.ensure_one()
+        p = self.sudo()
+        if p.image_1920:
+            return True
+        for v in p.product_variant_ids:
+            if v.image_1920:
+                return True
+        return False
+
+    def _ckr_get_homepage_listing_image_url(self):
+        """URL `web/image` 512 (modèle d’abord, sinon une variante avec binaire)."""
+        self.ensure_one()
+        p = self.sudo()
+        if p.image_1920:
+            return f"/web/image/product.template/{p.id}/image_512"
+        for v in p.product_variant_ids:
+            if v.image_1920:
+                return f"/web/image/product.product/{v.id}/image_512"
+        return None
+
+    def _ckr_get_homepage_listing_image_fallback_url(self):
+        """Visuel CK servi en statique si la fiche n’a aucun binaire image (repli recette)."""
+        return "/dorevia_ckreyol_marketplace/static/src/img/selection/ckr_selection_card_fallback.png"
+
+    # ------------------------------------------------------------------
+    # Tuile /shop — méta + sous-titre (Lot 1 positioning C-Kreyol)
+    # ------------------------------------------------------------------
+
+    def _ckr_shop_tile_meta_label_is_useful(self, label):
+        """True si le libellé vaut une méta « achat » (hors taxonomie générique type *Goods*)."""
+        if label is None:
+            return False
+        text = str(label).strip()
+        if not text:
+            return False
+        return text.lower() not in _CKR_SHOP_TILE_META_WEAK_NAMES
+
+    @api.model
+    def _ckr_shop_tile_pretty_format(self, value):
+        """Normalise un segment format pour l'affichage visiteur (`100g` -> `100 g`)."""
+        text = str(value or "").strip()
+        if not text:
+            return ""
+        text = re.sub(r"\s+", " ", text)
+        text = re.sub(r"(?i)(\d)\s*([a-zéè]+)\b", r"\1 \2", text)
+        text = re.sub(r"(?i)(\d)\s*[xX]\s*(\d)", r"\1 x \2", text)
+        return text.strip()
+
+    @api.model
+    def _ckr_shop_tile_extract_format(self, *values):
+        """Extrait un format court depuis le nom ou une description si l'UdM est trop faible."""
+        for raw in values:
+            text = str(raw or "").strip()
+            if not text:
+                continue
+            match = _CKR_SHOP_TILE_FORMAT_RE.search(text)
+            if match:
+                pretty = self._ckr_shop_tile_pretty_format(match.group(0))
+                if pretty:
+                    return pretty
+        return ""
+
+    @api.model
+    def _ckr_shop_tile_compact_text(self, value):
+        """Normalisation souple pour comparer deux libellés sans dépendre de la ponctuation."""
+        text = str(value or "").lower()
+        text = re.sub(r"[^a-z0-9àâçéèêëîïôûùüÿñæœ]+", " ", text)
+        return " ".join(text.split())
+
+    def _ckr_shop_tile_first_useful_category_name(self, category_root):
+        """Remonte la hiérarchie (``product.public.category`` ou ``product.category``) pour le 1er nom utile.
+
+        Souvent la feuille BO est un regroupement générique (« Tous », « Vente ») alors qu’un parent
+        porte un libellé exploitable (« Boissons », « Épicerie »).
+        """
+        self.ensure_one()
+        if not category_root:
+            return ""
+        seen = set()
+        current = category_root
+        while current and current.id not in seen:
+            seen.add(current.id)
+            name = (current.name or "").strip()
+            if name and self._ckr_shop_tile_meta_label_is_useful(name):
+                return name
+            current = current.parent_id
+        return ""
+
+    def _ckr_get_shop_tile_family_segment(self):
+        """Segment « famille » : 1re catégorie e-commerce utile (avec remontée parents), puis interne."""
+        self.ensure_one()
+        for cat in self.public_categ_ids.sorted("sequence"):
+            hit = self._ckr_shop_tile_first_useful_category_name(cat)
+            if hit:
+                return hit
+        if self.categ_id:
+            return self._ckr_shop_tile_first_useful_category_name(self.categ_id)
+        return ""
+
+    def _ckr_get_shop_tile_format_segment(self):
+        """Segment « format » : UdM produit si elle apporte de l’information (pas *Units* générique)."""
+        self.ensure_one()
+        uom = self.uom_id
+        if not uom:
+            return self._ckr_shop_tile_extract_format(
+                self.name,
+                html2plaintext(self.description_sale or ""),
+            )
+        name = (uom.name or "").strip()
+        if not name:
+            return self._ckr_shop_tile_extract_format(
+                self.name,
+                html2plaintext(self.description_sale or ""),
+            )
+        key = name.lower().replace(" ", "")
+        weak_compact = {w.replace(" ", "") for w in _CKR_SHOP_TILE_WEAK_UOM}
+        if key in weak_compact or name.lower() in _CKR_SHOP_TILE_WEAK_UOM:
+            return self._ckr_shop_tile_extract_format(
+                self.name,
+                html2plaintext(self.description_sale or ""),
+            )
+        return self._ckr_shop_tile_pretty_format(name)
+
+    def _ckr_get_shop_tile_origin_segment(self, website=None):
+        """Segment « origine » : profil CK publié si dispo, sinon valeur brute de l’attribut Origine.
+
+        Sur /shop, beaucoup de fiches n’ont pas encore de ``ckr.shop.origin`` publié alors que
+        l’attribut catalogue est renseigné : sans ce repli, la méta se réduit à *Unité(s)*.
+        """
+        self.ensure_one()
+        if website is not None:
+            short = (self._ckr_get_homepage_origin_short_label(website) or "").strip()
+            if short:
+                return short
+        attr = self._ckr_origin_attribute()
+        if not attr:
+            return ""
+        line = self.attribute_line_ids.filtered(lambda l: l.attribute_id == attr)[:1]
+        if not line or not line.value_ids:
+            return ""
+        vals = line.value_ids.sorted(key=lambda v: ((v.name or "").lower(), v.id))
+        name = (vals[0].name or "").strip()
+        if not name or not self._ckr_shop_tile_meta_label_is_useful(name):
+            return ""
+        return name
+
+    def _ckr_get_shop_tile_collection_segment(self, website=None):
+        """Segment « collection » de repli si aucune famille produit utile n'est disponible."""
+        self.ensure_one()
+        collections = self._ckr_get_visible_collections(website=website)
+        for collection in collections:
+            name = (collection.name or "").strip()
+            if name and self._ckr_shop_tile_meta_label_is_useful(name):
+                return name
+        return ""
+
+    def _ckr_get_shop_tile_description_line(self):
+        """Première ligne utile de `description_sale`, nettoyée pour la tuile boutique."""
+        self.ensure_one()
+        desc = html2plaintext(self.description_sale or "")
+        for raw in desc.splitlines():
+            line = raw.strip()
+            if line:
+                return line
+        return ""
+
+    def _ckr_get_shop_tile_meta_segments(self, website=None):
+        """Segments méta tuile : origine → famille/collection → format, limités à 2 items lisibles."""
+        self.ensure_one()
+        parts = []
+        origin = (self._ckr_get_shop_tile_origin_segment(website=website) or "").strip()
+        if origin:
+            parts.append(origin)
+        family = (self._ckr_get_shop_tile_family_segment() or "").strip()
+        if family and family not in parts:
+            parts.append(family)
+        elif len(parts) < 2:
+            collection = (self._ckr_get_shop_tile_collection_segment(website=website) or "").strip()
+            if collection and collection not in parts:
+                parts.append(collection)
+        fmt = (self._ckr_get_shop_tile_format_segment() or "").strip()
+        if fmt and fmt not in parts and len(parts) < 2:
+            parts.append(fmt)
+        return parts
+
+    def _ckr_get_shop_tile_meta_line(self, website=None):
+        """Ligne méta affichée au-dessus du titre (ex. « Guadeloupe · 100 g »)."""
+        self.ensure_one()
+        segs = self._ckr_get_shop_tile_meta_segments(website=website)
+        return _CKR_SHOP_TILE_META_SEP.join(segs) if segs else ""
+
+    def _ckr_get_shop_tile_subtitle(self, website=None):
+        """Sous-titre court sous le titre : extrait éditorial ou repli catégorie utile.
+
+        Lot 1 : pas de champ dédié — ``description_sale`` en texte brut tronqué, sinon famille
+        si elle n’est pas déjà entièrement portée par la méta (évite doublon total).
+        """
+        self.ensure_one()
+        line = self._ckr_get_shop_tile_description_line()
+        if line:
+            compact_title = self._ckr_shop_tile_compact_text(self.name)
+            compact_line = self._ckr_shop_tile_compact_text(line)
+            if compact_line and compact_line != compact_title:
+                if len(line) > 88:
+                    line = line[:85].rstrip() + "…"
+                return line
+        meta_set = set(self._ckr_get_shop_tile_meta_segments(website=website))
+        fmt = (self._ckr_get_shop_tile_format_segment() or "").strip()
+        if fmt and fmt not in meta_set:
+            return fmt
+        collection = (self._ckr_get_shop_tile_collection_segment(website=website) or "").strip()
+        if collection and collection not in meta_set:
+            return collection
+        for cat in self.public_categ_ids.sorted("sequence"):
+            cand = self._ckr_shop_tile_first_useful_category_name(cat)
+            if cand and cand not in meta_set:
+                return cand
+        if self.categ_id:
+            cand = self._ckr_shop_tile_first_useful_category_name(self.categ_id)
+            if cand and cand not in meta_set:
+                return cand
+        return ""

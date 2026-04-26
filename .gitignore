@@ -16,3 +16,8 @@ build/
 # Environnements locaux
 .env
 .venv/
+
+# Addons e-commerce locaux pédagogiques (hors dépôt, préfixe local_ecommerce_)
+local_*/
+
+Zedocs/*

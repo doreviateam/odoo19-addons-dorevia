@@ -6,13 +6,13 @@
 **Portée** : présentation, rythme, photo, copy visuel — **aucune** modification d'architecture, de doctrine produit, ni de comportement JS.
 
 **Documents de référence** :
-- [WIREFRAME_HOMEPAGE.md](../WIREFRAME_HOMEPAGE.md) (blocs 1–8, variantes sobre / enrichie)
-- [SPEC_HERO_HOMEPAGE.md](../SPEC_HERO_HOMEPAGE.md) (gel hero §7)
-- [CHARTE_GRAPHIQUE_PHASE1.md](../CHARTE_GRAPHIQUE_PHASE1.md) (Direction A gelée §3–§11)
-- [DIRECTIONS_ARTISTIQUES_PHASE1.md](../DIRECTIONS_ARTISTIQUES_PHASE1.md)
-- [DESIGN.md](../DESIGN.md) §7
-- [ARCHITECTURE_DECISION_RECORD.md](../ARCHITECTURE_DECISION_RECORD.md) (ADR-001, 002, 003, 005, 007, 008)
-- [STRUCTURE_MENU_PRINCIPAL.md](../STRUCTURE_MENU_PRINCIPAL.md) §11
+- [WIREFRAME_HOMEPAGE.md](../direction/WIREFRAME_HOMEPAGE.md) (blocs 1–8, variantes sobre / enrichie)
+- [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) (gel hero §7)
+- [CHARTE_GRAPHIQUE_PHASE1.md](../direction/CHARTE_GRAPHIQUE_PHASE1.md) (Direction A gelée §3–§11)
+- [DIRECTIONS_ARTISTIQUES_PHASE1.md](../direction/DIRECTIONS_ARTISTIQUES_PHASE1.md)
+- [DESIGN.md](../direction/DESIGN.md) §7
+- [ARCHITECTURE_DECISION_RECORD.md](../direction/ARCHITECTURE_DECISION_RECORD.md) (ADR-001, 002, 003, 005, 007, 008)
+- [STRUCTURE_MENU_PRINCIPAL.md](../direction/STRUCTURE_MENU_PRINCIPAL.md) §11
 
 ---
 
@@ -280,8 +280,8 @@ Décisions validées faisant de cette proposition une **base de travail officiel
 **Décision** : **60/40 cible**, **55/45 toléré en implémentation** pour affinage selon le visuel retenu et la longueur du titre, **50/50 exclu**.
 
 **Justification** :
-- La Direction A gelée ([CHARTE_GRAPHIQUE_PHASE1.md](../CHARTE_GRAPHIQUE_PHASE1.md) §3–§11, [SPEC_HERO_HOMEPAGE.md](../SPEC_HERO_HOMEPAGE.md) §3.4 / §7) place la **matière** au centre du message hero. Une image qui dépasse la moitié de l'écran est cohérente avec ce choix : la photo **porte** le message, le texte l'accompagne.
-- 50/50 glisse vers un pattern « template marketing » symétrique, contraire à [ADR-CKR-003](../ARCHITECTURE_DECISION_RECORD.md#adr-ckr-003) (le rendu standard Odoo n'est pas l'état final).
+- La Direction A gelée ([CHARTE_GRAPHIQUE_PHASE1.md](../direction/CHARTE_GRAPHIQUE_PHASE1.md) §3–§11, [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) §3.4 / §7) place la **matière** au centre du message hero. Une image qui dépasse la moitié de l'écran est cohérente avec ce choix : la photo **porte** le message, le texte l'accompagne.
+- 50/50 glisse vers un pattern « template marketing » symétrique, contraire à [ADR-CKR-003](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-003) (le rendu standard Odoo n'est pas l'état final).
 - 55/45 est une bande de tolérance saine pour les cas où le visuel est très dense ou le titre particulièrement long en mobile.
 
 **Contrainte d'implémentation** : le bloc texte doit tenir un **minimum de 360 px de largeur** sur un viewport 1280 px pour préserver la hiérarchie titre / sous-texte / CTA et éviter un sous-texte cassé sur 4 lignes.
@@ -293,7 +293,7 @@ Décisions validées faisant de cette proposition une **base de travail officiel
 **Décision** : **variante plane retenue pour V1** (deux colonnes 55/45, photo et texte **alignés haut**, **sans** chevauchement vertical). Un micro-accent de présence (filet amber `2px × 48px` au-dessus de la surtitre sauge) suffit à signer le bloc. Le chevauchement éditorial est **versé en option V1.1** si le bloc paraît trop plat après mise en ligne.
 
 **Justification** :
-- [WIREFRAME_HOMEPAGE.md](../WIREFRAME_HOMEPAGE.md) §3 Bloc 4 et [SPEC_HERO_HOMEPAGE.md](../SPEC_HERO_HOMEPAGE.md) §4 sont fermes : La Platine **ne doit pas** absorber C-Kreyol ni inverser la hiérarchie visuelle.
+- [WIREFRAME_HOMEPAGE.md](../direction/WIREFRAME_HOMEPAGE.md) §3 Bloc 4 et [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) §4 sont fermes : La Platine **ne doit pas** absorber C-Kreyol ni inverser la hiérarchie visuelle.
 - Le chevauchement est un effet « magazine » qui donne du **poids éditorial** à un bloc — donc exactement ce qu'on veut **éviter** pour garder Supplier en position clairement secondaire par rapport à Hero et Selection.
 - La variante plane sert mieux l'intention « ancrage sincère sans vitrine fournisseur » et simplifie le SCSS et le responsive (aucune logique mobile pour désactiver un chevauchement).
 
@@ -314,7 +314,7 @@ Décisions validées faisant de cette proposition une **base de travail officiel
 Tant qu'une condition manque : la variante sobre reste en place.
 
 **Justification** :
-- [WIREFRAME_HOMEPAGE.md](../WIREFRAME_HOMEPAGE.md) §3 Bloc 6 et §9 imposent explicitement : « si Offrir / Recettes ne sont pas nourris crédiblement, **réduire** ou **retirer** ce bloc ».
+- [WIREFRAME_HOMEPAGE.md](../direction/WIREFRAME_HOMEPAGE.md) §3 Bloc 6 et §9 imposent explicitement : « si Offrir / Recettes ne sont pas nourris crédiblement, **réduire** ou **retirer** ce bloc ».
 - Un bloc pleine largeur **mal nourri** produit l'inverse de l'intention : au lieu d'un magazine, le visiteur perçoit un bandeau publicitaire creux — plus gros risque de dégradation visuelle de toute la page.
 - La variante sobre reste **gracieuse** dans le rythme de la page et permet une bascule non-régressive vers la version riche dès que le contenu et le visuel sont prêts ensemble.
 
@@ -325,7 +325,7 @@ Tant qu'une condition manque : la variante sobre reste en place.
 **Décision** : la ligne secondaire sous le titre produit affiche **l'origine**, **sous condition de couverture ≥ 80 %** des produits de la sélection. En dessous de ce seuil : **aucune** ligne secondaire (titre + photo + prix suffisent). **Jamais** de mixage origine / famille / usage d'une carte à l'autre dans la même grille.
 
 **Justification** :
-- [DESIGN.md](../DESIGN.md) §5 (principes retail) et [SPEC_HERO_HOMEPAGE.md](../SPEC_HERO_HOMEPAGE.md) §1 placent **l'origine** comme repère commercial fort, visible dès le hero et **prolongé** sur les cartes — cohérence maximale.
+- [DESIGN.md](../direction/DESIGN.md) §5 (principes retail) et [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) §1 placent **l'origine** comme repère commercial fort, visible dès le hero et **prolongé** sur les cartes — cohérence maximale.
 - Une grille où quelques cartes affichent l'origine et les autres autre chose (ou rien) crée une **incohérence perçue** plus coûteuse que l'absence d'info : le visiteur retail lit la grille comme un tout.
 - **Famille / type de produit** est déjà redondant avec le titre (« Confiture de goyave » → famille = confiture). **Usage** est trop subjectif pour une homepage. L'origine reste le seul champ retail-pertinent ici.
 

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="ckr_page_privacy" name="C-Kreyol: Politique de confidentialite">
+        <t t-call="website.layout">
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <h1>Politique de confidentialité</h1>
+                        <p class="ckr-lead">
+                            La présente politique décrit comment sont traitées les données personnelles
+                            collectées sur ce site <strong>C-Kreyol</strong>, notamment lors de
+                            l’inscription au cercle (newsletter). Elle vise à vous informer de manière
+                            claire et à respecter le <strong>règlement général sur la protection des
+                            données</strong> (RGPD) et la loi « Informatique et libertés » applicable.
+                        </p>
+                        <h2>Responsable du traitement</h2>
+                        <p>
+                            Le responsable du traitement est <strong>l’exploitant du site</strong>,
+                            dont les coordonnées figurent dans les
+                            <a href="/terms">mentions légales</a>.
+                        </p>
+                        <h2>Données collectées et finalités</h2>
+                        <p>
+                            Lorsque vous rejoignez le <strong>cercle C-Kreyol</strong> depuis la page
+                            d’accueil, nous enregistrons&#160;:
+                        </p>
+                        <ul>
+                            <li>
+                                votre <strong>adresse e-mail</strong>, nécessaire pour vous adresser
+                                des messages&#160;;
+                            </li>
+                            <li>
+                                le cas échéant, vos <strong>préférences</strong> (offres, recettes,
+                                nouveautés), pour adapter le contenu des envois.
+                            </li>
+                        </ul>
+                        <p>
+                            Ces données servent uniquement à la <strong>gestion de l’inscription</strong>
+                            et, le cas échéant, à l’<strong>envoi d’informations</strong> correspondant
+                            à vos choix. Elles ne sont pas revendues ni utilisées à d’autres fins
+                            incompatibles.
+                        </p>
+                        <h2>Base légale</h2>
+                        <p>
+                            Le traitement repose sur votre <strong>consentement</strong>, exprimé en
+                            validant le formulaire d’inscription et, le cas échéant, en cochant les
+                            préférences proposées.
+                        </p>
+                        <h2>Conservation</h2>
+                        <p>
+                            Les données sont conservées <strong>tant que votre inscription reste
+                            active</strong>. Après désinscription, elles sont supprimées ou anonymisées
+                            dans des délais compatibles avec nos obligations légales et la bonne
+                            administration du site.
+                        </p>
+                        <h2>Destinataires</h2>
+                        <p>
+                            Les données sont accessibles aux <strong>personnes autorisées</strong> au
+                            sein de l’exploitant et, le cas échéant, à des <strong>prestataires
+                            techniques</strong> strictement nécessaires (hébergement, envoi d’e-mails),
+                            dans le respect du RGPD et sous engagements de confidentialité.
+                        </p>
+                        <h2>Vos droits</h2>
+                        <p>
+                            Vous disposez d’un droit d’<strong>accès</strong>, de
+                            <strong>rectification</strong>, d’<strong>effacement</strong>, de
+                            <strong>limitation</strong> du traitement, d’<strong>opposition</strong> et
+                            de <strong>portabilité</strong> lorsque la réglementation l’impose. Vous
+                            pouvez les exercer en nous contactant via le
+                            <a href="/contact">formulaire de contact</a> ou les coordonnées indiquées
+                            dans les <a href="/terms">mentions légales</a>.
+                        </p>
+                        <p>
+                            Vous pouvez également introduire une réclamation auprès de la
+                            <abbr title="Commission nationale de l’informatique et des libertés">CNIL</abbr>
+                            (<a href="https://www.cnil.fr" rel="noopener noreferrer" target="_blank">cnil.fr</a>).
+                        </p>
+                        <h2>Désinscription</h2>
+                        <p>
+                            Vous pouvez retirer votre consentement à tout moment&#160;: les e-mails
+                            envoyés dans le cadre du cercle comportent un <strong>lien de
+                            désinscription</strong>. Vous pouvez aussi utiliser le lien personnel qui
+                            vous a été communiqué après inscription, lorsqu’il est disponible.
+                        </p>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+    <template id="ckr_page_circle_unsubscribed" name="C-Kreyol: Desinscription cercle">
+        <t t-call="website.layout">
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section ckr-section--soft">
+                    <div class="ckr-container" style="max-width: 36rem; margin: 0 auto; text-align: center;">
+                        <h1>Préférences</h1>
+                        <p t-if="ckr_unsub_state == 'ok'" class="ckr-lead">
+                            Vous êtes désinscrit(e) du cercle C-Kreyol sur ce site. Merci
+                            d’avoir partagé un moment avec nous.
+                        </p>
+                        <p t-else="" class="ckr-lead">
+                            Ce lien de désinscription n’est plus valable ou a déjà été utilisé.
+                        </p>
+                        <p><a class="ckr-btn ckr-btn--primary" href="/">Retour à l’accueil</a></p>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+</odoo>

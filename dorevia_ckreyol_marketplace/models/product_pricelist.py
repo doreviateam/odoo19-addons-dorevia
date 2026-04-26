@@ -2,7 +2,7 @@
 """Extension de ``product.pricelist`` — source de vérité A2 « Promotions ».
 
 Matérialise la décision actée dans
-``docs/phase_2/CONTRAT_URL_PROMOTIONS.md`` §5 (option **A2 — Pricelist
+``docs/mvp_01/CONTRAT_URL_PROMOTIONS.md`` §5 (option **A2 — Pricelist
 datée avec remise**) : la source de vérité de la porte Promotions est
 **le mécanisme prix standard d'Odoo**, et rien d'autre.
 

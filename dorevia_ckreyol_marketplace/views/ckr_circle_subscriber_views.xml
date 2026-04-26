@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_ckr_circle_subscriber_tree" model="ir.ui.view">
+        <field name="name">ckr.circle.subscriber.list</field>
+        <field name="model">ckr.circle.subscriber</field>
+        <field name="arch" type="xml">
+            <list string="Cercle C-Kreyol" create="0" default_order="create_date desc">
+                <field name="active" column_invisible="1"/>
+                <field name="email"/>
+                <field name="opt_offers"/>
+                <field name="opt_recipes"/>
+                <field name="opt_news"/>
+                <field name="create_date" optional="show"/>
+                <field name="website_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ckr_circle_subscriber_form" model="ir.ui.view">
+        <field name="name">ckr.circle.subscriber.form</field>
+        <field name="model">ckr.circle.subscriber</field>
+        <field name="arch" type="xml">
+            <form string="Inscription cercle" create="0" edit="1">
+                <header/>
+                <sheet>
+                    <group>
+                        <field name="email"/>
+                        <field name="website_id"/>
+                        <field name="active"/>
+                        <field name="opt_offers"/>
+                        <field name="opt_recipes"/>
+                        <field name="opt_news"/>
+                        <field name="unsubscribe_token" groups="base.group_no_one" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ckr_circle_subscriber" model="ir.actions.act_window">
+        <field name="name">Cercle (inscriptions)</field>
+        <field name="res_model">ckr.circle.subscriber</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_ckreyol_configuration_circle"
+              name="Cercle (newsletter)"
+              parent="menu_ckreyol_configuration_root"
+              action="action_ckr_circle_subscriber"
+              sequence="20"/>
+
+    <menuitem id="menu_ckreyol_catalog_circle"
+              name="Cercle (newsletter)"
+              parent="menu_ckreyol_catalog_root"
+              action="action_ckr_circle_subscriber"
+              sequence="20"
+              groups="website.group_website_designer"/>
+
+</odoo>

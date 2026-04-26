@@ -18,29 +18,40 @@
     <!-- Reference : WIREFRAME_HOMEPAGE, SPEC_HERO_HOMEPAGE.         -->
     <!-- ========================================================== -->
 
+    <!-- priority élevée : d'autres modules (thèmes démo, autres sites du
+         mono-repo) peuvent aussi remplacer //div[@id='wrap'] sur
+         website.homepage — la priorité doit laisser C-Kreyol « dernier mot ». -->
     <template id="ckr_page_homepage"
               inherit_id="website.homepage"
               name="C-Kreyol: Homepage (retail enrichie)"
-              priority="99">
+              priority="2000">
         <xpath expr="//div[@id='wrap']" position="replace">
             <div id="wrap" class="ckr-page ckr-root">
 
-                <!-- Bloc 2 : Hero (copy gele SPEC § 7) -->
+                <!-- Ne pas modifier sans ticket MOA : drapeau bas de page V1 —
+                     0 = masque Fournisseur + Éditorial uniquement ; Cercle + Réassurance
+                     toujours rendus. 1 = réaffiche Fournisseur + Éditorial (ordre gelé MOA). -->
+                <t t-set="ckr_hpage_mvp1_tail_blocks" t-value="0"/>
+
+                <!-- Bloc 2 : Hero (copy gele SPEC § 7) — INCHANGÉ -->
                 <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_hero"/>
 
-                <!-- Bloc 3 : Entrees d exploration -->
+                <!-- Bloc 3 : Entrees d exploration (Explorer) — INCHANGÉ -->
                 <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_entries"/>
 
-                <!-- Bloc 4 : Mise en avant fournisseur / origine -->
-                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_supplier"/>
+                <!-- Bloc 4 : Fournisseur V1 (mise en avant La Platine, etc.) -->
+                <t t-if="ckr_hpage_mvp1_tail_blocks" t-call="dorevia_ckreyol_marketplace.ckr_snippet_supplier"/>
 
-                <!-- Bloc 5 : Selection produits -->
+                <!-- Bloc 5 : Selection produits (recette en cours) -->
                 <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_selection"/>
 
-                <!-- Bloc 6 : Bloc editorial -->
-                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_editorial"/>
+                <!-- Bloc 6 : Editorial V1 (gel MOA : avant Inscription quand tail V1 actif) -->
+                <t t-if="ckr_hpage_mvp1_tail_blocks" t-call="dorevia_ckreyol_marketplace.ckr_snippet_editorial"/>
 
-                <!-- Bloc 7 : Bloc confiance -->
+                <!-- Bloc inscription / Cercle C-Kreyol (MVP2.1 chantier 4/5) -->
+                <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_circle"/>
+
+                <!-- Bloc 7 : Réassurance / confiance (MVP2 clôture — toujours rendu, avant footer) -->
                 <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_trust"/>
 
             </div>

@@ -14,8 +14,8 @@
 Avant d’ouvrir la **PR dev** pour la **Phase A** uniquement ([BRIEF_CRÉA_PHASE_A_HOMEPAGE.md](BRIEF_CRÉA_PHASE_A_HOMEPAGE.md)), cocher ou tracer une décision écrite pour chaque point :
 
 1. [ ] **GO MOA Phase A** — médias + copy hors gel SPEC hero + SCSS ; **pas** de réordonnancement ni nouveaux snippets sans repasser en Phase B/C.
-2. [ ] **Hero copy** — inchangé conforme [SPEC_HERO_HOMEPAGE.md](../SPEC_HERO_HOMEPAGE.md) §7 **ou** amendement SPEC versionné **avant** merge (pas de retouche hero « discrète » hors gel).
-3. [ ] **Visuel hero** — brief / livrables alignés [BRIEF_VISUEL_HERO_PHASE1.md](../BRIEF_VISUEL_HERO_PHASE1.md) ; fichiers ou **échéance + responsable** (studio / BO) pour ne pas bloquer l’intégration.
+2. [ ] **Hero copy** — inchangé conforme [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) §7 **ou** amendement SPEC versionné **avant** merge (pas de retouche hero « discrète » hors gel).
+3. [ ] **Visuel hero** — brief / livrables alignés [BRIEF_VISUEL_HERO_PHASE1.md](../direction/BRIEF_VISUEL_HERO_PHASE1.md) ; fichiers ou **échéance + responsable** (studio / BO) pour ne pas bloquer l’intégration.
 4. [ ] **Copy hors hero** — textes **validés MOA** (supplier, editorial, micro Explorer si applicable) disponibles pour la PR (fichier, tableau ou ticket annexe).
 5. [ ] **Médias supplier + sélection** — liste d’assets ou règle d’alimentation Odoo (qui met à jour les images en BO) clarifiée.
 6. [ ] **Intégration** — branche cible, **relecteur**, instance de test, procédure **`-u dorevia_ckreyol_marketplace`** + rechargement assets navigateur.
@@ -31,6 +31,17 @@ La **homepage V1** a été livrée et gelée (arbitrages §9 de [PROPOSITION_HOM
 Parallèlement, la **plateforme de marque** et le **cadrage design & créa** fixent une ambition plus forte : site **construit**, **dense hiérarchisée**, **désirable** sans folklore ni agressivité commerciale — cf. [PLATEFORME_MARQUE_CK_V1.md](PLATEFORME_MARQUE_CK_V1.md) (effet §13, promesse) et [CADRAGE_DESIGN_CREATION_CK_V1.md](CADRAGE_DESIGN_CREATION_CK_V1.md) (§2–§8, §13, §19–§21).
 
 **Constat MOA** : l’expérience actuelle paraît **insuffisamment appétente** (peu de désir perçu, sensation parfois « maquette » / froide), tout en restant sobre.
+
+### 1 bis. Fils — Hero Homepage V2 (structurel)
+
+**Décision MOA** (2026-04-24) : [DECISION_HERO_HOMEPAGE_V2.md](../mvp_02/DECISION_HERO_HOMEPAGE_V2.md) (**Option B** — hero immersif, QWeb + SCSS).  
+**Exécution** : [TICKET_HERO_HOMEPAGE_V2.md](TICKET_HERO_HOMEPAGE_V2.md) + contenu cible [1_HOMEPAGE.md](../mvp_02/1_HOMEPAGE.md) + alignement [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) **§8** (pilotage) et **§7** après merge.  
+**Explorer grille MVP2** : [DECISION_EXPLORER_HOMEPAGE_MVP2.md](../mvp_02/DECISION_EXPLORER_HOMEPAGE_MVP2.md) + [TICKET_EXPLORER_HOMEPAGE_MVP2.md](TICKET_EXPLORER_HOMEPAGE_MVP2.md) + [PV_RECETTE_EXPLORER_HOMEPAGE_MVP2_CK.md](PV_RECETTE_EXPLORER_HOMEPAGE_MVP2_CK.md).  
+**Sélection produits MVP2.1** (`website_sale`) : [DECISION_PRODUITS_HOMEPAGE_MVP21.md](../mvp_02/DECISION_PRODUITS_HOMEPAGE_MVP21.md) + [TICKET_SELECTION_PRODUITS_HOMEPAGE_MVP21.md](TICKET_SELECTION_PRODUITS_HOMEPAGE_MVP21.md) + [PV_RECETTE_SELECTION_PRODUITS_HOMEPAGE_MVP21_CK.md](PV_RECETTE_SELECTION_PRODUITS_HOMEPAGE_MVP21_CK.md).  
+**Ordre Éditorial → Inscription → Réassurance** : [DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md](../mvp_02/DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md) + [1_HOMEPAGE.md](../mvp_02/1_HOMEPAGE.md) §4–6.  
+**Inscription MVP2.1** : [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) + [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md).  
+**Réassurance MVP2.1** : [TICKET_REASSURANCE_HOMEPAGE_MVP21.md](TICKET_REASSURANCE_HOMEPAGE_MVP21.md) + [PV_RECETTE_REASSURANCE_HOMEPAGE_MVP21_CK.md](PV_RECETTE_REASSURANCE_HOMEPAGE_MVP21_CK.md).  
+Ce fil **ne clos pas** le présent ticket sur les autres axes (partition globale, blocs hors homepage, etc.).
 
 ---
 
@@ -60,7 +71,7 @@ Rapprocher la homepage de :
 | Gel | Document / lieu | Conséquence |
 |-----|-----------------|---------------|
 | Homepage V1 §9 | `PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md` | Hero **60/40** ; Supplier **plane** ; Editorial **bandeau sobre sans `<h2>`** ; Selection **garde-fou responsive** ; **fil rouge** amber selon arbitrages. **Ne pas modifier** ces points sans **ticket + décision MOA** (éventuellement gel V1.1). |
-| Copy hero gelée | `docs/SPEC_HERO_HOMEPAGE.md` §7 | Toute évolution de texte hero au-delà de micro-ajustements = **amendement SPEC** + historique. |
+| Copy hero gelée | `docs/direction/SPEC_HERO_HOMEPAGE.md` §7 | Toute évolution de texte hero au-delà de micro-ajustements = **amendement SPEC** + historique. |
 | Explorer | ADR-007, WIREFRAME Bloc 3 | Les **5 portes** restent des **modes de lecture catalogue** ; le rail **manuel** (pas de carrousel auto). Remplacer par une grille « portes maîtresses » du cadrage = **décision d’architecture** (coexistence, remplacement, ou variante) **à trancher avant code**. |
 | Standard Odoo | ADR-001 | Pas de contournement lourd du moteur e-commerce. |
 
@@ -143,3 +154,10 @@ Rapprocher la homepage de :
 | 2026-04-23 | Livrables §7 : renvoi explicite vers [PV_RECETTE_PHASE_A_HOMEPAGE_CK.md](PV_RECETTE_PHASE_A_HOMEPAGE_CK.md) comme trame de recette Phase A. |
 | 2026-04-23 | Ajout **§0 Prêt pour dev — Phase A** : checklist MOA / pilotage (8 points) avant ouverture PR. |
 | 2026-04-23 | **Phase A — Lot 1 SCSS (PR draft `feat/homepage-phase-a`)** : polish cartes sélection (ombre sobre au repos, montée d’ombre au hover, micro zoom image `scale(1.04)` hover/focus-visible). Aucun changement QWeb, aucun déplacement de bloc, aucune modification copy hero. Bump `__manifest__.py` **19.0.1.6.16 → 19.0.1.6.17** (bundle frontend modifié). Médias hero / supplier / sélection, copy hors hero et consignes BO : en attente livrables MOA (§0 checklist, points 3–5). |
+| 2026-04-24 | **Fils Hero V2** — §1 bis : décision MVP02 + [TICKET_HERO_HOMEPAGE_V2.md](TICKET_HERO_HOMEPAGE_V2.md) + [PV_RECETTE_HERO_HOMEPAGE_V2_CK.md](PV_RECETTE_HERO_HOMEPAGE_V2_CK.md) ; [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) **§8** (pilotage). |
+| 2026-04-24 | **Fils Explorer MVP2** — §1 bis : [DECISION_EXPLORER_HOMEPAGE_MVP2.md](../mvp_02/DECISION_EXPLORER_HOMEPAGE_MVP2.md) + [TICKET_EXPLORER_HOMEPAGE_MVP2.md](TICKET_EXPLORER_HOMEPAGE_MVP2.md) + [PV_RECETTE_EXPLORER_HOMEPAGE_MVP2_CK.md](PV_RECETTE_EXPLORER_HOMEPAGE_MVP2_CK.md). |
+| 2026-04-24 | **Fils Sélection produits MVP2.1** — §1 bis : [DECISION_PRODUITS_HOMEPAGE_MVP21.md](../mvp_02/DECISION_PRODUITS_HOMEPAGE_MVP21.md) + [TICKET_SELECTION_PRODUITS_HOMEPAGE_MVP21.md](TICKET_SELECTION_PRODUITS_HOMEPAGE_MVP21.md) + [PV_RECETTE_SELECTION_PRODUITS_HOMEPAGE_MVP21_CK.md](PV_RECETTE_SELECTION_PRODUITS_HOMEPAGE_MVP21_CK.md). |
+| 2026-04-24 | **Ordre bas de page** — §1 bis : [DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md](../mvp_02/DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md) ; [1_HOMEPAGE.md](../mvp_02/1_HOMEPAGE.md) §4 Éditorial explicite, §5–6 renumérotés ; commentaire d’insertion dans `ckr_homepage.xml`. |
+| 2026-04-24 | **Fils Inscription MVP2.1** — §1 bis : [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) + [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md). |
+| 2026-04-24 | **Fils Réassurance MVP2.1** — §1 bis : [TICKET_REASSURANCE_HOMEPAGE_MVP21.md](TICKET_REASSURANCE_HOMEPAGE_MVP21.md) + [PV_RECETTE_REASSURANCE_HOMEPAGE_MVP21_CK.md](PV_RECETTE_REASSURANCE_HOMEPAGE_MVP21_CK.md). |
+| 2026-04-24 | **Pilotage MVP2.1** — ordre merge PR (Hero → … → Réassurance), précisions MOA (sélection BO, inscription custom, réassurance 5/3, assets `docs/assets/`, recette à chaque PR) : [README MVP 02](../mvp_02/README.md) **Pilotage MVP2.1**. |

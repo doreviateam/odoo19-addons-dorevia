@@ -3,8 +3,8 @@
 
 Couche CK **légère** (pas A5) qui **décore** et **route** la lecture
 visiteur de la porte Origines (voir
-``docs/phase_2/CONTRAT_URL_ORIGINES.md`` §13 et
-``docs/phase_2/SPEC_IMPL_ORIGINES.md`` §2.2 / §2.3) :
+``docs/mvp_01/CONTRAT_URL_ORIGINES.md`` §13 et
+``docs/mvp_01/SPEC_IMPL_ORIGINES.md`` §2.2 / §2.3) :
 
 * la **vérité catalogue** « ce produit est rattaché à telle origine »
   reste portée par le **socle standard Odoo** — un

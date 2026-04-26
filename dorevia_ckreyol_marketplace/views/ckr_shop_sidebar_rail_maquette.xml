@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Rail « Filtrer par » — alignement maquette (4 accordéons homogènes).
+
+        1) Désactive la vue Odoo `products_categories_list_collapsible` : elle
+           transforme le template catégories en accordéon **natif** incompatible
+           avec notre bloc « Catégories » unifié (xpath sur //h6). Notre accordéon
+           est porté par `ckr_shop_categories_list_maquette` dans ckr_shop.xml.
+
+        2) Force `is_sidebar_collapsible` à True sur la page produits : sinon le
+           bloc **Prix** (`filter_products_price`) reste en mode « label + range »
+           sans accordéon (cf. branche t-if dans le template standard Odoo 19).
+
+        3) Retire `vh-100` du rail : c’est la hauteur viewport Odoo qui crée le
+           « grand panneau blanc » vide sous le dernier filtre.
+
+        Où sont rendues les catégories (desktop) :
+        `website_sale.products` → `#products_grid_before` →
+        `div.o_wsale_products_grid_before_rail` → `div.products_categories` →
+        `t-call="website_sale.products_categories_list"` (surchargé CK).
+
+        Côté CK : `opt_wsale_categories` est forcé à True dans ce fichier (voir doc
+        TICKET_SHOP_SIDEBAR_CATEGORIES.md). En standard Odoo seul, ce flag suit la vue
+        `website_sale.products_categories` (« Categories in Left Side »).
+    -->
+    <function model="ir.ui.view" name="write">
+        <value eval="[ref('website_sale.products_categories_list_collapsible')]"/>
+        <value eval="{'active': False}"/>
+    </function>
+
+    <template id="ckr_shop_sidebar_rail_layout"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: rail filtres — pas vh-100, accordéon prix forcé"
+              priority="24">
+        <!--
+            Fallback maquette : le bloc Catégories n’apparaît que si `opt_wsale_categories`
+            est vrai. En standard, ce flag = `is_view_active('website_sale.products_categories')`
+            (vue **Categories in Left Side**, inactive par défaut). Pour garantir les 4 blocs
+            CK sans dépendre de l’éditeur, on force True — la logique liste / URLs reste celle
+            du template `products_categories_list` (voir doc TICKET_SHOP_SIDEBAR_CATEGORIES.md).
+        -->
+        <xpath expr="//t[@t-set='opt_wsale_categories']" position="replace">
+            <t t-set="opt_wsale_categories" t-value="True"/>
+        </xpath>
+        <!--
+            Cas nominal maquette : afficher le bloc Prix sans exiger `opt_wsale_attributes`.
+            En standard, `show_price_filter = opt_wsale_filter_price and opt_wsale_attributes` :
+            sans facettes attributs actives, le prix disparaît — sidebar à 3 blocs seulement.
+        -->
+        <xpath expr="//aside[@id='products_grid_before']//t[@t-set='show_price_filter']" position="replace">
+            <t t-set="show_price_filter" t-value="True"/>
+        </xpath>
+        <xpath expr="//aside[@id='products_grid_before']//div[hasclass('o_wsale_products_grid_before_rail')]" position="attributes">
+            <attribute name="class" remove="vh-100 overflow-y-scroll" separator=" "/>
+            <attribute name="class" add="ckr-shop-sidebar-rail" separator=" "/>
+        </xpath>
+        <xpath expr="//aside[@id='products_grid_before']//t[@t-set='is_sidebar_collapsible']" position="replace">
+            <t t-set="is_sidebar_collapsible" t-value="True"/>
+        </xpath>
+    </template>
+
+    <!--
+        Libellé FR offcanvas « Catégories » : retiré — sur certaines instances la chaîne
+        d’héritage de `website_sale.products` ne contient plus le nœud
+        `#o_wsale_offcanvas_categories_header` (thème), ce qui bloque le `-u`.
+        Recours : Interface de traduction (paramètres du site) sur la chaîne « Categories »
+        du template produits, ou héritage dédié une fois l’arch parente connue.
+    -->
+</odoo>

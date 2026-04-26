@@ -675,6 +675,9 @@ class WebsiteSaleCKR(WebsiteSale):
     def _get_additional_shop_values(self, values, **kwargs):
         result = super()._get_additional_shop_values(values, **kwargs)
         mode = _ckr_effective_mode(kwargs)
+        search_term = (kwargs or {}).get("search") or (values or {}).get("search") or ""
+        has_search = bool(str(search_term).strip())
+        has_category = bool((values or {}).get("category"))
         if mode == CKR_MODE_PACK:
             result.update(
                 {
@@ -807,13 +810,96 @@ class WebsiteSaleCKR(WebsiteSale):
             ("ckr_origin_empty", False),
             ("ckr_collection_empty", False),
             ("ckr_origin_filtered", False),
+            ("ckr_shop_hero_retail_lane", False),
+            ("ckr_shop_sidebar_suppress_attribute_ids", []),
+            ("ckr_shop_sidebar_active_origin_slugs", []),
+            ("ckr_shop_sidebar_active_collection_slugs", []),
         ):
             result.setdefault(_k, _d)
         if "ckr_origin_profiles" not in result:
             result["ckr_origin_profiles"] = request.env["ckr.shop.origin"].browse(
                 []
             )
+        # --- Orchestration page boutique (MVP2.2 — brief conformité visuelle) ---
+        # Un seul bloc éditorial principal : le hero QWeb (`ckr_shop_hero_*`).
+        # Les bandeaux historiques par porte restent dans les vues mais sont
+        # neutralisés par `ckr_shop_show_legacy_banners` pour éviter tout
+        # double emploi avec ce hero.
+        #
+        # * ckr_shop_show_hero — True hors recherche (y compris catégorie,
+        #   origines, collections, packs / promos / incontournables).
+        # * ckr_shop_show_shortcuts — True hors recherche et hors vue Collections
+        #   noble (grammaire dédiée /collections) ; inclut catégories et origines
+        #   pour coller à 2_SHOP.md §5 (chips au-dessus de la grille, pas seulement
+        #   /shop nu).
+        # * ckr_shop_hero_retail_lane — True seulement sur /shop sans contexte
+        #   (pas catégorie ni mode porte) : hero plus affirmé (visuel module).
+        # * ckr_shop_show_legacy_banners — désactivé (pas de retour bandeaux).
+        show_hero = not has_search
+        show_shortcuts = not has_search and not result.get(
+            "ckr_collection_mode"
+        )
+        hero_retail_lane = show_hero and not has_category and not any(
+            result.get(k)
+            for k in (
+                "ckr_collection_mode",
+                "ckr_origin_mode",
+                "ckr_pack_mode",
+                "ckr_promo_mode",
+                "ckr_featured_mode",
+            )
+        )
         result["ckr_shop_shortcut_mode"] = mode
+        result["ckr_shop_show_hero"] = show_hero
+        result["ckr_shop_show_shortcuts"] = show_shortcuts
+        result["ckr_shop_hero_retail_lane"] = hero_retail_lane
+        result["ckr_shop_show_legacy_banners"] = False
+        # --- Sidebar E2 (navigation CK) : blocs Collections / Origines (maquette §4) --
+        # Cases à cocher + JS (`ckr_shop_sidebar.js`) : `/collections/…`, union, et
+        # `ckr_mode=origin` / `ckr_origin` sur `/shop` ; pas de second moteur métier.
+        web = getattr(request, "website", None)
+        if web is not None and not web.id:
+            web = None
+        Collection = request.env["ckr.shop.collection"].sudo()
+        Origin = request.env["ckr.shop.origin"].sudo()
+        result["ckr_sidebar_collections"] = Collection.search(
+            Collection._ckr_visible_domain(website=web),
+            order="sequence, name, id",
+        )
+        origin_dom = [("website_published", "=", True)]
+        if web is not None:
+            origin_dom.append(("website_id", "in", [False, web.id]))
+        origins_rs = Origin.search(
+            origin_dom, order="sequence, name_visitor, id"
+        )
+        result["ckr_sidebar_origins"] = origins_rs
+        # Une seule navigation « Origines » dans le rail : si le bloc CK est
+        # alimenté, masquer la facette attribut `ckr_product_attribute_origin`
+        # (évite Origines + Origine en doublon, même moteur métier en coulisse).
+        suppress_attr_ids = []
+        if origins_rs:
+            origin_attr = request.env.ref(
+                "dorevia_ckreyol_marketplace.ckr_product_attribute_origin",
+                raise_if_not_found=False,
+            )
+            if origin_attr:
+                suppress_attr_ids = [origin_attr.id]
+        result["ckr_shop_sidebar_suppress_attribute_ids"] = suppress_attr_ids
+        # État cases à cocher sidebar (alignement maquette §4 — pas seulement des liens).
+        result["ckr_shop_sidebar_active_origin_slugs"] = list(
+            _ckr_canonical_origin_slugs()
+        )
+        ctx_sb = _ckr_collection_ctx_get()
+        if ctx_sb and ctx_sb.get("collections"):
+            result["ckr_shop_sidebar_active_collection_slugs"] = sorted(
+                {
+                    x.slug
+                    for x in ctx_sb["collections"]
+                    if getattr(x, "slug", None)
+                }
+            )
+        else:
+            result["ckr_shop_sidebar_active_collection_slugs"] = []
         return result
 
     # ------------------------------------------------------------------

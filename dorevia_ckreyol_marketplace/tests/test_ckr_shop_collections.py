@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Tests automatisés — Porte **Collections** V1 (PV + spec).
 
-Référence : **RC-01 … RC-14** dans ``docs/phase_2/PV_RECETTE_COLLECTIONS_V1.md``,
+Référence : **RC-01 … RC-14** dans ``docs/mvp_01/PV_RECETTE_COLLECTIONS_V1.md``,
 ``SPEC_IMPL_COLLECTIONS.md`` (§12), ``CONTRAT_URL_COLLECTIONS.md``.
 
 Chaque méthode correspond à la colonne *Couverture auto associée* du PV
@@ -45,6 +45,7 @@ from psycopg2 import IntegrityError
 from odoo.addons.dorevia_ckreyol_marketplace.controllers.website_sale_ckr import (
     CKR_COLLECTION_FLASH_SESSION_KEY,
     CKR_MODE_COLLECTION,
+    CKR_MODE_FEATURED,
     CKR_MODE_ORIGIN,
     CKR_MODE_PACK,
     CKR_MODE_PARAM,
@@ -327,22 +328,28 @@ class TestCkrCollectionsPVModel(TransactionCase):
     # RC-14 — priorité ``_ckr_effective_mode()`` (sans HTTP, SPEC §5.1)
     # ------------------------------------------------------------------
     def test_ckr_col_rc14_effective_mode_priority(self):
-        """RC-14 modèle : ``pack > promo > origin > collection`` figée.
+        """RC-14 modèle : ``pack > promo > featured > origin > collection`` figée.
 
         Vérification triple :
 
         1. la constante ``CKR_MODE_PRIORITY`` expose l'ordre figé
            (``collection`` **en dernier** — non-régression absolue) ;
         2. ``_ckr_effective_mode`` sur multi-valeurs respecte la
-           priorité (pack > promo > origin > collection) ;
+           priorité (pack > promo > featured > origin > collection) ;
         3. ``collection`` est bien lu quand il est seul — confirme
            son ajout à ``CKR_MODES_ALLOWED``.
         """
         self.assertEqual(
             CKR_MODE_PRIORITY,
-            (CKR_MODE_PACK, CKR_MODE_PROMO, CKR_MODE_ORIGIN, CKR_MODE_COLLECTION),
+            (
+                CKR_MODE_PACK,
+                CKR_MODE_PROMO,
+                CKR_MODE_FEATURED,
+                CKR_MODE_ORIGIN,
+                CKR_MODE_COLLECTION,
+            ),
             "L'ordre CKR_MODE_PRIORITY doit être figé pack > promo > "
-            "origin > collection (SPEC_IMPL §5.1).",
+            "featured > origin > collection (SPEC_IMPL §5.1 / SPEC §4.6).",
         )
         # Multi-modes → la priorité figée s'applique
         self.assertEqual(
@@ -368,17 +375,39 @@ class TestCkrCollectionsPVModel(TransactionCase):
         )
         self.assertEqual(
             _ckr_effective_mode(
+                {CKR_MODE_PARAM: [CKR_MODE_COLLECTION, CKR_MODE_FEATURED]}
+            ),
+            CKR_MODE_FEATURED,
+            "featured doit l'emporter sur collection.",
+        )
+        self.assertEqual(
+            _ckr_effective_mode(
+                {CKR_MODE_PARAM: [CKR_MODE_FEATURED, CKR_MODE_ORIGIN]}
+            ),
+            CKR_MODE_FEATURED,
+            "featured doit l'emporter sur origin.",
+        )
+        self.assertEqual(
+            _ckr_effective_mode(
+                {CKR_MODE_PARAM: [CKR_MODE_PROMO, CKR_MODE_FEATURED]}
+            ),
+            CKR_MODE_PROMO,
+            "promo l'emporte sur featured.",
+        )
+        self.assertEqual(
+            _ckr_effective_mode(
                 {
                     CKR_MODE_PARAM: [
                         CKR_MODE_COLLECTION,
                         CKR_MODE_ORIGIN,
+                        CKR_MODE_FEATURED,
                         CKR_MODE_PROMO,
                         CKR_MODE_PACK,
                     ]
                 }
             ),
             CKR_MODE_PACK,
-            "pack l'emporte en cas de cumul complet des 4 modes.",
+            "pack l'emporte en cas de cumul complet des modes whitelistés.",
         )
         # collection seule → reconnue (ajoutée à CKR_MODES_ALLOWED)
         self.assertEqual(
@@ -898,9 +927,55 @@ class TestCkrCollectionsPVHttp(HttpCase):
         """
         self._assert_redirect("/kits", 301, "ckr_mode=pack")
         self._assert_redirect("/promotions", 301, "ckr_mode=promo")
+        self._assert_redirect("/incontournables", 301, "ckr_mode=featured")
         self._assert_redirect("/origines", 301, "ckr_mode=origin")
         r_cat = self.url_open("/categories", allow_redirects=False, timeout=60)
         self.assertEqual(r_cat.status_code, 301)
         self.assertIn("/shop", r_cat.headers.get("Location", ""))
         r_shop = self.url_open("/shop", timeout=60)
         self.assertEqual(r_shop.status_code, 200)
+
+    # --- Porte Incontournables (featured) — SPEC §4.6 ---
+
+    def test_ckr_featured_shop_filters_configured_collection(self):
+        """``featured_collection_id`` valide → 200, périmètre = produits de la collection."""
+        ICP = self.env["ir.config_parameter"].sudo()
+        ICP.set_param(
+            "dorevia_ckreyol_marketplace.featured_collection_id",
+            str(self.col_a.id),
+        )
+        r = self.url_open("/shop?ckr_mode=featured", timeout=60)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn(self.product_a.name, r.text)
+        self.assertNotIn(self.product_b.name, r.text)
+        self.assertNotIn(self.product_lonely.name, r.text)
+
+    def test_ckr_featured_invalid_or_unconfigured_302(self):
+        """Paramètre absent / 0 → ``/shop?ckr_mode=featured`` → 302 ``/shop`` nu."""
+        ICP = self.env["ir.config_parameter"].sudo()
+        ICP.set_param(
+            "dorevia_ckreyol_marketplace.featured_collection_id",
+            "0",
+        )
+        self._assert_redirect("/shop?ckr_mode=featured", 302, "/shop")
+
+    def test_ckr_featured_non_visible_collection_302(self):
+        """Collection archivée configurée → 302 /shop nu."""
+        ICP = self.env["ir.config_parameter"].sudo()
+        ICP.set_param(
+            "dorevia_ckreyol_marketplace.featured_collection_id",
+            str(self.col_d_archived.id),
+        )
+        self._assert_redirect("/shop?ckr_mode=featured", 302, "/shop")
+
+    def test_ckr_featured_canonical_has_mode(self):
+        """Canonical /shop inclut ``ckr_mode=featured`` lorsque le paramètre est valide."""
+        ICP = self.env["ir.config_parameter"].sudo()
+        ICP.set_param(
+            "dorevia_ckreyol_marketplace.featured_collection_id",
+            str(self.col_a.id),
+        )
+        r = self.url_open("/shop?ckr_mode=featured", timeout=60)
+        self.assertEqual(r.status_code, 200)
+        canon = self._canonical_href(r.text)
+        self.assertIn("ckr_mode=featured", canon)

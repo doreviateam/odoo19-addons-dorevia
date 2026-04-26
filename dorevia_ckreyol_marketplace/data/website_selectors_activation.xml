@@ -17,7 +17,7 @@
     <!--     len(website_sale_pricelists) > 1                       -->
     <!--                                                            -->
     <!-- Cote back-office : prerequis decrits dans                  -->
-    <!--   docs/EXPLOITATION_I18N_DEVISES.md                        -->
+    <!--   docs/direction/EXPLOITATION_I18N_DEVISES.md                        -->
     <!-- ========================================================== -->
 
     <!-- Inline : supprime le dropdown, affiche les langues en ligne -->

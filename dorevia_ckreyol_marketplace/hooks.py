@@ -23,13 +23,20 @@ Portee :
 Idempotent : on peut rejouer la sequence a l install comme au
 upgrade (voir migrations/19.0.1.0.1/post-migration.py).
 
-Reference : docs/STRUCTURE_MENU_PRINCIPAL.md, ADR-CKR-003.
+Reference : docs/direction/STRUCTURE_MENU_PRINCIPAL.md, ADR-CKR-003.
 """
 
 import logging
 
+from odoo.api import Environment, SUPERUSER_ID
+
 _logger = logging.getLogger(__name__)
 
+# Clé ``ir.config_parameter`` — alignée sur
+# ``controllers/website_sale_ckr.CKR_FEATURED_COLLECTION_PARAM`` (SPEC §4.6).
+CKR_FEATURED_COLLECTION_PARAM = (
+    "dorevia_ckreyol_marketplace.featured_collection_id"
+)
 
 CKR_MENU_ITEMS = [
     # (nom, url, sequence)
@@ -116,6 +123,25 @@ def _sync_ckr_menus(env):
     _logger.info("[C-Kreyol] sync_ckr_menus : OK.")
 
 
-def post_init_hook(env):
-    """Declenche a l install initial du module."""
+def _ensure_featured_collection_parameter(env):
+    """Garantit la présence du paramètre Incontournables sans écraser sa valeur.
+
+    Volontairement **hors fichier data XML** : un upgrade module ne doit pas
+    repasser l'id collection à ``0`` après configuration BO / exploitation.
+    """
+    ICP = env["ir.config_parameter"].sudo()
+    if ICP.search([("key", "=", CKR_FEATURED_COLLECTION_PARAM)], limit=1):
+        return
+    ICP.set_param(CKR_FEATURED_COLLECTION_PARAM, "0")
+    _logger.info(
+        "[C-Kreyol] Paramètre %s créé (défaut 0).",
+        CKR_FEATURED_COLLECTION_PARAM,
+    )
+
+
+def post_init_hook(cr, registry):
+    """Déclenché à l'installation initiale du module (signature Odoo standard)."""
+    env = Environment(cr, SUPERUSER_ID, {})
     _sync_ckr_menus(env)
+    _ensure_featured_collection_parameter(env)
+    env["website"].ckr_ensure_showcase_featured_on_empty_websites()

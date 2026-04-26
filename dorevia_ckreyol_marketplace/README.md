@@ -6,7 +6,7 @@
 
 **La Platine** est ainsi le **premier fournisseur** de ce réseau et un **point d’appui commercial** au démarrage, sans que C-Kreyol ait vocation à se confondre avec le site ou l’identité de La Platine ni à n’être qu’une extension de son activité.
 
-**Localisation** : **C-Kreyol est localisé à Nantes** (France). Cet ancrage doit à terme soutenir non seulement le **canal commercial** et la **relation client**, mais aussi une compétence réelle en **logistique import-export**, au service de la mise en marché de produits agro transformés antillais — avec la nuance que l’**origine produit** reste **antillaise** alors que l’**opération** est **métropolaine**. Détail des **modèles logistiques** possibles (pur canal, hub léger, montée en puissance) : voir **[§4.4 de la note de cadrage](docs/NOTE_DE_CADRAGE.md)**.
+**Localisation** : **C-Kreyol est localisé à Nantes** (France). Cet ancrage doit à terme soutenir non seulement le **canal commercial** et la **relation client**, mais aussi une compétence réelle en **logistique import-export**, au service de la mise en marché de produits agro transformés antillais — avec la nuance que l’**origine produit** reste **antillaise** alors que l’**opération** est **métropolaine**. Détail des **modèles logistiques** possibles (pur canal, hub léger, montée en puissance) : voir **[§4.4 de la note de cadrage](docs/direction/NOTE_DE_CADRAGE.md)**.
 
 ## Identité visuelle
 
@@ -20,27 +20,57 @@ Fichiers **PNG versionnés** sous [`docs/assets/`](docs/assets/) pour le **cadra
 
 | Fichier | Rôle (résumé) |
 |---------|----------------|
-| `exemple_produit_manioc_crackers_la_platine.png` | Exemple produit réel (packaging lisible) — voir [spec hero homepage](docs/SPEC_HERO_HOMEPAGE.md). |
-| `hero_reference_direction_a_biscuits_confiture.png` | Moodboard **macro / matière** pour la direction hero gelée — voir [brief visuel hero](docs/BRIEF_VISUEL_HERO_PHASE1.md) (section 10.2). |
+| `exemple_produit_manioc_crackers_la_platine.png` | Exemple produit réel (packaging lisible) — voir [spec hero homepage](docs/direction/SPEC_HERO_HOMEPAGE.md). |
+| `hero_reference_direction_a_biscuits_confiture.png` | Moodboard **macro / matière** pour la direction hero gelée — voir [brief visuel hero](docs/direction/BRIEF_VISUEL_HERO_PHASE1.md) (section 10.2). |
 | `homepage_maniocookies_sale_la_platine.png` | **Banque homepage** : packshot Maniocookies (La Platine). |
 | `homepage_manioc_crackers_sale_ste_anne.png` | **Banque homepage** : packshot crackers manioc salés (Sainte-Anne). |
 | `homepage_manioc_pates_mayotte_la_platine.png` | **Banque homepage** : packshot pâtes manioc (Mayotte). |
 
-**Usages** des trois packshots (vignettes, blocs sélection, pas hero seul) : [brief visuel hero — section 10.3](docs/BRIEF_VISUEL_HERO_PHASE1.md) et [spec hero — banque photos homepage](docs/SPEC_HERO_HOMEPAGE.md). La [charte graphique Phase 1](docs/CHARTE_GRAPHIQUE_PHASE1.md) renvoie à ces fichiers en 7.2.
+**Références visuelles MVP 02** (moodboards / directions — hors gel Phase 1 §7 ; cadrage [1_HOMEPAGE.md](docs/mvp_02/1_HOMEPAGE.md), [DECISION_HERO_HOMEPAGE_V2.md](docs/mvp_02/DECISION_HERO_HOMEPAGE_V2.md)) :
+
+| Fichier | Rôle (résumé) |
+|---------|----------------|
+| `mvp02_reference_coffret_gourmand_bois.png` | Coffret bois, produits artisanaux (café, confiture, épices). |
+| `mvp02_reference_epices_curry_piments.png` | Bol d’épices (curry / colombo), piments, aromates — fond pierre. |
+| `mvp02_reference_miel_pot_mains.png` | Pot de miel, mains, matières chaudes (bois, toile). |
+| `mvp02_reference_epicerie_verre_etagere.png` | Étagère épicerie fine, bocaux et sauces en verre. |
+| `mvp02_reference_confitures_tropicaux_panier.png` | Confitures / fruits tropicaux, panier, ambiance lumineuse. |
+| `mvp02_reference_tropical_panier_fleurs_plage.png` | Portrait tropical, panier artisanal et fleurs (hibiscus, strelitzia) — mer, plage ; **origines / ambiance premium** (hero, carte Explorer, éditorial — hors packshot produit seul). |
+
+**Bloc Explorer (MVP2)** — intégration : copies sous `static/src/img/explorer_porte_*.png` (module ≥ 19.0.1.8.2) :
+
+| `static/src/img/` | Fichier source `docs/assets/` |
+|-------------------|------------------------------|
+| `explorer_porte_promotions.png` | `mvp02_reference_confitures_tropicaux_panier.png` |
+| `explorer_porte_kits.png` | `mvp02_reference_coffret_gourmand_bois.png` |
+| `explorer_porte_categories.png` | `mvp02_reference_epicerie_verre_etagere.png` |
+| `explorer_porte_collections.png` | `mvp02_reference_miel_pot_mains.png` |
+| `explorer_porte_origines.png` | `mvp02_reference_tropical_panier_fleurs_plage.png` |
+
+**Sélection produits homepage (MVP2.1, module ≥ 19.0.1.9.2)** : **Site web** → **Configuration** → **Sites** → site concerné : groupe *C-Kreyol — Sélection accueil (4 produits)*. **Jusqu’à 4** fiches visibles, **chacune avec image** (fiche et/ou variante) : les emplacements BO sans binaire image sont **ignorés** et remplacés en puisant dans le **catalogue** (ordre `website_sale`, même critères). Même règle si les quatre champs sont vides. À partir de **19.0.1.9.5**, le module crée **quatre fiches vitrine** (Crêpes, Bière, Sucre de canne, Chips ; références `CKR-SEL-*`) — **19.0.1.9.7** : **un visuel distinct** par fiche (PNG issus de la banque **`docs/assets/`** MVP02, copiés versionnés sous `static/src/img/selection/` ; la migration **19.0.1.9.7** réinjecte `image_1920` si les fiches existaient déjà sans binaire exploitable). Si **aucun** des quatre emplacements accueil n’est rempli, ils sont **affectés automatiquement** ; sinon le catalogue sert de **repli**. Repli d’affichage : image statique CK `ckr_selection_card_fallback.png` si la fiche n’a toujours pas de binaire. **Avec une seule** fiche image dans la base, seule **une** carte peut s’afficher : l’enrichissement du catalogue (ou l’affectation des quatre emplacements) est nécessaire pour valider la recette **4/4**. 
+
+| Fiche vitrine | Source `docs/assets/` (MVP02) |
+|---------------|-------------------------------|
+| Crêpes | `mvp02_reference_confitures_tropicaux_panier.png` |
+| Bière | `mvp02_reference_epicerie_verre_etagere.png` |
+| Sucre de canne | `mvp02_reference_miel_pot_mains.png` |
+| Chips | `mvp02_reference_coffret_gourmand_bois.png` | Prix pricelist visiteur, lien fiche, sans panier sur la grille. **Dépannage — hero / Explorer absents, ou page d’accueil “pas C-K”** : 1) Mettre à jour le module (priorité d’héritage `website.homepage` portée à **2000** en 19.0.1.9.1). 2) Vérifier qu’aucun autre module du dépôt ne remplace `//div[@id='wrap']` sur `website.homepage` avec une priorité plus haute, ou **désactiver** l’hérit concerné (ex. démo **Radio Grand Lieu** : `dorevia_website_radio_grandlieu` / `radiogl_homepage_inherit`). 3) Si la page a été **surchargée** par l’éditeur de site, repartir d’une home propre (réinitialiser le contenu / ré-appliquer le thème) pour retrouver le `t-call` C-K.
+
+**Usages** des trois packshots (vignettes, blocs sélection, pas hero seul) : [brief visuel hero — section 10.3](docs/direction/BRIEF_VISUEL_HERO_PHASE1.md) et [spec hero — banque photos homepage](docs/direction/SPEC_HERO_HOMEPAGE.md). La [charte graphique Phase 1](docs/direction/CHARTE_GRAPHIQUE_PHASE1.md) renvoie à ces fichiers en 7.2.
 
 ---
 
 ## Statut du dépôt
 
-**Phase 1 — implémentation front livrée et clôturée côté bilan** (voir **[rapport de phase MOA](docs/rapport_phase_1.md)**). Le module `dorevia_ckreyol_marketplace` est **installable** sur **Odoo 19 Community Edition** (dépendances `portal`, `website`, `website_sale`). Il fournit notamment :
+**Phase 1 — implémentation front livrée et clôturée côté bilan** (voir **[rapport de phase MOA](docs/direction/rapport_phase_1.md)**). Le module `dorevia_ckreyol_marketplace` est **installable** sur **Odoo 19 Community Edition** (dépendances `portal`, `website`, `website_sale`). Il fournit notamment :
 
 - un **header** avec **menu principal personnalisé** (Option B : Boutique / Collections / Offrir / Recettes / À propos / Contact), utilitaires (recherche, compte, panier), **menu compte** et **drawer mobile** ;
-- **langue et devise** : réemploi des mécanismes natifs Odoo (sélecteur langue inline + codes, pricelists) — prérequis exploitation : **[EXPLOITATION_I18N_DEVISES.md](docs/EXPLOITATION_I18N_DEVISES.md)** ;
+- **langue et devise** : réemploi des mécanismes natifs Odoo (sélecteur langue inline + codes, pricelists) — prérequis exploitation : **[EXPLOITATION_I18N_DEVISES.md](docs/direction/EXPLOITATION_I18N_DEVISES.md)** ;
 - une **page de connexion** `/web/login` orientée « Mon compte » (masquage d’éléments techniques superflus, charte) ;
 - le **portail** `/my` (scope et styles d’ensemble) ;
 - la **boutique** `/shop` et la **fiche produit** (scopes dédiés + SCSS : cartes, filtres, CTA, rubans produits, etc.) ;
 - un **footer** personnalisé (4 colonnes ; alignement **`res.company`** — voir § BAC-01 ci-dessous) ;
-- une **homepage** conforme au [wireframe](docs/WIREFRAME_HOMEPAGE.md) (variante retail enrichie) et au [spec hero](docs/SPEC_HERO_HOMEPAGE.md), avec bloc **Explorer** (5 portes au **pluriel**) : **Promotions**, **Collections**, **Kits**, **Catégories**, **Origines** — toutes convergeant à terme vers la boutique ([ADR-CKR-007](docs/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-007)) ; **UI** : rail horizontal **manuel** (sans autoplay), boutons précédent/suivant — détail [WIREFRAME — Bloc 3](docs/WIREFRAME_HOMEPAGE.md). **Trois portes déployées** : (a) **Kits** (v19.0.1.1.0) — bi-lexique [ADR-008](docs/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008), `/kits` → **301** → `/shop?ckr_mode=pack`, `pack_ok`, stub retiré ([CONTRAT_URL_PACKS §12-13](docs/phase_2/CONTRAT_URL_PACKS.md)) ; (b) **Promotions** (v19.0.1.2.0) — A2 pricelist, `/promotions` → **301** → `/shop?ckr_mode=promo`, bandeau + état vide ([CONTRAT_URL_PROMOTIONS §12-13](docs/phase_2/CONTRAT_URL_PROMOTIONS.md)) ; (c) **Catégories** (v19.0.1.3.0) — **H1 variante cible native** : `/categories` → **301** → `/shop/category/<id>-<slug>` (sans `ckr_mode`, filtre 100 % `website_sale`, résolveur `product.public.category._ckr_get_explorer_entry_shop_path`, paramètre système optionnel — [CONTRAT_URL_CATEGORIES §12-13](docs/phase_2/CONTRAT_URL_CATEGORIES.md)). Patrons formalisés : H1 avec `ckr_mode` (Pack, Promo) ; H1 **sans** `ckr_mode` quand le standard expose déjà l’URL canonique (Catégories). **Suite** : **Origines** = **priorité** — porte à **dimension éditoriale** (navigation + mise en scène sur `/shop`, pas réduction à un tag seul — [SPEC_SHOP_PORTES §4.5](docs/phase_2/SPEC_SHOP_PORTES.md)) ; cadrage détaillé : **[CONTRAT_URL_ORIGINES.md](docs/phase_2/CONTRAT_URL_ORIGINES.md)** — **§13** : arbitrages métier **verrouillés** (multi + **OU**, signal **§3.1**, `/shop` sans hub v1, repli invalide, vide dédié, fiche produit) ; **§12** : résidu PV / impl (**A1↔A2**, URL, copy) avant dev — brouillon technique : [SPEC_IMPL_ORIGINES.md](docs/phase_2/SPEC_IMPL_ORIGINES.md). **Collections** = stub conservé mais **chantier gelé** (spec métier/URL/front **ultérieur** — [SPEC_SHOP_PORTES §4.2](docs/phase_2/SPEC_SHOP_PORTES.md)). Capitalisation : [CONTRAT_URL_PROMOTIONS §13.6](docs/phase_2/CONTRAT_URL_PROMOTIONS.md) ;
+- une **homepage** conforme au [wireframe](docs/direction/WIREFRAME_HOMEPAGE.md) (variante retail enrichie) et au [spec hero](docs/direction/SPEC_HERO_HOMEPAGE.md), avec bloc **Explorer** (5 portes au **pluriel**) : **Promotions**, **Kits**, **Catégories**, **Collections**, **Origines** — toutes convergeant à terme vers la boutique ([ADR-CKR-007](docs/direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-007)) ; **UI** (grille asymétrique MVP2 + visuels portes, module ≥ 19.0.1.8.2) — [WIREFRAME — Bloc 3](docs/direction/WIREFRAME_HOMEPAGE.md), [DECISION_EXPLORER_HOMEPAGE_MVP2](docs/mvp_02/DECISION_EXPLORER_HOMEPAGE_MVP2.md). **Trois portes déployées** : (a) **Kits** (v19.0.1.1.0) — bi-lexique [ADR-008](docs/direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008), `/kits` → **301** → `/shop?ckr_mode=pack`, `pack_ok`, stub retiré ([CONTRAT_URL_PACKS §12-13](docs/mvp_01/CONTRAT_URL_PACKS.md)) ; (b) **Promotions** (v19.0.1.2.0) — A2 pricelist, `/promotions` → **301** → `/shop?ckr_mode=promo`, bandeau + état vide ([CONTRAT_URL_PROMOTIONS §12-13](docs/mvp_01/CONTRAT_URL_PROMOTIONS.md)) ; (c) **Catégories** (v19.0.1.3.0) — **H1 variante cible native** : `/categories` → **301** → `/shop/category/<id>-<slug>` (sans `ckr_mode`, filtre 100 % `website_sale`, résolveur `product.public.category._ckr_get_explorer_entry_shop_path`, paramètre système optionnel — [CONTRAT_URL_CATEGORIES §12-13](docs/mvp_01/CONTRAT_URL_CATEGORIES.md)). Patrons formalisés : H1 avec `ckr_mode` (Pack, Promo) ; H1 **sans** `ckr_mode` quand le standard expose déjà l’URL canonique (Catégories). **Suite** : **Origines** = **priorité** — porte à **dimension éditoriale** (navigation + mise en scène sur `/shop`, pas réduction à un tag seul — [SPEC_SHOP_PORTES §4.5](docs/mvp_01/SPEC_SHOP_PORTES.md)) ; cadrage détaillé : **[CONTRAT_URL_ORIGINES.md](docs/mvp_01/CONTRAT_URL_ORIGINES.md)** — **§13** : arbitrages métier **verrouillés** (multi + **OU**, signal **§3.1**, `/shop` sans hub v1, repli invalide, vide dédié, fiche produit) ; **§12** : résidu PV / impl (**A1↔A2**, URL, copy) avant dev — brouillon technique : [SPEC_IMPL_ORIGINES.md](docs/mvp_01/SPEC_IMPL_ORIGINES.md). **Collections** = stub conservé mais **chantier gelé** (spec métier/URL/front **ultérieur** — [SPEC_SHOP_PORTES §4.2](docs/mvp_01/SPEC_SHOP_PORTES.md)). Capitalisation : [CONTRAT_URL_PROMOTIONS §13.6](docs/mvp_01/CONTRAT_URL_PROMOTIONS.md) ;
 - **cohérence visuelle** Direction A (terracotta / sauge / amber / off-white / charcoal ; Playfair Display + Inter) et **mobile** utilisable (drawer, grilles responsives).
 
 Principe directeur : **respect maximal d’Odoo 19 CE** — sur-mesure limité au front présentationnel ; pas de logique métier parallèle.
@@ -55,9 +85,9 @@ dorevia_ckreyol_marketplace/
 │   ├── layout/           header + footer
 │   ├── auth/             login « Mon compte »
 │   ├── portal/           habillage portail /my
-│   ├── pages/            homepage, stubs, scope boutique + fiche produit
-│   └── snippets/         blocs homepage (hero, Explorer, supplier, sélection, éditorial, trust)
-├── docs/                 cadrage, backlog 1bis, rapport phase 1, ADR, exploitation i18n
+│   ├── pages/            homepage, /privacy, /terms, contact, stubs, boutique, fiche produit
+│   └── snippets/         blocs homepage (hero, Explorer, supplier, sélection, éditorial, cercle, trust)
+├── docs/                 direction/ crea/ mvp_01/ (portes & URL) mvp_02/ (chantier homepage V2…) prompting/ assets/
 ├── hooks.py              menu Option B (post_init)
 └── static/src/
     ├── js/               drawer + menu compte
@@ -65,7 +95,19 @@ dorevia_ckreyol_marketplace/
     └── img/              hero + packshots (copies depuis docs/assets/)
 ```
 
-> **Suite logique** (hors périmètre du rapport Phase 1 clôturé) : panier `/shop/cart`, puis checkout — voir [rapport_phase_1.md — §6](docs/rapport_phase_1.md). **Doctrine homepage / portes catalogue** : [ADR-006 à 008](docs/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-006), [WIREFRAME homepage — Bloc 3](docs/WIREFRAME_HOMEPAGE.md), [STRUCTURE_MENU — §11](docs/STRUCTURE_MENU_PRINCIPAL.md). Polissage transversal : [BACKLOG_PHASE_1BIS_FRONT.md](docs/BACKLOG_PHASE_1BIS_FRONT.md). Polissage copy, assets définitifs et richesse catalogue restent pilotés côté métier.
+> **Suite logique** (hors périmètre du rapport Phase 1 clôturé) : panier `/shop/cart`, puis checkout — voir [rapport_phase_1.md — §6](docs/direction/rapport_phase_1.md). **Doctrine homepage / portes catalogue** : [ADR-006 à 008](docs/direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-006), [WIREFRAME homepage — Bloc 3](docs/direction/WIREFRAME_HOMEPAGE.md), [STRUCTURE_MENU — §11](docs/direction/STRUCTURE_MENU_PRINCIPAL.md). Polissage transversal : [BACKLOG_PHASE_1BIS_FRONT.md](docs/direction/BACKLOG_PHASE_1BIS_FRONT.md). Polissage copy, assets définitifs et richesse catalogue restent pilotés côté métier.
+
+### Pages légales, formulaire Cercle et tests (≥ 19.0.1.10.x)
+
+| URL | Rôle |
+|-----|------|
+| **`/privacy`** | Politique de confidentialité (RGPD) — `views/pages/ckr_privacy.xml`, `website.page` dans `data/website_pages_data.xml`. Liée depuis le bloc **Cercle** et depuis `/terms`. |
+| **`/terms`** | Mentions légales (éditeur), **hébergement** (coordonnées sur la page — bloc **OVH SAS** par défaut : **à remplacer** si l’hébergeur réel diffère), propriété intellectuelle, renvoi `/privacy`, **CGV** (`#cgv`) — `views/pages/ckr_terms.xml`. Footer : **Mentions légales** → `/terms`, **CGV** → `/terms#cgv`. |
+| **`POST /ckr/circle/subscribe`** | Inscription newsletter — `controllers/ckr_circle.py` (recordset `ckr.circle.subscriber`). Redirections `?cc_cir=1` (succès) / `cc_cir=0` (échec). |
+
+**Tests** : tag Odoo **`dorevia_ckr_circle`** — `tests/test_ckr_circle.py` (homepage avec bloc cercle, `GET /privacy`, `GET /terms`, `POST` inscription avec CSRF, modèle `ckr.circle.subscriber`). Exécution : `odoo … --test-tags=dorevia_ckr_circle`.
+
+**Documentation pilotage** : [docs/mvp_02/README.md](docs/mvp_02/README.md) (inscription / RGPD) ; complément recette [docs/crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](docs/crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) (§ post-recette correctifs).
 
 ### Configuration société (BAC-01 — prérequis ouverture)
 
@@ -85,7 +127,7 @@ Le **footer du site** lit la **`res.company`** rattachée au **site web** couran
 
 **Mise à jour** : les changements dans la fiche société sont visibles au **rechargement** du site. Un **`-u dorevia_ckreyol_marketplace`** n’est nécessaire que lorsque le **code** du module (vues, SCSS) change.
 
-**Cadrage orienté implémentation** : le projet attaque maintenant le **cadrage détaillé en vue de la mise en œuvre sur Odoo 19 Community Edition** (arbitrages métier, juridique, logistique, périmètre fonctionnel V1, lots de travail). Les documents de travail pour cette phase sont la **[note de cadrage Phase 1](docs/NOTE_DE_CADRAGE.md)**, le **[registre des décisions d’architecture (ADR)](docs/ARCHITECTURE_DECISION_RECORD.md)** (y compris **ADR-CKR-006 à 008** : homepage d’orientation, convergence `/shop`, cinq portes d’exploration catalogue), le **[cadrage design / front-end](docs/DESIGN.md)**, la **[structure cible du menu principal](docs/STRUCTURE_MENU_PRINCIPAL.md)**, le **[wireframe homepage Phase 1](docs/WIREFRAME_HOMEPAGE.md)** , la **[spec hero homepage](docs/SPEC_HERO_HOMEPAGE.md)**, le **[brief visuel hero Phase 1](docs/BRIEF_VISUEL_HERO_PHASE1.md)**, le **[brief développeur front Phase 1](docs/BRIEF_DEV.md)** et la **[charte graphique minimale Phase 1](docs/CHARTE_GRAPHIQUE_PHASE1.md)** et le **[brief synthétique direction artistique Phase 1](docs/BRIEF_SYNTHETIQUE_CK.md)** et les **[directions artistiques Phase 1](docs/DIRECTIONS_ARTISTIQUES_PHASE1.md)** (3 pistes + recommandation) — **ADR-CKR-001** (doctrine de construction Phase 1 sur Odoo 19 CE), **ADR-CKR-002** (seul le **front-end** est spécifique présumé légitime en Phase 1 ; le reste = standard et modules activables d’abord), **ADR-CKR-003** (**menu principal** et **footer** entièrement personnalisés en Phase 1 pour l’identité du canal), **ADR-CKR-004** (**achat-revente** : **C-Kreyol** vend au client final, **encaisse**, **achète** à **La Platine**) et **ADR-CKR-005** (**hub léger** à **Nantes**, **flux tendu**, **stock consigné** — détail juridique / Odoo à affiner dans la note §5.4). **Dossier Phase 2** (homepage, Explorer, plan portes) : **[docs/phase_2/README.md](docs/phase_2/README.md)**.
+**Cadrage orienté implémentation** : le projet attaque maintenant le **cadrage détaillé en vue de la mise en œuvre sur Odoo 19 Community Edition** (arbitrages métier, juridique, logistique, périmètre fonctionnel V1, lots de travail). Les documents de travail pour cette phase sont la **[note de cadrage Phase 1](docs/direction/NOTE_DE_CADRAGE.md)**, le **[registre des décisions d’architecture (ADR)](docs/direction/ARCHITECTURE_DECISION_RECORD.md)** (y compris **ADR-CKR-006 à 008** : homepage d’orientation, convergence `/shop`, cinq portes d’exploration catalogue), le **[cadrage design / front-end](docs/direction/DESIGN.md)**, la **[structure cible du menu principal](docs/direction/STRUCTURE_MENU_PRINCIPAL.md)**, le **[wireframe homepage Phase 1](docs/direction/WIREFRAME_HOMEPAGE.md)** , la **[spec hero homepage](docs/direction/SPEC_HERO_HOMEPAGE.md)**, le **[brief visuel hero Phase 1](docs/direction/BRIEF_VISUEL_HERO_PHASE1.md)**, le **[brief développeur front Phase 1](docs/direction/BRIEF_DEV.md)** et la **[charte graphique minimale Phase 1](docs/direction/CHARTE_GRAPHIQUE_PHASE1.md)** et le **[brief synthétique direction artistique Phase 1](docs/direction/BRIEF_SYNTHETIQUE_CK.md)** et les **[directions artistiques Phase 1](docs/direction/DIRECTIONS_ARTISTIQUES_PHASE1.md)** (3 pistes + recommandation) — **ADR-CKR-001** (doctrine de construction Phase 1 sur Odoo 19 CE), **ADR-CKR-002** (seul le **front-end** est spécifique présumé légitime en Phase 1 ; le reste = standard et modules activables d’abord), **ADR-CKR-003** (**menu principal** et **footer** entièrement personnalisés en Phase 1 pour l’identité du canal), **ADR-CKR-004** (**achat-revente** : **C-Kreyol** vend au client final, **encaisse**, **achète** à **La Platine**) et **ADR-CKR-005** (**hub léger** à **Nantes**, **flux tendu**, **stock consigné** — détail juridique / Odoo à affiner dans la note §5.4). **Dossier MVP 01** (contrats d’URL, specs portes catalogue, PV recette) : entrée **[SPEC_SHOP_PORTES.md](docs/mvp_01/SPEC_SHOP_PORTES.md)**.
 
 ---
 
@@ -221,7 +263,7 @@ Le code du projet **C-Kreyol** (canal e-commerce spécialisé, projet Dorevia) e
 
 | Phase | Contenu |
 |--------|---------|
-| **0 — Cadrage** | Ce README (intention, périmètre) + **[note de cadrage Phase 1](docs/NOTE_DE_CADRAGE.md)** : arbitrages et plan d’exécution **en vue de l’implémentation Odoo 19 CE**. |
+| **0 — Cadrage** | Ce README (intention, périmètre) + **[note de cadrage Phase 1](docs/direction/NOTE_DE_CADRAGE.md)** : arbitrages et plan d’exécution **en vue de l’implémentation Odoo 19 CE**. |
 | **1 — Fondations** | **Implémentation** : instance Odoo 19 CE, nom de domaine, module installable minimal, premier catalogue, moyens de paiement / livraison réels ou tests, et mise en ligne d’un premier flux commercial opérationnel avec **La Platine comme premier fournisseur**. |
 | **2 — Croissance** | Élargissement catalogue, acquisition, fidélisation, ajustements juridiques et logistiques, et éventuelle ouverture progressive à d’autres offreurs — détail hors scope de ce fichier. |
 
@@ -239,23 +281,25 @@ Le code du projet **C-Kreyol** (canal e-commerce spécialisé, projet Dorevia) e
 | *(présent)* | **Définition** : C-Kreyol = marque + canal spécialisé ; commercialisation **sans** obligation de porter tout le stock / toute la logistique ; **réseau de fournisseurs** (La Platine = premier). |
 | *(présent)* | **Hypothèse opératoire privilégiée** : fonctionnement **sans stock centralisé systématique** ; partenaires pour préparation / expédition ; C-Kreyol = marque, canal, expérience client, orchestration commerciale (à valider). |
 | *(présent)* | **Identité document** : titre **C-Kreyol — Canal e-commerce spécialisé** ; mention **Dorevia pour le projet** (remplace l’ancien intitulé « Dorevia C-Kreyol — Marketplace »). |
-| 2026-04-21 | **Cadrage → implémentation Odoo 19 CE** : entrée dans le cadrage détaillé ; renvoi explicite vers [`docs/NOTE_DE_CADRAGE.md`](docs/NOTE_DE_CADRAGE.md) ; phase 0 / 1 clarifiées dans le tableau des phases. |
+| 2026-04-21 | **Cadrage → implémentation Odoo 19 CE** : entrée dans le cadrage détaillé ; renvoi explicite vers [`docs/direction/NOTE_DE_CADRAGE.md`](docs/direction/NOTE_DE_CADRAGE.md) ; phase 0 / 1 clarifiées dans le tableau des phases. |
 | 2026-04-21 | **Localisation** : projet C-Kreyol **localisé à Nantes** (France) ; précision origine produits ≠ ancrage opérationnel. |
 | 2026-04-21 | **Nantes + import-export** : promesse de compétence logistique ; renvoi note §4.4 ; formulation enrichie dans le README. |
-| 2026-04-21 | **ADR** : création de [`docs/ARCHITECTURE_DECISION_RECORD.md`](docs/ARCHITECTURE_DECISION_RECORD.md) ; **ADR-CKR-001** = doctrine §3.5 (composition maîtrisée Odoo 19 CE) ; lien depuis la note et le README. |
+| 2026-04-21 | **ADR** : création de [`docs/direction/ARCHITECTURE_DECISION_RECORD.md`](docs/direction/ARCHITECTURE_DECISION_RECORD.md) ; **ADR-CKR-001** = doctrine §3.5 (composition maîtrisée Odoo 19 CE) ; lien depuis la note et le README. |
 | 2026-04-21 | **ADR-CKR-002** : spécifique Phase 1 = **front-end** par défaut ; métier / intégration = standard Odoo CE d’abord. |
 | 2026-04-21 | **ADR-CKR-003** : **menu principal** et **footer** du site — personnalisation entière requise en Phase 1 (identité C-Kreyol, hors rendu standard Odoo). |
 | 2026-04-21 | **Mobile** : expérience **navigateur** sur smartphone = **must have** V1 ; **app native** reste hors périmètre ; note §6.1 / §6.3 / §9.2 alignées. |
 | 2026-04-21 | **Note** : positionnement **retail digital** ; **B2B** intermédiaire à terme ; risque **sur-promesse** §12.2 ; critère succès **mobile** §13 ; **ADR-CKR-004** (*modèle opératoire Phase 1*, ébauche au registre). |
 | 2026-04-21 | **ADR-CKR-004** / **005** : **achat-revente** + **hub Nantes**, **flux tendu**, **stock consigné** ; note §4.4, §5.4, §11.3, §16 ; règle **métier d’abord** puis **Odoo** minimal acceptable. |
-| 2026-04-21 | **[`docs/DESIGN.md`](docs/DESIGN.md)** : cadrage **design / retail / front** (benchmarks, principes, zones de page, mobile, lien ADR). |
-| 2026-04-21 | **[`docs/STRUCTURE_MENU_PRINCIPAL.md`](docs/STRUCTURE_MENU_PRINCIPAL.md)** : menu principal Phase 1 (proposition 6 entrées, options A/B/C, mobile, ADR-003) ; lien depuis **DESIGN** §6. |
-| 2026-04-21 | **[`docs/WIREFRAME_HOMEPAGE.md`](docs/WIREFRAME_HOMEPAGE.md)** : structure homepage Phase 1 (8 blocs, variantes, décision alignée **Option B**) ; lien **DESIGN** §7. |
-| 2026-04-21 | **[`docs/SPEC_HERO_HOMEPAGE.md`](docs/SPEC_HERO_HOMEPAGE.md)** : cadrage hero (titre, sous-texte, CTA, visuel) ; lien wireframe **Bloc 2**. |
-| 2026-04-21 | **[`docs/CHARTE_GRAPHIQUE_PHASE1.md`](docs/CHARTE_GRAPHIQUE_PHASE1.md)** : charte **minimale** (palette, typo, logo, CTA) avant gel hero ; liens **DESIGN** §14, **SPEC_HERO**. |
+| 2026-04-21 | **[`docs/direction/DESIGN.md`](docs/direction/DESIGN.md)** : cadrage **design / retail / front** (benchmarks, principes, zones de page, mobile, lien ADR). |
+| 2026-04-21 | **[`docs/direction/STRUCTURE_MENU_PRINCIPAL.md`](docs/direction/STRUCTURE_MENU_PRINCIPAL.md)** : menu principal Phase 1 (proposition 6 entrées, options A/B/C, mobile, ADR-003) ; lien depuis **DESIGN** §6. |
+| 2026-04-21 | **[`docs/direction/WIREFRAME_HOMEPAGE.md`](docs/direction/WIREFRAME_HOMEPAGE.md)** : structure homepage Phase 1 (8 blocs, variantes, décision alignée **Option B**) ; lien **DESIGN** §7. |
+| 2026-04-21 | **[`docs/direction/SPEC_HERO_HOMEPAGE.md`](docs/direction/SPEC_HERO_HOMEPAGE.md)** : cadrage hero (titre, sous-texte, CTA, visuel) ; lien wireframe **Bloc 2**. |
+| 2026-04-21 | **[`docs/direction/CHARTE_GRAPHIQUE_PHASE1.md`](docs/direction/CHARTE_GRAPHIQUE_PHASE1.md)** : charte **minimale** (palette, typo, logo, CTA) avant gel hero ; liens **DESIGN** §14, **SPEC_HERO**. |
 | 2026-04-21 | **CHARTE** : **Direction A** gelée ; **§3** tableau + **§§4–11** ; **Playfair Display** + **Inter** ; états UI **à décliner**. |
-| 2026-04-21 | **[`docs/BRIEF_SYNTHETIQUE_CK.md`](docs/BRIEF_SYNTHETIQUE_CK.md)** : brief **direction artistique** Phase 1 (positionnement, inspirations, livrable 1–3 pistes) ; liens **CHARTE**, **DESIGN**, **SPEC_HERO**, ADR. |
-| 2026-04-21 | **[`docs/DIRECTIONS_ARTISTIQUES_PHASE1.md`](docs/DIRECTIONS_ARTISTIQUES_PHASE1.md)** : **3 directions** DA + **reco A** ; alimente **CHARTE** §3 ; liens **BRIEF**, **SPEC_HERO**, ADR. |
-| 2026-04-21 | **[`docs/BRIEF_VISUEL_HERO_PHASE1.md`](docs/BRIEF_VISUEL_HERO_PHASE1.md)** : brief **production visuelle** hero (livrables, hiérarchie marque, à éviter) ; liens **SPEC**, **CHARTE**, **WIREFRAME**. |
+| 2026-04-21 | **[`docs/direction/BRIEF_SYNTHETIQUE_CK.md`](docs/direction/BRIEF_SYNTHETIQUE_CK.md)** : brief **direction artistique** Phase 1 (positionnement, inspirations, livrable 1–3 pistes) ; liens **CHARTE**, **DESIGN**, **SPEC_HERO**, ADR. |
+| 2026-04-21 | **[`docs/direction/DIRECTIONS_ARTISTIQUES_PHASE1.md`](docs/direction/DIRECTIONS_ARTISTIQUES_PHASE1.md)** : **3 directions** DA + **reco A** ; alimente **CHARTE** §3 ; liens **BRIEF**, **SPEC_HERO**, ADR. |
+| 2026-04-21 | **[`docs/direction/BRIEF_VISUEL_HERO_PHASE1.md`](docs/direction/BRIEF_VISUEL_HERO_PHASE1.md)** : brief **production visuelle** hero (livrables, hiérarchie marque, à éviter) ; liens **SPEC**, **CHARTE**, **WIREFRAME**. |
 | 2026-04-21 | **README** : sous-section **Références visuelles homepage** ; inventaire `docs/assets/` (exemple produit, moodboard hero, **banque** 3 packshots) + liens **brief** 10.3 / **spec** / **charte** 7.2. |
-| 2026-04-21 | **[`docs/BRIEF_DEV.md`](docs/BRIEF_DEV.md)** : brief **développeur front** Phase 1 ; renvoi depuis la liste des documents de cadrage ci-dessus. |
+| 2026-04-21 | **[`docs/direction/BRIEF_DEV.md`](docs/direction/BRIEF_DEV.md)** : brief **développeur front** Phase 1 ; renvoi depuis la liste des documents de cadrage ci-dessus. |
+| 2026-04-24 | **Références MVP 02** : ajout `docs/assets/mvp02_reference_tropical_panier_fleurs_plage.png` (scène tropical / origines — inventaire tableau **Références visuelles MVP 02**). |
+| 2026-04-25 | **Pages légales & cercle** : section dédiée (tableau `/privacy`, `/terms`, POST cercle, tests `dorevia_ckr_circle`) ; arborescence `views/pages/` précisée ; alignement docs MVP02, PV inscription, backlog FTR-01, `prompt_dev` / `prompt_lancement_mvp21`. |
