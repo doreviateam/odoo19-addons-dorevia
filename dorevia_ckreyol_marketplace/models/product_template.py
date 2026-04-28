@@ -392,6 +392,45 @@ class ProductTemplate(models.Model):
             domain.append(("website_id", "in", [False, website.id]))
         return self.env["ckr.shop.origin"].sudo().search(domain)
 
+    def _ckr_get_product_origin_labels(self, website=None):
+        """Libellés d'origine pour la fiche produit (mode informatif MVP2.3).
+
+        Priorité :
+        1) profils `ckr.shop.origin` publiés (libellé visiteur),
+        2) repli sur les valeurs brutes de l'attribut catalogue Origine.
+        """
+        self.ensure_one()
+        profiles = self._ckr_get_origin_profiles(website=website)
+        if profiles:
+            labels = [(p.display_name_visitor or "").strip() for p in profiles]
+            return [lbl for lbl in labels if lbl]
+
+        attr = self._ckr_origin_attribute()
+        if not attr:
+            return []
+        line = self.attribute_line_ids.filtered(lambda l: l.attribute_id == attr)[:1]
+        if not line:
+            return []
+        vals = line.value_ids.sorted(key=lambda v: ((v.name or "").lower(), v.id))
+        return [(v.name or "").strip() for v in vals if (v.name or "").strip()]
+
+    def _ckr_get_product_specs_single_values(self):
+        """Valeurs simples pour `Spécifications`, sans l'attribut Origine.
+
+        L'origine est déjà rendue en haut de fiche dans un bloc éditorial.
+        On évite le doublon en bas.
+        """
+        self.ensure_one()
+        values = self.valid_product_template_attribute_line_ids._prepare_single_value_for_display()
+        origin_attr = self._ckr_origin_attribute()
+        if not origin_attr:
+            return values
+        return {
+            attribute: line_values
+            for attribute, line_values in (values or {}).items()
+            if attribute.id != origin_attr.id
+        }
+
     # ------------------------------------------------------------------
     # Helper fiche produit — porte Collections
     # (SPEC_IMPL_COLLECTIONS §10, CONTRAT §11 — MOA 2026-04-22)
@@ -427,6 +466,27 @@ class ProductTemplate(models.Model):
         # les collections au visiteur non authentifié sinon.
         collections = self.ckr_collection_ids.sudo()
         return collections.filtered(lambda c: c._ckr_is_visible(website=website))
+
+    def _ckr_get_product_promise_line(self):
+        """Retourne une phrase courte exploitable pour la fiche produit.
+
+        Source MVP2.3 : première ligne utile de ``description_sale``.
+        Garde-fou : si aucune source éditoriale propre n'est disponible,
+        le bloc doit rester masqué côté template (pas de génération artificielle).
+        """
+        self.ensure_one()
+        desc = html2plaintext(self.description_sale or "")
+        for raw in desc.splitlines():
+            line = (raw or "").strip()
+            if not line:
+                continue
+            # Évite de répéter le titre produit comme fausse "promesse".
+            if self._ckr_shop_tile_compact_text(line) == self._ckr_shop_tile_compact_text(self.name):
+                continue
+            if len(line) > 180:
+                line = line[:177].rstrip() + "..."
+            return line
+        return ""
 
     # ------------------------------------------------------------------
     # Homepage — sélection produits MVP2.1 (DECISION_PRODUITS_HOMEPAGE_MVP21)

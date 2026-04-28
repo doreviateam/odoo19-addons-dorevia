@@ -23,43 +23,49 @@
     </template>
 
     <!-- ========================================================== -->
-    <!-- Fiche produit : bloc « Origines »                          -->
+    <!-- Fiche produit : bloc « Origines » + promesse courte         -->
     <!--                                                            -->
-    <!-- SPEC_IMPL_ORIGINES.md §7 : visibilite simple des origines   -->
-    <!-- associees au produit (affichage de tous les libelles        -->
-    <!-- visiteur). Resolution via le helper                         -->
-    <!-- `product.template._ckr_get_origin_profiles(website)` qui   -->
-    <!-- intersecte les product.attribute.value du template avec    -->
-    <!-- les profils `ckr.shop.origin` publies.                      -->
+    <!-- MVP2.3 : origine non interactive sur la fiche produit.      -->
+    <!-- Les libelles d'origine restent informatifs (pas de lien),   -->
+    <!-- afin d'eviter toute confusion avec une option selectionnable. -->
     <!--                                                            -->
-    <!-- Rendu : liste a puces horizontale, chaque libelle cliquable -->
-    <!-- vers la grille boutique ``/shop?ckr_origin=<slug>`` (conteneur -->
-    <!-- unique ; pas de ``ckr_mode=origin`` pour une facette seule).   -->
+    <!-- Promesse courte : issue de description_sale via helper      -->
+    <!-- `_ckr_get_product_promise_line()`. Si aucune source propre  -->
+    <!-- n'est disponible, le bloc n'est pas rendu.                  -->
     <!-- ========================================================== -->
 
     <template id="ckr_product_origins_block"
-              inherit_id="website_sale.product"
+              inherit_id="website_sale.product_title"
               name="C-Kreyol: fiche produit - bloc Origines"
               priority="31">
-        <xpath expr="//div[@id='product_details']" position="inside">
+        <xpath expr="//h1" position="before">
             <t t-set="ckr_product_tmpl"
                t-value="product.product_tmpl_id if product._name == 'product.product' else product"/>
-            <t t-set="ckr_origins"
-               t-value="ckr_product_tmpl._ckr_get_origin_profiles(website=website)"/>
-            <section t-if="ckr_origins"
+            <t t-set="ckr_origin_labels"
+               t-value="ckr_product_tmpl._ckr_get_product_origin_labels(website=website)"/>
+            <section t-if="ckr_origin_labels"
                      class="ckr-product-origins"
                      aria-label="Origines du produit">
                 <span class="ckr-product-origins__label">Origines :</span>
                 <ul class="ckr-product-origins__list">
-                    <li t-foreach="ckr_origins"
-                        t-as="ckr_origin"
+                    <li t-foreach="ckr_origin_labels"
+                        t-as="ckr_origin_label"
                         class="ckr-product-origins__item">
-                        <a t-att-href="'/shop?ckr_origin=%s' % ckr_origin.slug"
-                           class="ckr-product-origins__link"
-                           t-esc="ckr_origin.display_name_visitor"/>
+                        <span class="ckr-product-origins__value"
+                              t-esc="ckr_origin_label"/>
                     </li>
                 </ul>
             </section>
+        </xpath>
+        <xpath expr="//h1" position="after">
+            <t t-set="ckr_product_tmpl_promise"
+               t-value="product.product_tmpl_id if product._name == 'product.product' else product"/>
+            <t t-set="ckr_promise_line"
+               t-value="ckr_product_tmpl_promise._ckr_get_product_promise_line()"/>
+            <p t-if="ckr_promise_line" class="ckr-product-promise" t-esc="ckr_promise_line"/>
+        </xpath>
+        <xpath expr="//div[@t-field='product.description_ecommerce']" position="attributes">
+            <attribute name="class" add="d-none ckr-product-desc-inline-hidden" separator=" "/>
         </xpath>
     </template>
 
@@ -106,6 +112,37 @@
                     </li>
                 </ul>
             </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Variantes fiche produit : exclure l'attribut "Origine"     -->
+    <!--                                                            -->
+    <!-- MVP2.3 : l'origine reste informative (bloc dédié),         -->
+    <!-- jamais un choix interactif de variante sur la fiche.       -->
+    <!-- ========================================================== -->
+    <template id="ckr_product_variants_hide_origin_attribute"
+              inherit_id="website_sale.variants"
+              name="C-Kreyol: variantes fiche produit - masquer Origine"
+              priority="33">
+        <xpath expr="//t[@t-foreach='product.valid_product_template_attribute_line_ids']"
+               position="attributes">
+            <attribute name="t-if">ptal.attribute_id.id != request.env.ref('dorevia_ckreyol_marketplace.ckr_product_attribute_origin').id</attribute>
+        </xpath>
+    </template>
+
+    <template id="ckr_product_reassurance_block"
+              inherit_id="website_sale.product_terms_and_conditions"
+              name="C-Kreyol: fiche produit - bloc réassurance structuré"
+              priority="34">
+        <xpath expr="//small" position="replace">
+            <div class="ckr-product-reassurance" aria-label="Réassurance achat">
+                <a href="/terms" class="ckr-product-reassurance__link o_translate_inline">Achat en confiance</a>
+                <ul class="ckr-product-reassurance__list">
+                    <li>Garantie satisfait ou remboursé 30 jours</li>
+                    <li>Livraison : 2-3 jours ouvrables</li>
+                </ul>
+            </div>
         </xpath>
     </template>
 

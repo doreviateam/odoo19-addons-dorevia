@@ -290,6 +290,7 @@ class TestCkrOriginPVHttp(HttpCase):
                 "type": "consu",
                 "sale_ok": True,
                 "website_published": True,
+                "description_sale": "Galettes de manioc croustillantes, fabriquées en Guadeloupe.",
                 "attribute_line_ids": [
                     (
                         0,
@@ -473,15 +474,32 @@ class TestCkrOriginPVHttp(HttpCase):
         self.assertEqual(origins, ["guadeloupe", "martinique"])
 
     def test_pv_rc12_product_page_origins_links(self):
-        """RC-12 : bloc origines + liens ``/shop?ckr_origin=`` (facette seule)."""
+        """RC-12 : bloc origines informatif (non interactif) sur la fiche produit."""
         url = self.product_multi.website_url
         self.assertTrue(url.startswith("/"))
         resp = self.url_open(url, timeout=60)
         self.assertEqual(resp.status_code, 200)
         text = resp.text
         self.assertIn("ckr-product-origins", text)
-        self.assertIn("/shop?ckr_origin=guadeloupe", text)
-        self.assertIn("/shop?ckr_origin=martinique", text)
+        self.assertIn("ckr-product-origins__value", text)
+        self.assertIn("Guadeloupe", text)
+        self.assertIn("Martinique", text)
+        self.assertNotIn("ckr-product-origins__link", text)
+
+    def test_pv_rc12b_product_page_promise_line_fallback(self):
+        """MVP2.3 : promesse affichée si source propre, sinon bloc masqué."""
+        url_g = self.product_g.website_url
+        resp_g = self.url_open(url_g, timeout=60)
+        self.assertEqual(resp_g.status_code, 200)
+        text_g = resp_g.text
+        self.assertIn("ckr-product-promise", text_g)
+        self.assertIn("Galettes de manioc croustillantes", text_g)
+
+        url_m = self.product_m.website_url
+        resp_m = self.url_open(url_m, timeout=60)
+        self.assertEqual(resp_m.status_code, 200)
+        text_m = resp_m.text
+        self.assertNotIn("ckr-product-promise", text_m)
 
     def test_pv_rc13_regression_other_gates(self):
         """RC-13 : alias Kits / Promotions / Catégories / shop nu inchangés (301/200)."""

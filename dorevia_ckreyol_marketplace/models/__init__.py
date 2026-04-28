@@ -5,4 +5,5 @@ from . import ckr_shop_origin
 from . import product_pricelist
 from . import product_public_category
 from . import product_template
+from . import product_template_attribute_line
 from . import website

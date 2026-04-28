@@ -105,6 +105,55 @@
             margin-bottom: $ckr-space-sm;
         }
 
+        .ckr-product-origins {
+            margin-bottom: $ckr-space-xs;
+            font-family: $ckr-font-sans;
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: $ckr-text-muted;
+
+            .ckr-product-origins__label {
+                font-weight: $ckr-weight-semibold;
+                margin-right: $ckr-space-xs;
+            }
+
+            .ckr-product-origins__list {
+                display: inline-flex;
+                flex-wrap: wrap;
+                gap: $ckr-space-xs;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            .ckr-product-origins__item {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ckr-product-origins__value {
+                display: inline-block;
+                padding: 0.08rem 0.42rem;
+                border: 1px solid $ckr-border;
+                border-radius: $ckr-radius-sm;
+                color: $ckr-text;
+                background: $ckr-bg-soft;
+                text-transform: none;
+                letter-spacing: 0;
+                font-size: 0.78rem;
+                font-weight: $ckr-weight-medium;
+            }
+        }
+
+        .ckr-product-promise {
+            margin: 0 0 $ckr-space-md 0;
+            font-family: $ckr-font-sans;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: $ckr-text-muted;
+        }
+
         // Description e-commerce (snippet sous le titre)
         .oe_structure.text-muted,
         .oe_structure.mb-3 {
@@ -113,6 +162,16 @@
             line-height: 1.55;
             color: $ckr-text-muted !important;
             margin-bottom: $ckr-space-md;
+        }
+    }
+
+    .ckr-product-short-desc {
+        .oe_structure.text-muted {
+            margin-bottom: 0;
+            font-family: $ckr-font-sans;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: $ckr-text-muted !important;
         }
     }
 
@@ -422,6 +481,10 @@
             font-size: 0.9rem;
             line-height: 1.55;
             color: $ckr-text-muted;
+
+            &:empty {
+                display: none;
+            }
         }
     }
 
@@ -645,6 +708,30 @@
                 color: $ckr-primary-dark;
                 outline: none;
             }
+        }
+    }
+
+    .ckr-product-reassurance {
+        margin-top: $ckr-space-xs;
+        padding: $ckr-space-sm $ckr-space-md;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-md;
+        background: rgba(217, 208, 186, 0.16);
+        font-family: $ckr-font-sans;
+
+        .ckr-product-reassurance__link {
+            font-size: 0.8rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-primary;
+            text-decoration: none;
+        }
+
+        .ckr-product-reassurance__list {
+            margin: $ckr-space-xs 0 0 0;
+            padding-left: 1rem;
+            color: $ckr-text-muted;
+            font-size: 0.82rem;
+            line-height: 1.45;
         }
     }
 
