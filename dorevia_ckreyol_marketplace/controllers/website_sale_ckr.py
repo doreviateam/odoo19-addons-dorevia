@@ -851,10 +851,17 @@ class WebsiteSaleCKR(WebsiteSale):
         On recalcule donc **systématiquement** min/max catalogue depuis
         ``_get_shop_domain`` (liste produits alignée avec la grille), puis on
         redéfinit ``min_price`` / ``max_price`` affichés si absents de la query.
+
+        Second repli : lorsque ``list_price`` est nul part (prix porté par la
+        liste de prix seulement, cas fréquent), ``MIN/MAX(list_price)`` ramène
+        ``0`` ; on aligne alors la plage sur ``price_reduce`` comme la grille
+        via ``_get_sales_prices``.
         """
         current = values or {}
         category = current.get("category")
-        attrib_values = current.get("attrib_values") or []
+        attrib_values = current.get("attrib_values")
+        if attrib_values is None:
+            attrib_values = {}
         search = (
             (kwargs or {}).get("search")
             or current.get("original_search")
@@ -862,7 +869,8 @@ class WebsiteSaleCKR(WebsiteSale):
             or ""
         )
 
-        company_currency = request.website.company_id.sudo().currency_id
+        website = request.website
+        company_currency = website.company_id.sudo().currency_id
         conversion_rate = request.env["res.currency"]._get_conversion_rate(
             company_currency,
             request.website.currency_id,
@@ -881,6 +889,23 @@ class WebsiteSaleCKR(WebsiteSale):
             )
         )
         available_min_price, available_max_price = request.env.execute_query(sql)[0]
+        if (
+            website
+            and available_max_price is not None
+            and float(available_max_price) <= 0.0
+        ):
+            scanned = Product.search(domain)
+            if scanned:
+                by_tmpl = scanned._get_sales_prices(website)
+                shown = [
+                    float(entry["price_reduce"])
+                    for entry in by_tmpl.values()
+                    if isinstance(entry, dict)
+                    and entry.get("price_reduce") is not None
+                ]
+                if shown:
+                    available_min_price = min(shown)
+                    available_max_price = max(shown)
 
         min_price = (
             (kwargs or {}).get("min_price")
