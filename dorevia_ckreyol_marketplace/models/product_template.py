@@ -33,14 +33,34 @@ synchronisé avec ``attribute_line_ids`` — évite de chercher l'onglet
 import re
 
 from odoo import api, fields, models
-from odoo.fields import Command
+from odoo.fields import Command, Domain
 from odoo.http import request
-from odoo.tools import html2plaintext
+from odoo.tools import float_compare, html2plaintext
 
 
 # Sentinel : ``id = 0`` est la manière canonique Odoo de forcer
 # « aucun résultat » dans un domaine sans déclencher d'exception.
 _CKR_EMPTY_DOMAIN = [("id", "=", 0)]
+
+
+def _ckr_strip_list_price_constraints(base_domain_fragments):
+    """Retire les feuilles ``list_price`` du domaine recherche boutique.
+
+    Odoo filtre alors sur ``list_price`` ; sur config. pricelist + ``list_price`` nul
+    en base, la grille reflète pourtant ``price_reduce``. On remplace par un filtre
+    sur ces montants lorsque ``request`` est disponible.
+    """
+    return [
+        clause
+        for clause in base_domain_fragments
+        if not (
+            isinstance(clause, (list, tuple))
+            and len(clause) == 3
+            and clause[0] == "list_price"
+            and clause[1] in (">=", "<=")
+        )
+    ]
+
 
 # Libellés e-commerce trop génériques — exclus de la ligne méta tuile /shop (Lot 1 carte CK).
 _CKR_SHOP_TILE_META_WEAK_NAMES = frozenset(
@@ -272,8 +292,62 @@ class ProductTemplate(models.Model):
             else:
                 base_domain.append(_CKR_EMPTY_DOMAIN)
 
-        detail["base_domain"] = base_domain
+        detail["base_domain"] = (
+            self._ckr_substitute_shop_price_reduce_filter(domain=base_domain, website=website, options=options)
+        )
         return detail
+
+    # ------------------------------------------------------------------
+
+    def _ckr_substitute_shop_price_reduce_filter(self, *, domain, website, options):
+        """Aligne la recherche sur le même prix boutique que les tuiles (pricelist)."""
+        if not request:
+            return domain
+
+        min_p = float(options.get("min_price") or 0.0)
+        max_p = float(options.get("max_price") or 0.0)
+        # Même seuil truthy que le standard : pas de recherche prix si tout à 0.
+        if min_p <= 0.0 and max_p <= 0.0:
+            return domain
+
+        fragments = list(domain or [])
+        stripped = _ckr_strip_list_price_constraints(fragments)
+        if not stripped:
+            return fragments
+
+        try:
+            combined = Domain(stripped[0])
+            for part in stripped[1:]:
+                combined &= Domain(part)
+        except (TypeError, ValueError):
+            return domain
+
+        Product = self.with_context(bin_size=True)
+        candidates = Product.search(combined)
+        if not candidates:
+            return [_CKR_EMPTY_DOMAIN]
+
+        by_tmpl = candidates._get_sales_prices(website)
+        round_cur = website.currency_id.rounding or 0.01
+        keep_ids = []
+        for tmpl in candidates:
+            entry = by_tmpl.get(tmpl.id)
+            if not isinstance(entry, dict):
+                continue
+            pr = entry.get("price_reduce")
+            if pr is None:
+                continue
+            amount = float(pr)
+            if min_p > 0.0:
+                if float_compare(amount, min_p, precision_rounding=round_cur) < 0:
+                    continue
+            if max_p > 0.0:
+                if float_compare(amount, max_p, precision_rounding=round_cur) > 0:
+                    continue
+            keep_ids.append(tmpl.id)
+
+        stripped.append([("id", "in", keep_ids)] if keep_ids else _CKR_EMPTY_DOMAIN)
+        return stripped
 
     # ------------------------------------------------------------------
     # Helper fiche produit (SPEC_IMPL §7)
