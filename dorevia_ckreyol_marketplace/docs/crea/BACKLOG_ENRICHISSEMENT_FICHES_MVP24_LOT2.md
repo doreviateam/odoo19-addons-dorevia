@@ -83,9 +83,12 @@ Critères de priorité :
 
 | ID fiche | Nom produit | Niveau actuel (pauvre/moyenne/riche) | Priorité (P1/P2/P3) | Contenu manquant | Média manquant | Reco manquante | Lot cible | Responsable | Échéance | Statut |
 |---------|-------------|----------------------------------------|---------------------|------------------|----------------|----------------|----------|-------------|---------|--------|
-|  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |
+| 2 | Manio Crackers sucrée | pauvre | P1 | website_description, bénéfices/usages, ingrédients, conservation, conseils | détail/texture, usage, origine/ambiance | alternatives/optionnels non renseignés | Vague A | Contenu + Merch | S+1 | À lancer |
+| 7 | Kit colombo | pauvre | P1 | promesse courte, description utile, sections basses complètes | packshot à valider + médias complémentaires | alternatives/optionnels non renseignés | Vague A | Contenu + Merch | S+1 | À lancer |
+| 33 | Crêpes | pauvre | P2 | promesse, description utile, sections basses | packshot + détail + usage | alternatives/optionnels non renseignés | Vague A | Contenu + Merch | S+2 | À qualifier |
+| 34 | Bière | pauvre | P2 | promesse, description utile, sections basses | packshot + détail + usage | alternatives/optionnels non renseignés | Vague A | Contenu + Merch | S+2 | À qualifier |
+| 35 | Sucre de canne | pauvre | P2 | promesse, description utile, sections basses | packshot + détail + usage | alternatives/optionnels non renseignés | Vague A | Contenu + Merch | S+2 | À qualifier |
+| 36 | Chips | pauvre | P2 | promesse, description utile, sections basses | packshot + détail + usage | alternatives/optionnels non renseignés | Vague A | Contenu + Merch | S+2 | À qualifier |
 
 ---
 
@@ -133,3 +136,4 @@ Quand une donnée manque :
 | Date | Changement |
 |------|------------|
 | 2026-04-28 | Création du backlog d’enrichissement Lot 2 MVP2.4 (segmentation pauvre/moyenne/riche, priorisation progressive). |
+| 2026-04-28 | Pré-remplissage du backlog à partir de l’audit `tenant_o7` (6 fiches publiées classées en pauvres, priorisées Vague A). |
