@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Tests — chantier SELECTION-PRODUITS-HOMEPAGE-MVP21 (grille 4 produits)."""
+import re
+
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase, TransactionCase
 
@@ -45,8 +47,6 @@ class TestCkrSelectionHomepageMvp21(HttpCase):
                 "ckr_homepage_featured_4": self.products[3].id,
             }
         )
-        # Requis pour que l’HTTP d’`url_open` voie le site (HttpCase).
-        self.env.cr.commit()
 
     def _get_homepage_html(self):
         resp = self.url_open("/", timeout=60)
@@ -73,7 +73,8 @@ class TestCkrSelectionHomepageMvp21(HttpCase):
         # Regression V1 : plus de visuels packshot statiques sur ce bloc.
         self.assertNotIn("packshot_maniocookies.png", chunk)
         self.assertNotIn("Voir en boutique", chunk)
-        n_cards = chunk.count("ckr-selection__card")
+        # Ne pas utiliser substring : ckr-selection__card__* contient aussi « ckr-selection__card » (24 faux positifs pour 4 cartes).
+        n_cards = len(re.findall(r'class\s*=\s*"ckr-selection__card"', chunk))
         self.assertEqual(n_cards, 4, "Quatre liens-carte produit attendus.")
 
     def test_rc_selection_not_add_to_cart_in_card(self):

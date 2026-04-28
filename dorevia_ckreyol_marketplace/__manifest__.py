@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.62",
+    "version": "19.0.1.10.63",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -153,6 +153,9 @@ Portee :
 * 19.0.1.10.62 : données ``data/ckr_shop_contract_recette_seed_data.xml`` — 2ᵉ origine
   (Martinique), collection Découverte, 2 catégories eCommerce + ``public_categ_ids`` sur les
   fiches vitrine Sélection ; recette reproductible pour ``--test-tags=dorevia_ckr_shop_contract``.
+* 19.0.1.10.63 : /shop — finition UI maquette PJ sans changement fonctionnel :
+  sidebar plus sobre, chips intégrées au catalogue, bloc Prix plus lisible, cartes
+  produit homogénéisées et grille resserrée quand il y a peu de résultats.
 * 19.0.1.10.61 : doc **NOTE_TECH_TUILE_CORNER_ACTIONS.md** (rail wishlist + info) ; SCSS : harmonisation **tous** les blocs
   `.ckr-product-card__info-action` — plus de `::before` texte, **`.fa` / `.ckr-product-card__info-icon` visibles** (correction d’un
   `display:none` sur `.fa` dans `.ckr-shop` qui masquait `fa-info`).

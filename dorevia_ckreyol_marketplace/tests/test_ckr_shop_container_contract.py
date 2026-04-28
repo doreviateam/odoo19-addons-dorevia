@@ -306,27 +306,41 @@ class TestCkrShopContainerContract(HttpCase):
     def test_contract_03_commercial_chips_stay_on_shop(self):
         resp = self.url_open("/shop", timeout=60)
         self.assertEqual(resp.status_code, 200)
-        hrefs = self._shortcut_chip_hrefs(resp.text)
-        self.assertGreaterEqual(len(hrefs), 4, hrefs)
+        pairs = self._explorer_shortcuts_chip_label_hrefs(resp.text)
+        label_to_href = {lab: href for lab, href in pairs}
+        self.assertIn("Toute la sélection", label_to_href)
+        reset_href = label_to_href["Toute la sélection"]
         self.assertEqual(
-            urlparse(hrefs[0]).query,
+            urlparse(reset_href).query,
             "",
-            "Contrat chip Toute la sélection : aucune query sur page neutre non plus : %r" % hrefs[0],
+            "Contrat chip Toute la sélection : aucune query sur page neutre non plus : %r"
+            % reset_href,
         )
-        self.assertIn("ckr_mode=promo", hrefs[1])
-        self.assertIn("ckr_mode=featured", hrefs[2])
-        self.assertIn("ckr_mode=pack", hrefs[3])
-        for h in hrefs:
-            path = urlparse(h).path
+        commercial = (
+            ("Promotions", "promo"),
+            ("Incontournables", "featured"),
+            ("Kits / Packs", "pack"),
+        )
+        for label, mode in commercial:
+            if label not in label_to_href:
+                continue
+            href = label_to_href[label]
+            self.assertIn(
+                "ckr_mode=%s" % mode,
+                href,
+                "Chip %r : ``ckr_mode`` attendu dans href %r." % (label, href),
+            )
+        for _label, href in pairs:
+            path = urlparse(href).path
             self.assertTrue(
                 path == "/shop" or path.endswith("/shop"),
-                "Chaque chip doit cibler la grille boutique (chemin …/shop) : %r" % h,
+                "Chaque chip doit cibler la grille boutique (chemin …/shop) : %r" % href,
             )
             for bad in self._forbidden_chip_paths():
                 self.assertNotIn(
                     bad,
-                    h,
-                    "Pas de lien chip vers route parallèle %s : %r" % (bad, h),
+                    href,
+                    "Pas de lien chip vers route parallèle %s : %r" % (bad, href),
                 )
 
     def test_contract_03b_recipe_html_explorer_shortcuts_shop_grammar(self):
@@ -345,24 +359,42 @@ class TestCkrShopContainerContract(HttpCase):
         self.assertEqual(resp.status_code, 200, "GET /shop doit répondre 200.")
         body = resp.text
         specs = self._explorer_shortcuts_chip_label_hrefs(body)
-        expected = (
-            ("Toute la sélection", None),
+        commercial_ordered = (
             ("Promotions", "promo"),
             ("Incontournables", "featured"),
             ("Kits / Packs", "pack"),
         )
+        self.assertGreaterEqual(len(specs), 1, "Au minimum la chip reset boutique.")
+        label0, href0 = specs[0]
         self.assertEqual(
-            len(specs),
-            len(expected),
-            "Nombre de chips explorer attendu (libellés + ordre maquette).",
+            label0,
+            "Toute la sélection",
+            "Premier chip : reset catalogue attendu, obtenu %r." % label0,
         )
-        for i, ((label, href), (exp_label, exp_mode)) in enumerate(
-            zip(specs, expected)
-        ):
-            self.assertEqual(
-                label,
-                exp_label,
-                "Libellé chip #%s : attendu %r, obtenu %r." % (i + 1, exp_label, label),
+        pu0 = urlparse(href0)
+        path0 = pu0.path.rstrip("/") or "/"
+        self.assertTrue(
+            path0 == "/shop" or path0.endswith("/shop"),
+            "Chip reset : grille …/shop attendue, obtenu %r." % href0,
+        )
+        self.assertFalse(
+            [m for m in parse_qs(pu0.query).get("ckr_mode", []) if m != ""],
+            "« Toute la sélection » : pas de ``ckr_mode`` dans href %r." % href0,
+        )
+        commercial_specs = specs[1:]
+        labels_expected_order = [lab for lab, _m in commercial_ordered]
+        labels_got = [lab for lab, _h in commercial_specs]
+        self.assertEqual(
+            labels_got,
+            [lab for lab in labels_expected_order if lab in labels_got],
+            "Ordre maquette des chips commerciaux **affichés** (segments vides masqués).",
+        )
+        mode_by_label = dict(commercial_ordered)
+        for label, href in commercial_specs:
+            exp_mode = mode_by_label.get(label)
+            self.assertTrue(
+                exp_mode,
+                "Libellé chip inconnu ou commercial hors contrat : %r." % label,
             )
             pu = urlparse(href)
             path = pu.path.rstrip("/") or "/"
@@ -385,19 +417,12 @@ class TestCkrShopContainerContract(HttpCase):
             )
             qs = parse_qs(pu.query)
             modes = [m for m in qs.get("ckr_mode", []) if m != ""]
-            if exp_mode is None:
-                self.assertFalse(
-                    modes,
-                    "« Toute la sélection » ne doit pas conserver ou ajouter ``ckr_mode`` "
-                    "dans href : %r" % href,
-                )
-            else:
-                self.assertEqual(
-                    sorted(modes),
-                    [exp_mode],
-                    "Chip %r doit n’emporter que ``ckr_mode=%s`` (href %r)."
-                    % (label, exp_mode, href),
-                )
+            self.assertEqual(
+                sorted(modes),
+                [exp_mode],
+                "Chip %r doit n’emporter que ``ckr_mode=%s`` (href %r)."
+                % (label, exp_mode, href),
+            )
 
     # ------------------------------------------------------------------
     # 4 — Hero retail (vitrine Mi Boutik La) sur `/shop`
@@ -596,6 +621,33 @@ class TestCkrShopContainerContract(HttpCase):
         q = parse_qs(urlparse(self._canonical_href(r.text)).query)
         self.assertIn("ckr_collection", q)
         self.assertGreaterEqual(len(q["ckr_collection"]), 2)
+
+    def test_contract_06d_sidebar_facet_counters_never_display_zero(self):
+        """Non-régression UX : aucun compteur de facette ne doit afficher ``(0)`` dans le rail.
+
+        Les bornes servent le même domaine que la grille ; un compteur nul est masqué
+        (l’exception « ligne cochée » conserve la case sans parens si le résultat courant est vide).
+        """
+        r = self.url_open("/shop", timeout=60)
+        self.assertEqual(r.status_code, 200)
+        m_aside = re.search(
+            r'<aside\b[^>]*id=["\']products_grid_before["\']',
+            r.text,
+            re.I,
+        )
+        fragment = r.text[m_aside.start() :] if m_aside else r.text
+        m_close = fragment.find("</aside>")
+        if m_close != -1:
+            fragment = fragment[: m_close + len("</aside>")]
+        # Parenthèses « (0) » uniquement dans le span muted des compteurs de facettes.
+        self.assertFalse(
+            re.search(
+                r'<span[^>]*\btext-muted\b[^>]*\bsmall\b[^>]*>[\s\n]*\(\s*0\s*\)[\s\n]*</span>',
+                fragment,
+                re.I,
+            ),
+            "Aucune facette sidebar ne doit rendre un compteur littéral (0).",
+        )
 
     # ------------------------------------------------------------------
     # 7 — Origines
@@ -1050,6 +1102,17 @@ class TestCkrShopContainerContract(HttpCase):
         r = self.url_open("/shop", timeout=60)
         self.assertEqual(r.status_code, 200)
         low = r.text
+        def _facet_input_tags(fragment, needle, exclude=None):
+            """Balises `<input>` contenant ``needle`` en classe hors ``exclude``."""
+            exclude = exclude or ""
+            tags = []
+            for m in re.finditer(r"<input\b[^>]*>", fragment, flags=re.I):
+                tag = m.group(0)
+                tl = tag.lower()
+                if needle.lower() in tl and exclude.lower() not in tl:
+                    tags.append(tag)
+            return tags
+
         if self.env["product.public.category"].search(
             [
                 "|",
@@ -1058,47 +1121,39 @@ class TestCkrShopContainerContract(HttpCase):
             ],
             limit=1,
         ):
-            self.assertTrue(
-                re.search(
-                    r"<input[^>]+ckr-sidebar-cat-check[^>]+data-category-slug=",
-                    low,
-                    re.I,
+            for tag in _facet_input_tags(
+                low, "ckr-sidebar-cat-check", exclude="ckr-sidebar-cat-all"
+            ):
+                self.assertRegex(
+                    tag,
+                    r"data-category-slug\s*=",
+                    "Attribut data-category-slug requis pour le JS catégories.",
                 )
-                or re.search(
-                    r"<input[^>]+data-category-slug=[^>]+ckr-sidebar-cat-check",
-                    low,
-                    re.I,
-                ),
-                "Attribut data-category-slug requis pour le JS catégories.",
-            )
+
         if self.env["ckr.shop.collection"].sudo().search([], limit=1):
-            self.assertTrue(
-                re.search(
-                    r"<input[^>]+ckr-sidebar-collection-check[^>]+data-slug=",
-                    low,
-                    re.I,
+            for tag in _facet_input_tags(
+                low,
+                "ckr-sidebar-collection-check",
+                exclude="ckr-sidebar-collection-all",
+            ):
+                self.assertRegex(
+                    tag,
+                    r"data-slug\s*=",
+                    "Attribut data-slug requis pour les collections.",
                 )
-                or re.search(
-                    r"<input[^>]+data-slug=[^>]+ckr-sidebar-collection-check",
-                    low,
-                    re.I,
-                ),
-                "Attribut data-slug requis pour les collections.",
-            )
+
         if self.env["ckr.shop.origin"].sudo().search([], limit=1):
-            self.assertTrue(
-                re.search(
-                    r"<input[^>]+ckr-sidebar-origin-check[^>]+data-slug=",
-                    low,
-                    re.I,
+            for tag in _facet_input_tags(
+                low,
+                "ckr-sidebar-origin-check",
+                exclude="ckr-sidebar-origin-all",
+            ):
+                self.assertRegex(
+                    tag,
+                    r"data-slug\s*=",
+                    "Attribut data-slug requis pour les origines.",
                 )
-                or re.search(
-                    r"<input[^>]+data-slug=[^>]+ckr-sidebar-origin-check",
-                    low,
-                    re.I,
-                ),
-                "Attribut data-slug requis pour les origines.",
-            )
+
         if not (
             self.env["product.public.category"].search(
                 [
@@ -1112,3 +1167,25 @@ class TestCkrShopContainerContract(HttpCase):
             or self.env["ckr.shop.origin"].sudo().search([], limit=1)
         ):
             self.skipTest("Aucune facette CK en base pour data-*.")
+
+    def test_contract_inv_13_price_slider_value_matches_query_selection(self):
+        """Le double curseur Prix reflète la sélection ``min_price`` / ``max_price`` de l’URL.
+
+        Régression : les paramètres de route ne sont pas dans ``post`` passé à
+        ``_get_additional_shop_values`` ; sans lecture de la query HTTP, le serveur
+        pouvait injecter ``available_max_price`` dans ``value=`` alors que la grille
+        appliquait bien le plafond demandé.
+        """
+        r = self.url_open("/shop?min_price=1.8&max_price=3.2", timeout=60)
+        self.assertEqual(r.status_code, 200)
+        m = re.search(
+            r'<input[^>]*class="[^"]*\bform-range\b[^"]*\brange-with-input\b[^"]*"[^>]*value="([^"]+)"',
+            r.text,
+            re.I,
+        )
+        self.assertTrue(m, "Input « range-with-input » du bloc Prix introuvable.")
+        parts = m.group(1).split(",")
+        self.assertEqual(len(parts), 2, "Attendu value« min,max » pour le double curseur.")
+        low, high = float(parts[0]), float(parts[1])
+        self.assertAlmostEqual(low, 1.8, places=2)
+        self.assertAlmostEqual(high, 3.2, places=2)

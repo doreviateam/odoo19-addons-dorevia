@@ -79,6 +79,15 @@ class CkrCircleSubscriber(models.Model):
         for vals in vals_list:
             if vals.get("email"):
                 vals["email"] = _ckr_circle_normalize_email(vals["email"])
+            wid = vals.get("website_id")
+            if vals.get("email") and wid:
+                if self.search_count(
+                    [("email", "=", vals["email"]), ("website_id", "=", wid)],
+                    limit=2,
+                ):
+                    raise ValidationError(
+                        "Une inscription existe déjà pour cet e-mail sur ce site."
+                    )
             if not vals.get("unsubscribe_token"):
                 vals["unsubscribe_token"] = secrets.token_urlsafe(32)
         return super().create(vals_list)

@@ -19,6 +19,9 @@ dans les options passées à ``website._search_with_fuzzy`` :
   d'attribut standard. Si ``ckr_origin_only`` est vrai sans ids de
   valeurs (``ckr_mode=origin`` seul) : **aucune** restriction — le
   catalogue complet est affiché (§3.2).
+* ``ckr_public_category_ids`` / ``ckr_category_invalid`` → facette
+  **Catégories** (``/shop?ckr_category=…``), alignée sur
+  ``WebsiteSaleCKR._get_shop_domain`` (min-max prix, compteur, grille).
 
 Cette extension ne touche qu'à la couche *recherche* (``base_domain``
 du moteur Odoo). Aucune logique métier parallèle n'est introduite —
@@ -239,6 +242,19 @@ class ProductTemplate(models.Model):
         """
         detail = super()._search_get_detail(website, order, options)
         base_domain = list(detail.get("base_domain") or [])
+
+        if options.get("ckr_category_invalid"):
+            base_domain.append(_CKR_EMPTY_DOMAIN)
+        elif options.get("ckr_public_category_ids"):
+            base_domain.append(
+                [
+                    (
+                        "public_categ_ids",
+                        "in",
+                        list(options["ckr_public_category_ids"]),
+                    )
+                ]
+            )
 
         if options.get("ckr_pack_only"):
             base_domain.append([("pack_ok", "=", True)])

@@ -13,6 +13,7 @@ Tag ``post_install`` : dépend de ``website_sale`` + données module
 (``ckr_product_attribute_origin``).
 """
 import html
+import uuid
 import re
 from urllib.parse import urlparse, parse_qs
 
@@ -98,11 +99,15 @@ class TestCkrOriginPVModel(TransactionCase):
 
     def test_pv_rc03_slug_unique_per_website(self):
         """RC-03 : unicité logique slug par site (contrainte SQL)."""
+        slug = "pv-uniq-slug-%s" % uuid.uuid4().hex[:12]
         Origin = self.env["ckr.shop.origin"]
+        Origin.search(
+            [("slug", "=", slug), ("website_id", "=", self.website.id)]
+        ).unlink()
         Origin.create(
             {
                 "attribute_value_id": self.val_g.id,
-                "slug": "pv-uniq-slug",
+                "slug": slug,
                 "name_visitor": "G",
                 "website_id": self.website.id,
             }
@@ -111,7 +116,7 @@ class TestCkrOriginPVModel(TransactionCase):
             Origin.create(
                 {
                     "attribute_value_id": self.val_m.id,
-                    "slug": "pv-uniq-slug",
+                    "slug": slug,
                     "name_visitor": "M",
                     "website_id": self.website.id,
                 }
@@ -158,6 +163,37 @@ class TestCkrOriginPVModel(TransactionCase):
         )
         flat = str(detail.get("base_domain") or [])
         self.assertIn("attribute_line_ids.value_ids", flat)
+
+    def test_search_get_detail_ckr_public_category_restricts_domain(self):
+        """``ckr_public_category_ids`` : alignement grille / min-max / ``_get_shop_domain``."""
+        website = self.website
+        cat = self.env["product.public.category"].sudo().create(
+            {"name": "CKR Test Cat facet", "website_id": website.id}
+        )
+        detail = self.env["product.template"]._search_get_detail(
+            website,
+            "name asc",
+            _website_sale_search_options(
+                self.env,
+                ckr_public_category_ids=[cat.id],
+            ),
+        )
+        flat = str(detail.get("base_domain") or [])
+        self.assertIn("public_categ_ids", flat)
+        self.assertIn(str(cat.id), flat)
+
+    def test_search_get_detail_ckr_category_invalid_domain(self):
+        """Slug catégorie inconnu → domaine vide (cohérence filtre prix / sidebar)."""
+        detail = self.env["product.template"]._search_get_detail(
+            self.website,
+            "name asc",
+            _website_sale_search_options(
+                self.env,
+                ckr_category_invalid=True,
+            ),
+        )
+        domains = detail.get("base_domain") or []
+        self.assertIn([("id", "=", 0)], domains)
 
     def test_resolve_published_slugs_order(self):
         """Ordre stable des slugs résolus (contrôleur / modèle)."""

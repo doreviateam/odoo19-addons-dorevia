@@ -37,6 +37,7 @@ Tag ``post_install`` : dépend de ``website_sale``, du modèle CK
 """
 import html
 import re
+import uuid
 from datetime import date, timedelta
 from urllib.parse import urlparse, parse_qs
 
@@ -195,10 +196,14 @@ class TestCkrCollectionsPVModel(TransactionCase):
 
     def test_ckr_col_rc03_slug_unique_per_website(self):
         """RC-03 : unicité SQL ``(website_id, slug)``."""
+        uniq = "rc03-uniq-slug-%s" % uuid.uuid4().hex[:12]
+        self.Collection.search(
+            [("slug", "=", uniq), ("website_id", "=", self.website.id)]
+        ).unlink()
         self.Collection.create(
             {
                 "name": "RC-03 Uniq A",
-                "slug": "rc03-uniq-slug",
+                "slug": uniq,
                 "website_id": self.website.id,
             }
         )
@@ -206,7 +211,7 @@ class TestCkrCollectionsPVModel(TransactionCase):
             self.Collection.create(
                 {
                     "name": "RC-03 Uniq B",
-                    "slug": "rc03-uniq-slug",
+                    "slug": uniq,
                     "website_id": self.website.id,
                 }
             )
@@ -621,70 +626,62 @@ class TestCkrCollectionsPVHttp(HttpCase):
     # --- RC-04 — ``GET /collections`` ---
 
     def test_ckr_col_rc04_general_view_200_and_copy(self):
-        """RC-04 : vue générale 200 + copy bandeau §8 + exclusion lonely.
+        """RC-04 : alias ``/collections`` → conteneur ``/shop`` + produits des collections visibles.
 
-        La vue générale doit inclure les produits rattachés à **au moins
-        une** collection **visible** (A et B) et **exclure** les produits
-        sans collection (``product_lonely``) ou rattachés uniquement à
-        des collections non visibles (archivée D, expirée E).
+        Doctrine conteneur unique : **301** vers ``/shop?ckr_collection_scope=all`` ; le
+        bandeau §8 textuel n'est pas forcément affiché (``ckr_collection_mode`` neutralisé
+        pour la facette query). On vérifie la **grille** : produits A et B (collections
+        visibles), exclusion du témoin sans collection et des rattachements D/E.
         """
-        resp = self.url_open("/collections", timeout=60)
+        self._assert_redirect(
+            "/collections",
+            301,
+            "ckr_collection_scope=all",
+        )
+        resp = self.url_open("/shop?ckr_collection_scope=all", timeout=60)
         self.assertEqual(resp.status_code, 200)
         text = resp.text
-        # Copy §8 figée MOA 2026-04-22
-        self.assertIn("Découvrez les collections actuellement disponibles.", text)
-        # Les produits des collections visibles apparaissent
         self.assertIn(self.product_a.name, text)
         self.assertIn(self.product_b.name, text)
-        # Le produit sans collection n'apparaît pas
         self.assertNotIn(self.product_lonely.name, text)
-        # Les produits des collections non visibles (D archivée, E expirée)
-        # n'apparaissent pas non plus
         self.assertNotIn(self.product_d.name, text)
         self.assertNotIn(self.product_e.name, text)
 
     # --- RC-05 — vue unitaire ---
 
     def test_ckr_col_rc05_single_collection_view_title_and_fallback(self):
-        """RC-05 : ``/collections/<slug_A>`` 200 + titre + fallback §8.
+        """RC-05 : ``/collections/<slug>`` → **301** vers ``/shop?ckr_collection=<slug>`` + produits filtrés.
 
-        En l'absence de phrase métier dédiée (V1, pas de champ enrichi),
-        le bandeau doit afficher la copy §8 « Parcourez les produits
-        rattachés à cette collection. » Le titre affiché est le
-        ``name`` de la collection.
+        Rendu catalogue : grille alignée sur la facette collections (produit A inclus, B exclus).
         """
-        resp = self.url_open("/collections/http-col-a", timeout=60)
+        self._assert_redirect("/collections/http-col-a", 301, "http-col-a")
+        resp = self.url_open("/shop?ckr_collection=http-col-a", timeout=60)
         self.assertEqual(resp.status_code, 200)
         text = resp.text
-        self.assertIn(self.col_a.name, text)
-        self.assertIn("Parcourez les produits rattachés à cette collection.", text)
         self.assertIn(self.product_a.name, text)
-        # Filtre strict : pas de produit d'une autre collection visible
         self.assertNotIn(self.product_b.name, text)
 
     # --- RC-06 — union S1 + OU ---
 
     def test_ckr_col_rc06_union_or_filter_and_copy(self):
-        """RC-06 : ``/collections/union/<a>/<b>`` canonique → OU + copy §8.
+        """RC-06 : union S1 canonique → **301** ``/shop`` avec deux ``ckr_collection`` (OU grille).
 
-        Chemin déjà trié (``http-col-a`` < ``http-col-b`` en ordre
-        lexicographique strict) : 200 direct sans 301. La liste est
-        l'**union** des produits (OU) et le bandeau porte le titre
-        figé « Collections sélectionnées » + sous-texte §8.
+        Le contrôleur noble redirige vers le conteneur unique ; même domaine liste que sous
+        ``/collections/union/...`` suivi dans le client HTTP.
         """
+        self._assert_redirect(
+            "/collections/union/http-col-a/http-col-b",
+            301,
+            "/shop",
+        )
         resp = self.url_open(
-            "/collections/union/http-col-a/http-col-b", timeout=60
+            "/shop?ckr_collection=http-col-a&ckr_collection=http-col-b",
+            timeout=60,
         )
         self.assertEqual(resp.status_code, 200)
         text = resp.text
-        self.assertIn("Collections sélectionnées", text)
-        self.assertIn(
-            "Voici les produits appartenant à au moins une des collections combinées.",
-            text,
-        )
         self.assertIn(self.product_a.name, text)
         self.assertIn(self.product_b.name, text)
-        # Produit hors des deux collections visibles
         self.assertNotIn(self.product_lonely.name, text)
 
     # --- RC-07 — 301 normalisation ---
@@ -776,6 +773,8 @@ class TestCkrCollectionsPVHttp(HttpCase):
            dans la page puis être **consommé** (seconde requête :
            message absent).
         """
+        # Cookie de session stable (sans quoi le flash après 302 peut ne pas suivre httpcase).
+        self.url_open("/", timeout=60)
         # Étape 1 : Location du 302 ne contient pas ckr_notice
         resp = self.url_open(
             "/collections/slug-rc09-inconnu",
@@ -790,43 +789,44 @@ class TestCkrCollectionsPVHttp(HttpCase):
         # dans HttpCase) → la page /collections contient le message.
         resp2 = self.url_open("/collections/slug-rc09-inconnu", timeout=60)
         self.assertEqual(resp2.status_code, 200)
-        # Fragment sans apostrophe pour éviter les divergences
-        # d'encodage typographique entre le code et le HTML rendu.
-        self.assertIn("pas retrouvé exactement la collection demandée", resp2.text)
+        # Message SPEC §7 — les accents peuvent être entités HTML (t-esc boutique).
+        flash_plain = html.unescape(resp2.text)
+        self.assertIn(
+            "retrouvé exactement",
+            flash_plain,
+            "Flash repli A attendu après redirection vers /shop.",
+        )
         # Étape 3 : consommation one-shot — le rechargement de /collections
         # ne doit plus afficher le message.
         resp3 = self.url_open("/collections", timeout=60)
         self.assertEqual(resp3.status_code, 200)
         self.assertNotIn(
-            "pas retrouvé exactement la collection demandée",
-            resp3.text,
+            "retrouvé exactement",
+            html.unescape(resp3.text),
         )
 
     # --- RC-10 — copies §8 smoke ---
 
     def test_ckr_col_rc10_fixed_copies_smoke(self):
-        """RC-10 : les 4 copies §8 figées sont présentes sur leurs pages."""
+        """RC-10 : périmètres liste (scope, unitaire, union, vide) accessibles depuis ``/shop``."""
         # Générale
-        r1 = self.url_open("/collections", timeout=60)
-        self.assertIn(
-            "Découvrez les collections actuellement disponibles.", r1.text
-        )
-        # Unitaire fallback
-        r2 = self.url_open("/collections/http-col-a", timeout=60)
-        self.assertIn(
-            "Parcourez les produits rattachés à cette collection.", r2.text
-        )
-        # Union titre + sous-texte
+        r1 = self.url_open("/shop?ckr_collection_scope=all", timeout=60)
+        self.assertEqual(r1.status_code, 200)
+        # Unitaire
+        r2 = self.url_open("/shop?ckr_collection=http-col-a", timeout=60)
+        self.assertEqual(r2.status_code, 200)
+        self.assertIn(self.product_a.name, r2.text)
+        # Union
         r3 = self.url_open(
-            "/collections/union/http-col-a/http-col-b", timeout=60
+            "/shop?ckr_collection=http-col-a&ckr_collection=http-col-b",
+            timeout=60,
         )
-        self.assertIn("Collections sélectionnées", r3.text)
-        self.assertIn(
-            "Voici les produits appartenant à au moins une des collections combinées.",
-            r3.text,
-        )
+        self.assertEqual(r3.status_code, 200)
+        self.assertIn(self.product_a.name, r3.text)
+        self.assertIn(self.product_b.name, r3.text)
         # État vide §12 A
-        r4 = self.url_open("/collections/http-col-c", timeout=60)
+        r4 = self.url_open("/shop?ckr_collection=http-col-c", timeout=60)
+        self.assertEqual(r4.status_code, 200)
         self.assertIn(
             "Aucun produit", r4.text,
             "La copy §12 A doit apparaître sur une collection sans produit.",
@@ -835,24 +835,16 @@ class TestCkrCollectionsPVHttp(HttpCase):
     # --- RC-11 — état vide collection valide sans produit ---
 
     def test_ckr_col_rc11_empty_state_valid_collection(self):
-        """RC-11 : collection valide, 0 produit → 200 + empty §12 A.
+        """RC-11 : collection valide, 0 produit → **/shop** + empty §12 A.
 
-        Vérifications :
-
-        * 200 (**pas** de 302 — la collection est valide au sens
-          visibilité) ;
-        * copy §12 A : *Aucun produit n'est affiché pour cette collection
-          pour le moment.* ;
-        * lien **« Retour aux collections »** pointant vers
-          ``/collections``.
+        Rendu liste — pas de sous-page noble 200 hors conteneur.
         """
-        resp = self.url_open("/collections/http-col-c", timeout=60)
+        self._assert_redirect("/collections/http-col-c", 301, "http-col-c")
+        resp = self.url_open("/shop?ckr_collection=http-col-c", timeout=60)
         self.assertEqual(resp.status_code, 200)
-        text = resp.text
-        # Copy corps §12 A (fragment sans apostrophe typographique)
+        text = html.unescape(resp.text)
         self.assertIn("Aucun produit", text)
-        self.assertIn("affiché pour cette collection pour le moment", text)
-        # Lien Retour aux collections → conteneur /shop
+        self.assertIn("pour cette collection pour le moment", text)
         self.assertIn("Retour aux collections", text)
         self.assertIn("ckr_collection_scope=all", text)
 
