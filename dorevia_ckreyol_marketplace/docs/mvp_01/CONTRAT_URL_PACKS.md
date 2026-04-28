@@ -5,15 +5,15 @@
 | **Statut** | **Tranché et déployé** — **Hybride H1** retenu (2026-04-21) avec paramètre **`ckr_mode=pack`**, voir §12 ; **mise en service opérée en module 19.0.1.1.0** (voir §13 « Mise en service »). |
 | **Date** | 2026-04-21 |
 | **Périmètre** | Forme canonique de l’URL empruntée par la carte **Kits** de la section Explorer (libellé visiteur) et par tout lien partagé équivalent, pour arriver sur une **lecture boutique filtrée** sur les produits *« pack »* au sens du module OCA **`product_pack`**. |
-| **Prérequis actés** | Source de vérité **`product.template.pack_ok`** ([SPEC_SHOP_PORTES §4.3](SPEC_SHOP_PORTES.md)) ; convergence commerciale **`/shop`** ([ADR-CKR-007](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-007)) ; libellé visiteur **Kits** et règle de bi-lexique front / back-office ([ADR-CKR-008](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008)). |
+| **Prérequis actés** | Source de vérité **`product.template.pack_ok`** ([SPEC_SHOP_PORTES §4.3](SPEC_SHOP_PORTES.md)) ; convergence commerciale **`/shop`** ([ADR-CKR-007](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-007)) ; libellé visiteur **Kits** et règle de bi-lexique front / back-office ([ADR-CKR-008](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008)) ; doctrine métier **pack** (homogène) vs **kit** (hétérogène) pour copy et libellés produit ([DOCTRINE_CK_PACK_VS_KIT.md](../direction/DOCTRINE_CK_PACK_VS_KIT.md)). |
 
 Ce document a **exposé** les trois options demandées (plus variantes hybrides), les a évaluées selon les **critères doctrinaux** du projet, a formulé une **recommandation motivée**, et la décision a été **actée** le 2026-04-21 (voir §12).
 
 > **Convention lexicale interne au document** — conformément à la règle de bi-lexique [ADR-CKR-008](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008) :
-> - **Pack** est utilisé pour tout ce qui est **technique / source de vérité / implémentation** (champ `pack_ok`, module `product_pack`, titre de ce document).
-> - **Kits** est utilisé pour ce qui est **libellé visiteur / URL visible / copy** (carte Explorer, `/kits`).
+> - **Pack** est utilisé pour tout ce qui est **technique / source de vérité / implémentation** (champ `pack_ok`, module `product_pack`, paramètre `ckr_mode=pack`, titre de ce document).
+> - **Kits** est utilisé pour ce qui est **libellé visiteur / URL visible / porte Explorer** (carte **Kits**, `/kits`).
 >
-> Les deux ne désignent **pas** deux choses différentes : c’est **la même porte**, vue sous deux registres.
+> **Complément métier** ([DOCTRINE_CK_PACK_VS_KIT.md](../direction/DOCTRINE_CK_PACK_VS_KIT.md)) : dans le **langage catalogue C-Kreyol**, **pack** et **kit** désignent deux **logiques d’assemblage** (homogène vs hétérogène). Ce document et le filtre **`pack_ok`** couvrent **la même porte technique** pour l’instant ; les **titres produits**, **descriptions** et **merchandising** doivent appliquer la doctrine (ex. « pack de 6 » vs « kit apéro ») même si les deux sont listés sous **`/shop?ckr_mode=pack`**.
 
 ---
 

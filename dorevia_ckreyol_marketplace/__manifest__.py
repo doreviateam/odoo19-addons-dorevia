@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.51",
+    "version": "19.0.1.10.62",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -128,6 +128,34 @@ Portee :
   `display: contents` sur `.o_wsale_product_action_row` **exclut** `.ckr-product-card__footer` ; doc
   `docs/mvp_02/NOTE_TECH_TUILE_SHOP_FOOTER.md` ; mises à jour `2_SHOP`, `SHOP_COMPONENT_CONTRACTS`,
   `SHOP_MAQUETTE_ECARTS`, `mvp_02/README`.
+* 19.0.1.10.52 : boutique — activation data `website_sale.filter_products_price` (`ckr_shop_filter_price_activation.xml`)
+  pour que le rail maquette affiche le bloc **Prix** (`opt_wsale_filter_price`) sans forcer `show_price_filter=True` (évite 500).
+* 19.0.1.10.53 : tuile /shop — champ BO **`ck_product_name`** (Nom CK) sur `product.template` ; titre tuile =
+  `ck_product_name.strip() or name` ; méta / nom Odoo / ligne descriptive dans **`<details>` « Pour info »**
+  (replié par défaut) ; `docs/mvp_02/SPEC_CK_NOM_CK_TUILE_PRODUIT.md`.
+* 19.0.1.10.54 : tuile /shop — **rendu retail** : flux principal = image + titre (2 lignes) + **filet** ; « Pour info »
+  déplacé **dans le pied** (au-dessus prix | CTA) ; pied sans double bordure, typo titre un peu plus compacte.
+* 19.0.1.10.55 : tuile /shop — informations secondaires = **bouton info** FontAwesome **`fa-info`**
+  (`ckr-product-card__info-action` / `ckr-product-card__info-icon`) dans le rail
+  **`ckr-product-card__corner-actions`**, à côté de la wishlist sur la **média** (gabarit
+  `ckr_shop_wishlist_on_product_media`) ; fin du libellé « Pour info » / `<details>` sur la tuile liste ;
+  panneau **`ckr-product-card__details-body`** au-dessus des pastilles (`overflow` média si ouvert).
+* 19.0.1.10.56 : fix **assets frontend** — panneau infos tuile : `max-width` / `max-height` en `unquote("min(...)")` pour éviter
+  l’erreur Sass « calc is not a number for min » sur `web.assets_frontend`.
+* 19.0.1.10.57 : tuile /shop — **icône i toujours** dans le coin média (plus liée à `_ckr_shop_tile_has_more_block` seul) ; coin rendu sur
+  toute la grille boutique, wishlist inchangée.
+* 19.0.1.10.58 : fix SCSS **sélecteur double `.ckr-shop`** (règles imbriquées dans `.ckr-shop { }` ne doivent pas préfixer `.ckr-shop` à nouveau) :
+  coin média + pastille « i » + masquage quick-add / wishlist pied — l’icône info était hors cadre (overflow) alors que le cœur restait calé par le thème.
+* 19.0.1.10.59 : tuile /shop — **Classic Store** : neutraliser `position:absolute` sur `.wishlist-above-title .btn` dans le coin média
+  (sinon le cœur recouvre la pastille « i ») ; ordre flex **i** puis **cœur** ; xpath `oe_product_image` élargi (`hasclass` ou `t-attf-class`).
+* 19.0.1.10.60 : tuile /shop — coin média en **grille absolue** : conteneur largeur fixe `calc(2×2rem + gap)`, « i » en `left:0`,
+  wishlist en `right:0` (plus de flex seul vs thème) ; renfort `#wrap.o_wsale_products_page.ckr-shop`.
+* 19.0.1.10.62 : données ``data/ckr_shop_contract_recette_seed_data.xml`` — 2ᵉ origine
+  (Martinique), collection Découverte, 2 catégories eCommerce + ``public_categ_ids`` sur les
+  fiches vitrine Sélection ; recette reproductible pour ``--test-tags=dorevia_ckr_shop_contract``.
+* 19.0.1.10.61 : doc **NOTE_TECH_TUILE_CORNER_ACTIONS.md** (rail wishlist + info) ; SCSS : harmonisation **tous** les blocs
+  `.ckr-product-card__info-action` — plus de `::before` texte, **`.fa` / `.ckr-product-card__info-icon` visibles** (correction d’un
+  `display:none` sur `.fa` dans `.ckr-shop` qui masquait `fa-info`).
 * Homepage MVP2.1 : chantier 1/5 — hero immersif V2 (image fond,
   overlay G->D, 2 CTA /shop + /origines). Chantier 2/5 — bloc
   Explorer grille asymétrique MVP2 (Promotions dominante, Kits
@@ -259,6 +287,8 @@ ARCHITECTURE_DECISION_RECORD).
         # --- Back-office : profils origine (menus + vues) ---
         "views/ckr_shop_origin_views.xml",
         "views/product_template_ckr_origin_views.xml",
+        # --- Fiche produit : Nom CK (tuile /shop) — après vue Origines (xpath avant public_categ_ids) ---
+        "views/product_template_ck_product_name_views.xml",
         # --- Back-office : collections editoriales CK (menus + vues) ---
         # Charge apres les vues Origines pour que l heritage de
         # `product_template_form_view_ckr_origin` (extension champ
@@ -269,6 +299,7 @@ ARCHITECTURE_DECISION_RECORD).
         # --- Activation des variantes natives Odoo ---
         # (selecteur de langue : inline + codes, cf. docs/direction/EXPLOITATION_I18N_DEVISES.md)
         "data/website_selectors_activation.xml",
+        "data/ckr_shop_filter_price_activation.xml",
         "data/ckr_explorer_category_parameter.xml",
         # Paramètre ``featured_collection_id`` : **hors XML** (hooks + migrations)
         # pour qu'un ``-u`` ne réécrase jamais la valeur opérationnelle (§4.6 SPEC).
@@ -279,6 +310,7 @@ ARCHITECTURE_DECISION_RECORD).
         # Fiches et visuels minimum pour le bloc « Sélection » (recette 4/4)
         "data/ckr_product_selection_showcase_data.xml",
         "data/ckr_shop_sidebar_nominal_demo_data.xml",
+        "data/ckr_shop_contract_recette_seed_data.xml",
         # --- Portail client (/my) ---
         "views/portal/ckr_portal.xml",
         # --- Auth front (login Mon compte) ---

@@ -44,6 +44,8 @@ Références d'exécution :
 
 - [SHOP_EXEC_MATRIX.md](../mvp_02/SHOP_EXEC_MATRIX.md)
 - [SHOP_COMPONENT_CONTRACTS.md](../mvp_02/SHOP_COMPONENT_CONTRACTS.md)
+- [NOTE_TECH_TUILE_CORNER_ACTIONS.md](../mvp_02/NOTE_TECH_TUILE_CORNER_ACTIONS.md) — état livré du rail wishlist + info sur la tuile
+- [SPEC_CK_NOM_CK_TUILE_PRODUIT.md](../mvp_02/SPEC_CK_NOM_CK_TUILE_PRODUIT.md) — Nom CK + contenu information secondaire
 
 **Conventions Git** *(proposition)* :
 
@@ -174,8 +176,8 @@ Décisions reprises dans [2_SHOP.md §3 / §7 / §8 / §11](../mvp_02/2_SHOP.md)
 
 - [ ] **Image** : ratio homogène (`object-fit` / hauteur maîtrisée), pas de tuiles visuellement disjointes.
 - [ ] **Badge** : zone **haut gauche** ; **une** pastille prioritaire selon **MOA-5** (rupture > promo > nouveau/sélection > pack/incontournable si utile) ; **pas** d’empilement de badges concurrents si cela surcharge la carte.
-- [ ] **Wishlist** : zone **haut droite** **uniquement si** `website_sale_wishlist` est **installé** et **retenu** en prod ; sinon **grammaire de carte** respectée mais **bouton non affiché**, sans trou visuel (**MOA-1 acté**).
-- [ ] **Micro-info** : catégorie ou info courte sous l’image (selon données dispo standard).
+- [ ] **Rail coin média** : zone **haut droite** regroupant la **wishlist native Odoo** et l’icône **info** (`fa-info`) dans un même halo visuel ; la wishlist reste affichée **uniquement si** `website_sale_wishlist` est **installé** et **retenu** en prod (**MOA-1 acté**).
+- [ ] **Information secondaire** : méta, nom Odoo et ligne descriptive accessibles via l’icône **info**, sans libellé **« Pour info »** et sans `<details>` visible dans le corps ou le pied de carte.
 - [ ] **Nom produit** : lisible, hiérarchie typographique charte.
 - [ ] **Prix** : visible ; état **promo** : ancien prix barré + prix courant si le standard l’expose sur la tuile.
 - [ ] **Ajout panier** : **bas droite** (ou alignement équivalent Stitch) ; **rupture** : bouton désactivé ou masqué selon comportement natif + indication claire.

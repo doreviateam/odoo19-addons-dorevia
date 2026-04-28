@@ -110,6 +110,15 @@ _CKR_SHOP_TILE_FORMAT_RE = re.compile(
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
+    ck_product_name = fields.Char(
+        string="Nom CK",
+        help=(
+            "Nom commercial affiché en priorité sur la tuile boutique /shop. "
+            "Si vide, le nom produit Odoo (name) est utilisé. Ne remplace pas "
+            "le champ name pour les documents internes."
+        ),
+    )
+
     ckr_origin_value_ids = fields.Many2many(
         comodel_name="product.attribute.value",
         string="Origines",
@@ -381,6 +390,26 @@ class ProductTemplate(models.Model):
     # ------------------------------------------------------------------
     # Tuile /shop — méta + sous-titre (Lot 1 positioning C-Kreyol)
     # ------------------------------------------------------------------
+
+    def _ckr_shop_tile_has_more_block(self, website=None):
+        """True si le panneau sous le bouton info (``fa-info``, corps ``ckr-product-card__details-body``) a du contenu utile.
+
+        (méta catalogue, ligne desc. / sous-titre, ou écart nom commercial vs nom Odoo — voir QWeb.)
+
+        Sert surtout à décider d’afficher le **coin média** sur **/shop/wishlist** (pas de bouton wishlist).
+        Sur la grille **/shop**, le bouton **info** est **toujours** rendu dans le rail ; ce flag n’y masque plus l’icône.
+        Voir ``docs/mvp_02/SPEC_CK_NOM_CK_TUILE_PRODUIT.md`` et ``NOTE_TECH_TUILE_CORNER_ACTIONS.md``.
+        """
+        self.ensure_one()
+        meta = (self._ckr_get_shop_tile_meta_line(website=website) or "").strip()
+        desc = (self._ckr_get_shop_tile_description_line() or "").strip()
+        sub = (self._ckr_get_shop_tile_subtitle(website=website) or "").strip()
+        extra = desc or sub
+        commercial = (self.ck_product_name or "").strip() or (self.name or "").strip()
+        odoo_name = (self.name or "").strip()
+        if meta or extra:
+            return True
+        return odoo_name != commercial
 
     def _ckr_shop_tile_meta_label_is_useful(self, label):
         """True si le libellé vaut une méta « achat » (hors taxonomie générique type *Goods*)."""

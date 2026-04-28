@@ -2,7 +2,7 @@
 
 **Projet : C-Kreyol**
 
-**Documents liés** : [CHARTE_GRAPHIQUE_PHASE1.md](CHARTE_GRAPHIQUE_PHASE1.md) (arbitrages minimaux à figer), [DIRECTIONS_ARTISTIQUES_PHASE1.md](DIRECTIONS_ARTISTIQUES_PHASE1.md) (réponse au brief, **3 pistes** + recommandation), [DESIGN.md](DESIGN.md), [SPEC_HERO_HOMEPAGE.md](SPEC_HERO_HOMEPAGE.md), [WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md), [ARCHITECTURE_DECISION_RECORD.md](ARCHITECTURE_DECISION_RECORD.md) (**ADR-CKR-002** / **ADR-CKR-003**), [NOTE_DE_CADRAGE.md](NOTE_DE_CADRAGE.md), [README](../../README.md).
+**Documents liés** : [VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md) (trois mondes, désir / confiance / vente — contexte marque), [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) (B2C / B2B, grilles tarifaires — contexte offre), [DOCTRINE_CK_LANGUES_CREOLES.md](DOCTRINE_CK_LANGUES_CREOLES.md) (créoles — contexte culturel long terme, **ADR-CKR-011**), [CHARTE_GRAPHIQUE_PHASE1.md](CHARTE_GRAPHIQUE_PHASE1.md) (arbitrages minimaux à figer), [DIRECTIONS_ARTISTIQUES_PHASE1.md](DIRECTIONS_ARTISTIQUES_PHASE1.md) (réponse au brief, **3 pistes** + recommandation), [DESIGN.md](DESIGN.md), [SPEC_HERO_HOMEPAGE.md](SPEC_HERO_HOMEPAGE.md), [WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md), [ARCHITECTURE_DECISION_RECORD.md](ARCHITECTURE_DECISION_RECORD.md) (**ADR-CKR-002** / **ADR-CKR-003** / **ADR-CKR-009** / **ADR-CKR-010** / **ADR-CKR-011**), [NOTE_DE_CADRAGE.md](NOTE_DE_CADRAGE.md), [README](../../README.md).
 
 ---
 

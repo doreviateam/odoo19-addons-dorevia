@@ -4,7 +4,7 @@ Ce fichier consigne les **décisions d’architecture** (ADR) prises pour le can
 
 **Règle** : toute décision structurante sur le socle technique, les modules Odoo, ou la doctrine de construction, une fois **actée**, est référencée ici avec un identifiant stable **ADR-CKR-xxx**.
 
-Les **ADR-CKR-001 à 005** couvrent surtout la **Phase 1** ; les **ADR-CKR-006 à 008** couvrent la **doctrine Phase 2** (homepage d’orientation, convergence boutique, portes d’exploration catalogue).
+Les **ADR-CKR-001 à 005** couvrent surtout la **Phase 1** ; les **ADR-CKR-006 à 008** couvrent la **doctrine Phase 2** (homepage d’orientation, convergence boutique, portes d’exploration catalogue). **[ADR-CKR-009](#adr-ckr-009)** fige la **vision média-commerce** à trois mondes (e-commerce, éditorial, communautaire) et les garde-fous associés (dont publicité). **[ADR-CKR-010](#adr-ckr-010)** fige la **doctrine e-commerce B2C + B2B** (prix public conseillé / prix partenaire distributeur) dans un **même catalogue sanctuarisé**. **[ADR-CKR-011](#adr-ckr-011)** fige la **doctrine culturelle** des **langues créoles** dans l’expérience utilisateur (qualité, variantes, gouvernance — **sans** mandat MVP).
 
 ---
 
@@ -319,7 +319,7 @@ Dans tous les cas, **la destination commerciale finale reste `/shop`** ; une pag
 | **Statut** | **Acceptée** — en vigueur pour la **Phase 2** (doctrine catalogue) tant qu’elle n’est pas explicitement révisée. |
 | **Date** | 2026-04-21 |
 | **Périmètre** | **Modèle conceptuel** des entrées dans l’offre produit C-Kreyol ; matérialisation **homepage** (section Explorer) et **relais** navigation / boutique. |
-| **Liée à** | [ADR-CKR-006](#adr-ckr-006) (distribution sur la homepage). [ADR-CKR-007](#adr-ckr-007) (convergence sur `/shop`). [ADR-CKR-001](#adr-ckr-001) (standard vs construction CK). |
+| **Liée à** | [ADR-CKR-006](#adr-ckr-006) (distribution sur la homepage). [ADR-CKR-007](#adr-ckr-007) (convergence sur `/shop`). [ADR-CKR-001](#adr-ckr-001) (standard vs construction CK). [DOCTRINE_CK_PACK_VS_KIT.md](DOCTRINE_CK_PACK_VS_KIT.md) (terminologie métier **pack** homogène vs **kit** hétérogène). |
 
 ### Contexte
 
@@ -356,6 +356,19 @@ La porte 5 introduit — et formalise pour l’ensemble du projet — une **règ
 
 **Portée** : cette règle est **spécifique** à la porte Pack ↔ Kits. Elle **n’impose pas** un bi-lexique systématique pour les autres portes (Promotions, Collections, Catégories, Origines — actuellement sans écart lexical front / back-office). Si un cas analogue se présente (ex. une brique back-office nommée techniquement *X* mais dont le libellé commercial *Y* est plus lisible), cette règle sert de **précédent** : on conserve alors la grille technique inchangée, on explicite le libellé front retenu, et on documente la correspondance.
 
+### Doctrine métier complémentaire — Pack vs Kit
+
+La **[DOCTRINE_CK_PACK_VS_KIT.md](DOCTRINE_CK_PACK_VS_KIT.md)** fixe une distinction **métier** (indépendante du nom du module OCA) :
+
+- **Pack** = assemblage **homogène**, logique de **conditionnement commercial** ;
+- **Kit** = assemblage **hétérogène**, logique d’**usage**, **recette**, **moment** ou **expérience**.
+
+**Articulation avec la présente ADR** :
+
+1. La **porte Explorer** « **Kits** », le paramètre **`ckr_mode=pack`** et le filtre **`pack_ok=True`** restent, **à ce jour**, le **véhicule technique unique** pour lister toutes les compositions gérées par **`product_pack`** — **sans** second marqueur CK parallèle sur le même périmètre.
+2. Les **titres produits**, **textes éditoriaux**, **fiches** et **merchandising** doivent **respecter** la doctrine : réserver le mot **pack** aux offres homogènes et **kit** aux compositions hétérogènes, y compris lorsque les deux coexistent dans la liste filtrée par **`/kits`** → **`/shop?ckr_mode=pack`**.
+3. Une **évolution** (sous-filtres, attribut catalogue, double entrée Explorer) relèvera d’une **spec / ADR** ultérieure si le catalogue l’exige.
+
 **Libellés front retenus** sur la homepage (section **Explorer**) — **pluriel**, ordre d’affichage :
 
 1. **Promotions** — entrée par avantage commercial ;
@@ -380,6 +393,124 @@ Ces libellés **ne recopient pas** mot à mot la doctrine interne ; ils doivent 
 - [ADR-CKR-007](#adr-ckr-007) — convergence `/shop`.
 - [WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md) — Bloc 3 Explorer.
 - [mvp_01/SPEC_SHOP_PORTES.md](../mvp_01/SPEC_SHOP_PORTES.md) — matrice d’implémentation par porte (standard Odoo vs CK vs transitoire).
+- [DOCTRINE_CK_PACK_VS_KIT.md](DOCTRINE_CK_PACK_VS_KIT.md) — distinction métier pack (homogène) vs kit (hétérogène).
+
+---
+
+<a id="adr-ckr-009"></a>
+
+## ADR-CKR-009 — Vision média-commerce : trois mondes (e-commerce, éditorial, communautaire)
+
+| Champ | Contenu |
+|--------|---------|
+| **Statut** | **Acceptée** — orientation stratégique **figée** long terme ; structure UX / éditorial / communauté / publicité / e-commerce **sans élargir** le périmètre MVP ; ne prescrit pas le calendrier de livraison des trois mondes. |
+| **Date** | 2026-04-26 |
+| **Périmètre** | Positionnement global **C-Kreyol** : architecture produit / UX / monétisation sur le **long terme**, en cohérence avec le cadrage Phase 1 ([NOTE_DE_CADRAGE.md](NOTE_DE_CADRAGE.md)). |
+| **Liée à** | [ADR-CKR-001](#adr-ckr-001) (composition maîtrisée — ne pas surconstruire les mondes non prioritaires) ; [ADR-CKR-002](#adr-ckr-002) (spécifique front Phase 1 inchangé) ; [ADR-CKR-006](#adr-ckr-006) à [008](#adr-ckr-008) (orientation homepage / `/shop` compatibles avec un canal **plus large** qu’une simple boutique). |
+
+### Contexte
+
+La [note de cadrage Phase 1](NOTE_DE_CADRAGE.md) et le [README](../../README.md) décrivent **C-Kreyol** comme un **canal e-commerce spécialisé** opérable court terme. La vision **média-commerce** explicite l’ambition plus large : **destination créole** articulée en **trois mondes** — **e-commerce** (vente), **éditorial** (sens et désir), **communautaire** (lien et confiance) — avec une **régie publicitaire** éventuelle **sélective** et **sans pollution** du tunnel d’achat.
+
+Sans décision explicite, des arbitrages UX ou commerciaux risquent de **mélanger** contenu, publicité, communauté et vente, ou d’**ouvrir** des impasses techniques (impossibilité de séparer types de contenus ou d’espaces plus tard).
+
+### Décision
+
+1. Adopter comme **vision figée** le document **[VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md)** (trois mondes, doctrine économique, **protection maximale** du e-commerce vis-à-vis de la publicité agressive, lignes rouges, implications UX / technique, priorités court terme).
+2. **Court terme / MVP** : la vision est une **orientation stratégique long terme** ; elle **structure** les décisions UX, éditoriales, communautaires, publicitaires et e-commerce **sans élargir** le périmètre de **livraison immédiat** du MVP ni des phases déjà cadrées ([NOTE_DE_CADRAGE.md](NOTE_DE_CADRAGE.md), ADR Phase 1 / 2 applicables).
+3. Toute évolution produit ou technique **substantielle** doit être **rattachée** à l’un des trois mondes et évaluée pour **pollution** potentielle de l’acte d’achat (cf. vision §6, §9, §10).
+4. **Publicité et communauté (futur)** : toute évolution dans ces domaines doit respecter la **protection du parcours e-commerce** — en particulier **aucune pollution publicitaire agressive** dans les **zones d’achat** définies en vision §6.1 (non négociable).
+5. **Trajectoire de monétisation publicitaire** (vision **§5.1**) : **d’abord** régie **automatisée** **strictement cloisonnée** aux espaces **éditoriaux** et **communautaires** ; **ensuite** régie **directe**, qualitative et sélective, par **édification de partenaires** cohérents avec l’univers créole. L’**automatisation** sert à financer l’**audience** au démarrage ; l’**édification partenaire** construit la **valeur d’écosystème** à maturité. L’**e-commerce** reste **sanctuarisé** dans **les deux** temps.
+
+### Conséquences
+
+- Les **specs** homepage, boutique, portes Explorer et contenus **éditoriaux** peuvent se citer la vision pour trancher **secondarité** des éléments non marchands vs CTA et tunnel.
+- Les **choix d’implémentation Odoo** (pages CMS, blog, forum, modules publicitaires, etc.) doivent **rester compatibles** avec la séparation des mondes et la **protection** des zones listées en vision §6.1 — même si certaines briques ne sont **pas** activées en Phase 1.
+- La vision **ne remplace pas** [ADR-CKR-002](#adr-ckr-002) : en Phase 1, le spécifique présumé légitime reste le **front** présentationnel ; l’ADR-009 **cadre l’intention** et les **garde-fous**, pas un mandat de développement immédiat des trois mondes.
+- Les **revues** publicité / communauté / partenariats doivent **vérifier explicitement** l’absence d’intrusion agressive dans les zones §6.1 avant validation.
+- Tout **outil ou flux** de régie **automatisée** doit être **conçu** pour le **cloisonnement** (pas de débordement vers listing boutique, fiche produit, panier, tunnel — vision §6.1). La phase **directe / partenaires** ne **lève pas** le **sanctuaire** e-commerce : les zones §6.1 restent protégées dans les **deux** temps.
+
+### Références
+
+- [VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md) — texte normatif détaillé.
+- [NOTE_DE_CADRAGE.md](NOTE_DE_CADRAGE.md) — Phase 1 opérationnelle.
+- [README.md](../../README.md) — porte d’entrée dépôt.
+
+---
+
+<a id="adr-ckr-010"></a>
+
+## ADR-CKR-010 — Doctrine e-commerce : double lecture B2C et B2B
+
+| Champ | Contenu |
+|--------|---------|
+| **Statut** | **Acceptée** — doctrine **monde e-commerce** ; ne prescrit pas le calendrier de mise en œuvre B2B avancée (comptes validés, parcours dédiés, etc.). |
+| **Date** | 2026-04-26 |
+| **Périmètre** | **E-commerce C-Kreyol** : cohabitation **B2C** (particuliers, **prix public conseillé**) et **B2B** (professionnels / distributeurs, **prix partenaire distributeur**) sur un **catalogue commun**, sous **Odoo 19 CE** en privilégiant le **standard** ([ADR-CKR-001](#adr-ckr-001)). |
+| **Liée à** | [ADR-CKR-004](#adr-ckr-004) (C-Kreyol vend au client final — la double lecture **étend** les **types** de clients et de prix, sans nier le vendeur CK) ; [ADR-CKR-009](#adr-ckr-009) (**sanctuaire** e-commerce : pas de publicité agressive dans l’acte d’achat — **B2C et B2B**) ; [VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md) §3.1, §6. |
+
+### Contexte
+
+La [vision média-commerce](VISION_CK_MEDIA_COMMERCE.md) distingue trois **mondes** ; le monde **e-commerce** peut être implémenté comme une seule vitrine « grand public » si l’on ne formalise pas la cible **B2B**. Or C-Kreyol vise aussi **professionnels et distributeurs** avec une logique tarifaire et commerciale **distincte** du retail.
+
+Sans doctrine explicite, les arbitrages **pricelists**, **portail**, **UX** et **CGV** risquent d’être **incohérents** ou de **figer** prématurément une boutique **B2C-only** difficile à étendre.
+
+### Décision
+
+1. Adopter comme **doctrine figée** le document **[DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](DOCTRINE_CK_ECOMMERCE_B2C_B2B.md)** : e-commerce **sanctuarisé** mais **non monolithique** — **deux lectures** (**B2C** / **B2B**) sur le **même catalogue**, avec **prix public conseillé** vs **prix partenaire distributeur** ; **catalogue commun** et **affichage commercial contextualisé** (**§2.1** : prix visibles, remises, conditions selon statut, compte, pricelists Odoo). Détail : même fichier, **§§2.1–10**.
+2. **Exploitation Odoo** : **catalogue commun** ; l’**affichage commercial** (prix visibles, remises, conditions de commande) est **contextualisé** selon le **statut** du visiteur, son **compte client** et les **listes de prix** Odoo qui lui sont associées — **pas** de principe directeur « boutique parallèle » pour le **catalogue** ; **convergence** sur les mécanismes natifs tant qu’ils suffisent ([ADR-CKR-001](#adr-ckr-001)). Détail : doctrine **§2.1**.
+3. La **sanctuarisation** ([ADR-CKR-009](#adr-ckr-009), vision §6) s’applique **identiquement** aux parcours **B2C** et **B2B** (fiche, panier, checkout, compte, commande, réassort pro).
+4. Les **implications** détaillées en doctrine §8 (comptes B2B, visibilité tarifaire, parcours, CGV pro…) sont des **orientations** ; elles **n’élargissent pas** d’elles-mêmes le **MVP** ni ne remplacent la [note de cadrage](NOTE_DE_CADRAGE.md).
+
+### Conséquences
+
+- Les **futurs specs** (prix, pricelist, site, portail, tunnel) doivent **identifier** l’audience **B2C** et/ou **B2B** et **tracer** le choix vers la doctrine (phrase canonique §9) ; toute évolution front ou règle affichée doit rester **cohérente** avec le couple **catalogue unique** + **contexte** (compte, pricelist, statut) — **§2.1**.
+- Les **revues** tarifaires et **partenaires** doivent vérifier la **cohérence** entre prix public conseillé et prix partenaire distributeur (pas de concurrence **destructrice** entre les deux grilles).
+- Toute **exception** (ex. vitrine B2B séparée) nécessite une **justification** documentée et une **révision** explicite de la présente ADR ou une ADR fille.
+
+### Références
+
+- [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) — texte normatif détaillé.
+- [VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md) — trois mondes ; sanctuaire e-commerce.
+- [NOTE_DE_CADRAGE.md](NOTE_DE_CADRAGE.md) — Phase 1 opérationnelle.
+
+---
+
+<a id="adr-ckr-011"></a>
+
+## ADR-CKR-011 — Doctrine culturelle : langues créoles dans l’expérience utilisateur
+
+| Champ | Contenu |
+|--------|---------|
+| **Statut** | **Acceptée** — orientation **produit / éditoriale / culturelle** ; **ne prescrit pas** le calendrier d’activation des langues créoles côté Odoo ni le périmètre du MVP. |
+| **Date** | 2026-04-26 |
+| **Périmètre** | **Qualité linguistique**, **variantes**, **gouvernance** des contenus **créoles** ; articulation avec les **trois mondes** ([ADR-CKR-009](#adr-ckr-009)). |
+| **Liée à** | [VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md) §3.4 ; [EXPLOITATION_I18N_DEVISES.md](EXPLOITATION_I18N_DEVISES.md) (activation **FR / EN / ES**, sélecteurs — **couche technique** distincte) ; [ADR-CKR-009](#adr-ckr-009) (sanctuaire e-commerce : clarté prix / conditions — doctrine §7). |
+
+### Contexte
+
+La [vision média-commerce](VISION_CK_MEDIA_COMMERCE.md) vise une destination **créole** crédible. L’activation de **langues** dans Odoo ([EXPLOITATION_I18N_DEVISES.md](EXPLOITATION_I18N_DEVISES.md)) ne suffit pas à garantir une **légitimité linguistique** des **créoles** : risque de « créole générique », traductions **non qualifiées**, ou **ambiguïté** sur le parcours marchand.
+
+Sans doctrine explicite, les arbitrages **contenu**, **contribution** et **UX linguistique** risquent d’être **incohérents** ou de **confondre** paramétrage i18n et **mission culturelle**.
+
+### Décision
+
+1. Adopter comme **doctrine figée** le document **[DOCTRINE_CK_LANGUES_CREOLES.md](DOCTRINE_CK_LANGUES_CREOLES.md)** : **pas de créole générique** ; **variante par variante** ; traduction **humaine qualifiée** ; **contribuer → relire → valider → publier** ; protection du **parcours e-commerce** (doctrine §7) — aligné avec [ADR-CKR-009](#adr-ckr-009).
+2. **Distinguer** la présente doctrine (**culturelle / qualitative**) du guide **[EXPLOITATION_I18N_DEVISES.md](EXPLOITATION_I18N_DEVISES.md)** (**exploitation** FR / EN / ES, Phase 1bis) : les deux se **complètent** ; aucun ne se **substitue** à l’autre.
+3. La **mise en œuvre** des créoles est **progressive** et **postérieure** à la stabilisation du socle (catalogue, tunnel, ligne éditoriale, gouvernance de contenu) — **sans** obligation de livraison dans le **MVP** ni dans la **Phase 1** telle que cadrée par la [note de cadrage](NOTE_DE_CADRAGE.md).
+4. Les **implications** détaillées en doctrine (contributeurs, workflow, périmètre par monde) sont des **orientations** ; elles **n’élargissent pas** d’elles-mêmes le périmètre **immédiat** des livrables techniques.
+
+### Conséquences
+
+- Les **futurs specs** (i18n, contenus, communauté, éditorial) doivent **référencer** la doctrine pour tout ce qui touche aux **créoles** ; le **paramétrage** Odoo des langues reste couvert par [EXPLOITATION_I18N_DEVISES.md](EXPLOITATION_I18N_DEVISES.md) quand il s’agit de **FR / EN / ES** et de **promesse** côté site.
+- Les **revues** éditoriales et produit doivent vérifier la **lisibilité de la variante** proposée et l’**absence d’ambiguïté** sur les **éléments contractuels** du tunnel (doctrine §7).
+- Toute **exception** (ex. publication contributive sans relecture) nécessite une **révision** explicite de la présente ADR.
+
+### Références
+
+- [DOCTRINE_CK_LANGUES_CREOLES.md](DOCTRINE_CK_LANGUES_CREOLES.md) — texte normatif détaillé.
+- [EXPLOITATION_I18N_DEVISES.md](EXPLOITATION_I18N_DEVISES.md) — exploitation Phase 1bis (langues / devises).
+- [VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md) — trois mondes ; §3.4.
 
 ---
 
@@ -416,3 +547,10 @@ Ces libellés **ne recopient pas** mot à mot la doctrine interne ; ils doivent 
 | 2026-04-22 | **CONTRAT_URL_ORIGINES — verrouillage MOA §13** : doctrine *porte éditoriale → `/shop` + donnée structurée multi + signal visible* ; **multi-valeurs** produit + filtre **OU** ; exclusions tag/texte faible/A5 lourd v1 ; **§3.1** (nom, phrase, slug, ordre, visibilité) ; image/contenu riche hors v1 ; **fiche produit** ; pas hub obligatoire ; repli **`/shop`** propre si invalide ; **état vide dédié** + rebond. [§12](../mvp_01/CONTRAT_URL_ORIGINES.md) = résidu technique ; [SPEC_SHOP_PORTES](../mvp_01/SPEC_SHOP_PORTES.md) aligné. |
 | 2026-04-22 | **CONTRAT_URL_ORIGINES — confirmation réception verrouillage** : **§13** = **référence métier stable** actée par la MOA ; enchaînement **PV / spec d’impl.** sur **§12** (notamment **§12.2**) puis développement ; **gel de §13** hors nouvelle décision MOA **écrite** (paragraphe en tête de [§13](../mvp_01/CONTRAT_URL_ORIGINES.md)). |
 | 2026-04-22 | **Spec d’implémentation Origines** : création de [mvp_01/SPEC_IMPL_ORIGINES.md](../mvp_01/SPEC_IMPL_ORIGINES.md) (brouillon technique v1 : A1 + modèle léger `ckr.shop.origin`, `ckr_mode=origin` / `ckr_origin`, hooks `WebsiteSale`, `_search_get_detail`, bandeau, fiche produit, repli invalide, tests E2E, §10 ouvert). Référence ajoutée depuis [CONTRAT §12](../mvp_01/CONTRAT_URL_ORIGINES.md) et [SPEC_SHOP_PORTES §7](../mvp_01/SPEC_SHOP_PORTES.md). |
+| 2026-04-26 | **[VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md)** : vision **média-commerce** à trois mondes + doctrine publicitaire — intégration `docs/direction/`. **[ADR-CKR-009](#adr-ckr-009)** — **Acceptée** (orientation fondatrice ; priorité Phase 1 inchangée ; garde-fous e-commerce). En-tête registre : renvoi ADR-009. |
+| 2026-04-26 | **ADR-CKR-009** : **décisions 4–5** (protection zones d’achat ; trajectoire monétisation §5.1 : auto **cloisonnée** → régie **directe** / partenaires ; sanctuaire e-commerce **toujours**) ; conséquences revues + **cloisonnement** outils auto. **VISION** §14, **§5.1**. |
+| 2026-04-26 | **[DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](DOCTRINE_CK_ECOMMERCE_B2C_B2B.md)** : double lecture **B2C** / **B2B**, catalogue commun, Odoo standard d’abord. **[ADR-CKR-010](#adr-ckr-010)** — **Acceptée**. En-tête registre : renvoi ADR-010. **VISION** §3.1 complété. |
+| 2026-04-26 | **DOCTRINE §2.1** + **ADR-010** (décision 1–2, conséquences specs) : **affichage commercial contextualisé** — prix, remises, conditions de commande selon **statut**, **compte**, **pricelists** Odoo ; catalogue **unique**. |
+| 2026-04-26 | **[DOCTRINE_CK_LANGUES_CREOLES.md](DOCTRINE_CK_LANGUES_CREOLES.md)** : langues créoles — qualité, variantes, gouvernance ; distinct de **EXPLOITATION_I18N_DEVISES**. **[ADR-CKR-011](#adr-ckr-011)** — **Acceptée**. En-tête registre : renvoi ADR-011. **VISION** §3.4 ; renvois NOTE, README, methodo, BRIEF, DESIGN, **EXPLOITATION_I18N**. |
+| 2026-04-26 | **[DOCTRINE_CK_PACK_VS_KIT.md](DOCTRINE_CK_PACK_VS_KIT.md)** : distinction métier **pack** (homogène, conditionnement) vs **kit** (hétérogène, usage / expérience). Intégration sous **[ADR-CKR-008](#adr-ckr-008)** (*Doctrine métier complémentaire*) ; renvois **SPEC_SHOP_PORTES**, **CONTRAT_URL_PACKS**, **DESIGN**, **BRIEF_DEV**. |
+

@@ -24,7 +24,7 @@ Ce fichier complète :
 4. **La sidebar reste adossée au moteur natif Odoo** en Vague 1 :
    - pas de seconde logique filtres (pas de double `base_domain` parallèle) ;
    - pas de navigation collections parallèle au sens **routes nobles** : le rail CK **liste** des collections et **pointe** vers `/collections/...` ;
-   - **Extension livrée** (module ≥ **19.0.1.10.18**) : ordre **Catégories → Collections → Origines → Prix**, injection CK dans le rail, fallbacks `opt_wsale_categories` / `show_price_filter`, non-régression `/shop` documentée (**10.26–10.28**) — détail [TICKET_SHOP_SIDEBAR_CATEGORIES.md](TICKET_SHOP_SIDEBAR_CATEGORIES.md), [SHOP_MAQUETTE_ECARTS.md §2](SHOP_MAQUETTE_ECARTS.md).
+   - **Extension livrée** (module ≥ **19.0.1.10.18** ; filtre Prix **10.52+**) : ordre **Catégories → Collections → Origines → Prix**, injection CK dans le rail, fallback **`opt_wsale_categories`**, **`show_price_filter = opt_wsale_filter_price`** (+ data activation / recalcul contrôleur), non-régression `/shop` documentée (**10.26–10.28**, **10.52**) — détail [TICKET_SHOP_SIDEBAR_CATEGORIES.md](TICKET_SHOP_SIDEBAR_CATEGORIES.md), [SHOP_MAQUETTE_ECARTS.md §2](SHOP_MAQUETTE_ECARTS.md), [2_SHOP.md §4](2_SHOP.md).
 5. **Les shortcuts commerciaux réutilisent les routes existantes** :
    - `/promotions` ;
    - `/incontournables` ;

@@ -44,12 +44,22 @@
             <t t-set="opt_wsale_categories" t-value="True"/>
         </xpath>
         <!--
+            Sécurise l'affichage du bloc Prix côté boutique CK même si la vue native
+            `website_sale.filter_products_price` a été désactivée par l'éditeur ou un
+            thème. Le contrôleur CK recalcule les bornes min/max si elles sont absentes.
+        -->
+        <xpath expr="//t[@t-set='opt_wsale_filter_price']" position="replace">
+            <t t-set="opt_wsale_filter_price" t-value="True"/>
+        </xpath>
+        <!--
             Cas nominal maquette : afficher le bloc Prix sans exiger `opt_wsale_attributes`.
-            En standard, `show_price_filter = opt_wsale_filter_price and opt_wsale_attributes` :
-            sans facettes attributs actives, le prix disparaît — sidebar à 3 blocs seulement.
+            En standard : `show_price_filter = opt_wsale_filter_price and opt_wsale_attributes`.
+            Ici on ne garde que `opt_wsale_filter_price`, qui est déjà défini dans le même
+            template comme `is_view_active('website_sale.filter_products_price')` — aligné
+            sur le contrôleur qui n'injecte min/max que si cette vue est active (pas de 500).
         -->
         <xpath expr="//aside[@id='products_grid_before']//t[@t-set='show_price_filter']" position="replace">
-            <t t-set="show_price_filter" t-value="True"/>
+            <t t-set="show_price_filter" t-value="opt_wsale_filter_price"/>
         </xpath>
         <xpath expr="//aside[@id='products_grid_before']//div[hasclass('o_wsale_products_grid_before_rail')]" position="attributes">
             <attribute name="class" remove="vh-100 overflow-y-scroll" separator=" "/>

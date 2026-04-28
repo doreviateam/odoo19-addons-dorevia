@@ -33,9 +33,8 @@
     <!-- les profils `ckr.shop.origin` publies.                      -->
     <!--                                                            -->
     <!-- Rendu : liste a puces horizontale, chaque libelle cliquable -->
-    <!-- vers la lecture contextualisee /shop?ckr_mode=origin&       -->
-    <!-- ckr_origin=<slug> (boucle de lecture entree -> produit ->   -->
-    <!-- famille).                                                   -->
+    <!-- vers la grille boutique ``/shop?ckr_origin=<slug>`` (conteneur -->
+    <!-- unique ; pas de ``ckr_mode=origin`` pour une facette seule).   -->
     <!-- ========================================================== -->
 
     <template id="ckr_product_origins_block"
@@ -55,7 +54,7 @@
                     <li t-foreach="ckr_origins"
                         t-as="ckr_origin"
                         class="ckr-product-origins__item">
-                        <a t-att-href="'/shop?ckr_mode=origin&amp;ckr_origin=%s' % ckr_origin.slug"
+                        <a t-att-href="'/shop?ckr_origin=%s' % ckr_origin.slug"
                            class="ckr-product-origins__link"
                            t-esc="ckr_origin.display_name_visitor"/>
                     </li>
@@ -78,14 +77,10 @@
     <!-- website courant — SPEC_IMPL §2.2 / RC-03).                   -->
     <!--                                                            -->
     <!-- Rendu : liste a puces horizontale, chaque libelle cliquable -->
-    <!-- vers la lecture contextualisee /collections/<slug> UNIQUEMENT -->
-    <!-- (pas de lien /collections/union/... depuis la fiche - § V1    -->
-    <!-- par defaut, CONTRAT §11).                                    -->
+    <!-- vers ``/shop?ckr_collection=<slug>`` (conteneur unique).    -->
+    <!-- Aucun lien /collections/union/... depuis la fiche (V1).      -->
     <!--                                                            -->
-    <!-- Preuve auto : PV RC-13 -                                    -->
-    <!-- TestCkrCollectionsPVHttp.test_ckr_col_rc13_product_page_     -->
-    <!-- collection_links (liens /collections/<slug> presents ;      -->
-    <!-- aucun /collections/union/... ni /shop?ckr_mode=collection).  -->
+    <!-- Preuve auto : PV RC-13 — test_ckr_col_rc13_product_page_*   -->
     <!-- ========================================================== -->
 
     <template id="ckr_product_collections_block"
@@ -105,7 +100,7 @@
                     <li t-foreach="ckr_collections_block"
                         t-as="ckr_collection"
                         class="ckr-product-collections__item">
-                        <a t-att-href="'/collections/%s' % ckr_collection.slug"
+                        <a t-att-href="'/shop?ckr_collection=%s' % ckr_collection.slug"
                            class="ckr-product-collections__link"
                            t-esc="ckr_collection.name"/>
                     </li>

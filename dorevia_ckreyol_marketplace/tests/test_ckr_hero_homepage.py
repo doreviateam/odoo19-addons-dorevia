@@ -78,13 +78,12 @@ class TestCkrHeroHomepageV2(HttpCase):
         )
 
     def test_rc_hero_cta_secondary_origin_alias_present(self):
-        """CTA secondaire : /origines (alias H1 vers lecture Origines)."""
+        """CTA secondaire : conteneur /shop (mode origine portail)."""
         html_body = self._get_homepage_html()
         self.assertIn(
-            'href="/origines"',
+            'href="/shop?ckr_mode=origin"',
             html_body,
-            "Le CTA secondaire du hero MVP2.1 doit pointer vers /origines "
-            "(DECISION_EXPLORER_HOMEPAGE_MVP2 + contrat URL Origines).",
+            "Le CTA secondaire du hero doit rester sur /shop (doctrine conteneur unique).",
         )
         self.assertIn(
             "Explorer les origines",

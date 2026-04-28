@@ -690,24 +690,25 @@ class TestCkrCollectionsPVHttp(HttpCase):
     # --- RC-07 — 301 normalisation ---
 
     def test_ckr_col_rc07_union_order_dupes_301(self):
-        """RC-07 : ordre non canonique → 301 vers la forme triée §4.6 / §9."""
-        self._assert_redirect(
+        """RC-07 : ordre non canonique → 301 vers ``/shop`` (slugs triés)."""
+        resp = self._assert_redirect(
             "/collections/union/http-col-b/http-col-a",
             301,
-            "/collections/union/http-col-a/http-col-b",
+            "/shop",
         )
+        loc = resp.headers.get("Location", "")
+        self.assertIn("http-col-a", loc)
+        self.assertIn("http-col-b", loc)
 
     def test_ckr_col_rc07_union_collapses_to_single_301(self):
-        """RC-07 : ``/collections/union/a/a`` (doublon) → 301 ``/collections/a``.
-
-        Règle §4.6 contrat : après déduplication il ne reste qu'un slug
-        **valide** → 301 direct vers la vue unitaire canonique.
-        """
-        self._assert_redirect(
+        """RC-07 : doublon union → 301 ``/shop?ckr_collection=…`` (vue unitaire)."""
+        resp = self._assert_redirect(
             "/collections/union/http-col-a/http-col-a",
             301,
-            "/collections/http-col-a",
+            "/shop",
         )
+        loc = resp.headers.get("Location", "")
+        self.assertIn("ckr_collection=http-col-a", loc)
 
     # --- RC-08 — 302 replis ---
 
@@ -720,14 +721,12 @@ class TestCkrCollectionsPVHttp(HttpCase):
         resp = self._assert_redirect(
             "/collections/slug-inconnu-pv",
             302,
-            "/collections",
+            "/shop",
         )
         loc = resp.headers.get("Location", "")
         self.assertNotIn("ckr_notice", loc)
         parsed = urlparse(loc)
-        # La cible exacte doit être /collections (avec ou sans trailing slash)
-        self.assertEqual(parsed.path.rstrip("/") or "/", "/collections")
-        # Aucune query n'est attendue sur la Location
+        self.assertEqual(parsed.path.rstrip("/") or "/", "/shop")
         self.assertFalse(parse_qs(parsed.query))
 
     def test_ckr_col_rc08_union_incomplete_302(self):
@@ -742,7 +741,7 @@ class TestCkrCollectionsPVHttp(HttpCase):
         resp = self._assert_redirect(
             "/collections/union/http-col-a",
             302,
-            "/collections",
+            "/shop",
         )
         loc = resp.headers.get("Location", "")
         self.assertNotIn("ckr_notice", loc)
@@ -758,7 +757,7 @@ class TestCkrCollectionsPVHttp(HttpCase):
         resp = self._assert_redirect(
             "/collections/union/http-col-a/slug-inconnu-pv",
             302,
-            "/collections",
+            "/shop",
         )
         loc = resp.headers.get("Location", "")
         self.assertNotIn("ckr_notice", loc)
@@ -786,7 +785,7 @@ class TestCkrCollectionsPVHttp(HttpCase):
         self.assertEqual(resp.status_code, 302)
         loc = resp.headers.get("Location", "")
         self.assertNotIn("ckr_notice", loc)
-        self.assertNotIn("?", loc.replace("/collections", "", 1) or "")
+        self.assertFalse(parse_qs(urlparse(loc).query))
         # Étape 2 : suivi du 302 (session conservée par self.opener
         # dans HttpCase) → la page /collections contient le message.
         resp2 = self.url_open("/collections/slug-rc09-inconnu", timeout=60)
@@ -853,9 +852,9 @@ class TestCkrCollectionsPVHttp(HttpCase):
         # Copy corps §12 A (fragment sans apostrophe typographique)
         self.assertIn("Aucun produit", text)
         self.assertIn("affiché pour cette collection pour le moment", text)
-        # Lien Retour aux collections
+        # Lien Retour aux collections → conteneur /shop
         self.assertIn("Retour aux collections", text)
-        self.assertIn('href="/collections"', text)
+        self.assertIn("ckr_collection_scope=all", text)
 
     # --- RC-12 — canonical ---
 
@@ -865,35 +864,34 @@ class TestCkrCollectionsPVHttp(HttpCase):
         Vérifié sur les 3 cibles publiques nobles : générale, unitaire,
         union canonique.
         """
-        paths = [
-            "/collections",
-            "/collections/http-col-a",
-            "/collections/union/http-col-a/http-col-b",
+        expectations = [
+            ("/collections", ("ckr_collection_scope=all",)),
+            ("/collections/http-col-a", ("ckr_collection=http-col-a",)),
+            (
+                "/collections/union/http-col-a/http-col-b",
+                ("ckr_collection=http-col-a", "ckr_collection=http-col-b"),
+            ),
         ]
-        for path in paths:
+        for path, subs in expectations:
             resp = self.url_open(path, timeout=60)
             self.assertEqual(
                 resp.status_code, 200,
                 "%s doit renvoyer 200 (chemin canonique attendu)." % path,
             )
             canon = self._canonical_href(resp.text)
-            self.assertIn(
-                path, canon,
-                "Canonical %r attendu pour %s, obtenu : %r" % (path, path, canon),
-            )
-            # Pas de fuite /shop?ckr_mode=collection dans le canonical.
+            self.assertIn("/shop", canon, "Canonical shop attendu pour %s" % path)
+            for s in subs:
+                self.assertIn(s, canon, "Canonical %r manquant dans %r" % (s, canon))
             self.assertNotIn("ckr_mode=collection", canon)
-            self.assertNotIn("/shop?", canon)
 
     # --- RC-13 — fiche produit liens ``/collections/<slug>`` ---
 
     def test_ckr_col_rc13_product_page_collection_links(self):
-        """RC-13 : fiche produit — liens uniquement vers ``/collections/<slug>``.
+        """RC-13 : fiche produit — liens ``/shop?ckr_collection=<slug>`` uniquement.
 
-        Le produit A est rattaché à la collection A uniquement. Sa
-        fiche doit afficher le bloc Collections avec un lien
-        ``/collections/http-col-a`` — et **aucun** lien union (V1
-        CONTRAT §11) ni ``/shop?ckr_mode=collection``.
+        Le produit A est rattaché à la collection A uniquement. Sa fiche
+        affiche le bloc Collections avec un lien conteneur ``/shop`` — et
+        **aucun** lien union ni ``/shop?ckr_mode=collection``.
         """
         url = self.product_a.website_url
         self.assertTrue(url.startswith("/"))
@@ -901,7 +899,7 @@ class TestCkrCollectionsPVHttp(HttpCase):
         self.assertEqual(resp.status_code, 200)
         text = resp.text
         self.assertIn("ckr-product-collections", text)
-        self.assertIn('href="/collections/http-col-a"', text)
+        self.assertIn('href="/shop?ckr_collection=http-col-a"', text)
         # Interdits V1 depuis la fiche
         self.assertNotIn("/collections/union/", text)
         self.assertNotIn("ckr_mode=collection", text)
@@ -917,7 +915,7 @@ class TestCkrCollectionsPVHttp(HttpCase):
         * ``/kits`` → 301 ``/shop?ckr_mode=pack`` ;
         * ``/promotions`` → 301 ``/shop?ckr_mode=promo`` ;
         * ``/origines`` → 301 ``/shop?ckr_mode=origin`` ;
-        * ``/categories`` → 301 vers ``/shop[...]`` ;
+        * ``/categories`` → 301 vers ``/shop?ckr_category=…`` (pas ``/shop/category/``) ;
         * ``/shop`` nu → 200.
 
         Garantit que l'introduction de ``CKR_MODE_COLLECTION`` et des
@@ -931,7 +929,9 @@ class TestCkrCollectionsPVHttp(HttpCase):
         self._assert_redirect("/origines", 301, "ckr_mode=origin")
         r_cat = self.url_open("/categories", allow_redirects=False, timeout=60)
         self.assertEqual(r_cat.status_code, 301)
-        self.assertIn("/shop", r_cat.headers.get("Location", ""))
+        loc_cat = r_cat.headers.get("Location", "")
+        self.assertIn("/shop", loc_cat)
+        self.assertNotIn("/shop/category/", loc_cat)
         r_shop = self.url_open("/shop", timeout=60)
         self.assertEqual(r_shop.status_code, 200)
 

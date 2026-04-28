@@ -1,6 +1,6 @@
 # DESIGN — C-Kreyol
 
-Document de **cadrage design / front-end** pour le canal **C-Kreyol** (Odoo 19 CE). Il complète la [note de cadrage Phase 1](NOTE_DE_CADRAGE.md), le [registre ADR](ARCHITECTURE_DECISION_RECORD.md) et le [README](../../README.md). Il ne remplace pas les **décisions juridiques**, **commerciales** ni le **paramétrage stock** ; il en **reflète** les contraintes côté **promesse affichée** et **expérience utilisateur**.
+Document de **cadrage design / front-end** pour le canal **C-Kreyol** (Odoo 19 CE). Il complète la [vision média-commerce](VISION_CK_MEDIA_COMMERCE.md) ([ADR-CKR-009](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-009)), la [doctrine e-commerce B2C / B2B](DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) ([ADR-CKR-010](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010)), la [doctrine langues créoles](DOCTRINE_CK_LANGUES_CREOLES.md) ([ADR-CKR-011](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-011) — orientation long terme, hors mandat MVP), la [note de cadrage Phase 1](NOTE_DE_CADRAGE.md), le [registre ADR](ARCHITECTURE_DECISION_RECORD.md) et le [README](../../README.md). Il ne remplace pas les **décisions juridiques**, **commerciales** ni le **paramétrage stock** ; il en **reflète** les contraintes côté **promesse affichée** et **expérience utilisateur** — y compris la **protection** du tunnel d’achat et la **secondarité** des signaux non marchands vis-à-vis du CTA (cf. vision §6).
 
 ---
 
@@ -16,7 +16,7 @@ Ce document a pour objet de :
 - signaler les **pièges à éviter** ;
 - ouvrir des **pistes d’identité visuelle** et des **questions** encore ouvertes.
 
-**Périmètre technique** : site **website / e-commerce** Odoo 19 CE, dans le respect des [ADR-CKR-001](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-001) à [ADR-CKR-005](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-005) (standard d’abord, front-end spécifique maîtrisé, promesse de disponibilité alignée sur la réalité — cf. conséquences ADR-005).
+**Périmètre technique** : site **website / e-commerce** Odoo 19 CE, dans le respect des [ADR-CKR-001](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-001) à [ADR-CKR-005](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-005) (standard d’abord, front-end spécifique maîtrisé, promesse de disponibilité alignée sur la réalité — cf. conséquences ADR-005) et de l’**orientation** [ADR-CKR-009](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-009) (hiérarchie e-commerce vs éditorial / communautaire sur le long terme).
 
 ---
 
@@ -125,7 +125,7 @@ Objectifs **prioritaires** :
 **Blocs attendus** (résumé — l’ordre implémenté : `ckr_homepage.xml` ; doctrine portes catalogue : [ADR-006 à 008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-006), [WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md) Bloc 3) :
 
 1. **Hero principal** — message marque + CTA **boutique** + CTA secondaire **Explorer le catalogue** (ancre section Explorer) ;
-2. **Explorer / Par où commencer** — **cinq portes catalogue** : libellés front au **pluriel** **Promotions**, **Collections**, **Kits**, **Catégories**, **Origines**. Pour la porte 3, règle de bi-lexique [ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008) : **Kits** côté visiteur (univers alimentaire : kit colombo, kit apéritif…), **Pack** côté back-office et source de vérité (module OCA **`product_pack`**, case *« Est un pack ? »* = `pack_ok`). **≠** menu Option B (Boutique / Offrir / Recettes restent navigation **générale**) ; **présentation** : rail horizontal **sans autoplay**, boutons précédent/suivant + scroll natif + flèches clavier — [WIREFRAME_HOMEPAGE.md — Bloc 3](WIREFRAME_HOMEPAGE.md) (*Présentation front*) ;
+2. **Explorer / Par où commencer** — **cinq portes catalogue** : libellés front au **pluriel** **Promotions**, **Collections**, **Kits**, **Catégories**, **Origines**. Pour la porte 3, règle de bi-lexique [ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008) : **Kits** côté visiteur (entrée unique vers les produits `pack_ok`), **Pack** côté back-office et source de vérité (module OCA **`product_pack`**, case *« Est un pack ? »* = `pack_ok`). **Doctrine métier** [DOCTRINE_CK_PACK_VS_KIT.md](DOCTRINE_CK_PACK_VS_KIT.md) : en **copy** et **titres produits**, **pack** = assemblage **homogène** (conditionnement), **kit** = **hétérogène** (usage, recette, expérience) — la carte **Kits** peut donc mener à une liste contenant les deux types, nommés correctement sur chaque fiche. **≠** menu Option B (Boutique / Offrir / Recettes restent navigation **générale**) ; **présentation** : rail horizontal **sans autoplay**, boutons précédent/suivant + scroll natif + flèches clavier — [WIREFRAME_HOMEPAGE.md — Bloc 3](WIREFRAME_HOMEPAGE.md) (*Présentation front*) ;
 3. **Mise en avant fournisseur / origine** — **La Platine** comme **premier fournisseur**, sans confusion de marque ;
 4. **Sélection produits** — best sellers / nouveautés **sincères** (ADR-005) ;
 5. **Bloc retail éditorial** — collection / saison / cadeau / usages **si contenu crédible** ;
@@ -236,3 +236,4 @@ Référence normative : note **§6.1**, **§9.2**, **§13** et README.
 | 2026-04-21 | **§7** : libellés Explorer passés au **pluriel** — **Promotions**, **Collections**, **Kits**, **Catégories**, **Origines** (harmonisation lecture visiteur). |
 | 2026-04-21 | **§7** : porte **Kits → Packs** — alignement sur la logique pack Odoo / OCA **`product_pack`** après vérification back-office (case *« Est un pack ? »*, onglet *Pack*). Libellés retenus : **Promotions**, **Collections**, **Packs**, **Catégories**, **Origines**. |
 | 2026-04-21 | **§7** : règle de **bi-lexique front / back-office** [ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008) — libellé **visiteur** = **Kits** (univers alimentaire C-Kreyol), **grille back-office / source de vérité** = **Pack** (module OCA `product_pack`, `pack_ok`). Libellés Explorer : **Promotions**, **Collections**, **Kits**, **Catégories**, **Origines**. |
+| 2026-04-26 | **§7** : doctrine métier **[DOCTRINE_CK_PACK_VS_KIT.md](DOCTRINE_CK_PACK_VS_KIT.md)** — **pack** homogène (conditionnement) vs **kit** hétérogène (usage / expérience) pour **copy** et **titres** ; carte **Kits** = entrée unique `pack_ok`. |

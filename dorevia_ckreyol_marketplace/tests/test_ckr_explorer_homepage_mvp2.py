@@ -36,11 +36,12 @@ class TestCkrExplorerHomepageMvp2(HttpCase):
         start = html.find('id="explorer-catalogue"')
         self.assertNotEqual(start, -1, "Section Explorer presente.")
         chunk = html[start : start + 20000]
-        p = chunk.find('href="/promotions"')
-        k = chunk.find('href="/kits"')
-        c = chunk.find('href="/categories"')
-        co = chunk.find('href="/collections"')
-        o = chunk.find('href="/origines"')
+        p = chunk.find('href="/shop?ckr_mode=promo"')
+        k = chunk.find('href="/shop?ckr_mode=pack"')
+        # Carte Catégories seule : ``href="/shop"`` nu (pas ``/shop?…``).
+        c = chunk.find('<a href="/shop"')
+        co = chunk.find('href="/shop?ckr_collection_scope=all"')
+        o = chunk.find('href="/shop?ckr_mode=origin"')
         for name, pos in (("promotions", p), ("kits", k), ("categories", c),
                           ("collections", co), ("origines", o)):
             self.assertNotEqual(

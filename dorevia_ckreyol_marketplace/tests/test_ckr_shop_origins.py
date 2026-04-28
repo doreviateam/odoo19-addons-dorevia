@@ -437,15 +437,15 @@ class TestCkrOriginPVHttp(HttpCase):
         self.assertEqual(origins, ["guadeloupe", "martinique"])
 
     def test_pv_rc12_product_page_origins_links(self):
-        """RC-12 : bloc origines + liens ``/shop?ckr_mode=origin&ckr_origin=``."""
+        """RC-12 : bloc origines + liens ``/shop?ckr_origin=`` (facette seule)."""
         url = self.product_multi.website_url
         self.assertTrue(url.startswith("/"))
         resp = self.url_open(url, timeout=60)
         self.assertEqual(resp.status_code, 200)
         text = resp.text
         self.assertIn("ckr-product-origins", text)
-        self.assertIn("/shop?ckr_mode=origin&amp;ckr_origin=guadeloupe", text)
-        self.assertIn("/shop?ckr_mode=origin&amp;ckr_origin=martinique", text)
+        self.assertIn("/shop?ckr_origin=guadeloupe", text)
+        self.assertIn("/shop?ckr_origin=martinique", text)
 
     def test_pv_rc13_regression_other_gates(self):
         """RC-13 : alias Kits / Promotions / Catégories / shop nu inchangés (301/200)."""
@@ -453,6 +453,12 @@ class TestCkrOriginPVHttp(HttpCase):
         self._assert_redirect("/promotions", 301, "ckr_mode=promo")
         r_cat = self.url_open("/categories", allow_redirects=False)
         self.assertEqual(r_cat.status_code, 301)
-        self.assertIn("/shop", r_cat.headers.get("Location", ""))
+        loc_cat = r_cat.headers.get("Location", "")
+        self.assertIn("/shop", loc_cat)
+        self.assertNotIn(
+            "/shop/category/",
+            loc_cat,
+            "Doctrine conteneur : /categories ne doit pas cibler /shop/category/….",
+        )
         r_shop = self.url_open("/shop", timeout=60)
         self.assertEqual(r_shop.status_code, 200)

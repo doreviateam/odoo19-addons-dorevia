@@ -25,9 +25,11 @@ Dossier de **cadrage et décisions** pour la vague **MVP 02** (évolution homepa
 
 - [SHOP_EXEC_MATRIX.md](SHOP_EXEC_MATRIX.md) — matrice par contexte `/shop` (titre, hero, shortcuts, sidebar, fallback, recette) ;
 - [SHOP_COMPONENT_CONTRACTS.md](SHOP_COMPONENT_CONTRACTS.md) — mapping **doc → code** et invariants d'orchestration ;
-- [TICKET_SHOP_SIDEBAR_CATEGORIES.md](TICKET_SHOP_SIDEBAR_CATEGORIES.md) — fallback **`opt_wsale_categories`**, **`show_price_filter`**, démo 4 blocs, Odoo 19 / liens catégorie, offcanvas, **Prix** déplié par défaut (**10.24–10.28**) ;
+- [DOCTRINE_SHOP_CONTENEUR_UNIQUE.md](DOCTRINE_SHOP_CONTENEUR_UNIQUE.md) — doctrine front : `/shop` comme conteneur unique, chips = filtres commerciaux, sidebar = facettes multi-checkbox ;
+- [TICKET_SHOP_SIDEBAR_CATEGORIES.md](TICKET_SHOP_SIDEBAR_CATEGORIES.md) — fallback **`opt_wsale_categories`** ; filtre **Prix** : **`show_price_filter = opt_wsale_filter_price`**, data activation, recalcul contrôleur (**10.52**) ; démo 4 blocs ; Odoo 19 / liens catégorie ; offcanvas ; **Prix** déplié par défaut quand affiché (**10.28**) ;
 - [SHOP_MAQUETTE_ECARTS.md](SHOP_MAQUETTE_ECARTS.md) — synthèse maquette vs livré (sidebar §2) ;
-- [NOTE_TECH_TUILE_SHOP_FOOTER.md](NOTE_TECH_TUILE_SHOP_FOOTER.md) — pied tuile `/shop` (prix \| CTA, wrappers Odoo, cascade) ;
+- [NOTE_TECH_TUILE_SHOP_FOOTER.md](NOTE_TECH_TUILE_SHOP_FOOTER.md) — pied tuile `/shop` (prix \| CTA, wrappers Odoo, cascade) ; **Nom CK** + information secondaire **rail coin** (voir [NOTE_TECH_TUILE_CORNER_ACTIONS.md](NOTE_TECH_TUILE_CORNER_ACTIONS.md), [SPEC_CK_NOM_CK_TUILE_PRODUIT.md](SPEC_CK_NOM_CK_TUILE_PRODUIT.md)) ;
+- [NOTE_TECH_TUILE_CORNER_ACTIONS.md](NOTE_TECH_TUILE_CORNER_ACTIONS.md) — rail **wishlist + info** sur la média tuile (gabarit QWeb **`ckr_shop_wishlist_on_product_media`**, `ckr-product-card__corner-actions`, styles page, tests `dorevia_ckr_shop_wave1`) ;
 - [TICKET_SHOP_MVP22_VISIBLE_WAVE1.md](../crea/TICKET_SHOP_MVP22_VISIBLE_WAVE1.md) — ticket Vague 1 à utiliser avec les deux documents ci-dessus pour éviter l'empilement `hero + bandeaux + header natif`.
 
 ### Ordre de merge des PR (souhait MOA)
@@ -60,9 +62,12 @@ Dossier de **cadrage et décisions** pour la vague **MVP 02** (évolution homepa
 | [DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md](DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md) | Décision MOA — ordre **Produits → Éditorial → Inscription → Réassurance** (éditorial avant inscription) |
 | [1_HOMEPAGE.md](1_HOMEPAGE.md) | Canon homepage MVP2.1 : §1 Hero … §6 Réassurance (Éditorial §4 explicite) |
 | [2_SHOP.md](2_SHOP.md) | Canon boutique `/shop` MVP2.2 : UX, doctrine, **Incontournables** (`featured`) ; renvoi **[SPEC_SHOP_PORTES.md §4.6](../mvp_01/SPEC_SHOP_PORTES.md)** |
+| [DOCTRINE_SHOP_CONTENEUR_UNIQUE.md](DOCTRINE_SHOP_CONTENEUR_UNIQUE.md) | Doctrine front `/shop` : filtres commerciaux, facettes multi-sélection, `Toutes` neutre, URLs `/shop?...` |
 | [SHOP_EXEC_MATRIX.md](SHOP_EXEC_MATRIX.md) | Matrice d'exécution boutique : contextes `/shop`, hero, shortcuts, sidebar, fallback, recette |
 | [SHOP_COMPONENT_CONTRACTS.md](SHOP_COMPONENT_CONTRACTS.md) | Contrat des composants boutique : mapping doc / code / invariants d'orchestration |
-| [NOTE_TECH_TUILE_SHOP_FOOTER.md](NOTE_TECH_TUILE_SHOP_FOOTER.md) | Note dev : footer tuile produit `/shop` (QWeb, grille, neutralisation `website_sale`) |
+| [NOTE_TECH_TUILE_SHOP_FOOTER.md](NOTE_TECH_TUILE_SHOP_FOOTER.md) | Note dev : footer tuile `/shop` (QWeb, grille, neutralisation `website_sale`) ; média : rail coin wishlist+info (`ckr_shop_wishlist_on_product_media`, `o_add_wishlist` + `ckr-wishlist-ghost`, `fa-info`) ; rubans `o_left`/`o_right` |
+| [NOTE_TECH_TUILE_CORNER_ACTIONS.md](NOTE_TECH_TUILE_CORNER_ACTIONS.md) | Note dev : rail unique **wishlist + info** sur la média tuile ; conservation du comportement wishlist Odoo natif ; icônes FontAwesome ; dette CSS transitoire localisée |
+| [SPEC_CK_NOM_CK_TUILE_PRODUIT.md](SPEC_CK_NOM_CK_TUILE_PRODUIT.md) | Nom CK (`ck_product_name`) + information secondaire tuile (panneau **info** / rail coin ; historique « Pour info » / `<details>` en **10.53–10.54**) |
 
 **Exécution & recette** (dossier `docs/crea/`) :
 
@@ -82,6 +87,9 @@ Dossier de **cadrage et décisions** pour la vague **MVP 02** (évolution homepa
 
 ## Liens utiles (hors MVP 02)
 
+- Vision long terme (trois mondes, régie) : [VISION_CK_MEDIA_COMMERCE.md](../direction/VISION_CK_MEDIA_COMMERCE.md) — [ADR-CKR-009](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-009)
+- E-commerce B2C / B2B (grilles tarifaires, catalogue commun) : [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) — [ADR-CKR-010](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010)
+- Langues créoles (doctrine culturelle, hors mandat MVP) : [DOCTRINE_CK_LANGUES_CREOLES.md](../direction/DOCTRINE_CK_LANGUES_CREOLES.md) — [ADR-CKR-011](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-011)
 - Direction / ADR : `docs/direction/`
 - Créa & tickets : `docs/crea/`
 - Portes `/shop` & contrats URL : `docs/mvp_01/`

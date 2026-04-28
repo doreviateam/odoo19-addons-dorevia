@@ -28,12 +28,14 @@
     // immersifs (blanc sur overlay) : le `#wrap` est souvent `.ckr-root` sans
     // `.ckr-hero`, donc un `h1` descendant héritait du charcoal et battait
     // `_hero.scss` (spécificité moindre).
+    // Exclure le titre produit grille (`website_sale`) : son style « libellé catalogue »
+    // est défini dans `_shop.scss` ; sinon ce bloc lui impose Playfair + taille `h2` + semibold.
     h1:not(.ckr-hero__title):not(.ckr-shop-hero__title),
-    h2,
+    h2:not(.o_wsale_products_item_title),
     h3,
     h4,
     h5,
-    h6 {
+    h6:not(.o_wsale_products_item_title) {
         font-family: $ckr-font-serif;
         color: $ckr-text;
         font-weight: $ckr-weight-semibold;
@@ -41,13 +43,13 @@
     }
 
     h1 { font-size: $ckr-h1-size; line-height: 1.15; }
-    h2 { font-size: $ckr-h2-size; line-height: 1.2; }
+    h2:not(.o_wsale_products_item_title) { font-size: $ckr-h2-size; line-height: 1.2; }
     h3 { font-size: $ckr-h3-size; line-height: 1.3; }
 
     // Grille produit hors page boutique : le thème impose souvent du serif
     // géant sur les tuiles ; on force du sans ailleurs uniquement.
-    // Sur `/shop` (`.o_wsale_products_page`), le détail typographique retail
-    // est défini dans `layout/_shop.scss` (serif maquette + tailles verrouillées).
+    // Sur `/shop` (`.o_wsale_products_page`), le nom produit grille est en sans-serif
+    // catalogue dans `layout/_shop.scss` (tailles / 2 lignes verrouillées).
     .ckr-page:not(.o_wsale_products_page) form.oe_product_cart :is(h2, h6).o_wsale_products_item_title {
         font-family: $ckr-font-sans;
         font-weight: $ckr-weight-semibold;
@@ -63,7 +65,7 @@
     // Couleur de lien par defaut, sauf boutons (standard Odoo .btn
     // ou nos CTA .ckr-btn) dont la couleur est definie par leur propre
     // composant via _buttons.scss.
-    a:not(.btn):not(.ckr-btn):not(.ckr-shop-shortcuts__link) {
+    a:not(.btn):not(.ckr-btn):not(.ckr-shop-shortcuts__link):not(.ckr-product-card__name-link) {
         color: $ckr-primary;
         text-decoration: none;
         transition: color $ckr-transition-fast;

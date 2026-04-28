@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 """Extension ``product.public.category`` — porte Explorer **Catégories**.
 
-Matérialise la convergence boutique via l’**URL native** Odoo
-``/shop/category/<id>-<slug>`` (contrôleur ``website_sale``), sans
-paramètre ``ckr_mode`` : le filtrage produit est entièrement celui du
-standard (taxonomie ``product.public.category``).
+Doctrine **conteneur unique** : l’alias visiteur ``/categories`` converge
+vers ``/shop?ckr_category=<slug>`` (filtre ``website_sale`` via
+``ProductTemplate._search_get_detail``, même sémantique que la grille
+catégorie sans chemins parallèles ``/shop/category/…`` en entrée).
 
-Le point d’entrée **URL courte visiteur** ``/categories`` est résolu en
-**redirection HTTP 301** vers cette URL native — voir
-``docs/mvp_01/CONTRAT_URL_CATEGORIES.md`` §12 (**Hybride H1 — cible
-native**).
+Le helper ``_ckr_get_explorer_entry_shop_path`` conserve la forme native
+``/shop/category/<id>-<slug>`` pour les rares cas (tests, liens internes).
 """
 from odoo import api, models
 
@@ -23,27 +21,13 @@ class ProductPublicCategory(models.Model):
     _inherit = "product.public.category"
 
     @api.model
-    def _ckr_get_explorer_entry_shop_path(self, website):
-        """Chemin relatif ``/shop/category/<id>-<slug>`` pour la carte Explorer.
+    def _ckr_resolve_explorer_public_category(self, website):
+        """Catégorie d’entrée Explorer (paramètre système ou première racine).
 
-        :param website: ``website.website`` courant (obligatoire en pratique).
-        :returns: chaîne commençant par ``/shop/category/``, ou ``None`` si
-            aucune catégorie publique exploitable n’est trouvée (l’alias
-            ``/categories`` retombera alors sur ``/shop`` nu).
-
-        **Résolution** (dans l’ordre) :
-
-        1. ``ir.config_parameter`` ``dorevia_ckreyol_marketplace.explorer_public_category_id``
-           : id numérique d’une ``product.public.category`` **valide** pour le
-           site (``website_id`` vide ou égal au site courant).
-        2. **Sinon** : première **racine** de l’arbre (``parent_id`` absent),
-           filtrée par site, tri ``sequence, id``, limite 1.
-
-        Aucune donnée n’est dupliquée : la source de vérité reste le modèle
-        standard Odoo et les rattachements produits existants.
+        :returns: ``product.public.category`` (0 ou 1 enregistrement).
         """
         if not website:
-            return None
+            return self.env["product.public.category"].browse()
         website = website.sudo()
         Category = self.env["product.public.category"].sudo()
         ICP = self.env["ir.config_parameter"].sudo()
@@ -63,13 +47,18 @@ class ProductPublicCategory(models.Model):
             category = Category.search(
                 self._ckr_explorer_root_domain(website), order="sequence, id", limit=1
             )
+        return category
 
+    @api.model
+    def _ckr_get_explorer_entry_shop_path(self, website):
+        """Chemin relatif **natif** ``/shop/category/<id>-<slug>`` (legacy).
+
+        Préférer l’alias ``/categories`` → ``/shop?ckr_category=…`` pour la
+        navigation visiteur (doctrine conteneur unique).
+        """
+        category = self._ckr_resolve_explorer_public_category(website)
         if not category:
             return None
-
-        # Aligné sur ``website_sale.controllers.main.WebsiteSale._get_shop_path`` :
-        # slug via ``ir.http._slug`` (Odoo 19 — plus d’export ``slug`` depuis
-        # ``http_routing.models.ir_http``).
         slug = self.env["ir.http"].sudo()._slug
         return "/shop/category/%s" % slug(category)
 

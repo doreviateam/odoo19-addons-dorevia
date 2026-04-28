@@ -44,7 +44,7 @@ Effet : le rail affiche **systématiquement** le bloc Catégories (accordéon + 
 ## Cas nominal démo (4 blocs garantis sur instance neuve)
 
 1. **`show_price_filter`** — en standard : `opt_wsale_filter_price and opt_wsale_attributes`.  
-   Le module force **`show_price_filter = True`** dans le rail (`ckr_shop_sidebar_rail_maquette.xml`) pour afficher le bloc **Prix** sans activer toutes les facettes attributs.
+   Depuis **19.0.1.10.52**, le rail aligne **`show_price_filter = opt_wsale_filter_price`** (`ckr_shop_sidebar_rail_maquette.xml`) : le bloc **Prix** n’apparaît que si la vue native **`website_sale.filter_products_price`** est active — sinon le gabarit natif peut provoquer une **HTTP 500** (`min_price` / `max_price` absents). Le module charge **`data/ckr_shop_filter_price_activation.xml`** pour activer cette vue à l’`-u`, et **`WebsiteSaleCKR._ckr_get_price_filter_shop_values`** complète les bornes catalogue si le contexte les omet.
 
 2. **Données CK** — fichier `data/ckr_shop_sidebar_nominal_demo_data.xml` (chargé après les fiches vitrine Sélection) :
    - **Collection** « Collection Saint-Anne » (`slug` `saint-anne`) + produits Crêpes / Chips ;
@@ -63,7 +63,7 @@ Sur **`/shop`** (desktop `≥ lg`), la sidebar montre clairement **dans l’ordr
 
 Recette : hard refresh, `-u dorevia_ckreyol_marketplace`, ouvrir `/shop` sur une instance de démo avec données ci-dessus chargées.
 
-**Bloc Prix** : **déplié par défaut** (comportement natif accordéon `website_sale.filter_products_price`) ; libellés FR et classes maquette dans `ckr_shop_filter_price_fr` (**19.0.1.10.28**).
+**Bloc Prix** : affiché seulement si **`opt_wsale_filter_price`** (vue active, **10.52**) ; **déplié par défaut** quand le bloc est rendu (comportement natif) ; libellés FR et classes maquette dans `ckr_shop_filter_price_fr` (**19.0.1.10.28**).
 
 **Gel chantier (MOA)** : la sidebar est jugée **alignée recette visuelle** — pas d’ajustements structurels lourds tant que la recette (accordéons, cases à cocher, mobile/offcanvas, non-régression `/shop`, `/collections/...`, Origines) ne remonte pas d’écart ciblé.
 

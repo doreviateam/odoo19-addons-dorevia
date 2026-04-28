@@ -124,6 +124,40 @@ Contenu type :
 - phases ;
 - liens vers la documentation.
 
+#### `VISION_CK_MEDIA_COMMERCE.md`
+Rôle :
+- figer la **vision fondatrice** au-delà de la seule Phase 1 e-commerce ;
+- articuler les **trois mondes** (e-commerce, éditorial, communautaire) et la **doctrine publicitaire** ;
+- poser les **garde-fous** (protection du tunnel d’achat, zones sensibles, priorités court terme) ;
+- guider UX, produit et architecture sans imposer le calendrier de chaque monde.
+
+Contenu type :
+- vision et doctrine (vente / désir / confiance / régie) ;
+- périmètre de chaque monde et modèle économique ;
+- règles de protection du e-commerce ;
+- implications UX, produit, technique ;
+- lien vers le [registre ADR](ARCHITECTURE_DECISION_RECORD.md) (**ADR-CKR-009**).
+
+#### `DOCTRINE_CK_ECOMMERCE_B2C_B2B.md`
+Rôle :
+- figer la **double lecture** du **monde e-commerce** : **B2C** (prix public conseillé) et **B2B** (prix partenaire distributeur) ;
+- ancrer l’exploitation dans **Odoo** (catalogue commun, pricelists, **standard d’abord**) ;
+- maintenir la **sanctuarisation** du tunnel pour **les deux** publics.
+
+Contenu type :
+- principes B2C / B2B, phrase canonique, implications UX produit (orientations) ;
+- lien [ADR-CKR-010](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010).
+
+#### `DOCTRINE_CK_LANGUES_CREOLES.md`
+Rôle :
+- figer l’**orientation culturelle** long terme sur l’**accueil progressif** des **langues créoles** dans l’expérience utilisateur ;
+- distinguer **variantes**, exiger traduction **humaine qualifiée** et **gouvernance éditoriale** ;
+- protéger le **parcours marchand** (clarté prix / conditions) sans confondre avec le **paramétrage** FR / EN / ES ([EXPLOITATION_I18N_DEVISES.md](EXPLOITATION_I18N_DEVISES.md)).
+
+Contenu type :
+- principe fondateur, refus du « créole générique », rôle contributeurs, articulation trois mondes ;
+- lien [ADR-CKR-011](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-011).
+
 ---
 
 ### 4.2 Niveau cadrage projet
@@ -260,21 +294,23 @@ Rôle :
 Ordre type recommandé :
 
 1. `README.md`
-2. `NOTE_DE_CADRAGE.md`
-3. `ARCHITECTURE_DECISION_RECORD.md`
-4. `DESIGN.md`
-5. `STRUCTURE_MENU_PRINCIPAL.md`
-6. `WIREFRAME_HOMEPAGE.md`
-7. `SPEC_HERO_HOMEPAGE.md`
-8. `BRIEF_SYNTHETIQUE_<PROJET>.md`
-9. `DIRECTIONS_ARTISTIQUES_PHASE1.md`
-10. `CHARTE_GRAPHIQUE_PHASE1.md`
-11. `BRIEF_VISUEL_HERO_PHASE1.md`
-12. `BRIEF_DEV.md`
-13. `PLAN_IMPLEMENTATION.md`
-14. implémentation
-15. `RECETTE_FRONT_PHASE1.md`
-16. `BACKLOG_PHASE_1BIS_FRONT.md`
+2. `VISION_CK_MEDIA_COMMERCE.md` (vision long terme / trois mondes — dès que la direction est actée)
+3. `DOCTRINE_CK_ECOMMERCE_B2C_B2B.md` (monde e-commerce B2C / B2B — lorsque la double cible est actée)
+4. `NOTE_DE_CADRAGE.md`
+5. `ARCHITECTURE_DECISION_RECORD.md`
+6. `DESIGN.md`
+7. `STRUCTURE_MENU_PRINCIPAL.md`
+8. `WIREFRAME_HOMEPAGE.md`
+9. `SPEC_HERO_HOMEPAGE.md`
+10. `BRIEF_SYNTHETIQUE_<PROJET>.md`
+11. `DIRECTIONS_ARTISTIQUES_PHASE1.md`
+12. `CHARTE_GRAPHIQUE_PHASE1.md`
+13. `BRIEF_VISUEL_HERO_PHASE1.md`
+14. `BRIEF_DEV.md`
+15. `PLAN_IMPLEMENTATION.md`
+16. implémentation
+17. `RECETTE_FRONT_PHASE1.md`
+18. `BACKLOG_PHASE_1BIS_FRONT.md`
 
 Cet ordre peut être ajusté selon le projet, mais la logique générale doit rester :
 
@@ -397,3 +433,4 @@ C’est aussi :
 | Date | Changement |
 |------|------------|
 | 2026-04-21 | Création du plan de méthodologie projet digital / front Odoo avec chaîne documentaire type et préparation des modèles documentaires. |
+| 2026-04-26 | **§4.1** : entrée chaîne documentaire **`DOCTRINE_CK_LANGUES_CREOLES.md`** + lien **[ADR-CKR-011](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-011)** ; distinction **EXPLOITATION_I18N_DEVISES**. |

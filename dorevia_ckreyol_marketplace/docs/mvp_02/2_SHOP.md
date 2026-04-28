@@ -1,11 +1,13 @@
 # MVP2.2 — Boutique
 
 **Statut du document** : **cible UX / structure de page** pour une vague **MVP2.2** (densité retail, lisibilité, contextualisation par porte).  
-**Complément technique obligatoire** : portes catalogue, URLs et priorités sont **déjà figées** dans **[SPEC_SHOP_PORTES.md](../mvp_01/SPEC_SHOP_PORTES.md)** et les **ADR** [ADR-CKR-007](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-007), [ADR-CKR-008](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008), [ADR-CKR-001](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-001).
+**Complément technique obligatoire** : portes catalogue, URLs et priorités sont **déjà figées** dans **[SPEC_SHOP_PORTES.md](../mvp_01/SPEC_SHOP_PORTES.md)** et les **ADR** [ADR-CKR-007](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-007), [ADR-CKR-008](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008), [ADR-CKR-001](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-001). **Lexique métier pack / kit** (homogène vs hétérogène, copy et titres produits) : **[DOCTRINE_CK_PACK_VS_KIT.md](../direction/DOCTRINE_CK_PACK_VS_KIT.md)**.
 
 > Toute évolution qui **touche aux URL**, au **domaine produit** ou à un **nouveau `ckr_mode`** dépasse le seul design : elle exige **mise à jour des contrats `mvp_01`** + recette.
 
 **Validation MOA (langage public / technique)** : le libellé visiteur **ne suggère pas** un classement statistique fictif ; le nom technique **`featured`** est **neutre** (« mis en avant »). **Interdits** sans calcul réel sur ventes confirmées : `best_sellers`, `top_sales`.
+
+**Amendement doctrine front — conteneur unique** : pour la navigation boutique courante, **`/shop` est le conteneur unique**. Les chips du haut sont des **filtres commerciaux** (`ckr_mode=promo|featured|pack`) et la sidebar est une **facette multi-checkbox** (`ckr_category`, `ckr_collection`, `ckr_origin`, prix). Les routes historiques ou externes peuvent rester des entrées de compatibilité, mais les chips et la sidebar ne doivent pas envoyer vers des pages parallèles. Référence exécutable : [DOCTRINE_SHOP_CONTENEUR_UNIQUE.md](DOCTRINE_SHOP_CONTENEUR_UNIQUE.md).
 
 ---
 
@@ -14,11 +16,11 @@
 | Sujet | Livré aujourd’hui (repères) | Cible MVP2.2 (ce document) |
 |--------|------------------------------|----------------------------|
 | **Bandeau contextuel** | Bandeaux **texte** (titre + intro) par porte `ckr_mode` pack / promo / origin + bandeau collections ; **pas** d’image de fond obligatoire — `views/pages/ckr_shop.xml`, styles associés | **Hero** pleine largeur avec **fond image** + overlay, copy premium |
-| **Layout filtres** | Rail **19.0.1.10.18+** (palier doc **19.0.1.10.28**) : ordre **Catégories → Collections → Origines → Prix** puis facettes Odoo restantes ; fallback **`opt_wsale_categories`** + **`show_price_filter`** dans `views/ckr_shop_sidebar_rail_maquette.xml` ; gabarits `views/pages/ckr_shop.xml` + SCSS `layout/_shop.scss` ; liens catégorie Odoo 19 sans `website_url` (**10.27**) | Sidebar **gauche**, **4 blocs** maquette en **accordéons** ; **ouverture par porte** pour les blocs concernés ([§4](2_SHOP.md)) = cible E2 ; **Prix** déplié par défaut (**10.28**) |
+| **Layout filtres** | Rail **19.0.1.10.18+** ; filtre **Prix** : `show_price_filter = opt_wsale_filter_price` + activation data / recalcul contrôleur (**§4**, **19.0.1.10.52+**) ; fallback **`opt_wsale_categories`** dans `ckr_shop_sidebar_rail_maquette.xml` ; `ckr_shop.xml` + `_shop.scss` ; liens catégorie sans `website_url` (**10.27**) | Sidebar **gauche**, **4 blocs** maquette en **accordéons** ; **ouverture par porte** pour les blocs concernés ([§4](2_SHOP.md)) = cible E2 ; **Prix** déplié par défaut quand le bloc est affiché (**10.28**) |
 | **Raccourcis commerciaux** | Portes = **Explorer** (homepage) + **alias** (`/promotions`, `/kits`, etc.) ; **pas** de rangée « chips » Promotions / sélection éditoriale / Kits au-dessus de la grille sur `/shop` nu | Chips / boutons **au-dessus de la grille** + état « Toute la boutique » |
 | **Incontournables** *(sélection éditoriale)* | **Câblé** (**19.0.1.10.x**) — bandeau, chip, alias **`/incontournables`** ; exploitation paramètre sécurisée **19.0.1.10.5** | §5 + **[SPEC_SHOP_PORTES.md §4.6](../mvp_01/SPEC_SHOP_PORTES.md)** : **`ckr.shop.collection`** via **`dorevia_ckreyol_marketplace.featured_collection_id`** ; **`/incontournables`** → **301** → **`/shop?ckr_mode=featured`** ; fallback **`/shop`** ; *Exploitation* (une fois par base **`-u`** ≥ **19.0.1.10.5**) |
 | **Collections** | URLs **nobles** `/collections`, `/collections/<slug>`… — **pas** d’exposition visiteur de `/shop?ckr_mode=collection` (doctrine) | À intégrer dans la **grammaire visuelle** sans contredire les contrats |
-| **Carte produit** | Habillage **SCSS** sur le template standard ; **wishlist** : dépend du module **`website_sale_wishlist`** si le bouton doit exister en liste | Grammaire carte V1 (badge, wishlist, promo, rupture) |
+| **Carte produit** | QWeb **`ckr_shop_classic_tile_restore.xml`** + **`_shop.scss`** : **Nom CK** (`ck_product_name`) ou **`name`** ; **rail coin média** **`ckr-product-card__corner-actions`** (wishlist native **`o_add_wishlist`** + **`ckr-wishlist-ghost`** + bouton info **`fa-info`**, panneau méta / nom Odoo / desc.) — [SPEC_CK_NOM_CK_TUILE_PRODUIT.md](SPEC_CK_NOM_CK_TUILE_PRODUIT.md), [NOTE_TECH_TUILE_CORNER_ACTIONS.md](NOTE_TECH_TUILE_CORNER_ACTIONS.md) ; rubans **`o_wsale_ribbon` `o_left` / `o_right`** ; **wishlist** si **`website_sale_wishlist`** (MOA-1). *Historique* : **« Pour info »** / `<details>` (10.53–10.54) documenté dans la spec. | Grammaire carte V1 (badge, wishlist, promo, rupture) |
 
 Cette section sert de **cadrage** : le MVP2.2 peut rester **purement présentationnel** ([ADR-CKR-002](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-002)) ou ouvrir des **exceptions** justifiées si la sidebar / les raccourcis imposent de la logique non couverte par le standard.
 
@@ -114,7 +116,7 @@ Comportement :
 
 La sidebar ne porte pas les raccourcis commerciaux principaux.
 
-**Implémentation (module ≥ 19.0.1.10.18, doc alignée 19.0.1.10.28)** : ordre rail desktop **Catégories → Collections → Origines → Prix** ; le rail force **`opt_wsale_categories`** et **`show_price_filter`** pour afficher **Catégories** et **Prix** sans dépendre des options BO ni de l’activation complète des facettes attributs. **Collections** / **Origines** = navigation CK (liens nobles / porte). **Prix** = widget natif **repositionné** avant le bloc facettes ; styles / FR dans **`ckr_shop_filter_price_fr`**. **Facette attribut Origine** masquée lorsque le bloc CK **Origines** est alimenté. **Liens catégorie** en Odoo 19 : `keep('%s/category/%s' % (shop_path, slug(c)))` (aligné **`website_sale.categorie_link`**, **10.27**). Les **autres attributs / tags** actifs restent **sous** ces quatre blocs. **Ouverture par porte** (premier accordéon des trois premiers blocs) : cible E2 — [SHOP_MAQUETTE_ECARTS.md §2](SHOP_MAQUETTE_ECARTS.md).  
+**Implémentation (module ≥ 19.0.1.10.18 ; ajustements filtre Prix & tuile ≥ 19.0.1.10.52)** : ordre rail desktop **Catégories → Collections → Origines → Prix**. Le rail force **`opt_wsale_categories = True`** (bloc Catégories sans activer la vue native en BO). **`show_price_filter`** n’est **plus** forcé à `True` : il suit **`opt_wsale_filter_price`** (`is_view_active('website_sale.filter_products_price')`), comme le standard — sinon le contrôleur n’injecte pas `min_price` / `max_price` et le gabarit **`filter_products_price`** peut lever **`TypeError`** (`'%f' % None`) → **HTTP 500**. **Collections** / **Origines** = navigation CK (liens nobles / porte). **Prix** : (1) data **`data/ckr_shop_filter_price_activation.xml`** bascule la vue native **`website_sale.filter_products_price`** sur **`active`** à l’`-u` ; (2) **`WebsiteSaleCKR._ckr_get_price_filter_shop_values`** recalcule **`available_min_price` / `available_max_price`** (et bornes affichées) si le contexte les omet, en réutilisant la **même logique Odoo 19** que le shop : **`_get_shop_domain`**, **`product.template._search(domain)`**, **`query.select(SQL(...))`**, **`execute_query`**, taux **`res.currency._get_conversion_rate`** vers **`website.currency_id`** — **sans** APIs non portées sur l’instance (`get_current_pricelist`, `pricelist_id`, `_where_calc`, etc.) ; (3) gabarit **`ckr_shop_filter_products_price_standalone`** dans **`views/pages/ckr_shop.xml`** (attributs **`website.currency_id`** pour symbol / position / rounding, aligné natif) ; widget natif **repositionné** avant facettes ; styles / FR **`ckr_shop_filter_price_fr`**. **Facette attribut Origine** masquée lorsque le bloc CK **Origines** est alimenté. **Liens catégorie** Odoo 19 : `keep('%s/category/%s' % (shop_path, slug(c)))` (**10.27**). Les **autres attributs / tags** actifs restent **sous** ces quatre blocs. **Ouverture par porte** (premier accordéon des trois premiers blocs) : cible E2 — [SHOP_MAQUETTE_ECARTS.md §2](SHOP_MAQUETTE_ECARTS.md).  
 **Collections** : pas de seconde logique contradictoire avec **`/collections`** ([contrats `mvp_01`](../mvp_01/SPEC_SHOP_PORTES.md)).
 
 **Gel visuel / backlog** : le **rendu** du rail filtres est **gelé** pour la recette en cours. Le **comportement après sélection** des filtres (navigation, état actif, cases cochées, combinaisons **Catégories / Collections / Origines / Prix**) fait l’objet d’un **report fonctionnel** documenté — pas de chantier ouvert tant que la spec comportementale n’est pas arbitrée ([TICKET_SHOP_SIDEBAR_CATEGORIES.md — Backlog fonctionnel](TICKET_SHOP_SIDEBAR_CATEGORIES.md#backlog-fonctionnel-hors-périmètre-gel-visuel), [SHOP_MAQUETTE_ECARTS.md — tableau décisions](SHOP_MAQUETTE_ECARTS.md#décisions-produit-à-suivre-trace)).
@@ -285,8 +287,8 @@ La carte produit V1 est figée avec la grammaire suivante :
 
 - image produit homogène ;
 - badge éventuel en haut à gauche ;
-- wishlist en haut à droite ;
-- catégorie / micro-info sous l’image ;
+- rail d’actions en haut à droite : **wishlist native** + **information secondaire** (`fa-info`) dans un même halo visuel ;
+- information secondaire accessible à la demande (méta, nom Odoo, ligne descriptive), sans reprendre de place dans le corps de la carte ;
 - nom produit lisible ;
 - prix visible ;
 - panier en bas à droite ;
@@ -310,6 +312,8 @@ Cas rupture :
 **Vague 1 — acté MOA** : **wishlist** (**MOA-1**) — affichage **uniquement** si **`website_sale_wishlist`** est **installé** et **retenu** en prod ; sinon **grammaire de carte** inchangée mais **bouton non affiché** (pas de placeholder vide). **Badges** (**MOA-5**) — priorité : **1.** rupture **2.** promotion **3.** nouveau / sélection **4.** pack / incontournable si utile ; **éviter** plusieurs badges concurrents sur une même carte si le rendu est surchargé. Voir [TICKET_SHOP_MVP22_VISIBLE_WAVE1.md](../crea/TICKET_SHOP_MVP22_VISIBLE_WAVE1.md) — **arbitrages Vague 1 clos**, enchaînement dev **C → D → E0 → B → A**.
 
 **Implémentation pied carte (livrée)** : structure QWeb déterministe (`ckr_shop_classic_tile_restore.xml` : `footer-row`, `footer-price`, `footer-cta`), grille deux colonnes et neutralisations SCSS pour les sorties `product_price` / `shop_product_buttons` — détail **[NOTE_TECH_TUILE_SHOP_FOOTER.md](NOTE_TECH_TUILE_SHOP_FOOTER.md)**.
+
+**Amendement rail coin média (livré)** : l’ancien libellé **« Pour info »** / `<details>` est conservé uniquement comme historique documentaire. L’état courant de la liste `/shop` est le rail **`ckr-product-card__corner-actions`** : wishlist Odoo native (`o_add_wishlist`) + bouton info FontAwesome (`fa-info`), avec panneau d’information masqué par défaut. Voir **[NOTE_TECH_TUILE_CORNER_ACTIONS.md](NOTE_TECH_TUILE_CORNER_ACTIONS.md)** et **[SPEC_CK_NOM_CK_TUILE_PRODUIT.md](SPEC_CK_NOM_CK_TUILE_PRODUIT.md)**.
 
 ---
 
@@ -366,6 +370,7 @@ Sont hors scope du MVP2.2 :
 | Scope page `/shop`, bandeaux porte | `views/pages/ckr_shop.xml` |
 | Modes, domaines, collections | `controllers/website_sale_ckr.py` |
 | Styles liste / cartes / filtres | `static/src/scss/layout/_shop.scss` |
+| Rail wishlist + info tuile | `views/pages/ckr_shop_classic_tile_restore.xml` ; `views/pages/ckr_shop.xml` ; `docs/mvp_02/NOTE_TECH_TUILE_CORNER_ACTIONS.md` |
 | Matrice exécutable par contexte | `docs/mvp_02/SHOP_EXEC_MATRIX.md` |
 | Contrat composants / orchestration | `docs/mvp_02/SHOP_COMPONENT_CONTRACTS.md` |
 | Synthèse portes | `docs/mvp_01/SPEC_SHOP_PORTES.md` — **§4.6 Incontournables** (`featured`) |

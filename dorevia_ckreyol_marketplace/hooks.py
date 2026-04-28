@@ -39,9 +39,9 @@ CKR_FEATURED_COLLECTION_PARAM = (
 )
 
 CKR_MENU_ITEMS = [
-    # (nom, url, sequence)
+    # (nom, url, sequence) — doctrine : navigation catalogue via conteneur /shop.
     ("Boutique",    "/shop",        10),
-    ("Collections", "/collections", 20),
+    ("Collections", "/shop?ckr_collection_scope=all", 20),
     ("Offrir",      "/offrir",      30),
     ("Recettes",    "/recettes",    40),
     ("A propos",    "/a-propos",    50),

@@ -10,8 +10,8 @@
     <!--   en fond, overlay leger, texte aligne a gauche, 2 CTA.     -->
     <!--   Voir docs/mvp_02/DECISION_HERO_HOMEPAGE_V2.md et          -->
     <!--   docs/crea/TICKET_HERO_HOMEPAGE_V2.md.                     -->
-    <!-- CTA secondaire : /origines (contrat H1 - alias 301 vers     -->
-    <!--   /shop?ckr_mode=origin ; DECISION_EXPLORER_HOMEPAGE_MVP2). -->
+    <!-- CTA secondaire : lecture Origines sous le conteneur /shop   -->
+    <!--   (doctrine boutique unique — pas de lien vers /origines). -->
     <!-- ========================================================== -->
 
     <template id="ckr_snippet_hero" name="C-Kreyol: Hero homepage">
@@ -41,7 +41,7 @@
                         <a href="/shop" class="ckr-btn ckr-btn--primary ckr-btn--lg">
                             Découvrir la sélection
                         </a>
-                        <a href="/origines" class="ckr-btn ckr-btn--secondary ckr-btn--lg">
+                        <a href="/shop?ckr_mode=origin" class="ckr-btn ckr-btn--secondary ckr-btn--lg">
                             Explorer les origines
                         </a>
                     </div>

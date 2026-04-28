@@ -129,8 +129,12 @@ Le développement doit s’appuyer en priorité sur les documents suivants (chem
 | Document | Rôle |
 |----------|------|
 | [README.md](../../README.md) | Vue d’ensemble, phases, **tableau des PNG** sous `docs/assets/`. |
+| [VISION_CK_MEDIA_COMMERCE.md](VISION_CK_MEDIA_COMMERCE.md) | Vision **trois mondes** (e-commerce, éditorial, communautaire), garde-fous publicité / tunnel d’achat — contexte produit et priorisation ([ADR-CKR-009](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-009)). |
+| [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) | **B2C** / **B2B** : prix public conseillé vs prix partenaire distributeur, catalogue commun, Odoo standard — ([ADR-CKR-010](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010)). |
+| [DOCTRINE_CK_LANGUES_CREOLES.md](DOCTRINE_CK_LANGUES_CREOLES.md) | Langues **créoles** : qualité, variantes, gouvernance — orientation long terme, **sans** mandat MVP — ([ADR-CKR-011](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-011)) ; distinct de [EXPLOITATION_I18N_DEVISES.md](EXPLOITATION_I18N_DEVISES.md) (FR/EN/ES). |
+| [DOCTRINE_CK_PACK_VS_KIT.md](DOCTRINE_CK_PACK_VS_KIT.md) | **Pack** (homogène, conditionnement) vs **kit** (hétérogène, usage / expérience) — copy et catalogue ; complément [ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008) (porte **Kits** / `pack_ok`). |
 | [NOTE_DE_CADRAGE.md](NOTE_DE_CADRAGE.md) | Arbitrages métier, juridique, logistique, périmètre V1. |
-| [ARCHITECTURE_DECISION_RECORD.md](ARCHITECTURE_DECISION_RECORD.md) | **ADR-CKR-001** à **005** (doctrine Odoo 19 CE, front spécifique, menu/footer, modèle commercial, promesse / disponibilité). |
+| [ARCHITECTURE_DECISION_RECORD.md](ARCHITECTURE_DECISION_RECORD.md) | **ADR-CKR-001** à **011** (doctrine Odoo 19 CE, front spécifique, menu/footer, modèle commercial, promesse / disponibilité, homepage/portes, vision média-commerce, **e-commerce B2C+B2B**, **langues créoles**). |
 | [DESIGN.md](DESIGN.md) | Principes design / retail / front, zones de page, mobile. |
 | [STRUCTURE_MENU_PRINCIPAL.md](STRUCTURE_MENU_PRINCIPAL.md) | Menu **Option B**, entrées cibles, mobile. |
 | [WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md) | Structure homepage Phase 1 (blocs, variante retenue). |

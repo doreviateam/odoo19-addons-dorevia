@@ -24,9 +24,8 @@ Aucune autre URL n'est affectée : le comportement natif reste la règle
 générale, l'extension se limite strictement au couple
 (path=``/shop``, ckr_mode ∈ whitelist).
 """
-from werkzeug.urls import url_encode
-
 import logging
+from urllib.parse import urlencode as _ckr_urlencode_query
 
 from odoo import api, fields, models
 from odoo.http import request
@@ -38,11 +37,16 @@ from odoo.http import request
 # consommer.
 from odoo.addons.dorevia_ckreyol_marketplace.controllers.website_sale_ckr import (
     CKR_CANONICAL_PATH,
-    CKR_MODE_ORIGIN,
+    CKR_CATEGORY_PARAM,
+    CKR_COLLECTION_QUERY_PARAM,
+    CKR_COLLECTION_SCOPE_ALL,
+    CKR_COLLECTION_SCOPE_PARAM,
     CKR_MODE_PARAM,
     CKR_ORIGIN_PARAM,
+    _ckr_canonical_category_slugs,
     _ckr_canonical_origin_slugs,
-    _ckr_effective_mode,
+    _ckr_candidate_modes,
+    _ckr_mode_sort_key,
 )
 
 _logger = logging.getLogger(__name__)
@@ -239,26 +243,38 @@ class Website(models.Model):
         if not request or not getattr(request, "httprequest", None):
             return url
 
-        # Restreint à /shop + ckr_mode whitelisté. Toute autre URL (y
-        # compris un ``/shop`` avec un ``ckr_mode`` inconnu) garde son
-        # canonical natif, query string nettoyée par ``_url_localized``.
-        if request.httprequest.path != CKR_CANONICAL_PATH:
-            return url
-        mode = _ckr_effective_mode()
-        if not mode:
+        # Restreint à la page grille boutique + paramètres CK (modes cumulables,
+        # facettes catégories, origines, collections).
+        # ``path`` peut être ``/shop`` ou ``/<langue>/shop`` (routage website).
+        path = request.httprequest.path or ""
+        if not path.endswith(CKR_CANONICAL_PATH):
             return url
 
-        # Construction déterministe de la query string canonique :
-        # - `ckr_mode` en tête, en valeur unique (conflit déjà résolu
-        #   par `_ckr_effective_mode` selon la priorité SPEC_IMPL §4) ;
-        # - pour le mode `origin`, tous les `ckr_origin` valides sont
-        #   réémis en **ordre lexicographique croissant** (§3.4), ce
-        #   qui garantit une URL canonique unique pour un même
-        #   ensemble d'origines quelle que soit l'ordre de saisie.
-        params = [(CKR_MODE_PARAM, mode)]
-        if mode == CKR_MODE_ORIGIN:
-            for slug in _ckr_canonical_origin_slugs():
-                params.append((CKR_ORIGIN_PARAM, slug))
+        modes = sorted(_ckr_candidate_modes(), key=_ckr_mode_sort_key)
+        params = [(CKR_MODE_PARAM, m) for m in modes]
+        for slug in _ckr_canonical_category_slugs():
+            params.append((CKR_CATEGORY_PARAM, slug))
+        for slug in _ckr_canonical_origin_slugs():
+            params.append((CKR_ORIGIN_PARAM, slug))
+        args = request.httprequest.args
+        scope = (args.get(CKR_COLLECTION_SCOPE_PARAM) or "").strip().lower()
+        cols_sorted = sorted(
+            {
+                (s or "").strip().lower()
+                for s in args.getlist(CKR_COLLECTION_QUERY_PARAM)
+                if (s or "").strip()
+            }
+        )
+        if scope == CKR_COLLECTION_SCOPE_ALL:
+            params.append(
+                (CKR_COLLECTION_SCOPE_PARAM, CKR_COLLECTION_SCOPE_ALL)
+            )
+        for col in cols_sorted:
+            params.append((CKR_COLLECTION_QUERY_PARAM, col))
+        if not params:
+            return url
 
         separator = "&" if "?" in url else "?"
-        return f"{url}{separator}{url_encode(params)}"
+        # ``urllib.parse.urlencode`` préserve les clés répétées (ex. plusieurs
+        # ``ckr_mode``), contrairement à certains raccourcis werkzeug selon versions.
+        return f"{url}{separator}{_ckr_urlencode_query(params)}"

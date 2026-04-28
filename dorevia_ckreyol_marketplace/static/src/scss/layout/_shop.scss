@@ -105,6 +105,8 @@
     // --- MVP2.2 Vague 1 — Lot A : hero (pleine largeur conteneur boutique) -----
     .ckr-shop-hero {
         position: relative;
+        display: flex;
+        flex-direction: column;
         margin-bottom: unquote("clamp(#{$ckr-space-sm}, 1.6vw, #{$ckr-space-lg})");
         border-top-left-radius: 0;
         border-top-right-radius: 0;
@@ -158,7 +160,11 @@
         &__inner {
             position: relative;
             z-index: 2;
-            padding: unquote("clamp(1.35rem, 2.2vw, 2.15rem)") $ckr-container-px;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: unquote("clamp(1.01rem, 1.65vw, 1.61rem)") $ckr-container-px;
         }
 
         &__header {
@@ -196,6 +202,11 @@
             line-height: 1.14;
             max-width: 28rem;
             text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        // /shop nu : titre hero éditorial (h1) tient sur une seule ligne (pas de césure type vitrine).
+        &__title--nowrap {
+            white-space: nowrap;
         }
 
         &__intro {
@@ -264,15 +275,16 @@
             }
 
             &__inner {
-                padding-top: $ckr-space-md;
-                padding-bottom: $ckr-space-md;
+                padding-top: unquote("clamp(0.65rem, 2.2vw, #{$ckr-space-md})");
+                padding-bottom: unquote("clamp(0.65rem, 2.2vw, #{$ckr-space-md})");
             }
         }
 
         // /shop nu — maquette PJ : photo dominante, voile sombre à gauche, typo blanche.
         &--retail {
             margin-bottom: unquote("clamp(#{$ckr-space-md}, 2.2vw, #{$ckr-space-lg})");
-            min-height: unquote("clamp(12.5rem, 30vw, 17rem)");
+            // ~−25 % vs maquette initiale : bannière plus compacte, texte centré verticalement via flex (__inner).
+            min-height: unquote("clamp(9.375rem, 22.5vw, 12.75rem)");
             background: #1a1511;
             border-color: rgba(0, 0, 0, 0.22);
             box-shadow:
@@ -296,8 +308,8 @@
             }
 
             .ckr-shop-hero__inner {
-                padding-top: unquote("clamp(1.65rem, 4vw, 2.85rem)");
-                padding-bottom: unquote("clamp(1.65rem, 4vw, 2.85rem)");
+                padding-top: unquote("clamp(1.24rem, 3vw, 2.14rem)");
+                padding-bottom: unquote("clamp(1.24rem, 3vw, 2.14rem)");
             }
 
             // Couleur forcée : le thème / `h1` global peuvent battre `.ckr-shop-hero__title` seul (sous-titre déjà blanc).
@@ -310,6 +322,14 @@
                 text-shadow:
                     0 2px 26px rgba(0, 0, 0, 0.5),
                     0 1px 2px rgba(0, 0, 0, 0.4);
+            }
+
+            h1.ckr-shop-hero__title.ckr-shop-hero__title--nowrap,
+            #ckr-shop-hero-heading.ckr-shop-hero__title--nowrap {
+                max-width: none;
+                // Réduit légèrement le plafond pour rester lisible sur mobile sous `overflow: hidden` du hero.
+                font-size: unquote("clamp(1.42rem, 3.8vw + 0.55rem, 2.75rem)") !important;
+                letter-spacing: -0.025em;
             }
 
             .ckr-shop-hero__intro {
@@ -357,7 +377,7 @@
             }
 
             @media (max-width: 767.98px) {
-                min-height: unquote("clamp(13.5rem, 48vw, 18rem)");
+                min-height: unquote("clamp(10.125rem, 36vw, 13.5rem)");
 
                 &::after {
                     background: linear-gradient(
@@ -375,6 +395,11 @@
                 h1.ckr-shop-hero__title,
                 #ckr-shop-hero-heading {
                     max-width: none;
+                }
+
+                h1.ckr-shop-hero__title.ckr-shop-hero__title--nowrap,
+                #ckr-shop-hero-heading.ckr-shop-hero__title--nowrap {
+                    font-size: unquote("clamp(1.38rem, 4.6vw + 0.45rem, 2.65rem)") !important;
                 }
             }
         }
@@ -400,6 +425,10 @@
             .ckr-shop-hero__title {
                 font-size: unquote("clamp(1.38rem, 1.9vw + 0.55rem, 2.2rem)");
                 max-width: 36rem;
+            }
+
+            .ckr-shop-hero__title.ckr-shop-hero__title--nowrap {
+                max-width: none;
             }
 
             .ckr-shop-hero__intro {
@@ -1005,6 +1034,38 @@
         padding: 0.2rem 0.45rem;
     }
 
+    // Odoo rend les ribbons e-commerce avec une rotation native. Dans notre
+    // média carrée et masquée en overflow, cette rotation peut sortir du cadre :
+    // on fixe donc explicitement le ruban en diagonale visible dans le coin haut-gauche.
+    form.oe_product_cart .oe_product_image .o_ribbons.o_wsale_ribbon.o_left,
+    form.oe_product_cart .ckr-product-card__media .o_ribbons.o_wsale_ribbon.o_left {
+        top: 1.15rem !important;
+        left: -2.35rem !important;
+        width: 8.6rem !important;
+        max-width: none !important;
+        padding: 0.24rem 0.75rem !important;
+        text-align: center !important;
+        transform: rotate(-42deg) !important;
+        transform-origin: center !important;
+        z-index: 14 !important;
+        white-space: nowrap;
+    }
+
+    form.oe_product_cart .oe_product_image .o_ribbons.o_wsale_ribbon.o_right,
+    form.oe_product_cart .ckr-product-card__media .o_ribbons.o_wsale_ribbon.o_right {
+        top: 1.15rem !important;
+        right: -2.35rem !important;
+        left: auto !important;
+        width: 8.6rem !important;
+        max-width: none !important;
+        padding: 0.24rem 0.75rem !important;
+        text-align: center !important;
+        transform: rotate(42deg) !important;
+        transform-origin: center !important;
+        z-index: 14 !important;
+        white-space: nowrap;
+    }
+
     // Empilement explicite : wishlist est **sœur** du lien, ruban **dedans** — z-index interne suffit.
     form.oe_product_cart.ckr-product-card .oe_product_image > a.oe_product_image_link {
         position: relative !important;
@@ -1024,8 +1085,8 @@
         flex-direction: column !important;
         flex: 1 1 auto !important;
         min-height: 0;
-        // Lot 2 : légèrement plus d’air sous la méta / au-dessus du pied.
-        padding: 0.52rem 0.72rem 0.48rem !important;
+        // Retail compact : moins de padding latéral ; filet sous le bloc titre (text-stack).
+        padding: 0.42rem 0.65rem 0.4rem !important;
         top: auto !important;
         // Ancre absolue wishlist = `.ckr-product-card__media` ou `form` : pas de `relative` ici.
         position: static !important;
@@ -1052,26 +1113,22 @@
         padding-bottom: 0 !important;
     }
 
-    // Stack : méta utile → titre (2 lignes) → sous-info — espacement, pas de filet (Lot 1 CK).
+    // Stack : flux principal = titre (+ variante / avis si actifs) — filet bas = séparation prix (maquette retail).
     form.oe_product_cart.ckr-product-card .ckr-product-card__text-stack {
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
         min-height: 0;
-        // Lot 2 : rythme vertical un peu plus fluide (sans écarter excessivement).
-        gap: 0.36rem 0;
+        gap: 0.22rem 0;
+        padding-bottom: 0.4rem;
+        margin-bottom: 0;
+        border-bottom: 1px solid rgba($ckr-border, 0.38) !important;
     }
 
-    form.oe_product_cart.ckr-product-card .ckr-product-card__text-stack > .ckr-product-card__meta {
-        order: 1;
-    }
-
-    form.oe_product_cart.ckr-product-card .ckr-product-card__text-stack > :is(h2, h6).o_wsale_products_item_title {
-        order: 2;
-    }
-
-    form.oe_product_cart.ckr-product-card .ckr-product-card__text-stack > .ckr-product-card__subtitle {
-        order: 3;
+    form.oe_product_cart.ckr-product-card .ckr-product-card__head {
+        margin: 0;
+        padding: 0;
+        flex: 0 0 auto;
     }
 
     form.oe_product_cart.ckr-product-card .ckr-product-card__text-stack > div:has(.fa-folder-open) {
@@ -1174,37 +1231,37 @@
         }
     }
 
-    // Maquette : nom produit en serif foncé (pas en couleur d’accent type « Biscuits » orange).
+    // Nom produit : libellé catalogue (sans-serif retail), pas un titre éditorial — neutre foncé, ~500 ;
+    // terracotta = hover + prix / CTA / badges uniquement. Hauteur = 2 lignes (1em suit le clamp).
     form.oe_product_cart.ckr-product-card :is(h2, h6).o_wsale_products_item_title {
-        a,
-        a:visited {
-            color: rgba($ckr-text, 0.94) !important;
-        }
-
-        a:hover,
-        a:focus-visible {
-            color: $ckr-primary !important;
-        }
-    }
-
-    // Nom CK : slot **toujours** 2 lignes — hauteur **identique** sur toutes les cartes (max du clamp).
-    form.oe_product_cart.ckr-product-card :is(h2, h6).o_wsale_products_item_title {
+        font-family: $ckr-font-sans !important;
+        font-size: unquote("clamp(0.84rem, 0.2vw + 0.77rem, 0.93rem)") !important;
+        font-weight: $ckr-weight-medium !important;
+        line-height: 1.22 !important;
+        letter-spacing: 0.015em !important;
         flex: 0 0 auto;
         flex-shrink: 0 !important;
         margin-top: 0 !important;
         padding-bottom: 0 !important;
         margin-bottom: 0 !important;
         border-bottom: none !important;
-        line-height: 1.28 !important;
-        // Le clamp 2 lignes vit sur le lien ; le `h2` ne fait que réserver la hauteur.
         display: block !important;
         overflow: hidden !important;
         -webkit-box-orient: unset !important;
         -webkit-line-clamp: unset !important;
-        // 2 × line-height × taille **max** du clamp titre tuile (1.12rem) = réserve lisible même si nom court.
-        min-height: calc(2 * 1.28 * 1.12rem) !important;
-        height: calc(2 * 1.28 * 1.12rem) !important;
-        max-height: calc(2 * 1.28 * 1.12rem) !important;
+        min-height: calc(2 * 1.22 * 1em) !important;
+        height: calc(2 * 1.22 * 1em) !important;
+        max-height: calc(2 * 1.22 * 1em) !important;
+
+        a,
+        a:visited {
+            color: rgba(0, 0, 0, 0.74) !important;
+        }
+
+        a:hover,
+        a:focus-visible {
+            color: $ckr-primary !important;
+        }
     }
 
     form.oe_product_cart.ckr-product-card :is(h2, h6).o_wsale_products_item_title > a {
@@ -1337,13 +1394,10 @@
         margin-top: auto !important;
         margin-left: 0 !important;
         margin-right: 0 !important;
-        padding: 0.44rem 0.68rem 0.48rem !important;
-        border-top: 1px solid rgba($ckr-border, 0.22) !important;
-        background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(252, 248, 242, 0.44) 100%
-        ) !important;
+        // Filet porté par `.text-stack` au-dessus — pied plus sobre, sans double bordure.
+        padding: 0.34rem 0.65rem 0.44rem !important;
+        border-top: none !important;
+        background: rgba(252, 249, 247, 0.35) !important;
         line-height: 1.2 !important;
 
         // Rangée footer : une seule ligne robuste, sans retour à la ligne, quel que soit le HTML Odoo.
@@ -1354,7 +1408,7 @@
             column-gap: 0.45rem;
             row-gap: 0;
             width: 100%;
-            min-height: 2.45rem;
+            min-height: 2.28rem;
         }
 
         .ckr-product-card__footer-row > * {
@@ -1521,22 +1575,22 @@
         }
     }
 
-    // Wishlist : haut-droite de la zone image (nœud dans `.ckr-product-card__media`, `position: relative`).
-    // Repli : bloc info en `static` pour que toute wishlist héritée reste calée sur le formulaire.
-    // Pas de dépendance à `o_wsale_product_grid_wrapper` (autres layouts / snippets).
-    .ckr-shop form.oe_product_cart.ckr-product-card .ckr-product-card__media .wishlist-above-title,
-    .ckr-shop form.oe_product_cart.ckr-product-card .oe_product_image .wishlist-above-title,
-    .ckr-shop form.oe_product_cart.ckr-product-card .o_wsale_product_information .wishlist-above-title {
+    // Coin média : cœur (`fa-heart`) et info (`fa-info`) dans le même rail (`ckr-product-card__corner-actions`).
+    // Plus robuste que deux frères flottants : le thème ne peut plus isoler la wishlist du bouton info.
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media .ckr-product-card__media-corner,
+    form.oe_product_cart.ckr-product-card .oe_product_image .ckr-product-card__media-corner,
+    form.oe_product_cart.ckr-product-card .o_wsale_product_information .ckr-product-card__media-corner {
         position: absolute !important;
         top: 0.42rem !important;
         right: 0.42rem !important;
         left: auto !important;
         bottom: auto !important;
         z-index: 5 !important;
-        width: auto !important;
-        height: auto !important;
-        min-height: 0 !important;
-        max-width: 32% !important;
+        // 2 × 32px + écart (cœur à gauche, `fa-info` à droite — ordre DOM : wishlist puis info).
+        width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+        min-width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+        height: 2rem !important;
+        min-height: 2rem !important;
         margin: 0 !important;
         padding: 0 !important;
         pointer-events: auto !important;
@@ -1546,21 +1600,227 @@
         overflow: visible !important;
     }
 
-    // Cœur sur **image** : classe `ckr-wishlist-ghost` + reset BS5 (btn-light / btn-danger = même lecture « icône »).
-    .ckr-shop form.oe_product_cart.ckr-product-card .ckr-product-card__media .wishlist-above-title .ckr-wishlist-ghost.o_add_wishlist,
-    .ckr-shop form.oe_product_cart.ckr-product-card .oe_product_image .wishlist-above-title .ckr-wishlist-ghost.o_add_wishlist {
-        // Lot 2 : secondaire clair vs CTA — plus petit, moins de contraste, pas de « pastille » dominante.
-        // Variables BS5 — annule l’apparence bouton plein / bordée.
-        --bs-btn-color: rgba(255, 255, 255, 0.76) !important;
-        --bs-btn-bg: transparent !important;
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .wishlist-above-title,
+    form.oe_product_cart.ckr-product-card .oe_product_image .ckr-product-card__media-corner .wishlist-above-title,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__corner-actions {
+        position: relative !important;
+        inset: auto !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+        min-width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+        height: 2rem !important;
+        min-height: 2rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 0.35rem !important;
+        overflow: visible !important;
+    }
+
+    // Dans la boîte 2rem×2rem, annuler le calage « pleine image » du thème pour le cœur.
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .wishlist-above-title .btn,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .wishlist-above-title button:not(.ckr-product-card__info-action) {
+        position: relative !important;
+        inset: auto !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        flex-shrink: 0 !important;
+        order: 1 !important;
+    }
+
+    // Infos complémentaires : bouton `fa-info` (`.ckr-product-card__info-action`) dans le même rail que la wishlist.
+    form.oe_product_cart.ckr-product-card .ckr-product-card__info-action {
+        position: relative !important;
+        inset: auto !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        z-index: 6 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        order: 2 !important;
+        flex: 0 0 auto !important;
+        font-family: $ckr-font-sans !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__info-action {
+        order: 2 !important;
+        cursor: pointer;
+        user-select: none;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        min-width: 2rem !important;
+        min-height: 2rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        border: 0 !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        background: rgba(255, 253, 250, 0.11) !important;
+        background-color: rgba(255, 253, 250, 0.11) !important;
+        background-image: none !important;
+        color: rgba($ckr-text, 0.68) !important;
+        backdrop-filter: blur(6px) saturate(1.08) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(1.08) !important;
+        box-shadow: none !important;
+        outline: none !important;
+        font-size: 0 !important;
+        transition:
+            background-color $ckr-transition-fast,
+            color $ckr-transition-fast;
+
+        &::before,
+        &::after {
+            content: none !important;
+            display: none !important;
+        }
+
+        .fa,
+        .ckr-product-card__info-icon {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.82rem !important;
+            font-weight: $ckr-weight-regular !important;
+            margin: 0 !important;
+            line-height: 1 !important;
+            color: inherit !important;
+            filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.42))
+                drop-shadow(0 1px 1px rgba(44, 38, 30, 0.08)) !important;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: rgba(255, 252, 248, 0.18) !important;
+            color: rgba($ckr-text, 0.78) !important;
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgba(160, 82, 45, 0.35);
+            outline-offset: 2px;
+        }
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__corner-actions > .ckr-product-card__details-body {
+        position: absolute !important;
+        right: 0 !important;
+        top: calc(100% + 0.28rem) !important;
+        bottom: auto !important;
+        left: auto !important;
+        min-width: 10.5rem !important;
+        // `min()` CSS natif : unquote — sinon Dart Sass interprète `min()` et refuse `calc()`.
+        max-width: unquote("min(18rem, calc(100vw - 2rem))") !important;
+        max-height: unquote("min(42vh, 13.5rem)") !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        margin: 0 !important;
+        padding: 0.48rem 0.55rem !important;
+        text-align: left !important;
+        background: rgba(252, 249, 247, 0.98) !important;
+        border: 1px solid rgba($ckr-border, 0.38) !important;
+        border-radius: $ckr-radius-md !important;
+        box-shadow: 0 4px 16px rgba(55, 38, 24, 0.1) !important;
+        z-index: 25 !important;
+        box-sizing: border-box !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    form.oe_product_cart.ckr-product-card
+        .ckr-product-card__corner-actions
+        > .ckr-product-card__details-body {
+        display: none !important;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        form.oe_product_cart.ckr-product-card
+            .ckr-product-card__info-action:hover
+            + .ckr-product-card__details-body,
+        form.oe_product_cart.ckr-product-card
+            .ckr-product-card__info-action:focus-within
+            + .ckr-product-card__details-body {
+            display: block !important;
+        }
+    }
+
+    form.oe_product_cart.ckr-product-card
+        .ckr-product-card__info-action:focus
+        + .ckr-product-card__details-body,
+    form.oe_product_cart.ckr-product-card
+        .ckr-product-card__info-action:focus-within
+        + .ckr-product-card__details-body,
+    form.oe_product_cart.ckr-product-card
+        .ckr-product-card__corner-actions:focus-within
+        > .ckr-product-card__details-body {
+        display: block !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__corner-actions .ckr-product-card__details-meta {
+        font-size: 0.7rem !important;
+        font-weight: $ckr-weight-medium !important;
+        color: rgba($ckr-text, 0.66) !important;
+        margin: 0 !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__corner-actions .ckr-product-card__details-odoo-name {
+        font-size: 0.74rem !important;
+        font-weight: $ckr-weight-regular !important;
+        color: rgba($ckr-text, 0.86) !important;
+        margin: 0 !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__corner-actions .ckr-product-card__details-desc {
+        font-size: 0.72rem !important;
+        line-height: 1.3 !important;
+        margin: 0 !important;
+    }
+
+    // Panneau ouvert : éviter la découpe par `overflow: hidden` de la média carrée.
+    form.oe_product_cart.ckr-product-card .oe_product_image:has(.ckr-product-card__info-action:hover),
+    form.oe_product_cart.ckr-product-card .oe_product_image:has(.ckr-product-card__info-action:focus-within),
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media:has(.ckr-product-card__info-action:hover),
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media:has(.ckr-product-card__info-action:focus-within) {
+        overflow: visible !important;
+        z-index: 4 !important;
+    }
+
+    // Cœur wishlist sur **image** : puce fixe (secondaire au CTA), plus lisible sur image sombre
+    // grâce à un voile nacré très léger + micro-halo sur l’icône, sans contour ni anneau.
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media .wishlist-above-title .ckr-wishlist-ghost.o_add_wishlist,
+    form.oe_product_cart.ckr-product-card .oe_product_image .wishlist-above-title .ckr-wishlist-ghost.o_add_wishlist {
+        $ckr-wishlist-chip: 2rem;
+        $ckr-wishlist-bg: rgba(255, 253, 250, 0.11);
+        $ckr-wishlist-bg-hover: rgba(255, 252, 248, 0.18);
+        $ckr-wishlist-bg-in: rgba(255, 253, 250, 0.16);
+
+        --bs-btn-color: rgba($ckr-text, 0.68) !important;
+        --bs-btn-bg: #{$ckr-wishlist-bg} !important;
         --bs-btn-border-color: transparent !important;
-        --bs-btn-hover-color: rgba(255, 255, 255, 0.92) !important;
-        --bs-btn-hover-bg: rgba(255, 255, 255, 0.03) !important;
+        --bs-btn-border-width: 0 !important;
+        --bs-btn-hover-color: rgba($ckr-text, 0.74) !important;
+        --bs-btn-hover-bg: #{$ckr-wishlist-bg-hover} !important;
         --bs-btn-hover-border-color: transparent !important;
-        --bs-btn-active-color: #fff !important;
-        --bs-btn-active-bg: transparent !important;
+        --bs-btn-active-color: rgba($ckr-primary, 0.95) !important;
+        --bs-btn-active-bg: #{$ckr-wishlist-bg} !important;
         --bs-btn-active-border-color: transparent !important;
+        --bs-btn-focus-border-color: transparent !important;
         --bs-btn-focus-box-shadow: none !important;
+        --bs-btn-box-shadow: none !important;
+        --bs-btn-active-shadow: none !important;
         --bs-border-width: 0 !important;
         position: relative !important;
         top: auto !important;
@@ -1568,102 +1828,50 @@
         left: auto !important;
         bottom: auto !important;
         z-index: auto !important;
-        width: auto !important;
-        height: auto !important;
-        min-width: 0 !important;
-        min-height: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0 !important;
-        border: 0 !important;
-        border-width: 0 !important;
-        border-style: none !important;
-        outline: none !important;
-        box-shadow: none !important;
-        background: none !important;
-        background-color: transparent !important;
-        background-image: none !important;
-        color: rgba(255, 255, 255, 0.8) !important;
-        opacity: 0.88 !important;
-        visibility: visible !important;
-        transform: none !important;
-        pointer-events: auto !important;
-        line-height: 1 !important;
-        font-size: 0 !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        appearance: none !important;
-        -webkit-appearance: none !important;
-
-        .o_label,
-        .ms-2 {
-            display: none !important;
-        }
-
-        .fa,
-        .fa-heart {
-            font-size: 0.84rem !important;
-            margin: 0 !important;
-            font-weight: 400 !important;
-            color: inherit !important;
-            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.28));
-            -webkit-text-stroke: 0.25px rgba(0, 0, 0, 0.14);
-        }
-
-        &:hover,
-        &:focus-visible {
-            border: 0 !important;
-            box-shadow: none !important;
-            background-color: rgba(255, 255, 255, 0.02) !important;
-            color: rgba(255, 255, 255, 0.92) !important;
-            opacity: 1 !important;
-        }
-
-        &:focus-visible {
-            outline: 1px solid rgba(255, 255, 255, 0.22) !important;
-            outline-offset: 1px !important;
-        }
-
-        &.o_in_wishlist,
-        &.btn-danger {
-            --bs-btn-color: rgba(255, 255, 255, 0.88) !important;
-            --bs-btn-bg: transparent !important;
-            --bs-btn-border-color: transparent !important;
-            --bs-btn-hover-bg: rgba(255, 255, 255, 0.05) !important;
-            --bs-btn-hover-border-color: transparent !important;
-            border: 0 !important;
-            box-shadow: none !important;
-            background-color: transparent !important;
-            color: rgba(255, 255, 255, 0.9) !important;
-            opacity: 1 !important;
-
-            .fa-heart {
-                filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.32));
-                -webkit-text-stroke: 0;
-            }
-        }
-    }
-
-    // Wishlist éventuelle dans le pied : compacte, lisible sur fond clair.
-    .ckr-shop form.oe_product_cart.ckr-product-card .o_wsale_product_sub .o_wsale_product_btn .o_add_wishlist {
-        position: relative !important;
-        width: 2.25rem !important;
-        height: 2.25rem !important;
-        min-width: 2.25rem !important;
-        min-height: 2.25rem !important;
+        width: $ckr-wishlist-chip !important;
+        height: $ckr-wishlist-chip !important;
+        min-width: $ckr-wishlist-chip !important;
+        min-height: $ckr-wishlist-chip !important;
+        max-width: $ckr-wishlist-chip !important;
+        max-height: $ckr-wishlist-chip !important;
         padding: 0 !important;
         margin: 0 !important;
         display: inline-flex !important;
         align-items: center;
         justify-content: center;
         border-radius: 50% !important;
-        border: 1px solid rgba($ckr-border, 0.35) !important;
-        background-color: rgba($ckr-bg-soft, 0.92) !important;
+        border: 0 !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        outline: none !important;
+        outline-offset: 0 !important;
         box-shadow: none !important;
-        color: rgba($ckr-text, 0.78) !important;
+        background: $ckr-wishlist-bg !important;
+        background-color: $ckr-wishlist-bg !important;
+        background-image: none !important;
+        color: rgba($ckr-text, 0.68) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        pointer-events: auto !important;
+        line-height: 1 !important;
+        font-size: 0 !important;
+        backdrop-filter: blur(6px) saturate(1.08) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(1.08) !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        transition:
+            background-color $ckr-transition-fast,
+            color $ckr-transition-fast;
+
+        &::before,
+        &::after {
+            content: none !important;
+            display: none !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
 
         .o_label,
         .ms-2 {
@@ -1672,30 +1880,148 @@
 
         .fa,
         .fa-heart {
-            font-size: 1.02rem !important;
+            font-size: 0.72rem !important;
             margin: 0 !important;
+            font-weight: 400 !important;
+            color: inherit !important;
+            filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.42))
+                drop-shadow(0 1px 1px rgba(44, 38, 30, 0.08)) !important;
+            -webkit-text-stroke: 0 !important;
         }
 
-        &:hover,
+        &:hover {
+            border: 0 !important;
+            box-shadow: none !important;
+            outline: none !important;
+            background-color: $ckr-wishlist-bg-hover !important;
+            color: rgba($ckr-text, 0.74) !important;
+        }
+
+        &:focus,
         &:focus-visible {
-            border-color: rgba(160, 82, 45, 0.35) !important;
-            color: $ckr-primary !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            outline: none !important;
+            outline-offset: 0 !important;
+        }
+
+        &:focus-visible {
+            background-color: $ckr-wishlist-bg-hover !important;
+            color: rgba($ckr-text, 0.74) !important;
+        }
+
+        &:active {
+            background-color: $ckr-wishlist-bg !important;
+            box-shadow: none !important;
+            outline: none !important;
         }
 
         &.o_in_wishlist,
         &.btn-danger {
-            border-color: rgba(160, 82, 45, 0.42) !important;
-            background-color: rgba(160, 82, 45, 0.08) !important;
-            color: $ckr-primary !important;
+            --bs-btn-color: rgba($ckr-primary, 0.92) !important;
+            --bs-btn-bg: #{$ckr-wishlist-bg-in} !important;
+            --bs-btn-hover-color: rgba($ckr-primary, 1) !important;
+            --bs-btn-hover-bg: #{$ckr-wishlist-bg-hover} !important;
+            --bs-btn-active-bg: #{$ckr-wishlist-bg-in} !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            outline: none !important;
+            background-color: $ckr-wishlist-bg-in !important;
+            color: rgba($ckr-primary, 0.92) !important;
+
+            .fa-heart {
+                color: inherit !important;
+            }
         }
     }
 
-    .ckr-shop form.oe_product_cart.ckr-product-card .o_wsale_product_sub .o_wsale_product_btn .o_add_wishlist {
+    // Wishlist doublon dans `shop_product_buttons` : masquer le pied seulement si le cœur
+    // est déjà sur l’image (sinon pas de bouton image si `product_variant_id` absent).
+    form.oe_product_cart.ckr-product-card:has(
+            .oe_product_image .wishlist-above-title button.o_add_wishlist,
+            .ckr-product-card__media .wishlist-above-title button.o_add_wishlist
+        )
+        .ckr-product-card__footer
+        .o_add_wishlist {
+        display: none !important;
+    }
+
+    // Repli pied (wishlist native seulement) : mêmes dimensions / fond que la puce image.
+    form.oe_product_cart.ckr-product-card .ckr-product-card__footer .o_add_wishlist {
+        position: relative !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        min-width: 2rem !important;
+        min-height: 2rem !important;
+        max-width: 2rem !important;
+        max-height: 2rem !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
         flex: 0 0 auto;
+        border-radius: 50% !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        outline: none !important;
+        outline-offset: 0 !important;
+        --bs-btn-focus-box-shadow: none !important;
+        --bs-btn-box-shadow: none !important;
+        --bs-btn-active-shadow: none !important;
+        background: rgba(255, 253, 250, 0.11) !important;
+        background-color: rgba(255, 253, 250, 0.11) !important;
+        color: rgba($ckr-text, 0.68) !important;
+        backdrop-filter: blur(6px) saturate(1.08) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(1.08) !important;
+
+        &::before,
+        &::after {
+            content: none !important;
+            display: none !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+
+        .o_label,
+        .ms-2 {
+            display: none !important;
+        }
+
+        .fa,
+        .fa-heart {
+            font-size: 0.72rem !important;
+            margin: 0 !important;
+            filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.42))
+                drop-shadow(0 1px 1px rgba(44, 38, 30, 0.08)) !important;
+        }
+
+        &:hover {
+            background-color: rgba(255, 252, 248, 0.22) !important;
+            color: rgba($ckr-text, 0.74) !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+
+        &:focus,
+        &:focus-visible {
+            box-shadow: none !important;
+            outline: none !important;
+            outline-offset: 0 !important;
+            background-color: rgba(255, 252, 248, 0.22) !important;
+            color: rgba($ckr-text, 0.74) !important;
+        }
+
+        &.o_in_wishlist,
+        &.btn-danger {
+            background-color: rgba(255, 253, 250, 0.2) !important;
+            color: rgba($ckr-primary, 0.92) !important;
+        }
     }
 
     // Theme classic_store : quick add sous le bloc information (désactivé en QWeb ; repli CSS).
-    .ckr-shop form.oe_product_cart .o_quick_add_btn {
+    form.oe_product_cart .o_quick_add_btn {
         display: none !important;
     }
 
@@ -2028,6 +2354,120 @@
             accent-color: $ckr-primary;
         }
     }
+}
+
+// ============================================================================
+// Sécurité rendu tuile : ces règles ne dépendent volontairement ni de `form`,
+// ni de `#wrap`, car le thème peut changer ces ancres. Les classes CK suffisent.
+// ============================================================================
+.ckr-product-card__media-corner {
+    position: absolute !important;
+    top: 0.42rem !important;
+    right: 0.42rem !important;
+    z-index: 20 !important;
+    width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+    min-width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+    height: 2rem !important;
+    min-height: 2rem !important;
+    overflow: visible !important;
+}
+
+.ckr-product-card__corner-actions {
+    position: relative !important;
+    inset: auto !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.35rem !important;
+    width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+    min-width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+    height: 2rem !important;
+    min-height: 2rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+}
+
+.ckr-product-card__corner-actions > .ckr-wishlist-ghost,
+.ckr-product-card__corner-actions > button.o_add_wishlist {
+    order: 1 !important;
+    flex: 0 0 auto !important;
+}
+
+.ckr-product-card__info-action {
+    order: 2 !important;
+    flex: 0 0 auto !important;
+    position: relative !important;
+    inset: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 2rem !important;
+    height: 2rem !important;
+    min-width: 2rem !important;
+    min-height: 2rem !important;
+    max-width: 2rem !important;
+    max-height: 2rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-radius: 50% !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: rgba(255, 253, 250, 0.16) !important;
+    background-color: rgba(255, 253, 250, 0.16) !important;
+    background-image: none !important;
+    color: rgba(55, 38, 24, 0.78) !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    backdrop-filter: blur(6px) saturate(1.08) !important;
+    -webkit-backdrop-filter: blur(6px) saturate(1.08) !important;
+}
+
+// Icône = `<i class="fa fa-info ckr-product-card__info-icon">` (QWeb) ; pas de `::before` (évite double « i »
+// avec les règles page `ckr_shop.xml` / cache assets). Pseudo-éléments neutralisés si un thème les réinjecte.
+.ckr-product-card__info-action::before,
+.ckr-product-card__info-action::after {
+    content: none !important;
+    display: none !important;
+}
+
+.ckr-product-card__corner-actions > .ckr-product-card__details-body {
+    display: none !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: calc(100% + 0.28rem) !important;
+    left: auto !important;
+    bottom: auto !important;
+    min-width: 10.5rem !important;
+    max-width: unquote("min(18rem, calc(100vw - 2rem))") !important;
+    max-height: unquote("min(42vh, 13.5rem)") !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+    padding: 0.48rem 0.55rem !important;
+    text-align: left !important;
+    background: rgba(252, 249, 247, 0.98) !important;
+    border: 1px solid rgba($ckr-border, 0.38) !important;
+    border-radius: $ckr-radius-md !important;
+    box-shadow: 0 6px 22px rgba(55, 38, 24, 0.14) !important;
+    z-index: 50 !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ckr-product-card__info-action:hover + .ckr-product-card__details-body,
+.ckr-product-card__info-action:focus + .ckr-product-card__details-body,
+.ckr-product-card__info-action:focus-visible + .ckr-product-card__details-body,
+.ckr-product-card__corner-actions:focus-within > .ckr-product-card__details-body {
+    display: block !important;
 }
 
 // --- MVP2.2 Vague 1 — Lot A : pas de double titre / bandeau + hero ----------
@@ -2487,10 +2927,122 @@
 }
 
 // ============================================================================
-// Boutique /shop — couche **finale** sur `#wrap` : prime sur BS / thème après concat assets.
-// Cœur wishlist = icône sur l’image, pas une pastille (variables --bs-btn-* complètes).
+// Boutique /shop — couche **finale** sur `#wrap` : même puce wishlist que `.ckr-shop`
+// (évite que BS / thème ne réintroduise taille ou fond transparent après concat assets).
 // ============================================================================
 #wrap.o_wsale_products_page.ckr-shop {
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media .ckr-product-card__media-corner,
+    form.oe_product_cart.ckr-product-card .oe_product_image .ckr-product-card__media-corner {
+        display: block !important;
+        width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+        min-width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+        height: 2rem !important;
+        overflow: visible !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions {
+        position: relative !important;
+        inset: auto !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        display: inline-flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 0.35rem !important;
+        width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+        min-width: unquote("calc(2 * 2rem + 0.35rem)") !important;
+        height: 2rem !important;
+        min-height: 2rem !important;
+        overflow: visible !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__info-action {
+        position: relative !important;
+        inset: auto !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        order: 2 !important;
+        flex: 0 0 auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        min-width: 2rem !important;
+        min-height: 2rem !important;
+        max-width: 2rem !important;
+        max-height: 2rem !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        border-radius: 50% !important;
+        background: rgba(255, 253, 250, 0.11) !important;
+        background-color: rgba(255, 253, 250, 0.11) !important;
+        background-image: none !important;
+        color: rgba(55, 38, 24, 0.78) !important;
+        box-shadow: none !important;
+        outline: none !important;
+        line-height: 1 !important;
+        font-size: 0 !important;
+        cursor: pointer !important;
+        backdrop-filter: blur(6px) saturate(1.08) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(1.08) !important;
+        overflow: visible !important;
+        z-index: 6 !important;
+
+        &::before,
+        &::after {
+            content: none !important;
+            display: none !important;
+        }
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .wishlist-above-title .btn,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .wishlist-above-title button.o_add_wishlist {
+        order: 1 !important;
+        position: relative !important;
+        inset: auto !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .wishlist-above-title .btn,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .wishlist-above-title button:not(.ckr-product-card__info-action) {
+        position: relative !important;
+        inset: auto !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__info-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: auto !important;
+        height: auto !important;
+        color: inherit !important;
+        font-size: 0.86rem !important;
+        font-weight: $ckr-weight-regular !important;
+        line-height: 1 !important;
+        font-style: normal !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
     form.oe_product_cart.ckr-product-card .ckr-product-card__media .wishlist-above-title .ckr-wishlist-ghost.btn,
     form.oe_product_cart.ckr-product-card .oe_product_image .wishlist-above-title .ckr-wishlist-ghost.btn {
         --bs-btn-padding-x: 0 !important;
@@ -2498,52 +3050,202 @@
         --bs-btn-font-size: 0 !important;
         --bs-btn-font-family: inherit !important;
         --bs-btn-line-height: 1 !important;
-        --bs-btn-color: rgba(255, 255, 255, 0.96) !important;
-        --bs-btn-bg: transparent !important;
+        --bs-btn-bg: rgba(255, 253, 250, 0.11) !important;
         --bs-btn-border-color: transparent !important;
-        --bs-btn-hover-color: #fff !important;
-        --bs-btn-hover-bg: rgba(255, 255, 255, 0.06) !important;
+        --bs-btn-border-width: 0 !important;
+        --bs-btn-hover-bg: rgba(255, 252, 248, 0.18) !important;
         --bs-btn-hover-border-color: transparent !important;
-        --bs-btn-active-color: #fff !important;
-        --bs-btn-active-bg: transparent !important;
+        --bs-btn-active-bg: rgba(255, 253, 250, 0.11) !important;
         --bs-btn-active-border-color: transparent !important;
+        --bs-btn-focus-border-color: transparent !important;
         --bs-btn-disabled-opacity: 1 !important;
         --bs-btn-focus-box-shadow: none !important;
+        --bs-btn-box-shadow: none !important;
+        --bs-btn-active-shadow: none !important;
         --bs-border-width: 0 !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        min-width: 2rem !important;
+        min-height: 2rem !important;
+        max-width: 2rem !important;
+        max-height: 2rem !important;
         padding: 0 !important;
         margin: 0 !important;
         border: none !important;
-        border-radius: 0 !important;
+        border-radius: 50% !important;
         box-shadow: none !important;
-        background: transparent !important;
-        background-color: transparent !important;
+        outline: none !important;
+        outline-offset: 0 !important;
+        background: rgba(255, 253, 250, 0.11) !important;
+        background-color: rgba(255, 253, 250, 0.11) !important;
         background-image: none !important;
-        min-width: 0 !important;
-        min-height: 0 !important;
-        width: auto !important;
-        height: auto !important;
         line-height: 1 !important;
         vertical-align: middle !important;
         appearance: none !important;
         -webkit-appearance: none !important;
+        backdrop-filter: blur(6px) saturate(1.08) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(1.08) !important;
+
+        &::before,
+        &::after {
+            content: none !important;
+            display: none !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
 
         .fa,
         .fa-heart {
-            font-size: 1.14rem !important;
+            font-size: 0.72rem !important;
             line-height: 1 !important;
+            filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.42))
+                drop-shadow(0 1px 1px rgba(44, 38, 30, 0.08)) !important;
+        }
+
+        &:focus,
+        &:focus-visible {
+            box-shadow: none !important;
+            outline: none !important;
+            outline-offset: 0 !important;
         }
 
         &.btn-danger,
         &.o_in_wishlist {
-            --bs-btn-color: #fff !important;
-            --bs-btn-bg: transparent !important;
-            --bs-btn-border-color: transparent !important;
-            --bs-btn-hover-bg: rgba(255, 255, 255, 0.09) !important;
-            --bs-btn-hover-border-color: transparent !important;
-            background: transparent !important;
-            background-color: transparent !important;
+            --bs-btn-bg: rgba(255, 253, 250, 0.16) !important;
+            --bs-btn-hover-bg: rgba(255, 252, 248, 0.2) !important;
+            --bs-btn-active-bg: rgba(255, 253, 250, 0.16) !important;
+            background: rgba(255, 253, 250, 0.16) !important;
+            background-color: rgba(255, 253, 250, 0.16) !important;
             box-shadow: none !important;
             border: none !important;
+            outline: none !important;
         }
+    }
+}
+
+// ============================================================================
+// Boutique /shop — halo commun wishlist + info
+// Le halo appartient au rail parent ; les boutons restent de simples icônes.
+// ============================================================================
+#wrap.o_wsale_products_page.ckr-shop {
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media .ckr-product-card__media-corner,
+    form.oe_product_cart.ckr-product-card .oe_product_image .ckr-product-card__media-corner,
+    form.oe_product_cart.ckr-product-card .o_wsale_product_information .ckr-product-card__media-corner {
+        top: 0.42rem !important;
+        right: 0.42rem !important;
+        width: 4.05rem !important;
+        min-width: 4.05rem !important;
+        height: 1.9rem !important;
+        min-height: 1.9rem !important;
+        overflow: visible !important;
+        z-index: 20 !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .wishlist-above-title.ckr-product-card__corner-actions,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0.12rem !important;
+        width: 4.05rem !important;
+        min-width: 4.05rem !important;
+        height: 1.9rem !important;
+        min-height: 1.9rem !important;
+        padding: 0.16rem 0.24rem !important;
+        margin: 0 !important;
+        border: 0 !important;
+        border-radius: 0.58rem !important;
+        background: rgba(255, 253, 250, 0.3) !important;
+        background-color: rgba(255, 253, 250, 0.3) !important;
+        background-image: none !important;
+        box-shadow: 0 5px 18px rgba(44, 38, 30, 0.09) !important;
+        backdrop-filter: blur(8px) saturate(1.05) !important;
+        -webkit-backdrop-filter: blur(8px) saturate(1.05) !important;
+        overflow: visible !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > .ckr-wishlist-ghost.btn,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > button.o_add_wishlist,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > .ckr-product-card__info-action {
+        position: relative !important;
+        inset: auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 1.58rem !important;
+        width: 1.58rem !important;
+        min-width: 1.58rem !important;
+        max-width: 1.58rem !important;
+        height: 1.58rem !important;
+        min-height: 1.58rem !important;
+        max-height: 1.58rem !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        border-radius: 0.42rem !important;
+        outline: none !important;
+        outline-offset: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        line-height: 1 !important;
+        font-size: 0 !important;
+        color: rgba($ckr-text, 0.72) !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        cursor: pointer !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > .ckr-wishlist-ghost.btn,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > button.o_add_wishlist {
+        order: 1 !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > .ckr-product-card__info-action {
+        order: 2 !important;
+
+        &::before,
+        &::after {
+            content: none !important;
+            display: none !important;
+        }
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions .fa,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions .fa-heart,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions .ckr-product-card__info-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: auto !important;
+        height: auto !important;
+        font-family: FontAwesome !important;
+        font-size: 0.76rem !important;
+        font-weight: normal !important;
+        line-height: 1 !important;
+        color: inherit !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.5))
+            drop-shadow(0 1px 1px rgba(44, 38, 30, 0.1)) !important;
+    }
+
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > .ckr-wishlist-ghost.btn:hover,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > .ckr-wishlist-ghost.btn:focus-visible,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > button.o_add_wishlist:hover,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > button.o_add_wishlist:focus-visible,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > .ckr-product-card__info-action:hover,
+    form.oe_product_cart.ckr-product-card .ckr-product-card__media-corner .ckr-product-card__corner-actions > .ckr-product-card__info-action:focus-visible {
+        background: rgba(255, 253, 250, 0.32) !important;
+        background-color: rgba(255, 253, 250, 0.32) !important;
+        color: rgba($ckr-primary, 0.92) !important;
     }
 }

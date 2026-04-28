@@ -25,7 +25,7 @@
 
                 <div class="ckr-entries__grid" role="navigation" aria-label="Portes d exploration du catalogue">
 
-                    <a href="/promotions"
+                    <a href="/shop?ckr_mode=promo"
                        class="ckr-entries__card ckr-entries__card--promo">
                         <div class="ckr-entries__card__media ckr-entries__card__media--promo" aria-hidden="true">
                             <img src="/dorevia_ckreyol_marketplace/static/src/img/explorer_porte_promotions.png"
@@ -38,7 +38,7 @@
                         </div>
                     </a>
 
-                    <a href="/kits"
+                    <a href="/shop?ckr_mode=pack"
                        class="ckr-entries__card ckr-entries__card--kits">
                         <div class="ckr-entries__card__media ckr-entries__card__media--kits" aria-hidden="true">
                             <img src="/dorevia_ckreyol_marketplace/static/src/img/explorer_porte_kits.png"
@@ -51,7 +51,7 @@
                         </div>
                     </a>
 
-                    <a href="/categories"
+                    <a href="/shop"
                        class="ckr-entries__card ckr-entries__card--tile">
                         <div class="ckr-entries__card__media ckr-entries__card__media--tile" aria-hidden="true">
                             <img src="/dorevia_ckreyol_marketplace/static/src/img/explorer_porte_categories.png"
@@ -64,7 +64,7 @@
                         </div>
                     </a>
 
-                    <a href="/collections"
+                    <a href="/shop?ckr_collection_scope=all"
                        class="ckr-entries__card ckr-entries__card--tile">
                         <div class="ckr-entries__card__media ckr-entries__card__media--tile" aria-hidden="true">
                             <img src="/dorevia_ckreyol_marketplace/static/src/img/explorer_porte_collections.png"
@@ -77,7 +77,7 @@
                         </div>
                     </a>
 
-                    <a href="/origines"
+                    <a href="/shop?ckr_mode=origin"
                        class="ckr-entries__card ckr-entries__card--tile">
                         <div class="ckr-entries__card__media ckr-entries__card__media--tile" aria-hidden="true">
                             <img src="/dorevia_ckreyol_marketplace/static/src/img/explorer_porte_origines.png"
