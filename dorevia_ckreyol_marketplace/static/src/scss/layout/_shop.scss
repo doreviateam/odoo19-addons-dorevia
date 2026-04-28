@@ -598,6 +598,15 @@
             }
         }
 
+        // Bloc titre + réinitialisation : ordre DOM garanti (voir `ckr_shop_sidebar_filter_heading`).
+        .ckr-shop-sidebar__heading-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+            margin-bottom: 0.55rem;
+        }
+
         // « Filtrer par » — présence serif maquette (plus grand, plus d’air).
         .ckr-shop-sidebar__filter-heading {
             font-family: $ckr-font-serif !important;
@@ -606,12 +615,41 @@
             letter-spacing: -0.03em !important;
             text-transform: none !important;
             color: $ckr-text !important;
-            margin: 0 0 0.5rem !important;
-            padding: 0.15rem 0 1.05rem !important;
+            margin: 0 0 0.35rem !important;
+            padding: 0.15rem 0 0.65rem !important;
             line-height: 1.18 !important;
             border-bottom: 1px solid rgba($ckr-border, 0.45) !important;
             box-shadow: none !important;
             background: transparent !important;
+        }
+
+        // Réinitialisation globale : sous le titre (même cluster), avant Catégories / facettes CK.
+        .ckr-shop-sidebar__clear-filters {
+            margin-top: 0;
+            padding: 0.3rem 0.05rem 0.5rem !important;
+            border-bottom-color: rgba($ckr-border, 0.48) !important;
+
+            .btn {
+                border-radius: 0.52rem;
+                border: 1px solid rgba($ckr-primary, 0.26);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(252, 248, 240, 0.9));
+                color: rgba($ckr-text, 0.9);
+                font-weight: $ckr-weight-semibold;
+                letter-spacing: 0.005em;
+                transition:
+                    border-color $ckr-transition-fast,
+                    background-color $ckr-transition-fast,
+                    box-shadow $ckr-transition-fast,
+                    color $ckr-transition-fast;
+
+                &:hover,
+                &:focus-visible {
+                    color: $ckr-primary-dark;
+                    border-color: rgba($ckr-primary, 0.52);
+                    background: rgba(255, 255, 255, 0.98);
+                    box-shadow: 0 3px 10px rgba(160, 82, 45, 0.08);
+                }
+            }
         }
 
         // Collections + Origines : un seul `accordion-flush` à deux items (pas de « cluster »).
@@ -705,12 +743,12 @@
             font-weight: $ckr-weight-semibold !important;
             letter-spacing: 0.01em;
             color: rgba($ckr-text, 0.94) !important;
-            padding: 0.8rem 0.65rem !important;
-            margin: 0.35rem 0 0.2rem !important;
+            padding: 0.74rem 0.62rem !important;
+            margin: 0.42rem 0 0.22rem !important;
             border-radius: unquote("clamp(7px, 0.5vw, 9px)") !important;
             box-shadow: none;
-            background-color: rgba(252, 248, 240, 0.88) !important;
-            border: 1px solid rgba($ckr-border, 0.22);
+            background-color: rgba(255, 252, 247, 0.76) !important;
+            border: 1px solid rgba($ckr-border, 0.2);
 
             &::after {
                 opacity: 0.52;
@@ -720,7 +758,7 @@
 
             &:not(.collapsed) {
                 color: rgba($ckr-text, 0.94) !important;
-                background-color: rgba(255, 252, 246, 0.95) !important;
+                background-color: rgba(255, 252, 246, 0.9) !important;
                 box-shadow: none;
             }
 
@@ -741,7 +779,7 @@
         }
 
         .accordion-body {
-            padding: 0.45rem 0.2rem 1rem 0.65rem;
+            padding: 0.5rem 0.2rem 1.08rem 0.62rem;
             font-size: 0.90625rem;
         }
 
@@ -781,6 +819,8 @@
             line-height: 1.45;
             color: rgba(62, 56, 50, 0.96);
             font-size: 0.90625rem;
+            position: relative;
+            z-index: 1;
         }
 
         .form-check-input {
@@ -789,6 +829,10 @@
             margin-top: 0.2em;
             border-color: rgba($ckr-border, 0.88);
             accent-color: $ckr-primary;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            pointer-events: auto !important;
 
             &:checked {
                 background-color: $ckr-primary;
@@ -805,7 +849,7 @@
 
         // Prix : curseurs terracotta, espace sous les libellés min / max.
         #o_wsale_price_range_option {
-            padding-top: 0.25rem;
+            padding-top: 0.3rem;
             margin-bottom: 0;
 
             .accordion-button.bg-transparent {
@@ -813,23 +857,25 @@
             }
 
             #o_wsale_price_range_option_inner {
-                padding: 0.35rem 0.2rem 0.75rem 0.65rem;
+                padding: 0.44rem 0.22rem 0.84rem 0.65rem;
             }
 
             .accordion-body {
-                padding-bottom: 0.65rem;
+                padding-bottom: 0.75rem;
             }
 
             .form-range {
-                height: 0.35rem;
+                height: 0.42rem;
                 accent-color: $ckr-primary;
+                margin-top: 0.12rem;
+                margin-bottom: 0.6rem;
 
                 &::-webkit-slider-thumb {
-                    width: 1.15rem;
-                    height: 1.15rem;
+                    width: 1.08rem;
+                    height: 1.08rem;
                     background: $ckr-primary-dark;
                     border: 2px solid rgba(255, 255, 255, 0.95);
-                    box-shadow: 0 1px 4px rgba(44, 44, 44, 0.14);
+                    box-shadow: 0 2px 6px rgba(44, 44, 44, 0.16);
                 }
 
                 &::-webkit-slider-runnable-track {
@@ -839,11 +885,11 @@
                 }
 
                 &::-moz-range-thumb {
-                    width: 1.15rem;
-                    height: 1.15rem;
+                    width: 1.08rem;
+                    height: 1.08rem;
                     background: $ckr-primary-dark;
                     border: 2px solid rgba(255, 255, 255, 0.95);
-                    box-shadow: 0 1px 4px rgba(44, 44, 44, 0.14);
+                    box-shadow: 0 2px 6px rgba(44, 44, 44, 0.16);
                 }
 
                 &::-moz-range-track {
@@ -851,6 +897,18 @@
                     background: rgba($ckr-text, 0.14);
                     border-radius: 2px;
                 }
+            }
+
+            .css_non_editable_mode_hidden {
+                margin-top: 0.2rem;
+            }
+
+            .d-flex,
+            .d-flex.justify-content-between {
+                margin-top: 0.14rem;
+                gap: 0.45rem;
+                font-size: 0.81rem;
+                color: rgba($ckr-text-muted, 0.92);
             }
         }
 
@@ -977,6 +1035,25 @@
         --o-wsale-card-btn-submit-aspect-ratio: auto;
         // Sans classe `o_wsale_products_opt_has_cta` sur la section, Odoo garde display:none sur le primaire.
         --o-wsale-card-btn-submit-display: inline-flex;
+        border: 1px solid rgba($ckr-border, 0.44);
+        border-radius: $ckr-radius-lg;
+        background-color: rgba(255, 255, 255, 0.82);
+        box-shadow:
+            0 1px 1px rgba(255, 255, 255, 0.75) inset,
+            0 9px 20px rgba(44, 38, 30, 0.05);
+        transition:
+            border-color $ckr-transition-fast,
+            box-shadow $ckr-transition-fast,
+            transform $ckr-transition-fast;
+
+        &:hover,
+        &:focus-within {
+            border-color: rgba($ckr-primary, 0.34);
+            box-shadow:
+                0 1px 1px rgba(255, 255, 255, 0.8) inset,
+                0 12px 24px rgba(44, 38, 30, 0.08);
+            transform: translateY(-1px);
+        }
     }
 
     form.oe_product_cart:not(.ckr-product-card) {
@@ -2676,10 +2753,11 @@
 // compteur + « Trier par » en sans-serif, liste tri = encadré blanc discret.
 // ----------------------------------------------------------------------------
 .ckr-shop-shortcuts {
-    padding: 0.62rem 0 0.65rem;
-    margin-bottom: 0.35rem;
-    background-color: $ckr-bg;
-    border-bottom: 1px solid rgba(200, 188, 168, 0.45);
+    padding: 0.5rem 0 0.55rem;
+    margin-bottom: 0.5rem;
+    background-color: rgba(252, 249, 247, 0.78);
+    border: 1px solid rgba(214, 202, 181, 0.45);
+    border-radius: $ckr-radius-md;
 
     &__inner {
         display: flex;
@@ -2695,7 +2773,7 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: $ckr-space-xs $ckr-space-sm;
+        gap: 0.38rem 0.46rem;
         min-width: 0;
         flex: 1 1 auto;
 
@@ -2715,7 +2793,7 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: flex-end;
-        gap: $ckr-space-sm $ckr-space-md;
+        gap: 0.45rem 0.65rem;
         flex: 0 1 auto;
         min-width: 0;
     }
@@ -2808,24 +2886,31 @@
     &__link {
         display: inline-flex;
         align-items: center;
-        color: $ckr-primary;
+        color: rgba($ckr-text, 0.88);
         text-decoration: none;
-        font-weight: $ckr-weight-semibold;
-        padding: 0.38rem 0.82rem;
-        border: 1px solid $ckr-primary;
+        font-weight: $ckr-weight-medium;
+        padding: 0.34rem 0.74rem;
+        border: 1px solid rgba($ckr-border, 0.62);
         border-radius: $ckr-radius-pill;
-        background-color: rgba(255, 255, 255, 0.55);
+        background-color: rgba(255, 255, 255, 0.88);
         white-space: nowrap;
         transition: color $ckr-transition-fast,
                     border-color $ckr-transition-fast,
                     background-color $ckr-transition-fast,
                     box-shadow $ckr-transition-fast;
 
-        &:hover,
+        &:hover {
+            color: $ckr-primary-dark;
+            border-color: rgba($ckr-primary, 0.42);
+            background-color: rgba(252, 244, 236, 0.95);
+        }
+
         &:focus-visible {
             color: $ckr-primary-dark;
-            border-color: $ckr-primary-dark;
-            background-color: rgba(255, 255, 255, 0.92);
+            border-color: rgba($ckr-primary, 0.52);
+            background-color: rgba(252, 244, 236, 0.96);
+            box-shadow: 0 0 0 0.18rem rgba(160, 82, 45, 0.18);
+            outline: none;
         }
 
         &--active {
@@ -2833,13 +2918,19 @@
             font-weight: $ckr-weight-bold;
             background-color: $ckr-primary;
             border-color: $ckr-primary;
-            box-shadow: none;
+            box-shadow: 0 2px 8px rgba(160, 82, 45, 0.2);
 
             &:hover,
             &:focus-visible {
                 color: #fff;
                 background-color: $ckr-primary-dark;
                 border-color: $ckr-primary-dark;
+            }
+
+            &:focus-visible {
+                box-shadow:
+                    0 2px 8px rgba(160, 82, 45, 0.2),
+                    0 0 0 0.18rem rgba(160, 82, 45, 0.22);
             }
         }
     }
@@ -3248,4 +3339,421 @@
         background-color: rgba(255, 253, 250, 0.32) !important;
         color: rgba($ckr-primary, 0.92) !important;
     }
+}
+
+// ============================================================================
+// Boutique /shop — finition UI maquette PJ
+// ----------------------------------------------------------------------------
+// Couche volontairement visuelle : elle ne modifie ni les URLs, ni les facettes,
+// ni les compteurs, ni la mecanique de grille. Objectif : lecture plus sobre,
+// chaleureuse et retail, proche d'une selection d'epicerie fine creole.
+// ============================================================================
+
+#wrap.o_wsale_products_page.ckr-shop {
+    --ckr-shop-panel: #fffdf9;
+    --ckr-shop-ink-soft: rgba(55, 38, 24, 0.72);
+    --ckr-shop-line: rgba(167, 139, 112, 0.24);
+
+    #o_wsale_container.oe_website_sale {
+        padding-top: unquote("clamp(0.7rem, 1.2vw, 1.15rem)");
+    }
+
+    // Hero + navigation chips doivent se suivre sans blanc intermédiaire.
+    &:has(.ckr-shop-hero):has(.ckr-shop-shortcuts) {
+        .ckr-shop-hero {
+            // Respiration modérée entre zone éditoriale (hero) et zone marchande.
+            margin-bottom: 0.42rem;
+        }
+
+        #o_wsale_container.oe_website_sale {
+            padding-top: 0;
+        }
+    }
+
+    .o_wsale_products_main_row {
+        column-gap: unquote("clamp(1rem, 2vw, 2.1rem)");
+    }
+
+    #products_grid_before {
+        @media (min-width: 992px) {
+            max-width: 16.25rem;
+            padding-right: unquote("clamp(0.65rem, 1.1vw, 1.15rem)");
+        }
+
+        .ckr-shop-sidebar__heading-cluster {
+            margin-bottom: 0.4rem;
+        }
+
+        .ckr-shop-sidebar__filter-heading {
+            font-family: $ckr-font-serif !important;
+            font-size: 1.02rem !important;
+            font-weight: $ckr-weight-semibold !important;
+            letter-spacing: -0.012em !important;
+            color: rgba($ckr-text, 0.94) !important;
+            padding: 0 0 0.48rem !important;
+            margin-bottom: 0.42rem !important;
+            border-bottom-color: var(--ckr-shop-line) !important;
+        }
+
+        .ckr-shop-sidebar__clear-filters {
+            padding: 0 0 0.62rem !important;
+            margin-bottom: 0.18rem !important;
+            border-bottom-color: var(--ckr-shop-line) !important;
+
+            .btn {
+                min-height: 2.25rem;
+                justify-content: center;
+                border-radius: 999px;
+                border-color: rgba($ckr-primary, 0.22);
+                background: rgba(255, 255, 255, 0.72);
+                color: rgba($ckr-primary-dark, 0.92);
+                box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
+
+                small {
+                    margin: 0 !important;
+                    font-size: 0.78rem;
+                    letter-spacing: 0.01em;
+                }
+
+                .oi {
+                    opacity: 0.48;
+                    margin-left: 0.38rem;
+                }
+            }
+        }
+
+        .accordion-item,
+        .products_categories.accordion .accordion-item,
+        .products_categories .accordion-item,
+        #wsale_products_attributes_collapse .accordion-item:last-child,
+        #o_wsale_price_range_option:not(:last-child) {
+            border-bottom-color: var(--ckr-shop-line) !important;
+        }
+
+        .accordion-button {
+            min-height: 2.7rem;
+            margin: 0.16rem 0 0 !important;
+            padding: 0.72rem 0.18rem !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            color: rgba($ckr-text, 0.88) !important;
+            font-size: 0.78rem !important;
+            font-weight: $ckr-weight-semibold !important;
+            letter-spacing: 0.09em !important;
+            text-transform: uppercase;
+
+            &:not(.collapsed),
+            &:hover,
+            &:focus-visible {
+                background: transparent !important;
+                color: $ckr-primary-dark !important;
+            }
+
+            &::after {
+                opacity: 0.46;
+                background-size: 0.58rem;
+            }
+        }
+
+        .accordion-body {
+            padding: 0.26rem 0 0.95rem 0.1rem !important;
+        }
+
+        .ckr-shop-sidebar-catchecks {
+            margin-bottom: 0.2rem !important;
+        }
+
+        .form-check {
+            margin-bottom: 0.44rem;
+        }
+
+        .form-check-label,
+        .ckr-shop-sidebar-ck__link,
+        .products_categories .nav-link,
+        .products_categories a:not(.accordion-button) {
+            font-size: 0.86rem;
+            color: var(--ckr-shop-ink-soft) !important;
+        }
+
+        .form-check-input {
+            width: 0.92rem;
+            height: 0.92rem;
+            border-radius: 0.18rem;
+            border-color: rgba(112, 91, 72, 0.38);
+            background-color: rgba(255, 255, 255, 0.72);
+            cursor: pointer;
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 2;
+
+            &:checked {
+                background-color: $ckr-primary !important;
+                border-color: $ckr-primary !important;
+                background-image: var(--bs-form-check-bg-image);
+            }
+        }
+
+        #o_wsale_price_range_option {
+            padding-top: 0;
+
+            #o_wsale_price_range_option_inner,
+            .accordion-body {
+                padding: 0.34rem 0.05rem 1rem 0.08rem !important;
+            }
+
+            .form-range {
+                height: 0.56rem;
+                margin: 0.18rem 0 0.78rem;
+
+                &::-webkit-slider-runnable-track {
+                    height: 4px;
+                    background: linear-gradient(
+                        90deg,
+                        rgba($ckr-primary, 0.82),
+                        rgba($ckr-primary, 0.38)
+                    );
+                    border-radius: 999px;
+                }
+
+                &::-moz-range-track {
+                    height: 4px;
+                    background: rgba($ckr-primary, 0.55);
+                    border-radius: 999px;
+                }
+
+                &::-webkit-slider-thumb {
+                    width: 0.92rem;
+                    height: 0.92rem;
+                    margin-top: -0.29rem;
+                    background: $ckr-primary-dark;
+                    border: 2px solid #fffdf9;
+                    box-shadow: 0 2px 8px rgba(55, 38, 24, 0.18);
+                }
+
+                &::-moz-range-thumb {
+                    width: 0.92rem;
+                    height: 0.92rem;
+                    background: $ckr-primary-dark;
+                    border: 2px solid #fffdf9;
+                    box-shadow: 0 2px 8px rgba(55, 38, 24, 0.18);
+                }
+            }
+
+            .d-flex,
+            .d-flex.justify-content-between {
+                margin-top: 0.3rem;
+                padding: 0 0.02rem;
+                font-size: 0.76rem;
+                color: rgba($ckr-text, 0.58);
+            }
+        }
+    }
+
+    .ckr-shop-shortcuts {
+        margin: 0 0 0.9rem;
+        padding: 0.28rem 0 0.7rem;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid var(--ckr-shop-line);
+        border-radius: 0;
+
+        &__inner {
+            gap: 0.72rem 1rem;
+        }
+
+        &__chips {
+            gap: 0.48rem;
+        }
+
+        &__link {
+            min-height: 2.18rem;
+            padding: 0.42rem 0.86rem;
+            border-color: rgba($ckr-primary, 0.26);
+            background: rgba(255, 255, 255, 0.82);
+            color: rgba($ckr-text, 0.86);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
+
+            // Grammaire visuelle volontairement unique: état de chip uniquement
+            // (active/inactive/hover/focus), pas de variante par nature commerciale.
+            &:hover {
+                border-color: rgba($ckr-primary, 0.44);
+                background: rgba(252, 244, 236, 0.95);
+                box-shadow: 0 3px 12px rgba(55, 38, 24, 0.06);
+            }
+
+            &:focus-visible {
+                border-color: rgba($ckr-primary, 0.56);
+                background: rgba(252, 244, 236, 0.96);
+                box-shadow:
+                    0 3px 12px rgba(55, 38, 24, 0.06),
+                    0 0 0 0.18rem rgba(160, 82, 45, 0.18);
+                outline: none;
+            }
+
+            &--active {
+                background: $ckr-primary;
+                border-color: $ckr-primary;
+                color: #fff;
+                box-shadow: 0 5px 14px rgba(160, 82, 45, 0.18);
+
+                &:focus-visible {
+                    box-shadow:
+                        0 5px 14px rgba(160, 82, 45, 0.18),
+                        0 0 0 0.18rem rgba(160, 82, 45, 0.24);
+                }
+            }
+        }
+
+        &__count {
+            color: rgba($ckr-text, 0.58);
+        }
+
+        &__tools {
+            .o_sortby_dropdown,
+            .o_pricelist_dropdown {
+                > .dropdown-toggle {
+                    min-height: 2.18rem;
+                    padding: 0.32rem 0.58rem 0.32rem 0.72rem;
+                    border-color: rgba($ckr-border, 0.7);
+                    border-radius: 999px;
+                    background: rgba(255, 255, 255, 0.74);
+                }
+            }
+        }
+    }
+
+    #o_wsale_products_grid_table_wrapper {
+        padding-top: 0.18rem;
+    }
+
+    #o_wsale_products_grid.o_wsale_products_grid_table {
+        --ckr-shop-grid-gap: clamp(1.05rem, 1.22vw, 1.45rem);
+        justify-content: start;
+    }
+
+    form.oe_product_cart.ckr-product-card {
+        min-height: 100%;
+        border-radius: 0.78rem;
+        border-color: rgba(178, 153, 128, 0.34);
+        background: var(--ckr-shop-panel);
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.76) inset,
+            0 7px 22px rgba(44, 38, 30, 0.055);
+
+        &:hover,
+        &:focus-within {
+            border-color: rgba($ckr-primary, 0.3);
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.82) inset,
+                0 12px 28px rgba(44, 38, 30, 0.09);
+        }
+
+        .oe_product_image,
+        .ckr-product-card__media {
+            aspect-ratio: 1 / 1.08;
+            border-radius: 0.78rem 0.78rem 0 0;
+            background: #f8f2ea;
+        }
+
+        .o_wsale_product_information,
+        .ckr-product-card__info {
+            padding: 0.58rem 0.72rem 0.52rem !important;
+        }
+
+        .ckr-product-card__text-stack {
+            padding-bottom: 0.52rem;
+            border-bottom-color: rgba(167, 139, 112, 0.18) !important;
+        }
+
+        :is(h2, h6).o_wsale_products_item_title {
+            font-size: unquote("clamp(0.88rem, 0.18vw + 0.82rem, 0.96rem)") !important;
+            font-weight: $ckr-weight-semibold !important;
+            line-height: 1.25 !important;
+            letter-spacing: 0 !important;
+            min-height: calc(2 * 1.25 * 1em) !important;
+            height: calc(2 * 1.25 * 1em) !important;
+            max-height: calc(2 * 1.25 * 1em) !important;
+        }
+
+        .o_wsale_product_sub.ckr-product-card__footer {
+            padding: 0.48rem 0.72rem 0.62rem !important;
+            background: transparent !important;
+
+            .ckr-product-card__footer-row {
+                min-height: 2.2rem;
+                column-gap: 0.6rem;
+            }
+
+            .ckr-product-card__footer-price .product_price {
+                font-size: 0.92rem;
+            }
+
+            .product_price .fw-bold {
+                color: $ckr-primary-dark !important;
+                font-size: 1.02em;
+                letter-spacing: 0;
+            }
+
+            .o_wsale_product_btn_primary.ckr-product-card__cart-btn {
+                min-height: 2.12rem !important;
+                padding: 0.35rem 0.68rem !important;
+                border-radius: 999px !important;
+                box-shadow: none;
+            }
+        }
+
+        // Info-bulle "mini résumé produit": méta courte -> nom -> sous-titre.
+        .ckr-product-card__corner-actions > .ckr-product-card__details-body {
+            min-width: 11rem !important;
+            max-width: unquote("min(15.5rem, calc(100vw - 1.75rem))") !important;
+            max-height: unquote("min(36vh, 10.5rem)") !important;
+            padding: 0.5rem 0.58rem !important;
+            border-radius: 0.62rem !important;
+            border-color: rgba($ckr-border, 0.42) !important;
+            background: rgba(255, 252, 248, 0.97) !important;
+            box-shadow: 0 8px 20px rgba(55, 38, 24, 0.14) !important;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+
+        .ckr-product-card__corner-actions .ckr-product-card__details-meta {
+            margin: 0 0 0.24rem !important;
+            font-size: 0.68rem !important;
+            font-weight: $ckr-weight-semibold !important;
+            letter-spacing: 0.03em;
+            line-height: 1.25 !important;
+            color: rgba($ckr-text, 0.62) !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ckr-product-card__corner-actions .ckr-product-card__details-odoo-name {
+            margin: 0 0 0.2rem !important;
+            font-size: 0.78rem !important;
+            font-weight: $ckr-weight-semibold !important;
+            line-height: 1.28 !important;
+            letter-spacing: 0.01em;
+            color: rgba($ckr-text, 0.9) !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+        }
+
+        .ckr-product-card__corner-actions .ckr-product-card__details-desc {
+            margin: 0 !important;
+            font-size: 0.72rem !important;
+            line-height: 1.32 !important;
+            color: rgba($ckr-text-muted, 0.9) !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+        }
+    }
+
+    // Grammaire catalogue conservée quel que soit le volume (1, 2, 3... résultats):
+    // pas de centrage ni redimensionnement spécifique des cartes en desktop XL.
 }

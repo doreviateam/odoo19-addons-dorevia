@@ -2,9 +2,37 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut** | Référence produit et implémentation boutique (chips, sidebar, hero) |
-| **Principe** | `/shop` est le **catalogue unique** ; chips et facettes affinent la grille par query string |
+| **Statut** | Référence produit et implémentation boutique (chips, sidebar, hero) — **gel fonctionnel MOA page Shop par défaut (2026-04-28)** |
+| **Principe** | `/shop` est le **catalogue unique** ; chips et facettes affinent la grille par query string. **Chips contextuelles** — la barre de chips n’affiche que les portes menant à au moins un produit dans le contexte courant ; « Toute la sélection » reste toujours visible comme retour au catalogue global. |
 | **Portée** | Page `/shop`, chips commerciaux, sidebar Catégories / Collections / Origines / Prix |
+
+---
+
+## 0. Gel fonctionnel MOA — page Shop par défaut (2026-04-28)
+
+Après arbitrage MOA, la page **`/shop` par défaut** est considérée **fonctionnellement validée** et **gelée**.
+
+Structure validée (non à rouvrir sans demande explicite MOA) :
+
+* bannière hero contextualisée ;
+* colonne filtres à gauche ;
+* chips / raccourcis au-dessus de la grille ;
+* compteur produits + tri ;
+* grille produits desktop ;
+* cartes produit avec actions principales.
+
+Interventions autorisées tant que le gel est actif :
+
+1. correction de bugs ;
+2. prévention de régressions ;
+3. demande MOA explicite.
+
+Interventions hors périmètre sans nouvel arbitrage MOA :
+
+* refonte structurelle de la page ;
+* modification de logique filtres/chips ;
+* modification de comportement URL/canonical/portes ;
+* changement global de grammaire grille/carte hors bug.
 
 ---
 
@@ -64,6 +92,17 @@ Contrat :
 * **Kits / Packs** : `ckr_mode=pack`.
 
 Un chip commercial actif se combine en **ET** avec les facettes sidebar.
+
+### Visibilité contextuelle des chips
+
+La barre de chips n’est pas une liste marketing figée : elle propose une **navigation contextuelle** dans `/shop`, **cohérente avec le catalogue courant**. La règle est alignée sur celle de la sidebar : **on ne propose pas d’entrées vides** pour affiner ou pré-filter le périmètre.
+
+* **« Toute la sélection »** reste **toujours visible** : retour au catalogue global (réinitialisation des filtres lorsque le produit prévoit un reset global).
+* Les chips commerciales **Promotions**, **Incontournables** et **Kits / Packs** ne sont affichées que si elles mènent à **au moins un produit** dans le **contexte courant** (facettes actives : origines, collections, catégories CK, filtres prix, etc.).
+* Une chip **visible** correspond à une **porte utile** : un segment réellement disponible.
+* Une chip qui ne mènerait qu’à **zéro produit** dans ce contexte doit être **masquée** — pas affichée « vide » ou désactivée à la place ; le compteur global reste l’indicateur principal du volume de résultat.
+
+> **Note technique (sécurité contractuelle future, non bloquante pour un lot livré)** : un test HTTP dédié « segment vide → chip absente », avec données minimales de catalogue, peut être ajouté pour verrouiller explicitement ce comportement. Les tests existants du conteneur boutique acceptent déjà un sous-ensemble variable de chips commerciales visibles.
 
 ---
 
@@ -187,7 +226,7 @@ Exemples :
 | Zone | Fichiers | Contrat |
 |------|----------|---------|
 | Domaine produit | `controllers/website_sale_ckr.py`, `models/product_template.py` | Lire les paramètres répétables avec `request.httprequest.args.getlist`; appliquer OU intra-groupe et ET inter-groupes |
-| Chips | `views/pages/ckr_shop.xml` | Générer des `href` sous `/shop`, préserver les facettes existantes pour les chips commerciaux, reset global pour « Toute la sélection » |
+| Chips | `views/pages/ckr_shop.xml`, `controllers/website_sale_ckr.py` | Générer des `href` sous `/shop`, préserver les facettes pour les chips commerciaux, reset global pour « Toute la sélection » ; afficher les chips commerciales (`t-if`) seulement si le segment a au moins un produit dans le contexte (sonde domaine alignée sur un clic réel) |
 | Sidebar | `views/pages/ckr_shop.xml`, `views/ckr_shop_sidebar_rail_maquette.xml` | Rendre des cases à cocher (pas une navigation hors `/shop`), état accordéon par groupe |
 | Comportement client | `static/src/js/ckr_shop_sidebar.js` | `Toutes`, multi-sélection, redirection canonique sous `/shop?...` |
 | Canonical / pagination | `models/website.py`, hooks `WebsiteSale` | Réémettre les paramètres CK utiles sans transformer les facettes en routes hors `/shop` |
@@ -213,6 +252,7 @@ Elles ne doivent pas être réintroduites comme destinations des facettes sideba
 
 ## Critères d’acceptation synthétiques
 
+* **Chips** : « Toute la sélection » toujours proposée ; Promotions / Incontournables / Kits affichées uniquement si le segment correspondant comporte au moins un produit dans le contexte courant (voir §2 *Visibilité contextuelle des chips*).
 * Les entrées chips commerciales restent sous `/shop?…` (pas de pages « stub » depuis la barre courte).
 * La sidebar applique uniquement la query sous `/shop` ; pas de liens métier hors catalogue pour affiner une facette CK.
 * Multi-sélection par groupe ; `« Toutes »` cohérente avec l’état neutre du groupe.

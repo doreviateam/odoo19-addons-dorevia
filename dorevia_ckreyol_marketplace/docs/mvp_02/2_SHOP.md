@@ -7,6 +7,8 @@
 
 **Validation MOA (langage public / technique)** : le libellé visiteur **ne suggère pas** un classement statistique fictif ; le nom technique **`featured`** est **neutre** (« mis en avant »). **Interdits** sans calcul réel sur ventes confirmées : `best_sellers`, `top_sales`.
 
+**Gel fonctionnel MOA (2026-04-28)** : la page **`/shop` par défaut** est validée et gelée fonctionnellement. Hors demande MOA explicite, le périmètre d’intervention est limité au **bugfix** et à la **prévention de régression**. Référence opposable : [DOCTRINE_SHOP_CONTENEUR_UNIQUE.md](DOCTRINE_SHOP_CONTENEUR_UNIQUE.md) (§0).
+
 **Amendement doctrine front — conteneur unique** : pour la navigation boutique courante, **`/shop` est le conteneur unique**. Les chips du haut sont des **filtres commerciaux** (`ckr_mode=promo|featured|pack`) et la sidebar est une **facette multi-checkbox** (`ckr_category`, `ckr_collection`, `ckr_origin`, prix). Les routes historiques ou externes peuvent rester des entrées de compatibilité, mais les chips et la sidebar ne doivent pas envoyer vers des pages parallèles. Référence exécutable : [DOCTRINE_SHOP_CONTENEUR_UNIQUE.md](DOCTRINE_SHOP_CONTENEUR_UNIQUE.md).
 
 ---

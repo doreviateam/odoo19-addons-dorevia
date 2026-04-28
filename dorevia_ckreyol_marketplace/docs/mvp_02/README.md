@@ -32,6 +32,12 @@ Dossier de **cadrage et décisions** pour la vague **MVP 02** (évolution homepa
 - [NOTE_TECH_TUILE_CORNER_ACTIONS.md](NOTE_TECH_TUILE_CORNER_ACTIONS.md) — rail **wishlist + info** sur la média tuile (gabarit QWeb **`ckr_shop_wishlist_on_product_media`**, `ckr-product-card__corner-actions`, styles page, tests `dorevia_ckr_shop_wave1`) ;
 - [TICKET_SHOP_MVP22_VISIBLE_WAVE1.md](../crea/TICKET_SHOP_MVP22_VISIBLE_WAVE1.md) — ticket Vague 1 à utiliser avec les deux documents ci-dessus pour éviter l'empilement `hero + bandeaux + header natif`.
 
+**Gel fonctionnel MOA — Shop par défaut (2026-04-28)** :
+
+- la page **`/shop` par défaut** est validée et gelée fonctionnellement ;
+- périmètre autorisé : **bugfix**, **prévention régression**, **demande MOA explicite** ;
+- doctrine opposable : [DOCTRINE_SHOP_CONTENEUR_UNIQUE.md](DOCTRINE_SHOP_CONTENEUR_UNIQUE.md) (§0).
+
 ### Ordre de merge des PR (souhait MOA)
 
 1. **Hero** — [TICKET_HERO_HOMEPAGE_V2.md](../crea/TICKET_HERO_HOMEPAGE_V2.md)  

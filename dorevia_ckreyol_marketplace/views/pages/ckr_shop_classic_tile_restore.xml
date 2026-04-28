@@ -62,7 +62,6 @@
                             <button type="button"
                                     class="ckr-product-card__info-action"
                                     style="position:relative !important;inset:auto !important;display:inline-flex !important;align-items:center !important;justify-content:center !important;order:2 !important;flex:0 0 1.58rem !important;width:1.58rem !important;min-width:1.58rem !important;max-width:1.58rem !important;height:1.58rem !important;min-height:1.58rem !important;max-height:1.58rem !important;padding:0 !important;margin:0 !important;border:0 !important;border-radius:0.42rem !important;box-shadow:none !important;outline:none !important;outline-offset:0 !important;background:transparent !important;background-color:transparent !important;background-image:none !important;color:rgba(55,38,24,0.72) !important;line-height:1 !important;font-size:0 !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;"
-                                    title="Informations complémentaires"
                                     aria-label="Informations complémentaires sur ce produit"
                                     aria-haspopup="true">
                             <i class="fa fa-info ckr-product-card__info-icon"

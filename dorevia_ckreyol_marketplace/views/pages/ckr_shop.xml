@@ -87,17 +87,32 @@
         </xpath>
     </template>
 
-    <!-- Maquette MVP2.2 §4 : titre de rail « Filtrer par » (E0 — structure filtres native). -->
+    <!-- Maquette MVP2.2 §4 : titre de rail « Filtrer par » + réinitialisation globale (même bloc DOM). -->
     <template id="ckr_shop_sidebar_filter_heading"
               inherit_id="website_sale.products"
               name="C-Kreyol: titre rail Filtrer par"
               priority="27">
-        <!-- Premier nœud du rail : même panneau que les facettes (pas de bandeau à part). -->
+        <!--
+            Conteneur unique : garantit l’ordre « Filtrer par » → « Effacer les filtres » → filtres,
+            sans dépendre d’un xpath « after » fragile lors du merge QWeb (réordonnancement rail).
+        -->
         <xpath expr="//aside[@id='products_grid_before']/div[hasclass('o_wsale_products_grid_before_rail')]/*[1]"
                position="before">
-            <!-- Chemin boutique nu pour le JS sidebar (chips masqués en recherche, etc.). -->
-            <span class="ckr-js-shop-base d-none" t-att-data-ckr-shop-base="shop_path" aria-hidden="true"/>
-            <h2 class="ckr-shop-sidebar__filter-heading ckr-root">Filtrer par</h2>
+            <div class="ckr-shop-sidebar__heading-cluster">
+                <!-- Chemin boutique nu pour le JS sidebar (chips masqués en recherche, etc.). -->
+                <span class="ckr-js-shop-base d-none" t-att-data-ckr-shop-base="shop_path" aria-hidden="true"/>
+                <h2 class="ckr-shop-sidebar__filter-heading ckr-root">Filtrer par</h2>
+                <!-- ``ckr_shop_show_clear_filters`` : contrôleur ; évite l’écart ``isFilteringByPrice`` / bornes CK. -->
+                <div t-if="ckr_shop_show_clear_filters"
+                     class="ckr-shop-sidebar__clear-filters pb-2 mb-2 border-bottom border-secondary-subtle">
+                    <a t-att-href="keep(attribute_values=0, tags=0, min_price=0, max_price=0, ckr_mode=0, ckr_category=0, ckr_origin=0, ckr_collection=0, ckr_collection_scope=0)"
+                       t-attf-class="btn btn-{{navClass}} d-flex align-items-center py-1 w-100"
+                       title="Clear Filters">
+                        <small class="mx-auto"><b>Effacer les filtres</b></small>
+                        <i class="oi oi-close" role="presentation"/>
+                    </a>
+                </div>
+            </div>
         </xpath>
     </template>
 
@@ -166,18 +181,35 @@
                                             </label>
                                         </div>
                                     </li>
-                                    <t t-foreach="categories" t-as="c">
-                                        <li>
-                                            <div class="form-check mb-2">
-                                                <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
-                                                    <input type="checkbox"
-                                                           class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
-                                                           t-att-checked="(category and c.id in category.parents_and_self.ids) or (slug(c) in ckr_shop_sidebar_active_category_slugs)"
-                                                           t-att-data-category-slug="slug(c)"/>
-                                                    <span class="ckr-shop-sidebar-catchecks__name" t-field="c.name"/>
-                                                </label>
-                                            </div>
-                                        </li>
+                                    <t t-if="ckr_sidebar_category_rows is not None">
+                                        <t t-foreach="ckr_sidebar_category_rows" t-as="row">
+                                            <li>
+                                                <div class="form-check mb-2">
+                                                    <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                                        <input type="checkbox"
+                                                               class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
+                                                               t-att-checked="(category and row['cat'].id in category.parents_and_self.ids) or (slug(row['cat']) in ckr_shop_sidebar_active_category_slugs)"
+                                                               t-att-data-category-slug="slug(row['cat'])"/>
+                                                        <span class="ckr-shop-sidebar-catchecks__name" t-field="row['cat'].name"/>
+                                                    </label>
+                                                </div>
+                                            </li>
+                                        </t>
+                                    </t>
+                                    <t t-if="ckr_sidebar_category_rows is None">
+                                        <t t-foreach="categories" t-as="c">
+                                            <li>
+                                                <div class="form-check mb-2">
+                                                    <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                                        <input type="checkbox"
+                                                               class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
+                                                               t-att-checked="(category and c.id in category.parents_and_self.ids) or (slug(c) in ckr_shop_sidebar_active_category_slugs)"
+                                                               t-att-data-category-slug="slug(c)"/>
+                                                        <span class="ckr-shop-sidebar-catchecks__name" t-field="c.name"/>
+                                                    </label>
+                                                </div>
+                                            </li>
+                                        </t>
                                     </t>
                                 </ul>
                             </div>
@@ -198,18 +230,35 @@
                                 </label>
                             </div>
                         </li>
-                        <t t-foreach="categories" t-as="c">
-                            <li>
-                                <div class="form-check mb-2">
-                                    <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
-                                        <input type="checkbox"
-                                               class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
-                                               t-att-checked="(category and c.id in category.parents_and_self.ids) or (slug(c) in ckr_shop_sidebar_active_category_slugs)"
-                                               t-att-data-category-slug="slug(c)"/>
-                                        <span class="ckr-shop-sidebar-catchecks__name" t-field="c.name"/>
-                                    </label>
-                                </div>
-                            </li>
+                        <t t-if="ckr_sidebar_category_rows is not None">
+                            <t t-foreach="ckr_sidebar_category_rows" t-as="row">
+                                <li>
+                                    <div class="form-check mb-2">
+                                        <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                            <input type="checkbox"
+                                                   class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
+                                                   t-att-checked="(category and row['cat'].id in category.parents_and_self.ids) or (slug(row['cat']) in ckr_shop_sidebar_active_category_slugs)"
+                                                   t-att-data-category-slug="slug(row['cat'])"/>
+                                            <span class="ckr-shop-sidebar-catchecks__name" t-field="row['cat'].name"/>
+                                        </label>
+                                    </div>
+                                </li>
+                            </t>
+                        </t>
+                        <t t-if="ckr_sidebar_category_rows is None">
+                            <t t-foreach="categories" t-as="c">
+                                <li>
+                                    <div class="form-check mb-2">
+                                        <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                            <input type="checkbox"
+                                                   class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
+                                                   t-att-checked="(category and c.id in category.parents_and_self.ids) or (slug(c) in ckr_shop_sidebar_active_category_slugs)"
+                                                   t-att-data-category-slug="slug(c)"/>
+                                            <span class="ckr-shop-sidebar-catchecks__name" t-field="c.name"/>
+                                        </label>
+                                    </div>
+                                </li>
+                            </t>
                         </t>
                     </ul>
                 </div>
@@ -250,20 +299,14 @@
                                         <span>Toutes</span>
                                     </label>
                                 </div>
-                                <t t-foreach="ckr_sidebar_collections" t-as="coll">
+                                <t t-foreach="ckr_sidebar_collection_rows" t-as="row">
                                     <div class="form-check mb-2">
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
                                             <input type="checkbox"
                                                    class="form-check-input flex-shrink-0 ckr-sidebar-collection-check"
-                                                   t-att-data-slug="coll.slug"
-                                                   t-att-checked="coll.slug in ckr_shop_sidebar_active_collection_slugs"/>
-                                            <span>
-                                                <span t-out="coll.name"/>
-                                                <span class="text-muted small"
-                                                      t-if="coll.product_template_count">
-                                                    (<t t-out="coll.product_template_count"/>)
-                                                </span>
-                                            </span>
+                                                   t-att-data-slug="row['coll'].slug"
+                                                   t-att-checked="row['coll'].slug in ckr_shop_sidebar_active_collection_slugs"/>
+                                            <span t-out="row['coll'].name"/>
                                         </label>
                                     </div>
                                 </t>
@@ -298,14 +341,14 @@
                                         <span>Toutes</span>
                                     </label>
                                 </div>
-                                <t t-foreach="ckr_sidebar_origins" t-as="orig">
+                                <t t-foreach="ckr_sidebar_origin_rows" t-as="row">
                                     <div class="form-check mb-2">
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
                                             <input type="checkbox"
                                                    class="form-check-input flex-shrink-0 ckr-sidebar-origin-check"
-                                                   t-att-data-slug="orig.slug"
-                                                   t-att-checked="orig.slug in ckr_shop_sidebar_active_origin_slugs"/>
-                                            <span t-out="orig.display_name_visitor"/>
+                                                   t-att-data-slug="row['origin'].slug"
+                                                   t-att-checked="row['origin'].slug in ckr_shop_sidebar_active_origin_slugs"/>
+                                            <span t-out="row['origin'].display_name_visitor"/>
                                         </label>
                                     </div>
                                 </t>
@@ -436,15 +479,17 @@
         </xpath>
     </template>
 
-    <!-- Effacer les filtres — FR -->
-    <template id="ckr_shop_clear_filters_fr"
+    <template id="ckr_shop_clear_filters_remove_legacy_slot"
               inherit_id="website_sale.products"
-              name="C-Kreyol: bouton effacer filtres FR"
-              priority="61">
-        <!-- Lien : `t-attf-class="btn …"` — pas de `@class` avec « btn » dans l’arch. -->
-        <xpath expr="//aside[@id='products_grid_before']//div[hasclass('border-bottom')]//a[contains(@t-attf-class,'btn')]//small"
+              name="C-Kreyol: retire le bouton Effacer natif (milieu du rail)"
+              priority="62">
+        <!--
+            Slot Odoo d’origine : ``py-3 border-bottom`` (pas le bloc CK dans ``heading-cluster``).
+            Odoo 19 interdit ``@title`` comme sélecteur xpath dans les héritages de vue QWeb.
+        -->
+        <xpath expr="//aside[@id='products_grid_before']//div[hasclass('py-3')][hasclass('border-bottom')][.//i[hasclass('oi-close')]]"
                position="replace">
-            <small class="mx-auto"><b>Effacer les filtres</b></small>
+            <t/>
         </xpath>
     </template>
 
@@ -485,10 +530,19 @@
                         </h1>
                         <!-- Intro : portes hors vitrine ; /shop nu **ou** chips commerciaux seuls = même accroche retail. -->
                         <div class="ckr-shop-hero__intro">
-                            <t t-if="ckr_shop_hero_retail_lane">
+                            <t t-if="ckr_shop_hero_retail_lane and not ckr_shop_show_shop_query_collection_empty_intro">
                                 <p>
                                     Explorez l’excellence des terroirs créoles à travers notre sélection
                                     rigoureuse de produits d’exception.
+                                </p>
+                            </t>
+                            <t t-elif="ckr_shop_show_shop_query_collection_empty_intro">
+                                <p class="ckr-shop-hero__intro--muted">
+                                    Aucun produit n’est affiché pour cette collection pour le moment.
+                                </p>
+                                <p class="ckr-shop-hero__rebounds">
+                                    <a t-att-href="ckr_collection_base_path or '/shop?ckr_collection_scope=all'"
+                                       class="ckr-shop-hero__cta">Retour aux collections</a>
                                 </p>
                             </t>
                             <t t-elif="ckr_pack_mode">
@@ -596,15 +650,18 @@
                            t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_bar_show_all else ''}">
                             Toute la sélection
                         </a>
-                        <a t-att-href="ckr_shop_chip_href_promo"
+                        <a t-if="ckr_shop_show_chip_promo"
+                           t-att-href="ckr_shop_chip_href_promo"
                            t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if 'promo' in ckr_shop_shortcut_modes else ''}">
                             Promotions
                         </a>
-                        <a t-att-href="ckr_shop_chip_href_featured"
+                        <a t-if="ckr_shop_show_chip_featured"
+                           t-att-href="ckr_shop_chip_href_featured"
                            t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if 'featured' in ckr_shop_shortcut_modes else ''}">
                             Incontournables
                         </a>
-                        <a t-att-href="ckr_shop_chip_href_pack"
+                        <a t-if="ckr_shop_show_chip_pack"
+                           t-att-href="ckr_shop_chip_href_pack"
                            t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if 'pack' in ckr_shop_shortcut_modes else ''}">
                             Kits / Packs
                         </a>
@@ -612,7 +669,10 @@
                     <div class="ckr-shop-shortcuts__right">
                         <p t-if="search_count" class="ckr-shop-shortcuts__count">
                             <span class="ckr-shop-shortcuts__count-n" t-out="search_count"/>
-                            <span class="ckr-shop-shortcuts__count-label"> produits</span>
+                            <span class="ckr-shop-shortcuts__count-label">
+                                <t t-if="search_count == 1"> produit</t>
+                                <t t-else=""> produits</t>
+                            </span>
                         </p>
                         <div t-if="not opt_wsale_floating_bar and (hasPricelistDropdown or is_view_active('website_sale.sort'))"
                              class="ckr-shop-shortcuts__tools">

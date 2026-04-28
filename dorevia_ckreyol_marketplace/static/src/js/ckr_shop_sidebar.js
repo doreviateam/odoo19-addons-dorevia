@@ -86,6 +86,22 @@
         );
     }
 
+    function syncAllFallback(allNodes, specificNodes) {
+        const allList = Array.from(allNodes || []);
+        const specificList = Array.from(specificNodes || []);
+        if (!allList.length) {
+            return;
+        }
+        const anySpecific = specificList.some((b) => !!b.checked);
+        allList.forEach((b) => {
+            b.disabled = false;
+            b.checked = !anySpecific;
+        });
+        specificList.forEach((b) => {
+            b.disabled = false;
+        });
+    }
+
     function originInputsForSlug(slug) {
         const n = normSlug(slug);
         return Array.from(allOriginSpecificInputs()).filter(
@@ -342,6 +358,11 @@
             return;
         }
         document.body.setAttribute(INIT_DATA_ATTR, "1");
+        // Régression-safe: si aucun item spécifique n'est coché, "Toutes" redevient
+        // l'état visuel de base dès le chargement.
+        syncAllFallback(allCategoryAllInputs(), allCategorySpecificInputs());
+        syncAllFallback(allCollectionAllInputs(), allCollectionSpecificInputs());
+        syncAllFallback(allOriginAllInputs(), allOriginSpecificInputs());
         document.body.addEventListener("change", categoryChange);
         document.body.addEventListener("change", collectionChange);
         document.body.addEventListener("change", originChange);
