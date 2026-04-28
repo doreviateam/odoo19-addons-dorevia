@@ -58,6 +58,42 @@
 | NB2 | Progression mesurable (taux de complétion fiches) engagée | Non bloquant | [ ] | |
 | NB3 | Gouvernance d’amélioration continue (rythme de revue backlog) définie | Non bloquant | [ ] | |
 
+---
+
+## 2.b Résultat par fiche — Vague A (P1) — pré-remplissage initial
+
+### Fiche 1 — Manio Crackers sucrée
+
+- Promesse courte : [x] OK / [ ] KO / [ ] NA
+- Description utile (3–6 lignes) : [ ] OK / [ ] KO / [x] NA
+- Sections basses utiles renseignées : [ ] OK / [ ] KO / [x] NA
+- Aucune section vide visible : [x] OK / [ ] KO / [ ] NA
+- Médias (packshot + 1 visuel mini) : [ ] OK / [ ] KO / [x] NA
+- Recommandations simples fiables (ou fallback propre) : [ ] OK / [ ] KO / [x] NA
+- Quantité + ajout panier : [ ] OK / [ ] KO / [x] NA
+- Non-régression MVP2.3/Lot1 : [x] OK / [ ] KO / [ ] NA
+- Observation courte : Base actuelle pauvre ; structure/fallback propres, enrichissement contenu/médias/reco à produire.
+
+### Fiche 2 — Kit colombo
+
+- Promesse courte : [ ] OK / [ ] KO / [x] NA
+- Description utile (3–6 lignes) : [ ] OK / [ ] KO / [x] NA
+- Sections basses utiles renseignées : [ ] OK / [ ] KO / [x] NA
+- Aucune section vide visible : [ ] OK / [ ] KO / [x] NA
+- Médias (packshot + 1 visuel mini) : [ ] OK / [ ] KO / [x] NA
+- Recommandations simples fiables (ou fallback propre) : [ ] OK / [ ] KO / [x] NA
+- Quantité + ajout panier : [ ] OK / [ ] KO / [x] NA
+- Non-régression MVP2.3/Lot1 : [ ] OK / [ ] KO / [x] NA
+- Observation courte : Fiche publiée mais non enrichie ; tests complets à réaliser après alimentation minimale.
+
+### Synthèse Vague A — état initial
+
+- KO bloquants : 0
+- KO non bloquants : 0
+- NA (donnée absente / test non exécuté) : 12
+- Décision Vague A : [ ] GO / [x] GO avec réserves / [ ] NO GO
+- Actions suivantes : enrichir contenu + médias + reco sur les 2 fiches P1, puis revalidation manuelle (desktop/mobile + quantité/panier).
+
 ### Synthèse décision
 
 - **Nombre de KO Bloquants** : ___
