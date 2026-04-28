@@ -837,22 +837,22 @@ class WebsiteSaleCKR(WebsiteSale):
         return result
 
     def _ckr_get_price_filter_shop_values(self, values, **kwargs):
-        """Restaure les valeurs du filtre Prix si la vue native est désactivée.
+        """Calcule ou corrige les bornes du filtre Prix pour le domaine boutique **réel**.
 
-        Le rail CK affiche toujours le bloc Prix. Si l'éditeur/thème a désactivé
-        `website_sale.filter_products_price`, Odoo 19 ne prépare plus
-        `available_min_price` / `available_max_price` côté contrôleur. On
-        recalcule ici les bornes à partir du domaine boutique courant pour que le
-        template `website_sale.filter_products_price` puisse se rendre sans
-        dépendre de l'état de la vue native en base.
+        Cas couverts :
+
+        - Vue native désactivée : Odoo n'injecte pas ``available_*`` ;
+        - **Facettes CK** (``ckr_category``, ``ckr_collection``, ``ckr_origin``,
+          modes commerce, etc.) : le noyau fournit souvent ``available_min_price`` /
+          ``available_max_price`` **sans** ces contraintes, ce qui fige la plage
+          (ex. ``0``, ``0``) alors que la grille reflète bien le domaine étendu
+          dans ``_get_shop_domain``.
+
+        On recalcule donc **systématiquement** min/max catalogue depuis
+        ``_get_shop_domain`` (liste produits alignée avec la grille), puis on
+        redéfinit ``min_price`` / ``max_price`` affichés si absents de la query.
         """
         current = values or {}
-        if (
-            current.get("available_min_price") is not None
-            and current.get("available_max_price") is not None
-        ):
-            return {}
-
         category = current.get("category")
         attrib_values = current.get("attrib_values") or []
         search = (
