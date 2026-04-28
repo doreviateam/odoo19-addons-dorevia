@@ -331,8 +331,10 @@
         <div id="o_wsale_price_range_option"
              t-attf-class="position-relative {{_classes}} {{isDisabled and 'opacity-75 pe-none user-select-none'}}">
             <t t-if="is_sidebar_collapsible">
+                <!-- Toujours déplié si le serveur le demande ; ne pas replier lorsque la
+                     plage est dégénérée (min=max) — l’état inactif reste sur le conteneur. -->
                 <t t-set="ckr_sidebar_price_expand"
-                   t-value="bool(ckr_shop_sidebar_price_expanded) and not isDisabled"/>
+                   t-value="bool(ckr_shop_sidebar_price_expanded)"/>
                 <div class="accordion-item border-0 bg-transparent ckr-shop-filter-section">
                     <div class="accordion-header h6 mb-0">
                         <button type="button"
