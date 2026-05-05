@@ -303,6 +303,16 @@ Le vrai B2B tarifaire est un chantier séparé.
 
 ---
 
+## Transverse — Compatibilité snippets Odoo Website
+
+**Statut** : chantier **permanent mais second** — il ne prime pas sur la stabilisation fonctionnelle des MVP.
+
+**Document** : [COMPATIBILITE_SNIPPETS_WEBSITE_CK.md](COMPATIBILITE_SNIPPETS_WEBSITE_CK.md) (newsletter, demande pro, rappel, homepage, portes, Communauté, futurs panier/favoris / avis / réassurance).
+
+**Principe** : d’abord stabiliser **comportement et DA** ; ensuite seulement snippetiser où c’est **pertinent**, sans fragiler la logique métier ni la doctrine catalogue.
+
+---
+
 ## Décision de conduite
 
 Ne pas tout ouvrir en même temps.
