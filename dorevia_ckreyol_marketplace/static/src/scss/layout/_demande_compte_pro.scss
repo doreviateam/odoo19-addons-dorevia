@@ -1,37 +1,55 @@
 // ============================================================================
 // Page demande compte professionnel (/demande-compte-professionnel)
-// Composition ouverte sur fond CK — grille 2 col, sans carte « formulaire SaaS ».
+// Formulaire court : lisible sur laptop sans scroll (header + intro compacts,
+// grille 2 col, pas de carte ni bandeau vertical excessif).
 // ============================================================================
 
 .ckr-page--demande-pro {
-    // Respiration alignée pages éditoriales (ex. Contact) : pas de bandeau resserré.
+    // Moins de padding vertical que les sections éditoriales : libère la zone utile.
     .ckr-section {
-        padding-top: $ckr-section-py-mobile;
-        padding-bottom: $ckr-section-py-mobile;
+        padding-top: $ckr-space-lg;
+        padding-bottom: $ckr-space-lg;
 
         @media (min-width: 768px) {
-            padding-top: $ckr-section-py-desktop;
-            padding-bottom: $ckr-section-py-desktop;
+            padding-top: $ckr-space-md;
+            padding-bottom: $ckr-space-lg;
         }
     }
 
-    // Titre plus discret que le h1 pleine page standard (évite effet « landing »).
+    // Titre premium mais peu haut : reste visible avec le formulaire sur un écran standard.
     .ckr-demande-pro__title {
-        font-size: unquote("clamp(1.35rem, 2.2vw, 1.75rem)");
-        line-height: 1.25;
+        font-size: unquote("clamp(1.0625rem, 1.35vw, 1.3125rem)");
+        line-height: 1.22;
         font-weight: $ckr-weight-semibold;
-        margin-bottom: $ckr-space-md;
+        letter-spacing: unquote("-0.01em");
+        margin-bottom: $ckr-space-xs;
         max-width: 42rem;
     }
 
     .ckr-demande-pro__intro {
         max-width: 46rem;
+        margin-bottom: $ckr-space-sm;
 
-        p {
-            font-size: 1rem;
-            line-height: 1.55;
+        .ckr-demande-pro__intro-lead {
+            font-size: 0.9375rem;
+            line-height: 1.45;
             color: $ckr-text;
         }
+
+        .ckr-demande-pro__intro-note {
+            font-size: 0.8125rem;
+            line-height: 1.4;
+            color: $ckr-text-muted;
+        }
+    }
+
+    // Pas d’encadré blanc type carte : snippet Odoo neutre sur le fond CK.
+    .ckr-demande-pro__website-form {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
     }
 
     // Largeur de formulaire maîtrisée sans encadré : le fond reste le crème CK ($ckr-bg).
@@ -41,18 +59,21 @@
 
     // Champs : libellé au-dessus (pas de colonne fixe Odoo).
     .s_website_form_field:not(.s_website_form_dnone) {
+        margin-bottom: 0;
+
         .s_website_form_label {
             width: 100% !important;
             max-width: 100%;
             display: block;
-            margin-bottom: $ckr-space-xs;
+            margin-bottom: 0.1875rem;
             padding-right: 0;
+            padding-top: 0;
             font-weight: $ckr-weight-medium;
             color: $ckr-text;
         }
 
         .s_website_form_label_content {
-            font-size: 0.9375rem;
+            font-size: 0.8125rem;
         }
 
         .s_website_form_mark {
@@ -65,8 +86,11 @@
     .form-select {
         border-color: $ckr-border;
         border-radius: $ckr-radius-md;
-        font-size: 1rem;
+        font-size: 0.9375rem;
+        line-height: 1.35;
         background-color: $ckr-bg;
+        padding: 0.3125rem 0.625rem;
+        min-height: 2.125rem;
 
         &:focus {
             border-color: $ckr-primary;
@@ -75,12 +99,16 @@
     }
 
     textarea.form-control {
-        min-height: 6.5rem;
+        min-height: unquote("clamp(3.25rem, 9vh, 4rem)");
+        padding-top: 0.375rem;
+        padding-bottom: 0.375rem;
+        resize: vertical;
     }
 
     .s_website_form_submit {
-        margin-top: $ckr-space-sm;
-        padding-top: $ckr-space-md !important;
+        margin-top: $ckr-space-xs;
+        padding-top: $ckr-space-sm !important;
+        padding-bottom: 0 !important;
 
         .s_website_form_label {
             display: none !important;
@@ -92,7 +120,7 @@
     }
 
     .ckr-demande-pro__secondary {
-        margin-top: $ckr-space-xl;
+        margin-top: $ckr-space-md;
         max-width: 46rem;
     }
 }

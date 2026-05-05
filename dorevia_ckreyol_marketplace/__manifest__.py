@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.84",
+    "version": "19.0.1.10.85",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -28,6 +28,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   carte blanche, astérisques rouges, liens secondaires).
 * 19.0.1.10.84 : demande pro — retour composition ouverte (fond CK, sans carte blanche,
   titre allégé, pas de centrage landing, libellé Message + placeholder demandé).
+* 19.0.1.10.85 : demande pro — densité laptop : header + intro compacts, padding section
+  réduit, grille g-2, champs et textarea resserrés, CTA sans scroll sur desktop standard.
 
 Portee :
 

@@ -23,19 +23,17 @@
                         <h1 class="ckr-demande-pro__title">Demande d&apos;ouverture de compte professionnel</h1>
 
                         <div class="ckr-demande-pro__intro">
-                            <p class="ckr-lead mb-2">
-                                Vous représentez une entreprise, une boutique, un restaurant, une collectivité ou une organisation ?
+                            <p class="ckr-demande-pro__intro-lead mb-1">
+                                Entreprise, boutique, restaurant, collectivité ou organisation&nbsp;?
+                                Transmettez votre demande d&apos;ouverture de compte professionnel.
                             </p>
-                            <p class="mb-2">
-                                Vous pouvez nous transmettre une demande d&apos;ouverture de compte professionnel.
-                            </p>
-                            <p class="mb-0">
+                            <p class="ckr-demande-pro__intro-note mb-0">
                                 L&apos;accès aux conditions professionnelles est soumis à validation par l&apos;équipe C-Kreyol.
                             </p>
                         </div>
 
                         <div class="ckr-demande-pro__form">
-                            <section class="s_website_form mt-4" data-vcss="001" data-snippet="s_website_form">
+                            <section class="s_website_form ckr-demande-pro__website-form" data-vcss="001" data-snippet="s_website_form">
                                 <div class="container px-0">
                                     <form id="ckr_demande_compte_pro_form"
                                           action="/website/form/"
@@ -47,7 +45,7 @@
                                           data-success-mode="redirect"
                                           data-success-page="/demande-compte-pro-merci"
                                           data-pre-fill="true">
-                                        <div class="s_website_form_rows row g-3 g-lg-4 s_col_no_bgcolor">
+                                        <div class="s_website_form_rows row g-2 s_col_no_bgcolor">
                                             <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
                                                 <input type="hidden"
                                                        name="referred"
@@ -116,7 +114,7 @@
                                                     <span class="s_website_form_label_content">Message</span>
                                                     <span class="s_website_form_mark"> *</span>
                                                 </label>
-                                                <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="5" placeholder="Décrivez brièvement votre activité et votre besoin…"></textarea>
+                                                <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="3" placeholder="Décrivez brièvement votre activité et votre besoin…"></textarea>
                                             </div>
 
                                             <div class="mb-0 py-0 col-12 s_website_form_submit s_website_form_no_submit_label text-start" data-name="Submit Button">
@@ -130,7 +128,7 @@
                         </div>
 
                         <div class="ckr-demande-pro__secondary">
-                            <p class="small text-muted mt-4 mb-1">
+                            <p class="small text-muted mb-1">
                                 Vous souhaitez commander à titre personnel ?
                             </p>
                             <p class="small text-muted mb-0">
