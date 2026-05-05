@@ -3,7 +3,7 @@
 **ID** : `COMPTE-CLIENT-MVP03`  
 **Date d’ouverture** : 2026-05  
 **Priorité** : **P2** *(à confirmer pilotage)*  
-**Statut** : **§4 renseigné** — décisions alignées sur [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) ; **GO dev avec réserve** *(confirmer sur l’instance : `auth_signup`, CRM, `website_form`, achat invité)* — validation MOA / pickup équipe avant implémentation finale si nécessaire.  
+**Statut** : **§4 renseigné** — décisions alignées sur [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) ; **GO dev avec réserve réduite** *(voir [§ Complément technique — chaîne demande pro vers CRM](#complément-technique--chaîne-demande-pro-vers-crm) : installer `crm` + `website_crm` sur `tenant_o7`, configurer formulaire ; parcours B2C déjà aligné sur l’instance)* — validation MOA / pickup équipe si nécessaire.  
 **GO documentaire** : **2026-05-05** — validation du périmètre et des garde-fous du présent ticket *(voir aussi statut ci-dessus pour §4)*.  
 **Module** : `dorevia_ckreyol_marketplace` (+ configuration Odoo site / CRM selon arbitrage).
 
@@ -15,7 +15,7 @@
 | [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md) | Parcours A/B, états, points d’entrée, arbitrages métier |
 | [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) | Spec UX, wording interdit/privilégié, garde-fou `/my`, recette interface |
 
-Le **§4 est complété** avec les décisions recommandées ; le ticket sert de **brief exécutable** pour le dev (**réserve instance** + pilotage équipe). Les arbitrages formalisés en atelier MOA peuvent **ajuster** les lignes ci-dessous.
+Le **§4 est complété** avec les décisions recommandées ; le ticket sert de **brief exécutable** pour le dev (**réserve réduite** : installation / config **`crm` + `website_crm`** et formulaire sur **`tenant_o7`** — voir [complément technique](#complément-technique--chaîne-demande-pro-vers-crm) ; pilotage équipe). Les arbitrages formalisés en atelier MOA peuvent **ajuster** les lignes ci-dessous.
 
 **Doctrine** : [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) ; [ADR-CKR-001](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-001) (standard d’abord) ; [ADR-CKR-009](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-009) (sanctuarisation tunnel) ; [ADR-CKR-010](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010) (B2C/B2B).
 
@@ -70,20 +70,20 @@ Les habillages existants à respecter ou étendre : [`views/auth/ckr_login.xml`]
 
 ## 4. Arbitrages à trancher avant ou pendant le dev
 
-Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation. La colonne **Décision figée** reprend la **décision recommandée** du document [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) *(sections **17** tableau §4 et **16** GO avec réserve)* — **GO dev avec réserve technique** tant que l’**instance cible** n’a pas confirmé `auth_signup`, CRM, `website_form` et achat invité.
+Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation. La colonne **Décision figée** reprend la **décision recommandée** du document [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) *(sections **17** tableau §4 et **16** GO avec réserve)* — **GO dev avec réserve réduite** : sur **`tenant_o7`**, **`auth_signup`** et **achat invité** sont déjà alignés ; il reste à **installer `crm` + `website_crm`** et à **configurer le formulaire** (voir [Complément technique](#complément-technique--chaîne-demande-pro-vers-crm)).
 
 **Support d’atelier** : [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) — checklist structurée (durée cible 30–45 min, sorties attendues).
 
 **Doctrine et détail** : [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — B2C/B2B, champs, copies, doublon email, traçabilité BO.
 
-**Hypothèse MVP** *(alignée §4)* : page dédiée « Demande d’ouverture de compte pro » (**`/demande-compte-professionnel`**) alimentant un objet standard Odoo (**`crm.lead`** via **`website_form`** si le module CRM est disponible et pertinent), **sans** création automatique de compte portail pro ni modification de pricelist.
+**Hypothèse MVP** *(alignée §4 + complément technique)* : page dédiée « Demande d’ouverture de compte pro » (**`/demande-compte-professionnel`**) avec formulaire Website (**action** *Create an Opportunity*) → **`crm.lead`** via **`website_crm`** une fois **`crm`** installé, **sans** création automatique de compte portail pro ni modification de pricelist.
 
 | # | Sujet | Proposition initiale *(indicative)* | Décision figée (MOA / tech) |
 |---|--------|--------------------------------------|----------------------------|
 | 1 | **`auth_signup`** activé sur le site ? | À vérifier sur instance cible | À vérifier sur instance ; utiliser **`auth_signup`** pour création auto du **compte particulier** si activé / activable proprement (parcours A = standard Odoo, sans champs entreprise obligatoires ni statut pro). |
 | 2 | **Séparation A/B** | **Deux URLs** : signup standard B2C + **page dédiée** demande pro | **Deux URLs** : **`/web/signup`** (B2C) + **`/demande-compte-professionnel`** (demande pro). |
 | 3 | **Achat invité** | À **préserver** si activé sur l’instance | **Préserver** si activé ; ne pas forcer la création de compte avant paiement. |
-| 4 | **Demande pro** — chaîne technique | **`website_form` → `crm.lead`** si CRM disponible ; sinon alternative standard documentée | **`website_form` → `crm.lead`** si CRM disponible ; sinon alternative standard documentée ; **pas** de portail pro auto ni pricelist auto ; lead identifiable (tag / source type **Demande compte pro C-Kreyol MVP03**). |
+| 4 | **Demande pro** — chaîne technique | Formulaire Website → **`crm.lead`** via **`website_crm`** si **`crm`** installé ; sinon alternative standard documentée | **Décision figée** : **`website` + `crm` + `website_crm`** — page **`/demande-compte-professionnel`**, snippet formulaire, action **Create an Opportunity** ; **pas** de portail pro auto ni pricelist auto ; lead identifiable (tag / source type **Demande compte pro C-Kreyol MVP03**). Détail : [Complément technique](#complément-technique--chaîne-demande-pro-vers-crm). |
 | 5 | **Champs** formulaire B (liste minimale) | Société, contact, email, téléphone, type d’activité, message *(à valider MOA)* | **Obligatoires** : entreprise, contact, email, téléphone, type d’activité (**liste + Autre**), message. **Optionnels** : SIRET, adresse. |
 | 6 | **Email / notification** | Confirmation **web obligatoire** ; email auto au demandeur et/ou notification interne CK **à arbitrer** | Confirmation **web obligatoire** ; **notification interne** recommandée ; email demandeur **optionnel** V1 si mise en œuvre simple. |
 | 7 | **Validation métier** | Qui traite ; impact ultérieur sur pricelist / catégorie partenaire *(hors automatisation MVP si non validé)* | Traitement **manuel** ultérieur ; **aucune** pricelist / catégorie B2B automatique dans le périmètre MVP 03 décrit. |
@@ -101,17 +101,80 @@ Contrôle technique sur environnement local **`http://localhost:18079/`** (séle
 | **`auth_signup_uninvited`** | **`b2c`** |
 | **`account_on_checkout`** | **`optional`** (pas d’obligation de compte avant paiement, aligné ticket) |
 | **`/web/signup`** | Page signup **OK** (formulaire présent après entrée session avec `db=tenant_o7`) |
-| **`crm`** | **non installé** — **à installer** (ou alternative documentée) pour la chaîne **`website_form` → `crm.lead`** |
-| **`website_crm`** | **non installé** |
-| Module technique **`website_form`** | **Absent** du registre `ir.module.module` sous ce nom — **à confirmer** dans Applications selon la version Odoo 19 CE (formulaires site éventuellement intégrés ailleurs) |
+| **`crm`** | **non installé** — **à installer** sur **`tenant_o7`** pour la chaîne formulaire → **`crm.lead`** |
+| **`website_crm`** | **non installé** — **à installer** après **`crm`** *(souvent via **auto_install**)* |
+| Formulaires site (**pas** de module séparé **`website_form`**) | **Attendu en Odoo 19 CE** : snippets formulaire portés par **`website`** ; pont CRM = **`website_crm`** — voir [Complément technique](#complément-technique--chaîne-demande-pro-vers-crm) |
 
-**Suite** : installer **`crm`** sur **`tenant_o7`** avant de figer l’implémentation « demande pro → lead » ; compléter la checklist **§9** point 4 une fois CRM (+ pont formulaire si retenu) alignés.
+**Suite** : décision technique **figée** — [Complément technique — chaîne demande pro vers CRM](#complément-technique--chaîne-demande-pro-vers-crm) ; compléter la checklist **§9** point 4 après installation / config sur **`tenant_o7`**.
+
+---
+
+## Complément technique — chaîne demande pro vers CRM
+
+La solution standard retenue pour le **parcours B** est :
+
+```text
+Page dédiée /demande-compte-professionnel
+→ bloc formulaire Website (snippet)
+→ action Create an Opportunity
+→ crm.lead via website_crm
+```
+
+### Modules / configuration
+
+- **`crm`** doit être **installé** sur **`tenant_o7`**.
+- **`website_crm`** (Apps : *Contact Form*) est le **pont standard** entre formulaire Website et CRM ; il **dépend** de **`website`** et **`crm`** uniquement — **pas** de module séparé **`website_form`** à prévoir : en Odoo **19**, le formulaire est porté par **`website`** (blocs / snippets).
+- **`website_crm`** peut s’**auto-installer** une fois **`website`** + **`crm`** disponibles ; sinon l’**installer explicitement** depuis Applications.
+
+### Réglage CRM
+
+Dans **CRM → Configuration → Settings → Leads** :
+
+- si l’option **Leads** est activée : les envois peuvent être créés comme **leads** ;
+- sinon : **opportunités** — dans les deux cas l’objet **`crm.lead`** reste exploitable côté CRM.
+
+### Réglage formulaire Website
+
+Sur la page **`/demande-compte-professionnel`** : bloc formulaire Website (snippet), puis :
+
+```text
+Action : Create an Opportunity
+```
+
+(cf. [documentation Odoo 19 — opportunities from web forms](https://www.odoo.com/documentation/19.0/applications/sales/crm/acquire_leads/opportunities_form.html))
+
+### Garde-fous
+
+- Ne pas créer automatiquement d’**utilisateur portail pro**.
+- Ne pas modifier automatiquement la **pricelist**.
+- Ne pas attribuer automatiquement une **catégorie partenaire B2B**.
+- Garder la demande comme **objet CRM à qualifier**.
+- **Identifier** la demande comme **Demande compte pro C-Kreyol MVP03** (voir ci-dessous).
+
+### Traçabilité recommandée
+
+À choisir en implémentation **minimale** :
+
+- équipe commerciale **dédiée** ;
+- préfixe dans le **sujet** : `Demande compte pro — [Entreprise]` ;
+- **source / campagne / UTM** si déjà utilisés ;
+- **tag CRM** si disponible sans spécifique lourd ;
+- sinon **petite extension CK** pour valeur par défaut (tag, champ, etc.).
+
+### Décision technique
+
+```text
+Décision : installer crm, utiliser website_crm, créer la page /demande-compte-professionnel
+avec un formulaire Website configuré en Create an Opportunity.
+
+Pas de module website_form séparé à prévoir — les formulaires sont portés par website.
+```
 
 ---
 
 ## 5. Contraintes techniques
 
-- **Standard Odoo CE en priorité** : `website`, `portal`, `auth_signup`, `sale`, `contacts`, `crm` ou `website_form` selon arbitrage — pas de « double système de comptes » sans justification ([1_COMPTE_CLIENT_PARCOURS §2.1](1_COMPTE_CLIENT_PARCOURS.md)).
+- **Standard Odoo CE en priorité** : `website`, `portal`, `auth_signup`, `sale`, `contacts`, **`crm`**, **`website_crm`** (formulaire → lead — voir complément technique ci-dessus) — pas de « double système de comptes » sans justification ([1_COMPTE_CLIENT_PARCOURS §2.1](1_COMPTE_CLIENT_PARCOURS.md)).
 - **Pas** de boutique catalogue parallèle ; pas d’exposition prix B2B sur seule demande formulaire.
 - **Pas** de création automatique d’**utilisateur portail** pour la seule demande pro (**§3.2**), sauf arbitrage explicite MOA / tech.
 - Incrémenter le **`version`** du manifeste après livraison ; documenter les dépendances `__manifest__.py` si nouveaux modules.
@@ -150,9 +213,14 @@ Contrôle technique sur environnement local **`http://localhost:18079/`** (séle
 ## 9. Prêt pour dev — checklist
 
 1. [ ] **GO MOA** sur copies définitives (titres, CTA, message confirmation B) — propositions dans [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §9 sauf ajustement atelier.
-2. [x] **Arbitrages §4** complétés — colonne « Décision figée » renseignée ([RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §17) ; réserve **instance** (voir recommandation §16).
-3. [ ] **Branche** et responsable dev assignés.
-4. [ ] **Base de test** : `auth_signup` / invité / CRM alignés avec l’environnement cible.
+2. [x] **Arbitrages §4** complétés — colonne « Décision figée » renseignée ([RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §17) ; chaîne CRM **décisionnelle** : [Complément technique](#complément-technique--chaîne-demande-pro-vers-crm).
+3. [ ] **Branche** et responsable dev assignés *(ex. `feat/mvp03-compte-client`)*.
+4. [ ] **Base de test** **`tenant_o7`** :
+   - [x] **`auth_signup`** aligné ;
+   - [x] **achat invité** aligné (`account_on_checkout` = optional) ;
+   - [ ] **`crm`** à installer sur **`tenant_o7`** ;
+   - [ ] **`website_crm`** à installer / confirmer après installation CRM *(auto_install possible)* ;
+   - [ ] **formulaire** page **`/demande-compte-professionnel`** configuré en **Create an Opportunity**.
 
 ---
 
@@ -168,3 +236,4 @@ Contrôle technique sur environnement local **`http://localhost:18079/`** (séle
 | 2026-05-05 | Référence [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — pré-arbitrages et tableau §4 pré-rempli recommandé. |
 | 2026-05-05 | **§4 complété** : colonne « Décision figée » alignée sur [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §17 ; statut **GO dev avec réserve instance**. |
 | 2026-05-05 | **Vérification instance** : base **`tenant_o7`** sur `localhost:18079` — tableau sous §4 ; réserve **CRM non installé** ; pas de secrets dans le doc. |
+| 2026-05-05 | **Complément technique** : chaîne standard **`website` + `crm` + `website_crm`** ; pas de module `website_form` séparé ; checklist §9 point 4 détaillée ; statut **GO dev avec réserve réduite**. |
