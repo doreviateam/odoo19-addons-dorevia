@@ -80,7 +80,7 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher
 | 3 | **Achat invité** | À **préserver** si activé sur l’instance | |
 | 4 | **Demande pro** — chaîne technique | **`website_form` → `crm.lead`** si CRM disponible ; sinon alternative standard documentée | |
 | 5 | **Champs** formulaire B (liste minimale) | Société, contact, email, téléphone, type d’activité, message *(à valider MOA)* | |
-| 6 | **Email** | Confirmation **web** d’abord ; email auto au demandeur / copie CK **à arbitrer** | |
+| 6 | **Email / notification** | Confirmation **web obligatoire** ; email auto au demandeur et/ou notification interne CK **à arbitrer** | |
 | 7 | **Validation métier** | Qui traite ; impact ultérieur sur pricelist / catégorie partenaire *(hors automatisation MVP si non validé)* | |
 | 8 | **Email déjà existant** (doublon) | Comportement **non opaque** : message clair visiteur **ou** rattachement / traitement manuel côté Odoo selon solution retenue *(pas besoin de tout le dédoublonnage dans ce ticket)* | |
 | 9 | **Tests Odoo** | Tag proposé `dorevia_ckr_account_mvp03` *(à valider)* | |
@@ -120,7 +120,7 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher
 
 ## 8. Recette
 
-- **PV** : à produire après implémentation — **`PV_RECETTE_COMPTE_CLIENT_MVP03.md`** *(convention dossier `mvp_03`)*.
+- **PV** : **[PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md)** — brouillon de préparation recette ; à compléter après livraison (verdict, date, instance).
 - Jeux manuels : parcours A, parcours B, invité, erreurs formulaire, **petit écran**.
 
 ---
@@ -140,3 +140,4 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher
 |------|-----------|
 | 2026-05 | Création du ticket d’exécution MVP 03 à partir des docs parcours, spec UX et structure tickets module. |
 | 2026-05 | Amendements : statut « prêt pour arbitrage », exécutable si §4 complété ; hypothèse MVP ; pas d’utilisateur portail auto pour la demande pro ; §4 enrichi (propositions initiales, ligne doublon email) ; critères traçabilité BO + email dupliqué ; PV `PV_RECETTE_COMPTE_CLIENT_MVP03.md` ; lien `/privacy` clarifié. |
+| 2026-05 | §4 ligne *Email / notification* : confirmation web = minimum obligatoire ; emails auto / internes à arbitrer. **GO documentaire** ticket (brouillon prêt arbitrage). Lien vers PV brouillon recette. |
