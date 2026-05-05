@@ -2,8 +2,8 @@
 <odoo>
 
     <!-- Page publique : demande d'ouverture de compte professionnel (MVP03).
-         Formulaire Website → crm.lead via website_crm (action « Create an Opportunity »).
-         Champs masqués ``referred`` / ``name`` + logique ``website_form_input_filter`` (models/crm_lead.py). -->
+         Composition ouverte sur fond CK — pas de carte « SaaS ».
+         Formulaire Website → crm.lead via website_crm ; champs masqués + website_form_input_filter. -->
 
     <template id="ckr_page_demande_compte_pro" name="C-Kreyol: Demande ouverture compte professionnel">
         <t t-call="website.layout">
@@ -20,120 +20,124 @@
             <main class="ckr-page ckr-root ckr-page--demande-pro">
                 <section class="ckr-section">
                     <div class="ckr-container">
-                        <div class="ckr-demande-pro__layout">
-                            <header class="ckr-demande-pro__hero">
-                                <h1>Demande d&apos;ouverture de compte professionnel</h1>
-                                <p class="ckr-demande-pro__intro-copy">
-                                    Vous représentez une entreprise, une boutique, un restaurant, une collectivité ou une organisation ?
-                                    <br/><br/>
-                                    Vous pouvez nous transmettre une demande d&apos;ouverture de compte professionnel.
-                                    <br/><br/>
-                                    L&apos;accès aux conditions professionnelles est soumis à validation par l&apos;équipe C-Kreyol.
-                                </p>
-                            </header>
+                        <h1 class="ckr-demande-pro__title">Demande d&apos;ouverture de compte professionnel</h1>
 
-                            <div class="ckr-demande-pro__form-card">
-                                <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
-                                    <div class="container px-0">
-                                        <form id="ckr_demande_compte_pro_form"
-                                              action="/website/form/"
-                                              method="post"
-                                              enctype="multipart/form-data"
-                                              class="o_mark_required"
-                                              data-mark="*"
-                                              data-model_name="crm.lead"
-                                              data-success-mode="redirect"
-                                              data-success-page="/demande-compte-pro-merci"
-                                              data-pre-fill="true">
-                                            <div class="s_website_form_rows row g-3 g-lg-4 s_col_no_bgcolor">
-                                                <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
-                                                    <input type="hidden"
-                                                           name="referred"
-                                                           class="form-control s_website_form_input"
-                                                           value="CK-MVP03-demande-compte-pro"/>
-                                                </div>
-                                                <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
-                                                    <input type="hidden"
-                                                           name="name"
-                                                           class="form-control s_website_form_input"
-                                                           value="Demande compte pro C-Kreyol MVP03"/>
-                                                </div>
+                        <div class="ckr-demande-pro__intro">
+                            <p class="ckr-lead mb-2">
+                                Vous représentez une entreprise, une boutique, un restaurant, une collectivité ou une organisation ?
+                            </p>
+                            <p class="mb-2">
+                                Vous pouvez nous transmettre une demande d&apos;ouverture de compte professionnel.
+                            </p>
+                            <p class="mb-0">
+                                L&apos;accès aux conditions professionnelles est soumis à validation par l&apos;équipe C-Kreyol.
+                            </p>
+                        </div>
 
-                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                                                    <label class="s_website_form_label" for="ckr_pro_partner_name">
-                                                        <span class="s_website_form_label_content">Nom de l&apos;entreprise</span>
-                                                        <span class="s_website_form_mark"> *</span>
-                                                    </label>
-                                                    <input id="ckr_pro_partner_name" type="text" class="form-control s_website_form_input" name="partner_name" required="" placeholder="Raison sociale" data-fill-with="commercial_company_name"/>
-                                                </div>
-                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                                                    <label class="s_website_form_label" for="ckr_pro_contact_name">
-                                                        <span class="s_website_form_label_content">Nom et Prénom du contact</span>
-                                                        <span class="s_website_form_mark"> *</span>
-                                                    </label>
-                                                    <input id="ckr_pro_contact_name" type="text" class="form-control s_website_form_input" name="contact_name" required="" placeholder="Votre nom complet" data-fill-with="name"/>
-                                                </div>
-
-                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
-                                                    <label class="s_website_form_label" for="ckr_pro_email">
-                                                        <span class="s_website_form_label_content">Adresse Email</span>
-                                                        <span class="s_website_form_mark"> *</span>
-                                                    </label>
-                                                    <input id="ckr_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" placeholder="email@entreprise.com" data-fill-with="email"/>
-                                                </div>
-                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                                                    <label class="s_website_form_label" for="ckr_pro_phone">
-                                                        <span class="s_website_form_label_content">Téléphone</span>
-                                                        <span class="s_website_form_mark"> *</span>
-                                                    </label>
-                                                    <input id="ckr_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" required="" placeholder="Numéro direct ou standard" data-fill-with="phone"/>
-                                                </div>
-
-                                                <div class="mb-0 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="selection" data-name="Field">
-                                                    <label class="s_website_form_label" for="ckr_pro_activity">
-                                                        <span class="s_website_form_label_content">Type d&apos;activité</span>
-                                                        <span class="s_website_form_mark"> *</span>
-                                                    </label>
-                                                    <select id="ckr_pro_activity"
-                                                            name="ckr_activity_type"
-                                                            class="form-control form-select s_website_form_input"
-                                                            required=""
-                                                            title="Sélectionnez votre secteur">
-                                                        <option value="">Sélectionnez votre secteur</option>
-                                                        <option value="boutique_epicerie">Boutique / épicerie fine</option>
-                                                        <option value="restaurant_traiteur">Restaurant / traiteur</option>
-                                                        <option value="distributeur">Distributeur</option>
-                                                        <option value="collectivite_ce">Collectivité / comité d&apos;entreprise</option>
-                                                        <option value="association">Association / organisation</option>
-                                                        <option value="autre">Autre</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
-                                                    <label class="s_website_form_label" for="ckr_pro_description">
-                                                        <span class="s_website_form_label_content">Votre demande (Besoins, volumes estimés…)</span>
-                                                        <span class="s_website_form_mark"> *</span>
-                                                    </label>
-                                                    <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="5" placeholder="Décrivez brièvement vos besoins…"></textarea>
-                                                </div>
-
-                                                <div class="mb-0 py-0 col-12 s_website_form_submit s_website_form_no_submit_label" data-name="Submit Button">
-                                                    <a href="#" role="button" class="btn ckr-btn ckr-btn--primary s_website_form_send">Envoyer la demande</a>
-                                                    <span id="s_website_form_result"/>
-                                                </div>
+                        <div class="ckr-demande-pro__form">
+                            <section class="s_website_form mt-4" data-vcss="001" data-snippet="s_website_form">
+                                <div class="container px-0">
+                                    <form id="ckr_demande_compte_pro_form"
+                                          action="/website/form/"
+                                          method="post"
+                                          enctype="multipart/form-data"
+                                          class="o_mark_required"
+                                          data-mark="*"
+                                          data-model_name="crm.lead"
+                                          data-success-mode="redirect"
+                                          data-success-page="/demande-compte-pro-merci"
+                                          data-pre-fill="true">
+                                        <div class="s_website_form_rows row g-3 g-lg-4 s_col_no_bgcolor">
+                                            <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
+                                                <input type="hidden"
+                                                       name="referred"
+                                                       class="form-control s_website_form_input"
+                                                       value="CK-MVP03-demande-compte-pro"/>
                                             </div>
-                                        </form>
-                                    </div>
-                                </section>
-                            </div>
+                                            <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
+                                                <input type="hidden"
+                                                       name="name"
+                                                       class="form-control s_website_form_input"
+                                                       value="Demande compte pro C-Kreyol MVP03"/>
+                                            </div>
 
-                            <div class="ckr-demande-pro__secondary">
-                                <p class="mb-0">
-                                    <a href="/web/signup">Créer un compte particulier</a>
-                                    ·
-                                    <a href="/web/login">Connexion</a>
-                                </p>
-                            </div>
+                                            <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_partner_name">
+                                                    <span class="s_website_form_label_content">Entreprise</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <input id="ckr_pro_partner_name" type="text" class="form-control s_website_form_input" name="partner_name" required="" placeholder="Raison sociale" data-fill-with="commercial_company_name"/>
+                                            </div>
+                                            <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_contact_name">
+                                                    <span class="s_website_form_label_content">Nom et prénom du contact</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <input id="ckr_pro_contact_name" type="text" class="form-control s_website_form_input" name="contact_name" required="" placeholder="Votre nom complet" data-fill-with="name"/>
+                                            </div>
+
+                                            <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_email">
+                                                    <span class="s_website_form_label_content">Adresse e-mail</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <input id="ckr_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" placeholder="email@entreprise.com" data-fill-with="email"/>
+                                            </div>
+                                            <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_phone">
+                                                    <span class="s_website_form_label_content">Téléphone</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <input id="ckr_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" required="" placeholder="Numéro direct ou standard" data-fill-with="phone"/>
+                                            </div>
+
+                                            <div class="mb-0 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="selection" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_activity">
+                                                    <span class="s_website_form_label_content">Type d&apos;activité</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <select id="ckr_pro_activity"
+                                                        name="ckr_activity_type"
+                                                        class="form-control form-select s_website_form_input"
+                                                        required=""
+                                                        title="Sélectionnez votre secteur">
+                                                    <option value="">Sélectionnez votre secteur</option>
+                                                    <option value="boutique_epicerie">Boutique / épicerie fine</option>
+                                                    <option value="restaurant_traiteur">Restaurant / traiteur</option>
+                                                    <option value="distributeur">Distributeur</option>
+                                                    <option value="collectivite_ce">Collectivité / comité d&apos;entreprise</option>
+                                                    <option value="association">Association / organisation</option>
+                                                    <option value="autre">Autre</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_description">
+                                                    <span class="s_website_form_label_content">Message</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="5" placeholder="Décrivez brièvement votre activité et votre besoin…"></textarea>
+                                            </div>
+
+                                            <div class="mb-0 py-0 col-12 s_website_form_submit s_website_form_no_submit_label text-start" data-name="Submit Button">
+                                                <a href="#" role="button" class="btn ckr-btn ckr-btn--primary s_website_form_send">Envoyer la demande</a>
+                                                <span id="s_website_form_result"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="ckr-demande-pro__secondary">
+                            <p class="small text-muted mt-4 mb-1">
+                                Vous souhaitez commander à titre personnel ?
+                            </p>
+                            <p class="small text-muted mb-0">
+                                <a href="/web/signup">Créer un compte particulier</a>
+                                ·
+                                <a href="/web/login">Connexion</a>
+                            </p>
                         </div>
                     </div>
                 </section>

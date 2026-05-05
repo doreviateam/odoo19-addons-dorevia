@@ -1,54 +1,45 @@
 // ============================================================================
 // Page demande compte professionnel (/demande-compte-professionnel)
-// Lisibilité, grille 2 col desktop, carte sobre alignée charte CK (MVP03).
+// Composition ouverte sur fond CK — grille 2 col, sans carte « formulaire SaaS ».
 // ============================================================================
 
 .ckr-page--demande-pro {
+    // Respiration alignée pages éditoriales (ex. Contact) : pas de bandeau resserré.
     .ckr-section {
-        // CSS natif : unquote — sinon Dart Sass refuse vw + rem dans clamp().
-        padding-top: unquote("clamp(2rem, 5vw, 3.5rem)");
-        padding-bottom: unquote("clamp(2.5rem, 6vw, 4rem)");
-    }
+        padding-top: $ckr-section-py-mobile;
+        padding-bottom: $ckr-section-py-mobile;
 
-    .ckr-demande-pro__layout {
-        width: 100%;
-        max-width: 38rem;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .ckr-demande-pro__hero {
-        text-align: center;
-        margin-bottom: $ckr-space-lg;
-
-        h1 {
-            margin-bottom: $ckr-space-md;
-            letter-spacing: -0.02em;
+        @media (min-width: 768px) {
+            padding-top: $ckr-section-py-desktop;
+            padding-bottom: $ckr-section-py-desktop;
         }
     }
 
-    .ckr-demande-pro__intro-copy {
-        margin: 0 auto;
-        max-width: 52ch;
-        font-size: 1rem;
-        line-height: 1.6;
-        color: $ckr-text-muted;
-        text-align: center;
+    // Titre plus discret que le h1 pleine page standard (évite effet « landing »).
+    .ckr-demande-pro__title {
+        font-size: unquote("clamp(1.35rem, 2.2vw, 1.75rem)");
+        line-height: 1.25;
+        font-weight: $ckr-weight-semibold;
+        margin-bottom: $ckr-space-md;
+        max-width: 42rem;
     }
 
-    .ckr-demande-pro__form-card {
-        padding: unquote("clamp(1.25rem, 3vw, #{$ckr-space-xl})");
-        background-color: #ffffff;
-        border: 1px solid $ckr-border;
-        border-radius: $ckr-radius-lg;
-        box-shadow: $ckr-shadow-md;
+    .ckr-demande-pro__intro {
+        max-width: 46rem;
+
+        p {
+            font-size: 1rem;
+            line-height: 1.55;
+            color: $ckr-text;
+        }
     }
 
-    .ckr-demande-pro__form-card .container {
-        max-width: 100%;
+    // Largeur de formulaire maîtrisée sans encadré : le fond reste le crème CK ($ckr-bg).
+    .ckr-demande-pro__form {
+        max-width: 48rem;
     }
 
-    // Champs : libellé au-dessus, pleine largeur (plus de colonne fixe 200px).
+    // Champs : libellé au-dessus (pas de colonne fixe Odoo).
     .s_website_form_field:not(.s_website_form_dnone) {
         .s_website_form_label {
             width: 100% !important;
@@ -65,8 +56,8 @@
         }
 
         .s_website_form_mark {
-            color: #c53030;
-            font-weight: $ckr-weight-semibold;
+            color: $ckr-primary;
+            font-weight: $ckr-weight-medium;
         }
     }
 
@@ -75,6 +66,7 @@
         border-color: $ckr-border;
         border-radius: $ckr-radius-md;
         font-size: 1rem;
+        background-color: $ckr-bg;
 
         &:focus {
             border-color: $ckr-primary;
@@ -83,37 +75,24 @@
     }
 
     textarea.form-control {
-        min-height: 7.5rem;
+        min-height: 6.5rem;
     }
 
     .s_website_form_submit {
         margin-top: $ckr-space-sm;
         padding-top: $ckr-space-md !important;
-        text-align: center !important;
 
         .s_website_form_label {
             display: none !important;
         }
 
         .s_website_form_send {
-            // min() CSS natif : unquote — sinon erreur « Incompatible units: rem and % ».
             min-width: unquote("min(100%, 16rem)");
         }
     }
 
     .ckr-demande-pro__secondary {
-        margin-top: $ckr-space-lg;
-        padding-top: $ckr-space-md;
-        text-align: center;
-
-        p {
-            font-size: 0.875rem;
-            color: $ckr-text-muted;
-            letter-spacing: 0.01em;
-
-            a {
-                font-weight: $ckr-weight-medium;
-            }
-        }
+        margin-top: $ckr-space-xl;
+        max-width: 46rem;
     }
 }
