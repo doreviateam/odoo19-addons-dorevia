@@ -3,7 +3,10 @@ from unittest.mock import MagicMock
 
 from odoo.tests.common import TransactionCase
 
-from odoo.addons.dorevia_ckreyol_marketplace.models.crm_lead import CKR_MVP03_FORM_REFERRED
+from odoo.addons.dorevia_ckreyol_marketplace.models.crm_lead import (
+    CKR_MVP03_FORM_REFERRED,
+    CKR_MVP03_RAPPEL_REFERRED,
+)
 
 
 class TestCkrMvp03ProAccountLead(TransactionCase):
@@ -40,3 +43,24 @@ class TestCkrMvp03ProAccountLead(TransactionCase):
         values = {"name": "Autre sujet", "partner_name": "X"}
         out = Lead.website_form_input_filter(request, dict(values))
         self.assertEqual(out["name"], "Autre sujet")
+
+    def test_website_form_input_filter_rappel_marker(self):
+        Lead = self.env["crm.lead"]
+        website = self.env["website"].search([], limit=1)
+        request = MagicMock()
+        request.env = self.env
+        request.website = website
+        values = {
+            "referred": CKR_MVP03_RAPPEL_REFERRED,
+            "contact_name": "Jean Pro",
+            "phone": "0690123456",
+            "email_from": "jean@example.org",
+            "ckr_callback_slot": "Mardi matin",
+            "description": "Boulangerie.",
+        }
+        out = Lead.website_form_input_filter(request, dict(values))
+        self.assertIn("Jean Pro", out["name"])
+        self.assertIn("Rappel conseiller", out["name"])
+        self.assertIn("[Rappel conseiller C-Kreyol MVP03]", out["description"])
+        self.assertIn("Boulangerie", out["description"])
+        self.assertIn("Créneau souhaité : Mardi matin", out["description"])

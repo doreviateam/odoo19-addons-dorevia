@@ -256,7 +256,7 @@ def _whitelist_crm_lead_pro_form_fields(cr):
         SET website_form_blacklisted = FALSE
         WHERE model = %s AND name IN %s
         """,
-        ("crm.lead", ("referred", "ckr_activity_type")),
+        ("crm.lead", ("referred", "ckr_activity_type", "ckr_callback_slot")),
     )
 
 

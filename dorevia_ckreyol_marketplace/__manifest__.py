@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.92",
+    "version": "19.0.1.10.93",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -42,6 +42,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.91 : demande pro — copie intro MOA (demande compte pro + validation équipes).
 * 19.0.1.10.92 : demande pro — bloc MVP03+ « rendez-vous conseiller » sous le formulaire
   (lien ``/appointment`` si ``website_appointment`` installé, sinon ``/contact`` ; disclaimer).
+* 19.0.1.10.93 : demande pro — bloc « Être rappelé » (formulaire repliable → ``crm.lead``,
+  ``referred`` = ``CK-MVP03-rappel-conseiller``, champ ``ckr_callback_slot`` ; disclaimer).
 
 Portee :
 
