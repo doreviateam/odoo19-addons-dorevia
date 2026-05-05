@@ -72,6 +72,8 @@ Les habillages existants à respecter ou étendre : [`views/auth/ckr_login.xml`]
 
 Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher en réunion MOA / tech.
 
+**Support d’atelier** : [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) — checklist structurée (durée cible 30–45 min, sorties attendues).
+
 **Hypothèse MVP recommandée** *(non gelée — reste soumise à validation §4)* : page dédiée « Demande d’ouverture de compte pro » alimentant un objet standard Odoo (**`crm.lead`** via **`website_form`** si le module CRM est disponible et pertinent), **sans** création automatique de compte portail pro ni modification de pricelist.
 
 | # | Sujet | Proposition initiale *(indicative)* | Décision figée (MOA / tech) |
@@ -143,3 +145,4 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher
 | 2026-05 | Amendements : statut « prêt pour arbitrage », exécutable si §4 complété ; hypothèse MVP ; pas d’utilisateur portail auto pour la demande pro ; §4 enrichi (propositions initiales, ligne doublon email) ; critères traçabilité BO + email dupliqué ; PV `PV_RECETTE_COMPTE_CLIENT_MVP03.md` ; lien `/privacy` clarifié. |
 | 2026-05 | §4 ligne *Email / notification* : confirmation web = minimum obligatoire ; emails auto / internes à arbitrer ; lien vers PV recette brouillon. |
 | 2026-05-05 | **GO documentaire** — tampon date ; validation du document pour arbitrage §4 puis exécution ([PV recette brouillon](PV_RECETTE_COMPTE_CLIENT_MVP03.md)). |
+| 2026-05-05 | Lien vers support d’atelier [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) pour compléter le §4 en réunion MOA / tech. |

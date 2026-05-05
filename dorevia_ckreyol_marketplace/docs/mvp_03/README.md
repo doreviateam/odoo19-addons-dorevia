@@ -14,6 +14,7 @@ Dossier de **cadrage** pour la vague **MVP 03** : parcours de **création de com
 | [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) | Spec **UX** : écrans cibles, ton et messages, états, critères recette interface, arbitrages MOA — suite du parcours |
 | [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) | **Ticket d’exécution** dev : périmètre A/B, arbitrages, critères d’acceptation, checklist « prêt pour dev » |
 | [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) | **PV recette** — brouillon : parcours A/B, invité, `/my`, doublon email, mobile, accessibilité, BO |
+| [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) | **Atelier §4** — checklist MOA / tech pour compléter les arbitrages du ticket |
 
 ---
 
@@ -92,6 +93,7 @@ Le **parcours particulier** doit rester **court** et ne pas devenir plus **admin
 | Cadrage parcours | [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md) — **rédigé** (2026-05-05) |
 | Spec UX | [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — **rédigé** (2026-05-05) |
 | Ticket dev MVP 03 | [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) — **rédigé** (2026-05-05), **brouillon** — arbitrage §4 puis GO dev |
+| Atelier §4 | [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) — **rédigé** (2026-05-05) ; à utiliser avant pickup dev |
 | PR dev (`dorevia_ckreyol_marketplace`) | *À créer après GO* |
 | PV recette | [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) — **brouillon** (2026-05-05) ; verdict après implémentation |
 | Jeux de tests Odoo (`--test-tags=…`) | *À définir* |
@@ -119,3 +121,4 @@ Le **parcours particulier** doit rester **court** et ne pas devenir plus **admin
 | 2026-05-05 | Ajout [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) — ticket d’exécution dev (périmètre, arbitrages, critères d’acceptation, hors périmètre). |
 | 2026-05-05 | Ticket MVP03 : amendements (exécutable si §4, hypothèse MVP, pas de portail auto demande pro, traçabilité BO, doublon email, PV `PV_RECETTE_COMPTE_CLIENT_MVP03.md`). |
 | 2026-05-05 | **GO documentaire** tampon date — [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) ; création / enrichissement **PV** [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) ; §4 *Email / notification* ; **GO documentaire (PV)** — base recette validée ; **dossier MVP 03 prêt arbitrage MOA / tech**. |
+| 2026-05-05 | Ajout [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) — checklist d’atelier pour verrouiller le §4 ticket (référencée depuis le ticket). |
