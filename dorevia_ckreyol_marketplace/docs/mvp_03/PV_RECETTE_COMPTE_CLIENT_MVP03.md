@@ -3,9 +3,11 @@
 **Ticket** : [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md)  
 **Spec UX** : [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — parcours : [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md)
 
-**Statut** : **Brouillon** — structure de recette **avant livraison dev** ; verdict, date et instance à compléter après implémentation.  
+**Statut** : **Prêt pour recette technique** — livrable aligné avec [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) *(page `/demande-compte-professionnel`, CRM `website_crm`, traçabilité `referred`, tests)* ; **verdict MOA / technique à instruire** après session sur l’instance ci-dessous.  
 **GO documentaire (ticket)** : **2026-05-05** — voir [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md).  
 **GO documentaire (PV)** : **2026-05-05** — base recette validée pour préparation des tests *(verdict technique toujours **non instruit** jusqu’à recette réelle)*.
+
+**Pré-requis session recette** : `git pull` sur la branche courante ; mise à jour module **`-u dorevia_ckreyol_marketplace`** *(installe / aligne `crm` + `website_crm` selon dépendances)* ; base **`tenant_o7`** *(ou instance cible équivalente)*.
 
 | Champ | Valeur |
 |-------|--------|
@@ -22,6 +24,26 @@
 
 ---
 
+## Alignement livraison *(référence — à cocher en recette)*
+
+Points techniques livrés *(module **19.0.1.10.77+**, branche **`feature/shop-mvp22-visible-wave1`** au moment du dernier push)* :
+
+| Point | Détail |
+|-------|--------|
+| Page dédiée | **`/demande-compte-professionnel`** |
+| Chaîne CRM | Formulaire Website → **`crm.lead`** via **`website_crm`** |
+| Merci | Redirection **`/demande-compte-pro-merci`** |
+| Traçabilité | **`referred`** = **`CK-MVP03-demande-compte-pro`** ; nom **`Demande compte pro C-Kreyol MVP03 — …`** ; description préfixée **`[Demande compte pro C-Kreyol MVP03]`** |
+| Garde-fous code | Pas de portail pro auto, pas de pricelist B2B auto, pas de validation statut pro auto |
+| Entrées | Liens depuis **login** et **signup** |
+| Tests auto | `test_ckr_mvp03_pro_account` *(module)* |
+
+**CRM** : si besoin d’acheminement équipe, vérifier **Website → Configuration → CRM par défaut** (équipe / vendeur par défaut).
+
+**Branche / traçabilité** : l’implémentation MVP03 est sur **`feature/shop-mvp22-visible-wave1`** ; une **PR dédiée** ou une autre convention de merge reste **à confirmer** côté pilotage *(pas de changement de branche imposé par le livrable)*.
+
+---
+
 ## 1. Pré-requis et configuration *(à noter)*
 
 - **§4 ticket** complété : `auth_signup`, URLs A/B, achat invité, chaîne demande pro, champs, notifications, comportement doublon email.
@@ -33,13 +55,13 @@
 
 | Sujet | Décision testée |
 |-------|-----------------|
-| `auth_signup` | *À compléter* |
-| Séparation A/B | *À compléter* |
-| Achat invité | *À compléter* |
-| Chaîne demande pro | *À compléter* |
-| Champs formulaire B | *À compléter* |
-| Email / notification | *À compléter* |
-| Doublon email | *À compléter* |
+| `auth_signup` | Activé sur base test *(ex. `tenant_o7`)* — inchangé par MVP03 |
+| Séparation A/B | **`/web/signup`** (B2C) · **`/demande-compte-professionnel`** (demande pro) |
+| Achat invité | **`account_on_checkout`** = optional si configuré *(non forcé par MVP03)* |
+| Chaîne demande pro | **`website` + `crm` + `website_crm`** ; formulaire → **`crm.lead`** |
+| Champs formulaire B | Entreprise, contact, e-mail, téléphone, message *(type d’activité dans le message si besoin)* |
+| Email / notification | Confirmation **web** + redirection merci ; pas d’email auto imposé par le code livré |
+| Doublon email | Selon §4 ticket / recommandation *(non modifié spécifiquement par cette livraison)* |
 
 ---
 
@@ -145,3 +167,4 @@
 | 2026-05-05 | Création **brouillon** : grilles recette alignées ticket + spec UX ; verdict après livraison. |
 | 2026-05-05 | **GO documentaire** sur le dossier MVP 03 — PV prêt pour préparation des tests ; verdict après implémentation. |
 | 2026-05-05 | Amendements : §1.1 arbitrages testés ; contrôle formulations interdites parcours B ; ligne RGPD / **`/privacy`** ; §11 réserves / actions à ouvrir — **GO documentaire** sur la base recette (dossier MVP 03 prêt arbitrage MOA / tech, alignement ticket). |
+| 2026-05-05 | **Livraison dev alignée ticket** : section *Alignement livraison* ; statut **Prêt pour recette technique** ; §1.1 pré-rempli ; rappel **`tenant_o7`**, **`-u`**, branche **`feature/shop-mvp22-visible-wave1`**. |
