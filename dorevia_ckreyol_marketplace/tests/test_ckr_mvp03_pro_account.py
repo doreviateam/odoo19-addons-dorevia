@@ -55,7 +55,8 @@ class TestCkrMvp03ProAccountLead(TransactionCase):
             "contact_name": "Jean Pro",
             "phone": "0690123456",
             "email_from": "jean@example.org",
-            "ckr_callback_slot": "Mardi matin",
+            "ckr_callback_date": "2026-06-15",
+            "ckr_callback_window": "h14_16",
             "description": "Boulangerie.",
         }
         out = Lead.website_form_input_filter(request, dict(values))
@@ -63,4 +64,8 @@ class TestCkrMvp03ProAccountLead(TransactionCase):
         self.assertIn("Rappel conseiller", out["name"])
         self.assertIn("[Rappel conseiller C-Kreyol MVP03]", out["description"])
         self.assertIn("Boulangerie", out["description"])
-        self.assertIn("Créneau souhaité : Mardi matin", out["description"])
+        self.assertIn("Créneau souhaité : 15/06/2026 — 14h–16h", out["description"])
+        self.assertEqual(
+            out["ckr_callback_slot"],
+            "Créneau souhaité : 15/06/2026 — 14h–16h",
+        )

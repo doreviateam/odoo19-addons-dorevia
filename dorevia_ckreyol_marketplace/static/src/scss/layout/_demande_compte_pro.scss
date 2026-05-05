@@ -254,8 +254,7 @@
             min-height: 4rem;
         }
 
-        // Widget natif date + heure (pas de librairie tierce ; valeur stockée en Char côté CRM).
-        input[type="datetime-local"].ckr-demande-pro__input-datetime {
+        input[type="date"].ckr-demande-pro__input-date {
             min-height: 2.35rem;
             color-scheme: light;
         }

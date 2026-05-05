@@ -245,7 +245,7 @@ def _ensure_featured_collection_parameter(env):
 
 
 def _whitelist_crm_lead_pro_form_fields(cr):
-    """Autorise ``referred`` et ``ckr_activity_type`` sur les formulaires Website (MVP03).
+    """Autorise les champs CRM MVP03 / rappel sur les formulaires Website.
 
     ``formbuilder_whitelist`` exige le groupe Designer ; en hook superuser on
     applique la même mise à jour SQL que le core (voir ``website_form.py``).
@@ -256,7 +256,16 @@ def _whitelist_crm_lead_pro_form_fields(cr):
         SET website_form_blacklisted = FALSE
         WHERE model = %s AND name IN %s
         """,
-        ("crm.lead", ("referred", "ckr_activity_type", "ckr_callback_slot")),
+        (
+            "crm.lead",
+            (
+                "referred",
+                "ckr_activity_type",
+                "ckr_callback_slot",
+                "ckr_callback_date",
+                "ckr_callback_window",
+            ),
+        ),
     )
 
 

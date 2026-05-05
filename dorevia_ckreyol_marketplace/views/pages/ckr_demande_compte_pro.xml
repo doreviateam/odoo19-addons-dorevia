@@ -217,16 +217,34 @@
                                                            data-fill-with="email"/>
                                                 </div>
 
-                                                <div class="mb-0 col-12 s_website_form_field s_website_form_custom" data-type="char" data-name="Field">
-                                                    <label class="s_website_form_label" for="ckr_rappel_slot">
-                                                        <span class="s_website_form_label_content">Créneau souhaité</span>
+                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="date" data-name="Field">
+                                                    <label class="s_website_form_label" for="ckr_rappel_date">
+                                                        <span class="s_website_form_label_content">Date souhaitée</span>
+                                                        <span class="s_website_form_mark"> *</span>
                                                     </label>
-                                                    <input id="ckr_rappel_slot"
-                                                           type="datetime-local"
-                                                           class="form-control s_website_form_input ckr-demande-pro__input-datetime"
-                                                           name="ckr_callback_slot"
-                                                           step="900"
-                                                           title="Date et heure de disponibilité pour un rappel"/>
+                                                    <input id="ckr_rappel_date"
+                                                           type="date"
+                                                           class="form-control s_website_form_input ckr-demande-pro__input-date"
+                                                           name="ckr_callback_date"
+                                                           required=""
+                                                           title="Jour de disponibilité pour un rappel"/>
+                                                </div>
+                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="selection" data-name="Field">
+                                                    <label class="s_website_form_label" for="ckr_rappel_window">
+                                                        <span class="s_website_form_label_content">Créneau souhaité</span>
+                                                        <span class="s_website_form_mark"> *</span>
+                                                    </label>
+                                                    <select id="ckr_rappel_window"
+                                                            name="ckr_callback_window"
+                                                            class="form-control form-select s_website_form_input"
+                                                            required=""
+                                                            title="Plage horaire préférée">
+                                                        <option value="">Sélectionnez un créneau</option>
+                                                        <option value="h09_11">09h–11h</option>
+                                                        <option value="h11_13">11h–13h</option>
+                                                        <option value="h14_16">14h–16h</option>
+                                                        <option value="h16_18">16h–18h</option>
+                                                    </select>
                                                 </div>
 
                                                 <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">

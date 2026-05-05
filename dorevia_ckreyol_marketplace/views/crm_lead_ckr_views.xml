@@ -8,6 +8,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='phone']" position="after">
                 <field name="ckr_activity_type"/>
+                <field name="ckr_callback_date" optional="hide"/>
+                <field name="ckr_callback_window" optional="hide"/>
                 <field name="ckr_callback_slot" optional="hide"/>
             </xpath>
         </field>

@@ -31,6 +31,23 @@ class CrmLead(models.Model):
         tracking=False,
     )
 
+    ckr_callback_date = fields.Date(
+        string="Date souhaitée (rappel)",
+        tracking=False,
+    )
+
+    ckr_callback_window = fields.Selection(
+        selection=[
+            ("h09_11", "09h–11h"),
+            ("h11_13", "11h–13h"),
+            ("h14_16", "14h–16h"),
+            ("h16_18", "16h–18h"),
+        ],
+        string="Créneau horaire (rappel)",
+        tracking=False,
+    )
+
+    # Synthèse lisible pour la liste / recherche (remplie depuis date + fenêtre au dépôt web).
     ckr_callback_slot = fields.Char(
         string="Créneau souhaité (rappel)",
         tracking=False,
@@ -87,13 +104,46 @@ class CrmLead(models.Model):
             values["name"] = label
 
         msg = (values.get("description") or "").strip()
-        slot = (values.get("ckr_callback_slot") or "").strip()
+        creneau_line = self._ckr_format_rappel_creneau_line(values)
+        if creneau_line:
+            values["ckr_callback_slot"] = creneau_line
+
         header = f"[{label}]"
         blocks = [header]
         if msg:
             blocks.append(msg)
-        if slot:
-            blocks.append(f"Créneau souhaité : {slot}")
+        if creneau_line:
+            blocks.append(creneau_line)
         values["description"] = "\n\n".join(blocks)
 
         return values
+
+    def _ckr_format_rappel_creneau_line(self, values):
+        """Construit ``Créneau souhaité : JJ/MM/AAAA — 09h–11h`` depuis date + fenêtre."""
+        raw_date = values.get("ckr_callback_date")
+        win_key = values.get("ckr_callback_window")
+        if not raw_date or not win_key:
+            return ""
+
+        if isinstance(raw_date, str):
+            d = fields.Date.from_string(raw_date)
+        else:
+            d = raw_date
+        if not d:
+            return ""
+
+        # Website / ORM peuvent envoyer ``datetime`` ou ``date``.
+        if hasattr(d, "date") and callable(getattr(d, "date")):
+            try:
+                d = d.date()
+            except (ValueError, TypeError):
+                return ""
+
+        date_fr = d.strftime("%d/%m/%Y")
+
+        sel = self._fields["ckr_callback_window"].selection
+        pairs = sel(self) if callable(sel) else sel
+        labels = dict(pairs)
+        win_label = labels.get(win_key, win_key)
+
+        return f"Créneau souhaité : {date_fr} — {win_label}"

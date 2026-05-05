@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.97",
+    "version": "19.0.1.10.98",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -49,6 +49,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.96 : demande pro — créneau rappel en ``datetime-local`` (pas de 15 min via ``step``).
 * 19.0.1.10.97 : demande pro — boutons bloc rappel en contour terracotta (plus de noir plein) ;
   libellé ``Nom et prénom``.
+* 19.0.1.10.98 : demande pro — rappel : ``date`` + liste créneaux (09h–11h …) à la place de
+  ``datetime-local`` ; concaténation CRM dans ``ckr_callback_slot`` et description.
 
 Portee :
 
