@@ -46,6 +46,9 @@
     }
 
     .ckr-demande-pro__intro {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
         margin-bottom: $ckr-space-md;
         margin-left: auto;
         margin-right: auto;
@@ -56,6 +59,14 @@
             font-family: $ckr-font-sans;
             font-size: 0.9375rem;
             line-height: 1.5;
+            color: $ckr-text-muted;
+        }
+
+        .ckr-demande-pro__intro-note {
+            margin-bottom: 0;
+            font-family: $ckr-font-sans;
+            font-size: 0.875rem;
+            line-height: 1.45;
             color: $ckr-text-muted;
         }
     }
