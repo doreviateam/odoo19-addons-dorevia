@@ -90,6 +90,23 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation. La colo
 | 8 | **Email déjà existant** (doublon) | Comportement **non opaque** : message clair visiteur **ou** rattachement / traitement manuel côté Odoo selon solution retenue *(pas besoin de tout le dédoublonnage dans ce ticket)* | Pas d’échec silencieux ; message clair et/ou lead + rapprochement BO — détail : [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §11. |
 | 9 | **Tests Odoo** | Tag proposé `dorevia_ckr_account_mvp03` *(à valider)* | Tag **`dorevia_ckr_account_mvp03`** ; périmètre : [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §15. |
 
+### Vérification instance cible — base **`tenant_o7`** (2026-05-05)
+
+Contrôle technique sur environnement local **`http://localhost:18079/`** (sélection base **`?db=tenant_o7`**). Aucun identifiant consigné dans ce document.
+
+| Contrôle | Résultat |
+|----------|----------|
+| **`auth_signup`** | **installé** |
+| **Site web** (id 1) — nom | **C-KREYOLE** |
+| **`auth_signup_uninvited`** | **`b2c`** |
+| **`account_on_checkout`** | **`optional`** (pas d’obligation de compte avant paiement, aligné ticket) |
+| **`/web/signup`** | Page signup **OK** (formulaire présent après entrée session avec `db=tenant_o7`) |
+| **`crm`** | **non installé** — **à installer** (ou alternative documentée) pour la chaîne **`website_form` → `crm.lead`** |
+| **`website_crm`** | **non installé** |
+| Module technique **`website_form`** | **Absent** du registre `ir.module.module` sous ce nom — **à confirmer** dans Applications selon la version Odoo 19 CE (formulaires site éventuellement intégrés ailleurs) |
+
+**Suite** : installer **`crm`** sur **`tenant_o7`** avant de figer l’implémentation « demande pro → lead » ; compléter la checklist **§9** point 4 une fois CRM (+ pont formulaire si retenu) alignés.
+
 ---
 
 ## 5. Contraintes techniques
@@ -150,3 +167,4 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation. La colo
 | 2026-05-05 | Lien vers support d’atelier [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) pour compléter le §4 en réunion MOA / tech. |
 | 2026-05-05 | Référence [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — pré-arbitrages et tableau §4 pré-rempli recommandé. |
 | 2026-05-05 | **§4 complété** : colonne « Décision figée » alignée sur [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §17 ; statut **GO dev avec réserve instance**. |
+| 2026-05-05 | **Vérification instance** : base **`tenant_o7`** sur `localhost:18079` — tableau sous §4 ; réserve **CRM non installé** ; pas de secrets dans le doc. |
