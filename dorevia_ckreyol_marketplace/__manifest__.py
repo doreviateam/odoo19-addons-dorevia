@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.94",
+    "version": "19.0.1.10.95",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -45,6 +45,7 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.93 : demande pro — bloc « Être rappelé » (formulaire repliable → ``crm.lead``,
   ``referred`` = ``CK-MVP03-rappel-conseiller``, champ ``ckr_callback_slot`` ; disclaimer).
 * 19.0.1.10.94 : demande pro — ouverture « Être rappelé » replie le formulaire principal (JS Bootstrap).
+* 19.0.1.10.95 : demande pro — sync collapse sans ``window.bootstrap`` (MutationObserver sur classe ``show``).
 
 Portee :
 
