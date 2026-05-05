@@ -6,6 +6,8 @@ Dossier de **cadrage** pour la vague **MVP 04** : stabiliser les éléments d’
 
 > Alignement doctrine e-commerce CK : [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md). Ordre des chantiers : [CHANTIERS_CK_ORDRE.md](../direction/CHANTIERS_CK_ORDRE.md).
 
+**Hors périmètre de ce dossier** : la **compatibilité snippets Odoo Website** (Website Builder, blocs réutilisables) est un chantier **transverse** piloté depuis **`docs/direction/`** — [COMPATIBILITE_SNIPPETS_WEBSITE_CK.md](../direction/COMPATIBILITE_SNIPPETS_WEBSITE_CK.md). Ce n’est **pas** un livrable des lots panier / favoris ci-dessous.
+
 **Documents du dossier**
 
 | Document | Rôle |

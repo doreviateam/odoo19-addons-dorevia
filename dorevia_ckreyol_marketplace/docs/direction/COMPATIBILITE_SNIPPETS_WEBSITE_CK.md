@@ -3,6 +3,8 @@
 **Nature** : chantier **transverse** — il traverse les vagues MVP et les lots fonctionnels ; il n’est **pas** un remplacement des tickets produit par section.  
 **Pilotage ordre global** : [CHANTIERS_CK_ORDRE.md](CHANTIERS_CK_ORDRE.md).
 
+**Emplacement** : document de **`docs/direction/`**, **pas** un livrable d’un dossier **`docs/mvp_XX/`** (ex. ce n’est **pas** le périmètre fonctionnel [MVP 04 — panier & favoris](../mvp_04/README.md) ; les futurs blocs header panier / favoris y sont mentionnés comme **zones d’application** du présent chantier, une fois les parcours stabilisés).
+
 ---
 
 ## Intention
