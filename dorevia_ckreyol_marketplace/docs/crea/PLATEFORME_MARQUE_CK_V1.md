@@ -192,7 +192,7 @@ Lecture selon 3 axes :
 
 Rubriques :
 
-- Offrir
+- Idées cadeaux
 - Cuisiner
 - Découvrir
 - Associer

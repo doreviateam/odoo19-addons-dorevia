@@ -293,7 +293,7 @@ En particulier, **Idées cadeaux**, **Recettes** et **Blog** (sous **Communauté
 | Date | Changement |
 |------|------------|
 | 2026-04-21 | Création : rôle du menu, principes, proposition de base (puis **5 entrées niveau 1** + sous-menus), options A/B/C, mégamenu, utilitaires, mobile, questions, décision **[à compléter]**. |
-| 2026-04-21 | **Option B** posée comme **décision Phase 1** (§4, §10) avec repli **Option A** si charge éditoriale insuffisante ; distinctions **Boutique** / **Collections** ; vigences **Offrir** / **Recettes** ; **§2.4** intitulés niveau 1 ; lecture **option C** vs B2C. |
+| 2026-04-21 | **Option B** posée comme **décision Phase 1** (§4, §10) avec repli **Option A** si charge éditoriale insuffisante ; distinctions **Boutique** / **Collections** ; vigences **Idées cadeaux** / **Recettes** ; **§2.4** intitulés niveau 1 ; lecture **option C** vs B2C. |
 | 2026-04-21 | Lien vers **[WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md)** dans l’en-tête (cohérence menu / homepage). |
 | 2026-04-21 | **§11** : complément — section **Explorer** homepage **≠** menu Option B ; renvois **ADR-006/008** + **WIREFRAME** Bloc 3. |
 | 2026-04-21 | **§11** : porte **Kits → Packs** (et référence doctrine interne « composition » retirée) — alignement sur la logique pack Odoo / OCA **`product_pack`** (vérification back-office : case *« Est un pack ? »*, onglet *Pack*). |

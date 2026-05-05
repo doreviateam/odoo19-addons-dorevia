@@ -112,13 +112,13 @@ Installer une **épicerie fine tropicale éditoriale**, pas une boutique en lign
 **Intention** : casser le rythme grille avec un bloc narratif. C'est l'endroit du magazine où l'on raconte une histoire courte.
 
 **Choix visuels (V1 — variante sobre)** :
-- **Bandeau simple** dans le container : suréligne sauge uppercase (« Collection », « Saison », « Offrir »), une phrase Playfair 22 px sur une ligne (deux max. si long), lien souligné amber « En savoir plus » ou équivalent.
+- **Bandeau simple** dans le container : suréligne sauge uppercase (« Collection », « Saison », « Idées cadeaux »), une phrase Playfair 22 px sur une ligne (deux max. si long), lien souligné amber « En savoir plus » ou équivalent.
 - Pas de visuel pleine largeur, pas de cartouche en overlay.
 - Fond : off-white cohérent avec l'alternance de sections.
 
 **Variante V1.1 — pleine largeur** *(activée seulement si §9.3 remplit les trois conditions)* :
 - Format **pleine largeur** (break-out du container sur desktop ≥ 1200 px) : image paysage 21:9, texte superposé en bas à gauche dans un cartouche off-white à 92 % d'opacité, largeur max `520 px`.
-- Cartouche : surtitre sauge uppercase (« Collection », « Saison », « Offrir »), titre Playfair 26 px, une phrase Inter 15 px, lien « Voir la collection » en souligné amber.
+- Cartouche : surtitre sauge uppercase (« Collection », « Saison », « Idées cadeaux »), titre Playfair 26 px, une phrase Inter 15 px, lien « Voir la collection » en souligné amber.
 - Mobile : image 4:3, cartouche sous l'image (pas en overlay — illisible sur petits écrans).
 - **Si contenu non-crédible** au lancement, ce bloc se replie proprement en **bandeau simple** : une ligne de citation + lien discret, sans photo pleine largeur (variante sobre du wireframe §5).
 
@@ -314,7 +314,7 @@ Décisions validées faisant de cette proposition une **base de travail officiel
 Tant qu'une condition manque : la variante sobre reste en place.
 
 **Justification** :
-- [WIREFRAME_HOMEPAGE.md](../direction/WIREFRAME_HOMEPAGE.md) §3 Bloc 6 et §9 imposent explicitement : « si Offrir / Recettes ne sont pas nourris crédiblement, **réduire** ou **retirer** ce bloc ».
+- [WIREFRAME_HOMEPAGE.md](../direction/WIREFRAME_HOMEPAGE.md) §3 Bloc 6 et §9 imposent explicitement : « si Idées cadeaux / Recettes ne sont pas nourris crédiblement, **réduire** ou **retirer** ce bloc ».
 - Un bloc pleine largeur **mal nourri** produit l'inverse de l'intention : au lieu d'un magazine, le visiteur perçoit un bandeau publicitaire creux — plus gros risque de dégradation visuelle de toute la page.
 - La variante sobre reste **gracieuse** dans le rythme de la page et permet une bascule non-régressive vers la version riche dès que le contenu et le visuel sont prêts ensemble.
 
