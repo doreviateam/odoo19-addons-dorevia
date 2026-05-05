@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.65",
+    "version": "19.0.1.10.66",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -156,6 +156,8 @@ Portee :
 * 19.0.1.10.63 : /shop — finition UI maquette PJ sans changement fonctionnel :
   sidebar plus sobre, chips intégrées au catalogue, bloc Prix plus lisible, cartes
   produit homogénéisées et grille resserrée quand il y a peu de résultats.
+* 19.0.1.10.66 : page stub `/offrir` — titre et en-tête **Idées cadeaux**
+  (alignement menu + nom de page Website).
 * 19.0.1.10.65 : menu principal et footer — libellé **Idées cadeaux** pour
   `/offrir` (resync menu au upgrade).
 * 19.0.1.10.64 : fiche produit — Lot 2 UI proche maquette : sections
@@ -256,7 +258,7 @@ Portee :
   _get_shop_domain. Preuve auto : tag tests dorevia_ckr_collections
   (RC-01 a RC-14, 23 methodes, 0 skipTest, PV v1 Conforme —
   docs/mvp_01/evidences/run_rc_collections_v2_summary.log).
-* Pages stubs Offrir, Recettes, Collections, Origines, A propos,
+* Pages stubs Idées cadeaux (/offrir), Recettes, Collections, Origines, A propos,
   Contact. (Les stubs /kits et /promotions ont ete materialises
   comme redirections 301 portees par les controleurs CK en meme
   temps que la mise en service de leurs contrats H1 respectifs.)

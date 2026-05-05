@@ -67,9 +67,9 @@
     <!-- Nettoyage des installations existantes :                            -->
     <!-- data/ckr_cleanup_collections_stub.xml.                              -->
 
-    <!-- Offrir (stub) -->
+    <!-- Idées cadeaux (stub, URL historique /offrir) -->
     <record id="website_page_offrir" model="website.page">
-        <field name="name">Offrir</field>
+        <field name="name">Idées cadeaux</field>
         <field name="url">/offrir</field>
         <field name="website_published">True</field>
         <field name="is_published">True</field>
