@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.81",
+    "version": "19.0.1.10.82",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -22,6 +22,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   CTA ``ckr-btn``, phrase B2C avant liens.
 * 19.0.1.10.81 : demande compte pro — passe UX (grille 2 col, carte, placeholders,
   libellés, liens secondaires).
+* 19.0.1.10.82 : fix assets SCSS demande pro — ``unquote`` pour ``min()`` / ``clamp``
+  (évite erreur Dart Sass « Incompatible units rem and % »).
 
 Portee :
 
