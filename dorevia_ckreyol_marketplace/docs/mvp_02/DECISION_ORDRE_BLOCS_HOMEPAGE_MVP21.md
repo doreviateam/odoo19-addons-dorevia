@@ -6,13 +6,13 @@
 
 ## Décision
 
-**L’éditorial précède l’inscription (newsletter / cercle).**
+**L’éditorial précède l’inscription (newsletter homepage).**
 
 Séquence retenue :
 
 1. **Produits** (Blocs wireframe 4–5 : fournisseur + sélection)  
 2. **Éditorial** (bandeau « Collection » — V1)  
-3. **Inscription** (cercle C-Kreyol — `ckr_snippet_circle`)  
+3. **Inscription** (newsletter C-Kreyol — template **`ckr_snippet_circle`** dans `ckr_circle.xml`)  
 4. **Réassurance** (bloc confiance — `ckr_snippet_trust`)
 
 ## Synthèse (gel)
@@ -41,7 +41,8 @@ Le drapeau **`ckr_hpage_mvp1_tail_blocks`** (défaut `0`) **masque** uniquement 
 | Document | Rôle |
 |----------|------|
 | [1_HOMEPAGE.md](1_HOMEPAGE.md) | §4 Éditorial, §5 Inscription, §6 Réassurance |
-| [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) | Exécution snippet Inscription + PV recette |
+| [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) | Livraison MVP2.1 snippet Inscription + PV recette (2026-04) |
+| [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md) | Refonte UX / mass_mailing (**≥ 19.0.1.10.69**) |
 | [TICKET_REASSURANCE_HOMEPAGE_MVP21.md](../crea/TICKET_REASSURANCE_HOMEPAGE_MVP21.md) | Évolution bloc confiance (3 vs 5 items) + PV recette |
 | [WIREFRAME_HOMEPAGE.md](../direction/WIREFRAME_HOMEPAGE.md) | Blocs 6–7 |
 | [PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md](../crea/PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md) | §9.3 éditorial V1 |
@@ -55,3 +56,4 @@ Le drapeau **`ckr_hpage_mvp1_tail_blocks`** (défaut `0`) **masque** uniquement 
 | 2026-04-24 | **Ticket Inscription** — [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) + [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) ; références § mises à jour. |
 | 2026-04-24 | **Ticket Réassurance** — [TICKET_REASSURANCE_HOMEPAGE_MVP21.md](../crea/TICKET_REASSURANCE_HOMEPAGE_MVP21.md) + [PV_RECETTE_REASSURANCE_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_REASSURANCE_HOMEPAGE_MVP21_CK.md). |
 | 2026-04-25 | **Clôture homepage MVP2.1 (MOA)** — chaînage cercle + réassurance ; PV Inscription et Réassurance **GO** ; alignement de la présente section sur [`ckr_homepage.xml`](../../views/pages/ckr_homepage.xml). |
+| 2026-05-05 | **Documentation** — libellés « newsletter » au lieu de « cercle » pour le bloc ; ordre **`ckr_snippet_circle` → trust** inchangé ; lien ticket refonte [`TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md`](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md). |

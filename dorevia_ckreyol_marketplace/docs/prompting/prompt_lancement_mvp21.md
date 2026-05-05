@@ -16,7 +16,7 @@ Faire évoluer la homepage C-Kreyol en **5 chantiers d’implémentation**, dans
 1. **Hero immersif**
 2. **Explorer — grille asymétrique**
 3. **Sélection produits dynamique**
-4. **Inscription / cercle C-Kreyol**
+4. **Inscription / newsletter C-Kreyol** (refonte 2026-05 : [`TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md`](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md))
 5. **Réassurance / confiance**
 
 Le bloc **Éditorial** reste conservé en **V1** et **hors périmètre MVP2.1**, sauf demande explicite.
@@ -114,3 +114,4 @@ Fallback accepté en **3 axes enrichis** si la lisibilité l’exige.
 | 2026-04-24 | Création — lancement MVP2.1 (5 chantiers, gel conception, `/privacy`, assets locaux, recette à chaque PR). |
 | 2026-04-25 | **Clôture MOA** — homepage MVP2.1 recettée (PV Inscription + Réassurance ; pilotage [README MVP 02](../mvp_02/README.md)). |
 | 2026-04-25 | **Correctifs post-audit** — contrôleur cercle (`sub.search`) ; `/privacy` + `/terms` + tests `dorevia_ckr_circle` ; hébergeur LCEN sur `/terms` — détail [README module](../../README.md) § Pages légales. |
+| 2026-05-05 | **Refonte bloc newsletter** — `mass_mailing`, **`cc_nl`**, copy « NEWSLETTER » / horizontal desktop ; ticket [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md). |

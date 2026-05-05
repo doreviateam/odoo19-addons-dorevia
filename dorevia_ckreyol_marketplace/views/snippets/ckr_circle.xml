@@ -1,76 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="ckr_snippet_circle" name="C-Kreyol: Cercle (inscription)">
-        <t t-set="cc_cir" t-value="(request and request.httprequest and request.httprequest.args.get('cc_cir', '') or '')"/>
-        <section class="ckr-section ckr-section--soft ckr-circle ckr-root">
-            <div class="ckr-container ckr-circle__inner">
-                <t t-set="cc_ok" t-value="cc_cir == '1'"/>
-                <t t-set="cc_err" t-value="cc_cir == '0'"/>
-                <div t-if="cc_ok" class="ckr-circle__msg ckr-circle__msg--ok" role="status">
-                    Merci : votre inscription au cercle est bien enregistrée.
-                </div>
-                <div t-if="cc_err" class="ckr-circle__msg ckr-circle__msg--err" role="alert">
-                    L’e-mail n’a pas pu être enregistré. Vérifiez le format et réessayez.
+    <!-- id historique conservé pour le chaînage homepage / snippets -->
+    <template id="ckr_snippet_circle" name="C-Kreyol: Newsletter (homepage)">
+        <t t-set="ck_ccnl" t-value="(request and request.httprequest and request.httprequest.args.get('cc_nl', '') or '')"/>
+        <section class="ckr-section ckr-section--soft ckr-newsletter ckr-root" aria-labelledby="ckr-newsletter-heading">
+            <div class="ckr-container">
+
+                <div class="ckr-newsletter__messages"
+                     t-if="ck_ccnl in ('ok', 'dup', 'invalid', 'err')">
+                    <div t-if="ck_ccnl == 'ok'"
+                         id="ckr-newsletter-status"
+                         class="ckr-newsletter__msg ckr-newsletter__msg--ok"
+                         role="status"
+                         tabindex="-1">
+                        Merci, votre inscription a bien été prise en compte.
+                    </div>
+                    <div t-if="ck_ccnl == 'dup'"
+                         id="ckr-newsletter-status"
+                         class="ckr-newsletter__msg ckr-newsletter__msg--info"
+                         role="status"
+                         tabindex="-1">
+                        Cette adresse semble déjà inscrite à notre newsletter.
+                    </div>
+                    <div t-if="ck_ccnl == 'invalid'"
+                         id="ckr-newsletter-feedback"
+                         class="ckr-newsletter__msg ckr-newsletter__msg--err"
+                         role="alert">
+                        Veuillez saisir une adresse email valide.
+                    </div>
+                    <div t-if="ck_ccnl == 'err'"
+                         id="ckr-newsletter-feedback"
+                         class="ckr-newsletter__msg ckr-newsletter__msg--err"
+                         role="alert">
+                        L’inscription n’a pas pu être finalisée pour le moment. Vous pourrez réessayer dans quelques instants.
+                    </div>
                 </div>
 
-                <p class="ckr-circle__eyebrow">REJOINDRE</p>
-                <h2 class="ckr-circle__title">Rejoignez le cercle C-Kreyol</h2>
-                <p class="ckr-lead ckr-circle__intro">
-                    Recevez des nouvelles du catalogue, des sélections saisonnières et des idées
-                    pour découvrir les saveurs créoles.
+                <div class="ckr-newsletter__main">
+                    <div class="ckr-newsletter__copy">
+                        <p class="ckr-newsletter__eyebrow">NEWSLETTER</p>
+                        <h2 id="ckr-newsletter-heading" class="ckr-newsletter__title">
+                            Recevez nos sélections, découvertes et nouvelles de C-Kreyol
+                        </h2>
+                    </div>
+
+                    <form class="ckr-newsletter__form"
+                          action="/ckr/circle/subscribe"
+                          method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="redirect" t-att-value="request.httprequest.path or '/'"/>
+
+                        <div class="ckr-newsletter__field">
+                            <label class="ckr-newsletter__label-vh" for="ckr-newsletter-email">E-mail</label>
+                            <div class="ckr-newsletter__row">
+                                <div class="ckr-newsletter__input-wrap">
+                                    <input id="ckr-newsletter-email"
+                                           class="ckr-newsletter__input"
+                                           type="email"
+                                           name="email"
+                                           required="required"
+                                           inputmode="email"
+                                           autocomplete="email"
+                                           placeholder="votre.adresse@email.com"
+                                           aria-describedby="ckr-newsletter-legal"
+                                           t-att-aria-invalid="'true' if ck_ccnl == 'invalid' else 'false'"/>
+                                </div>
+                                <button type="submit" class="ckr-btn ckr-btn--primary ckr-newsletter__submit">
+                                    S’inscrire
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <hr class="ckr-newsletter__rule" aria-hidden="true"/>
+
+                <p id="ckr-newsletter-legal" class="ckr-newsletter__legal">
+                    Votre email est uniquement utilisé pour vous envoyer les nouvelles de C-Kreyol,
+                    nos sélections de produits et nos offres. Vous pouvez vous désabonner à tout moment
+                    via le lien présent dans chaque email.
                 </p>
-
-                <form class="ckr-circle__form" action="/ckr/circle/subscribe" method="post">
-                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                    <input type="hidden" name="redirect" t-att-value="request.httprequest.path or '/'"/>
-
-                    <div class="ckr-circle__field">
-                        <label class="ckr-circle__label" for="ckr-circle-email">E-mail <span class="ckr-sr-only">(obligatoire)</span></label>
-                        <input id="ckr-circle-email"
-                               class="ckr-circle__input"
-                               type="email"
-                               name="email"
-                               required="required"
-                               autocomplete="email"
-                               placeholder="votre@email.fr"/>
-                    </div>
-
-                    <fieldset class="ckr-circle__prefs">
-                        <legend class="ckr-circle__prefs-legend">Préférences (optionnel)</legend>
-                        <ul class="ckr-circle__prefs-list" role="list">
-                            <li>
-                                <label class="ckr-circle__check">
-                                    <input type="checkbox" name="opt_offers" value="1"/>
-                                    <span>Offres</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="ckr-circle__check">
-                                    <input type="checkbox" name="opt_recipes" value="1"/>
-                                    <span>Recettes</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="ckr-circle__check">
-                                    <input type="checkbox" name="opt_news" value="1"/>
-                                    <span>Nouveautés</span>
-                                </label>
-                            </li>
-                        </ul>
-                    </fieldset>
-
-                    <div class="ckr-circle__actions">
-                        <button type="submit" class="ckr-btn ckr-btn--primary ckr-circle__submit">
-                            S’inscrire
-                        </button>
-                    </div>
-
-                    <p class="ckr-circle__legal">
-                        En vous inscrivant, vous acceptez
-                        <a href="/privacy">notre politique de confidentialité</a>.
-                    </p>
-                </form>
             </div>
         </section>
     </template>

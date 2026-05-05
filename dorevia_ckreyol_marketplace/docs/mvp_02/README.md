@@ -85,8 +85,9 @@ Dossier de **cadrage et décisions** pour la vague **MVP 02** (évolution homepa
 | [PV_RECETTE_EXPLORER_HOMEPAGE_MVP2_CK.md](../crea/PV_RECETTE_EXPLORER_HOMEPAGE_MVP2_CK.md) | PV recette : **GO MOA 2026-04-24** (réserve mineure §3) |
 | [TICKET_SELECTION_PRODUITS_HOMEPAGE_MVP21.md](../crea/TICKET_SELECTION_PRODUITS_HOMEPAGE_MVP21.md) | Sélection produits dynamiques — checklist avant PR |
 | [PV_RECETTE_SELECTION_PRODUITS_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_SELECTION_PRODUITS_HOMEPAGE_MVP21_CK.md) | PV recette : **GO MOA** (2026-04-24, réserves mineures) |
-| [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) | Bloc newsletter / cercle — insertion éditorial → trust |
-| [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) | PV recette : **GO MOA 2026-04-25** |
+| [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) | Bloc inscription MVP2.1 (historique 2026-04) — insertion éditorial → trust |
+| [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) | PV recette : **GO MOA 2026-04-25** ; **GO visuel desktop** newsletter + checklist recette finale (2026-05) |
+| [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md) | Refonte bloc newsletter homepage — UX, **`mass_mailing`**, **`cc_nl`** (**≥ 19.0.1.10.69**) |
 | [TICKET_REASSURANCE_HOMEPAGE_MVP21.md](../crea/TICKET_REASSURANCE_HOMEPAGE_MVP21.md) | Bloc confiance — évolution 3 vs 5 axes, copy sincère |
 | [PV_RECETTE_REASSURANCE_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_REASSURANCE_HOMEPAGE_MVP21_CK.md) | PV recette : **GO MOA 2026-04-25** (réserve mineure Design System §4) |
 | [TICKET_INCONTOURNABLES_SHOP_FEATURED_MVP22.md](../crea/TICKET_INCONTOURNABLES_SHOP_FEATURED_MVP22.md) | Boutique `/shop` — porte **Incontournables** (`featured`), 6 lots, critères d’acceptation |

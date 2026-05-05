@@ -914,7 +914,7 @@
         gap: $ckr-space-sm !important;
         align-items: stretch;
 
-        @media (max-width: 420px) {
+        @media (max-width: 575.98px) {
             grid-template-columns: 1fr;
         }
     }
@@ -1108,6 +1108,10 @@
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: $ckr-space-md;
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+        }
 
         @media (min-width: 992px) {
             grid-template-columns: repeat(4, minmax(0, 1fr));

@@ -90,9 +90,9 @@ Lire ces principes avant de coder.
    - `docs/crea/PLAN_IMPL_HOMEPAGE_MONTEE_EN_GAMME_V1.md` (plan d’exécution)
    - `docs/crea/TICKETS_HORS_PERIMETRE_V1.md` (sujets hors V1)
 
-**Homepage MVP2.1** — vague **cinq chantiers** (hero immersif, Explorer, sélection, cercle, réassurance) : **clôturée côté MOA** le **2026-04-25**. Pilotage, PV et gel : [`docs/mvp_02/README.md`](../mvp_02/README.md), canon [`docs/mvp_02/1_HOMEPAGE.md`](../mvp_02/1_HOMEPAGE.md) ; lancement / historique : [`prompt_lancement_mvp21.md`](prompt_lancement_mvp21.md).
+**Homepage MVP2.1** — vague **cinq chantiers** (hero immersif, Explorer, sélection, inscription newsletter, réassurance) : **clôturée côté MOA** le **2026-04-25**. Refonte bloc newsletter (2026-05) : [`docs/crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md`](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md). Pilotage, PV et gel : [`docs/mvp_02/README.md`](../mvp_02/README.md), canon [`docs/mvp_02/1_HOMEPAGE.md`](../mvp_02/1_HOMEPAGE.md) ; lancement / historique : [`prompt_lancement_mvp21.md`](prompt_lancement_mvp21.md).
 
-**Pages légales & cercle** — URLs **`/privacy`**, **`/terms`** (QWeb `views/pages/`) ; inscription **`POST /ckr/circle/subscribe`** (`controllers/ckr_circle.py`). Tests tag **`dorevia_ckr_circle`** : [`tests/test_ckr_circle.py`](../../tests/test_ckr_circle.py). Après changement d’**hébergeur**, mettre à jour le bloc hébergement dans **`ckr_terms.xml`**.
+**Pages légales & newsletter homepage** — URLs **`/privacy`**, **`/terms`** (QWeb `views/pages/`) ; inscription **`POST /ckr/circle/subscribe`** (`controllers/ckr_circle.py`) — liste **`mass_mailing`** **Newsletter C-Kreyol**, redirections **`?cc_nl=`** (`ok` \| `dup` \| `invalid` \| `err`). Ticket refonte : [`docs/crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md`](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md). Tests tag **`dorevia_ckr_circle`** : [`tests/test_ckr_circle.py`](../../tests/test_ckr_circle.py). Après changement d’**hébergeur**, mettre à jour le bloc hébergement dans **`ckr_terms.xml`**.
 
 ---
 

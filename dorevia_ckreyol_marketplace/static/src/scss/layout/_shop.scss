@@ -2937,6 +2937,34 @@
             }
         }
     }
+
+    @media (max-width: 767.98px) {
+        &__inner {
+            align-items: stretch;
+        }
+
+        &__chips {
+            width: 100%;
+            order: 1;
+        }
+
+        &__right {
+            width: 100%;
+            order: 2;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        &__count {
+            order: 1;
+            font-size: 0.78rem;
+        }
+
+        &__tools {
+            order: 2;
+            margin-left: auto;
+        }
+    }
 }
 
 // ============================================================================

@@ -16,7 +16,7 @@
 - rendu **desktop** un peu **léger** visuellement (densité, contraste, rythme — charte) ;
 - **libellés** des fiches vitrine / catalogue à **affiner** avec les **vrais** produits commerciaux.
 
-**Feu vert chantier suivant** : **4/5 — Inscription / cercle C-Kreyol** — [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) ; pilotage [README MVP 02](../mvp_02/README.md).
+**Feu vert chantier suivant** : **4/5 — Inscription / newsletter** — [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) ; refonte ultérieure [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md) ; pilotage [README MVP 02](../mvp_02/README.md).
 
 ---
 

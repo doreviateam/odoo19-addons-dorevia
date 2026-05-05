@@ -10,6 +10,8 @@
 
 **Décision position (gel)** : [DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md](../mvp_02/DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md) — **après** Éditorial, **avant** Réassurance.
 
+**Évolution produit (2026-05)** — refonte du bloc (copy, UX horizontal, **sans** préférences ni « cercle », **`mass_mailing`**) : **[TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md)** ; implémentation module **≥ 19.0.1.10.69**. Le présent document reste l’**historique de clôture MVP2.1 (2026-04-25)** ; l’état fonctionnel courant est décrit dans ce ticket de refonte et dans le [README module](../../README.md) § *Pages légales, newsletter homepage et tests*.
+
 **Rattachement** : [TICKET_HOMEPAGE_APPETENCE_PARTITION_V1.md](TICKET_HOMEPAGE_APPETENCE_PARTITION_V1.md) ; cadrage copy §5 [1_HOMEPAGE.md](../mvp_02/1_HOMEPAGE.md).
 
 ---
@@ -96,7 +98,7 @@ Nouveau snippet dédié (ex. `ckr_snippet_newsletter` / nom validé en PR) + `t-
 ## Critères d’acceptation
 
 - [x] Bloc **visible** au **bon emplacement** — après `ckr_snippet_editorial` si rendu, avant `ckr_snippet_trust` ([`ckr_homepage.xml`](../../views/pages/ckr_homepage.xml), [DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md](../mvp_02/DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md)) ;
-- [x] Formulaire e-mail **fonctionnel** — POST `/ckr/circle/subscribe` ; messages retour query `cc_cir` ;
+- [x] Formulaire e-mail **fonctionnel** — POST `/ckr/circle/subscribe` ; messages retour query `cc_cir` *(clos 2026-04 ; depuis refonte **2026-05** : paramètres **`cc_nl`**, persistance **`mass_mailing`** — [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md))* ;
 - [x] **Préférences** affichées sans complexité excessive (cases optionnelles) ;
 - [x] **Message confidentialité** avec lien **`/privacy`** (libellé **politique de confidentialité**) ;
 - [x] **Rendu responsive** validé MOA ;
@@ -130,7 +132,7 @@ Nouveau snippet dédié (ex. `ckr_snippet_newsletter` / nom validé en PR) + `t-
 |----------|--------|
 | **QWeb** | Snippet section + formulaire (champs, CTA, lien **`/privacy`** — libellé **politique de confidentialité**). |
 | **Python** | Contrôleur ou héritage `website` / `mass_mailing` selon arbitrage. |
-| **SCSS** | Bloc centré (`ckr_circle`), responsive, cohérence tokens CK. |
+| **SCSS** | Bloc centré (`ckr_circle`) à l’époque MVP2.1 — **refonte 2026-05** : `_newsletter.scss`, classes `ckr-newsletter` / layout horizontal desktop. |
 | **Homepage** | `t-call` du snippet à l’emplacement défini dans `ckr_homepage.xml`. |
 
 ---
@@ -144,3 +146,4 @@ Nouveau snippet dédié (ex. `ckr_snippet_newsletter` / nom validé en PR) + `t-
 | 2026-04-24 | **RGPD** — URL **`/privacy`** ; libellé lien **politique de confidentialité** ; prérequis page `/privacy` avant prod. |
 | 2026-04-25 | **Clôture** — **GO MOA** ; [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) ; **Exécution : clos** ; critères + checklist §0 **soldés**. |
 | 2026-04-25 | **Post-audit** — correctif contrôleur `sub.search` ; pages `/privacy` / `/terms` ; tests `dorevia_ckr_circle` — voir **PV** § post-recette et [README module](../../README.md) § Pages légales. |
+| 2026-05-05 | **Refonte newsletter** — pilotage [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md) ; paramètres retour **`cc_nl`** ; stockage **`mailing.contact`** / liste **Newsletter C-Kreyol**. |

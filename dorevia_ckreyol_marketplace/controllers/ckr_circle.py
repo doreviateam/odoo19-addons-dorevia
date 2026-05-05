@@ -3,9 +3,13 @@ import logging
 import urllib.parse
 
 from odoo import http
+from odoo.exceptions import MissingError
 from odoo.http import request
 
 _logger = logging.getLogger(__name__)
+
+CKR_MAILING_LIST_XMLID = "dorevia_ckreyol_marketplace.ckr_mailing_list_newsletter_ck"
+CKR_MAILING_LIST_NAME = "Newsletter C-Kreyol"
 
 
 def _ckr_safe_redirect_path(raw):
@@ -18,6 +22,58 @@ def _ckr_safe_redirect_path(raw):
     if len(p) > 2048:
         return "/"
     return p
+
+
+def _ckr_mailing_list_newsletter(env):
+    """Retourne ``mailing.list`` « Newsletter C-Kreyol » (recordset 0 ou 1)."""
+    MList = env["mailing.list"].sudo()
+    try:
+        ref_rec = env.ref(CKR_MAILING_LIST_XMLID)
+        rec = MList.browse(ref_rec.id)
+        if rec.exists():
+            return rec
+    except MissingError:
+        pass
+    return MList.search([("name", "=", CKR_MAILING_LIST_NAME)], limit=1)
+
+
+def _ckr_subscribe_mailing_list(env, email, list_rec):
+    """Inscrit l’e-mail sur la liste. Retourne ``ok`` | ``dup`` | ``err``."""
+    if not list_rec:
+        return "err"
+    MContact = env["mailing.contact"].sudo()
+    MSub = env["mailing.subscription"].sudo()
+    lid = list_rec.id
+    try:
+        contact = MContact.search([("email", "=", email)], limit=1, order="id asc")
+        if not contact:
+            MContact.create({"email": email, "list_ids": [(4, lid)]})
+            return "ok"
+
+        sub = MSub.search(
+            [("contact_id", "=", contact.id), ("list_id", "=", lid)],
+            limit=1,
+        )
+        if sub:
+            if not sub.opt_out:
+                return "dup"
+            sub.write(
+                {
+                    "opt_out": False,
+                    "opt_out_reason_id": False,
+                }
+            )
+            return "ok"
+
+        contact.write({"list_ids": [(4, lid)]})
+        return "ok"
+    except Exception:  # pylint: disable=broad-except
+        _logger.exception(
+            "C-Kreyol: échec inscription newsletter (email=%s list_id=%s)",
+            email,
+            lid,
+        )
+        return "err"
 
 
 class CkrCircleController(http.Controller):
@@ -35,58 +91,30 @@ class CkrCircleController(http.Controller):
             return request.redirect("/", code=303)
 
         back = _ckr_safe_redirect_path(post.get("redirect") or post.get("r") or "/")
-        err_qs = {"cc_cir": "0"}
 
-        raw_email = post.get("email", "")
-        sub = request.env["ckr.circle.subscriber"].sudo()
-        email = sub.normalize_incoming_email(raw_email)
+        norm_fn = request.env["ckr.circle.subscriber"].sudo().normalize_incoming_email
+        email = norm_fn(post.get("email", ""))
         if not email:
             return request.redirect(
-                f"{back}?{urllib.parse.urlencode(err_qs)}",
+                f"{back}?{urllib.parse.urlencode({'cc_nl': 'invalid'})}",
                 code=303,
             )
 
-        opt_offers = post.get("opt_offers") == "1"
-        opt_recipes = post.get("opt_recipes") == "1"
-        opt_news = post.get("opt_news") == "1"
+        ml = _ckr_mailing_list_newsletter(request.env)
+        outcome = _ckr_subscribe_mailing_list(request.env, email, ml)
 
-        try:
-            existing = sub.search(
-                [
-                    ("website_id", "=", website.id),
-                    ("email", "=", email),
-                ],
-                limit=1,
-            )
-            if existing:
-                existing.write(
-                    {
-                        "opt_offers": opt_offers,
-                        "opt_recipes": opt_recipes,
-                        "opt_news": opt_news,
-                        "active": True,
-                    }
-                )
-            else:
-                sub.create(
-                    {
-                        "email": email,
-                        "website_id": website.id,
-                        "opt_offers": opt_offers,
-                        "opt_recipes": opt_recipes,
-                        "opt_news": opt_news,
-                    }
-                )
-        except Exception:  # pylint: disable=broad-except
-            _logger.exception("C-Kreyol: échec inscription cercle (email=%s)", email)
+        if outcome == "dup":
             return request.redirect(
-                f"{back}?{urllib.parse.urlencode(err_qs)}",
+                f"{back}?{urllib.parse.urlencode({'cc_nl': 'dup'})}",
                 code=303,
             )
-
-        ok_qs = {"cc_cir": "1"}
+        if outcome == "err":
+            return request.redirect(
+                f"{back}?{urllib.parse.urlencode({'cc_nl': 'err'})}",
+                code=303,
+            )
         return request.redirect(
-            f"{back}?{urllib.parse.urlencode(ok_qs)}",
+            f"{back}?{urllib.parse.urlencode({'cc_nl': 'ok'})}",
             code=303,
         )
 

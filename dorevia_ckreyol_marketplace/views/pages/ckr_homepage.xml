@@ -48,7 +48,7 @@
                 <!-- Bloc 6 : Editorial V1 (gel MOA : avant Inscription quand tail V1 actif) -->
                 <t t-if="ckr_hpage_mvp1_tail_blocks" t-call="dorevia_ckreyol_marketplace.ckr_snippet_editorial"/>
 
-                <!-- Bloc inscription / Cercle C-Kreyol (MVP2.1 chantier 4/5) -->
+                <!-- Bloc newsletter homepage (liste mass_mailing « Newsletter C-Kreyol ») -->
                 <t t-call="dorevia_ckreyol_marketplace.ckr_snippet_circle"/>
 
                 <!-- Bloc 7 : Réassurance / confiance (MVP2 clôture — toujours rendu, avant footer) -->

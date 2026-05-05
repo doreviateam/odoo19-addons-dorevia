@@ -88,7 +88,7 @@ dorevia_ckreyol_marketplace/
 │   ├── auth/             login « Mon compte »
 │   ├── portal/           habillage portail /my
 │   ├── pages/            homepage, /privacy, /terms, contact, stubs, boutique, fiche produit
-│   └── snippets/         blocs homepage (hero, Explorer, supplier, sélection, éditorial, cercle, trust)
+│   └── snippets/         blocs homepage (hero, Explorer, supplier, sélection, éditorial, newsletter, trust)
 ├── docs/                 direction/ crea/ mvp_01/ (portes & URL) mvp_02/ (chantier homepage V2…) prompting/ assets/
 ├── hooks.py              menu Option B (post_init)
 └── static/src/
@@ -99,17 +99,21 @@ dorevia_ckreyol_marketplace/
 
 > **Suite logique** (hors périmètre du rapport Phase 1 clôturé) : panier `/shop/cart`, puis checkout — voir [rapport_phase_1.md — §6](docs/direction/rapport_phase_1.md). **Doctrine homepage / portes catalogue** : [ADR-006 à 008](docs/direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-006), [WIREFRAME homepage — Bloc 3](docs/direction/WIREFRAME_HOMEPAGE.md), [STRUCTURE_MENU — §11](docs/direction/STRUCTURE_MENU_PRINCIPAL.md). Polissage transversal : [BACKLOG_PHASE_1BIS_FRONT.md](docs/direction/BACKLOG_PHASE_1BIS_FRONT.md). Polissage copy, assets définitifs et richesse catalogue restent pilotés côté métier.
 
-### Pages légales, formulaire Cercle et tests (≥ 19.0.1.10.x)
+### Pages légales, newsletter homepage et tests (≥ 19.0.1.10.x)
 
 | URL | Rôle |
 |-----|------|
-| **`/privacy`** | Politique de confidentialité (RGPD) — `views/pages/ckr_privacy.xml`, `website.page` dans `data/website_pages_data.xml`. Liée depuis le bloc **Cercle** et depuis `/terms`. |
+| **`/privacy`** | Politique de confidentialité (RGPD) — `views/pages/ckr_privacy.xml`, `website.page` dans `data/website_pages_data.xml`. Liée depuis `/terms`, footer et périmètres légaux ; le bloc homepage newsletter **réassure sous le formulaire** (texte RGPD inline, sans renvoi obligatoire vers `/privacy` dans ce bloc depuis la refonte 19.0.1.10.69). |
 | **`/terms`** | Mentions légales (éditeur), **hébergement** (coordonnées sur la page — bloc **OVH SAS** par défaut : **à remplacer** si l’hébergeur réel diffère), propriété intellectuelle, renvoi `/privacy`, **CGV** (`#cgv`) — `views/pages/ckr_terms.xml`. Footer : **Mentions légales** → `/terms`, **CGV** → `/terms#cgv`. |
-| **`POST /ckr/circle/subscribe`** | Inscription newsletter — `controllers/ckr_circle.py` (recordset `ckr.circle.subscriber`). Redirections `?cc_cir=1` (succès) / `cc_cir=0` (échec). |
+| **`POST /ckr/circle/subscribe`** | Inscription newsletter — `controllers/ckr_circle.py` : inscription sur la liste **`mailing.list`** **Newsletter C-Kreyol** (`mailing.contact`, module **`mass_mailing`**). Retours utilisateur **`?cc_nl=`** : `ok` (succès), `dup` (déjà inscrit), `invalid` (e-mail invalide), `err` (erreur technique). *L’URL et le fichier contrôleur conservent le nom historique « circle ».*
 
-**Tests** : tag Odoo **`dorevia_ckr_circle`** — `tests/test_ckr_circle.py` (homepage avec bloc cercle, `GET /privacy`, `GET /terms`, `POST` inscription avec CSRF, modèle `ckr.circle.subscriber`). Exécution : `odoo … --test-tags=dorevia_ckr_circle`.
+**Legacy** : le modèle **`ckr.circle.subscriber`** et **`GET /ckr/circle/unsubscribe/<token>`** existent encore pour données et liens anciens ; **les nouvelles inscriptions homepage** passent uniquement par **mass mailing**.
 
-**Documentation pilotage** : [docs/mvp_02/README.md](docs/mvp_02/README.md) (inscription / RGPD) ; complément recette [docs/crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](docs/crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) (§ post-recette correctifs).
+**Tests** : tag Odoo **`dorevia_ckr_circle`** — `tests/test_ckr_circle.py` (homepage avec bloc **`ckr-newsletter`**, `GET /privacy`, `GET /terms`, `POST` avec CSRF, présence **`mailing.contact`** sur la liste Newsletter C-Kreyol). Exécution : `odoo … --test-tags=dorevia_ckr_circle`.
+
+**Documentation pilotage** : [docs/mvp_02/README.md](docs/mvp_02/README.md) ; refonte produit [docs/crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](docs/crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md) ; recette [docs/crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](docs/crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) — **GO visuel desktop** + checklist **recette finale** (mobile, inscription réelle, états `cc_nl`, label accessible), voir § *GO visuel desktop & gel UI newsletter*.
+
+**Gel UI (desktop)** — module **≥ 19.0.1.10.76** : ne pas augmenter davantage le **`margin-top`** du formulaire au-delà du réglage actuel (~**`0.875rem`**) ; colonne formulaire ×**1.5** sur base 24/28 rem ; évolution uniquement sur **ticket MOA**.
 
 ### Configuration société (BAC-01 — prérequis ouverture)
 
@@ -305,3 +309,5 @@ Le code du projet **C-Kreyol** (canal e-commerce spécialisé, projet Dorevia) e
 | 2026-04-21 | **[`docs/direction/BRIEF_DEV.md`](docs/direction/BRIEF_DEV.md)** : brief **développeur front** Phase 1 ; renvoi depuis la liste des documents de cadrage ci-dessus. |
 | 2026-04-24 | **Références MVP 02** : ajout `docs/assets/mvp02_reference_tropical_panier_fleurs_plage.png` (scène tropical / origines — inventaire tableau **Références visuelles MVP 02**). |
 | 2026-04-25 | **Pages légales & cercle** : section dédiée (tableau `/privacy`, `/terms`, POST cercle, tests `dorevia_ckr_circle`) ; arborescence `views/pages/` précisée ; alignement docs MVP02, PV inscription, backlog FTR-01, `prompt_dev` / `prompt_lancement_mvp21`. |
+| 2026-05-05 | **Newsletter homepage** — refonte (ticket [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](docs/crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md)) : bloc horizontal desktop, **`mass_mailing`**, liste **Newsletter C-Kreyol**, params **`cc_nl`** ; mise à jour README, MVP02, créa et prompts. |
+| 2026-05-06 | **Newsletter** — doc : **GO visuel desktop** + gel UI + checklist recette finale dans [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](docs/crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) et README § Pages légales / newsletter. |

@@ -17,7 +17,7 @@
 
 **Clôture homepage MVP2.1 (MOA)** — **2026-04-25** : les cinq chantiers homepage sont **recettés** ; pilotage : [README MVP 02](README.md). Suite : amélioration continue (Design System, contenu, conversion).
 
-**Drapeau QWeb `ckr_hpage_mvp1_tail_blocks`** (valeur **`0`** par défaut dans [`ckr_homepage.xml`](../../views/pages/ckr_homepage.xml)) : **masque** uniquement **Fournisseur** (§3 bis) et **Éditorial** (§4). **Inscription** (cercle) et **Réassurance** (§6) sont **toujours** rendus. Mettre **`1`** pour réafficher le **bas de page V1** complet (fournisseur + éditorial), **sans** retirer cercle ni confiance.
+**Drapeau QWeb `ckr_hpage_mvp1_tail_blocks`** (valeur **`0`** par défaut dans [`ckr_homepage.xml`](../../views/pages/ckr_homepage.xml)) : **masque** uniquement **Fournisseur** (§3 bis) et **Éditorial** (§4). **Inscription** (newsletter) et **Réassurance** (§6) sont **toujours** rendus. Mettre **`1`** pour réafficher le **bas de page V1** complet (fournisseur + éditorial), **sans** retirer newsletter ni confiance.
 
 **Pilotage PR** : **ordre de merge** des cinq chantiers, précisions MOA (sélection BO, inscription, réassurance, assets `docs/assets/`, **recette à chaque PR**) — [README MVP 02](README.md) section **Pilotage MVP2.1**.
 
@@ -101,7 +101,7 @@ Voir **[TICKET_EXPLORER_HOMEPAGE_MVP2.md](../crea/TICKET_EXPLORER_HOMEPAGE_MVP2.
 
 #### Chaînage & implémentation (MVP2.1)
 
-- **Ordre cible (WIREFRAME)** : [`views/pages/ckr_homepage.xml`](../../views/pages/ckr_homepage.xml) — après Explorer : Fournisseur → Sélection ; puis Éditorial ; puis Inscription (cercle) ; puis Réassurance.
+- **Ordre cible (WIREFRAME)** : [`views/pages/ckr_homepage.xml`](../../views/pages/ckr_homepage.xml) — après Explorer : Fournisseur → Sélection ; puis Éditorial ; puis **Inscription newsletter** ; puis Réassurance.
 - **Ordre avec `ckr_hpage_mvp1_tail_blocks = 0` (défaut)** : **Hero** → **Explorer** → **Sélection** → **Inscription** → **Réassurance** (Fournisseur + Éditorial **non** rendus).
 - **Fournisseur** (V1) — `ckr_supplier.xml` (La Platine, CTA **En savoir plus** → `/a-propos`) : rendu seulement si `ckr_hpage_mvp1_tail_blocks` vaut `1`.
 - **Sélection** (module ≥ **19.0.1.9.2**, fiches vitrine 4/4 + affectation accueil si emplacements vides en **19.0.1.9.5** ; **visuels produit** banque `docs/assets/` → `static/src/img/selection/` + migration **19.0.1.9.7** ; tests repli en **19.0.1.9.4**) — `ckr_selection.xml` : **4** emplacements **Site web** ; résolution = jusqu’à **4** produits **avec** binaire image modèle **ou** variante (sinon l’emplacement est ignoré et complété par le catalogue jusqu’à 4) ; pas de visuel « placeholder » Odoo en grille. **Titre** accueil : *Notre sélection du moment* ; **prix** `_get_combination_info` ; **CTA** fiche ; **pas** d’ajout panier. **Aucun** produit publié avec image : message d’aide. **Origine** : couverture ≥ 80 % (§9.4). **Conflit** `website.homepage` : [README module](../../README.md) § Sélection.
@@ -157,50 +157,43 @@ Prolonger l’univers **C-Kreyol** au-delà du catalogue produit ([WIREFRAME_HOM
 
 ### 5. Inscription
 
-*(Cible **newsletter / cercle** — **après** le §4 Éditorial et **avant** le §6 Réassurance ; [DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md](DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md).)*
+*(Cible **newsletter homepage** — **après** le §4 Éditorial et **avant** le §6 Réassurance ; [DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md](DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md).)*
 
-**Ticket d’exécution** : [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) — **PV recette** : [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) (**GO MOA 2026-04-25**). **Chaînage** : `ckr_snippet_circle` **après** `ckr_snippet_editorial` (si rendu) et **avant** `ckr_snippet_trust` — [`ckr_homepage.xml`](../../views/pages/ckr_homepage.xml).
+**Refonte courante (≥ 19.0.1.10.69)** : [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md) — bloc horizontal desktop, **`mass_mailing`**, liste **Newsletter C-Kreyol**, retours **`?cc_nl=`**.  
+**Historique MVP2.1** — **PV recette** : [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) (**GO MOA 2026-04-25**) ; ticket livraison initiale [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md).
+
+**Chaînage** : **`ckr_snippet_circle`** (fichier `views/snippets/ckr_circle.xml`, id template conservé pour compatibilité) **après** `ckr_snippet_editorial` (si rendu) et **avant** `ckr_snippet_trust` — [`ckr_homepage.xml`](../../views/pages/ckr_homepage.xml).
 
 #### Rôle
 
-Transformer un visiteur intéressé en **contact qualifié**, sans pression commerciale ; prolonger l’univers CK au-delà de l’achat immédiat.
+Inviter le visiteur à **rester en relation** avec C-Kreyol (nouvelles, sélections, offres) **sans** bruit commercial ni parcours type « adhésion » — voir intention produit du **ticket de refonte**.
 
-#### V1 — implémentation actuelle (MVP2.1 livré)
+#### Implémentation actuelle (2026-05)
 
-- **Snippet** : `views/snippets/ckr_circle.xml` (`ckr_snippet_circle`) — formulaire centré, e-mail + préférences optionnelles, lien **`/privacy`**, soumission **`/ckr/circle/subscribe`**.
-- **Piste future** : composition **split** visuel / formulaire (cadrage historique §5) — **non** retenue en V1 ; voir [PV recette](../crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md).
+- **Snippet** : `views/snippets/ckr_circle.xml` — classes **`ckr-newsletter`** ; label **NEWSLETTER** ; promesse éditoriale ; filet horizontal puis texte RGPD complet ; champ e-mail + CTA **S’inscrire** ; **pas** de préférences optionnelles ; **pas** de wording « cercle ».
+- **SCSS** : `static/src/scss/components/_newsletter.scss`.
+- **POST** **`/ckr/circle/subscribe`** — `controllers/ckr_circle.py` : **`mailing.contact`** sur **`mailing.list` « Newsletter C-Kreyol »** ; redirections **`cc_nl`** : `ok` \| `dup` \| `invalid` \| `err`.
+- **Legacy** : modèle **`ckr.circle.subscriber`** et **`/ckr/circle/unsubscribe/<token>`** pour inscriptions historiques ; pages **`/privacy`** / **`/terms`** inchangées pour le site.
 
-#### MVP2.1 — cible MOA (contenu)
+#### Chronologie MVP2.1 (référence — contenu à l’époque « cercle »)
 
-**Direction** : bloc relationnel **« Rejoignez le cercle C-Kreyol »**.
+Le ticket [TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) et le **PV** documentent la **première livraison** (bloc centré, préférences, lien `/privacy` dans le formulaire, retours **`cc_cir`**). Ce périmètre est **remplacé** par la refonte pour le **comportement et le copy** courants — la **position** dans la page reste conforme au **DECISION**.
 
-| Élément | Contenu cible |
-|---------|----------------|
-| **Titre** | Rejoignez le cercle C-Kreyol |
-| **Texte** | Recevez nos sélections curatées, les histoires de nos producteurs et nos nouveaux arrivages directement dans votre boîte mail. |
-| **Champ** | Adresse e-mail |
-| **Préférences** *(optionnelles)* | Saveurs ; Épicerie ; Cadeaux ; Origines ; Nouveautés ; Histoires de producteurs |
-| **CTA** | S’abonner |
-| **Confidentialité** | En vous abonnant, vous acceptez notre politique de confidentialité. Vous pouvez vous désinscrire à tout moment. *(Le segment « politique de confidentialité » est le **lien** vers **`/privacy`** — libellé interface conforme au ticket.)* |
+#### Rendu attendu
 
-#### Rendu attendu (cible)
-
-- Section **après** le §4 **Éditorial** (lorsqu’il est affiché) et **avant** le §6 **Réassurance** — [DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md](DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md).
-- **V1 livrée** : bloc **centré** (pas de split) ; e-mail + préférences simples ; CTA **S’inscrire** ; ton **calme**. Split visuel / formulaire = **piste** hors V1.
+- Section **après** le §4 **Éditorial** (si affichée) et **avant** le §6 — ordre gelé inchangé.
+- **Desktop** : promesse à gauche, **e-mail + bouton sur une ligne** à droite (bouton pas pleine largeur) ; **mobile** : colonne, bouton pleine largeur.
 
 #### Contraintes
 
-- Pas de **pop-up** ; pas de promesse de **réduction** ; pas de **fausse urgence** ; pas d’image **touristique** décorative.
-- Ne pas suggérer une **communauté** complexe si seul l’inscription e-mail est livrée.
-- **RGPD** : consentement explicite, lien **`/privacy`** (libellé **politique de confidentialité**), preuve de désinscription — pages **`/privacy`** et **`/terms`** (mentions + hébergeur) livrées par le module ; **validation juridique** avant prod. publique recommandée.
-
-#### Checklist avant PR (renvoi ticket)
-
-Voir **[TICKET_INSCRIPTION_HOMEPAGE_MVP21.md](../crea/TICKET_INSCRIPTION_HOMEPAGE_MVP21.md) §0**.
+- Pas de **pop-up** ; pas de **réduction** promise ; pas de **fausse urgence** ; pas de **tracking** additionnel intrusive (ticket refonte §13).
+- **RGPD** : texte de réassurance dans le bloc + pages **`/privacy`** et **`/terms`** ; désinscription gérée côté e-mails (**mass mailing**) ; validation juridique avant prod. publique recommandée.
 
 #### Recette
 
-[PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) (**GO MOA 2026-04-25**).
+- **Initiale MVP2.1** : [PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md](../crea/PV_RECETTE_INSCRIPTION_HOMEPAGE_MVP21_CK.md) — complété § refonte **2026-05**.
+- **Critères refonte** : [TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md](../crea/TICKET_REFONTE_BLOC_NEWSLETTER_HOMEPAGE_CK.md) § critères d’acceptation (GO).
+- **GO visuel desktop & gel UI newsletter** : même PV, § dédié (2026-05) ; recette finale responsive / Odoo / états / accessibilité à confirmer sur instance.
 
 ---
 

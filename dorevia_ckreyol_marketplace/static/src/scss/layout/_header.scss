@@ -443,6 +443,14 @@ header#top.ckr-header,
                  calc(#{$ckr-space-lg} + env(safe-area-inset-left, 0px));
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+
+        @media (max-width: 575.98px) {
+            width: unquote("min(360px, 92vw)");
+            padding-top: calc(#{$ckr-space-md} + env(safe-area-inset-top, 0px));
+            padding-right: calc(#{$ckr-space-md} + env(safe-area-inset-right, 0px));
+            padding-bottom: calc(#{$ckr-space-md} + env(safe-area-inset-bottom, 0px));
+            padding-left: calc(#{$ckr-space-md} + env(safe-area-inset-left, 0px));
+        }
     }
 
     &__backdrop {
@@ -459,6 +467,9 @@ header#top.ckr-header,
 
     &__close {
         align-self: flex-end;
+        position: sticky;
+        top: 0;
+        z-index: 1;
         background: transparent;
         border: none;
         color: $ckr-text;
@@ -490,7 +501,7 @@ header#top.ckr-header,
     &__group-title {
         padding: $ckr-space-xs 0;
         font-family: $ckr-font-sans;
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         font-weight: $ckr-weight-semibold;
         letter-spacing: 0.05em;
         text-transform: uppercase;
@@ -508,7 +519,7 @@ header#top.ckr-header,
             align-items: center;
             min-height: 48px;
             font-family: $ckr-font-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: $ckr-text;
             padding: $ckr-space-sm 0;
             border-bottom: 1px solid $ckr-border;
@@ -530,7 +541,7 @@ header#top.ckr-header,
         a.ckr-drawer__sublink {
             padding-left: $ckr-space-md;
             font-family: $ckr-font-sans;
-            font-size: 1rem;
+            font-size: 0.98rem;
             border-bottom: 1px solid $ckr-border;
         }
     }

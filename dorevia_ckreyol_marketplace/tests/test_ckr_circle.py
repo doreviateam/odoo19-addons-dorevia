@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Tests — chantier Cercle / inscription (MVP2.1 4/5)."""
+"""Tests — bloc newsletter homepage + pages légales."""
 import re
 import time
 from html import unescape
@@ -11,7 +11,7 @@ from odoo.tests.common import HttpCase, TransactionCase
 
 @tagged("post_install", "-at_install", "dorevia_ckr_circle")
 class TestCkrCircleHomepage(HttpCase):
-    """Présence du bloc, page légal, POST fonctionnel (CSRF)."""
+    """Présence du bloc newsletter, page légal, POST fonctionnel (CSRF)."""
 
     def _extract_csrf(self, html):
         for pattern in (
@@ -23,13 +23,15 @@ class TestCkrCircleHomepage(HttpCase):
                 return m.group(1).strip()
         return None
 
-    def test_rc_homepage_renders_circle_block(self):
+    def test_rc_homepage_renders_newsletter_block(self):
         r = self.url_open("/", timeout=60)
         self.assertEqual(r.status_code, 200)
-        self.assertIn("ckr-circle", r.text)
-        self.assertIn("Rejoignez le cercle C-Kreyol", r.text)
+        self.assertIn("ckr-newsletter", r.text)
+        self.assertIn("NEWSLETTER", r.text)
+        self.assertIn("Recevez nos sélections, découvertes et nouvelles de C-Kreyol", r.text)
         self.assertIn('action="/ckr/circle/subscribe"', r.text)
-        self.assertIn("/privacy", r.text)
+        self.assertNotIn("Rejoignez le cercle", r.text.lower())
+        self.assertNotIn("Préférences (optionnel)", r.text)
 
     def test_rc_privacy_page_200(self):
         r = self.url_open("/privacy", timeout=60)
@@ -62,14 +64,14 @@ class TestCkrCircleHomepage(HttpCase):
         if ck_fr_ckr:
             self.assertIn("+33", txt)
 
-    def test_rc_subscribe_post_creates_subscriber(self):
-        email = "cercle.httpcase.%s@example.com" % int(time.time() * 1000)
+    def test_rc_subscribe_post_adds_mailing_contact(self):
+        email = "newsletter.httpcase.%s@example.com" % int(time.time() * 1000)
         r0 = self.url_open("/", timeout=60)
         self.assertEqual(r0.status_code, 200)
         token = self._extract_csrf(r0.text)
         self.assertTrue(
             token,
-            "Jeton CSRF requis (formulaire cercle en homepage).",
+            "Jeton CSRF requis (formulaire newsletter en homepage).",
         )
         res = self.url_open(
             "/ckr/circle/subscribe",
@@ -83,18 +85,71 @@ class TestCkrCircleHomepage(HttpCase):
         )
         self.assertIn(res.status_code, (301, 302, 303), "Redirection attendue après POST.")
         loc = res.headers.get("Location", "")
-        self.assertIn("cc_cir=1", loc, "Location : paramètre de succès attendu.")
-        sub = self.env["ckr.circle.subscriber"].sudo().search(
-            [("email", "=", email)], limit=1
+        self.assertIn("cc_nl=ok", loc, "Location : paramètre de succès attendu.")
+        ml = self.env.ref("dorevia_ckreyol_marketplace.ckr_mailing_list_newsletter_ck")
+        contact = (
+            self.env["mailing.contact"]
+            .sudo()
+            .search([("email", "=", email)], limit=1, order="id asc")
         )
-        self.assertTrue(sub, "Enregistrement ckr.circle.subscriber attendu.")
-        self.assertTrue(sub.unsubscribe_token)
-        self.assertTrue(sub.active)
+        self.assertTrue(contact, "contact mailing.contact attendu.")
+        self.assertIn(ml, contact.list_ids)
+
+    def test_rc_subscribe_invalid_email_redirects(self):
+        r0 = self.url_open("/", timeout=60)
+        self.assertEqual(r0.status_code, 200)
+        token = self._extract_csrf(r0.text)
+        self.assertTrue(token)
+        res = self.url_open(
+            "/ckr/circle/subscribe",
+            data={
+                "csrf_token": token,
+                "email": "pas-un-email",
+                "redirect": "/",
+            },
+            timeout=60,
+            allow_redirects=False,
+        )
+        self.assertIn(res.status_code, (301, 302, 303))
+        loc = res.headers.get("Location", "")
+        self.assertIn("cc_nl=invalid", loc)
+
+    def test_rc_subscribe_duplicate_returns_dup(self):
+        email = "newsletter.dup.%s@example.com" % int(time.time() * 1000)
+        r0 = self.url_open("/", timeout=60)
+        token = self._extract_csrf(r0.text)
+        res1 = self.url_open(
+            "/ckr/circle/subscribe",
+            data={
+                "csrf_token": token,
+                "email": email,
+                "redirect": "/",
+            },
+            timeout=60,
+            allow_redirects=False,
+        )
+        self.assertIn(res1.status_code, (301, 302, 303))
+        self.assertIn("cc_nl=ok", res1.headers.get("Location", ""))
+        r1 = self.url_open("/", timeout=60)
+        token2 = self._extract_csrf(r1.text)
+        self.assertTrue(token2)
+        res2 = self.url_open(
+            "/ckr/circle/subscribe",
+            data={
+                "csrf_token": token2,
+                "email": email,
+                "redirect": "/",
+            },
+            timeout=60,
+            allow_redirects=False,
+        )
+        self.assertIn(res2.status_code, (301, 302, 303))
+        self.assertIn("cc_nl=dup", res2.headers.get("Location", ""))
 
 
 @tagged("post_install", "-at_install", "dorevia_ckr_circle")
 class TestCkrCircleModel(TransactionCase):
-    """Règles de persistance côté modèle (sans HTTP)."""
+    """Règles de persistance côté modèle legacy (sans HTTP)."""
 
     def test_model_create_normalizes_and_token(self):
         website = self.env.ref("website.default_website")

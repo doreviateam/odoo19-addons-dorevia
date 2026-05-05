@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.67",
+    "version": "19.0.1.10.76",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -157,6 +157,27 @@ Portee :
 * 19.0.1.10.63 : /shop — finition UI maquette PJ sans changement fonctionnel :
   sidebar plus sobre, chips intégrées au catalogue, bloc Prix plus lisible, cartes
   produit homogénéisées et grille resserrée quand il y a peu de résultats.
+* 19.0.1.10.68 : passe mobile UI — drawer plus ergonomique, hero compact
+  sur petits écrans, barre shortcuts /shop réordonnée, CTA fiche produit et
+  grille recommandations plus lisibles en viewport étroit.
+* 19.0.1.10.76 : newsletter desktop — ``margin-top`` ``0.875rem`` ; colonne × **1.5**
+  sur la base 24/28 rem.
+* 19.0.1.10.75 : newsletter desktop — ``margin-top`` formulaire ``0.8rem`` ;
+  colonne × **1.45** sur la base 24/28 rem (champ plus long, une ligne).
+* 19.0.1.10.74 : newsletter desktop — léger ``margin-top`` sur le formulaire ;
+  colonne formulaire ~30 % plus large (champ + bouton inchangés en hiérarchie).
+* 19.0.1.10.73 : newsletter — sureligne NEWSLETTER en sauge + filet ambre (comme
+  « En pratique ») ; label champ masqué visuellement, accessible lecteurs d’écran.
+* 19.0.1.10.72 : newsletter — suite MOA : ``padding-top`` section suivante à
+  ``$ckr-space-lg``, formulaire desktop aligné en haut avec la promesse,
+  bandeau NEWSLETTER un peu resserré.
+* 19.0.1.10.71 : newsletter — section suivante (Réassurance) : ``padding-top``
+  réduit via sélecteur adjacent ``.ckr-newsletter + .ckr-section`` only.
+* 19.0.1.10.70 : newsletter homepage — moins de padding bas du bloc + promesse
+  titre légèrement contenue (taille / interligne), retour MOA après GO direction.
+* 19.0.1.10.69 : bloc newsletter homepage — layout horizontal desktop, copy
+  NEWSLETTER / promesse / RGPD sous filet, dépendance ``mass_mailing`` + liste
+  **Newsletter C-Kreyol**, POST ``/ckr/circle/subscribe`` avec retours ``cc_nl``.
 * 19.0.1.10.67 : menu — groupe **Communauté** (sous-menus Idées cadeaux,
   Recettes, Blog) ; header desktop/mobile + sync hook + lien footer Blog.
 * 19.0.1.10.66 : page stub `/offrir` — titre et en-tête **Idées cadeaux**
@@ -283,6 +304,7 @@ ARCHITECTURE_DECISION_RECORD).
         "portal",
         "website",
         "website_sale",
+        "mass_mailing",
         # Theme Classic Store : remplace `products_item` (prix dans la colonne texte,
         # panier dans `o_quick_add_btn`) — le module CK restaure la tuile standard
         # Odoo pour la structure carte /shop (voir `ckr_shop_classic_tile_restore.xml`).
@@ -297,6 +319,7 @@ ARCHITECTURE_DECISION_RECORD).
         "security/ir.model.access.csv",
         # --- Attribut catalogue « Origine » (A1) + champ confort fiche produit ---
         "data/ckr_product_attribute_origin.xml",
+        "data/ckr_mailing_list_newsletter.xml",
         # --- Back-office : profils origine (menus + vues) ---
         "views/ckr_shop_origin_views.xml",
         "views/product_template_ckr_origin_views.xml",
@@ -404,7 +427,7 @@ ARCHITECTURE_DECISION_RECORD).
             "dorevia_ckreyol_marketplace/static/src/scss/components/_entries.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_supplier.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_selection.scss",
-            "dorevia_ckreyol_marketplace/static/src/scss/components/_circle.scss",
+            "dorevia_ckreyol_marketplace/static/src/scss/components/_newsletter.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_editorial.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_trust.scss",
             # Point d entree
