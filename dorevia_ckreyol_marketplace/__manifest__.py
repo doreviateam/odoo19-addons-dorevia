@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.63",
+    "version": "19.0.1.10.64",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -156,6 +156,9 @@ Portee :
 * 19.0.1.10.63 : /shop — finition UI maquette PJ sans changement fonctionnel :
   sidebar plus sobre, chips intégrées au catalogue, bloc Prix plus lisible, cartes
   produit homogénéisées et grille resserrée quand il y a peu de résultats.
+* 19.0.1.10.64 : fiche produit — Lot 2 UI proche maquette : sections
+  éditoriales basses alimentées par données Odoo, bloc recommandations fiable,
+  réassurance structurée et finition galerie/CTA sans changement de routes.
 * 19.0.1.10.61 : doc **NOTE_TECH_TUILE_CORNER_ACTIONS.md** (rail wishlist + info) ; SCSS : harmonisation **tous** les blocs
   `.ckr-product-card__info-action` — plus de `::before` texte, **`.fa` / `.ckr-product-card__info-icon` visibles** (correction d’un
   `display:none` sur `.fa` dans `.ckr-shop` qui masquait `fa-info`).
@@ -381,6 +384,7 @@ ARCHITECTURE_DECISION_RECORD).
             # Layout
             "dorevia_ckreyol_marketplace/static/src/js/ckr_header_drawer.js",
             "dorevia_ckreyol_marketplace/static/src/js/ckr_shop_sidebar.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_homepage_hero_rotator.js",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_header.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_locale.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_product.scss",

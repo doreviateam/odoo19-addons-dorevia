@@ -15,13 +15,18 @@
     <!-- ========================================================== -->
 
     <template id="ckr_snippet_hero" name="C-Kreyol: Hero homepage">
-        <section class="ckr-hero ckr-hero--immersive ckr-root">
+        <section class="ckr-hero ckr-hero--immersive ckr-root"
+                 data-ckr-hero-rotate-interval="60000">
             <div class="ckr-hero__media" aria-hidden="true">
-                <img src="/dorevia_ckreyol_marketplace/static/src/img/hero_v2_immersive.png"
+                <img src="/dorevia_ckreyol_marketplace/static/src/img/hero_macro.png"
                      alt=""
                      loading="eager"
                      fetchpriority="high"
-                     class="ckr-hero__bg"/>
+                     class="ckr-hero__bg ckr-hero__bg--layer-a is-active"/>
+                <img src="/dorevia_ckreyol_marketplace/static/src/img/hero_v2_immersive.png"
+                     alt=""
+                     loading="lazy"
+                     class="ckr-hero__bg ckr-hero__bg--layer-b"/>
                 <span class="ckr-hero__overlay"/>
             </div>
 
