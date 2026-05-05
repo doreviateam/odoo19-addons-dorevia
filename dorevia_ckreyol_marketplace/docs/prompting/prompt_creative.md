@@ -18,7 +18,7 @@ Doctrine produit à respecter
 - ADR-007 : les 5 portes Explorer (Promotions, Collections, Kits, Catégories, Origines) convergent vers `/shop` ou un chemin natif Odoo équivalent.
 - ADR-008 : bi-lexique obligatoire — côté visiteur « Kits », côté technique « Pack » / `product_pack` / `pack_ok`.
 - Explorer n’est pas le menu principal.
-- La navigation principale suit l’Option B gelée (Boutique, Collections, Offrir, Recettes, À propos, Contact) — cf. `docs/direction/STRUCTURE_MENU_PRINCIPAL.md` §11.
+- La navigation principale suit l’Option B gelée (Boutique, Collections, **Communauté** — Idées cadeaux, Recettes, Blog, À propos, Contact) — cf. `docs/direction/STRUCTURE_MENU_PRINCIPAL.md` §11.
 - Homepage attendue, dans cet ordre vertical : hero, Explorer, mise en avant fournisseur, sélection, éditorial, confiance, footer.
 - Aucun carrousel automatique sur le hero ni sur la sélection produits.
 - Le rail Explorer fonctionne en pas à pas manuel : prev / next, scroll natif, clavier.

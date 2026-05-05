@@ -72,7 +72,7 @@ Lire ces principes avant de coder.
    - côté back-office / technique : **Pack**, `product_pack`, `pack_ok`
 
 5. **Explorer n’est pas le menu principal**  
-   Le menu principal porte la **navigation générale** (Boutique, Collections, Offrir, Recettes, etc.).  
+   Le menu principal porte la **navigation générale** (Boutique, Collections, **Communauté** — Idées cadeaux, Recettes, Blog, etc.).  
    Le bloc **Explorer** distribue des **modes de lecture du catalogue**, pas la navigation globale.  
    Références :
 

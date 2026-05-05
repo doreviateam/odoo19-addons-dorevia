@@ -14,8 +14,8 @@ Portee :
        `website_sale` sous le menu racine (Home, Shop, Contact us)
        pour eviter les doublons avec le menu Option B.
     2. Creation / mise a jour du menu Option B :
-       Boutique, Collections, Communaute (Idées cadeaux, Recettes, Blog),
-       A propos, Contact.
+       Boutique, Collections, Communaute (#, enfants : Idées cadeaux, Recettes,
+       Blog), A propos, Contact.
     3. Nettoyage d eventuels website.page stale pointant sur "/" qui
        auraient ete crees par des versions anterieures du module
        (desormais la homepage reste portee par website.homepage_page

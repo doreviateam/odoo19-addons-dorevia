@@ -56,7 +56,7 @@ La priorité est donnée à titre indicatif. L'ordonnancement réel est posé en
 
 - **Zone** : header.
 - **Description** : harmoniser le traitement visuel de l'entrée de menu active (actuellement soulignement par défaut de lien visité). Trancher entre soulignement plein, barre sous-jacente ou pastille, en cohérence avec la charte §9.2.
-- **Critère d'acceptation** : un seul traitement actif visible, identique sur les 6 entrées Option B, stable sur desktop et mobile.
+- **Critère d'acceptation** : un seul traitement actif visible, identique sur les **entrées de menu de niveau 1** (et cohérent pour les **sous-liens Communauté**), stable sur desktop et mobile.
 - **Priorité** : M
 - **Effort** : S
 
@@ -180,7 +180,7 @@ La priorité est donnée à titre indicatif. L'ordonnancement réel est posé en
 ### SEO-01 — Meta homepage et stubs
 
 - **Zone** : SEO.
-- **Description** : renseigner `website.meta_title`, `website.meta_description` et Open Graph (`og:title`, `og:description`, `og:image`) sur la homepage et chaque page stub (Offrir, Recettes, Collections, À propos, Contact).
+- **Description** : renseigner `website.meta_title`, `website.meta_description` et Open Graph (`og:title`, `og:description`, `og:image`) sur la homepage et chaque page stub (Idées cadeaux `/offrir`, Recettes, Blog, Collections, À propos, Contact).
 - **Critère d'acceptation** : toutes les pages ont un title et une description uniques et pertinents, OG image par défaut (hero homepage ou déclinaison).
 - **Priorité** : M
 - **Effort** : M

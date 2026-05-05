@@ -66,14 +66,15 @@ Les intitulés du **niveau 1** doivent rester **courts**, **concrets** et **imm�
 
 ### 3.1 Niveau 1 — proposition de base
 
-Proposition de structure principale :
+Proposition de structure principale (**niveau 1**) :
 
 1. **Boutique**
 2. **Collections**
-3. **Offrir**
-4. **Recettes**
-5. **À propos**
-6. **Contact**
+3. **Communauté** — sous-menus (**niveau 2**) : **Idées cadeaux** (URL `/offrir`), **Recettes**, **Blog** (URL `/blog`, sous réserve du module blog)
+4. **À propos**
+5. **Contact**
+
+*Implémentation* : hiérarchie `website.menu` synchronisée par le module (`hooks.py`, `_sync_ckr_menus`, migrations post-upgrade).
 
 À compléter / arbitrer :
 
@@ -105,30 +106,15 @@ Entrée **retail / éditoriale** sur une logique **non strictement taxonomique**
 
 **Distinction avec Boutique** : **Collections** ne remplace pas le **catalogue structuré** ; elle regroupe des **sélections** et des **angles** de découverte **sans dupliquer** la seule arborescence « grandes familles » de la **Boutique**. Si la frontière paraît floue en implémentation, trancher explicitement ce qui relève de **/shop** (familles) vs pages **collections** éditoriales.
 
-#### Offrir
+#### Communauté *(niveau 1, sous-navigation)*
 
-Entrée dédiée à la logique **cadeau**.
+Entrée **Communauté** regroupe le **pôle éditorial et convivial** du site (pas le catalogue produit structuré). **Niveau 2** :
 
-Peut inclure :
+- **Idées cadeaux** — URL **`/offrir`** ; logique **cadeau** (sélections, coffrets, attentions, budgets). **Vigilance** : l’entrée n’est **pertinente** que si le canal peut montrer un **mini-univers crédible** ; sinon arbitrer contenu minimal, repli vers **Collections**, ou page allégée.
+- **Recettes** — entrée **éditoriale** reliant produits et usages ; nécessite une **charge éditoriale** réelle (contenus reliés aux produits). Si capacité insuffisante à l’ouverture : calendrier minimal, **Blog** comme relais, ou retrait temporaire du sous-menu — **à trancher** avant gel.
+- **Blog** — URL **`/blog`** (activation **`website_blog`** côté Odoo pour le rendu standard). Peut servir de **repli** ou de complément aux recettes.
 
-- idées cadeaux ;
-- coffrets ;
-- sélections par budget ;
-- attentions / occasions.
-
-**Vigilance** : le libellé **Offrir** n’est **pertinent** en Phase 1 que si le canal peut montrer un **mini-univers crédible** (quelques idées cadeaux, une sélection simple, coffrets ou attentions **réellement** disponibles). Sinon l’entrée **décrédibilise** le retail — arbitrer : fusion avec **Collections**, contenu minimal **avant** ouverture, ou **repousser** l’entrée.
-
-#### Recettes
-
-Entrée **éditoriale** reliant produits et usages.
-
-Objectif :
-
-- enrichir l’expérience ;
-- soutenir l’exploration ;
-- crédibiliser la logique retail.
-
-**Vigilance** : l’entrée suppose une **charge éditoriale** (contenus recettes reliés aux produits). Si la capacité n’est pas là à l’ouverture : **assumer** un calendrier éditorial minimal, **retirer** l’entrée du menu jusqu’à preuve de contenu, ou **remplacer provisoirement** par une entrée plus simple (ex. **Blog** / **Inspirations**) — **à trancher** avant gel.
+**UI** : sous-menu **desktop** via `<details>` (sans dépendance JS lourd) ; **mobile** : bloc titré « Communauté » puis liens indentés dans le tiroir — voir `views/layout/ckr_header.xml`.
 
 #### À propos
 
@@ -162,8 +148,7 @@ Doit rester simple et accessible.
 
 - Boutique
 - Collections
-- Offrir
-- Recettes
+- **Communauté** — Idées cadeaux · Recettes · Blog *(sous-menus)*
 - À propos
 - Contact
 
@@ -171,8 +156,7 @@ Doit rester simple et accessible.
 
 - Boutique
 - Collections
-- Offrir
-- Recettes
+- **Communauté** — Idées cadeaux · Recettes · Blog
 - Pro
 - À propos
 - Contact
@@ -181,12 +165,12 @@ Doit rester simple et accessible.
 
 ### Décision Phase 1 (niveau 1)
 
-**Option B — menu retail enrichi**, avec **vigilance** particulière sur la **réalité éditoriale** des entrées **Offrir** et **Recettes**.
+**Option B — menu retail enrichi**, avec **vigilance** sur la **réalité éditoriale** des entrées sous **Communauté** (**Idées cadeaux**, **Recettes**, **Blog**).
 
-**Hypothèse recommandée à ce stade** : **Option B**, sous réserve de **confirmation** de la capacité à alimenter **Offrir** et **Recettes** de manière **crédible** dès la Phase 1.  
+**Hypothèse recommandée à ce stade** : **Option B**, sous réserve de **confirmation** de la capacité à alimenter notamment **Idées cadeaux** et **Recettes** de manière **crédible** dès la Phase 1.  
 Si cette capacité fait **défaut** à l’ouverture, **Option A** reste une **version transitoire** acceptable (sans renoncer à l’ambition **retail** à moyen terme).
 
-**Point de vigilance** : un menu **retail riche** sans **contenus minimaux** derrière **Offrir** et **Recettes** **dégrade la confiance** — l’arbitrage final dépend autant du **goût** que de la question : *peut-on nourrir ces entrées sans faire faux ?*
+**Point de vigilance** : un menu **retail riche** sans **contenus minimaux** derrière les rubriques éditoriales **dégrade la confiance** — l’arbitrage final dépend autant du **goût** que de la question : *peut-on nourrir ces entrées sans faire faux ?*
 
 ---
 
@@ -204,8 +188,8 @@ Un mégamenu n’est acceptable que si :
 
 ### 5.2 Hypothèse recommandée
 
-- **desktop** : menu principal clair, sous-entrées limitées ;
-- **mobile** : navigation courte, repliable, sans surcharge.
+- **desktop** : menu principal clair ; un seul groupe à sous-entrées (**Communauté**), déplié en **liste compacte** (pas de mégamenu catalogue) ;
+- **mobile** : navigation courte ; sous-liens **Communauté** regroupés sous un titre dans le tiroir (cf. §3.2).
 
 ---
 
@@ -267,23 +251,22 @@ La **structure de principe** **Option B** est posée en **§4** et **§10**. Res
 - **Nouveautés** : entrée de **niveau 1** dédiée ou intégration sous **Boutique** / **Collections** ?
 - **Origines / Territoires** : entrée de **niveau 1** en Phase 1 ou traitement par **pages** / **collections** ?
 - **Pro / B2B** : confirmer le repli **hors menu principal** (footer, **À propos**, lien discret) jusqu’à maturité du canal.
-- **Calendrier éditorial minimal** pour **Offrir** et **Recettes** ; faute de quoi **révision** du menu (repli **Option A** transitoire, cf. §4).
+- **Calendrier éditorial minimal** pour **Idées cadeaux** / **Recettes** (et le cas échéant **Blog**) ; faute de quoi **révision** du menu (repli **Option A** transitoire, cf. §4).
 
 ---
 
 ## 10. Décision cible à formaliser
 
 **Décision cible Phase 1** :  
-Le menu principal de **C-Kreyol** retient une structure **retail enrichie** de **niveau 1** :
+Le menu principal de **C-Kreyol** retient une structure **retail enrichie** : **cinq entrées de niveau 1**, dont **Communauté** regroupant **trois liens de niveau 2** :
 
 - **Boutique**
 - **Collections**
-- **Offrir**
-- **Recettes**
+- **Communauté** — **Idées cadeaux** (`/offrir`), **Recettes**, **Blog** (`/blog`)
 - **À propos**
 - **Contact**
 
-Cette structure pourra être **révisée** si la **charge éditoriale** réelle ne permet pas de soutenir de manière **crédible** les entrées **Offrir** et **Recettes** au moment de l’ouverture (cf. §3.2 et §4).
+Cette structure pourra être **révisée** si la **charge éditoriale** réelle ne permet pas de soutenir de manière **crédible** les rubriques sous **Communauté** au moment de l’ouverture (cf. §3.2 et §4).
 
 Le menu principal devra en tout état de cause :
 
@@ -298,10 +281,10 @@ Le menu principal devra en tout état de cause :
 
 La **Phase 2** introduit sur la **homepage** un bloc **Explorer / Par où commencer** qui ne remplace **pas** la décision **Option B** ci-dessus : le menu reste la **navigation générale du site**.
 
-* **Menu (§10)** : Boutique, Collections, Offrir, Recettes, À propos, Contact — rubriques **canal** (commerce + éditorial + relation).
+* **Menu (§10)** : **Boutique**, **Collections**, **Communauté** (sous-menus **Idées cadeaux**, **Recettes**, **Blog**), **À propos**, **Contact** — rubriques **canal** (commerce + éditorial + relation).
 * **Explorer** : **cinq portes d’exploration catalogue** — libellés front au **pluriel** **Promotions**, **Collections**, **Kits**, **Catégories**, **Origines** (ordre d’affichage). Pour la porte 3, **règle de bi-lexique** [ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008) : libellé **visiteur** = **Kits** (univers alimentaire C-Kreyol : kit colombo, kit apéritif…) ; **grille back-office / source de vérité** = **Pack** (module OCA **`product_pack`**, case *« Est un pack ? »* = booléen `pack_ok`, onglet *Pack*). URL visible **`/kits`** ; conventions internes en **Pack** — [ADR-CKR-006 / 008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-006), [WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md) Bloc 3. **Mise en page** des cartes sur l’accueil (rail horizontal **manuel**, sans autoplay, boutons précédent/suivant) : même référence **WIREFRAME** — sous-section *Présentation front (implémentation)*.
 
-En particulier, **Offrir** et **Recettes** ne sont **pas** des cartes **Explorer** ; ils restent accessibles via le **header** (et le **bloc éditorial** homepage si contenu disponible). **Promotions**, **Origines** et **Kits** *(front, porte **Pack** en back-office)* sont portés par Explorer (pages dédiées ou `/shop` selon arbitrages métier / paramétrage Odoo).
+En particulier, **Idées cadeaux**, **Recettes** et **Blog** (sous **Communauté**) ne sont **pas** des cartes **Explorer** ; ils restent accessibles via le **header** (et le **bloc éditorial** homepage si contenu disponible). **Promotions**, **Origines** et **Kits** *(front, porte **Pack** en back-office)* sont portés par Explorer (pages dédiées ou `/shop` selon arbitrages métier / paramétrage Odoo).
 
 ---
 
@@ -309,10 +292,11 @@ En particulier, **Offrir** et **Recettes** ne sont **pas** des cartes **Explorer
 
 | Date | Changement |
 |------|------------|
-| 2026-04-21 | Création : rôle du menu, principes, proposition de base (6 entrées), options A/B/C, mégamenu, utilitaires, mobile, questions, décision **[à compléter]**. |
+| 2026-04-21 | Création : rôle du menu, principes, proposition de base (puis **5 entrées niveau 1** + sous-menus), options A/B/C, mégamenu, utilitaires, mobile, questions, décision **[à compléter]**. |
 | 2026-04-21 | **Option B** posée comme **décision Phase 1** (§4, §10) avec repli **Option A** si charge éditoriale insuffisante ; distinctions **Boutique** / **Collections** ; vigences **Offrir** / **Recettes** ; **§2.4** intitulés niveau 1 ; lecture **option C** vs B2C. |
 | 2026-04-21 | Lien vers **[WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md)** dans l’en-tête (cohérence menu / homepage). |
 | 2026-04-21 | **§11** : complément — section **Explorer** homepage **≠** menu Option B ; renvois **ADR-006/008** + **WIREFRAME** Bloc 3. |
 | 2026-04-21 | **§11** : porte **Kits → Packs** (et référence doctrine interne « composition » retirée) — alignement sur la logique pack Odoo / OCA **`product_pack`** (vérification back-office : case *« Est un pack ? »*, onglet *Pack*). |
 | 2026-04-21 | **§11** : formalisation de la **règle de bi-lexique** [ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008) — libellé **visiteur** repassé à **Kits** (univers alimentaire), **grille back-office / source de vérité** conservée sur **Pack** (`pack_ok`, `product_pack`). URL visible **`/kits`** ; conventions internes SPEC / CONTRAT_URL / paramètre CK maintenues en **Pack**. |
 | 2026-04-23 | **§11** : renvoi **WIREFRAME** — sous-section *Présentation front* (rail Explorer **manuel**, prev/next, sans autoplay). |
+| 2026-05-05 | **Option B** alignée implémentation : entrée **Communauté** avec sous-menus **Idées cadeaux** (`/offrir`), **Recettes**, **Blog** ; §3, §4, §10, §11 et vigences éditoriales mises à jour (header + `hooks.py`). |

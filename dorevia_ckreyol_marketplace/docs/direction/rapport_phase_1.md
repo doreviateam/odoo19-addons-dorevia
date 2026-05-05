@@ -30,7 +30,7 @@ Le périmètre fonctionnel traité s’étend du **socle d’identification et d
 | Domaine | Réalisation | Notes |
 |---------|-------------|--------|
 | **Page de connexion** `/web/login` | Personnalisation du formulaire (titre « Mon compte », libellés orientés client, masquage d’éléments techniques superflus, CTA et champs alignés charte) | Validée côté MOA |
-| **Header site** | Header personnalisé (logo, menu Option B, utilitaires). Menu compte : solution native-friendly (`<details>` + styles), déconnexion et accès `/my`. Correction des conflits CSS (chevauchement, troncature) | Validée |
+| **Header site** | Header personnalisé (logo, menu Option B avec groupe **Communauté**, utilitaires). Menu compte : solution native-friendly (`<details>` + styles), déconnexion et accès `/my`. Correction des conflits CSS (chevauchement, troncature) | Validée |
 | **Langues et devises** | Activation des variantes natives **inline + codes** pour le sélecteur de langue ; réinjection des `t_call` natifs (langue + `pricelist_list`) dans le header et le drawer mobile ; fichier `data/website_selectors_activation.xml` | Cible V1 : FR / EN / ES et EUR / GBP selon configuration réelle ; **pas de `post_init_hook`** — voir doc exploitation |
 | **Documentation exploitation** | `docs/direction/EXPLOITATION_I18N_DEVISES.md` | Checklist back-office (langues publiées, pricelists, traductions, e-mails) |
 | **Portail client** `/my` | Scope et styles d’ensemble (titres, cartes, colonne profil) | Améliorations ultérieures possibles hors périmètre de cette clôture |

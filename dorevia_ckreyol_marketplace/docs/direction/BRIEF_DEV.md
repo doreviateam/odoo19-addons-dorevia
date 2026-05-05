@@ -136,7 +136,7 @@ Le développement doit s’appuyer en priorité sur les documents suivants (chem
 | [NOTE_DE_CADRAGE.md](NOTE_DE_CADRAGE.md) | Arbitrages métier, juridique, logistique, périmètre V1. |
 | [ARCHITECTURE_DECISION_RECORD.md](ARCHITECTURE_DECISION_RECORD.md) | **ADR-CKR-001** à **011** (doctrine Odoo 19 CE, front spécifique, menu/footer, modèle commercial, promesse / disponibilité, homepage/portes, vision média-commerce, **e-commerce B2C+B2B**, **langues créoles**). |
 | [DESIGN.md](DESIGN.md) | Principes design / retail / front, zones de page, mobile. |
-| [STRUCTURE_MENU_PRINCIPAL.md](STRUCTURE_MENU_PRINCIPAL.md) | Menu **Option B**, entrées cibles, mobile. |
+| [STRUCTURE_MENU_PRINCIPAL.md](STRUCTURE_MENU_PRINCIPAL.md) | Menu **Option B** (dont **Communauté** + sous-menus), entrées cibles, mobile. |
 | [WIREFRAME_HOMEPAGE.md](WIREFRAME_HOMEPAGE.md) | Structure homepage Phase 1 (blocs, variante retenue). |
 | [SPEC_HERO_HOMEPAGE.md](SPEC_HERO_HOMEPAGE.md) | Hero : **copy gelé** §7, CTA, hiérarchie provenance, **banque photos** homepage. |
 | [CHARTE_GRAPHIQUE_PHASE1.md](CHARTE_GRAPHIQUE_PHASE1.md) | Direction A, palette, typos, CTA, photo §7 (dont **7.2** hiérarchie packshots / hero). |

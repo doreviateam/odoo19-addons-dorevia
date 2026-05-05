@@ -39,7 +39,7 @@ Elle ne doit pas chercher à **tout dire**, ni à reproduire la profondeur d’u
   - accès **commercial**,
   - **preuve** de sérieux,
   - **respiration** visuelle ;
-- **cohérence** avec la [navigation principale](STRUCTURE_MENU_PRINCIPAL.md) (**Option B** retenue en principe — entrées **Boutique**, **Collections**, **Offrir**, **Recettes**, etc.) ;
+- **cohérence** avec la [navigation principale](STRUCTURE_MENU_PRINCIPAL.md) (**Option B** retenue en principe — entrées **Boutique**, **Collections**, **Communauté** *— Idées cadeaux, Recettes, Blog*, **À propos**, **Contact**) ;
 - **mobile-first** ;
 - **Zéro carrousel imposé** sur le **hero** et sur la **structure principale** du bloc **sélection produits** (cf. §3 Bloc 5) : éviter d’y faire porter la lecture exclusive — risques classiques sur **compréhension**, **mobile**, **performance** et **conversion**. Le **Bloc 3 Explorer** est une **grille asymétrique** de portes (**sans autoplay**) — détail sous le Bloc 3 (*Présentation front*).
 
@@ -90,7 +90,7 @@ Les blocs ci-dessous sont numérotés pour la **lecture** ; l’**ordre vertical
 
 Les libellés sont au **pluriel** et **orientés visiteur** (chaque porte ouvre sur un **ensemble à explorer**) ; ils ne reproduisent pas nécessairement le vocabulaire interne du projet. La porte 3 en est l’illustration : **« Kits »** est le libellé visiteur retenu (plus parlant dans l’univers alimentaire C-Kreyol), **« Pack »** est la grille back-office conservée pour l’implémentation et la source de vérité (règle de bi-lexique [ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008)). Chaque porte doit avoir une **cible** claire, un **comportement** cohérent sur la **Boutique** `/shop` ou pages associées, et une **source de vérité** métier lorsque nécessaire.
 
-**Règle** : ce bloc **n’est pas** la reprise des quatre entrées « Boutique / Collections / Offrir / Recettes » du menu **Option B** ; **Offrir** et **Recettes** restent des **rubriques de site** (menu + blocs éditoriaux éventuels), pas des portes **Explorer** au sens Phase 2.
+**Règle** : ce bloc **n’est pas** la reprise des entrées « Boutique / Collections / Communauté (Idées cadeaux, Recettes, Blog) » du menu **Option B** ; **Idées cadeaux**, **Recettes** et le **Blog** restent des **rubriques de site** (menu + blocs éditoriaux éventuels), pas des portes **Explorer** au sens Phase 2.
 
 #### Présentation front (implémentation — **MVP2**)
 
@@ -133,7 +133,7 @@ avec **sélections sincères** (cf. [DESIGN.md §5.1](DESIGN.md)) — pas de **s
 
 **Objectif** : installer une **petite** logique de **collection**, **saison**, **usage** ou **cadeau**.
 
-**Vigilance** : même logique que pour le menu — si **Offrir** / **Recettes** ne sont pas **nourris** crédiblement, **réduire** ou **retirer** ce bloc (repli vers **variante sobre**, §5).
+**Vigilance** : même logique que pour le menu — si **Idées cadeaux** / **Recettes** (voire **Blog**) ne sont pas **nourris** crédiblement, **réduire** ou **retirer** ce bloc (repli vers **variante sobre**, §5).
 
 ### Bloc 7 — Bloc confiance
 
@@ -188,11 +188,11 @@ Version plus **complète**, **alignée** sur le menu **Option B** ([STRUCTURE_ME
 - **Entrées d’exploration**
 - **Mise en avant fournisseur / origine**
 - **Sélection produits**
-- **Bloc** collection / **Offrir** / **Recettes** (éditorial — **sous réserve** de contenu)
+- **Bloc** collection / **Idées cadeaux** / **Recettes** (éditorial — **sous réserve** de contenu)
 - **Bloc confiance**
 - **Footer**
 
-**Hypothèse recommandée à ce stade** : **variante retail enrichie** (§6), sous réserve de la **même vigilance** que pour le menu sur **Offrir** et **Recettes** ; sinon **variante sobre** (§5) en **transitoire** jusqu’à stabilisation du contenu.
+**Hypothèse recommandée à ce stade** : **variante retail enrichie** (§6), sous réserve de la **même vigilance** que pour le menu sur **Idées cadeaux** et **Recettes** ; sinon **variante sobre** (§5) en **transitoire** jusqu’à stabilisation du contenu.
 
 ---
 
@@ -213,7 +213,7 @@ Version plus **complète**, **alignée** sur le menu **Option B** ([STRUCTURE_ME
 *(Pour le **hero**, voir les arbitrages dans [SPEC_HERO_HOMEPAGE.md](SPEC_HERO_HOMEPAGE.md) — **Nantes** hors hero principal, **La Platine** plutôt **bloc 4+**, **origine produit** légitime dès le hero si sobre.)*
 
 - ~~**combien** d’entrées d’exploration afficher (2, 3 ou 4) ?~~ — **tranché** : **cinq** cartes **Explorer** ([ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008), présent document Bloc 3).
-- faut-il un bloc visuel **Offrir** dès l’ouverture ?
+- faut-il un bloc visuel **Idées cadeaux** dès l’ouverture ?
 - faut-il un bloc **Recettes** dès l’ouverture ?
 - **combien** de produits mettre en avant dans la sélection (grille courte) ?
 
@@ -224,9 +224,9 @@ Version plus **complète**, **alignée** sur le menu **Option B** ([STRUCTURE_ME
 **Décision cible Phase 1** :  
 La homepage retient la **variante retail enrichie** (§6), **cohérente** avec le menu principal **Option B** ([STRUCTURE_MENU_PRINCIPAL.md §10](STRUCTURE_MENU_PRINCIPAL.md)) :
 
-- **Hero** + **Explorer** (cinq portes : Promotions, **Kits** *(front)* / **Pack** *(back-office)*, Catégories, Collections, Origines) + **mise en avant fournisseur / origine** + **sélection produits** + **bloc éditorial** (collection / Offrir / Recettes selon contenu disponible) + **bloc confiance** + **footer** personnalisé.
+- **Hero** + **Explorer** (cinq portes : Promotions, **Kits** *(front)* / **Pack** *(back-office)*, Catégories, Collections, Origines) + **mise en avant fournisseur / origine** + **sélection produits** + **bloc éditorial** (collection / Idées cadeaux / Recettes selon contenu disponible) + **bloc confiance** + **footer** personnalisé.
 
-**Révision** : si la **charge éditoriale** ou le **catalogue** ne permettent pas une **mise en scène crédible** des blocs **Offrir** / **Recettes** (bloc 3 et/ou bloc 6), basculer en **variante sobre** (§5) jusqu’à stabilisation — sans remettre en cause la **direction** retail.
+**Révision** : si la **charge éditoriale** ou le **catalogue** ne permettent pas une **mise en scène crédible** des blocs **Idées cadeaux** / **Recettes** (bloc 3 et/ou bloc 6), basculer en **variante sobre** (§5) jusqu’à stabilisation — sans remettre en cause la **direction** retail.
 
 ---
 
@@ -245,3 +245,4 @@ La homepage retient la **variante retail enrichie** (§6), **cohérente** avec l
 | 2026-04-21 | **Bloc 3 Explorer** — **règle de bi-lexique** [ADR-CKR-008](ARCHITECTURE_DECISION_RECORD.md#adr-ckr-008) : le libellé **visiteur** repasse à **Kits** (univers alimentaire : kit colombo, kit apéritif, kit découverte) ; la **source de vérité** reste **Pack** (module OCA `product_pack`, `pack_ok`). URL visible **`/kits`** ; conventions internes (SPEC, CONTRAT_URL, paramètre CK, domaine) conservées en **Pack**. Libellés Explorer : Promotions, Collections, **Kits**, Catégories, Origines. |
 | 2026-04-23 | **§2** : nuance « zéro carrousel imposé » — **hors** Bloc 5 sélection ; **Bloc 3** = rail horizontal **manuel** (sans autoplay). **Bloc 3** : nouveau sous-paragraphe **Présentation front (implémentation)** — boutons prev/next, boucle, accessibilité, titre centré, rythme vertical hero / sections, `dir="ltr"`, fichiers `ckr_entries` + SCSS + JS. |
 | 2026-04-24 | **Bloc 3** : passage à la **grille asymétrique MVP2** (ordre Promotions → Kits → Catégories → Collections → Origines) ; documentation **Présentation front** et liste ordre § alignées ; retrait du rail + JS carrousel (module 19.0.1.8.0, [DECISION_EXPLORER_HOMEPAGE_MVP2.md](../mvp_02/DECISION_EXPLORER_HOMEPAGE_MVP2.md)). |
+| 2026-05-05 | Alignement menu **Option B** : **Communauté** (Idées cadeaux, Recettes, Blog) ; formulations « Offrir » remplacées par **Idées cadeaux** où pertinent ; cohérence [STRUCTURE_MENU_PRINCIPAL.md](STRUCTURE_MENU_PRINCIPAL.md) §10–§11. |

@@ -66,7 +66,7 @@ Fichiers **PNG versionnés** sous [`docs/assets/`](docs/assets/) pour le **cadra
 
 **Phase 1 — implémentation front livrée et clôturée côté bilan** (voir **[rapport de phase MOA](docs/direction/rapport_phase_1.md)**). Le module `dorevia_ckreyol_marketplace` est **installable** sur **Odoo 19 Community Edition** (dépendances `portal`, `website`, `website_sale`). Il fournit notamment :
 
-- un **header** avec **menu principal personnalisé** (Option B : Boutique / Collections / Offrir / Recettes / À propos / Contact), utilitaires (recherche, compte, panier), **menu compte** et **drawer mobile** ;
+- un **header** avec **menu principal personnalisé** (Option B : Boutique / Collections / **Communauté** *— Idées cadeaux, Recettes, Blog* / À propos / Contact), utilitaires (recherche, compte, panier), **menu compte** et **drawer mobile** ;
 - **langue et devise** : réemploi des mécanismes natifs Odoo (sélecteur langue inline + codes, pricelists) — prérequis exploitation : **[EXPLOITATION_I18N_DEVISES.md](docs/direction/EXPLOITATION_I18N_DEVISES.md)** ;
 - une **page de connexion** `/web/login` orientée « Mon compte » (masquage d’éléments techniques superflus, charte) ;
 - le **portail** `/my` (scope et styles d’ensemble) ;
@@ -293,7 +293,7 @@ Le code du projet **C-Kreyol** (canal e-commerce spécialisé, projet Dorevia) e
 | 2026-04-21 | **Note** : positionnement **retail digital** ; **B2B** intermédiaire à terme ; risque **sur-promesse** §12.2 ; critère succès **mobile** §13 ; **ADR-CKR-004** (*modèle opératoire Phase 1*, ébauche au registre). |
 | 2026-04-21 | **ADR-CKR-004** / **005** : **achat-revente** + **hub Nantes**, **flux tendu**, **stock consigné** ; note §4.4, §5.4, §11.3, §16 ; règle **métier d’abord** puis **Odoo** minimal acceptable. |
 | 2026-04-21 | **[`docs/direction/DESIGN.md`](docs/direction/DESIGN.md)** : cadrage **design / retail / front** (benchmarks, principes, zones de page, mobile, lien ADR). |
-| 2026-04-21 | **[`docs/direction/STRUCTURE_MENU_PRINCIPAL.md`](docs/direction/STRUCTURE_MENU_PRINCIPAL.md)** : menu principal Phase 1 (proposition 6 entrées, options A/B/C, mobile, ADR-003) ; lien depuis **DESIGN** §6. |
+| 2026-04-21 | **[`docs/direction/STRUCTURE_MENU_PRINCIPAL.md`](docs/direction/STRUCTURE_MENU_PRINCIPAL.md)** : menu principal Phase 1 (proposition puis **5 entrées niveau 1** + **Communauté**, options A/B/C, mobile, ADR-003) ; lien depuis **DESIGN** §6. |
 | 2026-04-21 | **[`docs/direction/WIREFRAME_HOMEPAGE.md`](docs/direction/WIREFRAME_HOMEPAGE.md)** : structure homepage Phase 1 (8 blocs, variantes, décision alignée **Option B**) ; lien **DESIGN** §7. |
 | 2026-04-21 | **[`docs/direction/SPEC_HERO_HOMEPAGE.md`](docs/direction/SPEC_HERO_HOMEPAGE.md)** : cadrage hero (titre, sous-texte, CTA, visuel) ; lien wireframe **Bloc 2**. |
 | 2026-04-21 | **[`docs/direction/CHARTE_GRAPHIQUE_PHASE1.md`](docs/direction/CHARTE_GRAPHIQUE_PHASE1.md)** : charte **minimale** (palette, typo, logo, CTA) avant gel hero ; liens **DESIGN** §14, **SPEC_HERO**. |
