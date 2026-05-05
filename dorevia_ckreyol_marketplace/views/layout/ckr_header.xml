@@ -69,10 +69,26 @@
                         </svg>
                     </a>
 
-                    <!-- Menu principal desktop (itere sur les enfants du Top Menu du website courant) -->
+                    <!-- Menu principal desktop (enfants du Top Menu ; sous-menus = details) -->
                     <nav class="ckr-header__nav" aria-label="Menu principal">
                         <t t-foreach="website.menu_id.child_id" t-as="submenu">
-                            <a t-att-href="submenu.url" t-esc="submenu.name"/>
+                            <t t-if="submenu.child_id">
+                                <details class="ckr-header__nav-dropdown">
+                                    <summary class="ckr-header__nav-summary">
+                                        <span t-esc="submenu.name"/>
+                                    </summary>
+                                    <div class="ckr-header__nav-dropdown-panel" role="menu">
+                                        <t t-foreach="submenu.child_id" t-as="subchild">
+                                            <a role="menuitem"
+                                               t-att-href="subchild.url"
+                                               t-esc="subchild.name"/>
+                                        </t>
+                                    </div>
+                                </details>
+                            </t>
+                            <t t-else="">
+                                <a t-att-href="submenu.url" t-esc="submenu.name"/>
+                            </t>
                         </t>
                     </nav>
 
@@ -159,7 +175,19 @@
 
                     <nav class="ckr-drawer__nav" aria-label="Menu principal (mobile)">
                         <t t-foreach="website.menu_id.child_id" t-as="submenu_m">
-                            <a t-att-href="submenu_m.url" t-esc="submenu_m.name"/>
+                            <t t-if="submenu_m.child_id">
+                                <div class="ckr-drawer__group">
+                                    <div class="ckr-drawer__group-title" t-esc="submenu_m.name"/>
+                                    <t t-foreach="submenu_m.child_id" t-as="child_m">
+                                        <a class="ckr-drawer__sublink"
+                                           t-att-href="child_m.url"
+                                           t-esc="child_m.name"/>
+                                    </t>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <a t-att-href="submenu_m.url" t-esc="submenu_m.name"/>
+                            </t>
                         </t>
                     </nav>
 
