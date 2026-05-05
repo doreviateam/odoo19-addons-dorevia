@@ -33,6 +33,8 @@
                         </div>
 
                         <div class="ckr-demande-pro__form">
+                            <!-- Repliable quand le bloc « Être rappelé » est ouvert (voir ckr_demande_compte_pro.js). -->
+                            <div id="ckrDemandeProMainFormCollapse" class="collapse show">
                             <section class="s_website_form ckr-demande-pro__website-form" data-vcss="001" data-snippet="s_website_form">
                                 <div class="container px-0">
                                     <form id="ckr_demande_compte_pro_form"
@@ -125,6 +127,7 @@
                                     </form>
                                 </div>
                             </section>
+                            </div>
                         </div>
 
                         <!-- MVP03+ : rappel conseiller (formulaire repliable ; ≠ demande compte pro). -->

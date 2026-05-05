@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.93",
+    "version": "19.0.1.10.94",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -44,6 +44,7 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   (lien ``/appointment`` si ``website_appointment`` installé, sinon ``/contact`` ; disclaimer).
 * 19.0.1.10.93 : demande pro — bloc « Être rappelé » (formulaire repliable → ``crm.lead``,
   ``referred`` = ``CK-MVP03-rappel-conseiller``, champ ``ckr_callback_slot`` ; disclaimer).
+* 19.0.1.10.94 : demande pro — ouverture « Être rappelé » replie le formulaire principal (JS Bootstrap).
 
 Portee :
 
@@ -452,6 +453,7 @@ ARCHITECTURE_DECISION_RECORD).
             "dorevia_ckreyol_marketplace/static/src/js/ckr_header_drawer.js",
             "dorevia_ckreyol_marketplace/static/src/js/ckr_shop_sidebar.js",
             "dorevia_ckreyol_marketplace/static/src/js/ckr_homepage_hero_rotator.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_demande_compte_pro.js",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_header.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_locale.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_product.scss",
