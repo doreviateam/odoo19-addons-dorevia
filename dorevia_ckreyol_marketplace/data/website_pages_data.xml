@@ -34,7 +34,7 @@
 
     <!-- Demande compte professionnel (MVP03 — formulaire → CRM via website_crm) -->
     <record id="website_page_demande_compte_pro" model="website.page">
-        <field name="name">Demande compte professionnel</field>
+        <field name="name">Demande d'ouverture de compte professionnel</field>
         <field name="url">/demande-compte-professionnel</field>
         <field name="website_published">True</field>
         <field name="is_published">True</field>

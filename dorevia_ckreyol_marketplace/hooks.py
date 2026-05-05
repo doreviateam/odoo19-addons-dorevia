@@ -244,8 +244,8 @@ def _ensure_featured_collection_parameter(env):
     )
 
 
-def _whitelist_crm_lead_referred_for_website_form(cr):
-    """Autorise ``referred`` sur les formulaires Website (champ masqué MVP03).
+def _whitelist_crm_lead_pro_form_fields(cr):
+    """Autorise ``referred`` et ``ckr_activity_type`` sur les formulaires Website (MVP03).
 
     ``formbuilder_whitelist`` exige le groupe Designer ; en hook superuser on
     applique la même mise à jour SQL que le core (voir ``website_form.py``).
@@ -254,16 +254,21 @@ def _whitelist_crm_lead_referred_for_website_form(cr):
         """
         UPDATE ir_model_fields
         SET website_form_blacklisted = FALSE
-        WHERE model = %s AND name = %s
+        WHERE model = %s AND name IN %s
         """,
-        ("crm.lead", "referred"),
+        ("crm.lead", ("referred", "ckr_activity_type")),
     )
+
+
+def _whitelist_crm_lead_referred_for_website_form(cr):
+    """Compat : ancien nom ; délègue à ``_whitelist_crm_lead_pro_form_fields``."""
+    _whitelist_crm_lead_pro_form_fields(cr)
 
 
 def post_init_hook(cr, registry):
     """Déclenché à l'installation initiale du module (signature Odoo standard)."""
     env = Environment(cr, SUPERUSER_ID, {})
-    _whitelist_crm_lead_referred_for_website_form(cr)
+    _whitelist_crm_lead_pro_form_fields(cr)
     _sync_ckr_menus(env)
     _ensure_featured_collection_parameter(env)
     env["website"].ckr_ensure_showcase_featured_on_empty_websites()

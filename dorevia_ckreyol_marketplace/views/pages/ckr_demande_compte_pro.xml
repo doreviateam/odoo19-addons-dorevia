@@ -3,9 +3,9 @@
 
     <!-- Page publique : demande d'ouverture de compte professionnel (MVP03).
          Formulaire Website → crm.lead via website_crm (action « Create an Opportunity »).
-         Champ masqué ``referred`` + logique ``website_form_input_filter`` (models/crm_lead.py). -->
+         Champs masqués ``referred`` / ``name`` + logique ``website_form_input_filter`` (models/crm_lead.py). -->
 
-    <template id="ckr_page_demande_compte_pro" name="C-Kreyol: Demande compte professionnel">
+    <template id="ckr_page_demande_compte_pro" name="C-Kreyol: Demande ouverture compte professionnel">
         <t t-call="website.layout">
             <t t-set="logged_partner" t-value="request.env['website.visitor']._get_visitor_from_request().partner_id"/>
             <t t-set="ckr_pro_form_values" t-value="{
@@ -13,16 +13,22 @@
                 'contact_name': request.params.get('contact_name', ''),
                 'partner_name': request.params.get('partner_name', ''),
                 'phone': request.params.get('phone', ''),
+                'ckr_activity_type': request.params.get('ckr_activity_type', ''),
                 'description': request.params.get('description', ''),
             }"/>
             <span class="hidden" data-for="ckr_demande_compte_pro_form" t-att-data-values="ckr_pro_form_values"/>
-            <main class="ckr-page ckr-root">
+            <main class="ckr-page ckr-root ckr-page--demande-pro">
                 <section class="ckr-section">
                     <div class="ckr-container">
-                        <h1>Demande de compte professionnel</h1>
-                        <p class="ckr-lead">
-                            Réservé aux professionnels. Après envoi, notre équipe examine votre demande
-                            avant toute activation de conditions ou tarifs B2B.
+                        <h1>Demande d&apos;ouverture de compte professionnel</h1>
+                        <p class="ckr-lead mb-2">
+                            Vous représentez une entreprise, une boutique, un restaurant, une collectivité ou une organisation ?
+                        </p>
+                        <p class="mb-2">
+                            Vous pouvez nous transmettre une demande d&apos;ouverture de compte professionnel.
+                        </p>
+                        <p class="mb-0">
+                            L&apos;accès aux conditions professionnelles est soumis à validation par l&apos;équipe C-Kreyol.
                         </p>
 
                         <section class="s_website_form mt-4" data-vcss="001" data-snippet="s_website_form">
@@ -78,16 +84,34 @@
                                             </label>
                                             <input id="ckr_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" required="" data-fill-with="phone"/>
                                         </div>
+                                        <div class="mb-3 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="selection" data-name="Field">
+                                            <label class="s_website_form_label" style="width: 200px" for="ckr_pro_activity">
+                                                <span class="s_website_form_label_content">Type d&apos;activité</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <select id="ckr_pro_activity"
+                                                    name="ckr_activity_type"
+                                                    class="form-control form-select s_website_form_input"
+                                                    required="">
+                                                <option value="">— Sélectionnez —</option>
+                                                <option value="boutique_epicerie">Boutique / épicerie fine</option>
+                                                <option value="restaurant_traiteur">Restaurant / traiteur</option>
+                                                <option value="distributeur">Distributeur</option>
+                                                <option value="collectivite_ce">Collectivité / comité d&apos;entreprise</option>
+                                                <option value="association">Association / organisation</option>
+                                                <option value="autre">Autre</option>
+                                            </select>
+                                        </div>
                                         <div class="mb-3 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
                                             <label class="s_website_form_label" style="width: 200px" for="ckr_pro_description">
                                                 <span class="s_website_form_label_content">Message</span>
                                                 <span class="s_website_form_mark"> *</span>
                                             </label>
-                                            <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="6" placeholder="Indiquez notamment votre type d&apos;activité et toute information utile à l&apos;étude de votre dossier."></textarea>
+                                            <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="6" placeholder="Précisions utiles à l&apos;étude de votre dossier (effectif, zone géographique, précisions si « Autre », etc.)."></textarea>
                                         </div>
                                         <div class="mb-0 py-2 col-12 s_website_form_submit s_website_form_no_submit_label text-end" data-name="Submit Button">
                                             <div style="width: 200px;" class="s_website_form_label"/>
-                                            <a href="#" role="button" class="btn btn-primary s_website_form_send">Envoyer la demande</a>
+                                            <a href="#" role="button" class="btn ckr-btn ckr-btn--primary s_website_form_send">Envoyer la demande</a>
                                             <span id="s_website_form_result"/>
                                         </div>
                                     </div>
@@ -95,7 +119,10 @@
                             </div>
                         </section>
 
-                        <p class="small text-muted mt-4 mb-0">
+                        <p class="small text-muted mt-4 mb-1">
+                            Vous souhaitez commander à titre personnel ?
+                        </p>
+                        <p class="small text-muted mb-0">
                             <a href="/web/signup">Créer un compte particulier</a>
                             ·
                             <a href="/web/login">Connexion</a>
@@ -117,7 +144,7 @@
                             avant toute validation ; vous serez recontacté si des précisions sont nécessaires.
                         </p>
                         <p class="mt-4">
-                            <a href="/shop" class="btn btn-primary">Continuer sur la boutique</a>
+                            <a href="/shop" class="btn ckr-btn ckr-btn--primary">Continuer sur la boutique</a>
                         </p>
                     </div>
                 </section>

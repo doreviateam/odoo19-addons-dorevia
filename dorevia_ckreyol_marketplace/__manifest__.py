@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.79",
+    "version": "19.0.1.10.80",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -18,6 +18,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   (composant web.user_switch sur web.login).
 * 19.0.1.10.79 : login — formulaire toujours visible (retrait du ``d-none`` implicite
   Odoo 19 après suppression de web.user_switch).
+* 19.0.1.10.80 : demande compte pro — copies MOA, champ ``ckr_activity_type``,
+  CTA ``ckr-btn``, phrase B2C avant liens.
 
 Portee :
 
@@ -341,6 +343,7 @@ ARCHITECTURE_DECISION_RECORD).
         "views/ckr_shop_collection_views.xml",
         "views/product_template_ckr_collection_views.xml",
         "views/ckr_circle_subscriber_views.xml",
+        "views/crm_lead_ckr_views.xml",
         # --- Activation des variantes natives Odoo ---
         # (selecteur de langue : inline + codes, cf. docs/direction/EXPLOITATION_I18N_DEVISES.md)
         "data/website_selectors_activation.xml",

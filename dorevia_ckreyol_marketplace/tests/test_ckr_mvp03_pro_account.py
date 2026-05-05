@@ -21,12 +21,15 @@ class TestCkrMvp03ProAccountLead(TransactionCase):
             "contact_name": "Alex",
             "email_from": "alex@example.org",
             "phone": "0690123456",
+            "ckr_activity_type": "boutique_epicerie",
             "description": "Message test.",
         }
         out = Lead.website_form_input_filter(request, dict(values))
         self.assertIn("Ma Boutique SAS", out["name"])
         self.assertIn("Demande compte pro C-Kreyol MVP03", out["name"])
         self.assertTrue(out["description"].startswith("[Demande compte pro C-Kreyol MVP03]"))
+        self.assertIn("Type d'activité :", out["description"])
+        self.assertIn("épicerie", out["description"])
 
     def test_website_form_input_filter_unchanged_without_marker(self):
         Lead = self.env["crm.lead"]
