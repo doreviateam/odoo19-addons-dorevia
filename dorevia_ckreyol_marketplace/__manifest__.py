@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.76",
+    "version": "19.0.1.10.77",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -10,6 +10,10 @@ C-Kreyol - Canal e-commerce specialise (front Phase 1)
 
 Module de theme pour le canal de vente en ligne specialise C-Kreyol
 (projet Dorevia), sur Odoo 19 Community Edition.
+
+* 19.0.1.10.77 : page ``/demande-compte-professionnel`` (formulaire Website
+  vers ``crm.lead`` via ``website_crm``), garde-fous MVP03 (pas de portail
+  pro auto), liens login/signup.
 
 Portee :
 
@@ -304,6 +308,7 @@ ARCHITECTURE_DECISION_RECORD).
         "portal",
         "website",
         "website_sale",
+        "website_crm",
         "mass_mailing",
         # Theme Classic Store : remplace `products_item` (prix dans la colonne texte,
         # panier dans `o_quick_add_btn`) — le module CK restaure la tuile standard
@@ -363,6 +368,7 @@ ARCHITECTURE_DECISION_RECORD).
         "views/pages/ckr_homepage.xml",
         "views/pages/ckr_about.xml",
         "views/pages/ckr_contact.xml",
+        "views/pages/ckr_demande_compte_pro.xml",
         "views/pages/ckr_privacy.xml",
         "views/pages/ckr_terms.xml",
         # Note : views/pages/ckr_collections.xml (stub transitoire) a ete

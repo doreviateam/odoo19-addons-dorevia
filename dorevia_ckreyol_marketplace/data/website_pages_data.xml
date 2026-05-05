@@ -32,6 +32,23 @@
         <field name="view_id" ref="ckr_page_contact"/>
     </record>
 
+    <!-- Demande compte professionnel (MVP03 — formulaire → CRM via website_crm) -->
+    <record id="website_page_demande_compte_pro" model="website.page">
+        <field name="name">Demande compte professionnel</field>
+        <field name="url">/demande-compte-professionnel</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_demande_compte_pro"/>
+    </record>
+
+    <record id="website_page_demande_compte_pro_merci" model="website.page">
+        <field name="name">Merci — demande compte professionnel</field>
+        <field name="url">/demande-compte-pro-merci</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_demande_compte_pro_merci"/>
+    </record>
+
     <!-- Politique de confidentialite (lien formulaire Cercle -> /privacy) -->
     <record id="website_page_privacy" model="website.page">
         <field name="name">Confidentialite</field>

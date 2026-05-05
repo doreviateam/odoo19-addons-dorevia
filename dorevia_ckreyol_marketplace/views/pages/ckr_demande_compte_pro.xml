@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Page publique : demande d'ouverture de compte professionnel (MVP03).
+         Formulaire Website → crm.lead via website_crm (action « Create an Opportunity »).
+         Champ masqué ``referred`` + logique ``website_form_input_filter`` (models/crm_lead.py). -->
+
+    <template id="ckr_page_demande_compte_pro" name="C-Kreyol: Demande compte professionnel">
+        <t t-call="website.layout">
+            <t t-set="logged_partner" t-value="request.env['website.visitor']._get_visitor_from_request().partner_id"/>
+            <t t-set="ckr_pro_form_values" t-value="{
+                'email_from': request.params.get('email_from', ''),
+                'contact_name': request.params.get('contact_name', ''),
+                'partner_name': request.params.get('partner_name', ''),
+                'phone': request.params.get('phone', ''),
+                'description': request.params.get('description', ''),
+            }"/>
+            <span class="hidden" data-for="ckr_demande_compte_pro_form" t-att-data-values="ckr_pro_form_values"/>
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <h1>Demande de compte professionnel</h1>
+                        <p class="ckr-lead">
+                            Réservé aux professionnels. Après envoi, notre équipe examine votre demande
+                            avant toute activation de conditions ou tarifs B2B.
+                        </p>
+
+                        <section class="s_website_form mt-4" data-vcss="001" data-snippet="s_website_form">
+                            <div class="container px-0">
+                                <form id="ckr_demande_compte_pro_form"
+                                      action="/website/form/"
+                                      method="post"
+                                      enctype="multipart/form-data"
+                                      class="o_mark_required"
+                                      data-mark="*"
+                                      data-model_name="crm.lead"
+                                      data-success-mode="redirect"
+                                      data-success-page="/demande-compte-pro-merci"
+                                      data-pre-fill="true">
+                                    <div class="s_website_form_rows row s_col_no_bgcolor">
+                                        <div class="mb-3 col-12 s_website_form_field s_website_form_dnone">
+                                            <input type="hidden"
+                                                   name="referred"
+                                                   class="form-control s_website_form_input"
+                                                   value="CK-MVP03-demande-compte-pro"/>
+                                        </div>
+                                        <div class="mb-3 col-12 s_website_form_field s_website_form_dnone">
+                                            <input type="hidden"
+                                                   name="name"
+                                                   class="form-control s_website_form_input"
+                                                   value="Demande compte pro C-Kreyol MVP03"/>
+                                        </div>
+                                        <div class="mb-3 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                            <label class="s_website_form_label" style="width: 200px" for="ckr_pro_partner_name">
+                                                <span class="s_website_form_label_content">Entreprise</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <input id="ckr_pro_partner_name" type="text" class="form-control s_website_form_input" name="partner_name" required="" data-fill-with="commercial_company_name"/>
+                                        </div>
+                                        <div class="mb-3 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                            <label class="s_website_form_label" style="width: 200px" for="ckr_pro_contact_name">
+                                                <span class="s_website_form_label_content">Nom du contact</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <input id="ckr_pro_contact_name" type="text" class="form-control s_website_form_input" name="contact_name" required="" data-fill-with="name"/>
+                                        </div>
+                                        <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
+                                            <label class="s_website_form_label" style="width: 200px" for="ckr_pro_email">
+                                                <span class="s_website_form_label_content">E-mail</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <input id="ckr_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" data-fill-with="email"/>
+                                        </div>
+                                        <div class="mb-3 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                            <label class="s_website_form_label" style="width: 200px" for="ckr_pro_phone">
+                                                <span class="s_website_form_label_content">Téléphone</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <input id="ckr_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" required="" data-fill-with="phone"/>
+                                        </div>
+                                        <div class="mb-3 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
+                                            <label class="s_website_form_label" style="width: 200px" for="ckr_pro_description">
+                                                <span class="s_website_form_label_content">Message</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="6" placeholder="Indiquez notamment votre type d&apos;activité et toute information utile à l&apos;étude de votre dossier."></textarea>
+                                        </div>
+                                        <div class="mb-0 py-2 col-12 s_website_form_submit s_website_form_no_submit_label text-end" data-name="Submit Button">
+                                            <div style="width: 200px;" class="s_website_form_label"/>
+                                            <a href="#" role="button" class="btn btn-primary s_website_form_send">Envoyer la demande</a>
+                                            <span id="s_website_form_result"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+
+                        <p class="small text-muted mt-4 mb-0">
+                            <a href="/web/signup">Créer un compte particulier</a>
+                            ·
+                            <a href="/web/login">Connexion</a>
+                        </p>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+    <template id="ckr_page_demande_compte_pro_merci" name="C-Kreyol: Merci — demande compte pro">
+        <t t-call="website.layout">
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <h1>Demande bien reçue</h1>
+                        <p class="ckr-lead">
+                            Merci pour votre message. Notre équipe examine les demandes de compte professionnel
+                            avant toute validation ; vous serez recontacté si des précisions sont nécessaires.
+                        </p>
+                        <p class="mt-4">
+                            <a href="/shop" class="btn btn-primary">Continuer sur la boutique</a>
+                        </p>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+</odoo>

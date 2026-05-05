@@ -64,6 +64,23 @@
                tabindex="2"
                t-attf-href="/web/reset_password?{{ keep_query() }}">Mot de passe oublié ?</a>
         </xpath>
+        <xpath expr="//a[contains(@t-attf-href, '/web/signup')]" position="after">
+            <p class="mt-3 mb-0 small text-center text-muted">
+                <a href="/demande-compte-professionnel">Demande compte professionnel</a>
+            </p>
+        </xpath>
+    </template>
+
+    <template id="ckr_auth_signup_demande_pro"
+              inherit_id="auth_signup.signup"
+              name="C-Kreyol: lien demande compte pro"
+              priority="45">
+        <xpath expr="//a[contains(@t-attf-href, '/web/login')]" position="after">
+            <p class="mt-3 mb-0 small text-muted text-center">
+                Compte professionnel ?
+                <a href="/demande-compte-professionnel">Demander l&apos;ouverture</a>
+            </p>
+        </xpath>
     </template>
 
 </odoo>

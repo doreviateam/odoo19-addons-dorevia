@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from . import crm_lead
 from . import ckr_circle_subscriber
 from . import ckr_shop_collection
 from . import ckr_shop_origin
