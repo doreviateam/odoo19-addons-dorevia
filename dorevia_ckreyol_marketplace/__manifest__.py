@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.78",
+    "version": "19.0.1.10.79",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -16,6 +16,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   pro auto), liens login/signup.
 * 19.0.1.10.78 : login — masquage du lien « Choisissez un utilisateur »
   (composant web.user_switch sur web.login).
+* 19.0.1.10.79 : login — formulaire toujours visible (retrait du ``d-none`` implicite
+  Odoo 19 après suppression de web.user_switch).
 
 Portee :
 

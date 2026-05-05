@@ -47,6 +47,12 @@
 
         <!-- Retire le sélecteur rapide d'utilisateurs (« Choisissez un utilisateur » — web.user_switch). -->
         <xpath expr="//owl-component[@name='web.user_switch']" position="replace"/>
+
+        <!-- Odoo 19 : le gabarit natif masque le formulaire avec ``d-none`` tant que le champ login
+             est vide ; le composant user_switch le ré-affichait. Sans lui, il faut forcer la classe. -->
+        <xpath expr="//form[contains(@t-attf-class, 'oe_login_form')]" position="attributes">
+            <attribute name="t-attf-class">oe_login_form</attribute>
+        </xpath>
     </template>
 
     <template id="ckr_auth_signup_login"
