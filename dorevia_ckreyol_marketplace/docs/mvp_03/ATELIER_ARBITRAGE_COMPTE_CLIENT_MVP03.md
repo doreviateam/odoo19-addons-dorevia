@@ -8,6 +8,8 @@
 
 > Ne pas rouvrir l’ensemble du dossier MVP 03 : ne figer que les **décisions** qui débloquent l’implémentation.
 
+**Pré-arbitrages MOA / tech** *(orientations non contractuelles jusqu’à validation en séance)* : [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — doctrine opérationnelle B2C/B2B, propositions détaillées, **tableau §4 pré-rempli** aligné sur le ticket, statut **GO dev avec réserve** proposé.
+
 ---
 
 ## 1. Activation du signup
@@ -306,6 +308,7 @@ Tests manuels complémentaires :
 |----------|------|
 | Ticket §4 | [TICKET_COMPTE_CLIENT_MVP03.md §4](TICKET_COMPTE_CLIENT_MVP03.md#4-arbitrages-à-trancher-avant-ou-pendant-le-dev) |
 | PV — §1.1 arbitrages testés | [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) |
+| Pré-arbitrages / §4 pré-rempli | [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) |
 
 ---
 
@@ -314,3 +317,4 @@ Tests manuels complémentaires :
 | Date | Événement |
 |------|-----------|
 | 2026-05-05 | Création du support d’atelier pour compléter le §4 ticket MVP03. |
+| 2026-05-05 | Lien vers [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — doctrine opérationnelle et pré-remplissage §4. |

@@ -15,6 +15,7 @@ Dossier de **cadrage** pour la vague **MVP 03** : parcours de **création de com
 | [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) | **Ticket d’exécution** dev : périmètre A/B, arbitrages, critères d’acceptation, checklist « prêt pour dev » |
 | [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) | **PV recette** — brouillon : parcours A/B, invité, `/my`, doublon email, mobile, accessibilité, BO |
 | [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) | **Atelier §4** — checklist MOA / tech pour compléter les arbitrages du ticket |
+| [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) | **Pré-arbitrages** — doctrine opérationnelle, §4 pré-rempli recommandé, tests, GO avec réserve |
 
 ---
 
@@ -94,6 +95,7 @@ Le **parcours particulier** doit rester **court** et ne pas devenir plus **admin
 | Spec UX | [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — **rédigé** (2026-05-05) |
 | Ticket dev MVP 03 | [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) — **rédigé** (2026-05-05), **brouillon** — arbitrage §4 puis GO dev |
 | Atelier §4 | [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) — **rédigé** (2026-05-05) ; à utiliser avant pickup dev |
+| Recommandation atelier | [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — **rédigé** (2026-05-05) ; pré-remplissage §4 et doctrine |
 | PR dev (`dorevia_ckreyol_marketplace`) | *À créer après GO* |
 | PV recette | [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) — **brouillon** (2026-05-05) ; verdict après implémentation |
 | Jeux de tests Odoo (`--test-tags=…`) | *À définir* |
@@ -122,3 +124,4 @@ Le **parcours particulier** doit rester **court** et ne pas devenir plus **admin
 | 2026-05-05 | Ticket MVP03 : amendements (exécutable si §4, hypothèse MVP, pas de portail auto demande pro, traçabilité BO, doublon email, PV `PV_RECETTE_COMPTE_CLIENT_MVP03.md`). |
 | 2026-05-05 | **GO documentaire** tampon date — [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) ; création / enrichissement **PV** [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) ; §4 *Email / notification* ; **GO documentaire (PV)** — base recette validée ; **dossier MVP 03 prêt arbitrage MOA / tech**. |
 | 2026-05-05 | Ajout [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) — checklist d’atelier pour verrouiller le §4 ticket (référencée depuis le ticket). |
+| 2026-05-05 | Ajout [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — pré-arbitrages MOA/tech, tableau §4 pré-rempli, doctrine opérationnelle B2C/B2B (lien atelier + ticket §4). |
