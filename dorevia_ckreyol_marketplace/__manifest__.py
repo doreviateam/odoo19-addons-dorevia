@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.64",
+    "version": "19.0.1.10.65",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -14,7 +14,7 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 Portee :
 
 * Header + menu principal personnalises (menu Option B : Boutique,
-  Collections, Offrir, Recettes, A propos, Contact).
+  Collections, Idées cadeaux, Recettes, A propos, Contact).
 * Footer personnalise.
 * Homepage structuree selon le wireframe Phase 1 (variante retail
   enrichie) : hero gele (copy SPEC_HERO §7), bloc Explorer
@@ -156,6 +156,8 @@ Portee :
 * 19.0.1.10.63 : /shop — finition UI maquette PJ sans changement fonctionnel :
   sidebar plus sobre, chips intégrées au catalogue, bloc Prix plus lisible, cartes
   produit homogénéisées et grille resserrée quand il y a peu de résultats.
+* 19.0.1.10.65 : menu principal et footer — libellé **Idées cadeaux** pour
+  `/offrir` (resync menu au upgrade).
 * 19.0.1.10.64 : fiche produit — Lot 2 UI proche maquette : sections
   éditoriales basses alimentées par données Odoo, bloc recommandations fiable,
   réassurance structurée et finition galerie/CTA sans changement de routes.

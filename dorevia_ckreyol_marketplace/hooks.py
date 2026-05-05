@@ -14,7 +14,7 @@ Portee :
        `website_sale` sous le menu racine (Home, Shop, Contact us)
        pour eviter les doublons avec le menu Option B.
     2. Creation des 6 entrees Option B :
-       Boutique, Collections, Offrir, Recettes, A propos, Contact.
+       Boutique, Collections, Idées cadeaux, Recettes, A propos, Contact.
     3. Nettoyage d eventuels website.page stale pointant sur "/" qui
        auraient ete crees par des versions anterieures du module
        (desormais la homepage reste portee par website.homepage_page
@@ -42,7 +42,7 @@ CKR_MENU_ITEMS = [
     # (nom, url, sequence) — doctrine : navigation catalogue via conteneur /shop.
     ("Boutique",    "/shop",        10),
     ("Collections", "/shop?ckr_collection_scope=all", 20),
-    ("Offrir",      "/offrir",      30),
+    ("Idées cadeaux", "/offrir",    30),
     ("Recettes",    "/recettes",    40),
     ("A propos",    "/a-propos",    50),
     ("Contact",     "/contact",     60),
@@ -95,8 +95,16 @@ def _sync_ckr_menus(env):
                 ("name", "=", name),
                 ("website_id", "=", website.id),
             ], limit=1)
+            # Compatibilite retroactive: renommer les entrees existantes
+            # en se basant sur l'URL pour eviter un doublon "Offrir".
+            if not existing:
+                existing = Menu.search([
+                    ("parent_id", "=", root.id),
+                    ("url", "=", url),
+                    ("website_id", "=", website.id),
+                ], limit=1)
             if existing:
-                existing.write({"url": url, "sequence": sequence})
+                existing.write({"name": name, "url": url, "sequence": sequence})
             else:
                 Menu.create({
                     "name": name,
