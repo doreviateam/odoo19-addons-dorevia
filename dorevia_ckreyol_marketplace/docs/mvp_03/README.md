@@ -2,7 +2,7 @@
 
 Dossier de **cadrage** pour la vague **MVP 03** : parcours de **création de compte** et **demande compte professionnel**, distinct de **`docs/mvp_01/`** (catalogue / portes `shop`) et **`docs/mvp_02/`** (homepage, boutique wave 1…).
 
-**Statut documentaire** : intention et principes **gelés au niveau produit** ; **ticket** [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) (**GO documentaire** — brouillon prêt arbitrage ; exécutable après §4 complété) ; **PV recette** [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) (**brouillon** — grilles prêtes ; verdict après livraison).
+**Statut documentaire** : intention et principes **gelés au niveau produit** ; **dossier prêt pour arbitrage MOA / tech** — **ticket** [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) (**GO documentaire 2026-05-05** ; exécutable après §4 complété) ; **PV recette** [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) (**GO documentaire 2026-05-05** ; brouillon — verdict après livraison effective).
 
 > MVP_03 prépare la distinction entre **compte particulier** et **demande de compte professionnel**, sans créer immédiatement une mécanique B2B lourde ni une **boutique parallèle** — alignement [doctrine B2C/B2B](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md), [ADR-010](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010).
 
@@ -89,11 +89,11 @@ Le **parcours particulier** doit rester **court** et ne pas devenir plus **admin
 
 | Élément | Statut |
 |---------|--------|
-| Cadrage parcours | [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md) — **rédigé** (2026-05) |
-| Spec UX | [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — **rédigé** (2026-05) |
-| Ticket dev MVP 03 | [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) — **rédigé** (2026-05), **brouillon** — arbitrage §4 puis GO dev |
+| Cadrage parcours | [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md) — **rédigé** (2026-05-05) |
+| Spec UX | [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — **rédigé** (2026-05-05) |
+| Ticket dev MVP 03 | [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) — **rédigé** (2026-05-05), **brouillon** — arbitrage §4 puis GO dev |
 | PR dev (`dorevia_ckreyol_marketplace`) | *À créer après GO* |
-| PV recette | [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) — **brouillon** (2026-05) ; verdict après implémentation |
+| PV recette | [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) — **brouillon** (2026-05-05) ; verdict après implémentation |
 | Jeux de tests Odoo (`--test-tags=…`) | *À définir* |
 
 **Prompt / lancement** : à produire lorsque MOA aura validé le découpage (équivalent éventuel de [`prompt_lancement_mvp21.md`](../prompting/prompt_lancement_mvp21.md) pour cette vague).
@@ -111,12 +111,11 @@ Le **parcours particulier** doit rester **court** et ne pas devenir plus **admin
 
 | Date | Événement |
 |------|-----------|
-| 2026-05 | README MVP 03 : intention comptes B2C / demande B2B, références [doctrine B2C-B2B](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) et [ADR-010](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010), périmètre plausible, hors périmètre, tableau livrables — chantier non ouvert côté tickets. |
-| 2026-05 | Ajout [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md) — parcours, états, points d’entrée (`/web/login`, `/my`, signup), arbitrages techniques, critères de recette cible. |
-| 2026-05 | Alignement **synthèse recommandations** (prudence CE, non-ticket-exécutable, friction B2C, achat invité, libellés « demande d’ouverture de compte pro », arbitrages réponse/données) — voir historique dans [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md). |
-| 2026-05 | Ajout [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — principes UX, points d’entrée, parcours A/B écran, états et messages, accessibilité, critères recette UX, arbitrages MOA. |
-| 2026-05 | Spec UX [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) : amendements (distinction claire, modal, garde-fou `/my`, wording interdit/privilégié, email confirmation). |
-| 2026-05 | Ajout [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) — ticket d’exécution dev (périmètre, arbitrages, critères d’acceptation, hors périmètre). |
-| 2026-05 | Ticket MVP03 : amendements (exécutable si §4, hypothèse MVP, pas de portail auto demande pro, traçabilité BO, doublon email, PV `PV_RECETTE_COMPTE_CLIENT_MVP03.md`). |
-| 2026-05 | **GO documentaire** ticket MVP03 ; ligne §4 *Email / notification* ; création **PV recette brouillon** [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md). |
-| 2026-05-05 | **GO documentaire** daté — [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) + [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) (brouillon prêt arbitrage §4). |
+| 2026-05-05 | README MVP 03 : intention comptes B2C / demande B2B, références [doctrine B2C-B2B](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) et [ADR-010](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010), périmètre plausible, hors périmètre, tableau livrables — chantier non ouvert côté tickets. |
+| 2026-05-05 | Ajout [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md) — parcours, états, points d’entrée (`/web/login`, `/my`, signup), arbitrages techniques, critères de recette cible. |
+| 2026-05-05 | Alignement **synthèse recommandations** (prudence CE, non-ticket-exécutable, friction B2C, achat invité, libellés « demande d’ouverture de compte pro », arbitrages réponse/données) — voir historique dans [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md). |
+| 2026-05-05 | Ajout [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — principes UX, points d’entrée, parcours A/B écran, états et messages, accessibilité, critères recette UX, arbitrages MOA. |
+| 2026-05-05 | Spec UX [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) : amendements (distinction claire, modal, garde-fou `/my`, wording interdit/privilégié, email confirmation). |
+| 2026-05-05 | Ajout [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) — ticket d’exécution dev (périmètre, arbitrages, critères d’acceptation, hors périmètre). |
+| 2026-05-05 | Ticket MVP03 : amendements (exécutable si §4, hypothèse MVP, pas de portail auto demande pro, traçabilité BO, doublon email, PV `PV_RECETTE_COMPTE_CLIENT_MVP03.md`). |
+| 2026-05-05 | **GO documentaire** tampon date — [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) ; création / enrichissement **PV** [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) ; §4 *Email / notification* ; **GO documentaire (PV)** — base recette validée ; **dossier MVP 03 prêt arbitrage MOA / tech**. |
