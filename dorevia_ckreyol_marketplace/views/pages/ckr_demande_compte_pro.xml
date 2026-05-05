@@ -127,6 +127,33 @@
                             </section>
                         </div>
 
+                        <!-- MVP03+ : voie conseiller (non bloquant ; ≠ validation compte pro). -->
+                        <t t-set="ckr_has_website_appointment"
+                           t-value="request.env['ir.module.module'].sudo().search([('name', '=', 'website_appointment'), ('state', '=', 'installed')], limit=1)"/>
+                        <div class="ckr-demande-pro__appointment text-center">
+                            <p class="ckr-demande-pro__appointment-kicker mb-1">
+                                Besoin d&apos;échanger avant de déposer votre demande ?
+                            </p>
+                            <p class="ckr-demande-pro__appointment-lead small text-muted mb-3 mb-lg-2">
+                                Prenez rendez-vous avec un conseiller C-Kreyol pour présenter votre activité et vos besoins.
+                            </p>
+                            <t t-if="ckr_has_website_appointment">
+                                <a href="/appointment"
+                                   class="btn ckr-btn ckr-btn--secondary w-100">
+                                    Prendre rendez-vous
+                                </a>
+                            </t>
+                            <t t-else="">
+                                <a href="/contact"
+                                   class="btn ckr-btn ckr-btn--secondary w-100">
+                                    Prendre rendez-vous
+                                </a>
+                            </t>
+                            <p class="ckr-demande-pro__appointment-disclaimer small text-muted mt-2 mb-0">
+                                Un rendez-vous ne remplace pas la demande de compte professionnel et ne garantit ni validation ni accès aux tarifs pro.
+                            </p>
+                        </div>
+
                         <div class="ckr-demande-pro__secondary text-center">
                             <p class="small text-muted mb-1">
                                 Vous souhaitez commander à titre personnel ?

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.91",
+    "version": "19.0.1.10.92",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -40,6 +40,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.90 : demande pro — alignement maquette : fond blanc, titre Playfair, intro
   catalogue pro, placeholders exemples, champs blancs fins, CTA pleine largeur ; CRM inchangé.
 * 19.0.1.10.91 : demande pro — copie intro MOA (demande compte pro + validation équipes).
+* 19.0.1.10.92 : demande pro — bloc MVP03+ « rendez-vous conseiller » sous le formulaire
+  (lien ``/appointment`` si ``website_appointment`` installé, sinon ``/contact`` ; disclaimer).
 
 Portee :
 

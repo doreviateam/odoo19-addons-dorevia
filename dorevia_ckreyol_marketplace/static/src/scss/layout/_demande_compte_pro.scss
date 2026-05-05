@@ -154,8 +154,37 @@
         }
     }
 
+    // Voie alternative conseiller (MVP03+) : léger séparateur, pas de carte lourde.
+    .ckr-demande-pro__appointment {
+        margin-top: $ckr-space-lg;
+        padding-top: $ckr-space-md;
+        border-top: 1px solid $ckr-bg-soft;
+
+        .ckr-demande-pro__appointment-kicker {
+            font-family: $ckr-font-sans;
+            font-size: 0.9375rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+            line-height: 1.35;
+        }
+
+        .ckr-demande-pro__appointment-lead {
+            max-width: 28rem;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.45;
+        }
+
+        .ckr-demande-pro__appointment-disclaimer {
+            max-width: 32rem;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+    }
+
     .ckr-demande-pro__secondary {
-        margin-top: $ckr-space-md;
+        margin-top: $ckr-space-lg;
 
         a:not(.btn):not(.ckr-btn) {
             color: $ckr-primary;
