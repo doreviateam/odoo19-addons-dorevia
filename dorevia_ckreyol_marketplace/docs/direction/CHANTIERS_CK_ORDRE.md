@@ -44,6 +44,8 @@ Clôturer proprement avant d’ouvrir un gros nouveau chantier.
 
 ## 2. Prochain chantier — Panier
 
+**Cadrage MVP 04** (panier + favoris, lots et garde-fous) : [README MVP 04](../mvp_04/README.md).
+
 ### Objectif
 
 Stabiliser l’expérience d’achat immédiate.
@@ -67,6 +69,8 @@ Il doit être propre avant d’ajouter des intentions secondaires comme les favo
 ---
 
 ## 3. Chantier suivant — Favoris / Wishlist
+
+Lot 2 du **MVP 04** — voir [README MVP 04](../mvp_04/README.md).
 
 ### Objectif
 
