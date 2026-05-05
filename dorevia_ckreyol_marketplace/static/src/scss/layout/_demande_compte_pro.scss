@@ -203,6 +203,12 @@
         textarea.form-control {
             min-height: 4rem;
         }
+
+        // Widget natif date + heure (pas de librairie tierce ; valeur stockée en Char côté CRM).
+        input[type="datetime-local"].ckr-demande-pro__input-datetime {
+            min-height: 2.35rem;
+            color-scheme: light;
+        }
     }
 
     .ckr-demande-pro__secondary {

@@ -222,10 +222,11 @@
                                                         <span class="s_website_form_label_content">Créneau souhaité</span>
                                                     </label>
                                                     <input id="ckr_rappel_slot"
-                                                           type="text"
-                                                           class="form-control s_website_form_input"
+                                                           type="datetime-local"
+                                                           class="form-control s_website_form_input ckr-demande-pro__input-datetime"
                                                            name="ckr_callback_slot"
-                                                           placeholder="Ex. en semaine, matin…"/>
+                                                           step="900"
+                                                           title="Date et heure de disponibilité pour un rappel"/>
                                                 </div>
 
                                                 <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
