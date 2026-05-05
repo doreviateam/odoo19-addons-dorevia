@@ -68,13 +68,35 @@ Conséquence recette :
 
 | ID fiche | Niveau cible (pauvre/moyenne/riche) | % obligatoires OK | % recommandés OK | Sections vides visibles (oui/non) | Médias (1/2/3+) | Reco fiables (oui/non) | Décision |
 |---------|--------------------------------------|-------------------|------------------|-----------------------------------|-----------------|------------------------|----------|
-|  |  |  |  |  |  |  |  |
+| MAN-00012-02 / Manio Crackers sucrée | riche | partiel | faible | non | 1 | non | Vague A P1 — fiche pilote à enrichir |
 |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |
 
 ---
 
-## 6) Seuils de décision opérationnels
+## 6) Fiche pilote — Manio Crackers sucrée
+
+État observé `tenant_o7` :
+
+- nom, prix, image principale, origine et achat affichés proprement ;
+- promesse actuelle exacte mais encore descriptive ;
+- sections basses et recommandations non alimentées ;
+- fallback propre : aucune section vide visible.
+
+Contenus à renseigner en priorité :
+
+| Bloc | Cible contenu | Règle |
+|------|---------------|-------|
+| Promesse courte | `Galettes croustillantes de manioc, douceur traditionnelle de Guadeloupe.` ou `Une douceur croustillante au manioc, simple et authentique.` | Choisir une version alignée avec l’origine BO fiable. |
+| Description complète | 3 à 6 lignes sur texture, goût, format, moment de consommation. | Ne pas inventer de recette, origine ou fabrication. |
+| Ingrédients / composition | Liste issue de l’étiquette ou d’une source BO fiable. | Masquer la section tant que la donnée manque. |
+| Conservation | Conditions de stockage et durée si disponible. | Ne publier que l’information confirmée. |
+| Conseils de dégustation | Confiture, café, chocolat chaud ou jus local si cohérent produit. | Formuler comme suggestion, pas comme obligation. |
+| Spécifications | Format, poids, origine, famille, collection si renseignés. | Privilégier les attributs Odoo structurés. |
+
+---
+
+## 7) Seuils de décision opérationnels
 
 - **Publier (minimum)** : 100% obligatoires OK, 0 section vide.
 - **Passer “moyenne”** : minimum + au moins 50% recommandés OK.
@@ -82,8 +104,9 @@ Conséquence recette :
 
 ---
 
-## 7) Historique
+## 8) Historique
 
 | Date | Changement |
 |------|------------|
 | 2026-04-28 | Création de la matrice de contenu Lot 2 MVP2.4 (obligatoire/recommandé/manquant, pas de section vide). |
+| 2026-04-28 | Ajout de la fiche pilote Manio Crackers et des contenus à alimenter en priorité. |

@@ -2,8 +2,8 @@
 
 **Ticket** : [TICKET_PRODUCT_PAGE_MERCHANDISING_MVP24_LOT2.md](TICKET_PRODUCT_PAGE_MERCHANDISING_MVP24_LOT2.md)  
 **Références** : [TICKET_PRODUCT_PAGE_MERCHANDISING_MVP24.md](TICKET_PRODUCT_PAGE_MERCHANDISING_MVP24.md), [PV_RECETTE_PRODUCT_PAGE_MERCHANDISING_MVP24.md](PV_RECETTE_PRODUCT_PAGE_MERCHANDISING_MVP24.md)  
-**Date recette** : _(à compléter)_  
-**Instance** : _(à compléter)_  
+**Date recette** : 2026-04-28
+**Instance** : `tenant_o7`
 **Relecteur MOA** : _(à compléter)_
 
 ---
@@ -72,7 +72,7 @@
 - Recommandations simples fiables (ou fallback propre) : [ ] OK / [ ] KO / [x] NA
 - Quantité + ajout panier : [ ] OK / [ ] KO / [x] NA
 - Non-régression MVP2.3/Lot1 : [x] OK / [ ] KO / [ ] NA
-- Observation courte : Base actuelle pauvre ; structure/fallback propres, enrichissement contenu/médias/reco à produire.
+- Observation courte : Base actuelle pauvre ; 1 visuel, origine et achat visibles, sections basses/reco non alimentées, structure/fallback propres.
 
 ### Fiche 2 — Kit colombo
 
@@ -111,9 +111,9 @@
 
 ## 3. Réserves (si GO avec réserves)
 
-1. _(à compléter)_  
-2. _(à compléter)_  
-3. _(à compléter)_
+1. Enrichir Manio Crackers en contenu vérifié : promesse, description, ingrédients, conservation, conseils, spécifications.
+2. Ajouter au moins deux médias complémentaires : détail/texture et usage/dégustation.
+3. Alimenter `Vous aimerez aussi` uniquement avec des produits publiés et cohérents, sinon conserver le bloc masqué.
 
 ---
 
@@ -130,3 +130,4 @@
 | Date | Changement |
 |------|------------|
 | 2026-04-28 | Création du PV Lot 2 MVP2.4, aligné sur le ticket durable contenu/merchandising, avec grille bloquant/non bloquant et contrôle de non-régression MVP2.3/Lot1. |
+| 2026-04-28 | Pré-cadrage recette `tenant_o7` ajouté pour Manio Crackers sucrée, avec réserves contenu/médias/recommandations. |

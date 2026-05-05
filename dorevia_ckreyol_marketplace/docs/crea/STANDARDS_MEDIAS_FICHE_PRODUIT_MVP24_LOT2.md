@@ -76,7 +76,20 @@ Règle :
 
 ---
 
-## 6) Checklist d’acceptation média (par fiche)
+## 6) Cas pilote — Manio Crackers sucrée
+
+Visuels cibles, par ordre de priorité :
+
+1. **Packshot** : paquet seul, lisible, cadré proprement.
+2. **Détail / texture** : gros plan sur les crackers, croustillant visible.
+3. **Usage / dégustation** : crackers servis avec confiture, café, chocolat chaud ou jus local.
+4. **Origine / ambiance** : visuel d’ambiance Guadeloupe uniquement si asset disponible et cohérent.
+
+La fiche peut rester publiée avec un seul packshot si le fallback est propre, mais elle reste classée pauvre tant que les visuels 2 et 3 manquent.
+
+---
+
+## 7) Checklist d’acceptation média (par fiche)
 
 - [ ] Packshot présent et lisible.
 - [ ] Visuel détail/texture présent (ou NA justifié).
@@ -87,7 +100,7 @@ Règle :
 
 ---
 
-## 7) Gestion des cas NA
+## 8) Gestion des cas NA
 
 Si un visuel n’existe pas encore :
 
@@ -97,8 +110,9 @@ Si un visuel n’existe pas encore :
 
 ---
 
-## 8) Historique
+## 9) Historique
 
 | Date | Changement |
 |------|------------|
 | 2026-04-28 | Création du standard médias Lot 2 MVP2.4 (typologie, qualité, ratio, poids, checklist). |
+| 2026-04-28 | Ajout du standard média appliqué à la fiche pilote Manio Crackers. |

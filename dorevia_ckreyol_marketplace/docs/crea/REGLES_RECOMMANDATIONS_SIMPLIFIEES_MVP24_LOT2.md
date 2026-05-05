@@ -85,7 +85,24 @@ Rythme recommandé :
 
 ---
 
-## 7) Checklist recette recommandations
+## 7) Cas pilote — Manio Crackers sucrée
+
+Règles admissibles pour afficher `Vous aimerez aussi` :
+
+- **Même famille** : autres biscuits, douceurs ou produits de grignotage publiés.
+- **Complémentarité** : confitures, tartinables, café, chocolat chaud, jus local ou boisson compatible.
+- **Même origine** : produits Guadeloupe uniquement si l’origine est renseignée de manière fiable.
+- **Même collection** : produits de la même collection Odoo si la donnée existe.
+
+Règle de décision :
+
+- afficher le bloc seulement si au moins 1 produit publié respecte une règle métier claire ;
+- masquer le bloc si les relations produits sont absentes, ambiguës ou non publiées ;
+- ne pas utiliser de produits aléatoires pour combler la zone.
+
+---
+
+## 8) Checklist recette recommandations
 
 - [ ] Le bloc s’affiche seulement quand la donnée fiable existe.
 - [ ] Les produits proposés respectent au moins une règle métier simple.
@@ -95,7 +112,7 @@ Rythme recommandé :
 
 ---
 
-## 8) Hors périmètre explicite
+## 9) Hors périmètre explicite
 
 - moteur de recommandation algorithmique ;
 - scoring comportemental ;
@@ -104,8 +121,9 @@ Rythme recommandé :
 
 ---
 
-## 9) Historique
+## 10) Historique
 
 | Date | Changement |
 |------|------------|
 | 2026-04-28 | Création des règles de recommandations simplifiées Lot 2 MVP2.4 (compatibilité Odoo, fallback propre). |
+| 2026-04-28 | Ajout des règles de recommandation applicables à la fiche pilote Manio Crackers. |

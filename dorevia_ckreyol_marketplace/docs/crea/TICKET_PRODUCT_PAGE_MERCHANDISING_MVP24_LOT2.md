@@ -3,7 +3,7 @@
 **ID** : `PRODUCT-PAGE-MERCH-MVP24-LOT2`  
 **Date d’ouverture** : 2026-04-28  
 **Priorité** : **P2** (méthode durable d’enrichissement catalogue)  
-**Statut** : **Prêt pour cadrage exécution**  
+**Statut** : **Cadré — prêt pour exécution contenu / médias / merchandising**
 **Module** : `dorevia_ckreyol_marketplace`  
 **Périmètre** : chantier contenu/merchandising durable sur fiches produit, sans refonte technique.
 
@@ -20,6 +20,13 @@
 Le template produit MVP2.3 et le Lot 1 MVP2.4 sont posés.  
 Le besoin du Lot 2 est d’installer une méthode durable d’enrichissement éditorial et merchandising, pilotable et maintenable, sans rouvrir l’architecture technique.
 
+Décision MOA du 2026-04-28 :
+
+- la structure actuelle de la fiche produit est conforme à la logique MVP2.3 / MVP2.4 Lot 1 ;
+- le sujet restant est un sujet de **richesse produit** : données, médias, réassurance, recommandations ;
+- la suite doit être traitée comme un chantier **contenu produit / médias / merchandising** ;
+- aucun travail ne doit rouvrir les routes, le shop, le checkout, le moteur catalogue ou le template produit.
+
 ---
 
 ## Objectif
@@ -31,6 +38,8 @@ Industrialiser l’enrichissement des fiches produit via :
 - des standards médias homogènes ;
 - des règles simples de recommandations ;
 - un backlog d’enrichissement progressif.
+
+Objectif opérationnel : transformer une fiche techniquement propre en fiche riche, rassurante et désirable, en exploitant raisonnablement l’existant Odoo et les données disponibles en back-office.
 
 ---
 
@@ -120,6 +129,35 @@ Livrable attendu : backlog priorisé, loti et pilotable.
 
 ---
 
+## Fiche pilote — Manio Crackers sucrée
+
+URL de contrôle : `/shop/man-00012-02-manio-crackers-sucree-2`
+Instance de référence : `tenant_o7`
+
+Constat actuel :
+
+- fiche techniquement correcte et stable ;
+- un seul visuel produit disponible ;
+- promesse courte exacte mais descriptive ;
+- sections basses insuffisamment alimentées ;
+- bloc `Vous aimerez aussi` absent, à conserver masqué tant que les liens fiables manquent ;
+- bloc `Achat en confiance` présent mais encore minimal.
+
+Cible Lot 2 :
+
+- enrichir la promesse courte sans surpromesse ;
+- ajouter les contenus vérifiés : description complète, ingrédients/composition, conservation, conseils de dégustation, spécifications ;
+- viser 3 médias utiles : packshot, détail/texture, usage/dégustation ;
+- proposer des recommandations seulement si elles sont fiables ;
+- compléter la réassurance uniquement avec les promesses opérationnellement vraies.
+
+Exemples de promesse courte admissibles :
+
+- `Galettes croustillantes de manioc, douceur traditionnelle de Guadeloupe.`
+- `Une douceur croustillante au manioc, simple et authentique.`
+
+---
+
 ## Hors périmètre (strict)
 
 - Refonte UI/template produit ;
@@ -164,7 +202,7 @@ PV associé : [PV_RECETTE_PRODUCT_PAGE_MERCHANDISING_MVP24_LOT2.md](PV_RECETTE_P
 1. [x] Doctrine de continuité MVP2.3 / Lot 1 actée.
 2. [x] Invariants et hors périmètre figés.
 3. [x] Axes Lot 2 structurés (charte/matrice/médias/reco/backlog).
-4. [ ] Artefacts produits (documents opérationnels).
+4. [x] Artefacts produits (documents opérationnels).
 5. [ ] Recette Lot 2 exécutée.
 6. [ ] Décision finale MOA.
 
@@ -175,3 +213,4 @@ PV associé : [PV_RECETTE_PRODUCT_PAGE_MERCHANDISING_MVP24_LOT2.md](PV_RECETTE_P
 | Date | Changement |
 |------|------------|
 | 2026-04-28 | Création ticket Lot 2 MVP2.4 orienté méthode durable d’enrichissement contenu/merchandising, sans refonte technique. |
+| 2026-04-28 | Cadrage MOA intégré : le Lot 2 est limité à l’enrichissement contenu, médias, recommandations et réassurance, avec Manio Crackers comme fiche pilote `tenant_o7`. |

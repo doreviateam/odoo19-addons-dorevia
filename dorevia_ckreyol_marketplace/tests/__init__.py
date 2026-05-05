@@ -8,3 +8,4 @@ from . import test_ckr_hero_homepage
 from . import test_ckr_explorer_homepage_mvp2
 from . import test_ckr_selection_homepage_mvp21
 from . import test_ckr_product_tile_name
+from . import test_ckr_product_merchandising

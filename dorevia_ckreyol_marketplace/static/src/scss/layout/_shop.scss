@@ -567,6 +567,9 @@
         @media (min-width: 992px) {
             max-width: 17.5rem;
             padding-top: 0.35rem !important;
+            // Aligne le départ du rail filtres sur le haut de la grille produits.
+            // Objectif UX: éviter un rail visuellement "trop haut" vs tuiles.
+            margin-top: 0.7rem;
         }
 
         // Annule tout héritage « colonne blanche » (thème / utilitaires Odoo).
@@ -3378,6 +3381,9 @@
         @media (min-width: 992px) {
             max-width: 16.25rem;
             padding-right: unquote("clamp(0.65rem, 1.1vw, 1.15rem)");
+            // Aligner le début des filtres avec le haut de la grille tuiles
+            // (après la barre chips/tri), pas avec le tout début du panneau produits.
+            margin-top: 3.4rem !important;
         }
 
         .ckr-shop-sidebar__heading-cluster {

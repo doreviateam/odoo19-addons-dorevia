@@ -96,13 +96,16 @@
     .o_wsale_product_details_content_section_title {
         h1 {
             font-family: $ckr-font-serif;
-            // `unquote` : `2.2vw + 0.5rem` declenche "Incompatible units" si Sass evalue `clamp`.
-            font-size: unquote("clamp(1.35rem, 2.2vw + 0.5rem, 2rem)");
+            font-size: 1.45rem;
             font-weight: $ckr-weight-semibold;
-            letter-spacing: -0.02em;
+            letter-spacing: 0;
             line-height: 1.2;
             color: $ckr-text;
             margin-bottom: $ckr-space-sm;
+
+            @media (min-width: 992px) {
+                font-size: 2rem;
+            }
         }
 
         .ckr-product-origins {
@@ -719,19 +722,43 @@
         background: rgba(217, 208, 186, 0.16);
         font-family: $ckr-font-sans;
 
-        .ckr-product-reassurance__link {
+        .ckr-product-reassurance__title {
             font-size: 0.8rem;
             font-weight: $ckr-weight-semibold;
             color: $ckr-primary;
-            text-decoration: none;
         }
 
         .ckr-product-reassurance__list {
             margin: $ckr-space-xs 0 0 0;
-            padding-left: 1rem;
+            padding: 0;
+            list-style: none;
             color: $ckr-text-muted;
             font-size: 0.82rem;
             line-height: 1.45;
+
+            li {
+                display: grid;
+                grid-template-columns: 1.35rem minmax(0, 1fr);
+                gap: $ckr-space-xs;
+                align-items: start;
+                margin: 0 0 $ckr-space-xs 0;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+
+            .fa {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 1.35rem;
+                height: 1.35rem;
+                border-radius: 50%;
+                background: rgba(135, 168, 120, 0.16);
+                color: $ckr-secondary-dark;
+                font-size: 0.72rem;
+            }
         }
     }
 
@@ -760,6 +787,421 @@
         &:focus-visible {
             outline: 3px solid rgba(160, 82, 45, 0.35);
             outline-offset: 2px;
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Finition Lot 2 : lecture "épicerie fine" proche de la maquette
+    // ------------------------------------------------------------------
+    background: #fcfaf7;
+
+    section#product_detail {
+        padding-bottom: $ckr-space-2xl;
+    }
+
+    section#product_detail.o_wsale_container_lg {
+        max-width: 1160px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    #product_detail > .o_wsale_content_contained.container {
+        max-width: 1160px;
+        padding-right: $ckr-space-md;
+        padding-left: $ckr-space-md;
+    }
+
+    #product_detail_main {
+        max-width: 1160px;
+        margin: 0 auto;
+        row-gap: $ckr-space-xl;
+
+        @media (min-width: 992px) {
+            column-gap: $ckr-space-2xl;
+            padding: $ckr-space-md $ckr-space-md 0;
+        }
+    }
+
+    .o_wsale_product_images {
+        @media (min-width: 992px) {
+            flex: 0 0 58%;
+            max-width: 58%;
+        }
+    }
+
+    #product_details {
+        @media (min-width: 992px) {
+            flex: 1 1 0;
+            max-width: 38%;
+            top: 6rem;
+        }
+    }
+
+    #o_wsale_product_details_content {
+        padding-top: $ckr-space-md;
+        padding-bottom: $ckr-space-md;
+
+        @media (min-width: 992px) {
+            padding-top: 0;
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+
+    #o-carousel-product,
+    .o_carousel_product_outer {
+        border: 1px solid rgba(217, 208, 186, 0.72);
+        border-radius: $ckr-radius-md;
+        background: #fffdf9;
+        box-shadow: none;
+    }
+
+    #o-carousel-product {
+        .carousel-inner {
+            min-height: 22rem;
+            background: #fffdf9;
+
+            @media (min-width: 992px) {
+                min-height: 30rem;
+            }
+        }
+    }
+
+    .product_detail_img,
+    .o_product_detail_img_wrapper img {
+        object-fit: contain;
+    }
+
+    .o_carousel_product_indicators .carousel-indicators {
+        margin-top: $ckr-space-md;
+
+        li {
+            width: 4.5rem;
+            height: 4.5rem;
+            border-radius: $ckr-radius-sm;
+            background: #fffdf9;
+
+            &.active {
+                box-shadow: 0 0 0 2px $ckr-primary;
+            }
+        }
+    }
+
+    .o_wsale_product_details_content_section_title {
+        padding-bottom: $ckr-space-md;
+        border-bottom: 1px solid rgba(217, 208, 186, 0.72);
+
+        .ckr-product-promise {
+            max-width: 30rem;
+            color: $ckr-text;
+        }
+
+        .oe_structure.text-muted,
+        .oe_structure.mb-3 {
+            max-width: 31rem;
+            color: $ckr-text-muted !important;
+        }
+    }
+
+    .product_price .oe_price {
+        font-size: 1.55rem;
+        color: $ckr-primary-dark;
+    }
+
+    #o_wsale_cta_wrapper {
+        display: grid !important;
+        grid-template-columns: minmax(7.25rem, max-content) minmax(0, 1fr);
+        gap: $ckr-space-sm !important;
+        align-items: stretch;
+
+        @media (max-width: 420px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    #add_to_cart_wrap,
+    #add_to_cart {
+        width: 100%;
+    }
+
+    #add_to_cart {
+        justify-content: center;
+        min-height: 3rem;
+        padding: 0.75rem $ckr-space-lg;
+        border-radius: $ckr-radius-sm;
+    }
+
+    .css_quantity.input-group {
+        order: -1;
+        width: 100%;
+        max-width: none;
+        min-height: 3rem;
+        background: #fffdf9;
+    }
+
+    #product_option_block {
+        flex-wrap: wrap;
+        gap: $ckr-space-xs;
+        margin-top: $ckr-space-sm;
+
+        .o_add_wishlist_dyn {
+            min-height: 2.35rem;
+            padding: 0.55rem $ckr-space-sm;
+            border-radius: $ckr-radius-sm;
+            background: transparent !important;
+        }
+    }
+
+    .o_add_compare_dyn.btn {
+        min-height: 2.35rem;
+        padding: 0.55rem $ckr-space-sm;
+        border-color: rgba(112, 87, 99, 0.28) !important;
+        border-radius: $ckr-radius-sm;
+        background: transparent !important;
+        color: $ckr-text-muted !important;
+        font-family: $ckr-font-sans;
+        font-size: 0.86rem;
+        font-weight: $ckr-weight-medium;
+
+        &:hover,
+        &:focus-visible {
+            border-color: rgba(160, 82, 45, 0.4) !important;
+            color: $ckr-primary !important;
+            background: rgba(160, 82, 45, 0.05) !important;
+        }
+    }
+
+    .ckr-product-reassurance {
+        margin-top: $ckr-space-lg;
+        padding: $ckr-space-md;
+        border-color: rgba(217, 208, 186, 0.58);
+        background: rgba(255, 253, 249, 0.78);
+    }
+
+    .ckr-product-info {
+        max-width: 760px;
+        margin: $ckr-space-2xl auto 0;
+        padding: 0 $ckr-space-md;
+        font-family: $ckr-font-sans;
+    }
+
+    .ckr-product-info__header {
+        margin-bottom: $ckr-space-md;
+    }
+
+    .ckr-product-info__eyebrow {
+        margin: 0;
+        font-family: $ckr-font-serif;
+        font-size: 1.05rem;
+        font-weight: $ckr-weight-semibold;
+        color: $ckr-text;
+    }
+
+    .ckr-product-info__list {
+        border-top: 1px solid rgba(217, 208, 186, 0.86);
+    }
+
+    .ckr-product-info__item {
+        border-bottom: 1px solid rgba(217, 208, 186, 0.86);
+    }
+
+    .ckr-product-info__summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $ckr-space-md;
+        padding: $ckr-space-md 0;
+        cursor: pointer;
+        font-size: 0.92rem;
+        font-weight: $ckr-weight-semibold;
+        color: $ckr-text;
+        list-style: none;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::after {
+            content: "+";
+            color: $ckr-text-muted;
+            font-weight: $ckr-weight-medium;
+        }
+    }
+
+    .ckr-product-info__item[open] .ckr-product-info__summary::after {
+        content: "−";
+    }
+
+    .ckr-product-info__body {
+        padding: 0 0 $ckr-space-md 0;
+        color: $ckr-text-muted;
+        font-size: 0.9rem;
+        line-height: 1.62;
+    }
+
+    .ckr-product-info__text {
+        max-width: 46rem;
+        margin: 0;
+    }
+
+    .ckr-product-info__specs {
+        display: grid;
+        gap: $ckr-space-xs;
+        margin: 0;
+    }
+
+    .ckr-product-info__spec {
+        display: grid;
+        grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 1fr);
+        gap: $ckr-space-md;
+
+        @media (max-width: 575.98px) {
+            grid-template-columns: 1fr;
+            gap: 0.15rem;
+        }
+
+        dt {
+            color: $ckr-text;
+            font-weight: $ckr-weight-semibold;
+        }
+
+        dd {
+            margin: 0;
+        }
+    }
+
+    .ckr-product-recos {
+        padding: $ckr-space-2xl $ckr-space-md $ckr-space-3xl;
+        background: #fcfaf7;
+    }
+
+    .ckr-product-recos__inner {
+        max-width: 1160px;
+        margin: 0 auto;
+    }
+
+    .ckr-product-recos__header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: $ckr-space-md;
+        margin-bottom: $ckr-space-lg;
+
+        h2 {
+            margin: 0;
+            font-family: $ckr-font-serif;
+            font-size: 1.05rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-primary-dark;
+        }
+    }
+
+    .ckr-product-recos__link {
+        color: $ckr-primary;
+        font-family: $ckr-font-sans;
+        font-size: 0.85rem;
+        font-weight: $ckr-weight-semibold;
+        text-decoration: none;
+    }
+
+    .ckr-product-recos__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: $ckr-space-md;
+
+        @media (min-width: 992px) {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: $ckr-space-lg;
+        }
+    }
+
+    .ckr-product-reco-card {
+        min-width: 0;
+        border: 1px solid rgba(217, 208, 186, 0.82);
+        border-radius: $ckr-radius-md;
+        background: #fffdf9;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(44, 44, 44, 0.04);
+    }
+
+    .ckr-product-reco-card__media {
+        display: block;
+        aspect-ratio: 1 / 1;
+        background: rgba(237, 232, 219, 0.45);
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform $ckr-transition-base;
+        }
+
+        &:hover img,
+        &:focus-visible img {
+            transform: scale(1.025);
+        }
+    }
+
+    .ckr-product-reco-card__body {
+        display: grid;
+        gap: $ckr-space-xs;
+        padding: $ckr-space-sm;
+        font-family: $ckr-font-sans;
+    }
+
+    .ckr-product-reco-card__meta {
+        margin: 0;
+        color: $ckr-text-muted;
+        font-size: 0.68rem;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .ckr-product-reco-card h3 {
+        min-height: 2.4em;
+        margin: 0;
+        font-family: $ckr-font-serif;
+        font-size: 0.96rem;
+        line-height: 1.2;
+
+        a {
+            color: $ckr-text;
+            text-decoration: none;
+        }
+    }
+
+    .ckr-product-reco-card__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $ckr-space-sm;
+        padding-top: $ckr-space-xs;
+        border-top: 1px solid rgba(217, 208, 186, 0.7);
+
+        strong {
+            color: $ckr-primary-dark;
+            font-size: 0.95rem;
+        }
+    }
+
+    .ckr-product-reco-card__cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: $ckr-radius-sm;
+        background: rgba(160, 82, 45, 0.1);
+        color: $ckr-primary;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            background: $ckr-primary;
+            color: $ckr-bg;
+            outline: none;
         }
     }
 }

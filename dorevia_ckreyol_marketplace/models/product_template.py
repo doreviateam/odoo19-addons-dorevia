@@ -431,6 +431,185 @@ class ProductTemplate(models.Model):
             if attribute.id != origin_attr.id
         }
 
+    def _ckr_product_text_plain(self, value):
+        """Texte éditorial nettoyé pour les blocs bas de fiche."""
+        text = html2plaintext(value or "")
+        text = re.sub(r"\s+", " ", text or "").strip()
+        return text
+
+    def _ckr_get_product_long_description(self):
+        """Description utile pour le bloc bas de fiche produit.
+
+        Priorité aux champs éditoriaux e-commerce existants. On ne génère pas
+        de texte si la fiche ne contient qu'une promesse courte.
+        """
+        self.ensure_one()
+        promise = self._ckr_shop_tile_compact_text(
+            self._ckr_get_product_promise_line()
+        )
+        for raw in (
+            self.description_ecommerce,
+            self.website_description,
+            self.description_sale,
+        ):
+            text = self._ckr_product_text_plain(raw)
+            if not text:
+                continue
+            if self._ckr_shop_tile_compact_text(text) == promise:
+                continue
+            if len(text) > 900:
+                text = text[:897].rstrip() + "..."
+            return text
+        return ""
+
+    def _ckr_get_product_specs_lines(self, website=None):
+        """Lignes factuelles pour `Spécifications techniques`.
+
+        Source uniquement des données Odoo déjà présentes : référence, origine,
+        familles publiques, collections et format détecté.
+        """
+        self.ensure_one()
+        lines = []
+        seen = set()
+
+        def add(label, value):
+            text = str(value or "").strip()
+            key = (label, text)
+            if text and key not in seen:
+                seen.add(key)
+                lines.append({"label": label, "value": text})
+
+        variant = self.product_variant_ids[:1]
+        if variant and variant.default_code:
+            add("Référence", variant.default_code)
+
+        origins = self._ckr_get_product_origin_labels(website=website)
+        add("Origine", ", ".join(origins))
+
+        public_categories = [
+            cat.name
+            for cat in self.public_categ_ids.sorted("sequence")
+            if self._ckr_shop_tile_meta_label_is_useful(cat.name)
+        ]
+        add("Famille", ", ".join(public_categories))
+
+        collections = [
+            collection.name
+            for collection in self._ckr_get_visible_collections(website=website)
+            if self._ckr_shop_tile_meta_label_is_useful(collection.name)
+        ]
+        add("Collection", ", ".join(collections))
+
+        add("Format", self._ckr_get_shop_tile_format_segment())
+        return lines
+
+    def _ckr_get_product_detail_sections(self, website=None):
+        """Sections bas de fiche rendues uniquement quand elles sont alimentées."""
+        self.ensure_one()
+        sections = []
+        long_description = self._ckr_get_product_long_description()
+        if long_description:
+            sections.append(
+                {
+                    "key": "description",
+                    "title": "Description",
+                    "body": long_description,
+                    "open": True,
+                }
+            )
+
+        specs = self._ckr_get_product_specs_lines(website=website)
+        if specs:
+            sections.append(
+                {
+                    "key": "specs",
+                    "title": "Spécifications techniques",
+                    "lines": specs,
+                    "open": not sections,
+                }
+            )
+        return sections
+
+    def _ckr_is_product_recommendable(self, website=None):
+        """Vrai si le produit peut être proposé en recommandation publique."""
+        self.ensure_one()
+        if not self.active or not self.sale_ok:
+            return False
+        if "is_published" in self._fields and not self.is_published:
+            return False
+        if "website_published" in self._fields and not self.website_published:
+            return False
+        if website and "website_id" in self._fields and self.website_id:
+            return self.website_id == website
+        return True
+
+    def _ckr_get_product_recommendation_templates(self, website=None, limit=4):
+        """Recommandations simples et fiables pour `Vous aimerez aussi`.
+
+        Ordre : relations alternatives Odoo, même famille publique, même
+        origine, même collection. Aucun produit aléatoire n'est injecté.
+        """
+        self.ensure_one()
+        candidates = self.env["product.template"].browse()
+
+        def append(recordset):
+            nonlocal candidates
+            for tmpl in recordset:
+                if tmpl.id == self.id or tmpl in candidates:
+                    continue
+                if tmpl._ckr_is_product_recommendable(website=website):
+                    candidates |= tmpl
+                if len(candidates) >= limit:
+                    return True
+            return False
+
+        if append(self.alternative_product_ids):
+            return candidates[:limit]
+
+        domain = [
+            ("id", "!=", self.id),
+            ("sale_ok", "=", True),
+            ("active", "=", True),
+        ]
+        if "is_published" in self._fields:
+            domain.append(("is_published", "=", True))
+        if "website_published" in self._fields:
+            domain.append(("website_published", "=", True))
+
+        if self.public_categ_ids:
+            same_family = self.search(
+                domain + [("public_categ_ids", "in", self.public_categ_ids.ids)],
+                limit=limit,
+            )
+            if append(same_family):
+                return candidates[:limit]
+
+        origin_attr = self._ckr_origin_attribute()
+        if origin_attr:
+            origin_line = self.attribute_line_ids.filtered(
+                lambda line: line.attribute_id == origin_attr
+            )[:1]
+            if origin_line and origin_line.value_ids:
+                same_origin = self.search(
+                    domain
+                    + [
+                        (
+                            "attribute_line_ids.value_ids",
+                            "in",
+                            origin_line.value_ids.ids,
+                        )
+                    ],
+                    limit=limit,
+                )
+                if append(same_origin):
+                    return candidates[:limit]
+
+        collections = self._ckr_get_visible_collections(website=website)
+        if collections:
+            collection_products = collections.mapped("product_template_ids")
+            append(collection_products)
+        return candidates[:limit]
+
     # ------------------------------------------------------------------
     # Helper fiche produit — porte Collections
     # (SPEC_IMPL_COLLECTIONS §10, CONTRAT §11 — MOA 2026-04-22)

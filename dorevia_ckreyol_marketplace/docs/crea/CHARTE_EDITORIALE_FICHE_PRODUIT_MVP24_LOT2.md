@@ -56,10 +56,18 @@ Attendu :
 Exemple OK :
 
 - `Galettes de manioc croustillantes, au goût authentique des Antilles.`
+- `Galettes croustillantes de manioc, douceur traditionnelle de Guadeloupe.`
+- `Une douceur croustillante au manioc, simple et authentique.`
 
 Exemple KO :
 
 - `Le meilleur produit du marché, incomparable et révolutionnaire.`
+
+Cas pilote Manio Crackers :
+
+- éviter une promesse seulement descriptive comme `Galette de manioc sucrée 100g` ;
+- préférer une phrase qui dit texture, nature du produit et ancrage, sans inventer de bénéfice ;
+- ne pas mentionner Guadeloupe si l’origine n’est pas fiable dans le back-office.
 
 ## 3.2 Description utile
 
@@ -148,3 +156,4 @@ Priorité de traitement :
 | Date | Changement |
 |------|------------|
 | 2026-04-28 | Création de la charte éditoriale v1 pour exécution du Lot 2 MVP2.4. |
+| 2026-04-28 | Ajout des exemples de promesse courte validables pour la fiche pilote Manio Crackers. |

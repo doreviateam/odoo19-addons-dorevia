@@ -137,12 +137,125 @@
               priority="34">
         <xpath expr="//small" position="replace">
             <div class="ckr-product-reassurance" aria-label="Réassurance achat">
-                <a href="/terms" class="ckr-product-reassurance__link o_translate_inline">Achat en confiance</a>
+                <span class="ckr-product-reassurance__title o_translate_inline">Achat en confiance</span>
                 <ul class="ckr-product-reassurance__list">
-                    <li>Garantie satisfait ou remboursé 30 jours</li>
-                    <li>Livraison : 2-3 jours ouvrables</li>
+                    <li>
+                        <i class="fa fa-lock" aria-hidden="true"/>
+                        <span>Paiement sécurisé</span>
+                    </li>
+                    <li>
+                        <i class="fa fa-truck" aria-hidden="true"/>
+                        <span>Livraison : 2-3 jours ouvrables</span>
+                    </li>
+                    <li>
+                        <i class="fa fa-check" aria-hidden="true"/>
+                        <span>Satisfait ou remboursé 30 jours</span>
+                    </li>
                 </ul>
             </div>
+        </xpath>
+    </template>
+
+    <template id="ckr_product_merchandising_sections"
+              inherit_id="website_sale.product"
+              name="C-Kreyol: fiche produit - sections éditoriales Lot 2"
+              priority="35">
+        <xpath expr="//div[@id='product_full_description']" position="attributes">
+            <attribute name="class" add="d-none ckr-product-native-description-hidden" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='product_detail_main']" position="after">
+            <t t-set="ckr_product_tmpl_sections"
+               t-value="product.product_tmpl_id if product._name == 'product.product' else product"/>
+            <t t-set="ckr_product_sections"
+               t-value="ckr_product_tmpl_sections._ckr_get_product_detail_sections(website=website)"/>
+            <section t-if="ckr_product_sections"
+                     class="ckr-product-info"
+                     aria-label="Informations produit">
+                <header class="ckr-product-info__header">
+                    <p class="ckr-product-info__eyebrow">Informations Produit</p>
+                </header>
+                <div class="ckr-product-info__list">
+                    <details t-foreach="ckr_product_sections"
+                             t-as="ckr_section"
+                             t-att-open="'open' if ckr_section.get('open') else None"
+                             class="ckr-product-info__item">
+                        <summary class="ckr-product-info__summary">
+                            <span t-esc="ckr_section.get('title')"/>
+                        </summary>
+                        <div class="ckr-product-info__body">
+                            <p t-if="ckr_section.get('body')"
+                               class="ckr-product-info__text"
+                               t-esc="ckr_section.get('body')"/>
+                            <dl t-if="ckr_section.get('lines')"
+                                class="ckr-product-info__specs">
+                                <t t-foreach="ckr_section.get('lines')" t-as="ckr_line">
+                                    <div class="ckr-product-info__spec">
+                                        <dt t-esc="ckr_line.get('label')"/>
+                                        <dd t-esc="ckr_line.get('value')"/>
+                                    </div>
+                                </t>
+                            </dl>
+                        </div>
+                    </details>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <template id="ckr_product_recommendations"
+              inherit_id="website_sale.product"
+              name="C-Kreyol: fiche produit - Vous aimerez aussi"
+              priority="36">
+        <xpath expr="//div[@id='product_full_description']" position="after">
+            <t t-set="ckr_product_tmpl_reco"
+               t-value="product.product_tmpl_id if product._name == 'product.product' else product"/>
+            <t t-set="ckr_recommendations"
+               t-value="ckr_product_tmpl_reco._ckr_get_product_recommendation_templates(website=website, limit=4)"/>
+            <section t-if="ckr_recommendations"
+                     class="ckr-product-recos"
+                     aria-label="Vous aimerez aussi">
+                <div class="ckr-product-recos__inner">
+                    <header class="ckr-product-recos__header">
+                        <h2>Vous aimerez aussi</h2>
+                        <a href="/shop" class="ckr-product-recos__link">Voir tout le catalogue</a>
+                    </header>
+                    <div class="ckr-product-recos__grid">
+                        <article t-foreach="ckr_recommendations"
+                                 t-as="ckr_reco"
+                                 class="ckr-product-reco-card">
+                            <a t-att-href="ckr_reco.website_url"
+                               class="ckr-product-reco-card__media"
+                               t-att-aria-label="ckr_reco.ck_product_name or ckr_reco.name">
+                                <img t-att-src="ckr_reco._ckr_get_homepage_listing_image_url() or ckr_reco._ckr_get_homepage_listing_image_fallback_url()"
+                                     t-att-alt="ckr_reco.ck_product_name or ckr_reco.name"
+                                     loading="lazy"/>
+                            </a>
+                            <div class="ckr-product-reco-card__body">
+                                <p t-if="ckr_reco._ckr_get_shop_tile_meta_line(website=website)"
+                                   class="ckr-product-reco-card__meta"
+                                   t-esc="ckr_reco._ckr_get_shop_tile_meta_line(website=website)"/>
+                                <h3>
+                                    <a t-att-href="ckr_reco.website_url"
+                                       t-esc="ckr_reco.ck_product_name or ckr_reco.name"/>
+                                </h3>
+                                <t t-set="ckr_reco_price_info"
+                                   t-value="ckr_reco._ckr_get_homepage_combination_info()"/>
+                                <t t-set="ckr_reco_price"
+                                   t-value="ckr_reco_price_info.get('price_reduce') or ckr_reco_price_info.get('price') or ckr_reco.list_price"/>
+                                <div class="ckr-product-reco-card__footer">
+                                    <strong t-out="ckr_reco_price"
+                                            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                    <a t-att-href="ckr_reco.website_url"
+                                       class="ckr-product-reco-card__cta"
+                                       aria-label="Voir ce produit">
+                                        <i class="fa fa-arrow-right" aria-hidden="true"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
         </xpath>
     </template>
 
