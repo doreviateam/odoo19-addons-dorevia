@@ -44,6 +44,9 @@
         <xpath expr="//input[@id='password']" position="attributes">
             <attribute name="placeholder">Votre mot de passe</attribute>
         </xpath>
+
+        <!-- Retire le sélecteur rapide d'utilisateurs (« Choisissez un utilisateur » — web.user_switch). -->
+        <xpath expr="//owl-component[@name='web.user_switch']" position="replace"/>
     </template>
 
     <template id="ckr_auth_signup_login"

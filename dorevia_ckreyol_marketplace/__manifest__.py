@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.77",
+    "version": "19.0.1.10.78",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -14,6 +14,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.77 : page ``/demande-compte-professionnel`` (formulaire Website
   vers ``crm.lead`` via ``website_crm``), garde-fous MVP03 (pas de portail
   pro auto), liens login/signup.
+* 19.0.1.10.78 : login — masquage du lien « Choisissez un utilisateur »
+  (composant web.user_switch sur web.login).
 
 Portee :
 
