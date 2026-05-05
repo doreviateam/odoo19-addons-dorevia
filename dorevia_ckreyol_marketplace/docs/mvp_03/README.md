@@ -113,3 +113,4 @@ Le **parcours particulier** doit rester **court** et ne pas devenir plus **admin
 | 2026-05 | Ajout [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md) — parcours, états, points d’entrée (`/web/login`, `/my`, signup), arbitrages techniques, critères de recette cible. |
 | 2026-05 | Alignement **synthèse recommandations** (prudence CE, non-ticket-exécutable, friction B2C, achat invité, libellés « demande d’ouverture de compte pro », arbitrages réponse/données) — voir historique dans [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md). |
 | 2026-05 | Ajout [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — principes UX, points d’entrée, parcours A/B écran, états et messages, accessibilité, critères recette UX, arbitrages MOA. |
+| 2026-05 | Spec UX [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) : amendements (distinction claire, modal, garde-fou `/my`, wording interdit/privilégié, email confirmation). |
