@@ -446,7 +446,7 @@ GO dev avec réserve technique : confirmer sur l’instance cible auth_signup, C
 
 ## 17. Tableau §4 pré-rempli recommandé *(aligné ticket)*
 
-À **recopier ou ajuster** dans la colonne « Décision figée » du [ticket §4](TICKET_COMPTE_CLIENT_MVP03.md#4-arbitrages-à-trancher-avant-ou-pendant-le-dev) après validation en atelier.
+**Reporté dans** la colonne « Décision figée » du [ticket §4](TICKET_COMPTE_CLIENT_MVP03.md#4-arbitrages-à-trancher-avant-ou-pendant-le-dev) *(2026-05-05 — décision recommandée ; ajustements possibles après atelier MOA)*.
 
 | # | Sujet | Décision figée recommandée *(à valider)* |
 |---|--------|-------------------------------------------|
@@ -494,3 +494,4 @@ Cette approche reste fluide pour les particuliers, prudente pour les pros, confo
 | Date | Événement |
 |------|-----------|
 | 2026-05-05 | Création — doctrine opérationnelle, pré-arbitrages, tableau §4 aligné ticket, lien avec atelier et tests. |
+| 2026-05-05 | Tableau §17 **reporté** dans [TICKET_COMPTE_CLIENT_MVP03.md §4](TICKET_COMPTE_CLIENT_MVP03.md#4-arbitrages-à-trancher-avant-ou-pendant-le-dev) — colonne « Décision figée » complétée. |

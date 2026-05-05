@@ -3,8 +3,8 @@
 **ID** : `COMPTE-CLIENT-MVP03`  
 **Date d’ouverture** : 2026-05  
 **Priorité** : **P2** *(à confirmer pilotage)*  
-**Statut** : **Brouillon — prêt pour arbitrage MOA / tech** *(pas de GO dev tant que §4 n’est pas complété et validé)*.  
-**GO documentaire** : **2026-05-05** — validation du périmètre et des garde-fous du présent ticket *(exécution dev toujours soumise au §4 complété et au pickup équipe)*.  
+**Statut** : **§4 renseigné** — décisions alignées sur [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) ; **GO dev avec réserve** *(confirmer sur l’instance : `auth_signup`, CRM, `website_form`, achat invité)* — validation MOA / pickup équipe avant implémentation finale si nécessaire.  
+**GO documentaire** : **2026-05-05** — validation du périmètre et des garde-fous du présent ticket *(voir aussi statut ci-dessus pour §4)*.  
 **Module** : `dorevia_ckreyol_marketplace` (+ configuration Odoo site / CRM selon arbitrage).
 
 **Sources de vérité produit / UX** :
@@ -15,7 +15,7 @@
 | [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md) | Parcours A/B, états, points d’entrée, arbitrages métier |
 | [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) | Spec UX, wording interdit/privilégié, garde-fou `/my`, recette interface |
 
-Ce ticket devient **exécutable** uniquement après **complétion des arbitrages §4** ; avant cela, il sert de **cadrage d’exécution**.
+Le **§4 est complété** avec les décisions recommandées ; le ticket sert de **brief exécutable** pour le dev (**réserve instance** + pilotage équipe). Les arbitrages formalisés en atelier MOA peuvent **ajuster** les lignes ci-dessous.
 
 **Doctrine** : [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) ; [ADR-CKR-001](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-001) (standard d’abord) ; [ADR-CKR-009](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-009) (sanctuarisation tunnel) ; [ADR-CKR-010](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010) (B2C/B2B).
 
@@ -70,25 +70,25 @@ Les habillages existants à respecter ou étendre : [`views/auth/ckr_login.xml`]
 
 ## 4. Arbitrages à trancher avant ou pendant le dev
 
-Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher en réunion MOA / tech.
+Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation. La colonne **Décision figée** reprend la **décision recommandée** du document [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) *(sections **17** tableau §4 et **16** GO avec réserve)* — **GO dev avec réserve technique** tant que l’**instance cible** n’a pas confirmé `auth_signup`, CRM, `website_form` et achat invité.
 
 **Support d’atelier** : [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) — checklist structurée (durée cible 30–45 min, sorties attendues).
 
-**Pré-arbitrages recommandés** *(à valider en séance)* : [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — doctrine B2C/B2B, décisions proposées, **tableau §4 pré-rempli** à reporter dans la colonne « Décision figée » ci-dessous.
+**Doctrine et détail** : [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — B2C/B2B, champs, copies, doublon email, traçabilité BO.
 
-**Hypothèse MVP recommandée** *(non gelée — reste soumise à validation §4)* : page dédiée « Demande d’ouverture de compte pro » alimentant un objet standard Odoo (**`crm.lead`** via **`website_form`** si le module CRM est disponible et pertinent), **sans** création automatique de compte portail pro ni modification de pricelist.
+**Hypothèse MVP** *(alignée §4)* : page dédiée « Demande d’ouverture de compte pro » (**`/demande-compte-professionnel`**) alimentant un objet standard Odoo (**`crm.lead`** via **`website_form`** si le module CRM est disponible et pertinent), **sans** création automatique de compte portail pro ni modification de pricelist.
 
 | # | Sujet | Proposition initiale *(indicative)* | Décision figée (MOA / tech) |
 |---|--------|--------------------------------------|----------------------------|
-| 1 | **`auth_signup`** activé sur le site ? | À vérifier sur instance cible | |
-| 2 | **Séparation A/B** | **Deux URLs** : signup standard B2C + **page dédiée** demande pro | |
-| 3 | **Achat invité** | À **préserver** si activé sur l’instance | |
-| 4 | **Demande pro** — chaîne technique | **`website_form` → `crm.lead`** si CRM disponible ; sinon alternative standard documentée | |
-| 5 | **Champs** formulaire B (liste minimale) | Société, contact, email, téléphone, type d’activité, message *(à valider MOA)* | |
-| 6 | **Email / notification** | Confirmation **web obligatoire** ; email auto au demandeur et/ou notification interne CK **à arbitrer** | |
-| 7 | **Validation métier** | Qui traite ; impact ultérieur sur pricelist / catégorie partenaire *(hors automatisation MVP si non validé)* | |
-| 8 | **Email déjà existant** (doublon) | Comportement **non opaque** : message clair visiteur **ou** rattachement / traitement manuel côté Odoo selon solution retenue *(pas besoin de tout le dédoublonnage dans ce ticket)* | |
-| 9 | **Tests Odoo** | Tag proposé `dorevia_ckr_account_mvp03` *(à valider)* | |
+| 1 | **`auth_signup`** activé sur le site ? | À vérifier sur instance cible | À vérifier sur instance ; utiliser **`auth_signup`** pour création auto du **compte particulier** si activé / activable proprement (parcours A = standard Odoo, sans champs entreprise obligatoires ni statut pro). |
+| 2 | **Séparation A/B** | **Deux URLs** : signup standard B2C + **page dédiée** demande pro | **Deux URLs** : **`/web/signup`** (B2C) + **`/demande-compte-professionnel`** (demande pro). |
+| 3 | **Achat invité** | À **préserver** si activé sur l’instance | **Préserver** si activé ; ne pas forcer la création de compte avant paiement. |
+| 4 | **Demande pro** — chaîne technique | **`website_form` → `crm.lead`** si CRM disponible ; sinon alternative standard documentée | **`website_form` → `crm.lead`** si CRM disponible ; sinon alternative standard documentée ; **pas** de portail pro auto ni pricelist auto ; lead identifiable (tag / source type **Demande compte pro C-Kreyol MVP03**). |
+| 5 | **Champs** formulaire B (liste minimale) | Société, contact, email, téléphone, type d’activité, message *(à valider MOA)* | **Obligatoires** : entreprise, contact, email, téléphone, type d’activité (**liste + Autre**), message. **Optionnels** : SIRET, adresse. |
+| 6 | **Email / notification** | Confirmation **web obligatoire** ; email auto au demandeur et/ou notification interne CK **à arbitrer** | Confirmation **web obligatoire** ; **notification interne** recommandée ; email demandeur **optionnel** V1 si mise en œuvre simple. |
+| 7 | **Validation métier** | Qui traite ; impact ultérieur sur pricelist / catégorie partenaire *(hors automatisation MVP si non validé)* | Traitement **manuel** ultérieur ; **aucune** pricelist / catégorie B2B automatique dans le périmètre MVP 03 décrit. |
+| 8 | **Email déjà existant** (doublon) | Comportement **non opaque** : message clair visiteur **ou** rattachement / traitement manuel côté Odoo selon solution retenue *(pas besoin de tout le dédoublonnage dans ce ticket)* | Pas d’échec silencieux ; message clair et/ou lead + rapprochement BO — détail : [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §11. |
+| 9 | **Tests Odoo** | Tag proposé `dorevia_ckr_account_mvp03` *(à valider)* | Tag **`dorevia_ckr_account_mvp03`** ; périmètre : [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §15. |
 
 ---
 
@@ -132,8 +132,8 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher
 
 ## 9. Prêt pour dev — checklist
 
-1. [ ] **GO MOA** sur copies définitives (titres, CTA, message confirmation B).
-2. [ ] **Arbitrages §4** complétés (au minimum 1–6 pour démarrer).
+1. [ ] **GO MOA** sur copies définitives (titres, CTA, message confirmation B) — propositions dans [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §9 sauf ajustement atelier.
+2. [x] **Arbitrages §4** complétés — colonne « Décision figée » renseignée ([RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §17) ; réserve **instance** (voir recommandation §16).
 3. [ ] **Branche** et responsable dev assignés.
 4. [ ] **Base de test** : `auth_signup` / invité / CRM alignés avec l’environnement cible.
 
@@ -149,3 +149,4 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher
 | 2026-05-05 | **GO documentaire** — tampon date ; validation du document pour arbitrage §4 puis exécution ([PV recette brouillon](PV_RECETTE_COMPTE_CLIENT_MVP03.md)). |
 | 2026-05-05 | Lien vers support d’atelier [ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md](ATELIER_ARBITRAGE_COMPTE_CLIENT_MVP03.md) pour compléter le §4 en réunion MOA / tech. |
 | 2026-05-05 | Référence [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) — pré-arbitrages et tableau §4 pré-rempli recommandé. |
+| 2026-05-05 | **§4 complété** : colonne « Décision figée » alignée sur [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §17 ; statut **GO dev avec réserve instance**. |
