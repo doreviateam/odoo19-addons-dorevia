@@ -10,7 +10,9 @@ Dossier de **cadrage** pour la vague **MVP 04** : stabiliser les éléments d’
 
 | Document | Rôle |
 |----------|------|
-| [README.md](README.md) | Intention, lots 1 / 2, doctrine, garde-fous — **source de vérité produit** pour MVP 04 |
+| [README.md](README.md) | Intention, lots 1 / 2, doctrine, garde-fous, hors périmètre — **source de vérité produit** pour MVP 04 |
+| [1_PANIER_PARCOURS.md](1_PANIER_PARCOURS.md) | Parcours **panier** : points d’entrée, états, invité / connecté, alignement checkout |
+| [2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md) | Parcours **favoris** : ajout / retrait, liste, persistance, lien éventuel compte |
 
 ---
 
@@ -24,6 +26,8 @@ Stabiliser les éléments d’achat et de sélection personnelle dans l’expér
 ---
 
 ## Priorité MVP 04
+
+Le **Lot 1 — Panier** est prioritaire : il conditionne directement la conversion et la non-régression du checkout. Le **Lot 2 — Favoris** ne doit pas retarder la stabilisation du panier.
 
 ### Lot 1 — Panier
 
@@ -73,3 +77,18 @@ Stabiliser les éléments d’achat et de sélection personnelle dans l’expér
 - Ne pas forcer la création de compte si l’achat invité reste activé.
 - Ne pas mélanger favoris et panier.
 - Ne pas créer de mécanique marketing lourde en MVP 04.
+
+---
+
+## Hors périmètre implicite
+
+Sauf ticket ultérieur, MVP 04 ne couvre pas :
+
+- relance panier abandonné ;
+- recommandations personnalisées ;
+- emailing marketing lié aux favoris ;
+- partage de wishlist ;
+- wishlist collaborative ;
+- programme fidélité ;
+- promotions automatiques liées aux favoris ;
+- refonte complète du checkout.
