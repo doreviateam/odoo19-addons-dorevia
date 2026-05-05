@@ -2,7 +2,7 @@
 <odoo>
 
     <!-- Page publique : demande d'ouverture de compte professionnel (MVP03).
-         Bloc centré, largeur maîtrisée, parcours compact — fond CK, sans carte lourde.
+         Maquette : colonne centrée, fond clair, titre serif — sans carte lourde.
          Formulaire Website → crm.lead via website_crm ; champs masqués + website_form_input_filter. -->
 
     <template id="ckr_page_demande_compte_pro" name="C-Kreyol: Demande ouverture compte professionnel">
@@ -24,12 +24,9 @@
                         <h1 class="ckr-demande-pro__title text-center">Demande d&apos;ouverture de compte professionnel</h1>
 
                         <div class="ckr-demande-pro__intro text-center">
-                            <p class="ckr-demande-pro__intro-lead">
-                                Entreprise, boutique, restaurant, collectivité ou organisation&#160;?
-                                Transmettez votre demande d&apos;ouverture de compte professionnel.
-                            </p>
-                            <p class="ckr-demande-pro__intro-note mb-0">
-                                L&apos;accès aux conditions professionnelles est soumis à validation par l&apos;équipe C-Kreyol.
+                            <p class="ckr-demande-pro__intro-lead mb-0">
+                                Accédez à notre catalogue de produits artisanaux aux tarifs réservés aux professionnels.
+                                La création de compte est soumise à validation par nos équipes.
                             </p>
                         </div>
 
@@ -46,7 +43,7 @@
                                           data-success-mode="redirect"
                                           data-success-page="/demande-compte-pro-merci"
                                           data-pre-fill="true">
-                                        <div class="s_website_form_rows row g-2 s_col_no_bgcolor">
+                                        <div class="s_website_form_rows row g-3 s_col_no_bgcolor">
                                             <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
                                                 <input type="hidden"
                                                        name="referred"
@@ -65,14 +62,14 @@
                                                     <span class="s_website_form_label_content">Entreprise</span>
                                                     <span class="s_website_form_mark"> *</span>
                                                 </label>
-                                                <input id="ckr_pro_partner_name" type="text" class="form-control s_website_form_input" name="partner_name" required="" placeholder="Raison sociale" data-fill-with="commercial_company_name"/>
+                                                <input id="ckr_pro_partner_name" type="text" class="form-control s_website_form_input" name="partner_name" required="" placeholder="Nom de votre entreprise" data-fill-with="commercial_company_name"/>
                                             </div>
                                             <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
                                                 <label class="s_website_form_label" for="ckr_pro_contact_name">
                                                     <span class="s_website_form_label_content">Nom et prénom du contact</span>
                                                     <span class="s_website_form_mark"> *</span>
                                                 </label>
-                                                <input id="ckr_pro_contact_name" type="text" class="form-control s_website_form_input" name="contact_name" required="" placeholder="Votre nom complet" data-fill-with="name"/>
+                                                <input id="ckr_pro_contact_name" type="text" class="form-control s_website_form_input" name="contact_name" required="" placeholder="Jean Dupont" data-fill-with="name"/>
                                             </div>
 
                                             <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
@@ -80,14 +77,14 @@
                                                     <span class="s_website_form_label_content">Adresse e-mail</span>
                                                     <span class="s_website_form_mark"> *</span>
                                                 </label>
-                                                <input id="ckr_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" placeholder="email@entreprise.com" data-fill-with="email"/>
+                                                <input id="ckr_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" placeholder="contact@entreprise.com" data-fill-with="email"/>
                                             </div>
                                             <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
                                                 <label class="s_website_form_label" for="ckr_pro_phone">
                                                     <span class="s_website_form_label_content">Téléphone</span>
                                                     <span class="s_website_form_mark"> *</span>
                                                 </label>
-                                                <input id="ckr_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" required="" placeholder="Numéro direct ou standard" data-fill-with="phone"/>
+                                                <input id="ckr_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" required="" placeholder="01 23 45 67 89" data-fill-with="phone"/>
                                             </div>
 
                                             <div class="mb-0 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="selection" data-name="Field">
@@ -115,11 +112,11 @@
                                                     <span class="s_website_form_label_content">Message</span>
                                                     <span class="s_website_form_mark"> *</span>
                                                 </label>
-                                                <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="3" placeholder="Décrivez brièvement votre activité et votre besoin…"></textarea>
+                                                <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="3" placeholder="Décrivez brièvement vos besoins et les volumes envisagés…"></textarea>
                                             </div>
 
                                             <div class="mb-0 py-0 col-12 s_website_form_submit s_website_form_no_submit_label text-center" data-name="Submit Button">
-                                                <a href="#" role="button" class="btn ckr-btn ckr-btn--primary s_website_form_send">Envoyer la demande</a>
+                                                <a href="#" role="button" class="btn ckr-btn ckr-btn--primary s_website_form_send w-100">Envoyer la demande</a>
                                                 <span id="s_website_form_result"/>
                                             </div>
                                         </div>
