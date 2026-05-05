@@ -19,6 +19,32 @@ Le **§4 est complété** avec les décisions recommandées ; le ticket sert de 
 
 **Doctrine** : [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md) ; [ADR-CKR-001](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-001) (standard d’abord) ; [ADR-CKR-009](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-009) (sanctuarisation tunnel) ; [ADR-CKR-010](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010) (B2C/B2B).
 
+### Pickup dev *(réserve réduite)*
+
+Ticket **prêt pour pickup** ; détail dans les sections suivantes et [Complément technique](#complément-technique--chaîne-demande-pro-vers-crm).
+
+**Vérifié sur `tenant_o7`**
+
+- **`auth_signup`** installé ;
+- **`/web/signup`** OK ;
+- **achat invité** aligné (`account_on_checkout` = optional).
+
+**Décision technique — demande pro**
+
+- installer **`crm`** ;
+- installer / confirmer **`website_crm`** ;
+- créer **`/demande-compte-professionnel`** ;
+- formulaire Website avec action **Create an Opportunity** ;
+- identifier les demandes comme **`Demande compte pro C-Kreyol MVP03`**.
+
+**Garde-fous**
+
+- pas de portail pro automatique ;
+- pas de pricelist B2B automatique ;
+- pas de statut pro validé automatiquement.
+
+**Branche proposée** : **`feat/mvp03-compte-client`**.
+
 ---
 
 ## 1. Contexte
@@ -214,7 +240,7 @@ Pas de module website_form séparé à prévoir — les formulaires sont portés
 
 1. [ ] **GO MOA** sur copies définitives (titres, CTA, message confirmation B) — propositions dans [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §9 sauf ajustement atelier.
 2. [x] **Arbitrages §4** complétés — colonne « Décision figée » renseignée ([RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §17) ; chaîne CRM **décisionnelle** : [Complément technique](#complément-technique--chaîne-demande-pro-vers-crm).
-3. [ ] **Branche** et responsable dev assignés *(ex. `feat/mvp03-compte-client`)*.
+3. [ ] **Branche** et responsable dev assignés — **branche proposée** : **`feat/mvp03-compte-client`**.
 4. [ ] **Base de test** **`tenant_o7`** :
    - [x] **`auth_signup`** aligné ;
    - [x] **achat invité** aligné (`account_on_checkout` = optional) ;
@@ -237,3 +263,4 @@ Pas de module website_form séparé à prévoir — les formulaires sont portés
 | 2026-05-05 | **§4 complété** : colonne « Décision figée » alignée sur [RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md](RECOMMANDATION_ATELIER_COMPTE_CLIENT_MVP03.md) §17 ; statut **GO dev avec réserve instance**. |
 | 2026-05-05 | **Vérification instance** : base **`tenant_o7`** sur `localhost:18079` — tableau sous §4 ; réserve **CRM non installé** ; pas de secrets dans le doc. |
 | 2026-05-05 | **Complément technique** : chaîne standard **`website` + `crm` + `website_crm`** ; pas de module `website_form` séparé ; checklist §9 point 4 détaillée ; statut **GO dev avec réserve réduite**. |
+| 2026-05-05 | **Pickup dev** : synthèse **`tenant_o7`** + décision technique + garde-fous ; section *Pickup dev* ; branche proposée **`feat/mvp03-compte-client`**. |
