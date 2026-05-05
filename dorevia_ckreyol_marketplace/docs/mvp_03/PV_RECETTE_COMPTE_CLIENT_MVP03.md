@@ -26,6 +26,20 @@
 - **§4 ticket** complété : `auth_signup`, URLs A/B, achat invité, chaîne demande pro, champs, notifications, comportement doublon email.
 - Base alignée avec l’**instance cible** (CRM si `crm.lead`, etc.).
 
+### 1.1 Arbitrages retenus pour cette recette
+
+*À remplir avant ou au début de la session de test — évite de recourir à l’historique du ticket pendant la recette.*
+
+| Sujet | Décision testée |
+|-------|-----------------|
+| `auth_signup` | *À compléter* |
+| Séparation A/B | *À compléter* |
+| Achat invité | *À compléter* |
+| Chaîne demande pro | *À compléter* |
+| Champs formulaire B | *À compléter* |
+| Email / notification | *À compléter* |
+| Doublon email | *À compléter* |
+
 ---
 
 ## 2. Parcours A — compte particulier (B2C)
@@ -46,10 +60,12 @@
 |--------|:--:|:---:|:---:|-------------|
 | Entrée **distincte** du signup B2C (URL / section — selon arbitrage) | [ ] | [ ] | [ ] | |
 | Copies **sans** promesse tarifs pro immédiate ([spec §5.3](2_COMPTE_CLIENT_SPEC_UX.md)) | [ ] | [ ] | [ ] | |
+| **Aucune formulation interdite** visible (ex. « Accéder aux tarifs pro », « Activer mon compte pro », « Voir mes prix professionnels », etc. — [liste spec §5.3](2_COMPTE_CLIENT_SPEC_UX.md)) | [ ] | [ ] | [ ] | |
 | **Confirmation web obligatoire** après envoi (message clair « demande transmise ») | [ ] | [ ] | [ ] | |
 | **Pas** de création automatique d’utilisateur **portail pro** *(sauf arbitrage explicite)* | [ ] | [ ] | [ ] | |
 | **Pas** de bascule pricelist / prix B2B après seule soumission formulaire | [ ] | [ ] | [ ] | |
 | Emails / notifications additionnels conformes à **§4** ticket | [ ] | [ ] | [ ] | |
+| Mentions / renvoi **privacy** visibles ou accessibles selon arbitrage (**`/privacy`** — [ticket §3.4](TICKET_COMPTE_CLIENT_MVP03.md)) | [ ] | [ ] | [ ] | |
 
 ---
 
@@ -75,7 +91,7 @@
 | Critère | OK | NOK | N/A | Commentaire |
 |--------|:--:|:---:|:---:|-------------|
 | Comportement **explicite** côté visiteur **ou** traitement BO documenté (cf. §4 ticket — ligne doublon) | [ ] | [ ] | [ ] | |
-| Pas de échec **silencieux** ni message générique opaque | [ ] | [ ] | [ ] | |
+| Pas **d’échec silencieux** ni message générique opaque | [ ] | [ ] | [ ] | |
 
 ---
 
@@ -113,9 +129,18 @@
 
 ---
 
+## 11. Réserves / actions à ouvrir
+
+| ID | Réserve / action | Gravité | Responsable | Statut |
+|----|------------------|---------|-------------|--------|
+| R1 | *À compléter* | *Bloquant / Mineur / Info* | *À compléter* | *Ouvert* |
+
+---
+
 ## Historique
 
 | Date | Événement |
 |------|-----------|
 | 2026-05 | Création **brouillon** : grilles recette alignées ticket + spec UX ; verdict après livraison. |
 | 2026-05-05 | **GO documentaire** sur le dossier MVP 03 — PV prêt pour préparation des tests ; verdict après implémentation. |
+| 2026-05 | Amendements : §1.1 arbitrages testés ; contrôle formulations interdites parcours B ; ligne RGPD / **`/privacy`** ; §11 réserves / actions à ouvrir. |
