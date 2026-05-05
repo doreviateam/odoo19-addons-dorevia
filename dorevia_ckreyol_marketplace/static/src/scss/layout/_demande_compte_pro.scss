@@ -11,39 +11,34 @@
     }
 
     .ckr-demande-pro__layout {
-        max-width: 42rem;
+        width: 100%;
+        max-width: 38rem;
         margin-left: auto;
         margin-right: auto;
     }
 
-    h1 {
-        margin-bottom: $ckr-space-md;
-        letter-spacing: -0.02em;
-    }
-
-    .ckr-demande-pro__intro {
-        max-width: 58ch;
+    .ckr-demande-pro__hero {
+        text-align: center;
         margin-bottom: $ckr-space-lg;
 
-        p {
-            margin-bottom: $ckr-space-sm;
-            font-size: 1rem;
-            line-height: 1.55;
-            color: $ckr-text;
-
-            &:last-child {
-                margin-bottom: 0;
-            }
+        h1 {
+            margin-bottom: $ckr-space-md;
+            letter-spacing: -0.02em;
         }
+    }
 
-        .ckr-lead {
-            margin-bottom: $ckr-space-sm !important;
-        }
+    .ckr-demande-pro__intro-copy {
+        margin: 0 auto;
+        max-width: 52ch;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: $ckr-text-muted;
+        text-align: center;
     }
 
     .ckr-demande-pro__form-card {
         padding: unquote("clamp(1.25rem, 3vw, #{$ckr-space-xl})");
-        background-color: $ckr-bg;
+        background-color: #ffffff;
         border: 1px solid $ckr-border;
         border-radius: $ckr-radius-lg;
         box-shadow: $ckr-shadow-md;
@@ -67,6 +62,11 @@
 
         .s_website_form_label_content {
             font-size: 0.9375rem;
+        }
+
+        .s_website_form_mark {
+            color: #c53030;
+            font-weight: $ckr-weight-semibold;
         }
     }
 
@@ -102,21 +102,14 @@
     }
 
     .ckr-demande-pro__secondary {
-        margin-top: $ckr-space-xl;
+        margin-top: $ckr-space-lg;
         padding-top: $ckr-space-md;
         text-align: center;
-        border-top: 1px solid rgba(44, 44, 44, 0.08);
 
         p {
-            margin-bottom: $ckr-space-xs;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             color: $ckr-text-muted;
             letter-spacing: 0.01em;
-        }
-
-        p:last-child {
-            margin-bottom: 0;
-            font-size: 0.875rem;
 
             a {
                 font-weight: $ckr-weight-medium;

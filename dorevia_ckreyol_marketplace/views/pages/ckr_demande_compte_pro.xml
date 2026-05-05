@@ -21,19 +21,16 @@
                 <section class="ckr-section">
                     <div class="ckr-container">
                         <div class="ckr-demande-pro__layout">
-                            <h1>Demande d&apos;ouverture de compte professionnel</h1>
-
-                            <div class="ckr-demande-pro__intro">
-                                <p class="ckr-lead mb-2">
+                            <header class="ckr-demande-pro__hero">
+                                <h1>Demande d&apos;ouverture de compte professionnel</h1>
+                                <p class="ckr-demande-pro__intro-copy">
                                     Vous représentez une entreprise, une boutique, un restaurant, une collectivité ou une organisation ?
-                                </p>
-                                <p class="mb-2">
+                                    <br/><br/>
                                     Vous pouvez nous transmettre une demande d&apos;ouverture de compte professionnel.
-                                </p>
-                                <p class="mb-0">
+                                    <br/><br/>
                                     L&apos;accès aux conditions professionnelles est soumis à validation par l&apos;équipe C-Kreyol.
                                 </p>
-                            </div>
+                            </header>
 
                             <div class="ckr-demande-pro__form-card">
                                 <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
@@ -64,14 +61,14 @@
 
                                                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
                                                     <label class="s_website_form_label" for="ckr_pro_partner_name">
-                                                        <span class="s_website_form_label_content">Entreprise</span>
+                                                        <span class="s_website_form_label_content">Nom de l&apos;entreprise</span>
                                                         <span class="s_website_form_mark"> *</span>
                                                     </label>
                                                     <input id="ckr_pro_partner_name" type="text" class="form-control s_website_form_input" name="partner_name" required="" placeholder="Raison sociale" data-fill-with="commercial_company_name"/>
                                                 </div>
                                                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
                                                     <label class="s_website_form_label" for="ckr_pro_contact_name">
-                                                        <span class="s_website_form_label_content">Nom et prénom du contact</span>
+                                                        <span class="s_website_form_label_content">Nom et Prénom du contact</span>
                                                         <span class="s_website_form_mark"> *</span>
                                                     </label>
                                                     <input id="ckr_pro_contact_name" type="text" class="form-control s_website_form_input" name="contact_name" required="" placeholder="Votre nom complet" data-fill-with="name"/>
@@ -79,7 +76,7 @@
 
                                                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
                                                     <label class="s_website_form_label" for="ckr_pro_email">
-                                                        <span class="s_website_form_label_content">Adresse e-mail</span>
+                                                        <span class="s_website_form_label_content">Adresse Email</span>
                                                         <span class="s_website_form_mark"> *</span>
                                                     </label>
                                                     <input id="ckr_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" placeholder="email@entreprise.com" data-fill-with="email"/>
@@ -114,10 +111,10 @@
 
                                                 <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
                                                     <label class="s_website_form_label" for="ckr_pro_description">
-                                                        <span class="s_website_form_label_content">Message</span>
+                                                        <span class="s_website_form_label_content">Votre demande (Besoins, volumes estimés…)</span>
                                                         <span class="s_website_form_mark"> *</span>
                                                     </label>
-                                                    <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="5" placeholder="Décrivez brièvement votre activité et votre besoin…"></textarea>
+                                                    <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="5" placeholder="Décrivez brièvement vos besoins…"></textarea>
                                                 </div>
 
                                                 <div class="mb-0 py-0 col-12 s_website_form_submit s_website_form_no_submit_label" data-name="Submit Button">
@@ -131,8 +128,7 @@
                             </div>
 
                             <div class="ckr-demande-pro__secondary">
-                                <p>Vous souhaitez commander à titre personnel ?</p>
-                                <p>
+                                <p class="mb-0">
                                     <a href="/web/signup">Créer un compte particulier</a>
                                     ·
                                     <a href="/web/login">Connexion</a>

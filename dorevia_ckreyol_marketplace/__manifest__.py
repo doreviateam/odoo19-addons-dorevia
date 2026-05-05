@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.82",
+    "version": "19.0.1.10.83",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -24,6 +24,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   libellés, liens secondaires).
 * 19.0.1.10.82 : fix assets SCSS demande pro — ``unquote`` pour ``min()`` / ``clamp``
   (évite erreur Dart Sass « Incompatible units rem and % »).
+* 19.0.1.10.83 : demande pro — alignement maquette Stitch (libellés, intro centrée,
+  carte blanche, astérisques rouges, liens secondaires).
 
 Portee :
 
