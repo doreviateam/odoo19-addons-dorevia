@@ -2,9 +2,13 @@
 // Page demande compte professionnel (/demande-compte-professionnel)
 // Formulaire court : lisible sur laptop sans scroll (header + intro compacts,
 // grille 2 col, pas de carte ni bandeau vertical excessif).
+// Largeur intro + formulaire alignée pour éviter l’effet « tout à gauche ».
 // ============================================================================
 
 .ckr-page--demande-pro {
+    // Mesure unique du bloc éditorial + formulaire (plus large que l’ancien 48rem).
+    --ckr-demande-pro-content-max: 56rem;
+
     // Moins de padding vertical que les sections éditoriales : libère la zone utile.
     .ckr-section {
         padding-top: $ckr-space-lg;
@@ -16,29 +20,34 @@
         }
     }
 
-    // Titre premium mais peu haut : reste visible avec le formulaire sur un écran standard.
+    // Premium mais discret : ne domine pas la page.
     .ckr-demande-pro__title {
-        font-size: unquote("clamp(1.0625rem, 1.35vw, 1.3125rem)");
-        line-height: 1.22;
+        font-size: unquote("clamp(0.9375rem, 1.05vw, 1.125rem)");
+        line-height: 1.2;
         font-weight: $ckr-weight-semibold;
-        letter-spacing: unquote("-0.01em");
-        margin-bottom: $ckr-space-xs;
-        max-width: 42rem;
+        letter-spacing: unquote("-0.012em");
+        margin-bottom: 0.25rem;
+        max-width: var(--ckr-demande-pro-content-max);
     }
 
     .ckr-demande-pro__intro {
-        max-width: 46rem;
-        margin-bottom: $ckr-space-sm;
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+        max-width: var(--ckr-demande-pro-content-max);
+        margin-bottom: 0.5rem;
 
         .ckr-demande-pro__intro-lead {
+            margin-bottom: 0;
             font-size: 0.9375rem;
-            line-height: 1.45;
+            line-height: 1.38;
             color: $ckr-text;
         }
 
         .ckr-demande-pro__intro-note {
+            margin-bottom: 0;
             font-size: 0.8125rem;
-            line-height: 1.4;
+            line-height: 1.35;
             color: $ckr-text-muted;
         }
     }
@@ -52,9 +61,13 @@
         box-shadow: none;
     }
 
-    // Largeur de formulaire maîtrisée sans encadré : le fond reste le crème CK ($ckr-bg).
+    // Aligné sur l’intro : mieux rempli sur desktop qu’un 48rem isolé.
     .ckr-demande-pro__form {
-        max-width: 48rem;
+        max-width: var(--ckr-demande-pro-content-max);
+    }
+
+    @media (min-width: 1200px) {
+        --ckr-demande-pro-content-max: 58rem;
     }
 
     // Champs : libellé au-dessus (pas de colonne fixe Odoo).
@@ -121,6 +134,6 @@
 
     .ckr-demande-pro__secondary {
         margin-top: $ckr-space-md;
-        max-width: 46rem;
+        max-width: var(--ckr-demande-pro-content-max);
     }
 }
