@@ -6,6 +6,8 @@ Dossier de **cadrage** pour la vague **MVP 03** : parcours de **création de com
 
 > MVP_03 prépare la distinction entre **compte particulier** et **demande de compte professionnel**, sans créer immédiatement une mécanique B2B lourde ni une **boutique parallèle** — alignement [doctrine B2C/B2B](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md), [ADR-010](../direction/ARCHITECTURE_DECISION_RECORD.md#adr-ckr-010).
 
+Ordre des chantiers CK (court / moyen terme, après stabilisation tunnel) : [CHANTIERS_CK_ORDRE.md](../direction/CHANTIERS_CK_ORDRE.md).
+
 **Documents du dossier**
 
 | Document | Rôle |
