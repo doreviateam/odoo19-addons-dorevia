@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.85",
+    "version": "19.0.1.10.86",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -30,6 +30,7 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   titre allégé, pas de centrage landing, libellé Message + placeholder demandé).
 * 19.0.1.10.85 : demande pro — densité laptop : header + intro compacts, padding section
   réduit, grille g-2, champs et textarea resserrés, CTA sans scroll sur desktop standard.
+* 19.0.1.10.86 : demande pro — fix XML : ``&#160;`` au lieu de ``&nbsp;`` (entité non déclarée).
 
 Portee :
 
