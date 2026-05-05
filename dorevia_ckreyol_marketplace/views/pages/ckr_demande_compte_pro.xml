@@ -139,7 +139,7 @@
                                 Laissez-nous vos coordonnées et un créneau de disponibilité. Un conseiller C-Kreyol pourra vous rappeler pour comprendre votre activité et vos besoins.
                             </p>
                             <button type="button"
-                                    class="btn ckr-btn ckr-btn--secondary w-100 ckr-demande-pro__rappel-toggle"
+                                    class="btn ckr-btn w-100 ckr-demande-pro__rappel-toggle"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#ckrDemandeProRappelCollapse"
                                     aria-expanded="false"
@@ -178,7 +178,7 @@
 
                                                 <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
                                                     <label class="s_website_form_label" for="ckr_rappel_contact_name">
-                                                        <span class="s_website_form_label_content">Nom</span>
+                                                        <span class="s_website_form_label_content">Nom et prénom</span>
                                                         <span class="s_website_form_mark"> *</span>
                                                     </label>
                                                     <input id="ckr_rappel_contact_name"
@@ -243,7 +243,7 @@
                                                 </div>
 
                                                 <div class="mb-0 py-0 col-12 s_website_form_submit s_website_form_no_submit_label text-center" data-name="Submit Button">
-                                                    <a href="#" role="button" class="btn ckr-btn ckr-btn--secondary btn-sm s_website_form_send w-100">Envoyer</a>
+                                                    <a href="#" role="button" class="btn ckr-btn btn-sm s_website_form_send w-100 ckr-demande-pro__rappel-send">Envoyer</a>
                                                     <span id="ckr_rappel_form_result"/>
                                                 </div>
                                             </div>

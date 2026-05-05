@@ -182,10 +182,60 @@
             line-height: 1.4;
         }
 
-        .ckr-demande-pro__rappel-toggle {
+        // Boutons rappel : contour terracotta / fond clair — sans hover noir du ``ckr-btn--secondary``.
+        .ckr-demande-pro__rappel-toggle.ckr-btn {
             font-size: 0.9375rem;
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
+            background-color: #fff;
+            color: $ckr-primary;
+            border: 2px solid rgba(160, 82, 45, 0.38);
+
+            &:hover,
+            &:focus {
+                background-color: rgba(160, 82, 45, 0.06);
+                color: $ckr-primary-dark;
+                border-color: $ckr-primary;
+            }
+
+            &[aria-expanded="true"] {
+                background-color: rgba(160, 82, 45, 0.09);
+                color: $ckr-primary-dark;
+                border-color: $ckr-primary;
+                box-shadow: none;
+            }
+
+            &:focus-visible {
+                outline: 3px solid rgba(160, 82, 45, 0.28);
+                outline-offset: 2px;
+            }
+
+            &:active {
+                transform: translateY(1px);
+            }
+        }
+
+        .ckr-demande-pro__rappel-send.ckr-btn {
+            background-color: #fff;
+            color: $ckr-primary;
+            border: 2px solid rgba(160, 82, 45, 0.35);
+            font-weight: $ckr-weight-medium;
+
+            &:hover,
+            &:focus {
+                background-color: rgba(160, 82, 45, 0.06);
+                color: $ckr-primary-dark;
+                border-color: rgba(160, 82, 45, 0.55);
+            }
+
+            &:focus-visible {
+                outline: 3px solid rgba(160, 82, 45, 0.28);
+                outline-offset: 2px;
+            }
+
+            &:active {
+                transform: translateY(1px);
+            }
         }
 
         .ckr-demande-pro__rappel-collapse {
