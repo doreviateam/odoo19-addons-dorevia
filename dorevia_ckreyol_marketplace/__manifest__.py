@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.80",
+    "version": "19.0.1.10.81",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -20,6 +20,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   Odoo 19 après suppression de web.user_switch).
 * 19.0.1.10.80 : demande compte pro — copies MOA, champ ``ckr_activity_type``,
   CTA ``ckr-btn``, phrase B2C avant liens.
+* 19.0.1.10.81 : demande compte pro — passe UX (grille 2 col, carte, placeholders,
+  libellés, liens secondaires).
 
 Portee :
 
@@ -434,6 +436,7 @@ ARCHITECTURE_DECISION_RECORD).
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_footer.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_portal.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_login.scss",
+            "dorevia_ckreyol_marketplace/static/src/scss/layout/_demande_compte_pro.scss",
             # Components
             "dorevia_ckreyol_marketplace/static/src/scss/components/_buttons.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_hero.scss",

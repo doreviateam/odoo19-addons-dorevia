@@ -1,0 +1,124 @@
+// ============================================================================
+// Page demande compte professionnel (/demande-compte-professionnel)
+// Lisibilité, grille 2 col desktop, carte sobre alignée charte CK (MVP03).
+// ============================================================================
+
+.ckr-page--demande-pro {
+    .ckr-section {
+        padding-top: clamp(2rem, 5vw, 3.5rem);
+        padding-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+
+    .ckr-demande-pro__layout {
+        max-width: 42rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    h1 {
+        margin-bottom: $ckr-space-md;
+        letter-spacing: -0.02em;
+    }
+
+    .ckr-demande-pro__intro {
+        max-width: 58ch;
+        margin-bottom: $ckr-space-lg;
+
+        p {
+            margin-bottom: $ckr-space-sm;
+            font-size: 1rem;
+            line-height: 1.55;
+            color: $ckr-text;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .ckr-lead {
+            margin-bottom: $ckr-space-sm !important;
+        }
+    }
+
+    .ckr-demande-pro__form-card {
+        padding: clamp(1.25rem, 3vw, $ckr-space-xl);
+        background-color: $ckr-bg;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-lg;
+        box-shadow: $ckr-shadow-md;
+    }
+
+    .ckr-demande-pro__form-card .container {
+        max-width: 100%;
+    }
+
+    // Champs : libellé au-dessus, pleine largeur (plus de colonne fixe 200px).
+    .s_website_form_field:not(.s_website_form_dnone) {
+        .s_website_form_label {
+            width: 100% !important;
+            max-width: 100%;
+            display: block;
+            margin-bottom: $ckr-space-xs;
+            padding-right: 0;
+            font-weight: $ckr-weight-medium;
+            color: $ckr-text;
+        }
+
+        .s_website_form_label_content {
+            font-size: 0.9375rem;
+        }
+    }
+
+    .form-control,
+    .form-select {
+        border-color: $ckr-border;
+        border-radius: $ckr-radius-md;
+        font-size: 1rem;
+
+        &:focus {
+            border-color: $ckr-primary;
+            box-shadow: 0 0 0 0.2rem rgba(160, 82, 45, 0.12);
+        }
+    }
+
+    textarea.form-control {
+        min-height: 7.5rem;
+    }
+
+    .s_website_form_submit {
+        margin-top: $ckr-space-sm;
+        padding-top: $ckr-space-md !important;
+        text-align: center !important;
+
+        .s_website_form_label {
+            display: none !important;
+        }
+
+        .s_website_form_send {
+            min-width: min(100%, 16rem);
+        }
+    }
+
+    .ckr-demande-pro__secondary {
+        margin-top: $ckr-space-xl;
+        padding-top: $ckr-space-md;
+        text-align: center;
+        border-top: 1px solid rgba(44, 44, 44, 0.08);
+
+        p {
+            margin-bottom: $ckr-space-xs;
+            font-size: 0.9rem;
+            color: $ckr-text-muted;
+            letter-spacing: 0.01em;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+            font-size: 0.875rem;
+
+            a {
+                font-weight: $ckr-weight-medium;
+            }
+        }
+    }
+}
