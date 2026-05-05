@@ -4,6 +4,7 @@
 **Date d’ouverture** : 2026-05  
 **Priorité** : **P2** *(à confirmer pilotage)*  
 **Statut** : **Brouillon — prêt pour arbitrage MOA / tech** *(pas de GO dev tant que §4 n’est pas complété et validé)*.  
+**GO documentaire** : **2026-05-05** — validation du périmètre et des garde-fous du présent ticket *(exécution dev toujours soumise au §4 complété et au pickup équipe)*.  
 **Module** : `dorevia_ckreyol_marketplace` (+ configuration Odoo site / CRM selon arbitrage).
 
 **Sources de vérité produit / UX** :
@@ -140,4 +141,5 @@ Les lignes ci-dessous **bloquent** ou **orientent** l’implémentation ; cocher
 |------|-----------|
 | 2026-05 | Création du ticket d’exécution MVP 03 à partir des docs parcours, spec UX et structure tickets module. |
 | 2026-05 | Amendements : statut « prêt pour arbitrage », exécutable si §4 complété ; hypothèse MVP ; pas d’utilisateur portail auto pour la demande pro ; §4 enrichi (propositions initiales, ligne doublon email) ; critères traçabilité BO + email dupliqué ; PV `PV_RECETTE_COMPTE_CLIENT_MVP03.md` ; lien `/privacy` clarifié. |
-| 2026-05 | §4 ligne *Email / notification* : confirmation web = minimum obligatoire ; emails auto / internes à arbitrer. **GO documentaire** ticket (brouillon prêt arbitrage). Lien vers PV brouillon recette. |
+| 2026-05 | §4 ligne *Email / notification* : confirmation web = minimum obligatoire ; emails auto / internes à arbitrer ; lien vers PV recette brouillon. |
+| 2026-05-05 | **GO documentaire** — tampon date ; validation du document pour arbitrage §4 puis exécution ([PV recette brouillon](PV_RECETTE_COMPTE_CLIENT_MVP03.md)). |

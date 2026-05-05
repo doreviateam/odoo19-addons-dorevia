@@ -119,3 +119,4 @@ Le **parcours particulier** doit rester **court** et ne pas devenir plus **admin
 | 2026-05 | Ajout [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) — ticket d’exécution dev (périmètre, arbitrages, critères d’acceptation, hors périmètre). |
 | 2026-05 | Ticket MVP03 : amendements (exécutable si §4, hypothèse MVP, pas de portail auto demande pro, traçabilité BO, doublon email, PV `PV_RECETTE_COMPTE_CLIENT_MVP03.md`). |
 | 2026-05 | **GO documentaire** ticket MVP03 ; ligne §4 *Email / notification* ; création **PV recette brouillon** [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md). |
+| 2026-05-05 | **GO documentaire** daté — [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) + [PV_RECETTE_COMPTE_CLIENT_MVP03.md](PV_RECETTE_COMPTE_CLIENT_MVP03.md) (brouillon prêt arbitrage §4). |

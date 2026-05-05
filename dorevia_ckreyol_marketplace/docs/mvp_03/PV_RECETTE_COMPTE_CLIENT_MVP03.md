@@ -3,7 +3,8 @@
 **Ticket** : [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md)  
 **Spec UX** : [2_COMPTE_CLIENT_SPEC_UX.md](2_COMPTE_CLIENT_SPEC_UX.md) — parcours : [1_COMPTE_CLIENT_PARCOURS.md](1_COMPTE_CLIENT_PARCOURS.md)
 
-**Statut** : **Brouillon** — structure de recette **avant livraison dev** ; verdict, date et instance à compléter après implémentation.
+**Statut** : **Brouillon** — structure de recette **avant livraison dev** ; verdict, date et instance à compléter après implémentation.  
+**GO documentaire (ticket)** : **2026-05-05** — voir [TICKET_COMPTE_CLIENT_MVP03.md](TICKET_COMPTE_CLIENT_MVP03.md) *(ce PV reste non instruit jusqu’à recette réelle)*.
 
 | Champ | Valeur |
 |-------|--------|
@@ -117,3 +118,4 @@
 | Date | Événement |
 |------|-----------|
 | 2026-05 | Création **brouillon** : grilles recette alignées ticket + spec UX ; verdict après livraison. |
+| 2026-05-05 | **GO documentaire** sur le dossier MVP 03 — PV prêt pour préparation des tests ; verdict après implémentation. |
