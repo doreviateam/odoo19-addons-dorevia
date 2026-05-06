@@ -3,7 +3,7 @@
 **ID** : `HEADER-NAV-MVP04`  
 **Date d’ouverture** : 2026-05  
 **Priorité** : **P2**  
-**Statut** : **Décision de posture — Header CK V1**  
+**Statut** : **Header CK V1 implémenté et figé (baseline avant suite MVP04)**  
 **Module** : `dorevia_ckreyol_marketplace`
 
 **Dossier lié** : `docs/mvp_04/` — panier & favoris  
@@ -45,8 +45,15 @@ Attendu V1 :
 
 - barre fine ;
 - texte court ;
-- une seule information ;
+- une seule information visible à la fois ;
 - désactivable ou facilement neutralisable si possible.
+
+Calibrage retenu :
+
+- rotateur sobre (pas d’effet ticker) ;
+- cycle 32s ;
+- typo mobile 0.76rem ;
+- couleur texte terracotta validée.
 
 Exemple :
 
@@ -68,6 +75,20 @@ Garde-fou recherche :
 - pas de recherche massive ;
 - pas de barre dominante ;
 - icône ou champ court uniquement.
+
+Note produit (future recherche globale) :
+
+- le champ de recherche header est conservé comme entrée de recherche globale future ;
+- ne pas figer le wording sur "Rechercher un produit" ;
+- cible à terme : produits, collections, promotions, idées cadeaux, recettes, articles/blog, contenus Communauté.
+
+Finition créa retenue :
+
+- champ visuel desktop légèrement arrondi ;
+- contour terracotta sobre ;
+- icône loupe en terracotta ;
+- libellé aide harmonisé : `Aide & Contact`.
+- doctrine logotype marque/web : voir [PISTE_CREA_LOGOTYPE_CKREYOL.md](PISTE_CREA_LOGOTYPE_CKREYOL.md).
 
 ### 3.3 Top_2 — Exploration
 
@@ -167,4 +188,6 @@ Phrase de conduite :
 |------|-----------|
 | 2026-05 | Création du ticket de cadrage header / navigation CK en lien avec MVP04 panier & favoris. |
 | 2026-05 | Passage en posture **Header CK V1** : refonte structurante en trois niveaux, livrée en lots V1.1 / V1.2 / V1.3. |
+| 2026-05 | Gel de la baseline livrée : Top_0 rotateur sobre, Top_1 recherche visuelle discrète, wording recherche globale future, ajustements créa desktop validés. |
+| 2026-05 | Ajout d'une piste créa dédiée logotype (`C-Kréyòl` affiché / `C-Kreyol` technique) pour préparation d'une intégration header définitive. |
 

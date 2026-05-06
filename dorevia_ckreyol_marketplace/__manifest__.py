@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.107",
+    "version": "19.0.1.10.111",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -73,6 +73,14 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.107 : header V1.1 Top_1 — passe UI inspirée (CTA compte + icônes
   favoris/panier en pastilles avec compteurs), en conservant la palette et la
   hiérarchie visuelle CK.
+* 19.0.1.10.108 : header V1.2 mobile — ajout accès Favoris dans le cluster mobile
+  et bloc de liens rapides du drawer (Professionnels, Idées cadeaux, Recettes, Blog).
+* 19.0.1.10.109 : header V1.2 mobile — suppression duplication éditoriale dans le drawer ;
+  maintien d’une seule arborescence Communauté et entrée Professionnels dédiée.
+* 19.0.1.10.110 : tests HTTP panier MVP04 Palier A (tag ``dorevia_ckr_shop_cart``) :
+  ``/shop/cart``, header CK, structure checkout standard, panier vide + lien continuer (EN/FR).
+* 19.0.1.10.111 : tests panier — Odoo 19 panier vide : CTA ``Shop`` / ``Boutique`` vers ``/shop``
+  (``cart_lines``), en plus des libellés « Continue shopping ».
 
 Portee :
 
@@ -479,6 +487,7 @@ ARCHITECTURE_DECISION_RECORD).
         "web.assets_frontend": [
             # Layout
             "dorevia_ckreyol_marketplace/static/src/js/ckr_header_drawer.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_cart_feedback.js",
             "dorevia_ckreyol_marketplace/static/src/js/ckr_shop_sidebar.js",
             "dorevia_ckreyol_marketplace/static/src/js/ckr_homepage_hero_rotator.js",
             "dorevia_ckreyol_marketplace/static/src/js/ckr_demande_compte_pro.js",

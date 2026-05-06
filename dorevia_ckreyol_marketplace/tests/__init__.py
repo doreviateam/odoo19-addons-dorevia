@@ -2,6 +2,7 @@
 from . import test_ckr_mvp03_pro_account
 from . import test_ckr_circle
 from . import test_ckr_shop_wave1
+from . import test_ckr_shop_cart_mvp04
 from . import test_ckr_shop_container_contract
 from . import test_ckr_shop_collections
 from . import test_ckr_shop_origins

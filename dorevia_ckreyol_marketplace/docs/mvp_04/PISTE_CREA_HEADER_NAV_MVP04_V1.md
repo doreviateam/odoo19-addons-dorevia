@@ -1,6 +1,6 @@
 # Piste créa — Header CK MVP04 / V1
 
-**Statut** : piste créa / UX avant développement  
+**Statut** : piste créa / UX consolidée après implémentation V1  
 **Ticket lié** : `HEADER-NAV-MVP04`  
 **Dossier lié** : `docs/mvp_04/` — panier & favoris  
 **Module** : `dorevia_ckreyol_marketplace`
@@ -29,7 +29,7 @@ Objectif : valider une direction visuelle claire, e-commerce, compatible desktop
 
 - barre fine ;
 - texte court ;
-- une seule information ;
+- une seule information visible à la fois (rotateur sobre) ;
 - neutralisable facilement.
 
 Exemple :
@@ -41,11 +41,18 @@ Livraison offerte dès X € d’achat en France métropolitaine.
 ### Top_1 — Actions utiles
 
 - logo ;
-- recherche discrète (icône ou champ court) ;
+- recherche discrète (champ court desktop, icône mobile) ;
 - aide / contact ;
 - compte / connexion ;
 - favoris ;
 - panier + compteur.
+
+Calibrages créa validés :
+
+- style global sobre, non agressif ;
+- recherche desktop à contour terracotta fin, arrondi léger ;
+- loupe terracotta ;
+- libellé `Aide & Contact`.
 
 ### Top_2 — Exploration
 

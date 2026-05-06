@@ -311,6 +311,8 @@ Le vrai B2B tarifaire est un chantier séparé.
 
 **Principe** : d’abord stabiliser **comportement et DA** ; ensuite seulement snippetiser où c’est **pertinent**, sans fragiler la logique métier ni la doctrine catalogue.
 
+**Règle de nommage marque/web** : [NOMMAGE_CK_MARQUE_WEB.md](NOMMAGE_CK_MARQUE_WEB.md).
+
 ---
 
 ## Décision de conduite

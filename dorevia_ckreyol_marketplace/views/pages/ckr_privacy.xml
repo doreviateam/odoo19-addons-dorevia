@@ -9,7 +9,7 @@
                         <h1>Politique de confidentialité</h1>
                         <p class="ckr-lead">
                             La présente politique décrit comment sont traitées les données personnelles
-                            collectées sur ce site <strong>C-Kreyol</strong>, notamment lors de
+                            collectées sur ce site <strong>C-Kréyòl</strong>, notamment lors de
                             l’inscription au cercle (newsletter). Elle vise à vous informer de manière
                             claire et à respecter le <strong>règlement général sur la protection des
                             données</strong> (RGPD) et la loi « Informatique et libertés » applicable.
@@ -22,7 +22,7 @@
                         </p>
                         <h2>Données collectées et finalités</h2>
                         <p>
-                            Lorsque vous rejoignez le <strong>cercle C-Kreyol</strong> depuis la page
+                            Lorsque vous rejoignez le <strong>cercle C-Kréyòl</strong> depuis la page
                             d’accueil, nous enregistrons&#160;:
                         </p>
                         <ul>
@@ -96,7 +96,7 @@
                     <div class="ckr-container" style="max-width: 36rem; margin: 0 auto; text-align: center;">
                         <h1>Préférences</h1>
                         <p t-if="ckr_unsub_state == 'ok'" class="ckr-lead">
-                            Vous êtes désinscrit(e) du cercle C-Kreyol sur ce site. Merci
+                            Vous êtes désinscrit(e) du cercle C-Kréyòl sur ce site. Merci
                             d’avoir partagé un moment avec nous.
                         </p>
                         <p t-else="" class="ckr-lead">

@@ -52,37 +52,86 @@
                 <t t-set="ckr_cart_qty"
                    t-value="request.session.get('website_sale_cart_quantity', 0) if request and request.session else 0"/>
 
-                <div class="ckr-header__top0 d-none d-lg-block">
+                <div class="ckr-header__top0">
                     <div class="ckr-header__top0-inner">
-                        Livraison offerte dès 69 € d’achat en France métropolitaine.
+                        <div class="ckr-header__top0-rotator" aria-label="Informations boutique">
+                            <span class="ckr-header__top0-item ckr-header__top0-item--1">Livraison offerte dès 69 € d’achat en France métropolitaine.</span>
+                            <span class="ckr-header__top0-item ckr-header__top0-item--2">Expédition rapide : commandes préparées sous 24 à 48 h ouvrées.</span>
+                            <span class="ckr-header__top0-item ckr-header__top0-item--3">Produits antillais sélectionnés auprès de producteurs de confiance.</span>
+                            <span class="ckr-header__top0-item ckr-header__top0-item--4">Demandes professionnelles étudiées par l’équipe C-Kréyòl.</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="ckr-header__inner ckr-header__top1">
 
                     <!-- Logo / brand (SVG inline : Playfair deja charge dans le head) -->
-                    <a href="/" class="ckr-header__brand" aria-label="C-Kreyol - Accueil">
+                    <a href="/" class="ckr-header__brand ckr-header__brand--logo-c" aria-label="C-Kréyòl - Accueil">
+                        <!-- Variantes logotype header : -->
+                        <!-- A (sobre), B (plus vivante), C (intermédiaire) -->
+                        <!-- Variante active par defaut : logo C -->
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             class="ckr-wordmark ckr-wordmark--header"
-                             viewBox="0 0 220 40"
+                             class="ckr-wordmark ckr-wordmark--header ckr-wordmark--a"
+                             viewBox="0 0 240 44"
                              preserveAspectRatio="xMinYMid meet"
                              focusable="false"
                              aria-hidden="true">
-                            <text x="0" y="30"
+                            <text x="0" y="32"
                                   font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
-                                  font-size="26"
+                                  font-size="28"
                                   font-weight="600"
-                                  letter-spacing="0.04em">
-                                <tspan fill="#2C2C2C">C</tspan><tspan fill="#A0522D">-</tspan><tspan fill="#2C2C2C">Kreyol</tspan>
+                                  letter-spacing="0.02em">
+                                <tspan fill="#2C2C2C">C</tspan><tspan fill="#8D3B26">-</tspan><tspan fill="#2C2C2C">Kréyòl</tspan>
+                            </text>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="ckr-wordmark ckr-wordmark--header ckr-wordmark--b"
+                             viewBox="0 0 240 44"
+                             preserveAspectRatio="xMinYMid meet"
+                             focusable="false"
+                             aria-hidden="true">
+                            <text x="0" y="32"
+                                  font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+                                  font-size="28"
+                                  font-style="italic"
+                                  font-weight="600"
+                                  letter-spacing="0.01em"
+                                  fill="#8D3B26">C-Kréyòl</text>
+                            <path d="M104 35 Q 120 39 138 35"
+                                  stroke="#8D3B26"
+                                  stroke-width="1.5"
+                                  fill="none"
+                                  stroke-linecap="round"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="ckr-wordmark ckr-wordmark--header ckr-wordmark--c"
+                             viewBox="0 0 240 44"
+                             preserveAspectRatio="xMinYMid meet"
+                             focusable="false"
+                             aria-hidden="true">
+                            <text x="0" y="32"
+                                  font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+                                  font-size="29"
+                                  font-style="italic"
+                                  font-weight="600"
+                                  letter-spacing="0.015em">
+                                <tspan fill="#2C2C2C">C</tspan><tspan fill="#8D3B26">-</tspan><tspan fill="#8D3B26">Kréyòl</tspan>
                             </text>
                         </svg>
                     </a>
 
                     <div class="ckr-header__search-desktop d-none d-lg-inline-flex">
-                        <a href="/shop" title="Rechercher un produit" aria-label="Rechercher un produit">
-                            <i class="fa fa-search" aria-hidden="true"/>
-                            <span>Recherche</span>
-                        </a>
+                        <form action="/shop" method="get" role="search" aria-label="Recherche globale">
+                            <label class="visually-hidden" for="ckr_header_search_input">Recherche globale</label>
+                            <input id="ckr_header_search_input"
+                                   type="search"
+                                   name="search"
+                                   placeholder="Recherche rapide"
+                                   autocomplete="off"/>
+                            <button type="submit" title="Rechercher" aria-label="Rechercher">
+                                <i class="fa fa-search" aria-hidden="true"/>
+                            </button>
+                        </form>
                     </div>
 
                     <!-- Utilitaires : locale (langue + devise) + cluster + burger -->
@@ -118,7 +167,7 @@
                                class="ckr-header__link-help d-none d-lg-inline-flex"
                                title="Aide et contact"
                                aria-label="Aide et contact">
-                                <span>Aide / Contact</span>
+                                <span>Aide &amp; Contact</span>
                             </a>
                             <a t-if="website.user_id == user_id"
                                href="/web/signup"
@@ -127,8 +176,14 @@
                                aria-label="Créer un compte">
                                 <span>Créer un compte</span>
                             </a>
-                            <a href="/shop" class="d-lg-none" title="Rechercher un produit" aria-label="Rechercher">
+                            <a href="/shop" class="d-lg-none" title="Recherche globale" aria-label="Recherche globale">
                                 <i class="fa fa-search" aria-hidden="true"/>
+                            </a>
+                            <a href="/shop"
+                               class="d-lg-none ckr-header__mobile-favorites"
+                               title="Favoris"
+                               aria-label="Favoris">
+                                <i class="fa fa-heart-o" aria-hidden="true"/>
                             </a>
                             <details t-if="website.user_id != user_id"
                                      class="ckr-header__user-menu">
@@ -235,6 +290,7 @@
                                 <a t-att-href="submenu_m.url" t-esc="submenu_m.name"/>
                             </t>
                         </t>
+                        <a href="/demande-compte-professionnel">Professionnels</a>
                     </nav>
 
                     <div t-if="website.user_id != user_id" class="ckr-drawer__account">

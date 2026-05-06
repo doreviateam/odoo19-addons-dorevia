@@ -41,7 +41,7 @@
                     <div class="ckr-newsletter__copy">
                         <p class="ckr-newsletter__eyebrow">NEWSLETTER</p>
                         <h2 id="ckr-newsletter-heading" class="ckr-newsletter__title">
-                            Recevez nos sélections, découvertes et nouvelles de C-Kreyol
+                            Recevez nos sélections, découvertes et nouvelles de C-Kréyòl
                         </h2>
                     </div>
 
@@ -77,7 +77,7 @@
                 <hr class="ckr-newsletter__rule" aria-hidden="true"/>
 
                 <p id="ckr-newsletter-legal" class="ckr-newsletter__legal">
-                    Votre email est uniquement utilisé pour vous envoyer les nouvelles de C-Kreyol,
+                    Votre email est uniquement utilisé pour vous envoyer les nouvelles de C-Kréyòl,
                     nos sélections de produits et nos offres. Vous pouvez vous désabonner à tout moment
                     via le lien présent dans chaque email.
                 </p>

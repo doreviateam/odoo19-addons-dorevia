@@ -2,7 +2,7 @@
 
 Dossier de **cadrage** pour la vague **MVP 04** : stabiliser les éléments d’**achat immédiat** (panier) et de **sélection personnelle** (favoris), après **`docs/mvp_01/`** (catalogue / portes `shop`), **`docs/mvp_02/`** (homepage, boutique wave 1…), **`docs/mvp_03/`** (comptes client / demande pro).
 
-**Statut documentaire** : intention et priorités **cadrées** ; ticket d’exécution, spec UX détaillée et arbitrages tech **à produire** avant GO dev.
+**Statut documentaire** : intention et priorités **cadrées** ; socle **Header CK V1 (Top_0/Top_1/Top_2) implémenté et validé** ; suite MVP04 (panier/favoris) à enchaîner sur cette base figée.
 
 > Alignement doctrine e-commerce CK : [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md). Ordre des chantiers : [CHANTIERS_CK_ORDRE.md](../direction/CHANTIERS_CK_ORDRE.md).
 
@@ -16,7 +16,9 @@ Dossier de **cadrage** pour la vague **MVP 04** : stabiliser les éléments d’
 | [1_PANIER_PARCOURS.md](1_PANIER_PARCOURS.md) | Parcours **panier** : points d’entrée, états, invité / connecté, alignement checkout |
 | [2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md) | Parcours **favoris** : ajout / retrait, liste, persistance, lien éventuel compte |
 | [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) | Ticket de pilotage : posture **Header CK V1** (Top_0/Top_1/Top_2) et livraison en lots V1.1/V1.2/V1.3 |
+| [TICKET_PANIER_PALIER_A_EXECUTION.md](TICKET_PANIER_PALIER_A_EXECUTION.md) | Ticket d'exécution **Panier — Palier A** : périmètre, critères d'acceptation, recette minimale |
 | [PISTE_CREA_HEADER_NAV_MVP04_V1.md](PISTE_CREA_HEADER_NAV_MVP04_V1.md) | Piste créa / UX V1 : composition desktop/mobile et hiérarchie visuelle pour panier, favoris, professionnels |
+| [PISTE_CREA_LOGOTYPE_CKREYOL.md](PISTE_CREA_LOGOTYPE_CKREYOL.md) | Piste créa logotype : doctrine `C-Kreyol` (technique) / `C-Kréyòl` (marque affichée), variantes et critères GO/NO GO |
 
 ---
 
@@ -26,6 +28,18 @@ Stabiliser les éléments d’achat et de sélection personnelle dans l’expér
 
 - Le **panier** permet d’**acheter maintenant**.
 - Les **favoris** permettent de **conserver une intention pour plus tard**.
+
+## Gel d’avancement — Header CK V1
+
+Le header est désormais considéré comme **base stable** avant la suite des lots MVP04.
+
+Éléments figés à date :
+
+- structure `Top_0 / Top_1 / Top_2` active desktop + mobile ;
+- `Top_0` en rotateur sobre (un message visible, cycle 32s, fallback reduced-motion, style terracotta) ;
+- `Top_1` avec champ de recherche visuel desktop (sobre, contour terracotta, loupe terracotta) ;
+- wording de recherche aligné sur une **recherche globale future** (et non limité aux produits) ;
+- libellé aide harmonisé : `Aide & Contact`.
 
 ---
 
@@ -98,3 +112,18 @@ Sauf ticket ultérieur, MVP 04 ne couvre pas :
 - programme fidélité ;
 - promotions automatiques liées aux favoris ;
 - refonte complète du checkout.
+
+---
+
+## Point de reprise — Ticket suivant
+
+Prochaine exécution recommandée : **Panier — Palier A**.
+
+Cadre de reprise (court) :
+
+- partir de la baseline header V1 figée (pas de nouvelle refonte header) ;
+- prioriser la fiabilité du parcours panier avant tout enrichissement ;
+- sécuriser la non-régression checkout/achat invité ;
+- valider desktop + mobile sur les états panier vide/rempli ;
+- maintenir la séparation stricte `Panier` (achat immédiat) vs `Favoris` (intention) ;
+- limiter le lot à un incrément exécutable et testable rapidement.

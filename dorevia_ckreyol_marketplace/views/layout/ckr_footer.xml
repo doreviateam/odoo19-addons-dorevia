@@ -34,9 +34,9 @@
                         <!-- Bloc marque : wordmark HTML (Playfair deja chargee) — le SVG text
                              / tspan etait peu fiable selon navigateur ; ici contraste et taille assures. -->
                         <div class="ckr-footer__brand">
-                            <div class="ckr-footer__wordmark" role="img" aria-label="C-Kreyol">
+                            <div class="ckr-footer__wordmark" role="img" aria-label="C-Kréyòl">
                                 <span class="ckr-footer__wordmark-inner" aria-hidden="true">
-                                    <span class="ckr-footer__wordmark-c">C</span><span class="ckr-footer__wordmark-hyphen">-</span><span class="ckr-footer__wordmark-k">Kreyol</span>
+                                    <span class="ckr-footer__wordmark-c">C</span><span class="ckr-footer__wordmark-hyphen">-</span><span class="ckr-footer__wordmark-k">Kréyòl</span>
                                 </span>
                             </div>
                             <p>Canal e-commerce spécialisé : biscuits, douceurs et épicerie des Antilles,

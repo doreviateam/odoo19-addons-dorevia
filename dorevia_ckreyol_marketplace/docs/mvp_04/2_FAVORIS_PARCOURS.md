@@ -6,6 +6,8 @@
 
 **Engagement documentaire** : aucune mécanique marketing, aucun emailing ni partage de liste n’est couvert par MVP 04 — [Hors périmètre](README.md#hors-périmètre-implicite).
 
+**Référence de contexte** : le header `Top_0/Top_1/Top_2` est figé en baseline V1 ; ce parcours favoris s’appuie sur cette base sans relancer une refonte header.
+
 ---
 
 ## 1. Objectif de ce document
@@ -64,3 +66,34 @@ Partage de wishlist, wishlist collaborative, fidélité, promos déclenchées pa
 
 - Spec UX (micro-copy, états du cœur, page liste) — si besoin.  
 - **Ticket d’exécution** — après stabilisation du **Lot 1 panier**, conformément à la priorité dossier.
+
+---
+
+## 8. Critères d’acceptation — Favoris (Lot 2)
+
+1. **Ajout/retrait clair** : le cœur bascule proprement depuis carte produit et fiche produit.
+2. **Cohérence visuelle** : un même produit ne présente pas d’état contradictoire entre listing et fiche.
+3. **Liste dédiée** : l’utilisateur retrouve ses favoris dans une vue lisible avec liens vers les produits.
+4. **Séparation panier/favoris** : aucun wording ambigu ne laisse penser qu’un favori est déjà au panier.
+5. **Desktop + mobile** : actions principales accessibles dans les deux contextes.
+6. **Périmètre maîtrisé** : aucune logique marketing ou collaborative n’est introduite.
+
+---
+
+## 9. Scénarios de recette minimaux
+
+- **F1 — Ajout carte produit** : clic cœur depuis listing, état visuel mis à jour immédiatement.
+- **F2 — Ajout fiche produit** : même comportement depuis page produit.
+- **F3 — Retrait** : suppression depuis la liste favoris et vérification de disparition.
+- **F4 — Persistance non connecté** : comportement conforme à l’arbitrage technique retenu (session/local).
+- **F5 — Persistance connecté** : comportement conforme à l’arbitrage retenu côté compte.
+- **F6 — Mobile** : validation tactile des actions cœur/liste sans régression.
+
+---
+
+## 10. Garde-fous de mise en œuvre
+
+- Ne pas retarder le lot panier pour ajouter des options favoris.
+- Ne pas introduire emailing, partage, ou recommandations dans ce lot.
+- Ne pas forcer un compte utilisateur sans décision explicite d’arbitrage.
+- Conserver une implémentation simple, testable, et alignée au cadrage MVP04.
