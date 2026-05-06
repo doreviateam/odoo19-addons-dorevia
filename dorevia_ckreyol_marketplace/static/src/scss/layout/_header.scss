@@ -31,6 +31,20 @@ header#top.ckr-header,
 }
 
 .ckr-header {
+    &__top0 {
+        border-bottom: 1px solid $ckr-border;
+        background: $ckr-bg-soft;
+    }
+
+    &__top0-inner {
+        max-width: $ckr-container-max;
+        margin: 0 auto;
+        padding: $ckr-space-xs $ckr-container-px;
+        text-align: center;
+        font-size: 0.82rem;
+        font-weight: $ckr-weight-medium;
+        color: $ckr-text-muted;
+    }
 
     &__inner {
         display: flex;
@@ -49,6 +63,29 @@ header#top.ckr-header,
             gap: $ckr-space-xs;
             padding: $ckr-space-sm 10px;
             min-height: 52px;
+        }
+    }
+
+    &__search-desktop {
+        a {
+            display: inline-flex;
+            align-items: center;
+            gap: $ckr-space-xs;
+            color: $ckr-text;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: $ckr-weight-medium;
+            padding: $ckr-space-xs $ckr-space-sm;
+            border: 1px solid $ckr-border;
+            border-radius: $ckr-radius-pill;
+
+            &:hover,
+            &:focus {
+                color: $ckr-primary;
+                border-color: rgba($ckr-primary, 0.35);
+                background: $ckr-bg-soft;
+                text-decoration: none;
+            }
         }
     }
 
@@ -204,7 +241,7 @@ header#top.ckr-header,
     &__action-cluster {
         display: inline-flex;
         align-items: center;
-        gap: 0;
+        gap: $ckr-space-xs;
         overflow: visible;
         position: relative;
 
@@ -213,11 +250,15 @@ header#top.ckr-header,
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
+            gap: $ckr-space-xs;
+            width: auto;
             height: 40px;
+            padding: 0 $ckr-space-sm;
             border-radius: $ckr-radius-pill;
             color: $ckr-text;
             text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: $ckr-weight-medium;
             transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
 
             &:hover,
@@ -228,7 +269,7 @@ header#top.ckr-header,
             }
 
             i {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
         }
 
@@ -246,11 +287,57 @@ header#top.ckr-header,
                 height: 44px;
                 min-width: 44px;
                 min-height: 44px;
+                padding: 0;
 
                 &:hover,
                 &:focus {
                     background-color: rgba(255, 255, 255, 0.45);
                 }
+            }
+        }
+    }
+
+    &__counter-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.2rem;
+        height: 1.2rem;
+        padding: 0 0.25rem;
+        border-radius: $ckr-radius-pill;
+        background: $ckr-primary;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: $ckr-weight-semibold;
+        line-height: 1;
+    }
+
+    &__top2 {
+        border-top: 1px solid $ckr-border;
+        background: $ckr-bg;
+    }
+
+    &__top2-inner {
+        display: flex;
+        align-items: center;
+        gap: $ckr-space-lg;
+        max-width: $ckr-container-max;
+        margin: 0 auto;
+        padding: $ckr-space-sm $ckr-container-px;
+
+        > a {
+            color: $ckr-text;
+            font-size: 0.92rem;
+            font-weight: $ckr-weight-medium;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+
+            &:hover,
+            &:focus {
+                color: $ckr-primary;
+                border-bottom-color: $ckr-primary;
+                text-decoration: none;
             }
         }
     }
@@ -288,12 +375,16 @@ header#top.ckr-header,
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
+        gap: $ckr-space-xs;
+        width: auto;
         height: 40px;
+        padding: 0 $ckr-space-sm;
         border-radius: $ckr-radius-pill;
         color: $ckr-text;
         text-decoration: none;
         background: transparent;
+        font-size: 0.9rem;
+        font-weight: $ckr-weight-medium;
         cursor: pointer;
         user-select: none;
         transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
@@ -307,7 +398,13 @@ header#top.ckr-header,
         }
 
         i {
-            font-size: 1.1rem;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 991.98px) {
+            width: 44px;
+            min-width: 44px;
+            padding: 0;
         }
     }
 

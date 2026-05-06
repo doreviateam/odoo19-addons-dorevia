@@ -49,7 +49,16 @@
                 <!-- Toggle mobile (checkbox hors ecran ; labels for= pilotent l etat) -->
                 <input type="checkbox" id="ckr_drawer_toggle" class="ckr-drawer__toggle" tabindex="-1"/>
 
-                <div class="ckr-header__inner">
+                <t t-set="ckr_sale_order" t-value="request.website.sale_get_order() if request and request.website else None"/>
+                <t t-set="ckr_cart_qty" t-value="int(ckr_sale_order.cart_quantity) if ckr_sale_order and ckr_sale_order.cart_quantity else 0"/>
+
+                <div class="ckr-header__top0 d-none d-lg-block">
+                    <div class="ckr-header__top0-inner">
+                        Livraison offerte dès 69 € d’achat en France métropolitaine.
+                    </div>
+                </div>
+
+                <div class="ckr-header__inner ckr-header__top1">
 
                     <!-- Logo / brand (SVG inline : Playfair deja charge dans le head) -->
                     <a href="/" class="ckr-header__brand" aria-label="C-Kreyol - Accueil">
@@ -69,28 +78,12 @@
                         </svg>
                     </a>
 
-                    <!-- Menu principal desktop (enfants du Top Menu ; sous-menus = details) -->
-                    <nav class="ckr-header__nav" aria-label="Menu principal">
-                        <t t-foreach="website.menu_id.child_id" t-as="submenu">
-                            <t t-if="submenu.child_id">
-                                <details class="ckr-header__nav-dropdown">
-                                    <summary class="ckr-header__nav-summary">
-                                        <span t-esc="submenu.name"/>
-                                    </summary>
-                                    <div class="ckr-header__nav-dropdown-panel" role="menu">
-                                        <t t-foreach="submenu.child_id" t-as="subchild">
-                                            <a role="menuitem"
-                                               t-att-href="subchild.url"
-                                               t-esc="subchild.name"/>
-                                        </t>
-                                    </div>
-                                </details>
-                            </t>
-                            <t t-else="">
-                                <a t-att-href="submenu.url" t-esc="submenu.name"/>
-                            </t>
-                        </t>
-                    </nav>
+                    <div class="ckr-header__search-desktop d-none d-lg-inline-flex">
+                        <a href="/shop" title="Rechercher un produit" aria-label="Rechercher un produit">
+                            <i class="fa fa-search" aria-hidden="true"/>
+                            <span>Recherche</span>
+                        </a>
+                    </div>
 
                     <!-- Utilitaires : locale (langue + devise) + cluster + burger -->
                     <div class="ckr-header__utils">
@@ -121,7 +114,17 @@
                         </div>
 
                         <div class="ckr-header__action-cluster">
-                            <a href="/shop" title="Rechercher un produit" aria-label="Rechercher">
+                            <a href="/contact" class="d-none d-lg-inline-flex" title="Aide et contact" aria-label="Aide et contact">
+                                <span>Aide / Contact</span>
+                            </a>
+                            <a t-if="website.user_id == user_id"
+                               href="/web/signup"
+                               class="d-none d-lg-inline-flex"
+                               title="Créer un compte"
+                               aria-label="Créer un compte">
+                                <span>Créer un compte</span>
+                            </a>
+                            <a href="/shop" class="d-lg-none" title="Rechercher un produit" aria-label="Rechercher">
                                 <i class="fa fa-search" aria-hidden="true"/>
                             </a>
                             <details t-if="website.user_id != user_id"
@@ -131,6 +134,7 @@
                                          title="Mon compte"
                                          aria-label="Menu Mon compte">
                                     <i class="fa fa-user-o" aria-hidden="true"/>
+                                    <span class="d-none d-lg-inline">Mon compte</span>
                                 </summary>
                                 <div class="ckr-header__user-dropdown" role="menu">
                                     <a class="ckr-header__user-item" role="menuitem" href="/my">Mon compte</a>
@@ -140,12 +144,29 @@
                             </details>
                             <a t-else=""
                                href="/web/login?redirect=/my"
+                               class="d-none d-lg-inline-flex"
+                               title="Connexion"
+                               aria-label="Connexion">
+                                <span>Se connecter</span>
+                            </a>
+                            <a t-else=""
+                               href="/web/login?redirect=/my"
+                               class="d-lg-none"
                                title="Connexion"
                                aria-label="Connexion">
                                 <i class="fa fa-user-o" aria-hidden="true"/>
                             </a>
+                            <a href="/shop"
+                               class="d-none d-lg-inline-flex"
+                               title="Favoris"
+                               aria-label="Favoris">
+                                <i class="fa fa-heart-o" aria-hidden="true"/>
+                                <span>Favoris</span>
+                            </a>
                             <a href="/shop/cart" title="Mon panier" aria-label="Mon panier">
                                 <i class="fa fa-shopping-bag" aria-hidden="true"/>
+                                <span class="d-none d-lg-inline">Panier</span>
+                                <span class="ckr-header__counter-badge" t-esc="ckr_cart_qty"/>
                             </a>
                         </div>
 
@@ -163,6 +184,17 @@
                     </div>
 
                 </div>
+
+                <nav class="ckr-header__top2 d-none d-lg-block" aria-label="Exploration boutique et contenus">
+                    <div class="ckr-header__top2-inner">
+                        <a href="/shop">Tous les produits</a>
+                        <a href="/promotions">Promotions</a>
+                        <a href="/collections">Collections</a>
+                        <a href="/offrir">Idées cadeaux</a>
+                        <a href="/recettes">Recettes</a>
+                        <a href="/demande-compte-professionnel">Professionnels</a>
+                    </div>
+                </nav>
 
                 <!-- Drawer mobile -->
                 <label for="ckr_drawer_toggle" class="ckr-drawer__backdrop" aria-hidden="true"></label>
