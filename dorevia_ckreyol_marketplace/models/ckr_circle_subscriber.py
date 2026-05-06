@@ -57,13 +57,10 @@ class CkrCircleSubscriber(models.Model):
         index=True,
     )
 
-    _sql_constraints = [
-        (
-            "ckr_circle_subscriber_email_website_uniq",
-            "UNIQUE(website_id, email)",
-            "Une inscription existe déjà pour cet e-mail sur ce site.",
-        ),
-    ]
+    _ckr_circle_subscriber_email_website_uniq = models.Constraint(
+        "unique(website_id, email)",
+        "Une inscription existe déjà pour cet e-mail sur ce site.",
+    )
 
     @api.constrains("email")
     def _ckr_check_email(self):
