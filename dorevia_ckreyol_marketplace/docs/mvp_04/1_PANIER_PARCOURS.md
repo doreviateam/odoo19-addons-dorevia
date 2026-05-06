@@ -67,4 +67,5 @@ Décrire **comment** le visiteur **ajoute**, **consulte** et **poursuit** une co
 
 - Spec UX écrans panier (états, messages, accessibilité) — à produire si besoin.  
 - **Ticket d’exécution** — périmètre technique Odoo, fichiers impactés, critères d’acceptation.  
+- Ticket de cadrage navigation/header : [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) — visibilité panier/favoris, mobile, découpage MVP04 vs chantier dédié.  
 - Parcours **favoris** : [2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md) — **après** stabilisation du cadrage panier si l’équipe suit l’ordre des lots.
