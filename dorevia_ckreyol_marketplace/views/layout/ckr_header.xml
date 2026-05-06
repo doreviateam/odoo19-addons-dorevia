@@ -49,8 +49,8 @@
                 <!-- Toggle mobile (checkbox hors ecran ; labels for= pilotent l etat) -->
                 <input type="checkbox" id="ckr_drawer_toggle" class="ckr-drawer__toggle" tabindex="-1"/>
 
-                <t t-set="ckr_sale_order" t-value="request.website.sale_get_order() if request and request.website else None"/>
-                <t t-set="ckr_cart_qty" t-value="int(ckr_sale_order.cart_quantity) if ckr_sale_order and ckr_sale_order.cart_quantity else 0"/>
+                <t t-set="ckr_cart_qty"
+                   t-value="request.session.get('website_sale_cart_quantity', 0) if request and request.session else 0"/>
 
                 <div class="ckr-header__top0 d-none d-lg-block">
                     <div class="ckr-header__top0-inner">
@@ -114,12 +114,15 @@
                         </div>
 
                         <div class="ckr-header__action-cluster">
-                            <a href="/contact" class="d-none d-lg-inline-flex" title="Aide et contact" aria-label="Aide et contact">
+                            <a href="/contact"
+                               class="ckr-header__link-help d-none d-lg-inline-flex"
+                               title="Aide et contact"
+                               aria-label="Aide et contact">
                                 <span>Aide / Contact</span>
                             </a>
                             <a t-if="website.user_id == user_id"
                                href="/web/signup"
-                               class="d-none d-lg-inline-flex"
+                               class="ckr-header__link-signup d-none d-lg-inline-flex"
                                title="Créer un compte"
                                aria-label="Créer un compte">
                                 <span>Créer un compte</span>
@@ -142,14 +145,14 @@
                                        href="/web/session/logout?redirect=/">Déconnexion</a>
                                 </div>
                             </details>
-                            <a t-else=""
+                            <a t-if="website.user_id == user_id"
                                href="/web/login?redirect=/my"
-                               class="d-none d-lg-inline-flex"
+                               class="ckr-header__link-signin d-none d-lg-inline-flex"
                                title="Connexion"
                                aria-label="Connexion">
                                 <span>Se connecter</span>
                             </a>
-                            <a t-else=""
+                            <a t-if="website.user_id == user_id"
                                href="/web/login?redirect=/my"
                                class="d-lg-none"
                                title="Connexion"
@@ -157,13 +160,16 @@
                                 <i class="fa fa-user-o" aria-hidden="true"/>
                             </a>
                             <a href="/shop"
-                               class="d-none d-lg-inline-flex"
+                               class="ckr-header__link-favorites d-none d-lg-inline-flex"
                                title="Favoris"
                                aria-label="Favoris">
                                 <i class="fa fa-heart-o" aria-hidden="true"/>
                                 <span>Favoris</span>
                             </a>
-                            <a href="/shop/cart" title="Mon panier" aria-label="Mon panier">
+                            <a href="/shop/cart"
+                               class="ckr-header__link-cart"
+                               title="Mon panier"
+                               aria-label="Mon panier">
                                 <i class="fa fa-shopping-bag" aria-hidden="true"/>
                                 <span class="d-none d-lg-inline">Panier</span>
                                 <span class="ckr-header__counter-badge" t-esc="ckr_cart_qty"/>

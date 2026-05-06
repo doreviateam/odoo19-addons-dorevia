@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.99",
+    "version": "19.0.1.10.103",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -54,6 +54,15 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.99 : header CK V1 (lot V1.1 desktop) — structure en trois niveaux
   ``Top_0`` / ``Top_1`` / ``Top_2`` ; barre flash info, actions utiles (aide/compte/favoris/panier)
   et navigation exploration avec entrée ``/demande-compte-professionnel``.
+* 19.0.1.10.100 : fix QWeb header V1.1 — compteur panier rendu sans conversion ``int(...)``
+  dans le template (évite erreur d’évaluation en front sur ``/shop``).
+* 19.0.1.10.101 : fix QWeb header V1.1 — suppression du double ``t-else`` invalide
+  sur les liens connexion desktop/mobile (évite le 500 ``t-elif directive must be preceded by t-if``).
+* 19.0.1.10.102 : fix QWeb header V1.1 — compteur panier basé sur la session
+  ``website_sale_cart_quantity`` (suppression appel ``website.sale_get_order`` indisponible).
+* 19.0.1.10.103 : header V1.1 desktop — passe finitions laptop/responsive :
+  alignement vertical Top_1, compression des actions sur 992–1200px, allègement Top_2
+  et réduction de hauteur pour limiter l’impact visuel sur hero.
 
 Portee :
 

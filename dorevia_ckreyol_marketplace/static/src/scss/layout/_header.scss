@@ -56,6 +56,7 @@ header#top.ckr-header,
         margin: 0 auto;
         padding: $ckr-space-md $ckr-container-px;
         overflow: visible;
+        min-height: 64px;
 
         @media (max-width: 991.98px) {
             // Rapprocher logo et actions : padding lateral serre, pas de gap inutile
@@ -64,9 +65,18 @@ header#top.ckr-header,
             padding: $ckr-space-sm 10px;
             min-height: 52px;
         }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            gap: $ckr-space-sm;
+            padding-top: $ckr-space-sm;
+            padding-bottom: $ckr-space-sm;
+            min-height: 58px;
+        }
     }
 
     &__search-desktop {
+        margin-left: $ckr-space-sm;
+
         a {
             display: inline-flex;
             align-items: center;
@@ -85,6 +95,14 @@ header#top.ckr-header,
                 border-color: rgba($ckr-primary, 0.35);
                 background: $ckr-bg-soft;
                 text-decoration: none;
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            a {
+                font-size: 0.86rem;
+                padding-left: $ckr-space-xs;
+                padding-right: $ckr-space-xs;
             }
         }
     }
@@ -231,9 +249,14 @@ header#top.ckr-header,
         flex-shrink: 0;
         gap: $ckr-space-sm;
         overflow: visible;
+        margin-left: auto;
 
         @media (max-width: 991.98px) {
             gap: 6px;
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            gap: $ckr-space-xs;
         }
     }
 
@@ -295,6 +318,16 @@ header#top.ckr-header,
                 }
             }
         }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            gap: 4px;
+
+            > a {
+                font-size: 0.84rem;
+                padding-left: 0.45rem;
+                padding-right: 0.45rem;
+            }
+        }
     }
 
     &__counter-badge {
@@ -339,6 +372,29 @@ header#top.ckr-header,
                 border-bottom-color: $ckr-primary;
                 text-decoration: none;
             }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            gap: $ckr-space-md;
+            padding-top: $ckr-space-xs;
+            padding-bottom: $ckr-space-xs;
+
+            > a {
+                font-size: 0.86rem;
+            }
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1120px) {
+        &__link-signup {
+            display: none !important;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1040px) {
+        &__search-desktop,
+        &__link-help {
+            display: none !important;
         }
     }
 
