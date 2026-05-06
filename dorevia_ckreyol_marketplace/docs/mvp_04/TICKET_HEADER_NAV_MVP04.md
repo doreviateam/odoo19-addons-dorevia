@@ -1,7 +1,7 @@
 # TICKET — Header & navigation CK — cible MVP04
 
 **ID** : `HEADER-NAV-MVP04`  
-**Date d'ouverture** : 2026-05  
+**Date d’ouverture** : 2026-05  
 **Priorité** : **P2** (à confirmer au pilotage)  
 **Statut** : **Cadrage exécutable — retour dev attendu**  
 **Module** : `dorevia_ckreyol_marketplace`
@@ -36,28 +36,28 @@ Produire un retour dev exploitable pour décider :
 - ce qui peut être intégré dans MVP04 (minimum utile panier/favoris) ;
 - ce qui relève d'un ticket header dédié ;
 - les impacts QWeb / SCSS / responsive ;
-- les risques de regression sur la navigation actuelle ;
+- les risques de régression sur la navigation actuelle ;
 - la cible mobile recommandée.
 
 Ce ticket ne vaut **pas GO** pour une refonte complète tant que les arbitrages ne sont pas validés.
 
 ---
 
-## 3. Cible fonctionnelle envisagee
+## 3. Cible fonctionnelle envisagée
 
 ### 3.1 Top_0 — Barre flash info
 
-**Role** : afficher une information courte, utile et temporaire.
+**Rôle** : afficher une information courte, utile et temporaire.
 
-Exemples : livraison offerte, nouveautes, precommandes, information logistique, message saisonnier.
+Exemples : livraison offerte, nouveautés, précommandes, information logistique, message saisonnier.
 
 **Garde-fous** :
 
-- une seule information a la fois ;
+- une seule information à la fois ;
 - texte court ;
-- barre activable / desactivable rapidement ;
+- barre activable / désactivable rapidement ;
 - hauteur contenue ;
-- aucun impact negatif mobile ;
+- aucun impact négatif mobile ;
 - pas de zone promotionnelle agressive permanente.
 
 ### 3.2 Top_1 — Header actions utiles
@@ -65,10 +65,10 @@ Exemples : livraison offerte, nouveautes, precommandes, information logistique, 
 Structure cible desktop :
 
 ```text
-Logo | Recherche | Aide / Contact | Creer un compte | Se connecter | Favoris | Panier
+Logo | Recherche | Aide / Contact | Créer un compte | Se connecter | Favoris | Panier
 ```
 
-Hypothese mobile a instruire :
+Hypothèse mobile à instruire :
 
 ```text
 Logo | Recherche | Compte | Favoris | Panier | Menu
@@ -76,22 +76,22 @@ Logo | Recherche | Compte | Favoris | Panier | Menu
 
 **Fonctions attendues** :
 
-| Element | Role |
+| Élément | Rôle |
 |---------|------|
 | Logo | Retour accueil. |
-| Recherche | Acces rapide produits. |
-| Aide / Contact | Reassurance et support. |
-| Creer un compte | Entree parcours compte particulier B2C. |
+| Recherche | Accès rapide produits. |
+| Aide / Contact | Réassurance et support. |
+| Créer un compte | Entrée parcours compte particulier B2C. |
 | Se connecter | Login client. |
-| Favoris | Selection personnelle / intention. |
-| Panier | Achat immediat. |
+| Favoris | Sélection personnelle / intention. |
+| Panier | Achat immédiat. |
 
 ### 3.3 Top_2 — Navigation exploration
 
 Structure cible desktop :
 
 ```text
-Tous les produits | Promotions | Collections | Idees cadeaux | Recettes | Professionnels
+Tous les produits | Promotions | Collections | Idées cadeaux | Recettes | Professionnels
 ```
 
 Lien professionnel cible :
@@ -106,100 +106,100 @@ Lien professionnel cible :
 
 MVP04 reste prioritairement :
 
-1. **Panier** — achat immediat ;
-2. **Favoris** — selection personnelle.
+1. **Panier** — achat immédiat ;
+2. **Favoris** — sélection personnelle.
 
 Le header doit au minimum clarifier :
 
-- visibilite panier et favoris ;
-- compteurs eventuels ;
+- visibilité panier et favoris ;
+- compteurs éventuels ;
 - comportement desktop / mobile ;
 - distinction panier vs favoris ;
-- non-regression checkout ;
-- non-regression compte client.
+- non-régression checkout ;
+- non-régression compte client.
 
 ---
 
-## 5. Perimetre demande au dev
+## 5. Périmètre demandé au dev
 
 ### 5.1 Retour attendu
 
-- faisabilite dans le header CK actuel ;
+- faisabilité dans le header CK actuel ;
 - impacts QWeb ;
 - impacts SCSS ;
 - impacts mobile / responsive ;
-- dependances avec composants panier / favoris ;
+- dépendances avec composants panier / favoris ;
 - points risqués ;
-- decoupage recommande entre MVP04 et ticket header dedie.
+- découpage recommandé entre MVP04 et ticket header dédié.
 
-### 5.2 Questions a instruire
+### 5.2 Questions à instruire
 
 | Sujet | Question |
 |-------|----------|
-| Top_0 | Peut-on ajouter une barre flash info facilement desactivable ? |
+| Top_0 | Peut-on ajouter une barre flash info facilement désactivable ? |
 | Recherche | Emplacement compatible avec le header actuel ? |
-| Creer un compte / Se connecter | Distinction claire sans alourdir ? |
-| Favoris | Visibilite / icone / compteur possibles ? |
-| Panier | Visibilite / icone / compteur possibles ? |
+| Créer un compte / Se connecter | Distinction claire sans alourdir ? |
+| Favoris | Visibilité / icône / compteur possibles ? |
+| Panier | Visibilité / icône / compteur possibles ? |
 | Top_2 | Nav secondaire possible sans casser l'existant ? |
-| Mobile | Quelle version condensee recommander ? |
-| Professionnels | Entree vers `/demande-compte-professionnel` sans ambiguite ? |
+| Mobile | Quelle version condensée recommander ? |
+| Professionnels | Entrée vers `/demande-compte-professionnel` sans ambiguïté ? |
 
 ---
 
-## 6. Criteres d'acceptation du retour dev
+## 6. Critères d'acceptation du retour dev
 
-Le retour est accepte si les points suivants sont couverts :
+Le retour est accepté si les points suivants sont couverts :
 
-- proposition de **decoupage en 2 paliers** :
-  - **Palier A (MVP04)** : minimum utile pour lisibilite panier/favoris ;
-  - **Palier B (chantier dedie)** : evolution large Top_0 / Top_2 et structure globale ;
-- inventaire des fichiers potentiellement touches (QWeb / SCSS / JS) ;
-- risques principaux et mitigation proposee ;
+- proposition de **découpage en 2 paliers** :
+  - **Palier A (MVP04)** : minimum utile pour lisibilité panier/favoris ;
+  - **Palier B (chantier dédié)** : évolution large Top_0 / Top_2 et structure globale ;
+- inventaire des fichiers potentiellement touchés (QWeb / SCSS / JS) ;
+- risques principaux et mitigation proposée ;
 - proposition mobile explicite ;
-- recommandation claire : integrer / reporter / ouvrir ticket dedie.
+- recommandation claire : intégrer / reporter / ouvrir ticket dédié.
 
 ---
 
-## 7. Criteres UX minimaux (mesurables)
+## 7. Critères UX minimaux (mesurables)
 
 - **Desktop** : panier et favoris visibles sans interaction hover pour les trouver.
-- **Mobile** : actions critiques visibles sans surcharge ; pas d'empilement casse (pas de retour a la ligne non controle).
-- **Clarte** : aucune ambiguite entre favoris (intention) et panier (achat immediat).
-- **Acces compte** : connexion et creation compte restent identifiables.
+- **Mobile** : actions critiques visibles sans surcharge ; pas d'empilement cassé (pas de retour à la ligne non contrôlé).
+- **Clarté** : aucune ambiguïté entre favoris (intention) et panier (achat immédiat).
+- **Accès compte** : connexion et création compte restent identifiables.
 
 ---
 
-## 8. Criteres techniques minimaux
+## 8. Critères techniques minimaux
 
-- pas de regression sur le parcours checkout ;
-- pas de regression sur le parcours compte client / demande pro ;
-- pas de dependance JS bloquante nouvelle pour afficher la nav de base ;
-- priorite aux mecanismes standards Odoo Website / QWeb quand suffisants ;
-- pas d'ecart avec la doctrine catalogue et la sanctuarisation du tunnel.
+- pas de régression sur le parcours checkout ;
+- pas de régression sur le parcours compte client / demande pro ;
+- pas de dépendance JS bloquante nouvelle pour afficher la nav de base ;
+- priorité aux mécanismes standards Odoo Website / QWeb quand suffisants ;
+- pas d'écart avec la doctrine catalogue et la sanctuarisation du tunnel.
 
 ---
 
-## 9. Hors perimetre immediat
+## 9. Hors périmètre immédiat
 
-Sauf decision ulterieure :
+Sauf décision ultérieure :
 
-- refonte complete du header ;
+- refonte complète du header ;
 - refonte globale mobile ;
-- moteur de recherche avance ;
-- mega-menu catalogue ;
-- personnalisation marketing avancee ;
+- moteur de recherche avancé ;
+- méga-menu catalogue ;
+- personnalisation marketing avancée ;
 - modifications checkout.
 
 ---
 
-## 10. Decision attendue apres retour dev
+## 10. Décision attendue après retour dev
 
 ```text
-[ ] Integrer seulement les ajustements header necessaires a MVP04
-[ ] Ouvrir un ticket header dedie (Palier B)
-[ ] Reporter la refonte header apres MVP04
-[ ] Limiter MVP04 au strict minimum de visibilite panier/favoris
+[ ] Intégrer seulement les ajustements header nécessaires à MVP04
+[ ] Ouvrir un ticket header dédié (Palier B)
+[ ] Reporter la refonte header après MVP04
+[ ] Limiter MVP04 au strict minimum de visibilité panier/favoris
 ```
 
 ---
@@ -210,8 +210,75 @@ Sauf decision ulterieure :
 |----------|--------|
 | Retour dev faisabilité QWeb / SCSS / mobile | À produire |
 | Proposition de découpage Palier A / Palier B | À produire |
-| Arbitrage MOA | A produire |
+| Arbitrage MOA | À produire |
 | Ticket exécution header dédié (si nécessaire) | À produire |
+
+---
+
+## 12. Retour dev — découpage Palier A / Palier B
+
+### Découpage recommandé
+
+#### Palier A — MVP04, minimal et nécessaire
+
+À intégrer dans MVP04 uniquement si cela reste ciblé et sans refonte globale :
+
+- rendre **Panier** et **Favoris** clairement visibles dans le header, desktop + mobile ;
+- ajouter un **compteur panier** ;
+- ajouter un **compteur favoris** si faisable sans complexité ;
+- garantir la séparation claire :
+  - **Panier** = achat immédiat ;
+  - **Favoris** = intention / sélection ;
+- ajouter ou valider l’entrée **Professionnels** vers `/demande-compte-professionnel` sans ambiguïté ;
+- maintenir zéro régression sur :
+  - checkout ;
+  - compte client ;
+  - demande pro ;
+  - navigation mobile.
+
+#### Palier B — chantier header dédié, hors MVP04
+
+À reporter dans un ticket dédié :
+
+- structuration complète **Top_0 / Top_1 / Top_2** ;
+- barre flash info administrable (**Top_0**) ;
+- navigation secondaire élargie (**Top_2**) :
+  - Promotions ;
+  - Collections ;
+  - Idées cadeaux ;
+  - Recettes ;
+  - Communauté ;
+  - Professionnels ;
+- rationalisation UX / SCSS globale desktop et mobile ;
+- préparation éventuelle Website Builder / snippets lorsque les blocs seront stabilisés.
+
+### Justification
+
+Le **Palier A** sécurise la conversion et l’usage immédiat MVP04 : panier, favoris, accès professionnels.
+
+Le **Palier B** évite de transformer MVP04 en refonte complète de navigation.
+
+Cette séparation limite le risque principal : régression header / mobile / checkout.
+
+### Décision de pilotage
+
+Retenir le découpage suivant :
+
+```text
+MVP04 = Palier A
+Header dédié futur = Palier B
+```
+
+### Conséquence pour MVP04
+
+Les prochains tickets MVP04 doivent se concentrer sur :
+
+1. **Panier visible et fiable** ;
+2. **Favoris visibles et compréhensibles** ;
+3. **Entrée Professionnels validée** ;
+4. **zéro régression checkout / compte / mobile**.
+
+La refonte complète Top_0 / Top_1 / Top_2 est reportée.
 
 ---
 
@@ -221,4 +288,5 @@ Sauf decision ulterieure :
 |------|-----------|
 | 2026-05 | Création du ticket de cadrage header / navigation CK en lien avec MVP04 panier & favoris. |
 | 2026-05 | Renforcement du ticket : retour dev attendu, critères UX/tech mesurables, découpage Palier A / Palier B. |
+| 2026-05 | Décision de pilotage actée : MVP04 = Palier A ; refonte header dédiée future = Palier B. |
 
