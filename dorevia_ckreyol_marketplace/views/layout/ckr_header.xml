@@ -164,14 +164,14 @@
                                title="Favoris"
                                aria-label="Favoris">
                                 <i class="fa fa-heart-o" aria-hidden="true"/>
-                                <span>Favoris</span>
+                                <span class="visually-hidden">Favoris</span>
                             </a>
                             <a href="/shop/cart"
                                class="ckr-header__link-cart"
                                title="Mon panier"
                                aria-label="Mon panier">
                                 <i class="fa fa-shopping-bag" aria-hidden="true"/>
-                                <span class="d-none d-lg-inline">Panier</span>
+                                <span class="visually-hidden">Panier</span>
                                 <span class="ckr-header__counter-badge" t-esc="ckr_cart_qty"/>
                             </a>
                         </div>
@@ -196,8 +196,16 @@
                         <a href="/shop">Tous les produits</a>
                         <a href="/promotions">Promotions</a>
                         <a href="/collections">Collections</a>
-                        <a href="/offrir">Idées cadeaux</a>
-                        <a href="/recettes">Recettes</a>
+                        <details class="ckr-header__top2-dropdown">
+                            <summary class="ckr-header__top2-summary">
+                                Communauté
+                            </summary>
+                            <div class="ckr-header__top2-dropdown-panel" role="menu">
+                                <a role="menuitem" href="/offrir">Idées cadeaux</a>
+                                <a role="menuitem" href="/recettes">Recettes</a>
+                                <a role="menuitem" href="/blog">Blog</a>
+                            </div>
+                        </details>
                         <a href="/demande-compte-professionnel">Professionnels</a>
                     </div>
                 </nav>

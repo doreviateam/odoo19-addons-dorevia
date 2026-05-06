@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.103",
+    "version": "19.0.1.10.107",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -63,6 +63,16 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.103 : header V1.1 desktop — passe finitions laptop/responsive :
   alignement vertical Top_1, compression des actions sur 992–1200px, allègement Top_2
   et réduction de hauteur pour limiter l’impact visuel sur hero.
+* 19.0.1.10.104 : boutique /shop — hero élargi à 100% de l’espace horizontal
+  disponible (bleed contrôlé du bandeau, sans changer la grille produits).
+* 19.0.1.10.105 : header V1.1 Top_2 — navigation centrée horizontalement et recentrée
+  sur Promotions, Collections, Idées cadeaux, Recettes, Professionnels.
+* 19.0.1.10.106 : header V1.1 Top_2 — structure “monde” Communauté avec sous-menu
+  (Idées cadeaux, Recettes, Blog) ; ligne cible : Tous les produits, Promotions,
+  Collections, Communauté, Professionnels.
+* 19.0.1.10.107 : header V1.1 Top_1 — passe UI inspirée (CTA compte + icônes
+  favoris/panier en pastilles avec compteurs), en conservant la palette et la
+  hiérarchie visuelle CK.
 
 Portee :
 

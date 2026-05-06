@@ -107,6 +107,10 @@
         position: relative;
         display: flex;
         flex-direction: column;
+        width: unquote("calc(100% + (2 * #{$ckr-container-px}))");
+        max-width: none;
+        margin-left: unquote("calc(-1 * #{$ckr-container-px})");
+        margin-right: unquote("calc(-1 * #{$ckr-container-px})");
         margin-bottom: unquote("clamp(#{$ckr-space-sm}, 1.6vw, #{$ckr-space-lg})");
         border-top-left-radius: 0;
         border-top-right-radius: 0;
