@@ -15,7 +15,8 @@ Dossier de **cadrage** pour la vague **MVP 04** : stabiliser les éléments d’
 | [README.md](README.md) | Intention, lots 1 / 2, doctrine, garde-fous, hors périmètre — **source de vérité produit** pour MVP 04 |
 | [1_PANIER_PARCOURS.md](1_PANIER_PARCOURS.md) | Parcours **panier** : points d’entrée, états, invité / connecté, alignement checkout |
 | [2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md) | Parcours **favoris** : ajout / retrait, liste, persistance, lien éventuel compte |
-| [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) | Ticket de cadrage exécutable : évolution header/nav liée à la lisibilité panier/favoris, avec découpage MVP04 vs chantier dédié |
+| [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) | Ticket de pilotage : posture **Header CK V1** (Top_0/Top_1/Top_2) et livraison en lots V1.1/V1.2/V1.3 |
+| [PISTE_CREA_HEADER_NAV_MVP04_V1.md](PISTE_CREA_HEADER_NAV_MVP04_V1.md) | Piste créa / UX V1 : composition desktop/mobile et hiérarchie visuelle pour panier, favoris, professionnels |
 
 ---
 
@@ -47,7 +48,7 @@ Le **Lot 1 — Panier** est prioritaire : il conditionne directement la conversi
 - achat invité ;
 - non-régression du tunnel de commande.
 
-**Ticket lié (navigation)** : [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) — cadrage de la visibilité header panier/favoris sans lancer une refonte complète.
+**Ticket lié (navigation)** : [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) — première refonte structurante **Header CK V1** (Top_0/Top_1/Top_2) livrée en lots.
 
 ### Lot 2 — Favoris
 
