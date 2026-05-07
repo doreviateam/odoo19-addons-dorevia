@@ -17,3 +17,5 @@ Chaque pattern-bloc décrit :
 Ces documents servent de référence pour les tickets, les recettes et les futures évolutions de la boutique.
 
 Ils ne créent pas de nouveau périmètre fonctionnel : ils sécurisent les patterns déjà validés.
+
+Inventaire aligné code + vocabulaire (**Home** comme première source) : [`INVENTAIRE_HOME_PATTERN_BLOCS.md`](./INVENTAIRE_HOME_PATTERN_BLOCS.md).
