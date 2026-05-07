@@ -63,7 +63,7 @@ Dans les colonnes ci-dessous, **« Candidat snippet Odoo ? »** vise le **cas d�
 | Home — Explorer / portes | [`PATTERN_BLOC_HOME_EXPLORER_PORTES.md`](./PATTERN_BLOC_HOME_EXPLORER_PORTES.md) | **Créé** | Oui, potentiellement | `views/snippets/ckr_entries.xml` + `_entries.scss` — articulation Home ↔ doctrine `/shop` ; candidat snippet déposable ultérieurement. |
 | Home — sélection produits | [`PATTERN_BLOC_HOME_SELECTION_PRODUITS.md`](./PATTERN_BLOC_HOME_SELECTION_PRODUITS.md) | **Créé** | Partiel | `views/snippets/ckr_selection.xml` + `_selection.scss` + `website.py` — grille pilotée par le site (priorité aux 4 slots BO, complément auto). Pattern distinct des cards `/shop`. |
 | Home — carte produit « sélection » | `PATTERN_BLOC_PRODUCT_CARD_CATALOGUE.md` | À créer | Non libre | Rendu **interne** à la sélection Home : classes `ckr-selection__card*`. Distinct de la **card grille /shop** (autre contexte DOM). Documenter comme composant **pattern**, pas comme snippet éditorial autonome. |
-| Home — newsletter | `PATTERN_BLOC_HOME_NEWSLETTER.md` | À créer | Oui | `ckr_circle.xml` (id historique `ckr_snippet_circle`) — formulaire, messages `cc_nl`, endpoint dédié. Très bon candidat snippet déposable **si** enregistré côté Website. |
+| Home — newsletter | [`PATTERN_BLOC_HOME_NEWSLETTER.md`](./PATTERN_BLOC_HOME_NEWSLETTER.md) | **Créé** | Oui | `views/snippets/ckr_circle.xml`, `_newsletter.scss`, `controllers/ckr_circle.py`, liste **`mailing.list`** Newsletter C-Kréyòl (`cc_nl`). Candidat snippet déposable ultérieurement. |
 | Home — En pratique | `PATTERN_BLOC_HOME_EN_PRATIQUE.md` | **Créé** | Oui | `ckr_trust.xml` — pattern déjà stabilisé ; bon candidat snippet déposable. |
 | Layout — footer | `PATTERN_BLOC_FOOTER_RESPONSIVE.md` | **Créé** | Non | `ckr_footer.xml` + `_footer.scss` + `ckr_footer_fold.js` — **global**, pas spécifique Home. |
 | Transverse — titres de section | `PATTERN_BLOC_SECTION_TITLE.md` | À créer plus tard | Non / micro | Ex. `ckr-section-title` dans `ckr_selection.xml` (et réutilisable ailleurs). Micro-pattern. |
@@ -90,8 +90,9 @@ La lecture produit est validée :
 ## 6. Fichiers pattern-blocs déjà disponibles
 
 - [`PATTERN_BLOC_HEADER_NAV_3_NIVEAUX.md`](./PATTERN_BLOC_HEADER_NAV_3_NIVEAUX.md)
+- [`PATTERN_BLOC_HOME_HERO.md`](./PATTERN_BLOC_HOME_HERO.md)
 - [`PATTERN_BLOC_HOME_EXPLORER_PORTES.md`](./PATTERN_BLOC_HOME_EXPLORER_PORTES.md)
 - [`PATTERN_BLOC_HOME_SELECTION_PRODUITS.md`](./PATTERN_BLOC_HOME_SELECTION_PRODUITS.md)
-- [`PATTERN_BLOC_HOME_HERO.md`](./PATTERN_BLOC_HOME_HERO.md)
+- [`PATTERN_BLOC_HOME_NEWSLETTER.md`](./PATTERN_BLOC_HOME_NEWSLETTER.md)
 - [`PATTERN_BLOC_HOME_EN_PRATIQUE.md`](./PATTERN_BLOC_HOME_EN_PRATIQUE.md)
 - [`PATTERN_BLOC_FOOTER_RESPONSIVE.md`](./PATTERN_BLOC_FOOTER_RESPONSIVE.md)

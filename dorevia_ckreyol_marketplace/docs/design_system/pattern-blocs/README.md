@@ -25,3 +25,5 @@ Layout global (**header** 3 niveaux) : [`PATTERN_BLOC_HEADER_NAV_3_NIVEAUX.md`](
 Home — **Explorer / portes catalogue** : [`PATTERN_BLOC_HOME_EXPLORER_PORTES.md`](./PATTERN_BLOC_HOME_EXPLORER_PORTES.md).
 
 Home — **sélection produits** (grille courte) : [`PATTERN_BLOC_HOME_SELECTION_PRODUITS.md`](./PATTERN_BLOC_HOME_SELECTION_PRODUITS.md).
+
+Home — **newsletter** (captation douce / `mass_mailing`) : [`PATTERN_BLOC_HOME_NEWSLETTER.md`](./PATTERN_BLOC_HOME_NEWSLETTER.md).
