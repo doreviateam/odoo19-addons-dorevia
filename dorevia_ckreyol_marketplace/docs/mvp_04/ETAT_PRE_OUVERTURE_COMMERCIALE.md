@@ -48,6 +48,13 @@ En revanche, la V1 marchande prête à l'ouverture publique n'est pas encore att
 5. Vérifier systématiquement install/update/rendu (`/`, `/shop`, `/shop/cart`) sans erreur serveur.
 6. Finaliser les vérifications juridiques minimales avant communication publique.
 
+## 6.bis Avancement de la passe consolidation
+
+- Slugs (`website_id IS NULL`) : correction implémentée côté modèles `ckr.shop.collection` et `ckr.shop.origin` + tests dédiés.
+- ACL collections : décision clarifiée (lecture publique utilitaire front maintenue, audit record rules restant à trancher).
+- Canon URL : doctrine unique consolidée dans `docs/mvp_04/CANON_URL_BOUTIQUE.md`.
+- Smoke install/update/rendu : procédure de vérification documentée dans `docs/mvp_04/PROCEDURE_SMOKE_INSTALL_UPDATE.md`.
+
 ## 7. Décision
 
 CK dispose d’un socle front e-commerce avancé et cohérent. Avant d’ouvrir une nouvelle phase, le projet entre dans une passe de consolidation : données, ACL, canon URL, panier réel, checkout, paiement/livraison, juridique et tests bout-en-bout.

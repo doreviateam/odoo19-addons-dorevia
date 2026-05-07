@@ -216,6 +216,24 @@ class TestCkrCollectionsPVModel(TransactionCase):
                 }
             )
 
+    def test_ckr_col_rc03_slug_unique_for_global_scope(self):
+        """RC-03 : slug global unique quand ``website_id`` est vide."""
+        slug = "rc03-global-slug-%s" % uuid.uuid4().hex[:12]
+        self.Collection.search([("slug", "=", slug), ("website_id", "=", False)]).unlink()
+        self.Collection.create(
+            {
+                "name": "RC-03 Global A",
+                "slug": slug,
+            }
+        )
+        with self.assertRaises(ValidationError):
+            self.Collection.create(
+                {
+                    "name": "RC-03 Global B",
+                    "slug": slug,
+                }
+            )
+
     def test_ckr_col_rc03_menus_and_action_exist(self):
         """RC-03 : menus back-office et action window présents (deux branches)."""
         self.env.ref(

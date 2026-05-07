@@ -122,6 +122,27 @@ class TestCkrOriginPVModel(TransactionCase):
                 }
             )
 
+    def test_pv_rc03_slug_unique_for_global_scope(self):
+        """RC-03 : slug global unique quand ``website_id`` est ``NULL``."""
+        slug = "pv-global-slug-%s" % uuid.uuid4().hex[:12]
+        Origin = self.env["ckr.shop.origin"]
+        Origin.search([("slug", "=", slug), ("website_id", "=", False)]).unlink()
+        Origin.create(
+            {
+                "attribute_value_id": self.val_g.id,
+                "slug": slug,
+                "name_visitor": "Global A",
+            }
+        )
+        with self.assertRaises(ValidationError):
+            Origin.create(
+                {
+                    "attribute_value_id": self.val_m.id,
+                    "slug": slug,
+                    "name_visitor": "Global B",
+                }
+            )
+
     def test_pv_rc03_menus_and_action_exist(self):
         """RC-03 : menus back-office et action window présents."""
         self.env.ref("dorevia_ckreyol_marketplace.menu_ckreyol_configuration_origins")

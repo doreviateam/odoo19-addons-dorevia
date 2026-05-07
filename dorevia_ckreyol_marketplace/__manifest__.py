@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.133",
+    "version": "19.0.1.10.134",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -125,6 +125,9 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.132 : header Top_0 shop-only — bandeau flash affiché sur ``/shop`` (et sous-routes).
 * 19.0.1.10.133 : hero homepage — ajout de 2 visuels supplémentaires au rotateur (sources ``docs/assets``
   copiées en ``static/src/img`` : ``hero_v3_epicerie.png`` et ``hero_v4_epices.png``).
+* 19.0.1.10.134 : consolidation pré-ouverture — unicité slug globale (``website_id IS NULL``) renforcée
+  sur ``ckr.shop.collection``/``ckr.shop.origin`` (+ tests), clarification ACL collections, canon URL boutique
+  consolidé et procédure smoke install/update/rendu documentée.
 
 Portee :
 

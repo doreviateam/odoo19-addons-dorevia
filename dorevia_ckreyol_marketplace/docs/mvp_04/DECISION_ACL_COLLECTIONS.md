@@ -6,7 +6,7 @@ Une ambiguïté existe entre l'intention documentaire ("pas d'exposition publiqu
 
 ## Décision de consolidation
 
-Maintenir une lecture publique **strictement utilitaire front** pour le rendu QWeb, mais limiter l'exposition aux enregistrements publiables/visibles boutique.
+Maintenir la lecture publique de `ckr.shop.collection` **strictement utilitaire front** (rendu QWeb/website_sale), avec filtrage systématique côté contrôleurs/services sur les collections visibles.
 
 ## Règles cibles
 
@@ -16,12 +16,16 @@ Maintenir une lecture publique **strictement utilitaire front** pour le rendu QW
 - Aucune donnée métier sensible ne doit être exposée au public.
 - Les usages back-office complets restent réservés aux groupes internes.
 
-## Actions à exécuter
+## Application dans cette passe
 
-1. Auditer ACL + record rules de `ckr.shop.collection`.
-2. Si nécessaire, ajouter une record rule publique filtrée (publie/site courant).
-3. Documenter explicitement la raison de la lecture publique résiduelle (rendu boutique/QWeb).
-4. Ajouter tests de non-régression sécurité (public vs utilisateur interne).
+1. ACL publique conservée pour éviter toute régression front immédiate.
+2. Décision explicitée : le rendu public passe par des domaines de visibilité (`active`, fenêtre de dates, site).
+3. Le ticket de consolidation trace un audit complémentaire record rules + endpoints JSON/RPC.
+
+## Arbitrages restants
+
+- Faut-il ajouter une record rule publique stricte dès maintenant, ou après audit des chemins BO/front qui lisent `ckr.shop.collection` ?
+- Faut-il distinguer davantage les usages `portal` et `public` (domaines différents) ?
 
 ## Critère de validation
 

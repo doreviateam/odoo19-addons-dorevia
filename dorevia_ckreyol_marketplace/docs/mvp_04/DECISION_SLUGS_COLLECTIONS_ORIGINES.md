@@ -17,6 +17,14 @@ Garantir l'unicité des slugs sur deux niveaux:
 - Ajouter une validation Python explicite (`@api.constrains`) sur `slug` + `website_id` pour bloquer les doublons globaux (`website_id = False`) et les doublons par site.
 - En complément possible: index SQL partiels pour robustesse base.
 
+## Application dans cette passe
+
+- Implémenté dans `models/ckr_shop_collection.py` (`_check_slug_scope_uniqueness`).
+- Implémenté dans `models/ckr_shop_origin.py` (`_check_slug_scope_uniqueness`).
+- Couvert par tests:
+  - `tests/test_ckr_shop_collections.py` (`test_ckr_col_rc03_slug_unique_for_global_scope`)
+  - `tests/test_ckr_shop_origins.py` (`test_pv_rc03_slug_unique_for_global_scope`)
+
 ## Modèles concernés
 
 - `ckr.shop.collection`

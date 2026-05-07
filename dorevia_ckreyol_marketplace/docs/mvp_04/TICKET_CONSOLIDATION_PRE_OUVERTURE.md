@@ -173,6 +173,7 @@ Critère GO :
 - une commande ou procédure de vérification est documentée ;
 - le rendu home / shop / panier est contrôlé après update ;
 - les erreurs XPath / QWeb / assets sont détectables rapidement.
+- référence d'exécution : `docs/mvp_04/PROCEDURE_SMOKE_INSTALL_UPDATE.md`.
 
 ---
 
@@ -185,11 +186,9 @@ Créer ou mettre à jour :
 - `docs/mvp_04/DECISION_SLUGS_COLLECTIONS_ORIGINES.md`
 - `docs/mvp_04/DECISION_ACL_COLLECTIONS.md`
 - `docs/mvp_04/CANON_URL_BOUTIQUE.md`
-- `docs/design_system/README.md`
-- `docs/design_system/snippets/README.md`
-- `docs/design_system/snippets/SNIPPET_HOME_HERO.md`
-- `docs/design_system/snippets/SNIPPET_HOME_EN_PRATIQUE.md`
-- `docs/design_system/snippets/SNIPPET_FOOTER_RESPONSIVE.md`
+- `docs/mvp_04/PROCEDURE_SMOKE_INSTALL_UPDATE.md`
+
+Capitalisation design system/snippets : reportée en lot suivant (hors priorité de sécurisation du socle).
 
 ---
 
@@ -221,7 +220,6 @@ Créer ou mettre à jour :
 La passe est réussie si :
 
 - l'état pré-ouverture est documenté ;
-- les snippets mûrs sont créés ;
 - ce ticket consolidation existe et est suivi ;
 - les risques slugs / ACL / canon URL sont clarifiés ;
 - le périmètre tests panier / checkout est cadré ;

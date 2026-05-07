@@ -159,6 +159,26 @@ class CkrShopOrigin(models.Model):
                     % slug
                 )
 
+    @api.constrains("slug", "website_id")
+    def _check_slug_scope_uniqueness(self):
+        """Empêche les doublons de slug en scope global ``website_id=NULL``."""
+        for record in self:
+            slug = (record.slug or "").strip()
+            if not slug:
+                continue
+            domain = [("id", "!=", record.id), ("slug", "=", slug)]
+            if record.website_id:
+                domain.append(("website_id", "=", record.website_id.id))
+                scope_label = _("sur le site « %s »") % (record.website_id.name,)
+            else:
+                domain.append(("website_id", "=", False))
+                scope_label = _("dans le périmètre global (sans site)")
+            if self.sudo().search_count(domain):
+                raise ValidationError(
+                    _("Le slug d'origine « %(slug)s » existe déjà %(scope)s.")
+                    % {"slug": slug, "scope": scope_label}
+                )
+
     @api.depends("name_visitor", "attribute_value_id.name")
     def _compute_display_name_visitor(self):
         for record in self:

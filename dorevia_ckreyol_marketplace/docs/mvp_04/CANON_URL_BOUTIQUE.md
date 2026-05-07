@@ -15,7 +15,7 @@ Fixer une doctrine URL unique pour éviter les contradictions entre code, SEO, t
 ### 2) Collections
 
 - Canon fonctionnel: `/shop?ckr_collection=<slug>`
-- Statut de `/collections/<slug>`: URL marketing/historique éventuelle, à rediriger vers le canon `/shop?ckr_collection=<slug>` si conservée.
+- Statut de `/collections/<slug>`: alias entrant accepté, redirigé vers le canon `/shop?ckr_collection=<slug>`.
 
 ### 3) Origines
 
@@ -24,8 +24,8 @@ Fixer une doctrine URL unique pour éviter les contradictions entre code, SEO, t
 
 ### 4) Catégories
 
-- Canon Odoo natif: `/shop/category/<slug-categorie>`
-- Paramètre `ckr_category` possible pour expérience CK, mais la doctrine canonique publique reste la route catégorie native.
+- Canon fonctionnel CK: `/shop?ckr_category=<slug>`
+- Le chemin natif `/shop/category/<slug-categorie>` reste toléré en entrée, mais redirigé vers le canon CK.
 
 ## Règles de redirection et de cohérence
 
@@ -40,3 +40,9 @@ Fixer une doctrine URL unique pour éviter les contradictions entre code, SEO, t
 - Réduction des ambiguïtés produit/dev.
 - Alignement SEO et analytics.
 - Réduction du risque de réintroduire une doctrine obsolète.
+
+## Documents à aligner / marquer obsolètes
+
+- `docs/mvp_01/CONTRAT_URL_COLLECTIONS.md` (sections qui parlent encore des URLs nobles `/collections/...` comme cible finale).
+- `docs/mvp_01/CONTRAT_URL_ORIGINES.md` (passages orientés route dédiée vs canon `/shop`).
+- `docs/mvp_01/CONTRAT_URL_CATEGORIES.md` (mentions de canon natif catégorie à harmoniser avec canon CK query param).
