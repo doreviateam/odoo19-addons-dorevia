@@ -10,11 +10,11 @@ Ce document est **à jour comme référence de cadrage** ; il ne doit pas être 
 
 - **Favoris** = intention **différée**, distincte du **panier**.
 - Pas de marketing lourd ; pas d’**emailing automatique** ; pas de **partage de liste** ; pas de **compte forcé** sans arbitrage.
-- Persistance **invité / connectée / fusion invité → connecté** : **à arbitrer** ; **ticket d’exécution à créer plus tard**.
+- Persistance **invité / connectée / fusion invité → connecté** : **à arbitrer** ; voir [`TICKET_FAVORIS_EXECUTION_LOT2.md`](TICKET_FAVORIS_EXECUTION_LOT2.md) (**non lancé**).
 
 ---
 
-**Statut documentaire** : **cadrage produit / UX** ; stockage technique, routes et règles de fusion invité → connecté restent **à arbitrer** dans un **futur ticket d’exécution** (non rédigé tant que le Lot 1 n’est pas suffisamment sécurisé).  
+**Statut documentaire** : **cadrage produit / UX** ; stockage technique, routes et règles de fusion invité → connecté restent **à arbitrer** dans [`TICKET_FAVORIS_EXECUTION_LOT2.md`](TICKET_FAVORIS_EXECUTION_LOT2.md) (**préparation — non lancé**).  
 **Pilotage dossier** : [README MVP 04](README.md).  
 **Doctrine** : intention et retour différé — pas de confusion avec le panier ([README — Doctrine](README.md#doctrine)).
 
@@ -79,7 +79,7 @@ Partage de wishlist, wishlist collaborative, fidélité, promos déclenchées pa
 ## 7. Suite documentaire
 
 - Spec UX (micro-copy, états du cœur, page liste) — si besoin.  
-- **Ticket d’exécution Lot 2** — à **créer ultérieurement**, après stabilisation du **Lot 1 panier / checkout** et les jalons pré-ouverture marchande pertinents ; ce ticket formalisera les arbitrages techniques (persistance, fusion, routes).
+- **Ticket préparation / arbitrage Lot 2** : [`TICKET_FAVORIS_EXECUTION_LOT2.md`](TICKET_FAVORIS_EXECUTION_LOT2.md) — statut **à arbitrer — non lancé** ; **aucune implémentation** engagée par ce document. Exécution réelle **différée** après stabilisation du **Lot 1 panier / checkout** et jalons pré-ouverture marchande.
 
 ---
 

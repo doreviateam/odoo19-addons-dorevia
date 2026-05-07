@@ -15,6 +15,7 @@ Dossier de **cadrage** pour la vague **MVP 04** : stabiliser les éléments d’
 | [README.md](README.md) | Intention, lots 1 / 2, doctrine, garde-fous, hors périmètre — **source de vérité produit** pour MVP 04 |
 | [1_PANIER_PARCOURS.md](1_PANIER_PARCOURS.md) | Parcours **panier** : points d’entrée, états, invité / connecté, alignement checkout |
 | [2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md) | Parcours **favoris** : ajout / retrait, liste, persistance, lien éventuel compte |
+| [TICKET_FAVORIS_EXECUTION_LOT2.md](TICKET_FAVORIS_EXECUTION_LOT2.md) | Ticket **préparation Lot 2 Favoris** : arbitrages techniques — **non lancé** (statut : à arbitrer) |
 | [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) | Ticket de pilotage : posture **Header CK V1** (Top_0/Top_1/Top_2) et livraison en lots V1.1/V1.2/V1.3 |
 | [TICKET_PANIER_PALIER_A_EXECUTION.md](TICKET_PANIER_PALIER_A_EXECUTION.md) | Ticket d'exécution **Panier — Palier A** : périmètre, critères d'acceptation, recette minimale |
 | [PISTE_CREA_HEADER_NAV_MVP04_V1.md](PISTE_CREA_HEADER_NAV_MVP04_V1.md) | Piste créa / UX V1 : composition desktop/mobile et hiérarchie visuelle pour panier, favoris, professionnels |
@@ -76,7 +77,7 @@ Le **Lot 1 — Panier** est prioritaire : il conditionne directement la conversi
 - Pas de **marketing lourd** ; pas **d’emailing automatique** lié aux favoris ; pas de **partage de liste**.
 - Pas de **compte forcé** pour utiliser les favoris sans décision d’arbitrage explicite.
 - **Stockage** invité / connecté / **fusion invité → connecté** : encore à **trancher** au ticket d’exécution.
-- **Ticket d’exécution** Lot 2 à **créer plus tard**, une fois le Lot 1 et la pré-ouverture marchande suffisamment sécurisés.
+- **Ticket d’exécution / arbitrage** Lot 2 : [`TICKET_FAVORIS_EXECUTION_LOT2.md`](TICKET_FAVORIS_EXECUTION_LOT2.md) (**à arbitrer — non lancé**) ; implémentation **différée** après Lot 1 / pré-ouverture.
 
 **Objectif produit** : permettre au visiteur de **garder une sélection** pour plus tard (parcours : [2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md)).
 
