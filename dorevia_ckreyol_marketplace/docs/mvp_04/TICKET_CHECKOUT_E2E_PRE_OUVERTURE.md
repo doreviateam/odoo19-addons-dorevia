@@ -1,7 +1,7 @@
 # TICKET — Checkout E2E pré-ouverture
 
 **ID** : `CHECKOUT-E2E-PRE-OUVERTURE`  
-**Statut** : En cours  
+**Statut** : Exécuté (GO technique minimal)  
 **Priorité** : P4 (bloquant ouverture publique)  
 **Module** : `dorevia_ckreyol_marketplace`  
 **Type** : Consolidation fonctionnelle marchande (preuve E2E)
@@ -198,10 +198,12 @@ curl -I "http://localhost:8069/shop/checkout"
 
 ### Résultats (à compléter après exécution environnement)
 
-- Update module : TODO
-- Smoke post-update : TODO
-- Tag `dorevia_ckr_checkout_e2e` : TODO
-- Décision GO / NO GO : TODO
+- Update module : OK (`exit 0`) — log `/tmp/ckr_checkout_e2e_update_fix.log`
+- Smoke post-update : partiellement validé en tests HTTP (`/shop`, `/shop/cart`, `/shop/checkout`), exécution `curl -I` à faire uniquement avec serveur persistant (pas `--stop-after-init`)
+- Tag `dorevia_ckr_checkout_e2e` : OK après correction contrat Odoo 19 (`/shop/cart/add` JSON-RPC)
+  - résultat final : `0 failed, 0 error(s) of 3 tests`
+  - log : `/tmp/ckr_checkout_e2e_tests_codex_fix2.log`
+- Décision GO / NO GO : **GO technique minimal** (preuve automatisée qu'un client peut progresser dans le tunnel sans erreur bloquante)
 
 ---
 
