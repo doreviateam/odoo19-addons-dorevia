@@ -1,6 +1,6 @@
 # Note — Faisabilité et arbitrage technique (Lot 2 Favoris)
 
-**Statut** : note de préparation — **aucune implémentation engagée**  
+**Statut** : note de préparation — **gate technique `/shop` documenté (GO)** ; implémentation Lot 2 sprint **non engagée** sans décision explicite  
 **Références** : [`TICKET_FAVORIS_EXECUTION_LOT2.md`](TICKET_FAVORIS_EXECUTION_LOT2.md), [`2_FAVORIS_PARCOURS.md`](2_FAVORIS_PARCOURS.md), [README MVP 04](README.md)
 
 **Contexte** : avant tout développement Lot 2, répondre aux décisions listées dans *Décision attendue avant exécution* du ticket. Ce document propose des **recommandations** et une **estimation de risques / complexité** pour faciliter l’atelier d’arbitrage.
@@ -165,6 +165,16 @@ Aligné au **cœur minimal** du ticket : **`/shop`** + **fiche produit** + **lis
 ## Prochaine étape formelle
 
 Consigner les **choix réels** (copie de cette note ou tableau signé) dans une **révision** de [`TICKET_FAVORIS_EXECUTION_LOT2.md`](TICKET_FAVORIS_EXECUTION_LOT2.md) ou procès-verbal d’atelier, puis **GO implémentation** explicite.
+
+---
+
+## Recette gate `/shop` (référence — `tenant_o7`, 2026-05)
+
+Le **standard `website_sale_wishlist`** a été validé en recette : **tuile `/shop`** (cœur cliquable, `POST /shop/wishlist/add`), **fiche produit**, **liste `/shop/wishlist`**, **retrait**, console et logs propres. Le blocage **tuile `/shop`** identifié en préflight (clic absorbé / non cliquable) est **levé** (intégration CSS CK, pas de logique wishlist custom).
+
+**Décision enregistrée** : **Gate Favoris `/shop` — GO** dans [`TICKET_FAVORIS_EXECUTION_LOT2.md`](TICKET_FAVORIS_EXECUTION_LOT2.md). Ce GO **ne remplace pas** le **GO implémentation Lot 2** (sprint complet).
+
+**Exploitabilité instance** : après déploiement, si `docker compose up -d` ne recharge pas le worker Odoo, un **`docker compose restart odoo`** peut être nécessaire pour appliquer les assets.
 
 ---
 

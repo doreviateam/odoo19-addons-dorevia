@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.140",
+    "version": "19.0.1.10.141",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -143,6 +143,9 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   sandbox avec confirmation HTTP) ; documentation ticket §14 alignée.
 * 19.0.1.10.140 : documentation — ``TICKET_E2E_MARCHAND_ETENDU`` §14 : validation runtime **GO**
   Lot A tag ``dorevia_ckr_checkout_e2e_extended`` sur base ``tenant_o7`` (commit ``e6c3936``).
+* 19.0.1.10.141 : Lot 2 Favoris incrément minimal — page ``/shop/wishlist`` : classes CK sur ``#wrap``
+  (``ckr-root`` / ``ckr-page`` / ``ckr-shop-wishlist``), SCSS ``_shop_wishlist.scss`` ; dépendance
+  explicite ``website_sale_wishlist`` ; test HTTP tag ``dorevia_ckr_shop_wishlist``.
 
 Portee :
 
@@ -437,6 +440,7 @@ ARCHITECTURE_DECISION_RECORD).
         "portal",
         "website",
         "website_sale",
+        "website_sale_wishlist",
         "website_crm",
         "mass_mailing",
         # Theme Classic Store : remplace `products_item` (prix dans la colonne texte,
@@ -512,6 +516,7 @@ ARCHITECTURE_DECISION_RECORD).
         "views/ckr_shop_sidebar_rail_maquette.xml",
         "views/pages/ckr_shop_classic_tile_restore.xml",
         "views/pages/ckr_shop.xml",
+        "views/pages/ckr_shop_wishlist.xml",
         # --- Pages website (apres pages pour que les URLs existent) ---
         "data/website_pages_data.xml",
         # --- Nettoyage / migrations data ---
@@ -574,6 +579,7 @@ ARCHITECTURE_DECISION_RECORD).
             "dorevia_ckreyol_marketplace/static/src/scss/ckr_main.scss",
             # Boutique : après ckr_main pour garder la main sur la cascade (tuiles, wishlist, rubans).
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_shop.scss",
+            "dorevia_ckreyol_marketplace/static/src/scss/layout/_shop_wishlist.scss",
         ],
     },
     "installable": True,

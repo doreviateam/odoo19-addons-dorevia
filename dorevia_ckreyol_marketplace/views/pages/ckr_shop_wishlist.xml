@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ====================================================================== -->
+    <!-- Liste Favoris `/shop/wishlist` — ancrage charte CK sur `#wrap`.        -->
+    <!-- Le gabarit standard Odoo (`product_wishlist`) n’expose que `js_sale` ; -->
+    <!-- sans classes CK, `_shop.scss` (scope `.ckr-shop`) ne s’applique pas.    -->
+    <!-- Pas de `ckr-shop` ici : évite d’importer toute la cascade grille shop. -->
+    <!-- ====================================================================== -->
+    <template id="ckr_shop_wishlist_wrap"
+              inherit_id="website_sale_wishlist.product_wishlist"
+              name="C-Kreyol: liste favoris — classes wrap charte">
+        <xpath expr="//div[@id='wrap']" position="attributes">
+            <attribute name="class" add="ckr-root ckr-page ckr-shop-wishlist" separator=" "/>
+        </xpath>
+    </template>
+
+</odoo>

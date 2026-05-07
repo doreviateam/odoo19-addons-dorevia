@@ -1447,7 +1447,9 @@
             pointer-events: auto !important;
         }
 
-        .oe_product_cart.ckr-product-card .o_wsale_product_sub .o_wsale_product_btn .btn:not(.o_add_wishlist),
+        // Inclure `.o_add_wishlist` : sinon, avec `o_wsale_products_opt_actions_onhover`, Odoo met
+        // `pointer-events: none` sur `.o_wsale_product_btn` et le cœur listing ne reçoit pas le clic.
+        .oe_product_cart.ckr-product-card .o_wsale_product_sub .o_wsale_product_btn .btn,
         .oe_product_cart.ckr-product-card .o_wsale_product_sub .o_wsale_product_btn .o_wsale_product_btn_primary {
             opacity: 1 !important;
             visibility: visible !important;
@@ -1455,9 +1457,10 @@
             pointer-events: auto !important;
         }
 
-        .oe_product_cart.ckr-product-card.o_has_variations .o_wsale_product_sub .o_wsale_product_action_row .btn:not(.o_add_wishlist) {
+        .oe_product_cart.ckr-product-card.o_has_variations .o_wsale_product_sub .o_wsale_product_action_row .btn {
             opacity: 1 !important;
             transform: none !important;
+            pointer-events: auto !important;
         }
     }
 
@@ -1571,7 +1574,7 @@
             transform: none !important;
             pointer-events: auto !important;
 
-            .btn:not(.o_add_wishlist) {
+            .btn {
                 opacity: 1 !important;
                 transform: none !important;
                 pointer-events: auto !important;
@@ -1669,7 +1672,8 @@
         right: 0.42rem !important;
         left: auto !important;
         bottom: auto !important;
-        z-index: 5 !important;
+        // Au-dessus du lien pleine image et des rubans (z-index internes ≤ 14).
+        z-index: 16 !important;
         // 2 × 32px + écart (cœur à gauche, `fa-info` à droite — ordre DOM : wishlist puis info).
         width: unquote("calc(2 * 2rem + 0.35rem)") !important;
         min-width: unquote("calc(2 * 2rem + 0.35rem)") !important;

@@ -1,0 +1,113 @@
+// ============================================================================
+// C-Kreyol — Page liste Favoris `/shop/wishlist`
+// ============================================================================
+// Scope : `#wrap.ckr-shop-wishlist` (voir `views/pages/ckr_shop_wishlist.xml`).
+// Habillage uniquement : pas de duplication de `products_item`.
+// ============================================================================
+
+#wrap.ckr-shop-wishlist.js_sale {
+    // Aligné sur le fond boutique `#wrap.o_wsale_products_page.ckr-shop` (_shop.scss).
+    background-color: #fcf9f7;
+
+    .oe_website_sale {
+        padding-bottom: $ckr-space-lg;
+    }
+
+    .wishlist-section {
+        padding-bottom: $ckr-space-xl !important;
+    }
+
+    .o_wishlist_products_header {
+        padding-top: $ckr-space-md !important;
+        padding-bottom: $ckr-space-md !important;
+
+        h1,
+        .h4-fs {
+            font-family: $ckr-font-serif;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+            letter-spacing: -0.02em;
+            font-size: unquote("clamp(1.25rem, 1.4vw + 0.85rem, 1.55rem)") !important;
+        }
+    }
+
+    // --- État vide (illustration + message + CTA Boutique) ---
+    #empty-wishlist-message {
+        h5 {
+            font-family: $ckr-font-serif;
+            font-weight: $ckr-weight-medium;
+            color: $ckr-text-muted;
+        }
+
+        .btn-primary {
+            border-radius: $ckr-radius-md;
+            font-family: $ckr-font-sans;
+            font-weight: $ckr-weight-medium;
+        }
+    }
+
+    // --- Grille des articles (preset Website : colonnes / gap variables CSS) ---
+    #o_comparelist_table.o_wishlist_table {
+        margin-bottom: $ckr-space-xl !important;
+
+        @media (max-width: 575.98px) {
+            --ckr-wishlist-gap-fallback: #{$ckr-space-sm};
+            gap: var(--o-wsale-wishlist-grid-gap, var(--ckr-wishlist-gap-fallback));
+        }
+    }
+
+    // Tuile : même squelette `products_item` que la boutique ; léger cadre CK.
+    article.o_wishlist_item {
+        border-radius: $ckr-radius-lg;
+        border: 1px solid rgba($ckr-border, 0.44);
+        background-color: rgba(255, 255, 255, 0.82);
+        box-shadow:
+            0 1px 1px rgba(255, 255, 255, 0.75) inset,
+            0 6px 16px rgba(44, 38, 30, 0.05);
+        overflow: hidden;
+
+        @media (hover: hover) {
+            &:hover {
+                border-color: rgba($ckr-primary, 0.28);
+                box-shadow:
+                    0 1px 1px rgba(255, 255, 255, 0.8) inset,
+                    0 10px 22px rgba(44, 38, 30, 0.07);
+            }
+        }
+    }
+
+    // Retrait liste — zone tactile et focus visibles (F6 / a11y).
+    button.o_wish_rm {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.35rem;
+        min-height: 2.35rem;
+        padding: 0.35rem !important;
+        border-radius: $ckr-radius-pill !important;
+        border: 1px solid rgba($ckr-border, 0.55) !important;
+        background-color: rgba(255, 253, 250, 0.92) !important;
+        color: rgba($ckr-text, 0.72) !important;
+        box-shadow: 0 1px 2px rgba(44, 38, 30, 0.06);
+        transition:
+            background-color $ckr-transition-fast,
+            border-color $ckr-transition-fast,
+            color $ckr-transition-fast;
+
+        .oi {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        &:hover {
+            background-color: rgba(252, 248, 242, 1) !important;
+            border-color: rgba($ckr-primary, 0.35) !important;
+            color: $ckr-text !important;
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgba($ckr-primary, 0.65);
+            outline-offset: 2px;
+        }
+    }
+}
