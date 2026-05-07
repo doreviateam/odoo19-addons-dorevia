@@ -421,6 +421,42 @@ Traiter d’abord comme **sujet de configuration sandbox**, pas comme bug module
 * **Assertion `sale.order`** : recherche par **email partenaire** lorsque la commande est retrouvée ; si aucune correspondance (effets de contexte / partenaire), le test ne s’appuie pas sur cet échec seul une fois la **confirmation HTTP** validée (plan B décrit dans le code).
 * **État `sale.order.state`** : le Lot A prouve le parcours marchand HTTP complet jusqu’à la confirmation avec paiement Demo. L’état final `sale.order.state` dépend de la configuration paiement / confirmation Odoo et peut rester **`draft`** en sandbox ou avec le provider Demo ; **l’assertion backend ne doit pas être bloquante sur `sale` / `done` pour ce tag** — plage tolérée dans le test : `draft`, `sale`, `done`.
 
+### Validation runtime — GO base `tenant_o7`
+
+**Date de référence** : 2026-05-07  
+**Commit code de référence** : `e6c3936`  
+**Environnement** : sandbox Odoo 19, base **`tenant_o7`** (après `-u` module, grep update vide).
+
+**Exécution tag** : `--test-tags=dorevia_ckr_checkout_e2e_extended` → **`0 failed`, `0 error(s)`, `1` test**.
+
+**Décision** : **Lot A E2E marchand étendu — GO runtime** sur `tenant_o7`.
+
+**Parcours HTTP validé** (résumé) :
+
+| Étape | Résultat |
+| --- | --- |
+| `GET /` | 200 |
+| `GET /shop` | 200 |
+| Fiches produits A / B | 200 |
+| `POST /shop/cart/add` | 200 |
+| `GET /shop/cart` | 200 |
+| `POST /shop/cart/update` (qty + suppression ligne) | OK |
+| `GET /shop/checkout` | 303 |
+| `GET /shop/address` → `POST /shop/address/submit` | 200 |
+| `GET /shop/payment` | 200 |
+| `POST /shop/payment/transaction/<id>` | 200 |
+| `POST /payment/demo/simulate_payment` | 200 |
+| `GET /shop/payment/validate` | 303 |
+| `GET /shop/confirmation` | 200 |
+
+**Limites conservées** (non levées par ce GO) :
+
+* **Provider Demo** (`payment_demo`) requis pour exécuter le tag ; sinon skip test.
+* **`sale.order.state`** peut rester **`draft`** en sandbox malgré confirmation HTTP — inchangé vs §14 ci-dessus.
+* Preuve **HTTP robuste**, pas test UI pixel-perfect sur les tuiles `/shop`.
+* **Lots B / C / D / E** : hors périmètre du tag étendu Lot A.
+* **Recette humaine** toujours nécessaire avant ouverture publique (complément aux automates).
+
 ---
 
 ## Synthèse exécutive

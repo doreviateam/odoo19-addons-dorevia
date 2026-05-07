@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.139",
+    "version": "19.0.1.10.140",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -141,6 +141,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   ``token_id`` (``null`` sans jeton enregistré) pour alignement Odoo 19 ``_create_transaction``.
 * 19.0.1.10.139 : tests Lot A — assertion ``sale.order.state`` assouplie (``draft`` toléré en
   sandbox avec confirmation HTTP) ; documentation ticket §14 alignée.
+* 19.0.1.10.140 : documentation — ``TICKET_E2E_MARCHAND_ETENDU`` §14 : validation runtime **GO**
+  Lot A tag ``dorevia_ckr_checkout_e2e_extended`` sur base ``tenant_o7`` (commit ``e6c3936``).
 
 Portee :
 
