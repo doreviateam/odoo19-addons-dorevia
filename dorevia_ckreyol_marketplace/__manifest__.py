@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.137",
+    "version": "19.0.1.10.138",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -137,6 +137,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   parcours HTTP shop → panier (qty / update / suppression) → checkout invité → paiement Demo →
   confirmation ; dépend de ``payment_demo`` (skip sinon) ; tag minimal ``dorevia_ckr_checkout_e2e``
   inchangé.
+* 19.0.1.10.138 : tests Lot A — payload JSON-RPC ``/shop/payment/transaction/<id>`` : ajout
+  ``token_id`` (``null`` sans jeton enregistré) pour alignement Odoo 19 ``_create_transaction``.
 
 Portee :
 

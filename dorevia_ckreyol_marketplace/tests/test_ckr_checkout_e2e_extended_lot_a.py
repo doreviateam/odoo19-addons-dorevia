@@ -220,12 +220,15 @@ class TestCkrCheckoutE2EExtendedLotA(HttpCase):
         route = attrs["transaction_route"]
 
         landing = attrs.get("landing_route") or "/shop/payment/validate"
+        # Odoo 19 — ``PaymentPortal._create_transaction`` exige ``token_id`` (positional) ;
+        # flux carte / méthode sans jeton enregistré : ``None`` → ``null`` en JSON-RPC.
         tx_vals = self.make_jsonrpc_request(
             route,
             {
                 "access_token": access_token,
                 "provider_id": self.demo_provider.id,
                 "payment_method_id": self.demo_payment_method.id,
+                "token_id": None,
                 "flow": "direct",
                 "tokenization_requested": False,
                 "landing_route": landing,
