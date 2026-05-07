@@ -3,7 +3,7 @@
 **ID** : `FAVORIS-EXEC-LOT2`  
 **Statut** : **À arbitrer — non lancé**  
 **Type** : Préparation d’arbitrage technique / futur chantier — **aucune implémentation ouverte par ce document**  
-**Module** : `dorevia_ckreyol_marketplace` (+ dépendances à trancher : `website_sale`, évent. wishlist Odoo)
+**Module** : `dorevia_ckreyol_marketplace` (+ **`website_sale_wishlist`** / `website_sale` — orientation validée ci-dessous)
 
 ---
 
@@ -18,6 +18,57 @@ Ce fichier **formalise les arbitrages à trancher** avant tout développement. I
 **Références** : [README MVP 04](README.md), [doctrine Panier ≠ Favoris](README.md#doctrine), [hors périmètre implicite](README.md#hors-périmètre-implicite).
 
 **Note technique (pré-arbitrage)** : [`NOTE_ARBITRAGE_TECHNIQUE_FAVORIS_LOT2.md`](NOTE_ARBITRAGE_TECHNIQUE_FAVORIS_LOT2.md) — recommandations, risques et périmètre MVP **proposés** pour l’atelier de décision ; ne remplace pas une **décision écrite** dans la section *Décision attendue avant exécution*.
+
+---
+
+## Orientation technique validée (note faisabilité — documentaire)
+
+La note [`NOTE_ARBITRAGE_TECHNIQUE_FAVORIS_LOT2.md`](NOTE_ARBITRAGE_TECHNIQUE_FAVORIS_LOT2.md) est **validée** sur les points ci-dessous. Elles **orientent** le futur chantier mais **ne constituent pas un GO implémentation** : aucun code, aucune branche Favoris tant que le **GO / NO GO** explicite n’est pas donné (voir fin de ticket).
+
+### Doctrine Lot 2
+
+**Favoris Lot 2 = s’appuyer sur Odoo standard, corriger / habiller / tester — ne pas créer un système CK parallèle.**
+
+- Éviter tout **stockage custom** sauf **contrainte forte documentée** (exception rare).
+- Pas d’**emailing**, pas de **partage**, pas de **marketing lourd**, pas de **compte forcé** ([README — Hors périmètre](README.md#hors-périmètre-implicite)).
+
+### 1. Stack technique recommandée
+
+| Élément | Retenu |
+| --- | --- |
+| **Module** | **`website_sale_wishlist`** (standard Odoo 19, dépend de `website_sale`). |
+| **Modèle de données** | **`product.wishlist`** (`product_id`, `partner_id`, `website_id`, …). |
+| **URL page liste** | **`/shop/wishlist`** (route standard). |
+| **Stockage invité** | **Session** + lignes wishlist **sans `partner_id`**, conformément au **comportement standard** Odoo. |
+| **Stockage connecté** | Rattachement au **`partner_id`** du visiteur connecté (standard). |
+| **Fusion invité → connecté** | **Comportement standard Odoo** (ex. rattachement session → partner, gestion des doublons) ; **pas de promesse avancée** au-delà du standard. |
+
+### 2. Périmètre MVP Lot 2 recommandé (premier incrément)
+
+À réaliser **uniquement après GO implémentation** :
+
+- **Listing `/shop`** (carte produit + wishlist) ;
+- **Fiche produit** ;
+- **Page liste Favoris** (`/shop/wishlist`) ;
+- **Retrait favori** ;
+- **Lien vers fiche produit** depuis la liste ;
+- **Recette F1–F6** (section [§6](#6-recette-minimale-reprise-f1f6) ci-dessous ; [`2_FAVORIS_PARCOURS.md`](2_FAVORIS_PARCOURS.md) §9).
+
+### 3. Hors premier incrément (report ou incrément suivant)
+
+- **Home** (cartes produit hors `/shop`) ;
+- **Compteur** favoris dans le **header** ;
+- **Portail** `/my` ou équivalent étendu ;
+- **Marketing**, **partage**, **emailing** (hors périmètre MVP04 — [README](README.md#hors-périmètre-implicite)).
+
+### 4. Décision à venir
+
+| Décision | Statut |
+| --- | --- |
+| **GO / NO GO implémentation Lot 2** | **À acter explicitement** après Lot 1 / pré-ouverture et arbitrage restant (charge, planning). |
+| **Branche / code Favoris** | **Interdits** tant que le GO n’est pas donné. |
+
+Les sections **§1 à §6** ci-dessous conservent la **matrice détaillée** ; les tableaux **§1 à §3** peuvent être lus au travers de l’orientation **wishlist standard** ci-dessus (les lignes « à arbitrer » historiques sont **levées** sur le choix de base ; restent les finitions et le **GO** global).
 
 ---
 
@@ -38,37 +89,42 @@ Transformer le **cadrage** existant en **périmètre d’exécution arbitré** :
 
 ## 1. Stockage invité
 
+*Orientation validée* : **`website_sale_wishlist`** — session + enregistrements **`product.wishlist`** sans `partner_id` ; pas de stockage CK parallèle.
+
 | Option / question | Notes | Statut cible |
 | --- | --- | --- |
-| **Session** serveur (Odoo `website` / session visiteur) | Cohérent avec un état « panier-like » sans persistance longue durée. | À arbitrer |
-| **localStorage / cookie** côté navigateur | Persistance navigateur ; pas de sync multi-appareils sans mécanisme serveur. | À arbitrer |
-| **Mécanisme wishlist « standard » Odoo** (si module / API existante en 19) | Réutilisation vs sur-mesure CK ; dépend des modules installés. | À arbitrer |
-| **Autre** (hybride, service dédié, etc.) | À documenter si retenu. | À arbitrer |
-| **Persistance attendue ou non** pour l’invité (reprise après fermeture navigateur) | Le cadrage [`2_FAVORIS_PARCOURS.md`](2_FAVORIS_PARCOURS.md) (§4 *Connecté vs non connecté*) laisse l’arbitrage ouvert. | À arbitrer |
+| **Session** + lignes standard `product.wishlist` | Comportement Odoo documenté ; IDs en session (`wishlist_ids`). | **Retenu** (orientation) |
+| **localStorage / cookie** seuls (sans standard) | Alternative non souhaitée si wishlist standard disponible. | Hors orientation |
+| **Mécanisme wishlist standard Odoo** | Module **`website_sale_wishlist`**. | **Retenu** (orientation) |
+| **Autre** (hybride, service dédié) | Uniquement si contrainte forte documentée. | Hors MVP sauf exception |
+| **Persistance invité** | Limites standard (session, éventuel nettoyage automatique) — cf. note faisabilité. | À communiquer en recette |
 
-**Indispensable** : qu’**une** stratégie invité soit **choisie et documentée** avant implémentation (toutes les lignes ci-dessus restent des **options** jusqu’à arbitrage).
+**Indispensable** : confirmer sur chaque instance que **`website_sale_wishlist`** est **installé** avant développement.
 
 ---
 
 ## 2. Stockage connecté
 
+*Orientation validée* : lignes **`product.wishlist`** avec **`partner_id`** = partenaire du visiteur connecté ; **website** courant.
+
 | Option / question | Notes | Statut cible |
 | --- | --- | --- |
-| **Rattachement compte** client / `res.partner` | Alignement portail / politique compte MVP03. | À arbitrer |
-| **Usage wishlist standard Odoo** (si disponible et pertinent) | Évite le réinventer ; contraintes données / UX CK. | À arbitrer |
-| **Comportement portail** (liste visible `/my`, menu, etc.) | Cohérence avec l’expérience « Mon compte » sans déborder MVP04. | Optionnel |
+| **Rattachement compte** / **`res.partner`** | Via modèle standard `product.wishlist`. | **Retenu** (orientation) |
+| **Usage wishlist standard Odoo** | **`website_sale_wishlist`**. | **Retenu** (orientation) |
+| **Comportement portail** (liste `/my`, menu, etc.) | Hors premier incrément — cf. *Orientation technique validée*, §3 *Hors premier incrément*. | Optionnel / report |
 
-**Indispensable** : si persistance **connectée** retenue, définir **où** les données vivent (modèle, ACL, website).
+**Indispensable** : respecter les **règles d’accès** du module standard (tests ACL après habillage CK).
 
 ---
 
 ## 3. Fusion invité → connecté
 
+*Orientation validée* : **comportement standard Odoo** (ex. rattachement des entrées session au partner à la connexion, traitement des doublons) ; **pas de promesse produit** au-delà du standard.
+
 | Option | Notes | Statut cible |
 | --- | --- | --- |
-| **Fusion** des favoris invités dans le compte à la connexion | Expérience unifiée ; complexité technique. | À arbitrer |
-| **Remplacement** (état invité abandonné) | Simple ; perte possible côté invité. | À arbitrer |
-| **Conservation séparée** jusqu’à action utilisateur | Évite les surprises ; UX à clarifier. | À arbitrer |
+| **Fusion standard Odoo** | Méthodes du module wishlist (ex. `_check_wishlist_from_session`). | **Retenu** (orientation) |
+| **Remplacement / séparation custom** | Non souhaité sauf contrainte documentée. | Hors orientation |
 | **Pas de promesse MVP** sur une fusion élaborée | Aligné cadrage [`2_FAVORIS_PARCOURS.md`](2_FAVORIS_PARCOURS.md) §4. | Indispensable (rappel) |
 
 ---
@@ -91,7 +147,7 @@ Transformer le **cadrage** existant en **périmètre d’exécution arbitré** :
 
 | Élément | Notes | Statut cible |
 | --- | --- | --- |
-| **Page dédiée** `/…` (URL à fixer) | Vue liste scannable (cadrage §5 *Liste des favoris*). | Indispensable |
+| **Page dédiée** **`/shop/wishlist`** | Vue liste scannable (cadrage §5 *Liste des favoris*) ; URL standard Odoo. | Indispensable |
 | **Retrait favori** depuis la liste | Cadrage §3 / §5. | Indispensable |
 | **Lien vers fiche produit** | Cadrage §5. | Indispensable |
 | **Ajout au panier depuis la liste favoris** | Cadrage : **pas d’obligation** ; chemin panier **distinct**. Inclure un CTA panier = **optionnel**. | Optionnel |
@@ -133,20 +189,32 @@ Reprise des scénarios [§9 — `2_FAVORIS_PARCOURS.md`](2_FAVORIS_PARCOURS.md#9
 
 ## Décision attendue avant exécution
 
-Sans **décision explicite** sur les éléments suivants, ce ticket reste **strictement préparatoire** et **ne mandate aucune implémentation** ni engagement de sprint.
+Sans **GO / NO GO explicite** sur l’**implémentation Lot 2**, ce ticket reste **strictement préparatoire** : **aucun code**, **aucune branche Favoris**, **aucun sprint** tant que la ligne ci-dessous n’est pas actée.
 
-Arbitrages à **trancher par écrit** avant tout code :
+### GO / NO GO implémentation Lot 2
 
-1. **Stockage invité** (stratégie retenue parmi §1).
-2. **Stockage connecté** (modèle / rattachement `res.partner`, portail éventuel — §2).
-3. **Fusion invité → connecté** (fusion, remplacement, séparation, ou absence de promesse — §3).
-4. **URL et structure** de la **page liste Favoris** (chemins, gabarit, nom de route).
-5. **Points d’entrée retenus** au-delà du **cœur minimal** (`/shop` + fiche produit + liste), y compris **Home** si applicable (optionnel).
-6. **Accès header** : retenu ou non pour la V1 Lot 2 ; comportement du lien vers la liste.
-7. **Compteur** favoris dans le header : retenu ou non.
-8. **Scénarios F1–F6** effectivement **inclus dans le premier incrément** (tous ou sous-ensemble documenté).
-9. **Dépendance** ou non à une **wishlist / mécanisme standard Odoo** (modules, API, contraintes installation).
+| Décision | Statut |
+| --- | --- |
+| **GO** ou **NO GO** (charge, planning, disponibilité après Lot 1 / pré-ouverture) | **À trancher** — seule décision bloquante pour ouvrir le développement. |
+
+### Arbitrages déjà orientés (consignés plus haut)
+
+Les points suivants sont **réglés par orientation technique validée** (wishlist standard — section *Orientation technique validée*) :
+
+1. ~~Stockage invité~~ → **standard session + `product.wishlist`**.
+2. ~~Stockage connecté~~ → **`partner_id` sur `product.wishlist`**.
+3. ~~Fusion invité → connecté~~ → **standard Odoo**, sans promesse avancée.
+4. ~~URL liste~~ → **`/shop/wishlist`**.
+5. ~~Dépendance wishlist Odoo~~ → **`website_sale_wishlist`** **retenu**.
+
+Restent à trancher **au moment du GO** (ou dans le périmètre du sprint) pour le **premier incrément** :
+
+- **Home** : incluse ou non (par défaut **hors** premier incrément — § Orientation §3).
+- **Header** (lien Favoris / comportement) : périmètre du MVP ou report.
+- **Compteur** header : inclus ou report.
+- **Portail** : hors premier incrément sauf décision contraire.
+- **Scénarios F1–F6** : confirmation que **tous** sont dans le même incrément ou découpe documentée.
 
 ---
 
-*Document préparatoire — aucune implémentation engagée.*
+*Document préparatoire — aucune implémentation engagée tant que le GO / NO GO n’est pas donné.*
