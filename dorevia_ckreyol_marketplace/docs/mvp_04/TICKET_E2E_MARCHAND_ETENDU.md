@@ -369,6 +369,46 @@ Exécuter une **courte vérification** sur l’environnement sandbox (ex. conten
 
 ---
 
+## 13. Plan de déblocage — deux gates puis nouveau préflight
+
+**Décision actée** : le Lot A E2E étendu reste **bloqué** ; **ne pas implémenter** le tag **`dorevia_ckr_checkout_e2e_extended`** tant que les gates ci-dessous ne sont pas **GO**. Priorité au **déblocage runtime** sandbox ; pas de correctif CK « au hasard » sur le panier avant **stack JS complète**.
+
+### Gate 1 — Paiement test (configuration / environnement)
+
+Traiter d’abord comme **sujet de configuration sandbox**, pas comme bug module CK.
+
+**À contrôler** (BO / modules) :
+
+- module **`payment_demo`** installé ou non ;
+- provider **Demo** activé ;
+- provider **publié** et **utilisable** pour le **website CK** ;
+- **journal** / **société** / **devise** cohérents ;
+- site web correctement relié au provider ;
+- **`/shop/payment`** affiche au moins **un** moyen de paiement test.
+
+**Critère GO** : au moins **un** provider test **utilisable** apparaît sur **`/shop/payment`**.
+
+### Gate 2 — Suppression ligne panier (diagnostic puis correctif minimal)
+
+**Ne pas coder à l’aveugle.** Recueillir au clic suppression :
+
+- fichier **JS** ;
+- **ligne** ;
+- **fonction** ;
+- **contexte DOM** (élément attendu absent ou déplacé).
+
+**Objectif** : trancher **`website_sale`** standard vs **`theme_classic_store`** vs **vue CK** qui altère le DOM attendu.
+
+**Critère GO** : suppression d’une ligne panier **sans erreur JS** en navigation réelle.
+
+### Enchaînement
+
+1. Lever **Gate 1** puis **Gate 2** (ordre recommandé : paiement d’abord si les deux peuvent être menés en parallèle côté équipe, sinon Gate 1 souvent plus rapide).
+2. **Relancer le préflight Lot A** (repasser la check-list du §11 et le scénario §12).
+3. **Seulement si le préflight passe** : réarbitrer l’**implémentation** du tag **`dorevia_ckr_checkout_e2e_extended`** (toujours sans toucher au tag minimal **`dorevia_ckr_checkout_e2e`** sans décision explicite).
+
+---
+
 ## Synthèse exécutive
 
 **Pourquoi** : ouverture commerciale contrôlée = risque réduit si les parcours d’achat **fréquents** et les **échecs maîtrisés** sont connus et en partie automatisés.
