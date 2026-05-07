@@ -64,11 +64,25 @@ Décision de ce PV : **GO technique minimal pré-ouverture**, sous réserve de s
 
 **GO technique minimal pré-ouverture** pour le palier actuel.
 
-Ce GO ne signifie pas “ouverture publique immédiate”, mais valide que :
+Ce GO ne signifie pas “ouverture publique immédiate”.
 
-- le socle est consolidé selon la doctrine fixée ;
+Il valide que :
+
+- le socle front/catalogue a été consolidé selon la doctrine fixée ;
+- les risques slugs / ACL / canon URL sont désormais identifiés et documentés ;
 - une preuve automatisée minimale du parcours d’achat est disponible ;
-- les risques restants sont identifiés et planifiés.
+- les risques restants sont connus, tracés et planifiés.
+
+## 4.1) Non couvert par ce GO
+
+Ce GO ne couvre pas encore :
+
+- l’ouverture publique réelle ;
+- la couverture complète checkout / paiement / livraison ;
+- l’audit final ACL / record rules ;
+- le nettoyage complet de l’historique documentaire ;
+- la validation smoke HTTP live avec serveur persistant ;
+- les aspects juridiques, CGV, mentions légales et conformité commerciale.
 
 ---
 
