@@ -419,6 +419,7 @@ Traiter d’abord comme **sujet de configuration sandbox**, pas comme bug module
 * Objectif : parcours marchand **HTTP déterministe** (listing → fiches → JSON-RPC panier → adresse invité → paiement Demo → confirmation), **sans** simulation de clic sur les boutons « ajouter » des tuiles `/shop` (cf. docstring du test).
 * **Prérequis** : module **`payment_demo`** installé et enregistrements Demo présents ; sinon le test est **ignoré** explicitement (`skipTest`).
 * **Assertion `sale.order`** : recherche par **email partenaire** lorsque la commande est retrouvée ; si aucune correspondance (effets de contexte / partenaire), le test ne s’appuie pas sur cet échec seul une fois la **confirmation HTTP** validée (plan B décrit dans le code).
+* **État `sale.order.state`** : le Lot A prouve le parcours marchand HTTP complet jusqu’à la confirmation avec paiement Demo. L’état final `sale.order.state` dépend de la configuration paiement / confirmation Odoo et peut rester **`draft`** en sandbox ou avec le provider Demo ; **l’assertion backend ne doit pas être bloquante sur `sale` / `done` pour ce tag** — plage tolérée dans le test : `draft`, `sale`, `done`.
 
 ---
 

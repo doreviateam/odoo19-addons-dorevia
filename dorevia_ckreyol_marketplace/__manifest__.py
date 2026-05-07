@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.138",
+    "version": "19.0.1.10.139",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -139,6 +139,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   inchangé.
 * 19.0.1.10.138 : tests Lot A — payload JSON-RPC ``/shop/payment/transaction/<id>`` : ajout
   ``token_id`` (``null`` sans jeton enregistré) pour alignement Odoo 19 ``_create_transaction``.
+* 19.0.1.10.139 : tests Lot A — assertion ``sale.order.state`` assouplie (``draft`` toléré en
+  sandbox avec confirmation HTTP) ; documentation ticket §14 alignée.
 
 Portee :
 
