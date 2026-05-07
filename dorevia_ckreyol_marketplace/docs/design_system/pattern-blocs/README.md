@@ -19,3 +19,5 @@ Ces documents servent de référence pour les tickets, les recettes et les futur
 Ils ne créent pas de nouveau périmètre fonctionnel : ils sécurisent les patterns déjà validés.
 
 Inventaire aligné code + vocabulaire (**Home** comme première source) : [`INVENTAIRE_HOME_PATTERN_BLOCS.md`](./INVENTAIRE_HOME_PATTERN_BLOCS.md).
+
+Layout global (**header** 3 niveaux) : [`PATTERN_BLOC_HEADER_NAV_3_NIVEAUX.md`](./PATTERN_BLOC_HEADER_NAV_3_NIVEAUX.md).
