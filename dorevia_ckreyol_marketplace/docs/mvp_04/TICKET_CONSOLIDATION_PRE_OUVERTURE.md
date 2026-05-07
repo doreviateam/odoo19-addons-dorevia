@@ -174,6 +174,7 @@ Critère GO :
 - le rendu home / shop / panier est contrôlé après update ;
 - les erreurs XPath / QWeb / assets sont détectables rapidement.
 - référence d'exécution : `docs/mvp_04/PROCEDURE_SMOKE_INSTALL_UPDATE.md`.
+- preuve **smoke live serveur persistant** (complément) : `docs/mvp_04/PV_SMOKE_LIVE_SERVEUR_CK.md`.
 
 ---
 

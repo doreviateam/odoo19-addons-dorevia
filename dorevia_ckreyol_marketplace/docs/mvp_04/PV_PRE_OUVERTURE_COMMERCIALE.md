@@ -49,6 +49,7 @@ Décision de ce PV : **GO technique minimal pré-ouverture**, sous réserve de s
 
 - Procédure documentée : `docs/mvp_04/PROCEDURE_SMOKE_INSTALL_UPDATE.md`.
 - Vérification `-u` et endpoints critiques cadrée.
+- **Smoke live serveur persistant** exécuté et archivé : `docs/mvp_04/PV_SMOKE_LIVE_SERVEUR_CK.md` (**GO**, base `tenant_o7`, sans 500 ni traceback QWeb/XPath sur les URLs testées).
 
 ---
 
@@ -57,7 +58,7 @@ Décision de ce PV : **GO technique minimal pré-ouverture**, sous réserve de s
 1. **ACL collections** : record rules fines public/portal à auditer et éventuellement durcir.
 2. **Canon URL historique** : marquage obsolète/réécriture progressive des anciens documents à poursuivre.
 3. **E2E marchand** : couverture encore minimale ; un lot ultérieur doit élargir checkout/paiement/livraison (cas complémentaires).
-4. **Smoke HTTP manuel** : à exécuter avec serveur persistant (pas `--stop-after-init`) pour validation curl live.
+4. ~~**Smoke HTTP manuel serveur persistant**~~ : exécuté — preuve **`PV_SMOKE_LIVE_SERVEUR_CK.md`** (À reconduire après changements XPath/thème majeurs).
 
 ---
 
@@ -82,7 +83,7 @@ Ce GO ne couvre pas encore :
 - la couverture complète checkout / paiement / livraison ;
 - l’audit final ACL / record rules ;
 - le nettoyage complet de l’historique documentaire ;
-- la validation smoke HTTP live avec serveur persistant ;
+- ~~la validation smoke HTTP live avec serveur persistant~~ (réalisée ; voir `docs/mvp_04/PV_SMOKE_LIVE_SERVEUR_CK.md` — hors régressions futures) ;
 - les aspects juridiques, CGV, mentions légales et conformité commerciale.
 
 ---
@@ -92,4 +93,4 @@ Ce GO ne couvre pas encore :
 1. Finaliser l’audit ACL/record rules collections.
 2. Poursuivre le nettoyage canon URL historique (obsolescence explicite puis convergence).
 3. Ouvrir un lot E2E marchand étendu (scénarios additionnels checkout/paiement/livraison).
-4. Exécuter le smoke serveur persistant et archiver l’évidence dans le ticket P4.
+4. ~~Exécuter le smoke serveur persistant~~ — fait : `docs/mvp_04/PV_SMOKE_LIVE_SERVEUR_CK.md`. Poursuivre avec le lot E2E marchand étendu (hors smoke minimal).
