@@ -16,6 +16,7 @@ Dossier de **cadrage** pour la vague **MVP 04** : stabiliser les éléments d’
 | [1_PANIER_PARCOURS.md](1_PANIER_PARCOURS.md) | Parcours **panier** : points d’entrée, états, invité / connecté, alignement checkout |
 | [2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md) | Parcours **favoris** : ajout / retrait, liste, persistance, lien éventuel compte |
 | [TICKET_FAVORIS_EXECUTION_LOT2.md](TICKET_FAVORIS_EXECUTION_LOT2.md) | Ticket **préparation Lot 2 Favoris** : arbitrages techniques — **non lancé** (statut : à arbitrer) |
+| [NOTE_ARBITRAGE_TECHNIQUE_FAVORIS_LOT2.md](NOTE_ARBITRAGE_TECHNIQUE_FAVORIS_LOT2.md) | **Note faisabilité / arbitrage** technique (standard wishlist, risques, périmètre MVP proposé) — sans implémentation |
 | [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) | Ticket de pilotage : posture **Header CK V1** (Top_0/Top_1/Top_2) et livraison en lots V1.1/V1.2/V1.3 |
 | [TICKET_PANIER_PALIER_A_EXECUTION.md](TICKET_PANIER_PALIER_A_EXECUTION.md) | Ticket d'exécution **Panier — Palier A** : périmètre, critères d'acceptation, recette minimale |
 | [PISTE_CREA_HEADER_NAV_MVP04_V1.md](PISTE_CREA_HEADER_NAV_MVP04_V1.md) | Piste créa / UX V1 : composition desktop/mobile et hiérarchie visuelle pour panier, favoris, professionnels |

@@ -17,6 +17,8 @@ Ce fichier **formalise les arbitrages à trancher** avant tout développement. I
 
 **Références** : [README MVP 04](README.md), [doctrine Panier ≠ Favoris](README.md#doctrine), [hors périmètre implicite](README.md#hors-périmètre-implicite).
 
+**Note technique (pré-arbitrage)** : [`NOTE_ARBITRAGE_TECHNIQUE_FAVORIS_LOT2.md`](NOTE_ARBITRAGE_TECHNIQUE_FAVORIS_LOT2.md) — recommandations, risques et périmètre MVP **proposés** pour l’atelier de décision ; ne remplace pas une **décision écrite** dans la section *Décision attendue avant exécution*.
+
 ---
 
 ## Objectif du ticket
