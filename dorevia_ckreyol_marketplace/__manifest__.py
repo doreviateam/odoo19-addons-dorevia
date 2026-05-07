@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.111",
+    "version": "19.0.1.10.114",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -81,6 +81,13 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   ``/shop/cart``, header CK, structure checkout standard, panier vide + lien continuer (EN/FR).
 * 19.0.1.10.111 : tests panier — Odoo 19 panier vide : CTA ``Shop`` / ``Boutique`` vers ``/shop``
   (``cart_lines``), en plus des libellés « Continue shopping ».
+* 19.0.1.10.112 : drawer header — fermeture forcée en desktop (≥992px) : la nav horizontale
+  ``Top_2`` suffit ; évite drawer ouvert après resize ou mode responsive (CSS + JS ``matchMedia``).
+* 19.0.1.10.113 : header — classe ``o_header_fixed`` à la place de ``o_header_standard`` :
+  l’interaction Odoo « standard » translate le header hors écran au scroll ; sans navbar
+  Bootstrap native cela produit bandeau vide / burger seul. ``HeaderFixed`` convient au shell CK.
+* 19.0.1.10.114 : layout — annuler le ``padding-top`` inline sur ``main`` (affix Odoo) :
+  header CK en ``sticky`` → bande vide entre Top_2 et le hero sans cette neutralisation.
 
 Portee :
 

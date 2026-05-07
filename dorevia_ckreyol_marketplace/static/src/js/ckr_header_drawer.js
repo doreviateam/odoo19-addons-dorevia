@@ -52,6 +52,15 @@
             return;
         }
 
+        var mqDesktop = window.matchMedia("(min-width: 992px)");
+
+        function closeDrawerIfDesktop() {
+            if (mqDesktop.matches && toggle.checked) {
+                toggle.checked = false;
+                syncDrawerUi(toggle, burger);
+            }
+        }
+
         toggle.addEventListener("change", function () {
             syncDrawerUi(toggle, burger);
         });
@@ -77,6 +86,13 @@
         });
 
         syncDrawerUi(toggle, burger);
+        closeDrawerIfDesktop();
+
+        if (mqDesktop.addEventListener) {
+            mqDesktop.addEventListener("change", closeDrawerIfDesktop);
+        } else if (mqDesktop.addListener) {
+            mqDesktop.addListener(closeDrawerIfDesktop);
+        }
     }
 
     if (document.readyState === "loading") {

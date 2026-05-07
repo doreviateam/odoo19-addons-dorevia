@@ -10,7 +10,10 @@
     <!--                                                            -->
     <!-- On preserve :                                             -->
     <!--   * id="top" sur <header> (attendu par d autres vues)     -->
-    <!--   * class o_header_standard (compatibilite configurator)  -->
+    <!--   * class o_header_fixed : interaction Website Odoo 19    -->
+    <!--     (affix / scroll) adaptee au header natif ; contourner  -->
+    <!--     ``o_header_standard`` qui applique translateY(-100%)  -->
+    <!--     au scroll et casse notre markup CK (bandeau vide).     -->
     <!--                                                            -->
     <!-- Reference : STRUCTURE_MENU_PRINCIPAL.md, CHARTE § 9.2     -->
     <!-- ========================================================== -->
@@ -35,7 +38,7 @@
               name="C-Kreyol: header personnalise"
               priority="99">
         <xpath expr="//header" position="replace">
-            <header id="top" class="ckr-header ckr-root o_header_standard">
+            <header id="top" class="ckr-header ckr-root o_header_fixed">
 
                 <!-- Hook de compatibilite : le JS standard                 -->
                 <!-- (website/static/src/js/content/auto_hide_menu.js, ~340) -->

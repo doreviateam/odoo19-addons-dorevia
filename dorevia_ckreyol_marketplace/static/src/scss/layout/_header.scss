@@ -3,7 +3,7 @@
 // ============================================================================
 
 // Specificite renforcee (header#top.ckr-header) pour gagner sur les
-// regles standard Odoo (.o_header_standard, .o_header_is_scrolled...)
+// regles Website Odoo (.o_header_fixed / .o_header_is_scrolled / fond transparent…)
 // sans recourir uniquement a !important.
 header#top.ckr-header,
 .ckr-header {
@@ -783,6 +783,16 @@ header#top.ckr-header,
     overflow: visible !important;
 }
 
+// Interaction Website (BaseHeader.adjustMainPadding) : padding-top inline sur
+// <main> quand le header reçoit ``o_header_affixed`` — prévu pour un header
+// ``position: fixed`` hors flux. Notre ``header#top.ckr-header`` reste en
+// ``position: sticky`` et le bloc principal suit naturellement dans le flux ;
+// ce padding duplique la hauteur du header → bande beige vide entre Top_2 et
+// le hero (souvent visible après scroll).
+#wrapwrap > main {
+    padding-top: 0 !important;
+}
+
 // ============================================================================
 // Drawer mobile (off-canvas simple, sans JS lourd - utilise input:checked)
 // ============================================================================
@@ -974,6 +984,22 @@ header#top.ckr-header,
         transform: translateX(0);
     }
 
+    // Desktop (lg+) : la barre `ckr-header__top2` porte la navigation — le drawer
+    // ne doit pas rester visible si la case est encore cochée (resize mobile→desktop,
+    // outils de développement, etc.). Le burger est déjà masqué ici.
+    @media (min-width: 992px) {
+        &__toggle:checked ~ &__backdrop {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        &__toggle:checked ~ &__panel {
+            transform: translateX(100%);
+            pointer-events: none;
+            visibility: hidden;
+        }
+    }
 }
 
 // Verrouillage du scroll page quand le drawer est ouvert (classe posee par JS).
