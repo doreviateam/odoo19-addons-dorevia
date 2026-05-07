@@ -18,6 +18,12 @@ Ces documents servent de référence pour les tickets, les recettes et les futur
 
 Ils ne créent pas de nouveau périmètre fonctionnel : ils sécurisent les patterns déjà validés.
 
+## Doctrine projet (pattern-blocs d’abord, snippets Odoo pas en chantier prioritaire)
+
+- Les **pattern-blocs** sont la **voie maîtresse** pour stabiliser la grammaire CK, documenter les intentions et les critères recette, et guider les évolutions **sans** lancer pour l’instant une **production** de snippets Odoo **déposables** dans l’éditeur Website.
+- **Par défaut** : **pattern-bloc documenté ≠ snippet Odoo à créer** (`../README.md`, section doctrine).
+- Les snippets déposables pourront être **réouverts comme option** lorsqu’un besoin métier réel les justifiera (ex. multiplication de pages composer avec les mêmes blocs). En attendant : **priorité consolidation marchande et documentaire**, pas complexité snippet prématurée.
+
 Inventaire aligné code + vocabulaire (**Home** comme première source) : [`INVENTAIRE_HOME_PATTERN_BLOCS.md`](./INVENTAIRE_HOME_PATTERN_BLOCS.md).
 
 Clôture de passe — cartographie principale Home : [`PV_PATTERN_BLOCS_HOME.md`](./PV_PATTERN_BLOCS_HOME.md).

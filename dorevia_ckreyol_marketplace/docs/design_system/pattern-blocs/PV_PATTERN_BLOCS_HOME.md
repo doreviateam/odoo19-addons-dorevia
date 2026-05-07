@@ -44,16 +44,16 @@ Ne pas extrapoler automatiquement : *pattern documenté ⇒ snippet déposable*.
 
 ---
 
-## 4. Candidats futurs à « vrais » snippets Odoo (hypothèses, hors lancement)
+## 4. Snippets Odoo déposables — **option future** (pas chantier prioritaire ; pas backlog implicite)
 
-Décisions ultérieures, **sans mandatement** dans ce PV :
+Doctrine actuelle (**2026**) : **`pattern-bloc documenté ≠ snippet Odoo à créer`** — détail dans [`../README.md`](../README.md). Les lignes ci-dessous ne constituent **pas** un mandat de développement : elles énumèrent où un **besoin métier réel futur** *pourrait* justifier plus tard des snippets Website (composer plusieurs pages éditoriales, etc.) :
 
-- **`HOME_EN_PRATIQUE`** (réassurance) — forte réutilisation éditoriale potentielle ;
+- **`HOME_EN_PRATIQUE`** (réassurance) ;
 - **`HOME_NEWSLETTER`** (captation douce) ;
-- **`HOME_HERO`** ou **hero éditorial dérivé** — si besoin dupliquer une promesse ailleurs qu’à la racine `/` ;
-- **`HOME_EXPLORER_PORTES`** — si une page éditoriale doit reprendre le même tableau d’orientation sans dupliquer le QWeb à la main.
+- **`HOME_HERO`** ou **hero éditorial dérivé** ;
+- **`HOME_EXPLORER_PORTES`** (réutiliser le tableau d’orientation hors Home).
 
-Chaque passage en snippet Odoo nécessitera : périmètre BO, données, tests, régression layout.
+Chaque passage en snippet Odoo nécessitera au moment venu : **ticket explicite**, périmètre BO, données, tests, régression layout — hors périmètre tant que la doctrine « pattern-blocs d’abord » s’applique.
 
 ---
 

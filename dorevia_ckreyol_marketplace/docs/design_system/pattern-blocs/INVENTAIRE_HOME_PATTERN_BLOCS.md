@@ -12,8 +12,10 @@ Cartographier les **zones structurantes** de la page d’accueil C-Kreyol, quali
 Flux de décision :
 
 ```text
-Identifier le pattern → documenter comme pattern-bloc → décider ensuite s’il devient snippet Odoo déposable
+Identifier le pattern → documenter comme pattern-bloc → (plus tard seulement) snippet Odoo déposable si besoin métier réel
 ```
+
+Doctrine CK : **par défaut**, un pattern-bloc **ne donne pas** lieu à la création d’un snippet Odoo déposable — voir [`../README.md`](../README.md). La colonne « Candidat snippet Odoo ? » du tableau §4 reflète un **potentiel théorique**, pas un backlog de production.
 
 Cette note est **exclusivement documentaire** : elle ne prescrit pas de refonte ni la création de nouveaux snippets éditoriaux.
 
