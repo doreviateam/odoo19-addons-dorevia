@@ -273,12 +273,108 @@ Sans ces décisions, le présent ticket reste un **cadrage** ; il **ne mandate p
 
 ---
 
+## 11. Arbitrage Lot A acté (pré-implémentation) et check-list sandbox
+
+**Date d’arbitrage** : 2026-05-07 (aligné sur la note de faisabilité technique).
+
+### Décisions retenues
+
+- **Tag élargi** : **`dorevia_ckr_checkout_e2e_extended`** — nouveau périmètre Lot A uniquement ; **ne pas modifier** le comportement ni la liste des tests du tag minimal **`dorevia_ckr_checkout_e2e`**.
+- **Périmètre** : **strictement Lot A** (§7 et liste §11 ci-dessous) ; les lots **B / C / D / E** restent **hors scope** tant qu’ils ne sont **pas** arbitrés explicitement dans une mise à jour de ce ticket.
+- **Implémentation** : **aucune livraison de code** de tests élargis tant que la **check-list sandbox** ci-dessous n’est **pas** validée sur la base cible (**référence projet : `tenant_o7`** ou équivalent documenté au moment du run).
+
+### Risques acceptés (surveillance)
+
+- Parsing **HTML panier** (`line_id`, quantités, suppression) potentiellement **fragile** selon évolutions **website_sale** / thème.
+- **Paiement démo** indispensable pour une **preuve commande** bout-en-bout (pas seulement des GET successifs sur les routes).
+- Assertion **`sale.order`** : privilégier les **preuves robustes** (référence / token confirmés) ; **plan B** documenté (assertion atténuée) si la charge de maintenance est excessive.
+
+### Check-list sandbox — à cocher **avant** premier commit tests Lot A
+
+Sur la base **`tenant_o7`** (ou base de test explicitement identique en config) :
+
+1. **Provider paiement démo** : visible et **utilisable** pour le website CK ciblé par le test.
+2. **Transporteur** : au moins une méthode **disponible** pour l’**adresse de test** retenue.
+3. **Adresse de test** : **complète** et **compatible** règles livraison / pays / taxes.
+4. **Produits** : **deux** produits **publiés**, **vendables**, **URL fiche** accessibles.
+5. **HTTP** : **`/shop`** et **au moins une fiche produit** des produits de test répondent en **200**.
+6. **Flux réel** : le parcours manuel (ou script de sonde) permet d’aller jusqu’à une **confirmation exploitable** (commande matérialisée), **pas** seulement enchaîner des GET sur checkout / payment / confirmation.
+7. **Assertion `sale.order`** : faisabilité **raisonnable** en test automatisé, **ou** **plan B** écrit (assertion partielle / recette manuelle obligatoire) si l’assertion complète est trop fragile.
+
+**Gate** : tant que la check-list n’est **pas** cochée, le statut d’implémentation Lot A reste **« prêt à coder après validation sandbox »** — **pas** **« en cours d’implémentation »**.
+
+### Prochaine action
+
+Exécuter une **courte vérification** sur l’environnement sandbox (ex. conteneur Odoo, port mappé, session `db=tenant_o7`) pour valider **paiement démo**, **livraison**, **produits** et **routes** `/shop` + fiche produit, puis consigner en une ligne (commentaire de PR ou note interne) la **date** et l’**issue** de la check-list.
+
+---
+
+## 12. Préflight sandbox `tenant_o7` — résultat et diagnostic court
+
+**Date du préflight** : 2026-05-07  
+**Décision** : **NO GO configuration / runtime pour Lot A E2E étendu** à ce stade — **ne pas implémenter** le tag **`dorevia_ckr_checkout_e2e_extended`** tant que les **blocages** ci-dessous ne sont pas levés ou explicitement arbitrés (recette manuelle uniquement, hors automate).
+
+### Ce qui est validé (OK)
+
+- **`/`** et **`/shop`** : OK.
+- **Deux produits réels** (`Chips`, `Bière`) : fiches OK, prix affichés, **ajout panier** OK.
+- **Panier** : deux lignes, **quantités multiples** OK ; **modification de quantité** OK.
+- **Checkout** : adresse complète OK ; **transporteur** visible ; **frais** affichés (`Livraison standard`, gratuit dans ce cas).
+- **Logs** runtime filtrés `ERROR|CRITICAL|Traceback|QWeb|XPath|500` : **aucune ligne** pertinente sur le périmètre testé.
+
+### Blocage 1 — Aucun moyen de paiement test (`/shop/payment`)
+
+**Symptôme** : message **« Aucun mode de paiement disponible »** ; aucun provider affiché.
+
+**Impact Lot A** : impossible de **finaliser** un paiement test → pas de page **confirmation** exploitable → pas de **référence commande** ni assertion **`sale.order`** bout-en-bout.
+
+**Diagnostic technique court (hypothèses à vérifier côté BO / modules, sans accès base ici)** :
+
+1. **Module `payment_demo`** (ou équivalent fournissant un provider démo) : **non installé** ou désinstallé — fréquent sur une base minimaliste ; sans lui, il peut manquer les **enregistrements** `payment.provider` utilisables en test.
+2. **Providers existants mais invisibles storefront** : état **non publié**, **website** non relié au site CK, **journal** / **société** / **devise** incohérents avec la boutique, ou filtre Odoo qui exclut tous les providers pour ce website.
+3. **Paiement e-commerce** : vérifier **Paramètres → Website → Paiement** (terminologie Odoo 19) que les providers sont **activés** pour le canal vente web.
+
+**Pistes d’action BO** (ordre logique) : installer **`payment_demo`** si absent → rouvrir **Comptabilité / Paiement / Providers** → activer **Demo** pour le **website** concerné → associer **journal de paiement** valide → republier → retester `/shop/payment`.
+
+---
+
+### Blocage 2 — Suppression d’une ligne panier KO (JS)
+
+**Symptôme** : suppression ligne **échoue** ; console :
+
+`TypeError: Cannot read properties of null (reading 'classList')`
+
+**Impact Lot A** : le périmètre inclut **suppression de ligne** ; tant que le parcours est **instable** en navigateur, l’automate ou la recette « complète » restent **non fiables**.
+
+**Diagnostic technique court** :
+
+- L’erreur est typique d’un script qui applique **`classList`** sur un **élément DOM introuvable** après une interaction (RPC panier + mise à jour UI).
+- **Module CK** : les JS livrés (`ckr_cart_feedback.js`, etc.) utilisent `classList` sur le **toast** et le **badge header**, pas sur les lignes panier — **cause peu probable** pour la suppression seule, sauf effet de bord indirect (timing / mutation observer).
+- **Cause probable** : JS **standard `website_sale`** (ou bundle thème) qui suppose une **structure HTML** de ligne panier (ids / classes) ; **écart** avec le DOM rendu par **`theme_classic_store`** ou un **xpath CK** sur la page panier.
+- **Étape suivante** : reproduire avec **trace complète** (fichier + ligne dans la stack, pas seulement le message) ; comparer le HTML de **`#shop_cart`** avec une instance **vanilla** Odoo 19 + même thème ; identifier le **sélecteur** qui renvoie `null`.
+
+**Correctif attendu** : **minimal** — aligner un héritage QWeb ou un patch JS **ciblé** une fois la ligne de code source identifiée ; **pas** de refonte panier.
+
+---
+
+### Synthèse décisionnelle
+
+| Condition | Statut |
+| --- | --- |
+| Check-list §11 point 1 (paiement démo utilisable) | **KO** |
+| Check-list §11 point 6 (flux jusqu’à confirmation réelle) | **KO** (bloqué par paiement) |
+| Suppression ligne panier (Lot A) | **KO** (JS) |
+
+**Gate Lot A** : **fermé** jusqu’à correction **sandbox paiement** + **suppression panier** (ou réécriture du périmètre Lot A pour **exclure** la suppression et documenter **paiement** exclusivement via **données de test injectées en CI** — arbitrage MOA / tech).
+
+---
+
 ## Synthèse exécutive
 
 **Pourquoi** : ouverture commerciale contrôlée = risque réduit si les parcours d’achat **fréquents** et les **échecs maîtrisés** sont connus et en partie automatisés.
 
 **Quoi** : liste priorisée ci-dessus + tags + lots ; pas de travaux hors tunnel marchand.
 
-**Comment** : étendre `dorevia_ckr_checkout_e2e` par enrichissement ou introduce `dorevia_ckr_checkout_e2e_extended` selon charge ; garder le minimal stable.
+**Comment** : tag dédié **`dorevia_ckr_checkout_e2e_extended`** pour le Lot A (le minimal **`dorevia_ckr_checkout_e2e`** reste inchangé) ; voir [§11](#11-arbitrage-lot-a-acté-pré-implémentation-et-check-list-sandbox).
 
 **Quand le ticket « cadrage » est clos** : décisions écrites sur indispensable / auto / manuel / données — **avant** le premier merge de tests élargis massifs.
