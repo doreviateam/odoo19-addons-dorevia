@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.130",
+    "version": "19.0.1.10.133",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -120,6 +120,11 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.129 : fix header Top_0 homepage-only via CSS (``body.o_homepage``) plutôt que condition QWeb.
 * 19.0.1.10.130 : fix 500 homepage — compat ``website_sale`` cache panier : compteur header rendu en
   ``<sup class="my_cart_quantity ...">`` (attendu par ``website_sale.models.website_page``).
+* 19.0.1.10.131 : header Top_0 homepage-only — condition QWeb sur ``request.httprequest.path`` (``/``)
+  et retrait du masquage CSS ``body.o_homepage`` trop variable selon contexte.
+* 19.0.1.10.132 : header Top_0 shop-only — bandeau flash affiché sur ``/shop`` (et sous-routes).
+* 19.0.1.10.133 : hero homepage — ajout de 2 visuels supplémentaires au rotateur (sources ``docs/assets``
+  copiées en ``static/src/img`` : ``hero_v3_epicerie.png`` et ``hero_v4_epices.png``).
 
 Portee :
 

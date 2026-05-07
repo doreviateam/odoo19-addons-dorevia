@@ -5,6 +5,8 @@
 const HERO_IMAGES = [
     "/dorevia_ckreyol_marketplace/static/src/img/hero_macro.png",
     "/dorevia_ckreyol_marketplace/static/src/img/hero_v2_immersive.png",
+    "/dorevia_ckreyol_marketplace/static/src/img/hero_v3_epicerie.png",
+    "/dorevia_ckreyol_marketplace/static/src/img/hero_v4_epices.png",
 ];
 
 function preloadImage(url) {

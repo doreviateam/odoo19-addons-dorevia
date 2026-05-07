@@ -55,16 +55,20 @@
                 <t t-set="ckr_cart_qty"
                    t-value="request.session.get('website_sale_cart_quantity', 0) if request and request.session else 0"/>
 
-                <div class="ckr-header__top0">
-                    <div class="ckr-header__top0-inner">
-                        <div class="ckr-header__top0-rotator" aria-label="Informations boutique">
-                            <span class="ckr-header__top0-item ckr-header__top0-item--1">Livraison offerte dès 69 € d’achat en France métropolitaine.</span>
-                            <span class="ckr-header__top0-item ckr-header__top0-item--2">Expédition rapide : commandes préparées sous 24 à 48 h ouvrées.</span>
-                            <span class="ckr-header__top0-item ckr-header__top0-item--3">Produits antillais sélectionnés auprès de producteurs de confiance.</span>
-                            <span class="ckr-header__top0-item ckr-header__top0-item--4">Demandes professionnelles étudiées par l’équipe C-Kréyòl.</span>
+                <t t-set="ckr_path"
+                   t-value="(request.httprequest.path or '') if request and request.httprequest else ''"/>
+                <t t-if="ckr_path.startswith('/shop')">
+                    <div class="ckr-header__top0">
+                        <div class="ckr-header__top0-inner">
+                            <div class="ckr-header__top0-rotator" aria-label="Informations boutique">
+                                <span class="ckr-header__top0-item ckr-header__top0-item--1">Livraison offerte dès 69 € d’achat en France métropolitaine.</span>
+                                <span class="ckr-header__top0-item ckr-header__top0-item--2">Expédition rapide : commandes préparées sous 24 à 48 h ouvrées.</span>
+                                <span class="ckr-header__top0-item ckr-header__top0-item--3">Produits antillais sélectionnés auprès de producteurs de confiance.</span>
+                                <span class="ckr-header__top0-item ckr-header__top0-item--4">Demandes professionnelles étudiées par l’équipe C-Kréyòl.</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </t>
 
                 <div class="ckr-header__inner ckr-header__top1">
 
