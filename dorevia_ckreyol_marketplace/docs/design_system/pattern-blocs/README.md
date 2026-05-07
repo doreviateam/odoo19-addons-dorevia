@@ -1,12 +1,12 @@
-# CK — Snippets / patterns UX
+# CK — Pattern-blocs UX
 
-Ce dossier regroupe les patterns validés directionnellement pour C-Kreyol.
+Ce dossier regroupe les pattern-blocs validés directionnellement pour C-Kreyol.
 
 Objectif : consolider les sections réutilisables de l’interface CK sans ouvrir une refonte globale.
 
-Ces snippets ne sont pas des tickets de développement : ce sont des références de patterns validés directionnellement.
+Ces pattern-blocs ne sont pas des tickets de développement : ce sont des références de conception validées.
 
-Les snippets décrivent :
+Chaque pattern-bloc décrit :
 - l’intention produit ;
 - la structure attendue ;
 - les règles responsive ;

@@ -1,4 +1,4 @@
-# SNIPPET — HOME EN PRATIQUE
+# PATTERN-BLOC — HOME EN PRATIQUE
 
 ## Intention produit
 
@@ -66,4 +66,4 @@ Le module doit donner des repères pratiques au visiteur sans ralentir la lectur
 - Éviter toute dérive vers des cartes épaisses : le module doit rester une liste éditoriale compacte.
 - Préserver le wrapper `ckr-trust__item__body`, qui stabilise l’alignement entre icône et contenu.
 
-Ce snippet documente un pattern stabilisé ; il ne constitue pas un ticket de nouvelle fonctionnalité.
+Ce pattern-bloc documente un pattern stabilisé ; il ne constitue pas un ticket de nouvelle fonctionnalité.

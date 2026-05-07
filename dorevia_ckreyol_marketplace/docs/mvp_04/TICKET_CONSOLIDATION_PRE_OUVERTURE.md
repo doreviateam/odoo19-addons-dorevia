@@ -188,10 +188,10 @@ Créer ou mettre à jour :
 - `docs/mvp_04/CANON_URL_BOUTIQUE.md`
 - `docs/mvp_04/PROCEDURE_SMOKE_INSTALL_UPDATE.md`
 - `docs/design_system/README.md`
-- `docs/design_system/snippets/README.md`
-- `docs/design_system/snippets/SNIPPET_HOME_HERO.md`
-- `docs/design_system/snippets/SNIPPET_HOME_EN_PRATIQUE.md`
-- `docs/design_system/snippets/SNIPPET_FOOTER_RESPONSIVE.md`
+- `docs/design_system/pattern-blocs/README.md`
+- `docs/design_system/pattern-blocs/PATTERN_BLOC_HOME_HERO.md`
+- `docs/design_system/pattern-blocs/PATTERN_BLOC_HOME_EN_PRATIQUE.md`
+- `docs/design_system/pattern-blocs/PATTERN_BLOC_FOOTER_RESPONSIVE.md`
 
 ---
 
