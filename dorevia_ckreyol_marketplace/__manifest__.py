@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.136",
+    "version": "19.0.1.10.137",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -133,6 +133,10 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.136 : header — wrapper ``li.o_wsale_my_cart`` autour du lien panier (compat JS
   ``website_sale`` : ``CartService._updateCartIcon`` / mise à jour navbar après RPC panier) ;
   ``sup.my_cart_quantity`` conservé + ``data-order-id`` aligné thème ; ``ul`` en ``display: contents``.
+* 19.0.1.10.137 : tests — Lot A E2E marchand étendu (tag ``dorevia_ckr_checkout_e2e_extended``) :
+  parcours HTTP shop → panier (qty / update / suppression) → checkout invité → paiement Demo →
+  confirmation ; dépend de ``payment_demo`` (skip sinon) ; tag minimal ``dorevia_ckr_checkout_e2e``
+  inchangé.
 
 Portee :
 

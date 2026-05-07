@@ -409,6 +409,19 @@ Traiter d’abord comme **sujet de configuration sandbox**, pas comme bug module
 
 ---
 
+## 14. Implémentation livrée (Lot A — tag étendu)
+
+**Référence code** : `tests/test_ckr_checkout_e2e_extended_lot_a.py`  
+**Tag Odoo** : `dorevia_ckr_checkout_e2e_extended` (le tag minimal `dorevia_ckr_checkout_e2e` reste distinct et inchangé).
+
+**Décisions documentaires** :
+
+* Objectif : parcours marchand **HTTP déterministe** (listing → fiches → JSON-RPC panier → adresse invité → paiement Demo → confirmation), **sans** simulation de clic sur les boutons « ajouter » des tuiles `/shop` (cf. docstring du test).
+* **Prérequis** : module **`payment_demo`** installé et enregistrements Demo présents ; sinon le test est **ignoré** explicitement (`skipTest`).
+* **Assertion `sale.order`** : recherche par **email partenaire** lorsque la commande est retrouvée ; si aucune correspondance (effets de contexte / partenaire), le test ne s’appuie pas sur cet échec seul une fois la **confirmation HTTP** validée (plan B décrit dans le code).
+
+---
+
 ## Synthèse exécutive
 
 **Pourquoi** : ouverture commerciale contrôlée = risque réduit si les parcours d’achat **fréquents** et les **échecs maîtrisés** sont connus et en partie automatisés.
