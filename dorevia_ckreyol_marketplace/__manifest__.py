@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.114",
+    "version": "19.0.1.10.127",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -88,6 +88,34 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
   Bootstrap native cela produit bandeau vide / burger seul. ``HeaderFixed`` convient au shell CK.
 * 19.0.1.10.114 : layout — annuler le ``padding-top`` inline sur ``main`` (affix Odoo) :
   header CK en ``sticky`` → bande vide entre Top_2 et le hero sans cette neutralisation.
+* 19.0.1.10.115 : hero homepage immersif — hauteur ``calc(100dvh - pile header)`` pour que
+  header + hero occupent le premier écran sans scroll (offsets par breakpoint ; ``max()``
+  pour les très petits viewports).
+* 19.0.1.10.116 : hero homepage — mesure JS du header (``ResizeObserver``, resize,
+  ``visualViewport``, ``fonts.ready``) → ``--ckr-hero-header-measured`` ; repli SCSS inchangé.
+* 19.0.1.10.117 : header mobile — ``position: fixed`` + ``padding-top`` sur ``main`` via
+  ``--ckr-header-measured`` ; mesure centralisée dans ``ckr_header_drawer.js`` ; neutralisation
+  ``transform`` Odoo (``o_header_fixed``).
+* 19.0.1.10.118 : réassurance homepage — mobile : lignes compactes (icône + corps texte), espacements
+  resserrés, séparateurs discrets, icônes cadrées ; wrap ``ckr-trust__item__body`` (contenu inchangé).
+* 19.0.1.10.119 : réassurance « En pratique » — micro-polish mobile : titres repères plus légers,
+  icônes centrées au bloc texte, air sous ``Quelques repères``, filet eyebrow plus discret (section seule).
+* 19.0.1.10.120 : footer CK — mobile / tablette : marque + tagline, listes sémantiques, rubriques
+  hiérarchisées, filets discrets, bas légal aéré ; listes ``<ul>`` (contenu identique).
+* 19.0.1.10.121 : footer CK ≤991px — grille : marque pleine largeur, ``Explorer`` | ``Informations`` en
+  2 colonnes, ``Contact`` pleine largeur dessous ; filets allégés.
+* 19.0.1.10.122 : footer CK mobile — rubriques ``<details>`` si >2 liens ; fusion Informations + contact
+  société ; ``ckr_footer_fold.js`` ouvre les panneaux en desktop ; chevron discret, focus visible.
+* 19.0.1.10.123 : footer accordéon — a11y ``aria-expanded`` / ``tabindex`` desktop, blocage repli desktop,
+  ``role="region"`` + ``aria-labelledby`` ; animation d’ouverture légère (mobile) ; copyright espaces/normalisation.
+* 19.0.1.10.124 : hero immersif mobile — hauteur ~76 % viewport utile, bloc texte resserré, CTA compensés,
+  overlay diagonal renforcé à gauche, sous-titre raccourci.
+* 19.0.1.10.125 : hero mobile — micro-polish : CTA secondaire min-height tactile, voile sombre léger + ombre
+  texte ; titre ``text-wrap: balance`` et resserrement sous 360px (hauteur hero inchangée).
+* 19.0.1.10.126 : hero mobile — ``object-position`` plus haut / centré (moins bas coffret) ; overlay diagonal
+  micro-renforcé sous le texte (structure, typo, CTA inchangés).
+* 19.0.1.10.127 : hero mobile — CTA secondaire : contraste renforcé (fond/contour), ligne de texte plus stable
+  et réglage viewport très étroit (<360px) pour préserver lisibilité + zone tactile.
 
 Portee :
 
@@ -498,6 +526,7 @@ ARCHITECTURE_DECISION_RECORD).
             "dorevia_ckreyol_marketplace/static/src/js/ckr_shop_sidebar.js",
             "dorevia_ckreyol_marketplace/static/src/js/ckr_homepage_hero_rotator.js",
             "dorevia_ckreyol_marketplace/static/src/js/ckr_demande_compte_pro.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_footer_fold.js",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_header.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_locale.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_product.scss",

@@ -20,23 +20,61 @@
     display: flex;
     align-items: center;
 
-    // Hauteurs calees pour que hero + CTA soient visibles sans scroll sur
-    // la majorite des resolutions (desktop 1080p, mobile 6.1").
-    min-height: 70vh;
-    padding: $ckr-space-3xl 0;
+    // Premier écran : combler jusqu’au bas du viewport. Le header CK est au-dessus
+    // (document flow) ; les anciens min-height en vh du seul hero faisaient
+    // header + hero > 100vh → léger scroll avant le bloc suivant.
+    // Repli tant que JS n’a pas posé `--ckr-header-measured` (voir
+    // `ckr_header_drawer.js`). Offsets ≈ Top_0 + Top_1 (+ Top_2 dès lg).
+    --ckr-hero-header-stack: 6.75rem;
 
-    @media (max-width: 767px) {
-        min-height: 64vh;
-        padding: $ckr-space-2xl 0;
+    @media (min-width: 768px) and (max-width: 991.98px) {
+        --ckr-hero-header-stack: 7.25rem;
     }
 
-    @media (min-width: 768px) {
-        min-height: 78vh;
-        padding: $ckr-space-3xl 0;
+    @media (min-width: 992px) and (max-width: 1199.98px) {
+        --ckr-hero-header-stack: 10.5rem;
     }
 
     @media (min-width: 1200px) {
-        min-height: 82vh;
+        --ckr-hero-header-stack: 11.125rem;
+    }
+
+    min-height: unquote(
+        "max(16rem, calc(100vh - var(--ckr-header-measured, var(--ckr-hero-header-stack)) - env(safe-area-inset-top, 0px)))"
+    );
+    min-height: unquote(
+        "max(16rem, calc(100dvh - var(--ckr-header-measured, var(--ckr-hero-header-stack)) - env(safe-area-inset-top, 0px)))"
+    );
+
+    padding: $ckr-space-3xl 0;
+
+    @media (max-width: 767px) {
+        // Hero plus court et contenu relié au scroll de la page (moins « plein cadre »).
+        align-items: flex-start;
+        padding: $ckr-space-xl 0 $ckr-space-lg;
+        min-height: unquote(
+            "max(12.5rem, calc((100vh - var(--ckr-header-measured, var(--ckr-hero-header-stack)) - env(safe-area-inset-top, 0px)) * 0.76))"
+        );
+        min-height: unquote(
+            "max(12.5rem, calc((100dvh - var(--ckr-header-measured, var(--ckr-hero-header-stack)) - env(safe-area-inset-top, 0px)) * 0.76))"
+        );
+
+        // Cadrage : ancrage plus haut que 48% pour rogner le bas du coffret / panier
+        // et rapprocher l’intention « matière produit » du desktop (biscuits, confiture).
+        .ckr-hero__bg {
+            object-position: 52% 32%;
+        }
+
+        // Léger renfort sous le bloc texte si le recadrage éclaircit le coin gauche.
+        .ckr-hero__overlay {
+            background: linear-gradient(
+                165deg,
+                rgba(0, 0, 0, 0.76) 0%,
+                rgba(0, 0, 0, 0.52) 36%,
+                rgba(0, 0, 0, 0.22) 70%,
+                rgba(0, 0, 0, 0.06) 100%
+            );
+        }
     }
 
     // Fond media (image + overlay) plaque derriere le contenu
@@ -76,24 +114,14 @@
         inset: 0;
         pointer-events: none;
 
-        // Desktop / tablette (>= 768px) : fondu etendu jusqu a ~80% pour
-        // proteger le texte sur max-width ~42rem, image lisible a droite.
-        background: linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.6) 0%,
-            rgba(0, 0, 0, 0.4) 35%,
-            rgba(0, 0, 0, 0.15) 65%,
-            rgba(0, 0, 0, 0) 85%
-        );
-
-        // Mobile (<=767px) : fondu plus court - contenu pleine largeur.
-        @media (max-width: 767px) {
+        // Desktop / tablette : fondu horizontal (mobile : surchargé plus haut).
+        @media (min-width: 768px) {
             background: linear-gradient(
                 90deg,
-                rgba(0, 0, 0, 0.65) 0%,
-                rgba(0, 0, 0, 0.45) 35%,
-                rgba(0, 0, 0, 0.15) 70%,
-                rgba(0, 0, 0, 0.05) 100%
+                rgba(0, 0, 0, 0.6) 0%,
+                rgba(0, 0, 0, 0.4) 35%,
+                rgba(0, 0, 0, 0.15) 65%,
+                rgba(0, 0, 0, 0) 85%
             );
         }
     }
@@ -123,8 +151,8 @@
             z-index: 2;
             width: 100%;
             max-width: 100%;
-            margin: unquote("clamp(3.5rem, 14vw, 4.6rem)") 0.25rem 1.25rem;
-            padding: 1.4rem 1.2rem;
+            margin: $ckr-space-sm 0 0;
+            padding: 0.85rem $ckr-container-px 0;
             border-radius: 0;
             background: none;
             box-shadow: none;
@@ -188,24 +216,83 @@
     // restent identiques a la base (deja optimises pour overlay G->D).
     @media (max-width: 767px) {
         .ckr-hero__title {
-            font-size: unquote("clamp(2rem, 9vw, 2.8rem)");
-            line-height: 1.1;
+            font-size: unquote("clamp(1.72rem, 6.8vw, 2.35rem)");
+            font-weight: $ckr-weight-semibold;
+            line-height: 1.14;
+            margin: 0 0 $ckr-space-md 0;
+            // Retours à la ligne plus équilibrés sur petits viewport (titres longs FR).
+            text-wrap: balance;
+            overflow-wrap: break-word;
+
+            @media (max-width: 359px) {
+                font-size: unquote("clamp(1.62rem, 6.05vw, 2.35rem)");
+                line-height: 1.17;
+                letter-spacing: -0.02em;
+            }
         }
 
         .ckr-hero__subtitle {
-            font-size: 1rem;
-            line-height: 1.45;
+            font-size: 0.9rem;
+            line-height: 1.42;
+            max-width: 38ch;
+            margin: 0 0 $ckr-space-lg 0;
         }
 
         .ckr-hero__cta {
             flex-direction: column;
             flex-wrap: nowrap;
-            gap: 0.9rem;
-            margin-top: 1.1rem;
+            align-items: stretch;
+            gap: 0.5rem;
+            margin-top: 0;
 
             .ckr-btn {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .ckr-btn--lg.ckr-btn--primary {
+                font-size: 1rem;
+                letter-spacing: 0.012em;
+                padding: 0.68rem 1.35rem;
+                box-shadow: 0 3px 12px rgba(160, 82, 45, 0.24);
+            }
+
+            .ckr-btn--lg.ckr-btn--secondary {
+                font-size: 0.875rem;
+                font-weight: $ckr-weight-medium;
+                letter-spacing: 0.018em;
+                // ~44px tactile malgré typo plus discrète que le primaire.
+                min-height: 2.75rem;
+                padding: 0.7rem 1.2rem;
+                line-height: 1.24;
+                text-align: center;
+                white-space: normal;
+                box-shadow: none;
+                border-width: 1px;
+                border-color: rgba(255, 255, 255, 0.92);
+                // Voile léger sous le contour : lisible sur zones claires ou sombres de la photo.
+                background-color: rgba(12, 10, 8, 0.46);
+                color: #faf8f5;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+
+                &:hover,
+                &:focus {
+                    color: #fff;
+                    background-color: rgba(12, 10, 8, 0.55);
+                    border-color: rgba(255, 255, 255, 0.95);
+                    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+                }
+
+                &:active {
+                    background-color: rgba(12, 10, 8, 0.62);
+                }
+
+                @media (max-width: 359px) {
+                    font-size: 0.84rem;
+                    letter-spacing: 0.012em;
+                    min-height: 2.7rem;
+                    padding: 0.64rem 1rem;
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 /** @odoo-module **/
 
+/** Hauteur header : voir `ckr_header_drawer.js` → `--ckr-header-measured`. */
+
 const HERO_IMAGES = [
     "/dorevia_ckreyol_marketplace/static/src/img/hero_macro.png",
     "/dorevia_ckreyol_marketplace/static/src/img/hero_v2_immersive.png",

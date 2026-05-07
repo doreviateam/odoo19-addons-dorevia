@@ -793,6 +793,26 @@ header#top.ckr-header,
     padding-top: 0 !important;
 }
 
+// Mobile (<lg) : ``position: sticky`` est souvent cassé (conteneur de scroll,
+// WebKit). On force un bandeau type « top-fixed » ; le décalage du contenu
+// repose sur ``--ckr-header-measured`` (``ckr_header_drawer.js``).
+// Odoo HeaderFixed peut appliquer ``transform`` au scroll : il faut le neutraliser.
+@media (max-width: 991.98px) {
+    header#top.ckr-header.o_header_fixed {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        transform: none !important;
+        will-change: auto !important;
+    }
+
+    #wrapwrap > main {
+        padding-top: var(--ckr-header-measured, 6.75rem) !important;
+    }
+}
+
 // ============================================================================
 // Drawer mobile (off-canvas simple, sans JS lourd - utilise input:checked)
 // ============================================================================

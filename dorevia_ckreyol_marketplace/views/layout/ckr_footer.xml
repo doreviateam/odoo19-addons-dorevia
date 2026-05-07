@@ -9,6 +9,7 @@
     <!-- vues heritees qui ciblent <div id="footer">). On remplace -->
     <!-- uniquement le contenu du <div id="footer"> en preservant  -->
     <!-- cet identifiant structurant.                               -->
+    <!-- Mobile : rubriques >2 liens en <details> (accordéon natif). -->
     <!-- Coherence charte § 9.3 et ADR-CKR-003.                    -->
     <!-- ========================================================== -->
 
@@ -39,60 +40,79 @@
                                     <span class="ckr-footer__wordmark-c">C</span><span class="ckr-footer__wordmark-hyphen">-</span><span class="ckr-footer__wordmark-k">Kréyòl</span>
                                 </span>
                             </div>
-                            <p>Canal e-commerce spécialisé : biscuits, douceurs et épicerie des Antilles,
+                            <p class="ckr-footer__tagline">Canal e-commerce spécialisé : biscuits, douceurs et épicerie des Antilles,
                                sélectionnés avec soin.</p>
                         </div>
 
-                        <!-- Explorer -->
-                        <div class="ckr-footer__col">
-                            <h3 class="ckr-footer__title">Explorer</h3>
-                            <a href="/shop">Boutique</a>
-                            <a href="/shop?ckr_collection_scope=all">Collections</a>
-                            <a href="/offrir">Idées cadeaux</a>
-                            <a href="/recettes">Recettes</a>
-                            <a href="/blog">Blog</a>
+                        <!-- Explorer : >2 liens → accordéon mobile ; desktop ouvert via JS -->
+                        <div class="ckr-footer__col ckr-footer__col--explorer">
+                            <details class="ckr-footer__fold" id="ckr-footer-fold-explorer">
+                                <summary class="ckr-footer__fold-summary" aria-expanded="false">
+                                    <!-- <summary> = contrôle disclosure natif ; focus clavier Espace / Entrée -->
+                                    <h3 id="ckr-footer-heading-explorer" class="ckr-footer__title">Explorer</h3>
+                                    <span class="ckr-footer__fold-chevron" aria-hidden="true">
+                                        <i class="fa fa-angle-down"></i>
+                                    </span>
+                                </summary>
+                                <div class="ckr-footer__fold-panel" role="region" aria-labelledby="ckr-footer-heading-explorer">
+                                    <ul class="ckr-footer__list">
+                                        <li><a href="/shop">Boutique</a></li>
+                                        <li><a href="/shop?ckr_collection_scope=all">Collections</a></li>
+                                        <li><a href="/offrir">Idées cadeaux</a></li>
+                                        <li><a href="/recettes">Recettes</a></li>
+                                        <li><a href="/blog">Blog</a></li>
+                                    </ul>
+                                </div>
+                            </details>
                         </div>
 
-                        <!-- Informations -->
-                        <div class="ckr-footer__col">
-                            <h3 class="ckr-footer__title">Informations</h3>
-                            <a href="/a-propos">A propos</a>
-                            <a href="/shop">Livraison</a>
-                            <a href="/contact">Nous contacter</a>
-                        </div>
-
-                        <!-- Contact : donnees res.company (site courant) pour     -->
-                        <!-- alignement footer / e-mails transactionnels / PDF.   -->
-                        <div class="ckr-footer__col">
-                            <h3 class="ckr-footer__title">Contact</h3>
-                            <a href="/contact">Formulaire de contact</a>
-                            <a t-if="res_company.email"
-                               t-attf-href="mailto:#{res_company.email}">
-                                <t t-out="res_company.email"/>
-                            </a>
-                            <a t-if="res_company.phone"
-                               class="ckr-footer__tel"
-                               t-attf-href="tel:#{res_company.phone.replace(' ', '').replace('.', '').replace('-', '')}">
-                                <t t-out="res_company.phone"/>
-                            </a>
-                            <a t-if="res_company.website"
-                               class="ckr-footer__web"
-                               t-att-href="res_company.website if res_company.website.startswith(('http://', 'https://')) else ('https://' + res_company.website)"
-                               target="_blank" rel="noopener noreferrer">
-                                <t t-out="res_company.website"/>
-                            </a>
+                        <!-- Informations + contact société (fusion : pas de colonne Contact isolée) -->
+                        <div class="ckr-footer__col ckr-footer__col--infos">
+                            <details class="ckr-footer__fold" id="ckr-footer-fold-infos">
+                                <summary class="ckr-footer__fold-summary" aria-expanded="false">
+                                    <h3 id="ckr-footer-heading-infos" class="ckr-footer__title">Informations</h3>
+                                    <span class="ckr-footer__fold-chevron" aria-hidden="true">
+                                        <i class="fa fa-angle-down"></i>
+                                    </span>
+                                </summary>
+                                <div class="ckr-footer__fold-panel" role="region" aria-labelledby="ckr-footer-heading-infos">
+                                    <ul class="ckr-footer__list">
+                                        <li><a href="/a-propos">A propos</a></li>
+                                        <li><a href="/shop">Livraison</a></li>
+                                        <li><a href="/contact">Nous contacter</a></li>
+                                        <li t-if="res_company.email" class="ckr-footer__list-gap">
+                                            <a t-attf-href="mailto:#{res_company.email}">
+                                                <t t-out="res_company.email"/>
+                                            </a>
+                                        </li>
+                                        <li t-if="res_company.phone"
+                                            t-att-class="'ckr-footer__list-gap' if not res_company.email else ''">
+                                            <a class="ckr-footer__tel"
+                                               t-attf-href="tel:#{res_company.phone.replace(' ', '').replace('.', '').replace('-', '')}">
+                                                <t t-out="res_company.phone"/>
+                                            </a>
+                                        </li>
+                                        <li t-if="res_company.website"
+                                            t-att-class="'ckr-footer__list-gap' if not res_company.email and not res_company.phone else ''">
+                                            <a class="ckr-footer__web"
+                                               t-att-href="res_company.website if res_company.website.startswith(('http://', 'https://')) else ('https://' + res_company.website)"
+                                               target="_blank" rel="noopener noreferrer">
+                                                <t t-out="res_company.website"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </details>
                         </div>
 
                     </div>
 
                     <div class="ckr-footer__legal">
                         <span class="ckr-footer__copyright">
-                            &#169; <t t-out="res_company.name"/>
+                            &#169;&#160;<t t-out="res_company.name"/>
                             <t t-if="res_company.city or res_company.country_id">
-                                <span class="ckr-footer__copyright-sep"> — </span>
-                                <t t-if="res_company.city"><t t-out="res_company.city"/></t>
-                                <t t-if="res_company.city and res_company.country_id">, </t>
-                                <t t-if="res_company.country_id"><t t-out="res_company.country_id.name"/></t>
+                                <span class="ckr-footer__copyright-sep">&#160;—&#160;</span>
+                                <t t-if="res_company.city"><t t-out="res_company.city.strip()"/></t><t t-if="res_company.city and res_company.country_id">,</t><t t-if="res_company.country_id"><t t-if="res_company.city">&#160;</t><t t-out="res_company.country_id.name.strip()"/></t>
                             </t>
                         </span>
                         <ul>

@@ -21,40 +21,48 @@
                         <span class="ckr-trust__item__icon" aria-hidden="true">
                             <i class="fa fa-leaf"></i>
                         </span>
-                        <h3>Produits sélectionnés avec soin</h3>
-                        <p>
-                            Produits issus de producteurs et partenaires de confiance.
-                        </p>
+                        <div class="ckr-trust__item__body">
+                            <h3>Produits sélectionnés avec soin</h3>
+                            <p>
+                                Produits issus de producteurs et partenaires de confiance.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="ckr-trust__item">
                         <span class="ckr-trust__item__icon" aria-hidden="true">
                             <i class="fa fa-truck"></i>
                         </span>
-                        <h3>Expédition depuis la France</h3>
-                        <p>
-                            Préparation et envoi depuis la métropole.
-                        </p>
+                        <div class="ckr-trust__item__body">
+                            <h3>Expédition depuis la France</h3>
+                            <p>
+                                Préparation et envoi depuis la métropole.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="ckr-trust__item">
                         <span class="ckr-trust__item__icon" aria-hidden="true">
                             <i class="fa fa-lock"></i>
                         </span>
-                        <h3>Paiement sécurisé</h3>
-                        <p>
-                            Transactions protégées.
-                        </p>
+                        <div class="ckr-trust__item__body">
+                            <h3>Paiement sécurisé</h3>
+                            <p>
+                                Transactions protégées.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="ckr-trust__item">
                         <span class="ckr-trust__item__icon" aria-hidden="true">
                             <i class="fa fa-envelope-o"></i>
                         </span>
-                        <h3>Support disponible</h3>
-                        <p>
-                            Une question&#160;? Nous sommes joignables.
-                        </p>
+                        <div class="ckr-trust__item__body">
+                            <h3>Support disponible</h3>
+                            <p>
+                                Une question&#160;? Nous sommes joignables.
+                            </p>
+                        </div>
                     </div>
 
                 </div>

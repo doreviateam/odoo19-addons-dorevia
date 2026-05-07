@@ -30,13 +30,13 @@ Titre :
 Retrouvez les saveurs et savoir-faire créoles.
 
 Texte :
-C-Kreyol sélectionne avec soin des produits issus de territoires où la culture créole est vivante, auprès de producteurs et créateurs de confiance.
+Produits des territoires créoles, sélectionnés auprès de producteurs et créateurs de confiance.
 
 CTA principal :
 Découvrir la sélection → /shop
 
 CTA secondaire :
-Explorer les origines → /origines
+Explorer les origines → /shop?ckr_mode=origin
 
 ## Rendu attendu
 - image de fond produit (candidats versionnés : `docs/assets/mvp02_reference_*.png` — inventaire dans [README du module](../../README.md), sous-tableau **Références visuelles MVP 02**)
@@ -48,6 +48,13 @@ Explorer les origines → /origines
 - pas de blur fort
 - pas d’illustration
 - pas de style startup
+
+## État livré (2026-05, versions 19.0.1.10.124 → 19.0.1.10.127)
+- Desktop / laptop : cadrage « matière produit » validé (biscuit + texture + confiture), lisibilité CTA conservée.
+- Mobile : hero compact (hauteur maîtrisée), recadrage orienté produit/matière (moins de présence du contenant/coffret).
+- CTA secondaire mobile : contraste sécurisé sur image (outline + voile sombre léger), zone tactile maintenue.
+- Titre mobile : retours de ligne stabilisés, y compris sous 360 px.
+- Structure inchangée : hero immersif + double CTA, continuité naturelle vers la section suivante.
 
 ### 2. Explorer (portes)
 

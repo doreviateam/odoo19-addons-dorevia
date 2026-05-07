@@ -2,6 +2,45 @@
 (function () {
     "use strict";
 
+    /**
+     * Hauteur du header CK → `--ckr-header-measured` sur :root (mobile fixed + hero immersif).
+     * Toujours exécuté si le header existe, indépendamment du drawer.
+     */
+    function setupHeaderHeightCssVar() {
+        var header = document.querySelector("header#top.ckr-header");
+        if (!header) {
+            document.documentElement.style.removeProperty("--ckr-header-measured");
+            return;
+        }
+
+        function measure() {
+            window.requestAnimationFrame(function () {
+                var h = Math.round(header.getBoundingClientRect().height);
+                if (!isFinite(h) || h < 32) {
+                    document.documentElement.style.removeProperty("--ckr-header-measured");
+                    return;
+                }
+                document.documentElement.style.setProperty("--ckr-header-measured", h + "px");
+            });
+        }
+
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(measure).catch(measure);
+        } else {
+            measure();
+        }
+
+        window.addEventListener("resize", measure, { passive: true });
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", measure, { passive: true });
+        }
+
+        if (typeof ResizeObserver !== "undefined") {
+            var ro = new ResizeObserver(measure);
+            ro.observe(header);
+        }
+    }
+
     function syncDrawerUi(toggle, burger) {
         var on = toggle.checked;
         document.documentElement.classList.toggle("ckr-drawer-open", on);
@@ -44,6 +83,7 @@
     }
 
     function init() {
+        setupHeaderHeightCssVar();
         initUserMenu();
         var toggle = document.getElementById("ckr_drawer_toggle");
         var burger = document.getElementById("ckr_drawer_burger");
