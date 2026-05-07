@@ -4,6 +4,8 @@ Ce dossier regroupe les patterns validés directionnellement pour C-Kreyol.
 
 Objectif : consolider les sections réutilisables de l’interface CK sans ouvrir une refonte globale.
 
+Ces snippets ne sont pas des tickets de développement : ce sont des références de patterns validés directionnellement.
+
 Les snippets décrivent :
 - l’intention produit ;
 - la structure attendue ;
