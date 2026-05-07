@@ -60,7 +60,7 @@ Dans les colonnes ci-dessous, **« Candidat snippet Odoo ? »** vise le **cas d�
 | Header N1 — services & recherche | *(dans ce doc)* | **Créé** (cf. header) | Non | Logo, recherche (desktop), locale, compte, favoris, panier, burger — même fichier. |
 | Header N2 — navigation utile | *(dans ce doc)* | **Créé** (cf. header) | Non | Barre desktop `ckr-header__top2` + menu drawer (structure Odoo `website.menu_id`). |
 | Home — hero | `PATTERN_BLOC_HOME_HERO.md` | **Créé** | Peut-être | `ckr_hero.xml` + `_hero.scss` + `ckr_homepage_hero_rotator.js`. Bon candidat **éditorial** à terme si besoin de dupliquer un hero ailleurs qu’en Home. |
-| Home — Explorer / portes | `PATTERN_BLOC_HOME_EXPLORER_PORTES.md` | À créer | Oui, potentiellement | `ckr_entries.xml` — articulation Home ↔ doctrine `/shop` ; intéressant comme pattern-bloc réutilisable. |
+| Home — Explorer / portes | [`PATTERN_BLOC_HOME_EXPLORER_PORTES.md`](./PATTERN_BLOC_HOME_EXPLORER_PORTES.md) | **Créé** | Oui, potentiellement | `views/snippets/ckr_entries.xml` + `_entries.scss` — articulation Home ↔ doctrine `/shop` ; candidat snippet déposable ultérieurement. |
 | Home — sélection produits | `PATTERN_BLOC_HOME_SELECTION_PRODUITS.md` | À créer | Partiel | `ckr_selection.xml` — section + grille pilotée par le **site** (jusqu’à 4 produits). Pattern utile ; dépend du catalogue et de la config Website. |
 | Home — carte produit « sélection » | `PATTERN_BLOC_PRODUCT_CARD_CATALOGUE.md` | À créer | Non libre | Rendu **interne** à la sélection Home : classes `ckr-selection__card*`. Distinct de la **card grille /shop** (autre contexte DOM). Documenter comme composant **pattern**, pas comme snippet éditorial autonome. |
 | Home — newsletter | `PATTERN_BLOC_HOME_NEWSLETTER.md` | À créer | Oui | `ckr_circle.xml` (id historique `ckr_snippet_circle`) — formulaire, messages `cc_nl`, endpoint dédié. Très bon candidat snippet déposable **si** enregistré côté Website. |
@@ -90,6 +90,7 @@ La lecture produit est validée :
 ## 6. Fichiers pattern-blocs déjà disponibles
 
 - [`PATTERN_BLOC_HEADER_NAV_3_NIVEAUX.md`](./PATTERN_BLOC_HEADER_NAV_3_NIVEAUX.md)
+- [`PATTERN_BLOC_HOME_EXPLORER_PORTES.md`](./PATTERN_BLOC_HOME_EXPLORER_PORTES.md)
 - [`PATTERN_BLOC_HOME_HERO.md`](./PATTERN_BLOC_HOME_HERO.md)
 - [`PATTERN_BLOC_HOME_EN_PRATIQUE.md`](./PATTERN_BLOC_HOME_EN_PRATIQUE.md)
 - [`PATTERN_BLOC_FOOTER_RESPONSIVE.md`](./PATTERN_BLOC_FOOTER_RESPONSIVE.md)
