@@ -230,7 +230,8 @@
                                aria-label="Mon panier">
                                 <i class="fa fa-shopping-bag" aria-hidden="true"/>
                                 <span class="visually-hidden">Panier</span>
-                                <span class="ckr-header__counter-badge" t-esc="ckr_cart_qty"/>
+                                <!-- Compat website_sale cache: attendu en <sup class="my_cart_quantity..."> -->
+                                <sup class="my_cart_quantity ckr-header__counter-badge" t-esc="ckr_cart_qty"/>
                             </a>
                         </div>
 

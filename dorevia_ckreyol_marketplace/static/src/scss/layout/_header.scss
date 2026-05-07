@@ -776,6 +776,13 @@ header#top.ckr-header,
     }
 }
 
+// Top_0 visible uniquement sur homepage (classe body Odoo Website).
+body:not(.o_homepage) {
+    .ckr-header__top0 {
+        display: none !important;
+    }
+}
+
 // #wrapwrap (website Odoo) : overflow-x hidden rogne les menus du header.
 // Important : CSS refuse `overflow-x: visible` si overflow-y != visible,
 // il faut donc forcer les deux axes simultanément.
