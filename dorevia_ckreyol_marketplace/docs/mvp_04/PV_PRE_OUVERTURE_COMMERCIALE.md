@@ -43,6 +43,7 @@ Décision de ce PV : **GO technique minimal pré-ouverture**, sous réserve de s
 - Automatisation dédiée : tag `dorevia_ckr_checkout_e2e`.
 - Résultat final d’exécution runtime partagé : **0 failed, 0 error(s)**.
 - Alignement technique effectué sur endpoints Odoo 19 effectifs (`/shop/cart/add` JSON-RPC, `/shop/confirmation`).
+- Micro-correction P4 intégrée : abandon de l’ajout panier via `/shop/cart/update` au profit du contrat runtime valide.
 
 ### P5 — Smoke install/update/rendu
 
