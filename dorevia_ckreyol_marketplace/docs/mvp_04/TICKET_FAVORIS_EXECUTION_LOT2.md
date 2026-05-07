@@ -73,12 +73,14 @@ Transformer le **cadrage** existant en **périmètre d’exécution arbitré** :
 
 ## 4. Points d’entrée
 
+**Cœur minimal Lot 2** (hors arbitrage accessoire) : **listing `/shop`** + **fiche produit** + **liste Favoris** (page dédiée). Tout le reste ci-dessous est **complémentaire** ou **à trancher**.
+
 | Point d’entrée | Notes | Statut cible |
 | --- | --- | --- |
-| **Carte produit — homepage** (blocs type sélection / explorer) | Si tuiles produits alignées sur `/shop`. | À arbitrer |
-| **Listing `/shop`** | Cadrage §3 *Points d’entrée* — **point central attendu**. | Indispensable |
-| **Fiche produit** | Idem cadrage. | Indispensable |
-| **Accès header** (lien « Favoris » / icône cohérente header V1) | Déjà présent en navigation CK ; comportement **liste** à brancher. | À arbitrer |
+| **Listing `/shop`** | Carte produit sur la boutique — base du parcours. | Indispensable |
+| **Fiche produit** | Alignée au cadrage §3. | Indispensable |
+| **Carte produit — homepage** (blocs sélection / explorer, etc.) | Enrichissement ; **pas** le périmètre minimal. | Optionnel / à arbitrer |
+| **Accès header** (lien « Favoris » / icône cohérente header V1) | Navigation vers la liste ; arbitrage sous **Décision attendue avant exécution**. | À arbitrer |
 | **Compteur** favoris dans le header | Lisibilité vs charge ; pas imposé par le cadrage minimal. | Optionnel |
 
 ---
@@ -121,9 +123,27 @@ Reprise des scénarios [§9 — `2_FAVORIS_PARCOURS.md`](2_FAVORIS_PARCOURS.md#9
 
 ## Prochaines étapes (hors scope immédiat)
 
-1. Atelier **arbitrage** : trancher §1 à §5 (et ajuster les colonnes *Statut cible* dans une révision de ce document ou une décision écrite).
+1. Atelier **arbitrage** : trancher les points listés en **Décision attendue avant exécution** (ci-dessous).
 2. **GO / NO GO** lancement implémentation Lot 2 (après Lot 1 et jalons pré-ouverture).
-3. Découpage technique (routes, modèles, tests) — **après** arbitrage.
+3. Découpage technique (routes, modèles, tests) — **après** décision écrite.
+
+---
+
+## Décision attendue avant exécution
+
+Sans **décision explicite** sur les éléments suivants, ce ticket reste **strictement préparatoire** et **ne mandate aucune implémentation** ni engagement de sprint.
+
+Arbitrages à **trancher par écrit** avant tout code :
+
+1. **Stockage invité** (stratégie retenue parmi §1).
+2. **Stockage connecté** (modèle / rattachement `res.partner`, portail éventuel — §2).
+3. **Fusion invité → connecté** (fusion, remplacement, séparation, ou absence de promesse — §3).
+4. **URL et structure** de la **page liste Favoris** (chemins, gabarit, nom de route).
+5. **Points d’entrée retenus** au-delà du **cœur minimal** (`/shop` + fiche produit + liste), y compris **Home** si applicable (optionnel).
+6. **Accès header** : retenu ou non pour la V1 Lot 2 ; comportement du lien vers la liste.
+7. **Compteur** favoris dans le header : retenu ou non.
+8. **Scénarios F1–F6** effectivement **inclus dans le premier incrément** (tous ou sous-ensemble documenté).
+9. **Dépendance** ou non à une **wishlist / mécanisme standard Odoo** (modules, API, contraintes installation).
 
 ---
 
