@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.10.134",
+    "version": "19.0.1.10.135",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -128,6 +128,8 @@ Module de theme pour le canal de vente en ligne specialise C-Kreyol
 * 19.0.1.10.134 : consolidation pré-ouverture — unicité slug globale (``website_id IS NULL``) renforcée
   sur ``ckr.shop.collection``/``ckr.shop.origin`` (+ tests), clarification ACL collections, canon URL boutique
   consolidé et procédure smoke install/update/rendu documentée.
+* 19.0.1.10.135 : pré-ouverture P4 — ajout d'une suite de tests E2E checkout minimale
+  (tag ``dorevia_ckr_checkout_e2e``) + traçabilité d'exécution dans le ticket dédié.
 
 Portee :
 
