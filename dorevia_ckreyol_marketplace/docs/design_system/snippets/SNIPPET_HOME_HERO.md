@@ -64,3 +64,5 @@ Le mobile ne doit pas transformer le hero en panneau trop haut : l’utilisateur
 - Maintenir la liste des visuels du rotateur alignée avec les assets statiques réellement livrés.
 - Ne pas casser la logique de hauteur utile dépendante du header mesuré : `--ckr-header-measured`.
 - Les visuels actuels servent aussi de support de développement et de validation responsive ; la sélection iconographique définitive pourra être affinée dans un lot éditorial dédié.
+
+Ce snippet documente un pattern stabilisé ; il ne constitue pas un ticket de nouvelle fonctionnalité.

@@ -82,3 +82,5 @@ Le footer doit rester un repère de fin de page : marque, navigation secondaire 
 - Vérifier les attributs a11y : `aria-expanded`, focus visible, zone tactile.
 - Vérifier que l’ouverture d’une rubrique referme proprement l’autre en mobile.
 - Maintenir le footer comme un composant global : toute modification peut impacter home, shop, panier et checkout.
+
+Ce snippet documente un pattern stabilisé ; il ne constitue pas un ticket de nouvelle fonctionnalité.

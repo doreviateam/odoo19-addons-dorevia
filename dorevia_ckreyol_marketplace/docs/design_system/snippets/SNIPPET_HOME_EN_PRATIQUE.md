@@ -65,3 +65,5 @@ Le module doit donner des repères pratiques au visiteur sans ralentir la lectur
 - Vérifier le rendu sur mobiles étroits et densités d'écran variées.
 - Éviter toute dérive vers des cartes épaisses : le module doit rester une liste éditoriale compacte.
 - Préserver le wrapper `ckr-trust__item__body`, qui stabilise l’alignement entre icône et contenu.
+
+Ce snippet documente un pattern stabilisé ; il ne constitue pas un ticket de nouvelle fonctionnalité.

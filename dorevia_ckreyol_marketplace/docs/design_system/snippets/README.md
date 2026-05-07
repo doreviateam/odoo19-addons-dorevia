@@ -15,3 +15,5 @@ Les snippets décrivent :
 - les points de vigilance dev.
 
 Ces documents servent de référence pour les tickets, les recettes et les futures évolutions de la boutique.
+
+Ils ne créent pas de nouveau périmètre fonctionnel : ils sécurisent les patterns déjà validés.
