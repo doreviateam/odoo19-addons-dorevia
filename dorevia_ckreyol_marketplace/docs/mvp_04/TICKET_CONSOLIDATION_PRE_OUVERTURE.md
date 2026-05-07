@@ -187,8 +187,11 @@ Créer ou mettre à jour :
 - `docs/mvp_04/DECISION_ACL_COLLECTIONS.md`
 - `docs/mvp_04/CANON_URL_BOUTIQUE.md`
 - `docs/mvp_04/PROCEDURE_SMOKE_INSTALL_UPDATE.md`
-
-Capitalisation design system/snippets : reportée en lot suivant (hors priorité de sécurisation du socle).
+- `docs/design_system/README.md`
+- `docs/design_system/snippets/README.md`
+- `docs/design_system/snippets/SNIPPET_HOME_HERO.md`
+- `docs/design_system/snippets/SNIPPET_HOME_EN_PRATIQUE.md`
+- `docs/design_system/snippets/SNIPPET_FOOTER_RESPONSIVE.md`
 
 ---
 
@@ -220,6 +223,7 @@ Capitalisation design system/snippets : reportée en lot suivant (hors priorité
 La passe est réussie si :
 
 - l'état pré-ouverture est documenté ;
+- les snippets mûrs sont consolidés ;
 - ce ticket consolidation existe et est suivi ;
 - les risques slugs / ACL / canon URL sont clarifiés ;
 - le périmètre tests panier / checkout est cadré ;
