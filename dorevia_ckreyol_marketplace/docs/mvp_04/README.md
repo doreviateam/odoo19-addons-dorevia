@@ -2,7 +2,7 @@
 
 Dossier de **cadrage** pour la vague **MVP 04** : stabiliser les éléments d’**achat immédiat** (panier) et de **sélection personnelle** (favoris), après **`docs/mvp_01/`** (catalogue / portes `shop`), **`docs/mvp_02/`** (homepage, boutique wave 1…), **`docs/mvp_03/`** (comptes client / demande pro).
 
-**Statut documentaire** : intention et priorités **cadrées** ; socle **Header CK V1 (Top_0/Top_1/Top_2) implémenté et validé** ; suite MVP04 (panier/favoris) à enchaîner sur cette base figée.
+**Statut documentaire** : intention et priorités **cadrées** ; socle **Header CK V1 (Top_0/Top_1/Top_2) implémenté et validé** ; **Lot 1 panier / checkout** prioritaire en exécution ; **Lot 2 Favoris** cadré mais **exécution différée** (voir section Lot 2 ci-dessous ; non bloquant pour le GO technique minimal pré-ouverture actuel).
 
 > Alignement doctrine e-commerce CK : [DOCTRINE_CK_ECOMMERCE_B2C_B2B.md](../direction/DOCTRINE_CK_ECOMMERCE_B2C_B2B.md). Ordre des chantiers : [CHANTIERS_CK_ORDRE.md](../direction/CHANTIERS_CK_ORDRE.md).
 
@@ -64,11 +64,23 @@ Le **Lot 1 — Panier** est prioritaire : il conditionne directement la conversi
 
 **Ticket lié (navigation)** : [TICKET_HEADER_NAV_MVP04.md](TICKET_HEADER_NAV_MVP04.md) — première refonte structurante **Header CK V1** (Top_0/Top_1/Top_2) livrée en lots.
 
-### Lot 2 — Favoris
+### Lot 2 — Favoris — cadré produit / UX, exécution différée
 
-**Objectif** : permettre au visiteur de **garder une sélection**.
+**Statut** : le périmètre produit / UX est **cadré** ([2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md)) ; **aucune exécution livrable n’est lancée** à ce stade ; les **arbitrages techniques** (persistance invité / connecté, fusion invité → connecté, implémentation) restent **ouverts**. Le Lot 2 est **différé volontairement** après la stabilisation du **Lot 1 panier / checkout** et les jalons de **pré-ouverture marchande**. Il **n’est pas bloquant** pour le **GO technique minimal pré-ouverture** actuel.
 
-À cadrer :
+> Le Lot 2 Favoris est cadré mais non lancé en exécution. Son traitement est différé après le Lot 1 panier / checkout et les jalons de pré-ouverture marchande. Il n’est pas bloquant pour le GO technique minimal pré-ouverture actuel.
+
+À **retenir** (cadrage, sans développement ouvert) :
+
+- **Favoris** = intention **différée**, distincte du **panier** ([Doctrine](#doctrine)).
+- Pas de **marketing lourd** ; pas **d’emailing automatique** lié aux favoris ; pas de **partage de liste**.
+- Pas de **compte forcé** pour utiliser les favoris sans décision d’arbitrage explicite.
+- **Stockage** invité / connecté / **fusion invité → connecté** : encore à **trancher** au ticket d’exécution.
+- **Ticket d’exécution** Lot 2 à **créer plus tard**, une fois le Lot 1 et la pré-ouverture marchande suffisamment sécurisés.
+
+**Objectif produit** : permettre au visiteur de **garder une sélection** pour plus tard (parcours : [2_FAVORIS_PARCOURS.md](2_FAVORIS_PARCOURS.md)).
+
+Éléments déjà cadrés dans ce dossier :
 
 - icône cœur sur carte produit ;
 - icône cœur sur fiche produit ;

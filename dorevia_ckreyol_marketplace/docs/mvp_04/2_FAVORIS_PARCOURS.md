@@ -1,6 +1,20 @@
 # MVP 04 — Parcours favoris (cadrage)
 
-**Statut** : document de **cadrage produit / UX** ; stockage technique, routes et règles de fusion invité → connecté restent **à arbitrer** dans le ticket d’exécution.  
+## Lot 2 Favoris — cadré produit / UX, exécution différée
+
+Ce document est **à jour comme référence de cadrage** ; il ne doit pas être lu comme « sujet oublié » : le Lot 2 est **cadré**, l’**exécution n’est pas lancée**, les arbitrages techniques restent **ouverts**, et le chantier est **volontairement différé** après le **Lot 1 panier / checkout** — il **n’est pas bloquant** pour le GO technique minimal pré-ouverture actuel (voir [README MVP 04 — Lot 2 Favoris](README.md)).
+
+> Le Lot 2 Favoris est cadré mais non lancé en exécution. Son traitement est différé après le Lot 1 panier / checkout et les jalons de pré-ouverture marchande. Il n’est pas bloquant pour le GO technique minimal pré-ouverture actuel.
+
+**Rappels** :
+
+- **Favoris** = intention **différée**, distincte du **panier**.
+- Pas de marketing lourd ; pas d’**emailing automatique** ; pas de **partage de liste** ; pas de **compte forcé** sans arbitrage.
+- Persistance **invité / connectée / fusion invité → connecté** : **à arbitrer** ; **ticket d’exécution à créer plus tard**.
+
+---
+
+**Statut documentaire** : **cadrage produit / UX** ; stockage technique, routes et règles de fusion invité → connecté restent **à arbitrer** dans un **futur ticket d’exécution** (non rédigé tant que le Lot 1 n’est pas suffisamment sécurisé).  
 **Pilotage dossier** : [README MVP 04](README.md).  
 **Doctrine** : intention et retour différé — pas de confusion avec le panier ([README — Doctrine](README.md#doctrine)).
 
@@ -65,7 +79,7 @@ Partage de wishlist, wishlist collaborative, fidélité, promos déclenchées pa
 ## 7. Suite documentaire
 
 - Spec UX (micro-copy, états du cœur, page liste) — si besoin.  
-- **Ticket d’exécution** — après stabilisation du **Lot 1 panier**, conformément à la priorité dossier.
+- **Ticket d’exécution Lot 2** — à **créer ultérieurement**, après stabilisation du **Lot 1 panier / checkout** et les jalons pré-ouverture marchande pertinents ; ce ticket formalisera les arbitrages techniques (persistance, fusion, routes).
 
 ---
 
