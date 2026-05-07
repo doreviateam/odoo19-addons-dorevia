@@ -72,6 +72,11 @@
 
                 <div class="ckr-header__inner ckr-header__top1">
 
+                    <!-- Panier website_sale : ``li.o_wsale_my_cart`` requis par le JS panier
+                         (CartService._updateCartIcon / updateCartNavBar). Sans ce wrapper,
+                         suppression ligne panier peut lever ``classList`` sur null. -->
+                    <t t-set="website_sale_order" t-value="request.cart"/>
+
                     <!-- Logo / brand (SVG inline : Playfair deja charge dans le head) -->
                     <a href="/" class="ckr-header__brand ckr-header__brand--logo-c" aria-label="C-Kréyòl - Accueil">
                         <!-- Variantes logotype header : -->
@@ -228,15 +233,21 @@
                                 <i class="fa fa-heart-o" aria-hidden="true"/>
                                 <span class="visually-hidden">Favoris</span>
                             </a>
-                            <a href="/shop/cart"
-                               class="ckr-header__link-cart"
-                               title="Mon panier"
-                               aria-label="Mon panier">
-                                <i class="fa fa-shopping-bag" aria-hidden="true"/>
-                                <span class="visually-hidden">Panier</span>
-                                <!-- Compat website_sale cache: attendu en <sup class="my_cart_quantity..."> -->
-                                <sup class="my_cart_quantity ckr-header__counter-badge" t-esc="ckr_cart_qty"/>
-                            </a>
+                            <ul class="ckr-header__cart-sale-compat">
+                                <li class="o_wsale_my_cart nav-item">
+                                    <a href="/shop/cart"
+                                       class="ckr-header__link-cart"
+                                       title="Mon panier"
+                                       aria-label="Mon panier">
+                                        <i class="fa fa-shopping-bag" aria-hidden="true"/>
+                                        <span class="visually-hidden">Panier</span>
+                                        <!-- Compat website_sale cache: attendu en <sup class="my_cart_quantity..."> -->
+                                        <sup class="my_cart_quantity ckr-header__counter-badge"
+                                             t-esc="ckr_cart_qty"
+                                             t-att-data-order-id="website_sale_order.id if website_sale_order else ''"/>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
 
                         <!-- Burger mobile -->

@@ -388,6 +388,23 @@ header#top.ckr-header,
         overflow: visible;
         position: relative;
 
+        // Wrapper compat ``website_sale`` : ``ul`` n'occupe pas la flexbox (les ``li``
+        // participent comme enfants directs pour les styles > a du cluster mobile).
+        .ckr-header__cart-sale-compat {
+            display: contents;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li.o_wsale_my_cart {
+            display: inline-flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
         // Icônes d'action : enfants directs uniquement.
         > a {
             display: inline-flex;
@@ -425,6 +442,7 @@ header#top.ckr-header,
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
 
             > a,
+            li.o_wsale_my_cart > a,
             .ckr-header__user-toggle {
                 width: 44px;
                 height: 44px;
