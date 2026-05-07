@@ -28,7 +28,12 @@ class TestCkrCircleHomepage(HttpCase):
         self.assertEqual(r.status_code, 200)
         self.assertIn("ckr-newsletter", r.text)
         self.assertIn("NEWSLETTER", r.text)
-        self.assertIn("Recevez nos sélections, découvertes et nouvelles de C-Kreyol", r.text)
+        # La marque affichée peut être rendue en forme accentuée (« C-Kréyòl »)
+        # selon la copie front, tout en conservant la même promesse fonctionnelle.
+        self.assertRegex(
+            r.text,
+            r"Recevez nos sélections, découvertes et nouvelles de C-K(?:reyol|réyòl)",
+        )
         self.assertIn('action="/ckr/circle/subscribe"', r.text)
         self.assertNotIn("Rejoignez le cercle", r.text.lower())
         self.assertNotIn("Préférences (optionnel)", r.text)
