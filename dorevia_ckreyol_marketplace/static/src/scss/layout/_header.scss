@@ -397,12 +397,14 @@ header#top.ckr-header,
             list-style: none;
         }
 
-        li.o_wsale_my_cart {
+        // Classic Store : `.o_wsale_my_cart { padding: 10px }` désaligne le cluster ;
+        // on impose le même gabarit que les sœurs (cœur, compte).
+        li.o_wsale_my_cart.nav-item {
             display: inline-flex;
             align-items: center;
             list-style: none;
             margin: 0;
-            padding: 0;
+            padding: 0 !important;
         }
 
         // Icônes d'action : enfants directs uniquement.
@@ -486,20 +488,39 @@ header#top.ckr-header,
         }
     }
 
+    // Pastilles circulaires (favoris + panier) : même gabarit — le lien panier est sous
+    // ``li.o_wsale_my_cart`` donc il ne reçoit pas les ``> a`` du cluster ; le flex ici
+    // assure le centrage optique du glyphe (FA / line-height).
     &__link-favorites,
     &__link-cart {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box;
         width: 44px !important;
         min-width: 44px;
+        max-width: 44px;
         height: 44px !important;
+        min-height: 44px;
+        max-height: 44px;
         padding: 0 !important;
+        margin: 0;
         border: 2px solid rgba($ckr-text, 0.65);
         border-radius: 999px;
         background: #fff;
         color: $ckr-text;
         position: relative;
+        flex-shrink: 0;
 
         i {
             font-size: 1.2rem !important;
+            line-height: 1 !important;
+            margin: 0 !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            width: 1.35rem;
+            height: 1.35rem;
         }
 
         &:hover,
@@ -510,10 +531,9 @@ header#top.ckr-header,
         }
     }
 
-    &__link-cart {
-        border-color: rgba($ckr-primary, 0.8);
-        color: $ckr-primary;
-        background: rgba($ckr-primary, 0.1);
+    // ``fa-shopping-bag`` : compensation optique légère (glyphe vs cercle).
+    &__link-cart i.fa-shopping-bag {
+        transform: translateY(0.05rem);
     }
 
     &__mobile-favorites {
