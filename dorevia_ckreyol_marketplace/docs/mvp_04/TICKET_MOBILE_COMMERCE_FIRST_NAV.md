@@ -18,7 +18,7 @@ Formaliser la doctrine de navigation CK avant toute nouvelle évolution du drawe
 Le cadrage doit rendre explicite la priorité mobile suivante :
 
 - **desktop** : équilibre commerce / éditorial / promotionnel / communautaire ;
-- **mobile** : commerce d abord, éditorial en soutien, communautaire différé.
+- **mobile** : commerce d’abord, éditorial en soutien, communautaire différé.
 
 Ce ticket est **documentaire**. Il ne déclenche pas de refonte immédiate.
 
@@ -26,21 +26,21 @@ Ce ticket est **documentaire**. Il ne déclenche pas de refonte immédiate.
 
 ## 2. Doctrine
 
-La navigation mobile CK n est pas une réduction mécanique du desktop.  
-Elle priorise l action marchande : **boutique, recherche, panier, favoris, promotions**.
+La navigation mobile CK n’est pas une réduction mécanique du desktop.  
+Elle priorise l’action marchande : **boutique, recherche, panier, favoris, promotions**.
 
 Principes directeurs :
 
-- la première lecture mobile doit orienter vers l achat ;
-- l éditorial reste présent, mais en soutien du parcours marchand ;
+- la première lecture mobile doit orienter vers l’achat ;
+- l’éditorial reste présent, mais en soutien du parcours marchand ;
 - le communautaire reste accessible, mais non prioritaire au premier niveau mobile ;
 - la richesse desktop est préservée sur desktop, sans duplication brute en mobile.
 
 ---
 
-## 3. Mapping des entrees (L1 / L2 / L3)
+## 3. Mapping des entrées (L1 / L2 / L3)
 
-Le mapping ci-dessous constitue la base de travail. Il devra être ajusté à l état réel du menu publié.
+Le mapping ci-dessous constitue la base de travail. Il devra être ajusté à l’état réel du menu publié.
 
 ## 3.1 L1 — Action commerce (prioritaire mobile)
 
@@ -55,18 +55,18 @@ Précision :
 
 - `Recherche`, `Panier` et `Favoris` ne sont pas forcément des liens de menu textuels classiques ;
 - ils peuvent rester exposés comme actions du header ;
-- leur classement en L1 signifie surtout qu ils doivent être immédiatement accessibles en mobile.
+- leur classement en L1 signifie surtout qu’ils doivent être immédiatement accessibles en mobile.
 
 ## 3.2 L2 — Soutien éditorial (utile au parcours)
 
 - Origines ;
 - Collections ;
-- Idees cadeaux ;
+- Idées cadeaux ;
 - Recettes.
 
-## 3.3 L3 — Communautaire differe
+## 3.3 L3 — Communautaire différé
 
-- Communaute ;
+- Communauté ;
 - Blog ;
 - contenus relationnels ou non directement marchands.
 
@@ -74,12 +74,12 @@ Précision :
 
 ## 4. Règles non négociables
 
-1. Acces rapide a la boutique en premier niveau mobile.
+1. Accès rapide à la boutique en premier niveau mobile.
 2. Recherche, panier et favoris restent accessibles sans friction.
 3. Aucun état hybride entre navigation horizontale desktop et drawer mobile.
-4. Le cadrage mobile n impose pas de modification de la doctrine desktop.
+4. Le cadrage mobile n’impose pas de modification de la doctrine desktop.
 5. Panier/favoris ne sont pas relégués sous des rubriques éditoriales.
-6. Le communautaire n occupe pas le premier niveau mobile.
+6. Le communautaire n’occupe pas le premier niveau mobile.
 7. La navigation mobile reste actionnable (libellés clairs, hiérarchie courte, pas de surcharge).
 
 ---
@@ -99,7 +99,7 @@ Précision :
 - refonte desktop ;
 - création de nouveaux contenus éditoriaux ;
 - réarchitecture des pages éditoriales ;
-- instrumentation réelle si elle n est pas déjà disponible.
+- instrumentation réelle si elle n’est pas déjà disponible.
 
 ---
 
@@ -110,8 +110,8 @@ Précision :
 Le cadrage est validé si :
 
 - la hiérarchie mobile est explicite et exploitable ;
-- le desktop reste inchangé dans l arbitrage ;
-- les entrées L1 privilégient clairement l achat ;
+- le desktop reste inchangé dans l’arbitrage ;
+- les entrées L1 privilégient clairement l’achat ;
 - éditorial et communautaire restent accessibles sans prendre la priorité.
 
 ## 6.2 NO GO
@@ -143,7 +143,7 @@ Après validation de ce cadrage uniquement, ouvrir :
 
 `TICKET_IMPLEMENTATION_DRAWER_MOBILE_COMMERCE_FIRST.md`
 
-Ce ticket d implémentation devra :
+Ce ticket d’implémentation devra :
 
 - traduire L1/L2/L3 dans le drawer mobile ;
 - conserver la doctrine desktop existante ;
@@ -159,5 +159,5 @@ Elle ne modifie pas la doctrine desktop, qui conserve un équilibre entre commer
 
 Elle ne déclenche pas de refonte immédiate du header/drawer.
 
-Toute implémentation devra faire l objet d un ticket séparé, avec un diff ciblé sur la navigation mobile.
+Toute implémentation devra faire l’objet d’un ticket séparé, avec un diff ciblé sur la navigation mobile.
 
