@@ -250,7 +250,7 @@
                             </ul>
                         </div>
 
-                        <!-- Burger mobile -->
+                        <!-- Bouton menu mobile / tablette -->
                         <label for="ckr_drawer_toggle"
                                id="ckr_drawer_burger"
                                class="ckr-header__burger"
@@ -284,7 +284,7 @@
                     </div>
                 </nav>
 
-                <!-- Drawer mobile -->
+                <!-- Drawer mobile / tablette -->
                 <label for="ckr_drawer_toggle" class="ckr-drawer__backdrop" aria-hidden="true"></label>
                 <aside id="ckr_drawer_panel" class="ckr-drawer__panel" aria-label="Menu mobile">
                     <label for="ckr_drawer_toggle"
@@ -293,7 +293,7 @@
                            aria-label="Fermer le menu"
                            tabindex="0">&#215;</label>
 
-                    <nav class="ckr-drawer__nav" aria-label="Menu principal (mobile)">
+                    <nav class="ckr-drawer__nav" aria-label="Menu principal mobile">
                         <t t-foreach="website.menu_id.child_id" t-as="submenu_m">
                             <t t-if="submenu_m.child_id">
                                 <div class="ckr-drawer__group">

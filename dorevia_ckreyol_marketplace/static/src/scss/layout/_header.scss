@@ -542,8 +542,29 @@ header#top.ckr-header,
     }
 
     &__top2 {
+        // Navigation horizontale N2 : desktop large uniquement.
         border-top: 1px solid $ckr-border;
         background: $ckr-bg;
+
+        @media (max-width: 991.98px) {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-width: 0 !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+        }
+
+        @media (min-width: 992px) {
+            display: block !important;
+            visibility: visible !important;
+            height: auto !important;
+            margin: 0 !important;
+            overflow: visible !important;
+            pointer-events: auto !important;
+        }
     }
 
     &__top2-inner {
@@ -754,14 +775,15 @@ header#top.ckr-header,
         }
     }
 
-    // --- Bouton burger (mobile) ---------------------------------------------
+    // --- Bouton menu mobile / tablette --------------------------------------
     &__burger {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         width: 40px;
         height: 40px;
-        background: transparent;
+        border-radius: $ckr-radius-pill;
+        background-color: transparent;
         border: none;
         color: $ckr-text;
         cursor: pointer;
@@ -773,14 +795,13 @@ header#top.ckr-header,
             height: 44px;
             min-width: 44px;
             min-height: 44px;
-            border-radius: $ckr-radius-pill;
             background-color: $ckr-bg-soft;
             border: 1px solid $ckr-border;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
 
         @media (min-width: 992px) {
-            display: none;
+            display: none !important;
         }
 
         &:focus-visible {
@@ -791,6 +812,30 @@ header#top.ckr-header,
         i {
             font-size: 1.35rem;
         }
+    }
+}
+
+// Navigation horizontale N2 : renfort spécificité (#wrapwrap + header) pour gagner sur
+// tout ``nav { display: flex }`` ou équivalent chargé après le bundle CK.
+#wrapwrap header#top.ckr-header nav.ckr-header__top2 {
+    @media (max-width: 991.98px) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-width: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+
+    @media (min-width: 992px) {
+        display: block !important;
+        visibility: visible !important;
+        height: auto !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        pointer-events: auto !important;
     }
 }
 
@@ -1022,9 +1067,8 @@ header#top.ckr-header,
         transform: translateX(0);
     }
 
-    // Desktop (lg+) : la barre `ckr-header__top2` porte la navigation — le drawer
-    // ne doit pas rester visible si la case est encore cochée (resize mobile→desktop,
-    // outils de développement, etc.). Le burger est déjà masqué ici.
+    // Desktop (lg+) : la barre N2 porte la navigation. Le drawer reste
+    // inaccessible même si le checkbox conserve un état checked après resize.
     @media (min-width: 992px) {
         &__toggle:checked ~ &__backdrop {
             opacity: 0;
@@ -1034,8 +1078,19 @@ header#top.ckr-header,
 
         &__toggle:checked ~ &__panel {
             transform: translateX(100%);
-            pointer-events: none;
             visibility: hidden;
+            pointer-events: none;
+        }
+    }
+}
+
+#wrapwrap header#top.ckr-header {
+    @media (min-width: 992px) {
+        .ckr-drawer__backdrop,
+        .ckr-drawer__panel {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
         }
     }
 }
@@ -1044,6 +1099,13 @@ header#top.ckr-header,
 html.ckr-drawer-open,
 body.ckr-drawer-open {
     overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    html.ckr-drawer-open,
+    body.ckr-drawer-open {
+        overflow: visible;
+    }
 }
 
 @keyframes ckrTop0Rotate {
