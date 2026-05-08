@@ -87,7 +87,7 @@ Priorité :
 ## MODELE_PAGE_FAVORIS
 
 - **Objectif** : relier intention et conversion via wishlist.
-- **Statut** : Existant (wishlist standard habillée CK).
+- **Statut** : Existant — incrément minimal wishlist standard habillé CK.
 - **Priorité** : P2.
 - **Nature** : marchande (soutien conversion).
 - **Pattern-blocs mobilisables** : grille wishlist, actions produit, CTA retour boutique.
@@ -126,7 +126,7 @@ Priorité :
 ## MODELE_PAGE_ORIGINES
 
 - **Objectif** : valoriser terroirs/origines tout en menant à l’achat.
-- **Statut** : Existant (porte commerce via mode origin).
+- **Statut** : Existant comme porte commerciale / à cadrer comme modèle éditorial complet.
 - **Priorité** : P2.
 - **Nature** : mixte (éditoriale + marchande).
 - **Pattern-blocs mobilisables** : intro origine, filtres/portes origine, grille produits.
@@ -165,7 +165,7 @@ Priorité :
 ## MODELE_PAGE_COLLECTION
 
 - **Objectif** : présenter une collection thématique achetable.
-- **Statut** : À cadrer (structure présente côté shop, modèle de page dédié à formaliser).
+- **Statut** : Existant comme logique shop / à cadrer si landing dédiée.
 - **Priorité** : P2.
 - **Nature** : marchande avec soutien éditorial léger.
 - **Pattern-blocs mobilisables** : hero collection, intro courte, grille produits, filtres/tri, CTA.
@@ -215,4 +215,21 @@ Priorité :
 - refonte header/drawer ;
 - création de snippets Odoo ;
 - instrumentation analytics nouvelle.
+
+---
+
+## 6. Décision
+
+Cet inventaire est retenu comme première cartographie des modèles de page CK.
+
+Il ne déclenche pas de développement.
+
+Il sert à :
+
+- éviter de créer les futures pages CK de manière isolée ;
+- relier chaque page aux pattern-blocs existants ;
+- intégrer la doctrine responsive desktop/mobile dès le cadrage ;
+- préparer les futurs tickets de cadrage ou d’implémentation.
+
+Toute création ou refonte de page devra faire l’objet d’un ticket séparé.
 
