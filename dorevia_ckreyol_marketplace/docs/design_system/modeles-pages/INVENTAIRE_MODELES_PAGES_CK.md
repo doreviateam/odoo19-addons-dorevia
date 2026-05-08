@@ -38,6 +38,7 @@ Priorité :
 - **Statut** : Existant.
 - **Priorité** : P1.
 - **Nature** : mixte (marchande + éditoriale + promotionnelle + communautaire).
+- **Fiche modèle** : `docs/design_system/modeles-pages/MODELE_PAGE_HOME.md`
 - **Pattern-blocs mobilisables** : header 3 niveaux, hero, explorer portes, sélection produits, newsletter, en pratique, footer.
 - **Routes / liens Odoo associés** : `/` ; liens vers `/shop`, `/promotions`, `/collections`, `/origines`, `/shop?ckr_mode=pack` selon portes actives.
 - **Logique responsive desktop** : Home riche et équilibrée.
