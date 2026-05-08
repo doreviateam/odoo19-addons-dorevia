@@ -133,7 +133,7 @@ Checklist de validation documentaire :
 - chaque entrée de menu est rattachée à L1, L2 ou L3 ;
 - aucune ambiguïté sur le fait que mobile != desktop condensé ;
 - le ticket ne contient aucune exigence de refonte immédiate ;
-- la suite est explicitement séparée dans un ticket implémentation.
+- la suite est explicitement séparée dans un ticket d’implémentation.
 
 ---
 
