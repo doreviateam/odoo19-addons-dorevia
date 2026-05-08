@@ -112,9 +112,11 @@ header#top.ckr-header,
         @media (max-width: 991.98px) {
             // Rapprocher logo et actions : padding lateral serre, pas de gap inutile
             // entre les deux blocs (le cluster + burger forment l alignement a droite).
+            flex-wrap: wrap;
+            align-items: center;
             gap: $ckr-space-xs;
-            padding: $ckr-space-sm 10px;
-            min-height: 52px;
+            padding: 0.42rem 10px 0.34rem;
+            min-height: 48px;
         }
 
         @media (min-width: 992px) and (max-width: 1199.98px) {
@@ -195,6 +197,63 @@ header#top.ckr-header,
         }
     }
 
+    // Recherche mobile visible (commerce-first) : seconde ligne dédiée.
+    &__search-mobile {
+        width: 100%;
+        flex: 1 0 100%;
+        margin-top: 0.28rem;
+
+        form {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(154, 90, 56, 0.6);
+            border-radius: 8px;
+            background: #fff;
+            min-height: 40px;
+            overflow: hidden;
+        }
+
+        input {
+            flex: 1 1 auto;
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 0.96rem;
+            color: $ckr-text;
+            padding: 0.5rem 0.74rem;
+
+            &::placeholder {
+                color: rgba($ckr-text, 0.65);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        button {
+            flex: 0 0 40px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-left: 1px solid rgba(154, 90, 56, 0.45);
+            background: transparent;
+            color: #9a5a38;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &:hover,
+            &:focus {
+                background: $ckr-bg-soft;
+                color: $ckr-primary;
+                outline: none;
+            }
+        }
+    }
+
     @media (min-width: 992px) and (max-width: 1199.98px) {
         &__search-desktop {
             flex-basis: 340px;
@@ -244,13 +303,15 @@ header#top.ckr-header,
 
         @media (max-width: 991.98px) {
             min-width: 0;
-            flex-shrink: 1;
+            // Le logo restait trop discret face au cluster d'actions (retour recette mobile).
+            // On limite le shrink pour préserver la lisibilité sans agrandir fortement le header.
+            flex-shrink: 0.6;
 
             .ckr-wordmark {
-                height: 30px;
+                height: 32px;
                 // min() CSS natif : unquote obligatoire (sinon Dart Sass min()
                 // melange vw et px et echoue a la compilation du bundle).
-                max-width: unquote("min(172px, 52vw)");
+                max-width: unquote("min(188px, 56vw)");
             }
         }
 
@@ -436,12 +497,15 @@ header#top.ckr-header,
         }
 
         @media (max-width: 991.98px) {
-            padding: 2px 4px;
+            // Calage mobile : même encombrement visuel que le bouton burger voisin.
+            // (évite un cluster légèrement plus haut qui paraît désaxé).
+            padding: 0 4px;
             gap: 0;
             background-color: $ckr-bg-soft;
             border: 1px solid $ckr-border;
             border-radius: $ckr-radius-pill;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            align-self: center;
 
             > a,
             li.o_wsale_my_cart > a,
@@ -455,6 +519,11 @@ header#top.ckr-header,
                 &:hover,
                 &:focus {
                     background-color: rgba(255, 255, 255, 0.45);
+                }
+
+                i {
+                    display: block;
+                    line-height: 1;
                 }
             }
         }
@@ -534,12 +603,6 @@ header#top.ckr-header,
     // ``fa-shopping-bag`` : compensation optique légère (glyphe vs cercle).
     &__link-cart i.fa-shopping-bag {
         transform: translateY(0.05rem);
-    }
-
-    &__mobile-favorites {
-        @media (max-width: 991.98px) {
-            color: $ckr-text;
-        }
     }
 
     &__counter-badge {
@@ -815,6 +878,7 @@ header#top.ckr-header,
             height: 44px;
             min-width: 44px;
             min-height: 44px;
+            align-self: center;
             background-color: $ckr-bg-soft;
             border: 1px solid $ckr-border;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
@@ -831,6 +895,8 @@ header#top.ckr-header,
 
         i {
             font-size: 1.35rem;
+            line-height: 1;
+            display: block;
         }
     }
 }

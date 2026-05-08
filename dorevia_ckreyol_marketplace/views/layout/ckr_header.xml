@@ -188,17 +188,8 @@
                                aria-label="Créer un compte">
                                 <span>Créer un compte</span>
                             </a>
-                            <a href="/shop" class="d-lg-none" title="Recherche globale" aria-label="Recherche globale">
-                                <i class="fa fa-search" aria-hidden="true"/>
-                            </a>
-                            <a href="/shop"
-                               class="d-lg-none ckr-header__mobile-favorites"
-                               title="Favoris"
-                               aria-label="Favoris">
-                                <i class="fa fa-heart-o" aria-hidden="true"/>
-                            </a>
                             <details t-if="website.user_id != user_id"
-                                     class="ckr-header__user-menu">
+                                     class="ckr-header__user-menu d-none d-lg-inline-flex">
                                 <summary class="ckr-header__user-toggle"
                                          role="button"
                                          title="Mon compte"
@@ -221,13 +212,13 @@
                             </a>
                             <a t-if="website.user_id == user_id"
                                href="/web/login?redirect=/my"
-                               class="d-lg-none"
+                               class="d-none"
                                title="Connexion"
                                aria-label="Connexion">
                                 <i class="fa fa-user-o" aria-hidden="true"/>
                             </a>
                             <a href="/shop"
-                               class="ckr-header__link-favorites d-none d-lg-inline-flex"
+                               class="ckr-header__link-favorites"
                                title="Favoris"
                                aria-label="Favoris">
                                 <i class="fa fa-heart-o" aria-hidden="true"/>
@@ -261,6 +252,20 @@
                                tabindex="0">
                             <i class="fa fa-bars" aria-hidden="true"/>
                         </label>
+                    </div>
+
+                    <div class="ckr-header__search-mobile d-lg-none">
+                        <form action="/shop" method="get" role="search" aria-label="Recherche rapide">
+                            <label class="visually-hidden" for="ckr_header_search_mobile_input">Recherche rapide</label>
+                            <input id="ckr_header_search_mobile_input"
+                                   type="search"
+                                   name="search"
+                                   placeholder="Recherche rapide"
+                                   autocomplete="off"/>
+                            <button type="submit" title="Rechercher" aria-label="Rechercher">
+                                <i class="fa fa-search" aria-hidden="true"/>
+                            </button>
+                        </form>
                     </div>
 
                 </div>
