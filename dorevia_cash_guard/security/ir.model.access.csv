@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dorevia_cash_guard_user,dorevia.cash.guard user,model_dorevia_cash_guard,base.group_user,1,1,1,0
+access_dorevia_cash_guard_line_user,dorevia.cash.guard.line user,model_dorevia_cash_guard_line,base.group_user,1,1,1,0
