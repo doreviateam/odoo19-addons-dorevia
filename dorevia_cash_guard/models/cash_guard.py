@@ -15,21 +15,23 @@ class DoreviaCashGuard(models.Model):
     }
 
     _name = "dorevia.cash.guard"
-    _description = "Dorevia Cash Guard"
+    _description = "Point de trésorerie Dorevia"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "date_from desc, id desc"
 
     name = fields.Char(
+        string="Nom",
         required=True,
         copy=False,
         default=lambda self: _("Nouveau"),
         tracking=True,
         index=True,
     )
-    date_from = fields.Date(required=True, tracking=True, index=True)
-    date_to = fields.Date(required=True, tracking=True, index=True)
+    date_from = fields.Date(string="Date de début", required=True, tracking=True, index=True)
+    date_to = fields.Date(string="Date de fin", required=True, tracking=True, index=True)
     bank_journal_id = fields.Many2one(
         "account.journal",
+        string="Journal bancaire",
         required=True,
         domain=[("type", "in", ("bank", "cash"))],
         tracking=True,
@@ -37,23 +39,39 @@ class DoreviaCashGuard(models.Model):
     )
     company_id = fields.Many2one(
         "res.company",
+        string="Société",
         required=True,
         default=lambda self: self.env.company,
         index=True,
     )
     currency_id = fields.Many2one(
         "res.currency",
+        string="Devise",
         related="company_id.currency_id",
         store=True,
         readonly=True,
     )
-    alert_threshold = fields.Monetary(default=0.0, required=True, tracking=True)
-    initial_balance = fields.Monetary(readonly=True, copy=False)
-    forecast_final_balance = fields.Monetary(readonly=True, copy=False)
-    forecast_min_balance = fields.Monetary(readonly=True, copy=False)
-    min_balance_date = fields.Date(readonly=True, copy=False)
+    alert_threshold = fields.Monetary(
+        string="Seuil d'alerte",
+        default=0.0,
+        required=True,
+        tracking=True,
+    )
+    initial_balance = fields.Monetary(string="Solde initial", readonly=True, copy=False)
+    forecast_final_balance = fields.Monetary(
+        string="Solde final prévisionnel",
+        readonly=True,
+        copy=False,
+    )
+    forecast_min_balance = fields.Monetary(
+        string="Solde minimum prévisionnel",
+        readonly=True,
+        copy=False,
+    )
+    min_balance_date = fields.Date(string="Date du point bas", readonly=True, copy=False)
     risk_status = fields.Selection(
-        [("safe", "Securise"), ("warning", "Vigilance"), ("risk", "Risque")],
+        [("safe", "Sécurisé"), ("warning", "Vigilance"), ("risk", "Risque")],
+        string="Statut de risque",
         default="safe",
         required=True,
         readonly=True,
@@ -62,15 +80,20 @@ class DoreviaCashGuard(models.Model):
         index=True,
     )
     state = fields.Selection(
-        [("draft", "Brouillon"), ("validated", "Valide"), ("closed", "Cloture")],
+        [("draft", "Brouillon"), ("validated", "Validé"), ("closed", "Clôturé")],
+        string="État",
         default="draft",
         required=True,
         tracking=True,
         index=True,
     )
-    responsible_id = fields.Many2one("res.users", index=True)
-    line_ids = fields.One2many("dorevia.cash.guard.line", "guard_id")
-    note = fields.Text()
+    responsible_id = fields.Many2one("res.users", string="Responsable", index=True)
+    line_ids = fields.One2many(
+        "dorevia.cash.guard.line",
+        "guard_id",
+        string="Flux prévisionnels",
+    )
+    note = fields.Text(string="Notes")
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -88,17 +111,17 @@ class DoreviaCashGuard(models.Model):
         for guard in self:
             if guard.date_from and guard.date_to and guard.date_from > guard.date_to:
                 raise ValidationError(
-                    _("La date de debut doit etre inferieure ou egale a la date de fin.")
+                    _("La date de début doit être inférieure ou égale à la date de fin.")
                 )
             if guard.alert_threshold < 0:
-                raise ValidationError(_("Le seuil d'alerte doit etre positif ou nul."))
+                raise ValidationError(_("Le seuil d'alerte doit être positif ou nul."))
             if guard.bank_journal_id.type not in ("bank", "cash"):
                 raise ValidationError(
-                    _("Le journal suivi doit etre de type Banque ou Caisse.")
+                    _("Le journal suivi doit être de type Banque ou Caisse.")
                 )
             if guard.bank_journal_id.company_id != guard.company_id:
                 raise ValidationError(
-                    _("Le journal doit appartenir a la meme societe que le point.")
+                    _("Le journal doit appartenir à la même société que le point.")
                 )
 
     @api.constrains("name", "company_id")
@@ -116,7 +139,7 @@ class DoreviaCashGuard(models.Model):
             )
             if duplicate:
                 raise ValidationError(
-                    _("Le nom du point de tresorerie doit etre unique par societe.")
+                    _("Le nom du point de trésorerie doit être unique par société.")
                 )
 
     def _get_liquidity_account_ids(self):
@@ -173,7 +196,7 @@ class DoreviaCashGuard(models.Model):
                 if not is_manager:
                     raise UserError(
                         _(
-                            "Un point cloture ne peut etre modifie que par un manager Cash Guard."
+                            "Un point clôturé ne peut être modifié que par un manager Cash Guard."
                         )
                     )
                 continue
@@ -181,8 +204,8 @@ class DoreviaCashGuard(models.Model):
                 if self._PROTECTED_FIELDS_AFTER_VALIDATION.intersection(vals):
                     raise UserError(
                         _(
-                            "Apres validation, les champs structurants sont modifiables "
-                            "uniquement par un manager ou apres retour en brouillon."
+                            "Après validation, les champs structurants sont modifiables "
+                            "uniquement par un manager ou après retour en brouillon."
                         )
                     )
 
@@ -232,12 +255,12 @@ class DoreviaCashGuard(models.Model):
     def action_close(self):
         if not self._is_cash_guard_manager():
             raise UserError(
-                _("Seul un manager Cash Guard peut cloturer un point de tresorerie.")
+                _("Seul un manager Cash Guard peut clôturer un point de trésorerie.")
             )
         for guard in self:
             if guard.state != "validated":
                 raise UserError(
-                    _("Seul un point valide peut etre cloture.")
+                    _("Seul un point validé peut être clôturé.")
                 )
             guard.state = "closed"
         return True
@@ -245,7 +268,7 @@ class DoreviaCashGuard(models.Model):
     def action_reopen(self):
         if not self._is_cash_guard_manager():
             raise UserError(
-                _("Seul un manager Cash Guard peut reouvrir un point de tresorerie.")
+                _("Seul un manager Cash Guard peut rouvrir un point de trésorerie.")
             )
         for guard in self:
             if guard.state in ("validated", "closed"):
