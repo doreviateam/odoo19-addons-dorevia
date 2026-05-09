@@ -2,6 +2,12 @@
 
 Objectif : verifier rapidement le Lot A (scaffold, modeles, contraintes, moteur de calcul).
 
+Contexte de recette :
+
+- URL : `http://localhost:18079`
+- Base : `tenant_01`
+- Module : `dorevia_cash_guard`
+
 ---
 
 ## 1. Installation
@@ -121,6 +127,19 @@ Attendu :
 
 ---
 
+## 6.1 Simulation
+
+1. Creer une ligne avec `line_type = simulated`.
+2. Renseigner une sortie significative.
+3. Recalculer.
+
+Attendu :
+
+- la ligne simulee impacte le `forecast_min_balance` ;
+- la ligne simulee impacte le `risk_status` en V1.
+
+---
+
 ## 7. Cas critique : final positif mais point bas negatif
 
 1. Creer un point avec un solde initial positif.
@@ -151,6 +170,7 @@ Ce cas valide que le module alerte sur le point bas, pas seulement sur le solde 
 | Creation ligne sortie | OK / KO | |
 | Poste budgetaire obligatoire | OK / KO | |
 | Recalcul operationnel | OK / KO | |
+| Ligne simulee prise en compte | OK / KO | |
 | Statut safe | OK / KO | |
 | Statut warning | OK / KO | |
 | Statut risk | OK / KO | |

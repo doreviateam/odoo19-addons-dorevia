@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class DoreviaCashGuard(models.Model):
+    _PROTECTED_FIELDS_AFTER_VALIDATION = {
+        "date_from",
+        "date_to",
+        "bank_journal_id",
+        "alert_threshold",
+        "line_ids",
+        "company_id",
+    }
+
     _name = "dorevia.cash.guard"
     _description = "Dorevia Cash Guard"
     _inherit = ["mail.thread", "mail.activity.mixin"]
@@ -156,6 +165,31 @@ class DoreviaCashGuard(models.Model):
             return "warning"
         return "safe"
 
+    def _is_cash_guard_manager(self):
+        return self.env.user.has_group("dorevia_cash_guard.group_cash_guard_manager")
+
+    def _check_write_permissions_by_state(self, vals):
+        if self.env.context.get("skip_cash_guard_recompute"):
+            return
+        is_manager = self._is_cash_guard_manager()
+        for guard in self:
+            if guard.state == "closed":
+                if not is_manager:
+                    raise UserError(
+                        _(
+                            "Un point cloture ne peut etre modifie que par un manager Cash Guard."
+                        )
+                    )
+                continue
+            if guard.state == "validated" and not is_manager:
+                if self._PROTECTED_FIELDS_AFTER_VALIDATION.intersection(vals):
+                    raise UserError(
+                        _(
+                            "Apres validation, les champs structurants sont modifiables "
+                            "uniquement par un manager ou apres retour en brouillon."
+                        )
+                    )
+
     def action_compute_initial_balance(self):
         for guard in self:
             guard.initial_balance = guard._compute_initial_balance()
@@ -190,3 +224,34 @@ class DoreviaCashGuard(models.Model):
                 }
             )
         return True
+
+    def action_validate(self):
+        for guard in self:
+            if guard.state != "draft":
+                continue
+            guard.action_recompute_projection()
+            guard.state = "validated"
+        return True
+
+    def action_close(self):
+        for guard in self:
+            if guard.state != "validated":
+                raise UserError(
+                    _("Seul un point valide peut etre cloture.")
+                )
+            guard.state = "closed"
+        return True
+
+    def action_reopen(self):
+        if not self._is_cash_guard_manager():
+            raise UserError(
+                _("Seul un manager Cash Guard peut reouvrir un point de tresorerie.")
+            )
+        for guard in self:
+            if guard.state in ("validated", "closed"):
+                guard.state = "draft"
+        return True
+
+    def write(self, vals):
+        self._check_write_permissions_by_state(vals)
+        return super().write(vals)

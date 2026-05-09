@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_dorevia_cash_guard_root" name="Securite Tresorerie" sequence="10"/>
+    <menuitem
+        id="menu_dorevia_cash_guard_root"
+        name="Securite Tresorerie"
+        parent="account.menu_finance"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="90"
+    />
 
     <menuitem
         id="menu_dorevia_cash_guard_points"
         name="Points de tresorerie"
         parent="menu_dorevia_cash_guard_root"
         action="action_dorevia_cash_guard"
+        groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="10"
     />
 
@@ -15,6 +22,7 @@
         name="Flux previsionnels"
         parent="menu_dorevia_cash_guard_root"
         action="action_dorevia_cash_guard_line"
+        groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="20"
     />
 </odoo>

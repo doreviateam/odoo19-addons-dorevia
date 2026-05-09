@@ -19,6 +19,22 @@
         </field>
     </record>
 
+    <record id="view_dorevia_cash_guard_search" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.search</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="bank_journal_id"/>
+                <field name="company_id"/>
+                <filter name="filter_draft" string="Brouillon" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_validated" string="Valide" domain="[('state', '=', 'validated')]"/>
+                <filter name="filter_closed" string="Cloture" domain="[('state', '=', 'closed')]"/>
+                <filter name="filter_risk" string="Risque" domain="[('risk_status', '=', 'risk')]"/>
+            </search>
+        </field>
+    </record>
+
     <record id="view_dorevia_cash_guard_line_tree" model="ir.ui.view">
         <field name="name">dorevia.cash.guard.line.tree</field>
         <field name="model">dorevia.cash.guard.line</field>
@@ -41,6 +57,23 @@
         </field>
     </record>
 
+    <record id="view_dorevia_cash_guard_line_search" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.line.search</field>
+        <field name="model">dorevia.cash.guard.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="label"/>
+                <field name="budget_post_id"/>
+                <field name="guard_id"/>
+                <field name="line_type"/>
+                <field name="cash_state"/>
+                <filter name="filter_planned" string="Prevu" domain="[('line_type', '=', 'planned')]"/>
+                <filter name="filter_simulated" string="Simule" domain="[('line_type', '=', 'simulated')]"/>
+                <filter name="filter_reconciled" string="Rapproche" domain="[('cash_state', '=', 'reconciled')]"/>
+            </search>
+        </field>
+    </record>
+
     <record id="view_dorevia_cash_guard_form" model="ir.ui.view">
         <field name="name">dorevia.cash.guard.form</field>
         <field name="model">dorevia.cash.guard</field>
@@ -48,20 +81,23 @@
             <form>
                 <header>
                     <button name="action_recompute_projection" type="object" string="Recalculer" class="btn-primary"/>
+                    <button name="action_validate" type="object" string="Valider" invisible="state != 'draft'"/>
+                    <button name="action_close" type="object" string="Cloturer" invisible="state != 'validated'" groups="dorevia_cash_guard.group_cash_guard_manager"/>
+                    <button name="action_reopen" type="object" string="Reouvrir" invisible="state == 'draft'" groups="dorevia_cash_guard.group_cash_guard_manager"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <group>
                         <group>
-                            <field name="name"/>
+                            <field name="name" readonly="state != 'draft'"/>
                             <field name="company_id"/>
                             <field name="responsible_id"/>
-                            <field name="bank_journal_id"/>
+                            <field name="bank_journal_id" readonly="state != 'draft'"/>
                         </group>
                         <group>
-                            <field name="date_from"/>
-                            <field name="date_to"/>
-                            <field name="alert_threshold"/>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="alert_threshold" readonly="state != 'draft'"/>
                             <field name="risk_status" readonly="1"/>
                         </group>
                     </group>
@@ -73,7 +109,7 @@
                     </group>
                     <notebook>
                         <page string="Flux previsionnels">
-                            <field name="line_ids" context="{'default_projection_date': date_from}">
+                            <field name="line_ids" context="{'default_projection_date': date_from}" readonly="state != 'draft'">
                                 <list editable="bottom" default_order="projection_date asc,sequence asc,id asc">
                                     <field name="projection_date"/>
                                     <field name="sequence"/>
@@ -105,11 +141,13 @@
         <field name="name">Points de tresorerie</field>
         <field name="res_model">dorevia.cash.guard</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_dorevia_cash_guard_search"/>
     </record>
 
     <record id="action_dorevia_cash_guard_line" model="ir.actions.act_window">
         <field name="name">Flux previsionnels</field>
         <field name="res_model">dorevia.cash.guard.line</field>
         <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_dorevia_cash_guard_line_search"/>
     </record>
 </odoo>

@@ -1,43 +1,30 @@
 # -*- coding: utf-8 -*-
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
+from unittest.mock import patch
 
 
-class TestCashGuardCalc(SavepointCase):
+class TestCashGuardCalc(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.company = cls.env.company
+        cls.bank_journal = cls.env["account.journal"].search([("type", "=", "bank")], limit=1)
+        if not cls.bank_journal:
+            raise AssertionError("Aucun journal bancaire disponible pour les tests.")
+        cls.company = cls.bank_journal.company_id
         cls.currency = cls.company.currency_id
-
-        cls.account = cls.env["account.account"].search(
-            [("company_id", "=", cls.company.id), ("deprecated", "=", False)], limit=1
+        cls.account = (
+            cls.bank_journal.default_account_id
+            or cls.bank_journal.payment_debit_account_id
+            or cls.bank_journal.payment_credit_account_id
         )
         if not cls.account:
-            cls.account = cls.env["account.account"].create(
-                {
-                    "name": "CG Test Account",
-                    "code": "CGT001",
-                    "account_type": "asset_current",
-                    "company_id": cls.company.id,
-                }
-            )
-
-        cls.bank_journal = cls.env["account.journal"].create(
-            {
-                "name": "CG Bank",
-                "code": "CGBK",
-                "type": "bank",
-                "company_id": cls.company.id,
-                "default_account_id": cls.account.id,
-            }
-        )
+            raise AssertionError("Aucun compte de liquidite disponible sur le journal bancaire.")
 
         cls.budget_post = cls.env["account.budget.post"].create(
             {
                 "name": "CG Budget Post",
                 "account_ids": [(6, 0, [cls.account.id])],
-                "company_id": cls.company.id,
             }
         )
 
@@ -67,9 +54,13 @@ class TestCashGuardCalc(SavepointCase):
             }
         )
 
+    def _recompute_with_zero_initial(self, guard):
+        with patch.object(type(guard), "_compute_initial_balance", return_value=0.0):
+            guard.action_recompute_projection()
+
     def test_initial_balance_only(self):
         guard = self._create_guard(threshold=100.0)
-        guard.action_recompute_projection()
+        self._recompute_with_zero_initial(guard)
         self.assertEqual(guard.initial_balance, 0.0)
         self.assertEqual(guard.forecast_final_balance, 0.0)
         self.assertEqual(guard.forecast_min_balance, 0.0)
@@ -79,7 +70,7 @@ class TestCashGuardCalc(SavepointCase):
         guard = self._create_guard(threshold=500.0)
         self._create_line(guard, "2026-05-02", 1000.0, "inflow", seq=10)
         self._create_line(guard, "2026-05-03", 300.0, "outflow", seq=10)
-        guard.action_recompute_projection()
+        self._recompute_with_zero_initial(guard)
         self.assertEqual(guard.forecast_final_balance, 700.0)
         self.assertEqual(guard.forecast_min_balance, 0.0)
         self.assertEqual(guard.risk_status, "warning")
@@ -89,7 +80,7 @@ class TestCashGuardCalc(SavepointCase):
         line_a = self._create_line(guard, "2026-05-10", 200.0, "outflow", seq=20)
         line_b = self._create_line(guard, "2026-05-10", 100.0, "inflow", seq=10)
         line_c = self._create_line(guard, "2026-05-10", 50.0, "outflow", seq=20)
-        guard.action_recompute_projection()
+        self._recompute_with_zero_initial(guard)
 
         ordered = guard.line_ids.sorted(
             key=lambda l: (l.projection_date, l.sequence, l.id)
@@ -100,26 +91,26 @@ class TestCashGuardCalc(SavepointCase):
         self.assertEqual(ordered[2].balance_after_line, -150.0)
 
     def test_risk_statuses_safe_warning_risk(self):
-        guard_safe = self._create_guard(threshold=50.0)
+        guard_safe = self._create_guard(threshold=0.0)
         self._create_line(guard_safe, "2026-05-02", 200.0, "inflow")
-        guard_safe.action_recompute_projection()
+        self._recompute_with_zero_initial(guard_safe)
         self.assertEqual(guard_safe.risk_status, "safe")
 
         guard_warning = self._create_guard(threshold=150.0)
         self._create_line(guard_warning, "2026-05-02", 100.0, "inflow")
-        guard_warning.action_recompute_projection()
+        self._recompute_with_zero_initial(guard_warning)
         self.assertEqual(guard_warning.risk_status, "warning")
 
         guard_risk = self._create_guard(threshold=10.0)
         self._create_line(guard_risk, "2026-05-02", 50.0, "outflow")
-        guard_risk.action_recompute_projection()
+        self._recompute_with_zero_initial(guard_risk)
         self.assertEqual(guard_risk.risk_status, "risk")
 
     def test_risk_when_final_positive_but_min_negative(self):
         guard = self._create_guard(threshold=0.0)
         self._create_line(guard, "2026-05-02", 150.0, "outflow")
         self._create_line(guard, "2026-05-03", 200.0, "inflow")
-        guard.action_recompute_projection()
+        self._recompute_with_zero_initial(guard)
         self.assertEqual(guard.forecast_final_balance, 50.0)
         self.assertEqual(guard.forecast_min_balance, -150.0)
         self.assertEqual(guard.risk_status, "risk")
@@ -127,7 +118,7 @@ class TestCashGuardCalc(SavepointCase):
     def test_simulated_line_included_in_projection(self):
         guard = self._create_guard(threshold=0.0)
         self._create_line(guard, "2026-05-02", 100.0, "outflow", line_type="simulated")
-        guard.action_recompute_projection()
+        self._recompute_with_zero_initial(guard)
         self.assertEqual(guard.forecast_final_balance, -100.0)
         # En V1, il n'y a pas encore d'option d'exclusion des simulations.
         self.assertEqual(guard.risk_status, "risk")

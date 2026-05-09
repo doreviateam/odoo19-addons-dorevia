@@ -17,6 +17,7 @@ Fonctions principales:
     "license": "LGPL-3",
     "depends": ["account", "base_account_budget", "mail"],
     "data": [
+        "security/dorevia_cash_guard_security.xml",
         "security/ir.model.access.csv",
         "data/sequence.xml",
         "views/cash_guard_views.xml",
