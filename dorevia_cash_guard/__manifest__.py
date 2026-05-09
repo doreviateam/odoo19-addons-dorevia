@@ -20,6 +20,7 @@ Fonctions principales:
         "security/dorevia_cash_guard_security.xml",
         "security/ir.model.access.csv",
         "data/sequence.xml",
+        "data/cash_guard_cron.xml",
         "views/cash_guard_views.xml",
         "views/menus.xml",
     ],

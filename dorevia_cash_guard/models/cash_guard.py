@@ -255,3 +255,10 @@ class DoreviaCashGuard(models.Model):
     def write(self, vals):
         self._check_write_permissions_by_state(vals)
         return super().write(vals)
+
+    @api.model
+    def _cron_recompute_open_points(self):
+        """Cron optionnel: recalcule uniquement les points ouverts."""
+        guards = self.sudo().search([("state", "in", ("draft", "validated"))])
+        guards.action_recompute_projection()
+        return True
