@@ -318,8 +318,15 @@ Mode d’initialisation :
 
 Note V0.1 :
 
-- la V1 peut fournir la nomenclature documentaire des 20 postes ;
-- le seed XML automatique reste optionnel, car il nécessite un mapping fiable avec le plan comptable de l’instance (comptes associés aux postes).
+- la V1 fournit une nomenclature documentaire complète des 20 postes standards avec :
+  - nom ;
+  - sens cash par défaut ;
+  - famille entrée/sortie ;
+  - ordre d'affichage ;
+  - description métier ;
+  - comptes comptables suggérés ;
+- le seed XML automatique reste optionnel, car il nécessite un mapping fiable avec le plan comptable de l’instance (comptes associés aux postes) ;
+- aucun chargement automatique des postes sans validation manuelle préalable du mapping comptes dans l'instance.
 
 ### 8.2 Séquences
 

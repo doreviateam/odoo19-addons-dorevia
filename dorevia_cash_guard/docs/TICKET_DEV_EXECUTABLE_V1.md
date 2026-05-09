@@ -326,21 +326,30 @@ Ordre de réalisation retenu :
 
 ### Portée
 
-- fournir nomenclature documentaire des 20 postes ;
-- optionnel : seed XML idempotent si mapping comptable fiable disponible ;
+- fournir un référentiel documentaire complet des 20 postes standards avec, pour chaque poste :
+  - nom ;
+  - sens cash par défaut ;
+  - famille entrée/sortie ;
+  - ordre d'affichage ;
+  - description métier ;
+  - comptes comptables suggérés ;
+- optionnel : seed XML idempotent activable uniquement si mapping comptable fiable disponible ;
 - ne pas charger `budget_post_seed.xml` par défaut si les comptes comptables cibles ne sont pas garantis ;
+- prévoir validation manuelle du mapping comptes dans l'instance ;
 - ne pas casser une instance sans mapping.
 
 ### Livrables
 
+- document de référence des 20 postes (`docs` ou `data` de référence) ;
 - `data/budget_post_seed.xml` (optionnel activable) ;
-- note d’exploitation sur prérequis mapping comptes.
+- note d’exploitation sur prérequis et validation manuelle du mapping comptes.
 
 ### Critères d’acceptation
 
 - aucun doublon à réinstallation/mise à jour ;
 - aucune création invalide de poste sans comptes requis ;
-- activation/désactivation du seed maîtrisée.
+- activation/désactivation du seed maîtrisée ;
+- aucun chargement automatique des postes tant que le mapping comptable n'est pas explicitement validé.
 
 ---
 
