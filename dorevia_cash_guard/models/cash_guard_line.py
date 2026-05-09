@@ -5,6 +5,28 @@ from odoo.exceptions import ValidationError
 
 
 class DoreviaCashGuardLine(models.Model):
+    _RECOMPUTE_TRIGGER_FIELDS = {
+        "guard_id",
+        "projection_date",
+        "budget_post_id",
+        "budget_line_id",
+        "analytic_account_id",
+        "direction",
+        "line_type",
+        "label",
+        "projected_amount",
+        "realized_amount",
+        "partner_id",
+        "source_move_id",
+        "source_move_line_id",
+        "bank_move_line_id",
+        "certainty",
+        "priority",
+        "cash_state",
+        "sequence",
+        "note",
+    }
+
     _name = "dorevia.cash.guard.line"
     _description = "Dorevia Cash Guard Line"
     _order = "projection_date asc, sequence asc, id asc"
@@ -119,16 +141,21 @@ class DoreviaCashGuardLine(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         lines = super().create(vals_list)
-        lines.mapped("guard_id").action_recompute_projection()
+        if not self.env.context.get("skip_cash_guard_recompute"):
+            lines.mapped("guard_id").action_recompute_projection()
         return lines
 
     def write(self, vals):
         res = super().write(vals)
-        self.mapped("guard_id").action_recompute_projection()
+        if self.env.context.get("skip_cash_guard_recompute"):
+            return res
+        if set(vals).intersection(self._RECOMPUTE_TRIGGER_FIELDS):
+            self.mapped("guard_id").action_recompute_projection()
         return res
 
     def unlink(self):
         guards = self.mapped("guard_id")
         res = super().unlink()
-        guards.action_recompute_projection()
+        if not self.env.context.get("skip_cash_guard_recompute"):
+            guards.action_recompute_projection()
         return res

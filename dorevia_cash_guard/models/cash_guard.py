@@ -63,14 +63,6 @@ class DoreviaCashGuard(models.Model):
     line_ids = fields.One2many("dorevia.cash.guard.line", "guard_id")
     note = fields.Text()
 
-    _sql_constraints = [
-        (
-            "dorevia_cash_guard_company_name_uniq",
-            "unique(company_id, name)",
-            "Le nom du point de tresorerie doit etre unique par societe.",
-        ),
-    ]
-
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -98,6 +90,24 @@ class DoreviaCashGuard(models.Model):
             if guard.bank_journal_id.company_id != guard.company_id:
                 raise ValidationError(
                     _("Le journal doit appartenir a la meme societe que le point.")
+                )
+
+    @api.constrains("name", "company_id")
+    def _check_name_company_unique(self):
+        for guard in self:
+            if not guard.name or not guard.company_id:
+                continue
+            duplicate = self.search(
+                [
+                    ("id", "!=", guard.id),
+                    ("name", "=", guard.name),
+                    ("company_id", "=", guard.company_id.id),
+                ],
+                limit=1,
+            )
+            if duplicate:
+                raise ValidationError(
+                    _("Le nom du point de tresorerie doit etre unique par societe.")
                 )
 
     def _get_liquidity_account_ids(self):
@@ -163,12 +173,14 @@ class DoreviaCashGuard(models.Model):
             )
             for line in ordered_lines:
                 running_balance += line.signed_projected_amount
-                line.balance_after_line = running_balance
+                line.with_context(skip_cash_guard_recompute=True).write(
+                    {"balance_after_line": running_balance}
+                )
                 if running_balance < min_balance:
                     min_balance = running_balance
                     min_balance_date = line.projection_date
 
-            guard.write(
+            guard.with_context(skip_cash_guard_recompute=True).write(
                 {
                     "initial_balance": initial_balance,
                     "forecast_final_balance": running_balance,
