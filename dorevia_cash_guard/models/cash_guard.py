@@ -143,18 +143,14 @@ class DoreviaCashGuard(models.Model):
         liquidity_account_ids = self._get_liquidity_account_ids()
         domain = [
             ("company_id", "=", self.company_id.id),
+            ("journal_id", "=", self.bank_journal_id.id),
             ("parent_state", "=", "posted"),
             ("date", "<=", self.date_from),
         ]
         if liquidity_account_ids:
-            domain += [
-                "|",
-                ("journal_id", "=", self.bank_journal_id.id),
-                ("account_id", "in", liquidity_account_ids),
-            ]
-        else:
-            domain.append(("journal_id", "=", self.bank_journal_id.id))
-        move_lines = self.env["account.move.line"].search(domain)
+            domain.append(("account_id", "in", liquidity_account_ids))
+        # Lecture comptable en sudo: seul le solde agrege est renvoye.
+        move_lines = self.env["account.move.line"].sudo().search(domain)
         return sum(move_lines.mapped("balance"))
 
     def _compute_risk_status(self, min_balance):
@@ -234,6 +230,10 @@ class DoreviaCashGuard(models.Model):
         return True
 
     def action_close(self):
+        if not self._is_cash_guard_manager():
+            raise UserError(
+                _("Seul un manager Cash Guard peut cloturer un point de tresorerie.")
+            )
         for guard in self:
             if guard.state != "validated":
                 raise UserError(
