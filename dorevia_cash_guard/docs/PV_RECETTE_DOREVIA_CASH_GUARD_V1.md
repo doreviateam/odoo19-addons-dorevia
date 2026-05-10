@@ -1,4 +1,6 @@
-# PV_RECETTE_DOREVIA_CASH_GUARD_V1
+# PV_RECETTE_DOREVIA_CASH_GUARD_V1_PLUS_EXTENSIONS
+
+*Nom de fichier conservé : `PV_RECETTE_DOREVIA_CASH_GUARD_V1.md` (liens et historique).*
 
 ## 1. Objet
 
@@ -231,12 +233,22 @@ Date d’acte :
 
 - **2026-05-10**
 
+### 10.8 Points hors jalon à traiter ultérieurement
+
+- prévisionnel attendu issu du budget ;
+- règles de ventilation de trésorerie ;
+- simulations avancées ;
+- intégration éventuelle LYNKR / Vault ;
+- amélioration du chatter.
+
+*(Le périmètre V1.2 acté ci-dessus couvre uniquement le **prévisionnel engagé par factures ouvertes**.)*
+
 ---
 
 ## 11. Signature / Validation (mise à jour V1.2)
 
 Statut après extension :
 
-- **Dorevia Cash Guard V1 + V1.2 — GO**
+- **Dorevia Cash Guard V1 étendue V1.2 — GO**
 
 *(À compléter : validateur produit, validateur technique, signature si formalisme interne.)*
