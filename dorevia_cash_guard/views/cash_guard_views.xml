@@ -118,9 +118,9 @@
                                     <field name="week_label"/>
                                     <field name="date_from"/>
                                     <field name="date_to"/>
-                                    <field name="period_type"/>
+                                    <field name="period_type" string="État"/>
                                     <field name="closing_balance"/>
-                                    <field name="projected_balance"/>
+                                    <field name="projected_balance" string="Projection"/>
                                     <field name="risk_status"/>
                                 </list>
                             </field>
