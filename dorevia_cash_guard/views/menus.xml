@@ -2,7 +2,7 @@
 <odoo>
     <menuitem
         id="menu_dorevia_cash_guard_root"
-        name="Sécurité Trésorerie"
+        name="Prévision de trésorerie"
         parent="account.menu_finance"
         groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="90"

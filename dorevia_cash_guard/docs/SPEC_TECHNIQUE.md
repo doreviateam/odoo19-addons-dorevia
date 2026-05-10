@@ -33,7 +33,11 @@ Fournir un module Odoo permettant de :
 ### 2.1 Nom technique
 
 - Module : `dorevia_cash_guard`
-- Dépendances minimales : `account`, `base_account_budget`, `mail`
+- Dépendances minimales : `account`, `base_account_budget`, `base_accounting_kit`, `mail`
+
+### 2.1 bis Environnement de recette (référence sandbox)
+
+Pour les tests manuels et la mise à jour module sur la stack Docker Dorevia : URL `http://localhost:18079`, base PostgreSQL **`tenant_o8`** (lettre **o**, pas `tenant_08`), commandes détaillées dans `docs/SCENARIO_MANUEL_V1_1_HEBDO.md`.
 
 ### 2.2 Arborescence cible
 
@@ -243,7 +247,7 @@ Convention figée V0.1 : montants absolus + `direction`, avec champs signés cal
 ### 6.1 Menus
 
 ```text
-Comptabilité / Trésorerie / Sécurité Trésorerie
+Comptabilité / Trésorerie / Prévision de trésorerie
 ```
 
 Sous-menus :
@@ -267,7 +271,7 @@ Blocs :
 - Indicateurs : seuil, soldes, statut
 - Onglet lignes : one2many éditable
 - Onglet analyse : synthèse prévu/réalisé simple
-- Boutons : recalculer, valider, clôturer
+- Boutons : actualiser (recalcul), valider, clôturer
 
 ### 6.4 Vue lignes
 

@@ -5,7 +5,7 @@ Objectif : verifier rapidement le Lot A (scaffold, modeles, contraintes, moteur 
 Contexte de recette :
 
 - URL : `http://localhost:18079`
-- Base : `tenant_01`
+- Base : `tenant_o8` *(lettre **o**, pas `tenant_08` avec un zéro)*
 - Module : `dorevia_cash_guard`
 
 ---
@@ -14,7 +14,7 @@ Contexte de recette :
 
 1. Mettre a jour la liste des apps.
 2. Installer `dorevia_cash_guard`.
-3. Verifier que le menu **Securite Tresorerie** apparait.
+3. Verifier que le menu **Prévision de trésorerie** apparait.
 
 Attendu :
 
@@ -52,7 +52,7 @@ Les montants attendus dans les scenarios doivent donc etre lus relativement au s
 2. Ajouter deux lignes :
    - ligne 1 : entree `2000`, date J+1 ;
    - ligne 2 : sortie `500`, date J+2.
-3. Cliquer **Recalculer**.
+3. Cliquer **Actualiser**.
 
 Attendu :
 
@@ -70,7 +70,7 @@ Exemple de lecture (si `initial_balance = 10 000`) :
 
 1. Reprendre le meme point.
 2. Ajuster les lignes pour obtenir un point bas >= 0 et < seuil.
-3. Recalculer.
+3. Actualiser.
 
 Attendu :
 
@@ -88,7 +88,7 @@ Exemple de lecture (si `initial_balance = 10 000`) :
 ## 4. Cas nominal : statut `risk`
 
 1. Ajouter une sortie supplementaire qui fait passer le solde sous 0.
-2. Recalculer.
+2. Actualiser.
 
 Attendu :
 
@@ -118,7 +118,7 @@ Verifier que les creations suivantes sont bloquees :
 ## 6. Determinisme de calcul
 
 1. Creer plusieurs lignes meme date avec sequences differentes.
-2. Recalculer.
+2. Actualiser.
 3. Verifier l'ordre applique : `projection_date`, `sequence`, `id`.
 
 Attendu :
@@ -131,7 +131,7 @@ Attendu :
 
 1. Creer une ligne avec `line_type = simulated`.
 2. Renseigner une sortie significative.
-3. Recalculer.
+3. Actualiser.
 
 Attendu :
 
@@ -145,7 +145,7 @@ Attendu :
 1. Creer un point avec un solde initial positif.
 2. Ajouter une sortie datee J+1 qui fait passer le solde sous zero.
 3. Ajouter une entree datee J+2 qui remet le solde final positif.
-4. Recalculer.
+4. Actualiser.
 
 Attendu :
 

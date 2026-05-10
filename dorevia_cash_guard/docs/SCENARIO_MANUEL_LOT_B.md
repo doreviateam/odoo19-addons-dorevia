@@ -5,7 +5,7 @@ Objectif : valider manuellement le Lot B (securite, workflow, UI, prevu/realise 
 Contexte de recette :
 
 - URL : `http://localhost:18079`
-- Base : `tenant_01`
+- Base : `tenant_o8` *(lettre **o**, pas `tenant_08` avec un zéro)*
 - Module : `dorevia_cash_guard`
 
 ---
@@ -35,7 +35,7 @@ Verifier aussi que le module est a jour :
 ## 2. Controle securite et acces
 
 1. Se connecter avec un utilisateur sans groupe Cash Guard.
-2. Verifier que le menu **Securite Tresorerie** n'est pas accessible.
+2. Verifier que le menu **Prévision de trésorerie** n'est pas accessible.
 3. Se connecter avec un utilisateur **Cash Guard User**.
 4. Verifier acces menu, points et lignes.
 5. Se connecter avec **Cash Guard Manager**.
@@ -131,7 +131,7 @@ Attendu :
 
 1. Creer une ligne `planned`.
 2. Renseigner `projected_amount` puis `realized_amount`.
-3. Recalculer.
+3. Actualiser.
 4. Verifier :
    - `signed_projected_amount` ;
    - `signed_realized_amount` ;

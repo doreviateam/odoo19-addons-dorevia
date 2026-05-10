@@ -5,7 +5,7 @@ Objectif : valider manuellement le Lot C (seed optionnel documentaire + cron opt
 Contexte de recette :
 
 - URL : `http://localhost:18079`
-- Base : `tenant_01`
+- Base : `tenant_o8` *(lettre **o**, pas `tenant_08` avec un zéro)*
 - Module : `dorevia_cash_guard`
 
 ---

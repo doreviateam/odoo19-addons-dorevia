@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import ValidationError
 
 
 class DoreviaCashGuardLine(models.Model):
@@ -168,28 +168,12 @@ class DoreviaCashGuardLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if not self.env.context.get("skip_cash_guard_recompute"):
-            is_manager = self.env.user.has_group("dorevia_cash_guard.group_cash_guard_manager")
-            for vals in vals_list:
-                guard_id = vals.get("guard_id")
-                if not guard_id:
-                    continue
-                guard = self.env["dorevia.cash.guard"].browse(guard_id)
-                if guard.state != "draft" and not is_manager:
-                    raise UserError("Les flux ne sont modifiables qu'en brouillon.")
         lines = super().create(vals_list)
         if not self.env.context.get("skip_cash_guard_recompute"):
             lines.mapped("guard_id").action_recompute_projection()
         return lines
 
     def write(self, vals):
-        if not self.env.context.get("skip_cash_guard_recompute"):
-            guards = self.mapped("guard_id")
-            if any(g.state != "draft" for g in guards):
-                if not self.env.user.has_group("dorevia_cash_guard.group_cash_guard_manager"):
-                    raise UserError(
-                        "Les flux ne sont modifiables qu'en brouillon (sauf manager)."
-                    )
         res = super().write(vals)
         if self.env.context.get("skip_cash_guard_recompute"):
             return res
@@ -199,12 +183,6 @@ class DoreviaCashGuardLine(models.Model):
 
     def unlink(self):
         guards = self.mapped("guard_id")
-        if not self.env.context.get("skip_cash_guard_recompute"):
-            if any(g.state != "draft" for g in guards):
-                if not self.env.user.has_group("dorevia_cash_guard.group_cash_guard_manager"):
-                    raise UserError(
-                        "Les flux ne sont supprimables qu'en brouillon (sauf manager)."
-                    )
         res = super().unlink()
         if not self.env.context.get("skip_cash_guard_recompute"):
             guards.action_recompute_projection()

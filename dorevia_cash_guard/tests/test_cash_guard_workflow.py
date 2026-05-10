@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from datetime import date
+
+from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
+from unittest.mock import patch
 
 
 class TestCashGuardWorkflow(TransactionCase):
@@ -36,10 +40,10 @@ class TestCashGuardWorkflow(TransactionCase):
         )
         if not cls.cash_user:
             cls.cash_user = cls.cash_manager
-        cls.cash_user.write({"groups_id": [(4, cls.base_user_group.id), (4, cls.group_user.id)]})
+        cls.cash_user.write({"group_ids": [(4, cls.base_user_group.id), (4, cls.group_user.id)]})
         cls.cash_manager.write(
             {
-                "groups_id": [
+                "group_ids": [
                     (4, cls.base_user_group.id),
                     (4, cls.group_user.id),
                     (4, cls.group_manager.id),
@@ -48,15 +52,16 @@ class TestCashGuardWorkflow(TransactionCase):
         )
 
     def _create_guard(self, user):
-        return self.env["dorevia.cash.guard"].with_user(user).create(
-            {
-                "date_from": "2026-05-01",
-                "date_to": "2026-05-31",
-                "bank_journal_id": self.bank_journal.id,
-                "company_id": self.company.id,
-                "alert_threshold": 100.0,
-            }
-        )
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 10)):
+            return self.env["dorevia.cash.guard"].with_user(user).create(
+                {
+                    "date_from": "2026-05-01",
+                    "date_to": "2026-05-31",
+                    "bank_journal_id": self.bank_journal.id,
+                    "company_id": self.company.id,
+                    "alert_threshold": 100.0,
+                }
+            )
 
     def test_workflow_state_transitions(self):
         guard = self._create_guard(self.cash_user)
@@ -75,21 +80,16 @@ class TestCashGuardWorkflow(TransactionCase):
         with self.assertRaises(UserError):
             guard.with_user(self.cash_user).action_reopen()
 
-    def test_non_manager_cannot_edit_validated_structural_fields(self):
+    def test_user_can_edit_structural_fields_after_legacy_validate(self):
+        """V1.1 : plus de verrouillage selon ``state`` en UI ; les anciens états restent en base."""
         if self.cash_user.id == self.cash_manager.id:
             self.skipTest("No dedicated non-manager user available in this environment.")
         guard = self._create_guard(self.cash_user)
         guard.with_user(self.cash_user).action_validate()
-        with self.assertRaises(UserError):
-            guard.with_user(self.cash_user).write({"alert_threshold": 50.0})
-
-    def test_manager_can_edit_validated_structural_fields(self):
-        guard = self._create_guard(self.cash_user)
-        guard.with_user(self.cash_user).action_validate()
-        guard.with_user(self.cash_manager).write({"alert_threshold": 50.0})
+        guard.with_user(self.cash_user).write({"alert_threshold": 50.0})
         self.assertEqual(guard.alert_threshold, 50.0)
 
-    def test_non_manager_cannot_edit_lines_when_validated(self):
+    def test_user_can_edit_lines_after_legacy_validate(self):
         if self.cash_user.id == self.cash_manager.id:
             self.skipTest("No dedicated non-manager user available in this environment.")
         guard = self._create_guard(self.cash_user)
@@ -107,5 +107,5 @@ class TestCashGuardWorkflow(TransactionCase):
             }
         )
         guard.with_user(self.cash_user).action_validate()
-        with self.assertRaises(UserError):
-            line.with_user(self.cash_user).write({"projected_amount": 120.0})
+        line.with_user(self.cash_user).write({"projected_amount": 120.0})
+        self.assertEqual(line.projected_amount, 120.0)

@@ -2,6 +2,8 @@
 
 Module Odoo 19 CE — **Sécurité Trésorerie**
 
+**Environnement de recette de référence** : URL `http://localhost:18079`, base PostgreSQL **`tenant_o8`** (lettre **o**, pas `tenant_08`), module `dorevia_cash_guard`. Les commandes `docker compose` se lancent depuis le dossier du stack où se trouve **`docker-compose.yml`** (ex. `~/sandbox-odoo19` ; adapter le chemin). Détail et parcours manuel V1.1 : `docs/SCENARIO_MANUEL_V1_1_HEBDO.md`.
+
 ## 1. Objectif
 
 `dorevia_cash_guard` est un module de projection de trésorerie destiné à anticiper les tensions de cash avant qu’elles ne deviennent critiques.
@@ -31,7 +33,7 @@ Le principe directeur est simple :
 | Élément | Valeur |
 |---|---|
 | Module technique | `dorevia_cash_guard` |
-| Nom métier Odoo | Sécurité Trésorerie |
+| Entrée menu (racine Comptabilité) | Prévision de trésorerie |
 | Objet principal | Point de trésorerie |
 | Lignes | Flux prévisionnels |
 | Référentiel pivot | Postes budgétaires |
@@ -65,10 +67,16 @@ Phrase de cadrage :
 Le module dépend de :
 
 ```text
+account
 base_account_budget
+base_accounting_kit
+mail
 ```
 
-Cette dépendance permet de réutiliser la notion de **poste budgétaire**.
+- **`account`** : comptabilité (écritures, journaux, soldes).
+- **`base_account_budget`** : postes budgétaires réutilisés comme pivot des flux.
+- **`base_accounting_kit`** : socle comptable / UX attendu sur les instances Dorevia qui livrent Cash Guard avec ce kit (ordre de chargement et cohérence menu).
+- **`mail`** : fil de discussion et activités sur les points de trésorerie.
 
 Modèles réutilisés :
 

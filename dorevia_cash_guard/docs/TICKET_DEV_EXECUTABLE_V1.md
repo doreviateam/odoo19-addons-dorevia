@@ -4,6 +4,8 @@
 **Version de référence** : `README.md v0.1` + `SPEC_TECHNIQUE v0.1`  
 **Statut** : **Prêt à exécuter**
 
+**Environnement de recette (référence)** : URL `http://localhost:18079`, base PostgreSQL **`tenant_o8`** (lettre **o**, pas `tenant_08`), module `dorevia_cash_guard`. Commandes Docker : `docs/SCENARIO_MANUEL_V1_1_HEBDO.md`.
+
 ---
 
 ## 1. Objectif
@@ -57,7 +59,7 @@ Ordre de réalisation retenu :
 ### Portée
 
 - créer le squelette module `dorevia_cash_guard` ;
-- déclarer `depends` : `account`, `base_account_budget`, `mail` ;
+- déclarer `depends` : `account`, `base_account_budget`, `base_accounting_kit`, `mail` ;
 - enregistrer fichiers `models`, `views`, `security`, `data` (même si partiels).
 
 ### Livrables
@@ -166,7 +168,7 @@ Ordre de réalisation retenu :
 ### Livrables
 
 - méthodes de recalcul dans les modèles ;
-- bouton/action “Recalculer”.
+- bouton/action « Actualiser » (recalcul).
 
 ### Critères d’acceptation
 
@@ -272,7 +274,7 @@ Ordre de réalisation retenu :
 
 ### Portée
 
-- menu `Comptabilité / Trésorerie / Sécurité Trésorerie` ;
+- menu `Comptabilité / Trésorerie / Prévision de trésorerie` ;
 - vues liste/form du point ;
 - one2many lignes dans le formulaire ;
 - vue liste lignes avec filtres clés ;
@@ -389,7 +391,7 @@ La V1 est considérée livrable si :
 - documentation mise à jour (`README.md`, `SPEC_TECHNIQUE.md`, ce fichier) ;
 - mise à jour explicite du `README.md` en cas d’écart d’implémentation ;
 - mise à jour explicite de `SPEC_TECHNIQUE.md` en cas d’arbitrage technique différent ;
-- mini-recette utilisateur validée : créer un point, ajouter des flux, recalculer, lire le statut.
+- mini-recette utilisateur validée : créer un point, ajouter des flux, actualiser, lire le statut.
 
 ---
 

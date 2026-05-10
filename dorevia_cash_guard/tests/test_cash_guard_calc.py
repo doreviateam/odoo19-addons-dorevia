@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from datetime import date
+
+from odoo import fields
 from odoo.tests.common import TransactionCase
 from unittest.mock import patch
 
@@ -12,6 +15,10 @@ class TestCashGuardCalc(TransactionCase):
         if not cls.bank_journal:
             raise AssertionError("Aucun journal bancaire disponible pour les tests.")
         cls.company = cls.bank_journal.company_id
+        cls.cash_journal = cls.env["account.journal"].search(
+            [("type", "=", "cash"), ("company_id", "=", cls.company.id)],
+            limit=1,
+        )
         cls.currency = cls.company.currency_id
         cls.account = (
             cls.bank_journal.default_account_id
@@ -29,15 +36,16 @@ class TestCashGuardCalc(TransactionCase):
         )
 
     def _create_guard(self, threshold=0.0):
-        return self.env["dorevia.cash.guard"].create(
-            {
-                "date_from": "2026-05-01",
-                "date_to": "2026-05-31",
-                "bank_journal_id": self.bank_journal.id,
-                "company_id": self.company.id,
-                "alert_threshold": threshold,
-            }
-        )
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 1)):
+            return self.env["dorevia.cash.guard"].create(
+                {
+                    "date_from": "2026-05-01",
+                    "date_to": "2026-05-31",
+                    "bank_journal_id": self.bank_journal.id,
+                    "company_id": self.company.id,
+                    "alert_threshold": threshold,
+                }
+            )
 
     def _create_line(self, guard, date_, amount, direction, seq=10, line_type="planned"):
         return self.env["dorevia.cash.guard.line"].create(
@@ -55,8 +63,14 @@ class TestCashGuardCalc(TransactionCase):
         )
 
     def _recompute_with_zero_initial(self, guard):
-        with patch.object(type(guard), "_compute_initial_balance", return_value=0.0):
-            guard.action_recompute_projection()
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 1)):
+            with patch.object(type(guard), "_compute_bank_balance_at_date", return_value=0.0):
+                with patch.object(
+                    type(guard),
+                    "_search_open_invoice_moves",
+                    return_value=self.env["account.move"],
+                ):
+                    guard.action_recompute_projection()
 
     def test_initial_balance_only(self):
         guard = self._create_guard(threshold=100.0)
@@ -67,7 +81,7 @@ class TestCashGuardCalc(TransactionCase):
         self.assertEqual(guard.risk_status, "warning")
 
     def test_projection_simple_inflow_outflow(self):
-        guard = self._create_guard(threshold=500.0)
+        guard = self._create_guard(threshold=800.0)
         self._create_line(guard, "2026-05-02", 1000.0, "inflow", seq=10)
         self._create_line(guard, "2026-05-03", 300.0, "outflow", seq=10)
         self._recompute_with_zero_initial(guard)
@@ -108,8 +122,8 @@ class TestCashGuardCalc(TransactionCase):
 
     def test_risk_when_final_positive_but_min_negative(self):
         guard = self._create_guard(threshold=0.0)
-        self._create_line(guard, "2026-05-02", 150.0, "outflow")
-        self._create_line(guard, "2026-05-03", 200.0, "inflow")
+        self._create_line(guard, "2026-05-08", 150.0, "outflow")
+        self._create_line(guard, "2026-05-15", 200.0, "inflow")
         self._recompute_with_zero_initial(guard)
         self.assertEqual(guard.forecast_final_balance, 50.0)
         self.assertEqual(guard.forecast_min_balance, -150.0)
@@ -132,3 +146,96 @@ class TestCashGuardCalc(TransactionCase):
         self.assertEqual(line.signed_projected_amount, -120.0)
         self.assertEqual(line.signed_realized_amount, -100.0)
         self.assertEqual(line.variance_amount, 20.0)
+
+    def test_alert_threshold_write_updates_risk_status(self):
+        guard = self._create_guard(threshold=250.0)
+        self._create_line(guard, "2026-05-02", 200.0, "inflow")
+        self._recompute_with_zero_initial(guard)
+        self.assertEqual(guard.forecast_final_balance, 200.0)
+        self.assertEqual(guard.risk_status, "warning")
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 1)):
+            with patch.object(type(guard), "_compute_bank_balance_at_date", return_value=0.0):
+                with patch.object(
+                    type(guard),
+                    "_search_open_invoice_moves",
+                    return_value=self.env["account.move"],
+                ):
+                    guard.write({"alert_threshold": 0.0})
+        self.assertEqual(guard.risk_status, "safe")
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 1)):
+            with patch.object(type(guard), "_compute_bank_balance_at_date", return_value=0.0):
+                with patch.object(
+                    type(guard),
+                    "_search_open_invoice_moves",
+                    return_value=self.env["account.move"],
+                ):
+                    guard.write({"alert_threshold": 250.0})
+        self.assertEqual(guard.risk_status, "warning")
+
+    def test_liquidity_journal_write_recomputes_observed_balance(self):
+        if not self.cash_journal:
+            self.skipTest("Aucun journal de caisse disponible pour les tests.")
+        guard = self._create_guard(threshold=0.0)
+
+        def balance_from_journal_count(record, target_date):
+            return 100.0 * len(record._liquidity_journals())
+
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 1)):
+            with patch.object(
+                type(guard),
+                "_compute_bank_balance_at_date",
+                autospec=True,
+                side_effect=balance_from_journal_count,
+            ):
+                with patch.object(
+                    type(guard),
+                    "_search_open_invoice_moves",
+                    return_value=self.env["account.move"],
+                ):
+                    guard.write(
+                        {
+                            "liquidity_journal_ids": [
+                                (6, 0, [self.bank_journal.id, self.cash_journal.id])
+                            ]
+                        }
+                    )
+
+        self.assertEqual(guard.observed_balance, 200.0)
+        self.assertEqual(guard.forecast_final_balance, 200.0)
+
+    def test_liquidity_journal_onchange_previews_observed_balance(self):
+        if not self.cash_journal:
+            self.skipTest("Aucun journal de caisse disponible pour les tests.")
+        guard = self.env["dorevia.cash.guard"].new(
+            {
+                "date_from": "2026-05-01",
+                "date_to": "2026-05-31",
+                "company_id": self.company.id,
+                "alert_threshold": 0.0,
+                "liquidity_journal_ids": [(6, 0, [self.bank_journal.id])],
+            }
+        )
+
+        def balance_from_journal_count(record, target_date):
+            return 100.0 * len(record._liquidity_journals())
+
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 1)):
+            with patch.object(
+                type(guard),
+                "_compute_bank_balance_at_date",
+                autospec=True,
+                side_effect=balance_from_journal_count,
+            ):
+                with patch.object(
+                    type(guard),
+                    "_search_open_invoice_moves",
+                    return_value=self.env["account.move"],
+                ):
+                    guard._onchange_projection_inputs()
+                    self.assertEqual(guard.observed_balance, 100.0)
+
+                    guard.liquidity_journal_ids = self.bank_journal | self.cash_journal
+                    guard._onchange_projection_inputs()
+
+        self.assertEqual(guard.observed_balance, 200.0)
+        self.assertEqual(guard.forecast_final_balance, 200.0)

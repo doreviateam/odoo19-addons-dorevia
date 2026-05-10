@@ -27,7 +27,8 @@ Hors périmètre confirmé V1 :
 ## 3. Environnement de recette
 
 - URL : `http://localhost:18079`
-- Base : `tenant_01`
+- Base : `tenant_o8` *(lettre **o**, pas `tenant_08` avec un zéro ; les recettes Lots A/B/C documentées historiquement sous `tenant_01` restent valables sur une base équivalente.)*
+- Module : `dorevia_cash_guard`
 - Version Odoo : `19.0-20260324`
 - Addons path module : `/mnt/odoo19-addons-dorevia/dorevia_cash_guard`
 

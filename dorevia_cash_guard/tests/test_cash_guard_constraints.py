@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from datetime import date
+
+from odoo import fields
 from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
+from unittest.mock import patch
 
 
 class TestCashGuardConstraints(TransactionCase):
@@ -44,6 +48,13 @@ class TestCashGuardConstraints(TransactionCase):
         with self.assertRaises(ValidationError):
             self.env["dorevia.cash.guard"].create(vals)
 
+    def test_situation_date_write_ignored(self):
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 15)):
+            guard = self.env["dorevia.cash.guard"].create(self._base_guard_vals())
+            prev = guard.situation_date
+        guard.write({"situation_date": "2026-01-01"})
+        self.assertEqual(guard.situation_date, prev)
+
     def test_negative_threshold(self):
         vals = self._base_guard_vals()
         vals["alert_threshold"] = -1.0
@@ -53,6 +64,13 @@ class TestCashGuardConstraints(TransactionCase):
     def test_journal_must_be_bank_or_cash(self):
         vals = self._base_guard_vals()
         vals["bank_journal_id"] = self.sale_journal.id
+        with self.assertRaises(ValidationError):
+            self.env["dorevia.cash.guard"].create(vals)
+
+    def test_liquidity_journal_must_be_bank_or_cash(self):
+        vals = self._base_guard_vals()
+        vals.pop("bank_journal_id", None)
+        vals["liquidity_journal_ids"] = [(6, 0, [self.sale_journal.id])]
         with self.assertRaises(ValidationError):
             self.env["dorevia.cash.guard"].create(vals)
 
