@@ -2,9 +2,9 @@
 
 ## 1. Objet
 
-Procès-verbal de recette de la V1 du module `dorevia_cash_guard` (Odoo 19 CE).
+Procès-verbal de recette du module `dorevia_cash_guard` (Odoo 19 CE).
 
-Ce document acte les résultats de recette des Lots A, B et C, ainsi que la décision de clôture V1.
+Ce document acte les résultats de recette des Lots A, B et C, la décision de clôture V1, puis **l’extension V1.2** (solde projeté depuis factures ouvertes).
 
 ---
 
@@ -158,3 +158,85 @@ Date de clôture V1 :
 Statut final :
 
 - **Dorevia Cash Guard V1 — GO**
+
+---
+
+## 10. Extension V1.2 — Solde projeté depuis factures ouvertes
+
+### 10.1 Périmètre
+
+Ticket : `CG-V1.2-01-PROJECTED-BALANCE-FROM-OPEN-INVOICES`.
+
+Inclus :
+
+- colonne **Solde projeté** sur le suivi de trésorerie (`dorevia.cash.guard.week`) ;
+- calcul agrégé depuis `account.move` : pièces **postées** avec **`amount_residual ≠ 0`** ;
+- date projetée : `max(invoice_date_due or invoice_date or situation_date, situation_date)` ;
+- statuts de ligne et statut global du point basés sur la **trajectoire projetée forward** (à partir de la date de situation).
+
+Hors périmètre V1.2 (confirmé) :
+
+- budget, devis, simulations avancées, lignes de flux automatiques `dorevia.cash.guard.line` pour les factures.
+
+Référence scénario manuel : `docs/SCENARIO_MANUEL_V1_2_FACTURES_OUVERTES.md`.
+
+### 10.2 Environnement de recette V1.2
+
+- URL : `http://localhost:18079`
+- Base : `tenant_o8`
+- Module : `dorevia_cash_guard`
+- Version module relevée en recette : **`19.0.4.0.7`**
+
+### 10.3 Point de recette contrôlé
+
+Libellé interne :
+
+- `CGV12 20260510 0512 Point recette factures ouvertes`
+
+### 10.4 Résultats validés (produit)
+
+Verdict recette : **GO V1.2**.
+
+Constats :
+
+| Contrôle | Résultat |
+| -------- | -------- |
+| Baseline sans facture ouverte | **Solde** = **Solde projeté** = 2 520,00 € (ligne Situation) |
+| Facture client future +300 € | Intégration au **Solde projeté** sur la **période d’échéance** |
+| Facture fournisseur future −500 € | Diminution du **Solde projeté** sur la **période d’échéance** |
+| Facture client payée | Résiduel 0,00 € ; **exclue** du projeté |
+| Facture brouillon (future) | **Ignorée** |
+| Facture client validée **échue** +150 € | Impact sur le projeté **dès la ligne Situation** (exigible à la date de situation) |
+| Facture brouillon **échue** | **Ignorée** |
+| Flux prévisionnels | **Aucune** ligne `dorevia.cash.guard.line` créée automatiquement pour les factures |
+
+### 10.5 Doctrine validée
+
+```text
+Solde de trésorerie constaté ± factures postées ouvertes (à la date projetée) = Solde projeté
+```
+
+### 10.6 Commits de référence (branche)
+
+Branche : `feature/shop-mvp22-visible-wave1`
+
+- `daa012e` — `feat(cash_guard): add projected balance from open invoices`
+- `622f64d` — `chore(cash_guard): docs V1.1/V1.2, i18n, tests et migrations`
+
+### 10.7 Décision
+
+Décision : **V1.2 — GO** (recette produit validée sur `tenant_o8`).
+
+Date d’acte :
+
+- **2026-05-10**
+
+---
+
+## 11. Signature / Validation (mise à jour V1.2)
+
+Statut après extension :
+
+- **Dorevia Cash Guard V1 + V1.2 — GO**
+
+*(À compléter : validateur produit, validateur technique, signature si formalisme interne.)*
