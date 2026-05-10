@@ -8,13 +8,14 @@
                 <field name="name"/>
                 <field name="date_from"/>
                 <field name="date_to"/>
-                <field name="bank_journal_id"/>
+                <field name="periodicity" optional="show"/>
+                <field name="situation_date" optional="show"/>
+                <field name="liquidity_journal_ids" widget="many2many_tags" optional="show"/>
                 <field name="alert_threshold"/>
-                <field name="initial_balance"/>
+                <field name="observed_balance"/>
                 <field name="forecast_final_balance"/>
                 <field name="forecast_min_balance"/>
                 <field name="risk_status"/>
-                <field name="state"/>
             </list>
         </field>
     </record>
@@ -25,11 +26,9 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="bank_journal_id"/>
+                <field name="situation_date"/>
+                <field name="liquidity_journal_ids"/>
                 <field name="company_id"/>
-                <filter name="filter_draft" string="Brouillon" domain="[('state', '=', 'draft')]"/>
-                <filter name="filter_validated" string="Validé" domain="[('state', '=', 'validated')]"/>
-                <filter name="filter_closed" string="Clôturé" domain="[('state', '=', 'closed')]"/>
                 <filter name="filter_risk" string="Risque" domain="[('risk_status', '=', 'risk')]"/>
             </search>
         </field>
@@ -80,36 +79,54 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_recompute_projection" type="object" string="Recalculer" class="btn-primary"/>
-                    <button name="action_validate" type="object" string="Valider" invisible="state != 'draft'"/>
-                    <button name="action_close" type="object" string="Clôturer" invisible="state != 'validated'" groups="dorevia_cash_guard.group_cash_guard_manager"/>
-                    <button name="action_reopen" type="object" string="Rouvrir" invisible="state == 'draft'" groups="dorevia_cash_guard.group_cash_guard_manager"/>
-                    <field name="state" widget="statusbar"/>
+                    <button name="action_recompute_projection" type="object" string="Actualiser" class="btn-primary"/>
                 </header>
                 <sheet>
+                    <field name="state" invisible="1"/>
                     <group>
                         <group>
-                            <field name="name" readonly="state != 'draft'"/>
+                            <field name="name"/>
                             <field name="company_id"/>
                             <field name="responsible_id"/>
-                            <field name="bank_journal_id" readonly="state != 'draft'"/>
+                            <field name="liquidity_journal_ids" widget="many2many_tags"
+                                   domain="[('type','in',('bank','cash')), ('company_id','=', company_id)]"/>
+                            <field name="bank_journal_id" invisible="1"/>
                         </group>
                         <group>
-                            <field name="date_from" readonly="state != 'draft'"/>
-                            <field name="date_to" readonly="state != 'draft'"/>
-                            <field name="alert_threshold" readonly="state != 'draft'"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="periodicity"/>
+                            <field name="alert_threshold"/>
                             <field name="risk_status" readonly="1"/>
                         </group>
                     </group>
                     <group string="Synthèse">
-                        <field name="initial_balance" readonly="1"/>
-                        <field name="forecast_final_balance" readonly="1"/>
-                        <field name="forecast_min_balance" readonly="1"/>
-                        <field name="min_balance_date" readonly="1"/>
+                        <group string="Situation constatée">
+                            <field name="situation_date" readonly="1"/>
+                            <field name="observed_balance" readonly="1"/>
+                        </group>
+                        <group string="Prévision">
+                            <field name="forecast_final_balance" readonly="1"/>
+                            <field name="forecast_min_balance" readonly="1"/>
+                            <field name="min_balance_date" readonly="1"/>
+                        </group>
                     </group>
                     <notebook>
+                        <page string="Suivi de trésorerie">
+                            <field name="weekly_line_ids" readonly="1">
+                                <list default_order="week_index asc">
+                                    <field name="week_label"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="period_type"/>
+                                    <field name="closing_balance"/>
+                                    <field name="projected_balance"/>
+                                    <field name="risk_status"/>
+                                </list>
+                            </field>
+                        </page>
                         <page string="Flux prévisionnels">
-                            <field name="line_ids" context="{'default_projection_date': date_from}" readonly="state != 'draft'">
+                            <field name="line_ids" context="{'default_projection_date': date_from}">
                                 <list editable="bottom" default_order="projection_date asc,sequence asc,id asc">
                                     <field name="projection_date"/>
                                     <field name="sequence"/>

@@ -2,3 +2,4 @@
 
 from . import cash_guard
 from . import cash_guard_line
+from . import cash_guard_week

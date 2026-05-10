@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia Cash Guard",
-    "version": "19.0.1.0.0",
+    "version": "19.0.4.0.7",
     "category": "Accounting",
     "summary": "Projection et garde-fou de tresorerie.",
     "description": """
@@ -15,7 +15,7 @@ Fonctions principales:
 """,
     "author": "Dorevia",
     "license": "LGPL-3",
-    "depends": ["account", "base_account_budget", "mail"],
+    "depends": ["account", "base_account_budget", "base_accounting_kit", "mail"],
     "data": [
         "security/dorevia_cash_guard_security.xml",
         "security/ir.model.access.csv",
