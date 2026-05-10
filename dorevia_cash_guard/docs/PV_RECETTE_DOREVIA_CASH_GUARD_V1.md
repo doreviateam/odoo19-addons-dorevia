@@ -171,7 +171,7 @@ Ticket : `CG-V1.2-01-PROJECTED-BALANCE-FROM-OPEN-INVOICES`.
 
 Inclus :
 
-- colonne **Solde projeté** sur le suivi de trésorerie (`dorevia.cash.guard.week`) ;
+- colonne **Projection** sur le suivi de trésorerie (`dorevia.cash.guard.week`) ; colonne **État** (Constaté / Situation / Prévisionnel) ;
 - calcul agrégé depuis `account.move` : pièces **postées** avec **`amount_residual ≠ 0`** ;
 - date projetée : `max(invoice_date_due or invoice_date or situation_date, situation_date)` ;
 - statuts de ligne et statut global du point basés sur la **trajectoire projetée forward** (à partir de la date de situation).
@@ -203,9 +203,9 @@ Constats :
 
 | Contrôle | Résultat |
 | -------- | -------- |
-| Baseline sans facture ouverte | **Solde** = **Solde projeté** = 2 520,00 € (ligne Situation) |
-| Facture client future +300 € | Intégration au **Solde projeté** sur la **période d’échéance** |
-| Facture fournisseur future −500 € | Diminution du **Solde projeté** sur la **période d’échéance** |
+| Baseline sans facture ouverte | **Solde** = **Projection** = 2 520,00 € (ligne **État** = Situation) |
+| Facture client future +300 € | Intégration à la **Projection** sur la **période d’échéance** |
+| Facture fournisseur future −500 € | Diminution de la **Projection** sur la **période d’échéance** |
 | Facture client payée | Résiduel 0,00 € ; **exclue** du projeté |
 | Facture brouillon (future) | **Ignorée** |
 | Facture client validée **échue** +150 € | Impact sur le projeté **dès la ligne Situation** (exigible à la date de situation) |
@@ -215,7 +215,7 @@ Constats :
 ### 10.5 Doctrine validée
 
 ```text
-Solde de trésorerie constaté ± factures postées ouvertes (à la date projetée) = Solde projeté
+Solde de trésorerie constaté ± factures postées ouvertes (à la date projetée) = Projection (colonne UI)
 ```
 
 ### 10.6 Commits de référence (branche)

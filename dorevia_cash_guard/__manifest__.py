@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia Cash Guard",
-    "version": "19.0.4.0.7",
+    "version": "19.0.4.0.8",
     "category": "Accounting",
     "summary": "Projection et garde-fou de tresorerie.",
     "description": """

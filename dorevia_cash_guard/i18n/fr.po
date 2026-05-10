@@ -266,8 +266,8 @@ msgstr "Fin"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__period_type
-msgid "Lecture"
-msgstr "Lecture"
+msgid "État"
+msgstr "État"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__closing_balance
@@ -276,8 +276,8 @@ msgstr "Solde"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__projected_balance
-msgid "Solde projeté"
-msgstr "Solde projeté"
+msgid "Projection"
+msgstr "Projection"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__invoice_inflow_amount

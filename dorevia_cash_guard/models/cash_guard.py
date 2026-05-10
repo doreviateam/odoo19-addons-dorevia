@@ -486,7 +486,7 @@ class DoreviaCashGuard(models.Model):
     def _cumulative_projected_by_week_index(
         self, meta, situation_date, observed_balance, invoice_buckets, line_buckets=None
     ):
-        """Solde projeté cumulé : trajectoire V1.1 + factures ouvertes V1.2."""
+        """Projection cumulée (champ ``projected_balance``) : V1.1 + factures ouvertes V1.2."""
         self.ensure_one()
         if not meta or situation_date is None:
             return {}

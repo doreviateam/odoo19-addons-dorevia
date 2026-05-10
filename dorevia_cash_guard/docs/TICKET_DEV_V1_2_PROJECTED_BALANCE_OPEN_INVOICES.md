@@ -2,6 +2,8 @@
 
 ## Solde projeté depuis factures ouvertes
 
+*Interface utilisateur : colonne **Projection** (`projected_balance`), colonne **État** (Constaté / Situation / Prévisionnel).*
+
 **ID** : `CG-V1.2-01-PROJECTED-BALANCE-FROM-OPEN-INVOICES`  
 **Module** : `dorevia_cash_guard`  
 **Priorité** : P0  
@@ -26,7 +28,7 @@ Trésorerie constatée = banques + caisse / espèces
 Le suivi de trésorerie affiche aujourd’hui une trajectoire simple par période :
 
 ```text
-Période | Début | Fin | Lecture | Solde | Statut
+Période | Début | Fin | État | Solde | Statut
 ```
 
 Cette lecture donne le solde constaté / rejoué / projeté selon la période, mais elle ne tient pas encore compte automatiquement des factures ouvertes.
@@ -39,13 +41,13 @@ Or les factures validées non payées constituent le premier niveau fiable du pr
 
 ## 2. Objectif
 
-Ajouter une colonne **Solde projeté** dans le suivi de trésorerie, calculée à partir du solde constaté et des factures ouvertes validées.
+Ajouter une colonne **Projection** dans le suivi de trésorerie, calculée à partir du solde constaté et des factures ouvertes validées.
 
 Doctrine V1.2 :
 
 ```text
 Solde = trésorerie constatée à date de situation
-Solde projeté = solde + impact des factures validées ouvertes à leur date d’échéance (projetée)
+Projection = solde + impact des factures validées ouvertes à leur date d’échéance (projetée)
 ```
 
 « À date » signifie **à la date de situation** du point, alignée sur le calcul V1.1 du solde constaté — pas une lecture implicite sur la date serveur seule.
@@ -207,18 +209,18 @@ Champ à ajouter :
 
 | Champ               | Type     | Description                                                            |
 | ------------------- | -------- | ---------------------------------------------------------------------- |
-| `projected_balance` | Monetary | Solde projeté à fin de période après intégration des factures ouvertes |
+| `projected_balance` | Monetary | Projection à fin de période après intégration des factures ouvertes |
 
 Libellé UI :
 
 ```text
-Solde projeté
+Projection
 ```
 
 Colonnes cible :
 
 ```text
-Période | Début | Fin | Lecture | Solde | Solde projeté | Statut
+Période | Début | Fin | État | Solde | Projection | Statut
 ```
 
 ### 5.2 Optionnel : agrégats factures
@@ -307,13 +309,13 @@ Exemple :
 
 ```text
 Période 1 :
-Solde projeté = observed_balance + factures de période 1
+Projection = observed_balance + factures de période 1
 
 Période 2 :
-Solde projeté = solde projeté période 1 + factures de période 2
+Projection = projection période 1 + factures de période 2
 
 Période N :
-Solde projeté = solde projeté période N-1 + factures de période N
+Projection = projection période N-1 + factures de période N
 ```
 
 ### 7.4 Règles complémentaires V1.2
@@ -365,9 +367,9 @@ Colonnes cible :
 Période
 Début
 Fin
-Lecture
+État
 Solde
-Solde projeté
+Projection
 Statut
 ```
 
@@ -375,13 +377,13 @@ Sens :
 
 | Colonne       | Signification                                         |
 | ------------- | ----------------------------------------------------- |
-| Solde         | solde de trésorerie constaté / recalculé à la période |
-| Solde projeté | solde après intégration des factures ouvertes         |
-| Statut        | statut calculé sur le solde projeté de la ligne (cf. §8) |
+| Solde         | solde de trésorerie constaté / rejoué sur la période |
+| Projection   | solde après prise en compte des factures ouvertes à leur date d’échéance |
+| Statut        | statut calculé sur la projection de la ligne (cf. §8) |
 
 ### 9.2 Vocabulaire
 
-Conserver les valeurs de lecture :
+Valeurs de la colonne **État** :
 
 ```text
 Constaté
@@ -414,16 +416,16 @@ Date d’échéance : 20/05/2026
 
 Résultat attendu :
 
-| Période               | Lecture      |   Solde | Solde projeté | Statut  |
-| --------------------- | ------------ | ------: | ------------: | ------- |
-| Semaine 09/05 → 15/05 | Situation    | 2 520 € |       2 520 € | Warning |
-| Semaine 16/05 → 22/05 | Prévisionnel | 2 520 € |       2 820 € | Warning |
+| Période               | État         |   Solde | Projection | Statut  |
+| --------------------- | ------------ | ------: | ---------: | ------- |
+| Semaine 09/05 → 15/05 | Situation    | 2 520 € |    2 520 € | Warning |
+| Semaine 16/05 → 22/05 | Prévisionnel | 2 520 € |    2 820 € | Warning |
 
 Si seuil = 2 000 € :
 
-| Période       | Solde projeté | Statut |
-| ------------- | ------------: | ------ |
-| 16/05 → 22/05 |       2 820 € | Safe   |
+| Période       | Projection | Statut |
+| ------------- | ---------: | ------ |
+| 16/05 → 22/05 |    2 820 € | Safe   |
 
 ---
 
@@ -570,9 +572,9 @@ Scénario minimal :
 1. Créer ou utiliser un point de trésorerie avec date de situation, journaux Banque + Caisse, solde constaté connu, périodicité semaine.
 2. Créer une facture client validée non payée avec échéance future.
 3. Actualiser le point.
-4. Vérifier que **Solde projeté** augmente à la période d’échéance.
+4. Vérifier que la **Projection** augmente à la période d’échéance.
 5. Créer une facture fournisseur validée non payée.
-6. Vérifier que **Solde projeté** diminue à la période d’échéance.
+6. Vérifier que la **Projection** diminue à la période d’échéance.
 7. Payer une facture.
 8. Vérifier qu’elle disparaît du projeté après actualisation.
 9. Créer une facture brouillon / à valider.
@@ -620,7 +622,7 @@ Les lignes de flux manuelles restent réservées aux prévisions attendues et si
 
 Le ticket est validé si :
 
-- une colonne **Solde projeté** est visible dans le suivi de trésorerie ;
+- une colonne **Projection** est visible dans le suivi de trésorerie ;
 - les factures client validées ouvertes augmentent le solde projeté ;
 - les factures fournisseur validées ouvertes diminuent le solde projeté ;
 - les montants résiduels sont utilisés ;
@@ -646,7 +648,7 @@ Il permet de lire :
 ```text
 Solde de trésorerie constaté
 +/- factures ouvertes à leur date d’échéance
-= Solde projeté
+= Projection
 ```
 
 Formule courte :

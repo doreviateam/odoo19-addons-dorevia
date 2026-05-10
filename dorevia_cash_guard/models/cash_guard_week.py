@@ -26,7 +26,7 @@ class DoreviaCashGuardWeek(models.Model):
             ("current", "Situation"),
             ("forecast", "Prévisionnel"),
         ],
-        string="Lecture",
+        string="État",
         required=True,
         index=True,
     )
@@ -35,13 +35,16 @@ class DoreviaCashGuardWeek(models.Model):
     outflow_amount = fields.Monetary(string="Sorties")
     closing_balance = fields.Monetary(
         string="Solde",
-        help="Solde de trésorerie en fin de période (trajectoire synthétique).",
+        help=(
+            "Solde de trésorerie constaté ou rejoué sur la période "
+            "(fin de maille, trajectoire synthétique)."
+        ),
     )
     projected_balance = fields.Monetary(
-        string="Solde projeté",
+        string="Projection",
         help=(
-            "Solde après intégration des factures clients/fournisseurs validées ouvertes "
-            "(montant résiduel à la date d'échéance projetée)."
+            "Solde après prise en compte des factures ouvertes validées, à leur date "
+            "d'échéance projetée (montant résiduel)."
         ),
     )
     invoice_inflow_amount = fields.Monetary(
