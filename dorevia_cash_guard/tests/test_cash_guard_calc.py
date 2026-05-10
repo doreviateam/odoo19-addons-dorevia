@@ -72,6 +72,20 @@ class TestCashGuardCalc(TransactionCase):
                 ):
                     guard.action_recompute_projection()
 
+    def test_new_guard_defaults_month_start_year_end_and_situation_today(self):
+        """Sans dates explicites : début = 1er du mois courant, fin = 31/12, situation = jour."""
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 10)):
+            guard = self.env["dorevia.cash.guard"].create(
+                {
+                    "bank_journal_id": self.bank_journal.id,
+                    "company_id": self.company.id,
+                    "alert_threshold": 0.0,
+                }
+            )
+        self.assertEqual(guard.date_from, date(2026, 5, 1))
+        self.assertEqual(guard.date_to, date(2026, 12, 31))
+        self.assertEqual(guard.situation_date, date(2026, 5, 10))
+
     def test_initial_balance_only(self):
         guard = self._create_guard(threshold=100.0)
         self._recompute_with_zero_initial(guard)

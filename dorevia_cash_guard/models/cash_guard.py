@@ -37,6 +37,10 @@ class DoreviaCashGuard(models.Model):
         tracking=True,
         index=True,
         default=lambda self: self._default_period_date_from(),
+        help=(
+            "À la création d’un nouveau point : premier jour du mois civil en cours "
+            "(vue centrée sur le mois courant, sans démarrer au 1er janvier par défaut)."
+        ),
     )
     date_to = fields.Date(
         string="Date de fin",
@@ -44,6 +48,9 @@ class DoreviaCashGuard(models.Model):
         tracking=True,
         index=True,
         default=lambda self: self._default_period_date_to(),
+        help=(
+            "À la création d’un nouveau point : 31 décembre de l’année civile en cours."
+        ),
     )
     situation_date = fields.Date(
         string="Date de situation",
@@ -52,8 +59,8 @@ class DoreviaCashGuard(models.Model):
         index=True,
         copy=False,
         help=(
-            "Calculée automatiquement : date du jour, bornée entre la date de début "
-            "et la date de fin. Référence pour le solde de trésorerie constaté."
+            "Date de référence pour le solde constaté : le jour de calcul (date du jour dans "
+            "le fuseau utilisateur), borné entre la date de début et la date de fin."
         ),
     )
     liquidity_journal_ids = fields.Many2many(
@@ -173,11 +180,13 @@ class DoreviaCashGuard(models.Model):
 
     @api.model
     def _default_period_date_from(self):
+        """Premier jour du mois civil courant (ex. création le 10/05 → 01/05)."""
         today = fields.Date.context_today(self)
         return today.replace(day=1)
 
     @api.model
     def _default_period_date_to(self):
+        """31 décembre de l’année civile courante."""
         today = fields.Date.context_today(self)
         return date(today.year, 12, 31)
 
