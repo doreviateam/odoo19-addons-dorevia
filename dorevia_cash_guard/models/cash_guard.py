@@ -5,7 +5,6 @@ from datetime import date, timedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from odoo.osv.expression import AND, OR
 
 
 class DoreviaCashGuard(models.Model):
@@ -481,7 +480,7 @@ class DoreviaCashGuard(models.Model):
             explicit_ids = self._liquidity_account_ids_for_journal(journal)
             type_tuple = self._liquidity_account_types_for_journal(journal)
             if explicit_ids:
-                account_scope = OR(
+                account_scope = fields.Domain.OR(
                     [
                         [("account_id.account_type", "in", type_tuple)],
                         [("account_id", "in", list(explicit_ids))],
@@ -489,7 +488,7 @@ class DoreviaCashGuard(models.Model):
                 )
             else:
                 account_scope = [("account_id.account_type", "in", type_tuple)]
-            domain = AND(
+            domain = fields.Domain.AND(
                 [base_common + [("journal_id", "=", journal.id)], account_scope]
             )
             total += sum(AccountLine.search(domain).mapped("balance"))
@@ -530,7 +529,7 @@ class DoreviaCashGuard(models.Model):
             explicit_ids = self._liquidity_account_ids_for_journal(journal)
             type_tuple = self._liquidity_account_types_for_journal(journal)
             if explicit_ids:
-                account_scope = OR(
+                account_scope = fields.Domain.OR(
                     [
                         [("account_id.account_type", "in", type_tuple)],
                         [("account_id", "in", list(explicit_ids))],
@@ -538,7 +537,7 @@ class DoreviaCashGuard(models.Model):
                 )
             else:
                 account_scope = [("account_id.account_type", "in", type_tuple)]
-            domain = AND(
+            domain = fields.Domain.AND(
                 [base_common + [("journal_id", "=", journal.id)], account_scope]
             )
             lines = AccountLine.search(domain)
