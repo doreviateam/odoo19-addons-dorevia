@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Cash Guard form: simulation toggle + smart button -->
+    <record id="view_cash_guard_form_simulation" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.form.simulation</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="inherit_id" ref="dorevia_cash_guard.view_dorevia_cash_guard_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Smart button for simulation orders -->
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box"
+                     invisible="not include_simulation">
+                    <button name="action_view_simulation_orders"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-line-chart"
+                            invisible="not include_simulation">
+                        <field name="simulation_order_count"
+                               string="Simulations"
+                               widget="statinfo"/>
+                    </button>
+                </div>
+            </xpath>
+
+            <!-- Toggle after comfort_threshold_rate -->
+            <xpath expr="//field[@name='comfort_threshold_rate']" position="after">
+                <field name="include_simulation"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Cash Guard list: optional simulation column -->
+    <record id="view_cash_guard_tree_simulation" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.tree.simulation</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="inherit_id" ref="dorevia_cash_guard.view_dorevia_cash_guard_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='risk_status']" position="before">
+                <field name="include_simulation"
+                       string="Simulation"
+                       optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
