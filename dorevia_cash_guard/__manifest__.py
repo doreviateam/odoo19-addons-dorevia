@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia Cash Guard",
-    "version": "19.0.5.3.3",
+    "version": "19.0.5.3.6",
     "category": "Accounting",
     "summary": "Projection de trésorerie : constat + factures ouvertes engagées.",
     "description": """

@@ -163,6 +163,16 @@ class DoreviaCashGuard(models.Model):
             "sur les journaux de trésorerie du périmètre, jusqu'à la date de situation."
         ),
     )
+    bank_unreconciled_amount = fields.Monetary(
+        string="Écritures bancaires non rapprochées",
+        readonly=True,
+        copy=False,
+        help=(
+            "Montant total (en valeur absolue) des écritures de trésorerie non "
+            "rapprochées dans le périmètre du document : lignes comptables de "
+            "liquidité sans lien relevé bancaire + paiements postés non rapprochés."
+        ),
+    )
     forecast_final_balance = fields.Monetary(
         string="Projection en fin de période",
         readonly=True,
@@ -553,6 +563,30 @@ class DoreviaCashGuard(models.Model):
         )
         return self.env.cr.fetchone()[0] or 0.0
 
+    def _compute_bank_unreconciled_amount(self):
+        """Montant abs des paiements non rapprochés, aligné sur le dashboard Odoo.
+
+        Réutilise ``account.journal._get_journal_dashboard_outstanding_payments``
+        (même requête que le bloc « Paiements » du tableau de bord comptable)
+        puis somme ``abs()`` du net signé par journal.
+
+        Aucun filtre date : le montant affiché correspond exactement à ce que
+        l'utilisateur voit dans le tableau de bord lorsqu'il clique sur le lien.
+        """
+        self.ensure_one()
+        journals = self._liquidity_journals()
+        if not journals:
+            return 0.0
+        dashboard = journals._get_journal_dashboard_outstanding_payments()
+        total = 0.0
+        for journal in journals:
+            entry = dashboard.get(journal.id)
+            if not entry:
+                continue
+            amount = entry[1] if isinstance(entry, (list, tuple)) else entry.get("amount", 0.0)
+            total += abs(amount)
+        return total
+
     def _compute_initial_balance(self):
         self.ensure_one()
         return self._compute_bank_balance_at_date(self.date_from)
@@ -725,6 +759,7 @@ class DoreviaCashGuard(models.Model):
         initial_balance = self._compute_bank_balance_at_date(self.date_from)
         observed_balance = self._compute_bank_balance_at_date(situation_date)
         bank_confirmation_rate = self._compute_bank_confirmation_rate(situation_date)
+        bank_unreconciled_amount = self._compute_bank_unreconciled_amount()
         meta = self._split_exercise_periods()
         invoice_buckets = self._open_invoice_week_buckets(meta, situation_date)
         line_buckets = self._manual_line_net_by_week_index(meta, situation_date)
@@ -752,6 +787,7 @@ class DoreviaCashGuard(models.Model):
             "observed_balance": observed_balance,
             "observed_balance_date": situation_date,
             "bank_confirmation_rate": bank_confirmation_rate,
+            "bank_unreconciled_amount": bank_unreconciled_amount,
             "forecast_final_balance": forecast_final_balance,
             "forecast_min_balance": forecast_min_balance,
             "forecast_min_margin": forecast_min_margin,
@@ -1197,6 +1233,17 @@ class DoreviaCashGuard(models.Model):
                 allow_cash_guard_situation_write=True,
             ).write(proj_align)
         return True
+
+    def action_open_bank_reconciliation(self):
+        """Ouvre le tableau de bord comptable (kanban journaux) filtré sur les journaux de trésorerie."""
+        self.ensure_one()
+        action = self.env["ir.actions.act_window"]._for_xml_id(
+            "account.open_account_journal_dashboard_kanban"
+        )
+        journals = self._liquidity_journals()
+        if journals:
+            action["domain"] = [("id", "in", journals.ids)]
+        return action
 
     def action_archive(self):
         """Archive le document de projection (masqué par défaut, lignes inchangées)."""

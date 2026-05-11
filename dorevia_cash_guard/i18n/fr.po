@@ -370,6 +370,11 @@ msgid "Taux de confirmation bancaire"
 msgstr "Taux de confirmation bancaire"
 
 #. module: dorevia_cash_guard
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__bank_unreconciled_amount
+msgid "Écritures bancaires non rapprochées"
+msgstr "Écritures bancaires non rapprochées"
+
+#. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__days_overdue_label
 msgid "Retard"
 msgstr "Retard"

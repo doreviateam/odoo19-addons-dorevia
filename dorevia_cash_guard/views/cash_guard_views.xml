@@ -132,6 +132,19 @@
                             <field name="bank_confirmation_rate"
                                    readonly="1"
                                    widget="progressbar"/>
+                            <label for="bank_unreconciled_amount"
+                                   invisible="bank_unreconciled_amount == 0"/>
+                            <div invisible="bank_unreconciled_amount == 0"
+                                 class="d-flex align-items-center gap-2">
+                                <field name="bank_unreconciled_amount"
+                                       readonly="1"
+                                       class="oe_inline"/>
+                                <button name="action_open_bank_reconciliation"
+                                        type="object"
+                                        class="btn btn-link p-0"
+                                        icon="fa-external-link"
+                                        title="Voir les écritures à rapprocher"/>
+                            </div>
                         </group>
                         <group string="Projection">
                             <field name="forecast_final_balance"
