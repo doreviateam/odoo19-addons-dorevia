@@ -35,7 +35,7 @@ Verifier aussi que le module est a jour :
 ## 2. Controle securite et acces
 
 1. Se connecter avec un utilisateur sans groupe Cash Guard.
-2. Verifier que le menu **Prévision de trésorerie** n'est pas accessible.
+2. Verifier que le menu **Projection de trésorerie** n'est pas accessible.
 3. Se connecter avec un utilisateur **Cash Guard User**.
 4. Verifier acces menu, points et lignes.
 5. Se connecter avec **Cash Guard Manager**.

@@ -12,6 +12,8 @@ class DoreviaCashGuard(models.Model):
     # Champs du point dont une modification doit relancer la projection complète.
     _RECOMPUTE_GUARD_WRITE_FIELDS = {
         "alert_threshold",
+        "bank_journal_id",
+        "company_id",
         "date_from",
         "date_to",
         "liquidity_journal_ids",
@@ -19,7 +21,7 @@ class DoreviaCashGuard(models.Model):
     }
 
     _name = "dorevia.cash.guard"
-    _description = "Point de trésorerie Dorevia"
+    _description = "Projection de trésorerie Dorevia"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "date_from desc, id desc"
 
@@ -31,6 +33,16 @@ class DoreviaCashGuard(models.Model):
         tracking=True,
         index=True,
     )
+    active = fields.Boolean(
+        string="Actif",
+        default=True,
+        copy=False,
+        tracking=True,
+        help=(
+            "Document de projection courant. Désactiver pour archiver la projection "
+            "(masquée des vues par défaut ; lignes et analyses restent liées au même document)."
+        ),
+    )
     date_from = fields.Date(
         string="Date de début",
         required=True,
@@ -38,8 +50,8 @@ class DoreviaCashGuard(models.Model):
         index=True,
         default=lambda self: self._default_period_date_from(),
         help=(
-            "À la création d’un nouveau point : premier jour du mois civil en cours "
-            "(vue centrée sur le mois courant, sans démarrer au 1er janvier par défaut)."
+            "À la création d’un nouveau document : même jour que la date de situation (date du jour), "
+            "pour démarrer la projection à partir de maintenant."
         ),
     )
     date_to = fields.Date(
@@ -49,7 +61,7 @@ class DoreviaCashGuard(models.Model):
         index=True,
         default=lambda self: self._default_period_date_to(),
         help=(
-            "À la création d’un nouveau point : 31 décembre de l’année civile en cours."
+            "À la création d’un nouveau document : date de début + 90 jours (projection opérationnelle)."
         ),
     )
     situation_date = fields.Date(
@@ -131,17 +143,36 @@ class DoreviaCashGuard(models.Model):
         copy=False,
     )
     forecast_final_balance = fields.Monetary(
-        string="Solde prévu en fin de période",
+        string="Projection en fin de période",
         readonly=True,
         copy=False,
+        help=(
+            "Dernière valeur cumulée de la colonne Projection (mailles Situation + Prévisionnel), "
+            "soit trésorerie constatée et factures ouvertes, avec flux complémentaires par maille."
+        ),
     )
     forecast_min_balance = fields.Monetary(
-        string="Solde minimum prévu",
+        string="Projection minimum",
         readonly=True,
         copy=False,
+        help="Minimum des soldes projetés sur les mailles Situation et Prévisionnel.",
     )
     min_balance_date = fields.Date(
-        string="Date du point bas prévu", readonly=True, copy=False
+        string="Date du point bas projeté",
+        readonly=True,
+        copy=False,
+        help="Fin de la maille où le minimum de projection est atteint (cohérent avec le suivi).",
+    )
+    forecast_min_margin = fields.Monetary(
+        string="Couverture minimum",
+        currency_field="currency_id",
+        readonly=True,
+        copy=False,
+        help=(
+            "Au point bas projeté : couverture minimum (projection minimum moins le seuil d'alerte), "
+            "alignée sur la colonne Couverture du suivi. Couverture négative : il manque ce montant "
+            "par rapport au seuil au point le plus bas."
+        ),
     )
     risk_status = fields.Selection(
         [("safe", "Sécurisé"), ("warning", "Vigilance"), ("risk", "Risque")],
@@ -161,7 +192,7 @@ class DoreviaCashGuard(models.Model):
         tracking=True,
         index=True,
         help=(
-            "Champ technique (plus affiché en V1.1). Le point est une lecture dynamique ; "
+            "Champ technique (plus affiché en V1.1). La projection est une lecture dynamique ; "
             "un vrai cycle de validation pourra s’appuyer sur des snapshots plus tard."
         ),
     )
@@ -169,26 +200,30 @@ class DoreviaCashGuard(models.Model):
     line_ids = fields.One2many(
         "dorevia.cash.guard.line",
         "guard_id",
-        string="Flux prévisionnels",
+        string="Flux complémentaires",
     )
     weekly_line_ids = fields.One2many(
         "dorevia.cash.guard.week",
         "guard_id",
         string="Suivi de trésorerie",
     )
+    projection_period_move_ids = fields.One2many(
+        "dorevia.cash.guard.period.move",
+        "guard_id",
+        string="Détail projection (factures)",
+        readonly=True,
+    )
     note = fields.Text(string="Notes")
 
     @api.model
     def _default_period_date_from(self):
-        """Premier jour du mois civil courant (ex. création le 10/05 → 01/05)."""
-        today = fields.Date.context_today(self)
-        return today.replace(day=1)
+        """Date du jour : alignée par défaut sur la date de situation (ex. création le 10/05 → 10/05)."""
+        return fields.Date.context_today(self)
 
     @api.model
     def _default_period_date_to(self):
-        """31 décembre de l’année civile courante."""
-        today = fields.Date.context_today(self)
-        return date(today.year, 12, 31)
+        """Horizon par défaut : 90 jours après la date du jour (cohérent avec ``date_from`` par défaut)."""
+        return fields.Date.context_today(self) + timedelta(days=90)
 
     @api.model
     def _situation_date_for_period(self, date_from, date_to):
@@ -206,9 +241,10 @@ class DoreviaCashGuard(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get("name", _("Nouveau")) == _("Nouveau"):
-                vals["name"] = self.env["ir.sequence"].next_by_code(
-                    "dorevia.cash.guard"
-                ) or _("Nouveau")
+                seq = self.env["ir.sequence"].next_by_code("dorevia.cash.guard")
+                vals["name"] = (
+                    _("Projection Trésorerie — %s") % seq if seq else _("Nouveau")
+                )
             vals.pop("situation_date", None)
             df = vals.get("date_from")
             dt = vals.get("date_to")
@@ -216,7 +252,8 @@ class DoreviaCashGuard(models.Model):
                 vals["date_from"] = self._default_period_date_from()
                 df = vals["date_from"]
             if dt is None:
-                vals["date_to"] = self._default_period_date_to()
+                df_end = df if isinstance(df, date) else fields.Date.from_string(df)
+                vals["date_to"] = df_end + timedelta(days=90)
                 dt = vals["date_to"]
             vals["situation_date"] = self._situation_date_for_period(df, dt)
         records = super().create(vals_list)
@@ -268,7 +305,7 @@ class DoreviaCashGuard(models.Model):
                     )
                 if journal.company_id != guard.company_id:
                     raise ValidationError(
-                        _("Chaque journal doit appartenir à la même société que le point.")
+                        _("Chaque journal doit appartenir à la même société que le document de projection.")
                     )
 
     @api.constrains("name", "company_id")
@@ -286,7 +323,7 @@ class DoreviaCashGuard(models.Model):
             )
             if duplicate:
                 raise ValidationError(
-                    _("Le nom du point de trésorerie doit être unique par société.")
+                    _("Le nom du document de projection doit être unique par société.")
                 )
 
     def _liquidity_journals(self):
@@ -402,13 +439,21 @@ class DoreviaCashGuard(models.Model):
         self.ensure_one()
         return self._compute_bank_balance_at_date(self.date_from)
 
-    def _compute_risk_status(self, min_balance):
+    def _compute_risk_status(self, projected_balance):
+        """Bands alignées sur la colonne Projection vs seuil (grille Suivi + décorations).
+
+        * ``projected_balance > alert_threshold`` → safe ;
+        * ``0 < projected_balance <= alert_threshold`` → warning ;
+        * ``projected_balance <= 0`` → risk.
+        """
         self.ensure_one()
-        if min_balance < 0:
+        pb = projected_balance or 0.0
+        th = self.alert_threshold or 0.0
+        if pb <= 0:
             return "risk"
-        if min_balance < self.alert_threshold:
-            return "warning"
-        return "safe"
+        if pb > th:
+            return "safe"
+        return "warning"
 
     def _search_open_invoice_moves(self):
         """Factures / avoirs validés, non soldés — critère métier : posted + résiduel (V1.2)."""
@@ -523,17 +568,6 @@ class DoreviaCashGuard(models.Model):
             out[idx] = running
         return out
 
-    def _min_forward_projected_balance(
-        self, meta, situation_date, observed_balance, invoice_buckets, line_buckets=None
-    ):
-        """Minimum des soldes projetés « forward » (situation + prévisionnel)."""
-        pmap = self._cumulative_projected_by_week_index(
-            meta, situation_date, observed_balance, invoice_buckets, line_buckets
-        )
-        if not pmap:
-            return observed_balance
-        return min(pmap.values())
-
     def _is_cash_guard_manager(self):
         return self.env.user.has_group("dorevia_cash_guard.group_cash_guard_manager")
 
@@ -551,7 +585,12 @@ class DoreviaCashGuard(models.Model):
         return True
 
     def _get_projection_summary_values(self):
-        """Calcule les soldes de synthèse sans effet de bord, utilisable en onchange."""
+        """Calcule les soldes de synthèse sans effet de bord, utilisable en onchange.
+
+        Les indicateurs « projection » (fin de période, minimum, date du minimum) suivent la
+        même trajectoire que la colonne ``projected_balance`` du suivi (Situation + Prévisionnel),
+        et non plus un simple enchaînement ligne à ligne des flux.
+        """
         self.ensure_one()
         situation_date = self._situation_date_for_period(self.date_from, self.date_to)
         initial_balance = self._compute_bank_balance_at_date(self.date_from)
@@ -559,29 +598,23 @@ class DoreviaCashGuard(models.Model):
         meta = self._split_exercise_periods()
         invoice_buckets = self._open_invoice_week_buckets(meta, situation_date)
         line_buckets = self._manual_line_net_by_week_index(meta, situation_date)
-        min_projected_forward = self._min_forward_projected_balance(
+        pmap = self._cumulative_projected_by_week_index(
             meta, situation_date, observed_balance, invoice_buckets, line_buckets
         )
+        meta_by_idx = {idx: (wf, wt) for idx, wf, wt in meta}
 
-        ordered_lines = self.line_ids.sorted(
-            key=lambda l: (l.projection_date or situation_date, l.sequence, l.id)
-        )
-        future_lines = ordered_lines.filtered(
-            lambda l: l.projection_date and l.projection_date > situation_date
-        )
-        running_fut = observed_balance
-        forecast_min_balance = observed_balance
-        min_balance_date = situation_date
-        if future_lines:
-            for line in future_lines:
-                running_fut += line.signed_projected_amount
-                if running_fut < forecast_min_balance:
-                    forecast_min_balance = running_fut
-                    min_balance_date = line.projection_date
-            forecast_final_balance = running_fut
+        if pmap:
+            ordered_keys = sorted(pmap.keys())
+            forecast_final_balance = pmap[ordered_keys[-1]]
+            forecast_min_balance = min(pmap.values())
+            min_week_idx = min(pmap.items(), key=lambda kv: (kv[1], kv[0]))[0]
+            min_balance_date = meta_by_idx[min_week_idx][1]
         else:
             forecast_final_balance = observed_balance
             forecast_min_balance = observed_balance
+            min_balance_date = situation_date
+
+        forecast_min_margin = forecast_min_balance - self.alert_threshold
 
         return {
             "situation_date": situation_date,
@@ -590,8 +623,43 @@ class DoreviaCashGuard(models.Model):
             "observed_balance_date": situation_date,
             "forecast_final_balance": forecast_final_balance,
             "forecast_min_balance": forecast_min_balance,
+            "forecast_min_margin": forecast_min_margin,
             "min_balance_date": min_balance_date,
-            "risk_status": self._compute_risk_status(min_projected_forward),
+            "risk_status": self._compute_risk_status(forecast_min_balance),
+        }
+
+    def _projection_summary_from_weekly_forward_lines(self):
+        """Indicateurs projection alignés sur la grille (après ``_sync_weekly_lines``).
+
+        Utilise les ``projected_balance`` des mailles Situation + Prévisionnel uniquement,
+        soit exactement la colonne Projection du suivi.
+        """
+        self.ensure_one()
+        lines = self.weekly_line_ids.filtered(
+            lambda w: w.period_type in ("current", "forecast")
+        ).sorted("week_index")
+        situation_date = self._situation_date_for_period(self.date_from, self.date_to)
+        observed = self.observed_balance or 0.0
+        if not lines:
+            fm = observed - self.alert_threshold
+            return {
+                "forecast_final_balance": observed,
+                "forecast_min_balance": observed,
+                "forecast_min_margin": fm,
+                "min_balance_date": situation_date,
+                "risk_status": self._compute_risk_status(observed),
+            }
+        balances = lines.mapped("projected_balance")
+        forecast_final_balance = lines[-1].projected_balance
+        forecast_min_balance = min(balances)
+        forecast_min_margin = forecast_min_balance - self.alert_threshold
+        min_line = min(lines, key=lambda w: (w.projected_balance, w.week_index))
+        return {
+            "forecast_final_balance": forecast_final_balance,
+            "forecast_min_balance": forecast_min_balance,
+            "forecast_min_margin": forecast_min_margin,
+            "min_balance_date": min_line.date_to,
+            "risk_status": self._compute_risk_status(forecast_min_balance),
         }
 
     @api.onchange(
@@ -698,18 +766,48 @@ class DoreviaCashGuard(models.Model):
             return self._split_exercise_quarters()
         return self._split_exercise_weeks()
 
+    def _week_iso_display_label(self, segment_start):
+        """Libellé maille « semaine » : ``Sxx`` = numéro de semaine ISO (01–53) du début de période."""
+        self.ensure_one()
+        if not segment_start:
+            return ""
+        if not isinstance(segment_start, date):
+            segment_start = fields.Date.from_string(segment_start)
+        _year, iso_week, _dow = segment_start.isocalendar()
+        return "S%02d" % iso_week
+
     def _period_display_label(self, index, wf, wt):
-        """Libellé court pour la colonne Période (sans notion « semaine » en UI)."""
+        """Fallback si aucune maille « situation » (point d’ancrage P0) n’est résolue."""
         self.ensure_one()
         if self.periodicity == "month":
             return "%02d/%04d" % (wf.month, wf.year)
         if self.periodicity == "quarter":
             quarter = (wf.month - 1) // 3 + 1
             return "T%d %d" % (quarter, wf.year)
-        return "P%d" % index
+        return self._week_iso_display_label(wf)
+
+    def _situation_meta_position(self, meta, situation_date):
+        """Index 0-based dans ``meta`` de la maille contenant la date de situation (type « current »)."""
+        self.ensure_one()
+        if not meta or not situation_date:
+            return None
+        for pos, (_wi, wf, wt) in enumerate(meta):
+            if self._period_type_for_segment(wf, wt, situation_date) == "current":
+                return pos
+        return None
+
+    def _period_anchor_display_label(self, meta_pos, sit_meta_pos, week_index, wf, wt):
+        """Libellé colonne Période : en semaine ISO ``Sxx`` ; sinon P relatif / mois / trimestre."""
+        self.ensure_one()
+        if self.periodicity == "week":
+            return self._week_iso_display_label(wf)
+        if sit_meta_pos is None:
+            return self._period_display_label(week_index, wf, wt)
+        rel = meta_pos - sit_meta_pos
+        return "P%d" % rel
 
     def _sync_weekly_lines(self):
-        """Régénère les lignes de suivi par maille (historique / situation / prévisionnel)."""
+        """Régénère les lignes de suivi par maille (historique / situation / projection engagée)."""
         self.ensure_one()
         Week = self.env["dorevia.cash.guard.week"].sudo()
         Week.search([("guard_id", "=", self.id)]).unlink()
@@ -727,12 +825,16 @@ class DoreviaCashGuard(models.Model):
             meta, sit, observed, buckets, line_buckets
         )
 
+        sit_meta_pos = self._situation_meta_position(meta, sit)
+
         prev_closing = None
         forecast_chunks = []
 
-        for week_index, wf, wt in meta:
+        for meta_pos, (week_index, wf, wt) in enumerate(meta):
             ptype = self._period_type_for_segment(wf, wt, sit)
-            label = self._period_display_label(week_index, wf, wt)
+            label = self._period_anchor_display_label(
+                meta_pos, sit_meta_pos, week_index, wf, wt
+            )
             bc = buckets.get(
                 week_index, {"net": 0.0, "inflow": 0.0, "outflow": 0.0}
             )
@@ -840,8 +942,102 @@ class DoreviaCashGuard(models.Model):
                 }
             )
 
+    def _sync_projection_period_moves(self):
+        """V1.3 — lignes dérivées listant les factures/avoirs ouverts par maille (régénération complète)."""
+        self.ensure_one()
+        PeriodMove = self.env["dorevia.cash.guard.period.move"].sudo()
+        PeriodMove.search([("guard_id", "=", self.id)]).unlink()
+        meta = self._split_exercise_periods()
+        sit = self.situation_date
+        if not meta or not sit:
+            return
+        weeks_by_index = {w.week_index: w for w in self.weekly_line_ids}
+        rows = []
+        for move in self._search_open_invoice_moves():
+            proj_date = self._invoice_projected_cash_date(move, sit)
+            if not proj_date:
+                continue
+            widx = self._week_index_for_date(meta, proj_date)
+            if widx is None:
+                continue
+            week = weeks_by_index.get(widx)
+            if not week:
+                continue
+            signed = self._cash_impact_signed_for_invoice_move(move)
+            ref = move.invoice_date_due or move.invoice_date
+            is_overdue = bool(ref and sit and ref < sit)
+            mag = abs(move.amount_residual or 0.0)
+            expl = "inflow" if signed >= 0 else "outflow"
+            rows.append(
+                {
+                    "guard_id": self.id,
+                    "week_id": week.id,
+                    "move_id": move.id,
+                    "partner_id": move.partner_id.id if move.partner_id else False,
+                    "move_name": move.name or "",
+                    "invoice_date": move.invoice_date,
+                    "invoice_date_due": move.invoice_date_due,
+                    "projected_date": proj_date,
+                    "amount_residual": mag,
+                    "signed_amount": signed,
+                    "currency_id": self.company_id.currency_id.id,
+                    "company_id": self.company_id.id,
+                    "explanation_type": expl,
+                    "is_overdue": is_overdue,
+                    "_sort": (week.week_index, proj_date, signed, move.id),
+                }
+            )
+        rows.sort(key=lambda r: r["_sort"])
+        seq = 10
+        for item in rows:
+            item.pop("_sort", None)
+            item["sequence"] = seq
+            seq += 10
+        if rows:
+            PeriodMove.create(rows)
+        for week in self.weekly_line_ids:
+            pm = week.projection_move_ids
+            net = sum(pm.mapped("signed_amount"))
+            week.sudo().write(
+                {
+                    "invoice_net_amount": net,
+                    "invoice_move_count": len(pm),
+                }
+            )
+
+    def _realign_period_to_situation_plus_90_days(self):
+        """Réaligne sur la situation à date + horizon 90 jours (bouton Actualiser si exposé).
+
+        ``date_from`` = ``situation_date``, ``date_to`` = ``date_from`` + 90 jours.
+        Une future évolution pourra préserver une « période personnalisée ».
+        """
+        self.ensure_one()
+        today = fields.Date.context_today(self)
+        date_from = today
+        date_to = date_from + timedelta(days=90)
+        situation_date = self._situation_date_for_period(date_from, date_to)
+        date_from = situation_date
+        date_to = date_from + timedelta(days=90)
+        situation_date = self._situation_date_for_period(date_from, date_to)
+        self.with_context(
+            skip_cash_guard_recompute=True,
+            allow_cash_guard_situation_write=True,
+        ).write(
+            {
+                "date_from": date_from,
+                "date_to": date_to,
+                "situation_date": situation_date,
+            }
+        )
+
+    def action_reset_period_to_defaults(self):
+        """Réapplique les valeurs par défaut de période (situation à date + 90 j) puis recalcule tout."""
+        return self.with_context(cash_guard_actualiser_realign=True).action_recompute_projection()
+
     def action_recompute_projection(self):
         for guard in self:
+            if self.env.context.get("cash_guard_actualiser_realign"):
+                guard._realign_period_to_situation_plus_90_days()
             values = guard._get_projection_summary_values()
 
             running_balance = values["initial_balance"]
@@ -860,6 +1056,22 @@ class DoreviaCashGuard(models.Model):
                 allow_cash_guard_situation_write=True,
             ).write(values)
             guard._sync_weekly_lines()
+            guard._sync_projection_period_moves()
+            proj_align = guard._projection_summary_from_weekly_forward_lines()
+            guard.with_context(
+                skip_cash_guard_recompute=True,
+                allow_cash_guard_situation_write=True,
+            ).write(proj_align)
+        return True
+
+    def action_archive(self):
+        """Archive le document de projection (masqué par défaut, lignes inchangées)."""
+        self.write({"active": False})
+        return True
+
+    def action_unarchive(self):
+        """Réactive un document archivé."""
+        self.write({"active": True})
         return True
 
     def action_validate(self):
@@ -873,12 +1085,12 @@ class DoreviaCashGuard(models.Model):
     def action_close(self):
         if not self._is_cash_guard_manager():
             raise UserError(
-                _("Seul un manager Cash Guard peut clôturer un point de trésorerie.")
+                _("Seul un manager Cash Guard peut clôturer un document de projection.")
             )
         for guard in self:
             if guard.state != "validated":
                 raise UserError(
-                    _("Seul un point validé peut être clôturé.")
+                    _("Seul un document validé peut être clôturé.")
                 )
             guard.state = "closed"
         return True
@@ -886,7 +1098,7 @@ class DoreviaCashGuard(models.Model):
     def action_reopen(self):
         if not self._is_cash_guard_manager():
             raise UserError(
-                _("Seul un manager Cash Guard peut rouvrir un point de trésorerie.")
+                _("Seul un manager Cash Guard peut rouvrir un document de projection.")
             )
         for guard in self:
             if guard.state in ("validated", "closed"):

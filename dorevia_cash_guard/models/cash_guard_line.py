@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -28,12 +28,12 @@ class DoreviaCashGuardLine(models.Model):
     }
 
     _name = "dorevia.cash.guard.line"
-    _description = "Flux prévisionnel Cash Guard"
+    _description = "Flux complémentaire Cash Guard"
     _order = "projection_date asc, sequence asc, id asc"
 
     guard_id = fields.Many2one(
         "dorevia.cash.guard",
-        string="Point de trésorerie",
+        string="Document de projection",
         required=True,
         ondelete="cascade",
         index=True,
@@ -160,7 +160,9 @@ class DoreviaCashGuardLine(models.Model):
     def _check_amounts_and_sequence(self):
         for line in self:
             if line.projected_amount < 0:
-                raise ValidationError("Le montant prévisionnel doit être positif ou nul.")
+                raise ValidationError(
+                    _("Le montant du flux complémentaire doit être positif ou nul.")
+                )
             if line.realized_amount and line.realized_amount < 0:
                 raise ValidationError("Le montant réalisé doit être positif ou nul.")
             if line.sequence < 0:

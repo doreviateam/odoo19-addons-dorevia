@@ -244,3 +244,11 @@ class TestCashGuardProjectedInvoices(AccountTestInvoicingCommon):
         week_due.ensure_one()
         self.assertEqual(guard.risk_status, "risk")
         self.assertEqual(week_due.risk_status, "risk")
+        self.assertEqual(
+            week_due.margin_amount,
+            week_due.projected_balance - guard.alert_threshold,
+        )
+        self.assertEqual(
+            guard.forecast_min_margin,
+            guard.forecast_min_balance - guard.alert_threshold,
+        )

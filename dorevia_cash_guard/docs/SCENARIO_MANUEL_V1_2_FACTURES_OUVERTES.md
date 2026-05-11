@@ -15,7 +15,7 @@
 
 ## Étapes
 
-1. **Créer ou ouvrir un point de trésorerie** avec :
+1. **Créer ou ouvrir un document de projection** avec :
    - une **date de situation** comprise dans l’exercice affiché ;
    - **journaux de trésorerie** Banque + Caisse ;
    - une **périodicité** semaine (pour repérer facilement la ligne du mois concerné) ;
@@ -25,7 +25,7 @@
 
 3. **Créer une facture client validée**, non payée, avec une **date d’échéance dans une semaine future** (après la date de situation).
 
-4. Cliquer **Actualiser** sur le point de trésorerie.
+4. Cliquer **Actualiser** sur le document de projection.
 
 5. Vérifier dans **Suivi de trésorerie** :
    - une ligne dont la colonne **État** est **Prévisionnel**, correspondant à la semaine de l’échéance, affiche une **Projection** supérieure au **Solde** de cette ligne d’un montant égal au **résiduel** de la facture (en devise société) ;
@@ -56,6 +56,6 @@
 ## Résultat attendu
 
 - La **Projection** reflète **uniquement** les pièces **postées** avec résiduel non nul, agrégées depuis `account.move`.
-- Aucune ligne automatique n’apparaît dans l’onglet **Flux prévisionnels** pour représenter les factures (calcul agrégé uniquement).
+- Aucune ligne automatique `dorevia.cash.guard.line` n’est créée pour représenter les factures (calcul agrégé uniquement). L’UI métier standard n’expose pas d’onglet de saisie parallèle de flux complémentaires.
 - Une facture **validée échue non payée** est traitée comme **exigible à la date de situation**.
 - Une facture **brouillon / à valider**, même échue, est **ignorée**.

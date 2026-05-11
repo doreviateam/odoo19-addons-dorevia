@@ -54,9 +54,13 @@ class TestCashGuardWeekly(TransactionCase):
         self.assertEqual(weeks[2].period_type, "current")
         self.assertEqual(weeks[3].period_type, "forecast")
         self.assertEqual(weeks[4].period_type, "forecast")
+        self.assertEqual(
+            [w.week_label for w in weeks],
+            ["S18", "S19", "S20", "S21", "S22"],
+        )
 
     def test_forecast_week_net_from_lines_after_situation(self):
-        """Flux strictement après la date de situation : agrégés en semaines prévisionnelles."""
+        """Flux strictement après la date de situation : agrégés en mailles projection engagée."""
         guard = self._create_guard()
         self.env["dorevia.cash.guard.line"].create(
             {
@@ -89,7 +93,7 @@ class TestCashGuardWeekly(TransactionCase):
                 guard.action_recompute_projection()
         lines = guard.weekly_line_ids.sorted("week_index")
         self.assertEqual(len(lines), 1)
-        self.assertEqual(lines.week_label, "05/2026")
+        self.assertEqual(lines.week_label, "P0")
         self.assertEqual(lines.period_type, "current")
 
     def test_quarter_periodicity_may_segment_label(self):
@@ -99,4 +103,4 @@ class TestCashGuardWeekly(TransactionCase):
                 guard.action_recompute_projection()
         lines = guard.weekly_line_ids.sorted("week_index")
         self.assertEqual(len(lines), 1)
-        self.assertEqual(lines.week_label, "T2 2026")
+        self.assertEqual(lines.week_label, "P0")

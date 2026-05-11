@@ -6,7 +6,7 @@
 
 Procès-verbal de recette du module `dorevia_cash_guard` (Odoo 19 CE).
 
-Ce document acte les résultats de recette des Lots A, B et C, la décision de clôture V1, puis **l’extension V1.2** (solde projeté depuis factures ouvertes).
+Ce document acte les résultats de recette des Lots A, B et C, la décision de clôture V1, puis les extensions **V1.2** (solde projeté depuis factures ouvertes) et **V1.3** (détail projection par période + recette UI).
 
 ---
 
@@ -48,7 +48,7 @@ Résultat constaté :
 
 Points validés :
 
-- création point de trésorerie ;
+- création d’un document de projection ;
 - calculs `initial_balance`, `forecast_final_balance`, `forecast_min_balance`, `min_balance_date` ;
 - statuts `safe` / `warning` / `risk` ;
 - cas critique (final positif, point bas négatif => `risk`) ;
@@ -210,7 +210,7 @@ Constats :
 | Facture brouillon (future) | **Ignorée** |
 | Facture client validée **échue** +150 € | Impact sur le projeté **dès la ligne Situation** (exigible à la date de situation) |
 | Facture brouillon **échue** | **Ignorée** |
-| Flux prévisionnels | **Aucune** ligne `dorevia.cash.guard.line` créée automatiquement pour les factures |
+| Flux complémentaires | **Aucune** ligne `dorevia.cash.guard.line` créée automatiquement pour les factures |
 
 ### 10.5 Doctrine validée
 
@@ -252,3 +252,65 @@ Statut après extension :
 - **Dorevia Cash Guard V1 étendue V1.2 — GO**
 
 *(À compléter : validateur produit, validateur technique, signature si formalisme interne.)*
+
+---
+
+## 12. Extension V1.3 — Détail projection (pièces par période)
+
+### 12.1 Périmètre
+
+Ticket : `CG-V1.3-01-PROJECTION-PERIOD-EXPLANATION`.
+
+Inclus :
+
+- onglet **Détail projection** : lignes `dorevia.cash.guard.period.move` liées aux factures/avoirs ouverts ;
+- colonnes métier : **Période** en première colonne ; **Impact net période** ; **Nb pièces** ; **Échue** en libellés **Oui / Non** (lisibilité vs case à cocher) ; total sur la colonne **Impact** ;
+- masquage UI de l’onglet **Flux complémentaires** sur le formulaire document (`invisible="1"`), modèle et menu liste conservés.
+
+Référence scénario manuel : `docs/SCENARIO_MANUEL_V1_3_DETAIL_PROJECTION.md`.
+
+### 12.2 Environnement de recette V1.3
+
+- Base : `tenant_o8`
+- Module : `dorevia_cash_guard`
+- Version module relevée en recette : **`19.0.5.0.2`**
+
+### 12.3 Recette UI — compréhension métier
+
+Verdict : **GO V1.3** (compréhension métier de l’onglet **Détail projection**). Tests automatisés V1.3 : **OK**. Formalisation : présent PV + signatures internes selon process.
+
+Constats produit :
+
+- **Échue** en **Oui / Non** : lecture immédiate ;
+- **Impact net période** : effet global de la période sans regroupement natif (Odoo ne permet pas `group_by` utile dans le one2many embarqué) ; chaque ligne réaffiche période + agrégats — acceptable V1.3 ;
+- **Nb pièces** : nombre de pièces expliquant la période ;
+- pièces critiques identifiables (ex. `FACTU/2026/06/0001` en **S31**, impact **−4 000,00 €**).
+
+Lecture métier validée sur un jeu contrôlé :
+
+| Période | Impact net période | Lecture |
+| ------- | ------------------ | ------- |
+| S20 | +150 € | compensation client / fournisseur |
+| S22 | −500 € | sortie nette |
+| S24 | +200 € | entrée nette |
+| S31 | −4 000 € | tension / risque expliqué |
+
+### 12.4 Réserve UX (non bloquante V1.3)
+
+**Impact net période** et **Nb pièces** sont répétés sur chaque ligne d’une même période. Une vue groupée par période serait plus élégante en évolution ultérieure (hors contrainte one2many).
+
+### 12.5 Décision
+
+Décision : **V1.3 — GO** (recette UI compréhension métier + tests automatisés V1.3 **OK**).
+
+Date d’acte (rédaction PV) :
+
+- **2026-05-10**
+
+---
+
+## 13. Signature / Validation (mise à jour V1.3)
+
+Statut après extension :
+
+- **Dorevia Cash Guard V1 étendue V1.2 et V1.3 — GO** (V1.3 : compréhension métier Détail projection validée ; formalisation signatures inchangée section 11 si besoin.)

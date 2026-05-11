@@ -5,3 +5,5 @@ access_dorevia_cash_guard_line_user,dorevia.cash.guard.line user,model_dorevia_c
 access_dorevia_cash_guard_line_manager,dorevia.cash.guard.line manager,model_dorevia_cash_guard_line,dorevia_cash_guard.group_cash_guard_manager,1,1,1,1
 access_dorevia_cash_guard_week_user,dorevia.cash.guard.week user,model_dorevia_cash_guard_week,dorevia_cash_guard.group_cash_guard_user,1,0,0,0
 access_dorevia_cash_guard_week_manager,dorevia.cash.guard.week manager,model_dorevia_cash_guard_week,dorevia_cash_guard.group_cash_guard_manager,1,0,0,0
+access_dorevia_cash_guard_period_move_user,dorevia.cash.guard.period.move user,model_dorevia_cash_guard_period_move,dorevia_cash_guard.group_cash_guard_user,1,0,0,0
+access_dorevia_cash_guard_period_move_manager,dorevia.cash.guard.period.move manager,model_dorevia_cash_guard_period_move,dorevia_cash_guard.group_cash_guard_manager,1,0,0,0

@@ -12,7 +12,7 @@ def migrate(cr, version):
     )
     if not menu:
         return
-    label = "Prévision de trésorerie"
+    label = "Projection de trésorerie"
     menu.write({"name": label})
     for lang in env["res.lang"].search([("active", "=", True)]):
         if lang.code.startswith("fr"):

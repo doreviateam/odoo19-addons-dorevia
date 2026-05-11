@@ -33,9 +33,9 @@ Le principe directeur est simple :
 | Élément | Valeur |
 |---|---|
 | Module technique | `dorevia_cash_guard` |
-| Entrée menu (racine Comptabilité) | Prévision de trésorerie |
-| Objet principal | Point de trésorerie |
-| Lignes | Flux prévisionnels |
+| Entrée menu (racine Comptabilité) | Projection de trésorerie |
+| Objet principal | Document de projection (`dorevia.cash.guard`) |
+| Lignes techniques | Flux complémentaires (non exposées dans l'UI métier standard) |
 | Référentiel pivot | Postes budgétaires |
 
 ---
@@ -44,16 +44,15 @@ Le principe directeur est simple :
 
 Le module ne remplace pas la comptabilité générale.
 
-Il s’appuie sur les écritures comptables, les postes budgétaires et le rapprochement bancaire pour produire une lecture de trésorerie prévisionnelle.
+Il s’appuie sur les écritures comptables, les postes budgétaires et le rapprochement bancaire pour produire une **projection de trésorerie** (constat + factures ouvertes à l’échéance), sans équivalent d’une prévision métier complète (budget attendu, simulations avancées : hors périmètre actuel).
 
 Le module ajoute une couche de pilotage :
 
-- projection datée des flux ;
+- projection datée des factures ouvertes ;
 - calcul du solde futur ;
 - identification du solde minimum ;
 - alerte si passage sous zéro ;
 - seuil d’alerte de gestion ;
-- simulation d’hypothèses ;
 - comparaison prévu / réalisé.
 
 Phrase de cadrage :
@@ -76,7 +75,7 @@ mail
 - **`account`** : comptabilité (écritures, journaux, soldes).
 - **`base_account_budget`** : postes budgétaires réutilisés comme pivot des flux.
 - **`base_accounting_kit`** : socle comptable / UX attendu sur les instances Dorevia qui livrent Cash Guard avec ce kit (ordre de chargement et cohérence menu).
-- **`mail`** : fil de discussion et activités sur les points de trésorerie.
+- **`mail`** : fil de discussion et activités sur les documents de projection.
 
 Modèles réutilisés :
 
@@ -150,14 +149,14 @@ Décision :
 
 ## 7. Concepts fonctionnels
 
-### 7.1 Point de trésorerie
+### 7.1 Document de projection
 
-Un point de trésorerie représente une projection sur une période.
+Un document de projection représente une projection sur une période.
 
 Exemple :
 
 ```text
-Point trésorerie — Mai 2026
+Projection Trésorerie 2026
 ```
 
 Il contient :
@@ -230,7 +229,7 @@ Cette nomenclature sert de point de départ pour structurer :
 - les projections de trésorerie ;
 - les analyses graphiques ;
 - les comparaisons prévu / réalisé ;
-- les lectures par poste dans les points de trésorerie.
+- les lectures par poste dans les documents de projection.
 
 Elle n’est pas figée.
 
@@ -326,7 +325,7 @@ Une ligne simulée :
 
 Le solde initial ne doit pas être saisi manuellement dans le fonctionnement normal.
 
-Il est calculé à partir du journal bancaire sélectionné et des écritures comptables à la date de début du point.
+Il est calculé à partir du journal bancaire sélectionné et des écritures comptables à la date de début du document de projection.
 
 ```text
 Solde initial = solde comptable du journal bancaire à la date de début
@@ -453,13 +452,13 @@ La trésorerie n’est pas seulement ce qui est dû : c’est ce qui entre ou so
 
 ### 9.1 `dorevia.cash.guard`
 
-Objet principal : **Point de trésorerie**
+Objet principal : **Document de projection**
 
 Champs pressentis :
 
 | Champ | Type | Description |
 | --- | --- | --- |
-| `name` | Char | Nom du point de trésorerie |
+| `name` | Char | Nom du document de projection |
 | `date_from` | Date | Début de période |
 | `date_to` | Date | Horizon de projection |
 | `bank_journal_id` | Many2one `account.journal` | Journal bancaire suivi |
@@ -485,7 +484,7 @@ Champs pressentis :
 
 | Champ | Type | Description |
 | --- | --- | --- |
-| `guard_id` | Many2one `dorevia.cash.guard` | Point de trésorerie |
+| `guard_id` | Many2one `dorevia.cash.guard` | Document de projection |
 | `projection_date` | Date | Date prévue du flux |
 | `budget_post_id` | Many2one `account.budget.post` | Poste budgétaire |
 | `budget_line_id` | Many2one `budget.lines` | Ligne budgétaire optionnelle |
@@ -589,7 +588,7 @@ Synthèse :
 
 ### Inclus
 
-- création d’un point de trésorerie ;
+- création d’un document de projection ;
 - sélection d’un journal bancaire ;
 - calcul du solde initial depuis la comptabilité ;
 - saisie du seuil d’alerte ;
@@ -624,7 +623,7 @@ Le module est validé si :
 
 | Critère | Attendu |
 | --- | --- |
-| Créer un point de trésorerie | OK |
+| Créer un document de projection | OK |
 | Définir une période | OK |
 | Choisir un journal bancaire | OK |
 | Calculer le solde initial | OK |
@@ -665,7 +664,7 @@ Le module est validé si :
 ### V3
 
 - intégration Dorevia Vault ;
-- scellement des points de trésorerie validés ;
+- scellement des documents de projection validés ;
 - preuve des décisions ;
 - analyse des écarts historiques ;
 - aide à la décision augmentée.

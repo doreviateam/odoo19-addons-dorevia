@@ -216,7 +216,7 @@ Solde de trésorerie
 
 | Champ             | Type                          | Requis | Description                           |
 | ----------------- | ----------------------------- | -----: | ------------------------------------- |
-| `guard_id`        | Many2one `dorevia.cash.guard` |    Oui | Point de trésorerie parent            |
+| `guard_id`        | Many2one `dorevia.cash.guard` |    Oui | Document de projection parent          |
 | `week_index`      | Integer                       |    Oui | Numéro de semaine dans l’exercice     |
 | `week_label`      | Char                          |    Oui | Libellé, ex. `S19`                    |
 | `date_from`       | Date                          |    Oui | Début de semaine                      |
@@ -437,7 +437,7 @@ forecast_final_balance = observed_balance
 
 ## 7. UX attendue
 
-### 7.1 Formulaire Point de trésorerie
+### 7.1 Formulaire Document de projection
 
 Renommer visuellement les champs :
 
@@ -491,31 +491,19 @@ Colonnes recommandées :
 
 ## 8. Menu et libellés UX
 
-Le menu principal utilisateur a été renommé :
+Libellés actés (alignement doctrine projection) :
 
 ```text
-Prévision de trésorerie
+Projection de trésorerie
 ```
-
-Conserver ce libellé.
 
 Sous-menus :
 
 ```text
-Prévision de trésorerie
-- Points de trésorerie
-- Flux prévisionnels
+Projection de trésorerie
+- Documents de projection
+- Flux complémentaires
 ```
-
-Amélioration possible ultérieure :
-
-```text
-Prévision de trésorerie
-- Mes prévisions
-- Détail des flux
-```
-
-Ne pas changer les sous-menus dans ce ticket sauf si simple.
 
 ---
 
@@ -695,7 +683,7 @@ date_from/date_to = exercice courant si détectable
 
 Le ticket est validé si :
 
-- un point de trésorerie peut être rattaché à un exercice ;
+- un document de projection peut être rattaché à un exercice ;
 - une date de situation est disponible ;
 - le solde bancaire à date est calculé correctement ;
 - les semaines de l’exercice sont générées ;

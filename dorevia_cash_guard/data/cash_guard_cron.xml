@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="ir_cron_cash_guard_recompute_open_points" model="ir.cron">
-        <field name="name">Cash Guard - Recalcul des points ouverts</field>
+        <field name="name">Cash Guard — Recalcul des projections ouvertes</field>
         <field name="model_id" ref="model_dorevia_cash_guard"/>
         <field name="state">code</field>
         <field name="code">model._cron_recompute_open_points()</field>

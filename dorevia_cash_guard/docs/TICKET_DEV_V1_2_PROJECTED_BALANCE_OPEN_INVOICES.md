@@ -341,9 +341,9 @@ warning si projected_balance >= 0 et < alert_threshold
 safe si projected_balance >= alert_threshold
 ```
 
-### 8.2 Point de trésorerie (statut global)
+### 8.2 Document de projection (statut global)
 
-Le statut affiché sur le **point** (`dorevia.cash.guard`) doit refléter le **minimum des `projected_balance`** sur les périodes **à partir de la date de situation** : inclure la ligne « Situation » (courante) et les lignes « Prévisionnel » ; **exclure** les lignes « Constaté » dont la période est entièrement **avant** la date de situation (historique pur). Appliquer les **mêmes seuils** que §8.1 à ce minimum.
+Le statut affiché sur le **document de projection** (`dorevia.cash.guard`) doit refléter le **minimum des `projected_balance`** sur les périodes **à partir de la date de situation** : inclure la ligne « Situation » (courante) et les lignes « Prévisionnel » ; **exclure** les lignes « Constaté » dont la période est entièrement **avant** la date de situation (historique pur). Appliquer les **mêmes seuils** que §8.1 à ce minimum.
 
 Le dev doit mettre à jour **à la fois** les statuts de ligne **et** le champ `risk_status` du point selon cette règle — pas uniquement l’un des deux, ni un minimum indifférencié sur tout l’exercice si cela masque un risque sur la trajectoire future.
 
@@ -569,7 +569,7 @@ docs/SCENARIO_MANUEL_V1_2_FACTURES_OUVERTES.md
 
 Scénario minimal :
 
-1. Créer ou utiliser un point de trésorerie avec date de situation, journaux Banque + Caisse, solde constaté connu, périodicité semaine.
+1. Créer ou utiliser un document de projection avec date de situation, journaux Banque + Caisse, solde constaté connu, périodicité semaine.
 2. Créer une facture client validée non payée avec échéance future.
 3. Actualiser le point.
 4. Vérifier que la **Projection** augmente à la période d’échéance.

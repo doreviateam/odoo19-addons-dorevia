@@ -2,7 +2,7 @@
 <odoo>
     <menuitem
         id="menu_dorevia_cash_guard_root"
-        name="Prévision de trésorerie"
+        name="Projection de trésorerie"
         parent="account.menu_finance"
         groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="90"
@@ -10,7 +10,7 @@
 
     <menuitem
         id="menu_dorevia_cash_guard_points"
-        name="Points de trésorerie"
+        name="Documents de projection"
         parent="menu_dorevia_cash_guard_root"
         action="action_dorevia_cash_guard"
         groups="dorevia_cash_guard.group_cash_guard_user"
@@ -19,10 +19,14 @@
 
     <menuitem
         id="menu_dorevia_cash_guard_lines"
-        name="Flux prévisionnels"
+        name="Flux complémentaires"
         parent="menu_dorevia_cash_guard_root"
         action="action_dorevia_cash_guard_line"
         groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="20"
     />
+
+    <record id="menu_dorevia_cash_guard_lines" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
 </odoo>

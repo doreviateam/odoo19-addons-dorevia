@@ -34,7 +34,7 @@ docker compose exec odoo odoo -d tenant_o8 -u dorevia_cash_guard --test-enable -
 
 ## Parcours minimal
 
-1. Créer un **point de trésorerie** : journal banque/caisse, **dates de début et de fin** de la période suivie, **périodicité** (semaine / mois / trimestre ; défaut : semaine), seuil d’alerte.
+1. Créer un **document de projection** : journal banque/caisse, **dates de début et de fin** de la période suivie, **périodicité** (semaine / mois / trimestre ; défaut : semaine), seuil d’alerte.
 2. Enregistrer ; cliquer **Actualiser** : la synthèse affiche la **situation constatée** et la **prévision** ; l’onglet **Suivi de trésorerie** liste les segments selon la périodicité (historique / situation / prévisionnel).
 3. Ajouter des **flux prévisionnels** avec dates strictement **après** la date de situation pour alimenter les **périodes prévisionnelles** correspondantes ; actualiser à nouveau.
 4. **Valider** puis, en manager, **Clôturer** : le cron « Recalcul des points ouverts » ne doit pas modifier les points **Clôturés** (uniquement brouillon / validé).

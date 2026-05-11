@@ -14,7 +14,7 @@ Contexte de recette :
 
 1. Mettre a jour la liste des apps.
 2. Installer `dorevia_cash_guard`.
-3. Verifier que le menu **Prévision de trésorerie** apparait.
+3. Verifier que le menu **Projection de trésorerie** apparait.
 
 Attendu :
 

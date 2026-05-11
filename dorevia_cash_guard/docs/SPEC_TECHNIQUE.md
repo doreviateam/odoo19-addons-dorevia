@@ -15,7 +15,7 @@ Fournir un module Odoo permettant de :
 - projeter une trésorerie bancaire sur une période donnée ;
 - calculer automatiquement le solde initial, le solde final et le solde minimum ;
 - classifier le niveau de risque (`safe`, `warning`, `risk`) selon un seuil ;
-- suivre des flux prévisionnels et simulés ;
+- suivre des flux complémentaires (manuel / simulation) ;
 - préparer une comparaison simple prévu / réalisé.
 
 ### 1.2 Hors périmètre V1
@@ -33,7 +33,7 @@ Fournir un module Odoo permettant de :
 ### 2.1 Nom technique
 
 - Module : `dorevia_cash_guard`
-- Dépendances minimales : `account`, `base_account_budget`, `base_accounting_kit`, `mail`
+- Dépendances minimales : `account`, `base_account_budget`, `base_accounting_kit`, `dorevia_budget_post_unique_accounts`, `mail`
 
 ### 2.1 bis Environnement de recette (référence sandbox)
 
@@ -73,7 +73,9 @@ dorevia_cash_guard/
 
 ### 3.1 Objet principal — `dorevia.cash.guard`
 
-Rôle : représenter un **point de trésorerie** sur une période.
+Rôle : représenter un **document de projection** sur une période.
+
+**Création par défaut (sans dates saisies)** : `situation_date` = date du jour ; `date_from` = `situation_date` ; `date_to` = `date_from` + 90 jours (projection opérationnelle).
 
 ### Champs fonctionnels
 
@@ -87,9 +89,9 @@ Rôle : représenter un **point de trésorerie** sur une période.
 | `currency_id` | Many2one `res.currency` | Oui | Non | Devise société/journal |
 | `alert_threshold` | Monetary | Oui | Non | Seuil de vigilance |
 | `initial_balance` | Monetary | Oui | Non | Calculé |
-| `forecast_final_balance` | Monetary | Oui | Non | Calculé |
-| `forecast_min_balance` | Monetary | Oui | Non | Calculé |
-| `min_balance_date` | Date | Non | Non | Calculé |
+| `forecast_final_balance` | Monetary | Oui | Non | Calculé — projection fin de période (suivi) |
+| `forecast_min_balance` | Monetary | Oui | Non | Calculé — min des projections Situation + projection engagée |
+| `min_balance_date` | Date | Non | Non | Calculé — fin de maille du minimum projeté |
 | `risk_status` | Selection | Oui | Oui | `safe` / `warning` / `risk` |
 | `state` | Selection | Oui | Oui | `draft` / `validated` / `closed` |
 | `responsible_id` | Many2one `res.users` | Non | Oui | Responsable métier |
@@ -153,15 +155,14 @@ Rôle : représenter un flux de trésorerie daté (prévu ou simulé) et son ava
 
 ---
 
-### 3.3 Extension éventuelle — `account.budget.post`
+### 3.3 Référentiel — `account.budget.post`
 
-Pas de nouveau référentiel dédié cash.
+Le module **`dorevia_budget_post_unique_accounts`** (dépendance de Cash Guard) étend les postes budgétaires :
 
-Extensions minimales possibles :
+- champ **`active`** (par défaut actif) pour distinguer postes courants et postes archivés ;
+- contrainte métier : **un même compte comptable ne peut être lié qu’à un seul poste actif par société** ; les postes archivés (`active=False`) ne participent pas à la contrainte, ce qui permet de réaffecter les comptes vers un nouveau poste actif.
 
-- `active` (déjà présent selon versions, sinon utilisé nativement)
-- `cash_direction_default` (`inflow` / `outflow` / `mixed`) pour aide à la saisie
-- `cash_sequence` pour ordre d’affichage
+Extensions futures possibles (hors périmètre actuel) : `cash_direction_default`, `cash_sequence`, etc.
 
 Suppression interdite pour postes utilisés ; archivage recommandé.
 
@@ -193,29 +194,29 @@ id ASC
 
 Objectif : rendre le calcul déterministe.
 
-### 4.3 Solde courant, final et minimum
+### 4.3 Synthèse « projection » (alignée sur le suivi)
 
-Algorithme :
+Les champs **Projection en fin de période**, **Projection minimum** et **Date du point bas projeté** sont alignés sur la colonne **Projection** du suivi : après chaque recalcul, ils sont dérivés des `projected_balance` stockés sur les mailles **Situation** et **Projection engagée** (même source que la grille).
 
-1. `running_balance = initial_balance`
+### 4.4 Solde après ligne (flux)
+
+Algorithme pour `balance_after_line` sur les lignes de flux :
+
+1. `running_balance = initial_balance` (logique des lignes éditables)
 2. Pour chaque ligne triée :
    - appliquer le flux (`+` entrée, `-` sortie)
    - stocker `balance_after_line`
-   - mettre à jour le minimum observé
-3. Fin :
-   - `forecast_final_balance = running_balance`
-   - `forecast_min_balance = min_observe`
-   - `min_balance_date = date_du_min`
+   - mettre à jour le minimum observé sur la trajectoire ligne à ligne
 
-### 4.4 Statut de risque
+### 4.5 Statut de risque
 
-À partir de `forecast_min_balance` et `alert_threshold` :
+À partir de `forecast_min_balance` (projection minimum) et `alert_threshold` :
 
 - `risk` si `< 0`
 - `warning` si `>= 0` et `< alert_threshold`
 - `safe` si `>= alert_threshold`
 
-### 4.5 Variance prévu / réalisé
+### 4.6 Variance prévu / réalisé
 
 ```text
 variance_amount = signed_realized_amount - signed_projected_amount
@@ -227,7 +228,7 @@ Convention figée V0.1 : montants absolus + `direction`, avec champs signés cal
 
 ## 5. Gestion des états
 
-### 5.1 États du point de trésorerie (`state`)
+### 5.1 États du document de projection (`state`)
 
 - `draft` : modifiable
 - `validated` : projection figée fonctionnellement (édition limitée selon droits)
@@ -247,13 +248,12 @@ Convention figée V0.1 : montants absolus + `direction`, avec champs signés cal
 ### 6.1 Menus
 
 ```text
-Comptabilité / Trésorerie / Prévision de trésorerie
+Comptabilité / Trésorerie / Projection de trésorerie
 ```
 
 Sous-menus :
 
-- Points de trésorerie
-- Flux prévisionnels
+- Documents de projection
 - Postes budgétaires (raccourci)
 - Reporting (V1.1)
 
@@ -269,9 +269,10 @@ Blocs :
 
 - En-tête : identité + période + journal
 - Indicateurs : seuil, soldes, statut
-- Onglet lignes : one2many éditable
-- Onglet analyse : synthèse prévu/réalisé simple
+- Onglet suivi : trajectoire de trésorerie calculée
+- Onglet notes : commentaires internes
 - Boutons : actualiser (recalcul), valider, clôturer
+- **Actualiser (V1.2)** : outre le recalcul, réaligne par défaut la période sur la situation à date + **90 jours** (`date_from` = `situation_date`, `date_to` = `date_from` + 90 jours). Les autres déclencheurs de recalcul ne modifient pas les dates.
 
 ### 6.4 Vue lignes
 
@@ -378,7 +379,7 @@ Principe : un seul point d’entrée de recalcul pour éviter les divergences.
 
 Hypothèses V1 :
 
-- 100 à 5 000 lignes par point de trésorerie.
+- 100 à 5 000 lignes par document de projection.
 
 Mesures :
 

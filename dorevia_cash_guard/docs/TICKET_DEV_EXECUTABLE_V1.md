@@ -274,7 +274,7 @@ Ordre de réalisation retenu :
 
 ### Portée
 
-- menu `Comptabilité / Trésorerie / Prévision de trésorerie` ;
+- menu `Comptabilité / Projection de trésorerie` *(racine sous Comptabilité selon instance)* ;
 - vues liste/form du point ;
 - one2many lignes dans le formulaire ;
 - vue liste lignes avec filtres clés ;
