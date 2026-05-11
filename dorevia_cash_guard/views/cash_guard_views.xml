@@ -13,9 +13,9 @@
                 <field name="situation_date" optional="show"/>
                 <field name="liquidity_journal_ids" widget="many2many_tags" optional="show"/>
                 <field name="alert_threshold"/>
-                <field name="observed_balance"/>
-                <field name="forecast_final_balance" string="Projection fin période"/>
-                <field name="forecast_min_balance" string="Projection min."/>
+                <field name="observed_balance" string="Solde constaté"/>
+                <field name="forecast_final_balance" string="Projection finale"/>
+                <field name="forecast_min_balance" string="Point bas"/>
                 <field name="risk_status"/>
             </list>
         </field>
@@ -120,19 +120,26 @@
                         </group>
                     </group>
                     <group string="Synthèse">
+                        <field name="currency_id" invisible="1"/>
                         <group string="Situation constatée">
                             <div colspan="2"
                                  invisible="observed_balance &gt;= 0"
                                  class="alert alert-danger mb-2 p-2"
                                  role="alert">
-                                <strong>Attention :</strong> le solde de trésorerie constaté est négatif.
+                                <strong>Attention :</strong> le solde constaté est négatif.
                             </div>
-                            <field name="situation_date" readonly="1"/>
-                            <field name="observed_balance" readonly="1"/>
+                            <field name="situation_date"
+                                   string="Date"
+                                   readonly="1"/>
+                            <field name="observed_balance"
+                                   string="Solde constaté"
+                                   readonly="1"/>
                             <field name="bank_confirmation_rate"
+                                   string="Confirmation bancaire"
                                    readonly="1"
                                    widget="progressbar"/>
                             <label for="bank_unreconciled_amount"
+                                   string="À rapprocher"
                                    invisible="bank_unreconciled_amount == 0"/>
                             <div invisible="bank_unreconciled_amount == 0"
                                  class="d-flex align-items-center gap-2">
@@ -148,16 +155,16 @@
                         </group>
                         <group string="Projection">
                             <field name="forecast_final_balance"
-                                   string="Projection en fin de période"
+                                   string="Projection finale"
                                    readonly="1"/>
                             <field name="forecast_min_balance"
-                                   string="Projection minimum"
+                                   string="Point bas"
                                    readonly="1"/>
                             <field name="min_balance_date"
-                                   string="Date du point bas projeté"
+                                   string="Date du point bas"
                                    readonly="1"/>
                             <field name="forecast_min_margin"
-                                   string="Couverture minimum"
+                                   string="Couverture min."
                                    readonly="1"/>
                         </group>
                     </group>

@@ -81,7 +81,7 @@ class DoreviaCashGuard(models.Model):
         "dorevia_cash_guard_liquidity_journal_rel",
         "guard_id",
         "journal_id",
-        string="Journaux de trésorerie",
+        string="Journaux",
         domain=[("type", "in", ("bank", "cash"))],
         tracking=True,
         help=(
@@ -98,7 +98,7 @@ class DoreviaCashGuard(models.Model):
         index=True,
         help=(
             "Champ historique V1 : premier journal banque/caisse. "
-            "Préférez « Journaux de trésorerie » pour le périmètre complet."
+            "Préférez « Journaux » pour le périmètre complet."
         ),
     )
     company_id = fields.Many2one(
@@ -387,6 +387,14 @@ class DoreviaCashGuard(models.Model):
             return self.bank_journal_id
         return self.env["account.journal"]
 
+    def _bank_only_journals(self):
+        """Sous-ensemble banque (type='bank') du périmètre de trésorerie.
+
+        Utilisé pour les indicateurs de confirmation bancaire qui ne
+        doivent pas inclure la caisse.
+        """
+        return self._liquidity_journals().filtered(lambda j: j.type == "bank")
+
     def _sync_legacy_bank_journal_from_liquidity(self):
         """Aligne le champ historique `bank_journal_id` sur le premier journal du périmètre."""
         for guard in self:
@@ -502,7 +510,7 @@ class DoreviaCashGuard(models.Model):
         self.ensure_one()
         if not target_date:
             return 0.0
-        journals = self._liquidity_journals()
+        journals = self._bank_only_journals()
         if not journals:
             return 0.0
         base_common = [
@@ -574,7 +582,7 @@ class DoreviaCashGuard(models.Model):
         l'utilisateur voit dans le tableau de bord lorsqu'il clique sur le lien.
         """
         self.ensure_one()
-        journals = self._liquidity_journals()
+        journals = self._bank_only_journals()
         if not journals:
             return 0.0
         dashboard = journals._get_journal_dashboard_outstanding_payments()
@@ -1235,12 +1243,12 @@ class DoreviaCashGuard(models.Model):
         return True
 
     def action_open_bank_reconciliation(self):
-        """Ouvre le tableau de bord comptable (kanban journaux) filtré sur les journaux de trésorerie."""
+        """Ouvre le tableau de bord comptable filtré sur les journaux banque du périmètre."""
         self.ensure_one()
         action = self.env["ir.actions.act_window"]._for_xml_id(
             "account.open_account_journal_dashboard_kanban"
         )
-        journals = self._liquidity_journals()
+        journals = self._bank_only_journals()
         if journals:
             action["domain"] = [("id", "in", journals.ids)]
         return action
