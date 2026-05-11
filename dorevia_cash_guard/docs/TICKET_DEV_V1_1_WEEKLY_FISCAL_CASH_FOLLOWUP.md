@@ -19,7 +19,7 @@ La V1 fonctionne techniquement, mais son modèle de lecture est trop centré sur
 ```text
 date_from
 → solde initial à cette date
-→ flux prévisionnels
+→ flux complémentaires
 ```
 
 Ce comportement est correct pour une projection simple, mais il n’est pas assez naturel pour un suivi réel de trésorerie.
@@ -50,7 +50,7 @@ Doctrine retenue :
 ```text
 Horizon par défaut = exercice comptable courant
 Découpage de lecture = semaines de l’exercice
-Point de départ prévisionnel = dernier solde bancaire à date
+Point de départ projeté = dernier solde bancaire à date
 Capacité historique = rejouer la trésorerie à une date antérieure, par semaine, jusqu’à la date de début de l’exercice par défaut
 ```
 
@@ -59,7 +59,7 @@ Formulation métier :
 > Cash Guard suit l’exercice comptable courant, semaine par semaine.  
 > Les semaines passées sont recalculées depuis les écritures comptables datées.  
 > La date de situation fournit le solde bancaire constaté à date.  
-> Les semaines futures sont projetées depuis ce solde, avec les flux prévisionnels et simulés.
+> Les semaines futures sont projetées depuis ce solde, avec les flux complémentaires et simulés.
 
 Phrase courte :
 
@@ -96,7 +96,7 @@ Solde bancaire à date : 2 400 €
 Lecture historique :
 S01 → S18 : soldes hebdomadaires recalculés depuis les écritures comptables
 
-Lecture prévisionnelle :
+Lecture projetée :
 S19 → S52 : projection depuis le solde bancaire à date
 ```
 
@@ -148,7 +148,7 @@ Pour chaque semaine future :
     solde courant
     + entrées prévues de la semaine
     - sorties prévues de la semaine
-    = solde fin de semaine prévisionnel
+    = solde fin de semaine projeté
 ```
 
 Les flux utilisés sont les flux dont :
@@ -237,7 +237,7 @@ Solde de trésorerie
 period_type = [
     ("historical", "Historique"),
     ("current", "Semaine de situation"),
-    ("forecast", "Prévisionnel"),
+    ("forecast", "Projeté"),
 ]
 ```
 
@@ -277,7 +277,7 @@ initial_balance =
 solde bancaire calculé à date_from
 ```
 
-Mais il ne doit plus être le point de départ opérationnel du prévisionnel si une `situation_date` existe.
+Mais il ne doit plus être le point de départ opérationnel du projeté si une `situation_date` existe.
 
 ### 6.3 Calcul du solde à date de situation
 
@@ -286,7 +286,7 @@ observed_balance =
 solde bancaire calculé à situation_date
 ```
 
-Ce solde devient le point de départ du prévisionnel futur.
+Ce solde devient le point de départ du projeté futur.
 
 ### 6.4 Génération des semaines de l’exercice
 
@@ -315,7 +315,7 @@ Ne pas supposer strictement 52 semaines : selon les dates, il peut y avoir 52 ou
 
 Mais côté UX, on peut parler de « semaines de l’exercice ».
 
-### 6.5 Classification historique / courant / prévisionnel
+### 6.5 Classification historique / courant / projeté
 
 Pour chaque semaine :
 
@@ -364,12 +364,12 @@ closing_balance = observed_balance
 period_type = current
 ```
 
-Cette semaine marque le passage entre historique et prévisionnel.
+Cette semaine marque le passage entre historique et projeté.
 
 Nuance possible :
 
 - les jours <= `situation_date` sont constatés ;
-- les jours > `situation_date` sont prévisionnels.
+- les jours > `situation_date` sont projetés.
 
 Pour V1.1, ne pas complexifier : la semaine courante peut simplement afficher le solde à date comme point d’ancrage.
 
@@ -448,8 +448,8 @@ Renommer visuellement les champs :
 | `situation_date`         | Date de situation                 |
 | `initial_balance`        | Solde début exercice              |
 | `observed_balance`       | Solde bancaire à date             |
-| `forecast_min_balance`   | Solde minimum prévisionnel        |
-| `forecast_final_balance` | Solde prévisionnel fin d’exercice |
+| `forecast_min_balance`   | Projection minimum                |
+| `forecast_final_balance` | Projection en fin de période      |
 
 ### 7.2 Bloc synthèse cible
 
@@ -460,7 +460,7 @@ Exercice : 01/01/2026 → 31/12/2026
 Date de situation : 09/05/2026
 Solde bancaire à date : 2 400 €
 Seuil d’alerte : 3 000 €
-Solde minimum prévisionnel : ...
+Projection minimum : ...
 Statut : safe / warning / risk
 ```
 
@@ -469,7 +469,7 @@ Statut : safe / warning / risk
 Ajouter ou réorganiser les onglets :
 
 ```text
-Flux prévisionnels
+Flux complémentaires
 Soldes de trésorerie
 Notes
 ```
@@ -480,7 +480,7 @@ Colonnes recommandées :
 
 - Semaine ;
 - Période ;
-- Type : Historique / Situation / Prévisionnel ;
+- Type : Historique / Situation / Projeté ;
 - Solde début ;
 - Entrées ;
 - Sorties ;
@@ -696,7 +696,7 @@ Le ticket est validé si :
   - exercice ;
   - date de situation ;
   - solde bancaire à date ;
-  - solde minimum prévisionnel ;
+  - projection minimum ;
   - statut ;
 - les tests automatisés passent ;
 - un scénario manuel V1.1 est documenté et exécuté.

@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia Cash Guard",
-    "version": "19.0.5.0.2",
+    "version": "19.0.5.3.3",
     "category": "Accounting",
-    "summary": "Projection de trésorerie à partir du constat et des factures ouvertes.",
+    "summary": "Projection de trésorerie : constat + factures ouvertes engagées.",
     "description": """
-Cash Guard visualise la projection de trésorerie à partir de la trésorerie constatée et des
-factures ouvertes déjà engagées dans Odoo (pièces postées, résidu à l’échéance).
+Cash Guard mesure l'impact des entrées et sorties de cash engagées sur la trésorerie
+afin d'anticiper les mesures nécessaires.
 
-Périmètre actuel : projection — pas une prévision métier complète (budget, récurrences,
-simulations avancées : évolutions ultérieures).
+Doctrine : trésorerie constatée ± flux engagés (factures ouvertes) = projection.
 
 Fonctions principales :
 - document de projection sur une période ;
-- flux complémentaires (saisie manuelle / simulation) ;
-- soldes et statut de vigilance (safe / warning / risk).
+- suivi de trésorerie (constaté / situation / projeté) ;
+- détail projection : pièces expliquant les tensions ;
+- statut par période (confort / vigilance / tension / risque) ;
+- flux complémentaires (saisie manuelle / simulation, optionnel).
 """,
     "author": "Dorevia",
     "license": "LGPL-3",

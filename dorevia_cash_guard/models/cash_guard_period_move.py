@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import AccessError
 
 
 class DoreviaCashGuardPeriodMove(models.Model):
@@ -41,6 +42,18 @@ class DoreviaCashGuardPeriodMove(models.Model):
         string="Libellé période",
         store=False,
         readonly=True,
+    )
+    period_risk_status = fields.Selection(
+        related="week_id.risk_status",
+        string="Statut",
+        store=True,
+        readonly=True,
+    )
+    period_risk_sequence = fields.Integer(
+        string="Ordre statut",
+        compute="_compute_period_risk_sequence",
+        store=True,
+        index=True,
     )
     week_invoice_net_amount = fields.Monetary(
         related="week_id.invoice_net_amount",
@@ -112,8 +125,49 @@ class DoreviaCashGuardPeriodMove(models.Model):
         compute="_compute_is_overdue_label",
         readonly=True,
     )
+    days_overdue = fields.Integer(
+        string="Jours de retard",
+        readonly=True,
+        help="Nombre de jours entre la date de situation et l'échéance de référence (0 si non échue).",
+    )
+    days_overdue_label = fields.Char(
+        string="Retard",
+        compute="_compute_days_overdue_label",
+        readonly=True,
+    )
 
     @api.depends("is_overdue")
     def _compute_is_overdue_label(self):
         for line in self:
             line.is_overdue_label = "Oui" if line.is_overdue else "Non"
+
+    @api.depends("days_overdue")
+    def _compute_days_overdue_label(self):
+        for line in self:
+            d = line.days_overdue or 0
+            line.days_overdue_label = f"{d} j" if d > 0 else ""
+
+    @api.depends("week_id.risk_status")
+    def _compute_period_risk_sequence(self):
+        order = {"risk": 10, "tension": 15, "warning": 20, "safe": 30}
+        for line in self:
+            line.period_risk_sequence = order.get(line.week_id.risk_status, 99)
+
+    def action_open_source_invoice(self):
+        """Ouvre la facture / avoir source (droits ``account.move`` standards)."""
+        self.ensure_one()
+        move = self.move_id
+        try:
+            move.check_access("read")
+        except AccessError:
+            raise AccessError(
+                _("Vous n'avez pas les droits pour ouvrir cette pièce comptable.")
+            ) from None
+        return {
+            "type": "ir.actions.act_window",
+            "name": move.display_name,
+            "res_model": "account.move",
+            "res_id": move.id,
+            "view_mode": "form",
+            "target": "new",
+        }

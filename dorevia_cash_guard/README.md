@@ -97,7 +97,7 @@ Décision importante :
 
 Une projection de trésorerie négative ne constitue pas automatiquement une situation juridique de cessation des paiements.
 
-Dans `dorevia_cash_guard`, un passage prévisionnel sous zéro est traité comme une **alerte de gestion**.
+Dans `dorevia_cash_guard`, un passage projeté sous zéro est traité comme une **alerte de gestion**.
 
 Le module ne qualifie pas juridiquement la situation de l’entreprise ou de l’association.
 
@@ -111,11 +111,12 @@ ou :
 
 Le module doit afficher des statuts de pilotage :
 
-| Statut | Signification |
-| --- | --- |
-| Sécurisé | la trésorerie reste au-dessus du seuil d’alerte |
-| Vigilance | la trésorerie reste positive mais passe sous le seuil d’alerte |
-| Risque | un passage sous zéro est prévu |
+| Statut | Couleur | Signification |
+| --- | --- | --- |
+| Confort | vert | la projection couvre le seuil d’alerte avec la marge de confort |
+| Vigilance | bleu | la projection couvre le seuil d’alerte mais pas la marge de confort |
+| Tension | orange | la projection reste positive mais ne couvre pas le seuil d’alerte |
+| Risque | rouge | la projection est nulle ou négative |
 
 Formulation retenue :
 
@@ -127,7 +128,7 @@ Formulation retenue :
 
 Le module s’inspire conceptuellement de `mis_builder_cash_flow` côté OCA, notamment pour l’idée suivante :
 
-> unifier les écritures comptables ouvertes et les lignes prévisionnelles manuelles dans une même lecture datée.
+> unifier les écritures comptables ouvertes et les lignes projetées manuelles dans une même lecture datée.
 
 Cependant, `dorevia_cash_guard` ne dépend pas de `mis_builder_cash_flow` ni de MIS Builder.
 
@@ -165,16 +166,16 @@ Il contient :
 - un journal bancaire ;
 - un solde initial calculé ;
 - un seuil d’alerte ;
-- des flux prévisionnels ;
+- des flux complémentaires ;
 - un solde final prévu ;
 - un solde minimum prévu ;
 - un statut de risque.
 
 ---
 
-### 7.2 Flux prévisionnel
+### 7.2 Flux complémentaire
 
-Un flux prévisionnel représente une entrée ou une sortie datée.
+Un flux complémentaire représente une entrée ou une sortie datée.
 
 Exemples :
 
@@ -213,7 +214,7 @@ Il devient le point de jonction entre :
 Budget
 → comptes comptables
 → écritures comptables
-→ flux prévisionnels
+→ flux complémentaires
 → paiements rapprochés
 → analyse prévu / réalisé
 ```
@@ -319,6 +320,32 @@ Une ligne simulée :
 
 ---
 
+### 7.7 Taux de confirmation bancaire
+
+Le taux de confirmation bancaire qualifie la fiabilité du **solde de trésorerie constaté**.
+
+Formule :
+
+```text
+taux = abs(mouvements confirmés)
+     / (abs(mouvements totaux) + abs(paiements en transit))
+     × 100
+```
+
+Un mouvement est « confirmé » si sa ligne comptable est rattachée à une ligne de relevé bancaire (`statement_line_id` renseigné).
+
+Les **paiements en transit** sont les `account.payment` postés sur les journaux du périmètre, dont `is_matched = False` (paiements enregistrés mais pas encore rapprochés avec un relevé bancaire).
+
+Lecture métier :
+
+- **100 %** : tous les mouvements de trésorerie sont confirmés et aucun paiement ne reste en transit ;
+- **< 100 %** : une partie des mouvements reste à confirmer ou des paiements sont en attente de rapprochement ;
+- **0 %** : aucune confirmation bancaire détectée.
+
+Le taux est affiché dans le bloc **Situation constatée** avec un widget barre de progression.
+
+---
+
 ## 8. Règles métier
 
 ### 8.1 Solde initial
@@ -339,13 +366,13 @@ Le module doit éviter de recréer une logique de tableur dans Odoo.
 
 Les flux sont ordonnés par date.
 
-Après chaque flux, le module calcule un nouveau solde prévisionnel.
+Après chaque flux, le module calcule un nouveau solde projeté.
 
 ```text
 Solde initial
 + entrées prévues datées
 - sorties prévues datées
-= solde prévisionnel
+= solde projeté
 ```
 
 Les lignes sont triées par :
@@ -376,13 +403,16 @@ Le module doit donc alerter sur le **solde minimum**, pas seulement sur le solde
 
 ### 8.4 Statut de risque
 
-Le statut est calculé à partir du solde minimum et du seuil d’alerte.
+Le statut est calculé à partir de la projection minimum, du seuil d’alerte et du seuil de confort.
 
-| Condition | Statut |
-| --- | --- |
-| Solde minimum < 0 | Risque |
-| Solde minimum >= 0 et < seuil d’alerte | Vigilance |
-| Solde minimum >= seuil d’alerte | Sécurisé |
+Seuil sécurisé = seuil d’alerte × (1 + seuil de confort / 100).
+
+| Condition | Statut | Couleur |
+| --- | --- | --- |
+| Projection ≤ 0 | Risque | rouge |
+| 0 < Projection < seuil d’alerte | Tension | orange |
+| seuil d’alerte ≤ Projection < seuil sécurisé | Vigilance | bleu |
+| Projection ≥ seuil sécurisé | Confort | vert |
 
 ---
 
@@ -465,11 +495,13 @@ Champs pressentis :
 | `company_id` | Many2one `res.company` | Société |
 | `currency_id` | Many2one `res.currency` | Devise |
 | `alert_threshold` | Monetary | Seuil d’alerte |
+| `observed_balance` | Monetary | Solde de trésorerie constaté |
+| `bank_confirmation_rate` | Float | Taux de confirmation bancaire (%) |
 | `initial_balance` | Monetary | Solde initial calculé |
 | `forecast_final_balance` | Monetary | Solde final prévu |
 | `forecast_min_balance` | Monetary | Solde minimum prévu |
 | `min_balance_date` | Date | Date du point bas |
-| `risk_status` | Selection | sécurisé / vigilance / risque |
+| `risk_status` | Selection | confort / vigilance / tension / risque |
 | `state` | Selection | brouillon / validé / clôturé |
 | `responsible_id` | Many2one `res.users` | Responsable |
 | `note` | Text | Commentaire |
@@ -478,7 +510,7 @@ Champs pressentis :
 
 ### 9.2 `dorevia.cash.guard.line`
 
-Objet : **Flux prévisionnel**
+Objet : **Flux complémentaire**
 
 Champs pressentis :
 
@@ -564,7 +596,7 @@ Le graphique doit permettre d’identifier rapidement :
 
 ## 11. Exemple de projection
 
-| Date | Poste budgétaire | Libellé | Entrée | Sortie | Solde prévu |
+| Date | Poste budgétaire | Libellé | Entrée | Sortie | Projection |
 | --- | --- | --- | ---: | ---: | ---: |
 | 01/05/2026 | — | Solde initial Banque |  |  | 18 400 € |
 | 15/05/2026 | Fournisseurs | Paiement fournisseur |  | 4 800 € | 13 600 € |
@@ -580,7 +612,7 @@ Synthèse :
 | Solde final prévu | 3 200 € |
 | Solde minimum prévu | 3 200 € |
 | Seuil d’alerte | 5 000 € |
-| Statut | Vigilance |
+| Statut | Tension |
 
 ---
 
@@ -595,11 +627,11 @@ Synthèse :
 - réutilisation des postes budgétaires ;
 - initialisation optionnelle d’une nomenclature de 20 postes budgétaires standards ;
 - possibilité d’archiver, renommer ou compléter les postes selon les besoins de gestion ;
-- création de flux prévisionnels ;
+- création de flux complémentaires ;
 - création de lignes simulées ;
 - calcul du solde après chaque flux ;
 - calcul du solde minimum ;
-- statut sécurisé / vigilance / risque ;
+- statut confort / vigilance / tension / risque ;
 - comparaison simple prévu / réalisé ;
 - graphique mensuel par poste budgétaire en V1.1, sauf si rapide via vue graph standard Odoo.
 
@@ -635,9 +667,10 @@ Le module est validé si :
 | Créer un nouveau poste budgétaire si besoin | OK |
 | Calculer le solde après chaque ligne | OK |
 | Identifier le solde minimum | OK |
-| Déclencher un statut Risque si solde minimum < 0 | OK |
-| Déclencher un statut Vigilance si solde minimum < seuil | OK |
-| Déclencher un statut Sécurisé si solde minimum >= seuil | OK |
+| Déclencher un statut Risque si projection ≤ 0 | OK |
+| Déclencher un statut Tension si 0 < projection < seuil d’alerte | OK |
+| Déclencher un statut Vigilance si seuil d’alerte ≤ projection < seuil sécurisé | OK |
+| Déclencher un statut Confort si projection ≥ seuil sécurisé | OK |
 | Comparer prévu / réalisé simple | OK |
 | Afficher une analyse par poste budgétaire | OK |
 | Ne jamais afficher automatiquement “dépôt de bilan” ou “cessation des paiements” | OK |
@@ -681,7 +714,7 @@ Elle relie :
 Budget
 → Comptabilité
 → Rapprochement bancaire
-→ Trésorerie prévisionnelle
+→ Projection de trésorerie
 → Simulation
 → Décision
 ```

@@ -81,6 +81,8 @@ class TestCashGuardProjectionExplanation(AccountTestInvoicingCommon):
         self.assertEqual(detail.signed_amount, 300.0)
         self.assertEqual(detail.explanation_type, "inflow")
         self.assertFalse(detail.is_overdue)
+        self.assertEqual(detail.days_overdue, 0)
+        self.assertEqual(detail.days_overdue_label, "")
         self.assertEqual(week.invoice_net_amount, 300.0)
         self.assertEqual(week.invoice_move_count, 1)
 
@@ -117,6 +119,8 @@ class TestCashGuardProjectionExplanation(AccountTestInvoicingCommon):
         detail.ensure_one()
         self.assertEqual(detail.projected_date, date(2026, 5, 9))
         self.assertTrue(detail.is_overdue)
+        self.assertEqual(detail.days_overdue, 4)
+        self.assertEqual(detail.days_overdue_label, "4 j")
         sit = guard.weekly_line_ids.filtered(lambda w: w.period_type == "current")
         sit.ensure_one()
         self.assertEqual(detail.week_id, sit)
@@ -240,3 +244,86 @@ class TestCashGuardProjectionExplanation(AccountTestInvoicingCommon):
         self._recompute(guard, moves=[inv])
         self.assertEqual(len(guard.projection_period_move_ids), 1)
         self.assertEqual(guard.projection_period_move_ids.move_id, inv)
+
+    def test_detail_status_order_prioritizes_risk_then_warning_then_safe(self):
+        safe_inv = self._create_invoice_one_line(
+            price_unit=500.0,
+            move_type="in_invoice",
+            invoice_date="2026-05-09",
+            invoice_date_due="2026-05-15",
+            tax_ids=[Command.clear()],
+            post=True,
+        )
+        self._force_due_date(safe_inv, "2026-05-15")
+        warning_inv = self._create_invoice_one_line(
+            price_unit=600.0,
+            move_type="in_invoice",
+            invoice_date="2026-05-09",
+            invoice_date_due="2026-05-22",
+            tax_ids=[Command.clear()],
+            post=True,
+        )
+        self._force_due_date(warning_inv, "2026-05-22")
+        risk_inv = self._create_invoice_one_line(
+            price_unit=4000.0,
+            move_type="in_invoice",
+            invoice_date="2026-05-09",
+            invoice_date_due="2026-05-29",
+            tax_ids=[Command.clear()],
+            post=True,
+        )
+        self._force_due_date(risk_inv, "2026-05-29")
+        guard = self._create_guard()
+        self._recompute(
+            guard,
+            bank_balance=4200.0,
+            moves=[safe_inv, warning_inv, risk_inv],
+        )
+        details = guard.projection_period_move_ids.sorted(
+            key=lambda line: (
+                line.period_risk_sequence,
+                line.week_index,
+                line.projected_date,
+                line.signed_amount,
+                line.id,
+            )
+        )
+        self.assertEqual(
+            details.mapped("period_risk_status"),
+            ["risk", "warning", "safe"],
+        )
+        self.assertEqual(details.mapped("period_risk_sequence"), [10, 20, 30])
+        unsecured_details = guard.projection_unsecured_period_move_ids.sorted(
+            key=lambda line: (
+                line.period_risk_sequence,
+                line.week_index,
+                line.projected_date,
+                line.signed_amount,
+                line.id,
+            )
+        )
+        self.assertEqual(
+            unsecured_details.mapped("period_risk_status"),
+            ["risk", "warning"],
+        )
+        self.assertEqual(len(details), 3)
+
+    def test_action_open_source_invoice_returns_move_form(self):
+        inv = self._create_invoice_one_line(
+            price_unit=300.0,
+            move_type="in_invoice",
+            invoice_date="2026-05-09",
+            invoice_date_due="2026-05-20",
+            tax_ids=[Command.clear()],
+            post=True,
+        )
+        self._force_due_date(inv, "2026-05-20")
+        guard = self._create_guard()
+        self._recompute(guard, moves=[inv])
+        detail = guard.projection_period_move_ids.filtered(lambda d: d.move_id == inv)
+        detail.ensure_one()
+        action = detail.action_open_source_invoice()
+        self.assertEqual(action.get("type"), "ir.actions.act_window")
+        self.assertEqual(action.get("res_model"), "account.move")
+        self.assertEqual(action.get("res_id"), inv.id)
+        self.assertEqual(action.get("view_mode"), "form")

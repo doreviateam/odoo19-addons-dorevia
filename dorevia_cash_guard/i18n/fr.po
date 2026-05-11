@@ -332,11 +332,44 @@ msgstr "Situation"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_week__period_type__forecast
-msgid "Prévisionnel"
-msgstr "Prévisionnel"
+msgid "Projeté"
+msgstr "Projeté"
 
 #. module: dorevia_cash_guard
 #: code:addons/dorevia_cash_guard/models/cash_guard_line.py:0
 #, python-format
 msgid "Le montant du flux complémentaire doit être positif ou nul."
 msgstr "Le montant du flux complémentaire doit être positif ou nul."
+
+#. module: dorevia_cash_guard
+#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
+msgid "Ouvrir la facture"
+msgstr "Ouvrir la facture"
+
+#. module: dorevia_cash_guard
+#: code:addons/dorevia_cash_guard/models/cash_guard_period_move.py:0
+#, python-format
+msgid "Vous n'avez pas les droits pour ouvrir cette pièce comptable."
+msgstr "Vous n'avez pas les droits pour ouvrir cette pièce comptable."
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard__risk_status__tension
+#: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_week__risk_status__tension
+msgid "Tension"
+msgstr "Tension"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard__risk_status__safe
+#: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_week__risk_status__safe
+msgid "Confort"
+msgstr "Confort"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__bank_confirmation_rate
+msgid "Taux de confirmation bancaire"
+msgstr "Taux de confirmation bancaire"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__days_overdue_label
+msgid "Retard"
+msgstr "Retard"

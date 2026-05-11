@@ -171,7 +171,7 @@ Ticket : `CG-V1.2-01-PROJECTED-BALANCE-FROM-OPEN-INVOICES`.
 
 Inclus :
 
-- colonne **Projection** sur le suivi de trésorerie (`dorevia.cash.guard.week`) ; colonne **État** (Constaté / Situation / Prévisionnel) ;
+- colonne **Projection** sur le suivi de trésorerie (`dorevia.cash.guard.week`) ; colonne **État** (Constaté / Situation / Projeté) ;
 - calcul agrégé depuis `account.move` : pièces **postées** avec **`amount_residual ≠ 0`** ;
 - date projetée : `max(invoice_date_due or invoice_date or situation_date, situation_date)` ;
 - statuts de ligne et statut global du point basés sur la **trajectoire projetée forward** (à partir de la date de situation).
@@ -235,13 +235,13 @@ Date d’acte :
 
 ### 10.8 Points hors jalon à traiter ultérieurement
 
-- prévisionnel attendu issu du budget ;
+- projection attendue issue du budget ;
 - règles de ventilation de trésorerie ;
 - simulations avancées ;
 - intégration éventuelle LYNKR / Vault ;
 - amélioration du chatter.
 
-*(Le périmètre V1.2 acté ci-dessus couvre uniquement le **prévisionnel engagé par factures ouvertes**.)*
+*(Le périmètre V1.2 acté ci-dessus couvre uniquement la **projection engagée par factures ouvertes**.)*
 
 ---
 
@@ -264,7 +264,9 @@ Ticket : `CG-V1.3-01-PROJECTION-PERIOD-EXPLANATION`.
 Inclus :
 
 - onglet **Détail projection** : lignes `dorevia.cash.guard.period.move` liées aux factures/avoirs ouverts ;
-- colonnes métier : **Période** en première colonne ; **Impact net période** ; **Nb pièces** ; **Échue** en libellés **Oui / Non** (lisibilité vs case à cocher) ; total sur la colonne **Impact** ;
+- colonnes métier (vue par défaut) : **Statut** ; **Période** ; **Pièce** (`move_id`, lien facture) ; **Partenaire** ; **Type** ; **Échéance** ; **Impact** (total) ; **Échue** ; action discrète (icône, fin de ligne) ; **Impact net période** / **Nb pièces** / **Date projetée** en colonnes optionnelles masquées par défaut ; ouverture `account.move` avec droits standards ; pas d’ouverture du formulaire technique `dorevia.cash.guard.period.move` au clic sur la ligne ;
+- tri par défaut **Risque → Tension → Vigilance → Confort** (champ technique `period_risk_sequence`), puis période, date projetée, impact ; décorations liste par statut (rouge / orange / bleu / vert) ;
+- mode focus **Non sécurisées seulement** dans l’onglet détail : lignes `Risque` + `Vigilance` uniquement, avec bascule **Toutes** conservant les lignes `Sécurisé` ;
 - masquage UI de l’onglet **Flux complémentaires** sur le formulaire document (`invisible="1"`), modèle et menu liste conservés.
 
 Référence scénario manuel : `docs/SCENARIO_MANUEL_V1_3_DETAIL_PROJECTION.md`.
@@ -273,7 +275,7 @@ Référence scénario manuel : `docs/SCENARIO_MANUEL_V1_3_DETAIL_PROJECTION.md`.
 
 - Base : `tenant_o8`
 - Module : `dorevia_cash_guard`
-- Version module relevée en recette : **`19.0.5.0.2`**
+- Version module relevée en recette : **`19.0.5.0.8`**
 
 ### 12.3 Recette UI — compréhension métier
 
@@ -281,10 +283,12 @@ Verdict : **GO V1.3** (compréhension métier de l’onglet **Détail projection
 
 Constats produit :
 
+- **Statut** + tri métier : les pièces des périodes en **Risque** apparaissent avant **Tension**, puis **Vigilance**, puis **Confort** (non-regression testée : ordre `risk`, `tension`, `warning`, `safe`) ;
+- **Non sécurisées seulement** : filtre de lecture sur les lignes **Risque** + **Tension** + **Vigilance**, sans suppression des lignes **Confort** disponibles dans **Toutes** ;
 - **Échue** en **Oui / Non** : lecture immédiate ;
-- **Impact net période** : effet global de la période sans regroupement natif (Odoo ne permet pas `group_by` utile dans le one2many embarqué) ; chaque ligne réaffiche période + agrégats — acceptable V1.3 ;
+- **Impact net période** : effet global de la période sans regroupement natif (Odoo ne permet pas `group_by` utile dans le one2many embarqué) ; compromis = tri + colonnes répétées — acceptable V1.3 ;
 - **Nb pièces** : nombre de pièces expliquant la période ;
-- pièces critiques identifiables (ex. `FACTU/2026/06/0001` en **S31**, impact **−4 000,00 €**).
+- pièces critiques identifiables en tête de liste (ex. ligne **Risque / S31 / FACTU/2026/06/0001 / −4 000,00 €**, puis **Vigilance / S22**, etc.).
 
 Lecture métier validée sur un jeu contrôlé :
 
@@ -297,7 +301,7 @@ Lecture métier validée sur un jeu contrôlé :
 
 ### 12.4 Réserve UX (non bloquante V1.3)
 
-**Impact net période** et **Nb pièces** sont répétés sur chaque ligne d’une même période. Une vue groupée par période serait plus élégante en évolution ultérieure (hors contrainte one2many).
+**Statut**, **Impact net période** et **Nb pièces** sont répétés sur chaque ligne d’une même période. Une vue groupée par période serait plus élégante en évolution ultérieure (hors contrainte one2many).
 
 ### 12.5 Décision
 
@@ -309,8 +313,123 @@ Date d’acte (rédaction PV) :
 
 ---
 
-## 13. Signature / Validation (mise à jour V1.3)
+## 13. Extension V1.4 — Taux de confirmation bancaire
+
+### 13.1 Périmètre
+
+Nouvel indicateur **Taux de confirmation bancaire** ajouté au bloc **Situation constatée** du document de projection.
+
+Définition :
+
+```text
+Taux de confirmation bancaire
+= somme(abs(mouvements de trésorerie rapprochés avec un relevé bancaire))
+  / somme(abs(mouvements de trésorerie totaux))
+× 100
+```
+
+Périmètre : journaux de trésorerie du document, écritures postées, jusqu'à la date de situation.
+
+Un mouvement est « confirmé » lorsque la ligne comptable est liée à une ligne de relevé bancaire (`statement_line_id` renseigné sur `account.move.line`).
+
+Le dénominateur inclut également les **paiements bancaires en transit** (`account.payment` postés, `is_matched = False` sur les journaux du périmètre), ce qui empêche le taux d'atteindre 100 % tant que des paiements restent à rapprocher.
+
+Sens métier :
+
+- **100 %** : tous les mouvements de trésorerie sont confirmés ET aucun paiement bancaire en transit ;
+- **taux partiel** : une partie des mouvements reste à confirmer ou des paiements sont en attente de rapprochement ;
+- **0 %** : aucune confirmation bancaire détectée.
+
+### 13.2 UX
+
+Affiché dans le formulaire, bloc **Situation constatée**, sous le solde constaté, avec un widget barre de progression.
+
+### 13.3 Environnement de recette V1.4
+
+- Base : `tenant_o8`
+- Module : `dorevia_cash_guard`
+- Version : `19.0.5.3.3`
+
+### 13.4 Résultat de recette
+
+L'indicateur **Taux de confirmation bancaire** est visible dans le bloc **Situation constatée**, sous le **Solde de trésorerie constaté**.
+
+Exemple constaté en recette (après correction V1.4) :
+
+```text
+Taux de confirmation bancaire : 97 %
+```
+
+Le taux n'est plus 100 % car 520 € de paiements bancaires non rapprochés sont inclus dans le dénominateur.
+
+### 13.5 Lecture métier validée
+
+L'indicateur qualifie la fiabilité du solde constaté sans polluer la projection.
+
+Lecture utilisateur :
+
+- le solde indique combien de trésorerie est constatée à date ;
+- le taux de confirmation bancaire indique dans quelle mesure ce solde est confirmé par les relevés bancaires importés / rattachés.
+
+Lecture globale validée :
+
+```text
+Situation constatée
+→ combien j'ai
+→ à quel point c'est confirmé par la banque
+
+Projection
+→ ce qui va se passer
+→ couverture / statut / pièces explicatives
+```
+
+### 13.6 Tests
+
+Suite `dorevia_cash_guard` relancée sur `tenant_o8`.
+
+Résultat :
+
+```text
+0 failed, 0 errors
+```
+
+Warnings Odoo connus uniquement (`odoo.osv` déprécié).
+
+### 13.7 Décision
+
+**V1.4 — Taux de confirmation bancaire : GO produit.**
+
+Date d'acte (rédaction PV) :
+
+- **2026-05-11**
+
+### 13.8 Correction doctrine V1.4 — paiements en transit
+
+**Problème** : le taux affichait 100 % alors que le tableau de bord Banque montrait encore des paiements à traiter/confirmer.
+
+**Cause** : le calcul V1 ne tenait compte que des `account.move.line` avec `statement_line_id`. Les paiements enregistrés (`account.payment` postés, `is_matched = False`) étaient invisibles pour le taux.
+
+**Correction** (version `19.0.5.3.3`) : le dénominateur du taux intègre désormais `abs(amount)` des paiements non rapprochés sur les journaux du périmètre. Ces paiements gonflent le dénominateur sans augmenter le numérateur, ce qui empêche le 100 % tant qu'il reste des paiements en transit.
+
+**Formule corrigée** :
+
+```text
+taux = abs(mouvements confirmés) / (abs(mouvements totaux) + abs(paiements en transit)) × 100
+```
+
+**Résultat sur tenant_o8** :
+
+```text
+Avant correction : 99 %
+Après correction  : 97 %  (520 € de paiements en transit détectés)
+```
+
+**Tests** : 53 tests, 0 failed, 0 errors (nouveau test : `test_bank_confirmation_rate_below_100_with_outstanding_payment`).
+
+---
+
+## 14. Signature / Validation (mise à jour V1.4)
 
 Statut après extension :
 
-- **Dorevia Cash Guard V1 étendue V1.2 et V1.3 — GO** (V1.3 : compréhension métier Détail projection validée ; formalisation signatures inchangée section 11 si besoin.)
+- **Dorevia Cash Guard V1 étendue V1.2, V1.3 et V1.4 — GO** (V1.4 : Taux de confirmation bancaire validé produit, correction paiements en transit appliquée ; V1.3 : compréhension métier Détail projection validée ; formalisation signatures inchangée section 11 si besoin.)

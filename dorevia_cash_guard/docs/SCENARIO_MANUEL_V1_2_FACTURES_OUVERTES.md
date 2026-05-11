@@ -28,7 +28,7 @@
 4. Cliquer **Actualiser** sur le document de projection.
 
 5. Vérifier dans **Suivi de trésorerie** :
-   - une ligne dont la colonne **État** est **Prévisionnel**, correspondant à la semaine de l’échéance, affiche une **Projection** supérieure au **Solde** de cette ligne d’un montant égal au **résiduel** de la facture (en devise société) ;
+   - une ligne dont la colonne **État** est **Projeté**, correspondant à la semaine de l’échéance, affiche une **Projection** supérieure au **Solde** de cette ligne d’un montant égal au **résiduel** de la facture (en devise société) ;
    - le **Statut** des lignes utilise bien la **Projection** (pas uniquement le solde constaté si la facture suffit à changer le niveau de risque).
 
 6. **Créer une facture fournisseur validée**, non payée, échéance sur une autre semaine.

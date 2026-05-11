@@ -31,7 +31,7 @@ class DoreviaCashGuardWeek(models.Model):
         [
             ("historical", "Constaté"),
             ("current", "Situation"),
-            ("forecast", "Prévisionnel"),
+            ("forecast", "Projeté"),
         ],
         string="État",
         required=True,
@@ -92,14 +92,15 @@ class DoreviaCashGuardWeek(models.Model):
     min_balance = fields.Monetary(string="Point bas")
     risk_status = fields.Selection(
         [
-            ("safe", "Sécurisé"),
+            ("safe", "Confort"),
             ("warning", "Vigilance"),
+            ("tension", "Tension"),
             ("risk", "Risque"),
         ],
         string="Statut",
         help=(
-            "Risque par rapport au seuil d'alerte et à la projection sur la maille : "
-            "identique à la coloration des lignes (sécurisé / vigilance / risque)."
+            "Statut par rapport aux seuils d'alerte et de confort : "
+            "confort (vert) / vigilance (bleu) / tension (orange) / risque (rouge)."
         ),
     )
     currency_id = fields.Many2one(

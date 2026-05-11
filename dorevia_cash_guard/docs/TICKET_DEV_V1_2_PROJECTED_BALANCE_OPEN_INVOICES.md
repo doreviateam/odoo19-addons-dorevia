@@ -2,7 +2,7 @@
 
 ## Solde projeté depuis factures ouvertes
 
-*Interface utilisateur : colonne **Projection** (`projected_balance`), colonne **État** (Constaté / Situation / Prévisionnel).*
+*Interface utilisateur : colonne **Projection** (`projected_balance`), colonne **État** (Constaté / Situation / Projeté).*
 
 **ID** : `CG-V1.2-01-PROJECTED-BALANCE-FROM-OPEN-INVOICES`  
 **Module** : `dorevia_cash_guard`  
@@ -33,9 +33,9 @@ Période | Début | Fin | État | Solde | Statut
 
 Cette lecture donne le solde constaté / rejoué / projeté selon la période, mais elle ne tient pas encore compte automatiquement des factures ouvertes.
 
-Or les factures validées non payées constituent le premier niveau fiable du prévisionnel :
+Or les factures validées non payées constituent le premier niveau fiable de la projection :
 
-> **Prévisionnel engagé = factures ouvertes validées dans Odoo.**
+> **Projection engagée = factures ouvertes validées dans Odoo.**
 
 ---
 
@@ -87,7 +87,7 @@ Exclure du solde projeté V1.2 :
 
 ### 4.1 Factures validées ouvertes
 
-Une facture validée ouverte devient un flux prévisionnel engagé.
+Une facture validée ouverte devient un flux complémentaire engagé.
 
 **Facture client**
 
@@ -144,7 +144,7 @@ Conséquences :
 
 ### 4.3 Factures à valider
 
-Les factures à valider ne font pas partie du prévisionnel engagé.
+Les factures à valider ne font pas partie de la projection engagée.
 
 Règles V1.2 :
 
@@ -343,7 +343,7 @@ safe si projected_balance >= alert_threshold
 
 ### 8.2 Document de projection (statut global)
 
-Le statut affiché sur le **document de projection** (`dorevia.cash.guard`) doit refléter le **minimum des `projected_balance`** sur les périodes **à partir de la date de situation** : inclure la ligne « Situation » (courante) et les lignes « Prévisionnel » ; **exclure** les lignes « Constaté » dont la période est entièrement **avant** la date de situation (historique pur). Appliquer les **mêmes seuils** que §8.1 à ce minimum.
+Le statut affiché sur le **document de projection** (`dorevia.cash.guard`) doit refléter le **minimum des `projected_balance`** sur les périodes **à partir de la date de situation** : inclure la ligne « Situation » (courante) et les lignes « Projeté » ; **exclure** les lignes « Constaté » dont la période est entièrement **avant** la date de situation (historique pur). Appliquer les **mêmes seuils** que §8.1 à ce minimum.
 
 Le dev doit mettre à jour **à la fois** les statuts de ligne **et** le champ `risk_status` du point selon cette règle — pas uniquement l’un des deux, ni un minimum indifférencié sur tout l’exercice si cela masque un risque sur la trajectoire future.
 
@@ -388,7 +388,7 @@ Valeurs de la colonne **État** :
 ```text
 Constaté
 Situation
-Prévisionnel
+Projeté
 ```
 
 ### 9.3 Aucune lecture devis
@@ -419,7 +419,7 @@ Résultat attendu :
 | Période               | État         |   Solde | Projection | Statut  |
 | --------------------- | ------------ | ------: | ---------: | ------- |
 | Semaine 09/05 → 15/05 | Situation    | 2 520 € |    2 520 € | Warning |
-| Semaine 16/05 → 22/05 | Prévisionnel | 2 520 € |    2 820 € | Warning |
+| Semaine 16/05 → 22/05 | Projeté | 2 520 € |    2 820 € | Warning |
 
 Si seuil = 2 000 € :
 
@@ -614,7 +614,7 @@ Raison :
 - éviter une synchronisation complexe ;
 - garder la source de vérité dans `account.move`.
 
-Les lignes de flux manuelles restent réservées aux prévisions attendues et simulations.
+Les lignes de flux manuelles restent réservées aux projections attendues et simulations.
 
 ---
 
@@ -637,10 +637,10 @@ Le ticket est validé si :
 
 ## 16. Résumé produit
 
-Ce ticket ajoute le premier niveau automatique de prévisionnel :
+Ce ticket ajoute le premier niveau automatique de projection :
 
 ```text
-Prévisionnel engagé = factures ouvertes
+Projection engagée = factures ouvertes
 ```
 
 Il permet de lire :
@@ -653,6 +653,6 @@ Solde de trésorerie constaté
 
 Formule courte :
 
-> **Facture validée ouverte = prévisionnel engagé.  
+> **Facture validée ouverte = projection engagée.  
 > Facture payée = constaté.  
 > Facture brouillon = ignorée.**

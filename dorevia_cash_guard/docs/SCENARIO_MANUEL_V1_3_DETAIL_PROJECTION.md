@@ -20,11 +20,13 @@ Sur le formulaire document de projection, l’onglet **Flux complémentaires** e
 4. Créer une **facture fournisseur** postée, ouverte, avec **échéance** dans une autre semaine couverte.
 5. Rouvrir le document ou attendre le recalcul (selon configuration) ; forcer un recalcul si besoin.
 6. Ouvrir l’onglet **Détail projection**.
-7. Vérifier que chaque facture apparaît sur la **Période** (ex. `Sxx`) correspondant à la date projetée `max(échéance, date de situation)`.
-8. Vérifier les **signes** : client positif, fournisseur négatif ; avoirs inversés.
-9. Identifier une période en **Risque** dans le suivi et la **pièce** associée dans le détail.
-10. **Payer** une facture listée ; recalculer.
-11. Vérifier que la pièce **disparaît** du détail et que les totaux de la maille se mettent à jour.
+7. Par défaut, consulter **Non sécurisées seulement** : seules les lignes `Risque`, `Tension` et `Vigilance` doivent être visibles.
+8. Basculer sur **Toutes** pour vérifier que les lignes `Confort` restent disponibles en lecture.
+9. Vérifier que chaque facture apparaît sur la **Période** (ex. `Sxx`) correspondant à la date projetée `max(échéance, date de situation)`.
+10. Vérifier les **signes** : client positif, fournisseur négatif ; avoirs inversés.
+11. Identifier une période en **Risque** dans le suivi et la **pièce** associée dans le détail ; ouvrir la facture via la **colonne Pièce** (`move_id`) ou l’**icône lien** en fin de ligne (infobulle *Ouvrir la facture*). Un clic sur le **reste de la ligne** ne doit pas ouvrir le formulaire technique `dorevia.cash.guard.period.move`.
+12. **Payer** une facture listée ; recalculer.
+13. Vérifier que la pièce **disparaît** du détail et que les totaux de la maille se mettent à jour.
 
 ## Points de contrôle
 
@@ -34,10 +36,24 @@ Sur le formulaire document de projection, l’onglet **Flux complémentaires** e
 
 ## Grille Détail projection (UX validée recette)
 
-- **Période** : première colonne (ex. `S20`, `S31`).
-- **Impact net période** : montant agrégé pour la période (répété sur chaque ligne de la même période — limitation one2many sans `group_by` ; évolution possible plus tard).
-- **Nb pièces** : nombre de pièces comptabilisées pour la période (idem répétition par ligne).
+- Sous-onglet **Non sécurisées seulement** : filtre de lecture sur `Risque` + `Tension` + `Vigilance`.
+- Sous-onglet **Toutes** : toutes les pièces de projection, y compris `Confort`.
+- **Statut** : première lecture métier, triée par défaut en `Risque`, puis `Tension`, puis `Vigilance`, puis `Confort`.
+- **Période** : repère temporel conservé juste après le statut (ex. `S20`, `S31`).
+- **Impact net période** : montant agrégé pour la période (répété sur chaque ligne de la même période — limitation one2many sans `group_by` ; évolution possible plus tard) ; **masquée par défaut**, réactivable depuis le sélecteur de colonnes de la liste.
+- **Date projetée** : **masquée par défaut** (même mécanisme).
+- **Nb pièces** : **masquée par défaut** (`optional="hide"`), réactivable si besoin d’agrégat période.
+- **Pièce** : **Many2one** `account.move` en lecture seule (référence, lien vers la facture selon les droits).
+- **Action** : icône discrète en fin de ligne (même ouverture que la pièce, infobulle *Ouvrir la facture*).
 - **Échue** : **Oui** / **Non** (pas une case seule).
 - **Impact** : ligne pièce ; total colonne **Impact** affiché en liste.
 
-Recette UI : **GO V1.3** sur la compréhension métier ; réserve mineure : répétition des colonnes période — acceptable pour le jalon, vue groupée envisageable ultérieurement.
+Le `group_by` natif dans le one2many embarqué n’est pas utilisé : Odoo valide le contexte de groupement sur le modèle parent. Le compromis V1.3 est donc un **tri métier** :
+
+```text
+Statut -> Période -> Date projetée -> Impact
+```
+
+Objectif : faire apparaître en premier les pièces des périodes en **Risque**, puis **Tension**, puis **Vigilance**, puis **Confort**, tout en gardant la période visible.
+
+Recette UI : **GO V1.3** sur la compréhension métier ; réserve mineure : répétition des colonnes période/statut — acceptable pour le jalon, vue groupée envisageable ultérieurement.

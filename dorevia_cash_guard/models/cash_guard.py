@@ -12,6 +12,7 @@ class DoreviaCashGuard(models.Model):
     # Champs du point dont une modification doit relancer la projection complète.
     _RECOMPUTE_GUARD_WRITE_FIELDS = {
         "alert_threshold",
+        "comfort_threshold_rate",
         "bank_journal_id",
         "company_id",
         "date_from",
@@ -120,6 +121,16 @@ class DoreviaCashGuard(models.Model):
         required=True,
         tracking=True,
     )
+    comfort_threshold_rate = fields.Float(
+        string="Seuil de confort (%)",
+        default=20.0,
+        tracking=True,
+        help=(
+            "Marge de sécurité au-dessus du seuil d'alerte. "
+            "Le statut Sécurisé n'est atteint que si la projection dépasse "
+            "seuil d'alerte × (1 + taux / 100)."
+        ),
+    )
     periodicity = fields.Selection(
         [
             ("week", "Semaine"),
@@ -142,12 +153,22 @@ class DoreviaCashGuard(models.Model):
         readonly=True,
         copy=False,
     )
+    bank_confirmation_rate = fields.Float(
+        string="Taux de confirmation bancaire",
+        readonly=True,
+        copy=False,
+        help=(
+            "Pourcentage des mouvements de trésorerie confirmés par relevé bancaire "
+            "(rapprochés avec une ligne de relevé) par rapport au total des mouvements "
+            "sur les journaux de trésorerie du périmètre, jusqu'à la date de situation."
+        ),
+    )
     forecast_final_balance = fields.Monetary(
         string="Projection en fin de période",
         readonly=True,
         copy=False,
         help=(
-            "Dernière valeur cumulée de la colonne Projection (mailles Situation + Prévisionnel), "
+            "Dernière valeur cumulée de la colonne Projection (mailles Situation + Projeté), "
             "soit trésorerie constatée et factures ouvertes, avec flux complémentaires par maille."
         ),
     )
@@ -155,7 +176,7 @@ class DoreviaCashGuard(models.Model):
         string="Projection minimum",
         readonly=True,
         copy=False,
-        help="Minimum des soldes projetés sur les mailles Situation et Prévisionnel.",
+        help="Minimum des soldes projetés sur les mailles Situation et Projeté.",
     )
     min_balance_date = fields.Date(
         string="Date du point bas projeté",
@@ -175,7 +196,12 @@ class DoreviaCashGuard(models.Model):
         ),
     )
     risk_status = fields.Selection(
-        [("safe", "Sécurisé"), ("warning", "Vigilance"), ("risk", "Risque")],
+        [
+            ("safe", "Confort"),
+            ("warning", "Vigilance"),
+            ("tension", "Tension"),
+            ("risk", "Risque"),
+        ],
         string="Statut de risque",
         default="safe",
         required=True,
@@ -213,6 +239,13 @@ class DoreviaCashGuard(models.Model):
         string="Détail projection (factures)",
         readonly=True,
     )
+    projection_unsecured_period_move_ids = fields.One2many(
+        "dorevia.cash.guard.period.move",
+        "guard_id",
+        string="Détail projection non sécurisées",
+        compute="_compute_projection_unsecured_period_move_ids",
+        readonly=True,
+    )
     note = fields.Text(string="Notes")
 
     @api.model
@@ -224,6 +257,15 @@ class DoreviaCashGuard(models.Model):
     def _default_period_date_to(self):
         """Horizon par défaut : 90 jours après la date du jour (cohérent avec ``date_from`` par défaut)."""
         return fields.Date.context_today(self) + timedelta(days=90)
+
+    @api.depends("projection_period_move_ids.period_risk_status")
+    def _compute_projection_unsecured_period_move_ids(self):
+        for guard in self:
+            guard.projection_unsecured_period_move_ids = (
+                guard.projection_period_move_ids.filtered(
+                    lambda line: line.period_risk_status in ("risk", "tension", "warning")
+                )
+            )
 
     @api.model
     def _situation_date_for_period(self, date_from, date_to):
@@ -435,23 +477,110 @@ class DoreviaCashGuard(models.Model):
             total += sum(AccountLine.search(domain).mapped("balance"))
         return total
 
+    def _compute_bank_confirmation_rate(self, target_date):
+        """Taux de confirmation bancaire : abs(confirmé) / (abs(mouvements) + abs(paiements en transit)).
+
+        Deux familles composent le dénominateur :
+
+        1. Mouvements de trésorerie sur comptes de liquidité (mêmes que le solde constaté).
+           Un mouvement est « confirmé » si ``statement_line_id`` est renseigné.
+
+        2. Paiements bancaires en transit (``account.payment`` postés, ``is_matched = False``
+           sur les journaux du périmètre, date <= situation). Ces paiements ne sont pas encore
+           rapprochés avec un relevé : ils gonflent le dénominateur sans augmenter le numérateur.
+        """
+        self.ensure_one()
+        if not target_date:
+            return 0.0
+        journals = self._liquidity_journals()
+        if not journals:
+            return 0.0
+        base_common = [
+            ("company_id", "=", self.company_id.id),
+            ("parent_state", "=", "posted"),
+            ("date", "<=", target_date),
+            (
+                "display_type",
+                "not in",
+                ("line_section", "line_subsection", "line_note"),
+            ),
+        ]
+        total_abs = 0.0
+        confirmed_abs = 0.0
+        AccountLine = self.env["account.move.line"].sudo()
+        for journal in journals:
+            explicit_ids = self._liquidity_account_ids_for_journal(journal)
+            type_tuple = self._liquidity_account_types_for_journal(journal)
+            if explicit_ids:
+                account_scope = OR(
+                    [
+                        [("account_id.account_type", "in", type_tuple)],
+                        [("account_id", "in", list(explicit_ids))],
+                    ]
+                )
+            else:
+                account_scope = [("account_id.account_type", "in", type_tuple)]
+            domain = AND(
+                [base_common + [("journal_id", "=", journal.id)], account_scope]
+            )
+            lines = AccountLine.search(domain)
+            for line in lines:
+                amount = abs(line.balance)
+                total_abs += amount
+                if line.statement_line_id:
+                    confirmed_abs += amount
+        outstanding_abs = self._outstanding_payment_abs(journals, target_date)
+        total_abs += outstanding_abs
+        if not total_abs:
+            return 0.0
+        return (confirmed_abs / total_abs) * 100.0
+
+    def _outstanding_payment_abs(self, journals, target_date):
+        """Montant absolu des paiements postés non rapprochés sur les journaux du périmètre."""
+        self.ensure_one()
+        self.env.cr.execute(
+            """
+            SELECT COALESCE(SUM(ABS(pay.amount)), 0)
+              FROM account_payment pay
+              JOIN account_move move ON move.origin_payment_id = pay.id
+             WHERE pay.is_matched IS NOT TRUE
+               AND move.state = 'posted'
+               AND move.date <= %s
+               AND pay.journal_id = ANY(%s)
+               AND pay.company_id = %s
+            """,
+            [target_date, list(journals.ids), self.company_id.id],
+        )
+        return self.env.cr.fetchone()[0] or 0.0
+
     def _compute_initial_balance(self):
         self.ensure_one()
         return self._compute_bank_balance_at_date(self.date_from)
 
-    def _compute_risk_status(self, projected_balance):
-        """Bands alignées sur la colonne Projection vs seuil (grille Suivi + décorations).
+    def _comfort_threshold_amount(self):
+        """Seuil monétaire de confort : seuil d'alerte × (1 + taux / 100)."""
+        self.ensure_one()
+        th = self.alert_threshold or 0.0
+        rate = self.comfort_threshold_rate or 0.0
+        return th * (1.0 + rate / 100.0)
 
-        * ``projected_balance > alert_threshold`` → safe ;
-        * ``0 < projected_balance <= alert_threshold`` → warning ;
-        * ``projected_balance <= 0`` → risk.
+    def _compute_risk_status(self, projected_balance):
+        """Bands alignées sur la colonne Projection vs seuils (grille Suivi + décorations).
+
+        * ``projected_balance <= 0`` → risk (rouge) ;
+        * ``0 < projected_balance < alert_threshold`` → tension (orange) ;
+        * ``alert_threshold <= projected_balance < comfort_threshold`` → warning (bleu) ;
+        * ``projected_balance >= comfort_threshold`` → safe (vert).
         """
         self.ensure_one()
         pb = projected_balance or 0.0
         th = self.alert_threshold or 0.0
+        comfort = self._comfort_threshold_amount()
         if pb <= 0:
             return "risk"
-        if pb > th:
+        if pb < th:
+            return "tension"
+        if pb >= comfort:
             return "safe"
         return "warning"
 
@@ -588,13 +717,14 @@ class DoreviaCashGuard(models.Model):
         """Calcule les soldes de synthèse sans effet de bord, utilisable en onchange.
 
         Les indicateurs « projection » (fin de période, minimum, date du minimum) suivent la
-        même trajectoire que la colonne ``projected_balance`` du suivi (Situation + Prévisionnel),
+        même trajectoire que la colonne ``projected_balance`` du suivi (Situation + Projeté),
         et non plus un simple enchaînement ligne à ligne des flux.
         """
         self.ensure_one()
         situation_date = self._situation_date_for_period(self.date_from, self.date_to)
         initial_balance = self._compute_bank_balance_at_date(self.date_from)
         observed_balance = self._compute_bank_balance_at_date(situation_date)
+        bank_confirmation_rate = self._compute_bank_confirmation_rate(situation_date)
         meta = self._split_exercise_periods()
         invoice_buckets = self._open_invoice_week_buckets(meta, situation_date)
         line_buckets = self._manual_line_net_by_week_index(meta, situation_date)
@@ -621,6 +751,7 @@ class DoreviaCashGuard(models.Model):
             "initial_balance": initial_balance,
             "observed_balance": observed_balance,
             "observed_balance_date": situation_date,
+            "bank_confirmation_rate": bank_confirmation_rate,
             "forecast_final_balance": forecast_final_balance,
             "forecast_min_balance": forecast_min_balance,
             "forecast_min_margin": forecast_min_margin,
@@ -631,7 +762,7 @@ class DoreviaCashGuard(models.Model):
     def _projection_summary_from_weekly_forward_lines(self):
         """Indicateurs projection alignés sur la grille (après ``_sync_weekly_lines``).
 
-        Utilise les ``projected_balance`` des mailles Situation + Prévisionnel uniquement,
+        Utilise les ``projected_balance`` des mailles Situation + Projeté uniquement,
         soit exactement la colonne Projection du suivi.
         """
         self.ensure_one()
@@ -668,6 +799,7 @@ class DoreviaCashGuard(models.Model):
         "liquidity_journal_ids",
         "bank_journal_id",
         "alert_threshold",
+        "comfort_threshold_rate",
         "periodicity",
         "line_ids",
         "line_ids.projection_date",
@@ -966,6 +1098,7 @@ class DoreviaCashGuard(models.Model):
             signed = self._cash_impact_signed_for_invoice_move(move)
             ref = move.invoice_date_due or move.invoice_date
             is_overdue = bool(ref and sit and ref < sit)
+            days_overdue = max(0, (sit - ref).days) if ref and sit and ref < sit else 0
             mag = abs(move.amount_residual or 0.0)
             expl = "inflow" if signed >= 0 else "outflow"
             rows.append(
@@ -984,6 +1117,7 @@ class DoreviaCashGuard(models.Model):
                     "company_id": self.company_id.id,
                     "explanation_type": expl,
                     "is_overdue": is_overdue,
+                    "days_overdue": days_overdue,
                     "_sort": (week.week_index, proj_date, signed, move.id),
                 }
             )
