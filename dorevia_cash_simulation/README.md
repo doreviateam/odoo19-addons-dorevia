@@ -293,6 +293,8 @@ Les devis dans une autre devise sont exclus de la simulation.
 
 ## 12. Conditions de paiement et échéancier
 
+La V1 traite uniquement les devis clients (`sale.order`) comme flux d'encaissement simulés. Les devis fournisseurs / demandes de prix achat (`purchase.order`) ne sont pas couverts en V1.
+
 La V1 utilise un seul flux simulé par devis.
 
 Règle V1 :
@@ -451,6 +453,7 @@ Elle permet d'éclairer une situation future possible, sans altérer la comptabi
 
 Évolutions envisageables après la V1 :
 
+* simulation des devis fournisseurs / demandes de prix achat (`purchase.order`) comme flux de décaissement simulé ;
 * simulation de sorties de trésorerie ;
 * intégration de dépenses prévues ;
 * scénarios multiples ;
