@@ -83,6 +83,10 @@ class DoreviaCashGuardWeek(models.Model):
         string="Nb pièces (factures)",
         readonly=True,
     )
+    document_count_label = fields.Char(
+        string="Documents",
+        compute="_compute_document_count_label",
+    )
     projection_move_ids = fields.One2many(
         "dorevia.cash.guard.period.move",
         "week_id",
@@ -116,6 +120,11 @@ class DoreviaCashGuardWeek(models.Model):
         readonly=True,
         index=True,
     )
+
+    @api.depends("invoice_move_count")
+    def _compute_document_count_label(self):
+        for rec in self:
+            rec.document_count_label = str(rec.invoice_move_count) if rec.invoice_move_count else ""
 
     @api.depends("week_label")
     def _compute_display_name(self):
