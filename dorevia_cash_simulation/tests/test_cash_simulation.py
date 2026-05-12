@@ -64,7 +64,7 @@ class TestCashSimulation(TransactionCase):
             {
                 "partner_id": self.partner.id,
                 "company_id": self.company.id,
-                "validity_date": validity_date or self._future(),
+                "validity_date": self._future() if validity_date is None else validity_date,
                 "order_line": [
                     (
                         0,

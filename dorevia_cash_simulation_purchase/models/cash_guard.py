@@ -64,7 +64,9 @@ class DoreviaCashGuard(models.Model):
             buckets[week_idx] -= order.amount_total
         return buckets
 
-    def _manual_line_net_by_week_index(self, meta, situation_date):
+    def _manual_line_net_by_week_index(self, meta, situation_date=None, **kwargs):
+        if situation_date is None:
+            situation_date = kwargs.get("sit")
         buckets = super()._manual_line_net_by_week_index(meta, situation_date)
         if not self.include_simulation:
             return buckets

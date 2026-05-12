@@ -141,7 +141,7 @@ Sauvegarder / Actualiser
 D1 est pris en compte pour +1 000 €
 D2 est pris en compte pour +2 000 €
 Le solde projeté augmente de 3 000 € au total
-Le smart button « Simulations » affiche 2
+Le smart button « Devis simulés » affiche 2
 Le risk_status est recalculé avec la simulation
 ```
 
@@ -163,7 +163,7 @@ Revenir sur la projection Cash Guard.
 
 ```text
 D4 reste visible dans le champ « Devis » (il est toujours dans le M2M).
-D4 n'apparaît PAS dans le smart button « Simulations ».
+D4 n'apparaît PAS dans le smart button « Devis simulés ».
 D4 n'impacte PAS la projection.
 Le compteur smart button ne le compte pas.
 ```
@@ -216,11 +216,17 @@ Statut : `OK / KO`
 
 ---
 
-## 9. Test 7 — Achat confirmé ou facturé → exclu
+## 9. Test 7 — Achat sélectionné puis confirmé / facturé → exclu
 
 ### Action
 
-Confirmer P2 (`state = 'purchase'`).
+Sélectionner P2 dans le champ « Commandes achat » pendant qu'il est encore en brouillon.
+
+Sauvegarder / Actualiser.
+
+Vérifier que P2 est bien pris en compte dans la projection (impact −1 500 €).
+
+Puis confirmer P2 (`state = 'purchase'`).
 
 Revenir sur la projection Cash Guard.
 
@@ -230,6 +236,7 @@ Revenir sur la projection Cash Guard.
 P2 reste dans le champ « Commandes achat » (M2M inchangé).
 P2 n'apparaît PAS dans le smart button « Achats simulés ».
 P2 n'impacte PAS la projection.
+Le compteur smart button ne le compte pas.
 ```
 
 Statut : `OK / KO`
