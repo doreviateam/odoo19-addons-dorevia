@@ -329,8 +329,7 @@ Aucune réserve bloquante ouverte.
 | Limite | Statut |
 | ------ | ------ |
 | Les simulations impactent `projected_balance` et `risk_status`, pas encore `inflow_amount` / `outflow_amount` | Accepté V1 |
-| La V1 couvre uniquement les devis clients (`sale.order`) comme hypothèses d'encaissement. | Accepté V1 |
-| Hors périmètre V1 : simulation des devis fournisseurs / demandes de prix achat. Cette évolution pourra être traitée en V1.1 ou V2 via `purchase.order`, comme flux de décaissement simulé. | Hors périmètre |
+| La V1 couvre uniquement les devis clients (`sale.order`) comme hypothèses d'encaissement. Hors périmètre V1 : simulation des achats / demandes de prix fournisseur (`purchase.order`). Prévu en V1.1. | Accepté V1 |
 | Le test multi-société n'a pas été exécuté sur `tenant_o8` | N/A, base mono-société |
 
 ### 8.3 Point de vigilance

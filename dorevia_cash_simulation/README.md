@@ -67,6 +67,18 @@ Lorsque le mode simulation est activé, les devis éligibles sont ajoutés à la
 
 Les flux simulés ne doivent jamais être confondus avec les flux réels issus de la comptabilité, des paiements ou des mouvements bancaires.
 
+### Limite de périmètre V1
+
+La V1 validée concerne uniquement les devis clients (`sale.order`) comme hypothèses d'encaissement.
+
+Hors périmètre V1 :
+
+```text
+Simulation des devis fournisseurs / demandes de prix achat.
+Cette évolution pourra être traitée en V1.1 ou V2 via purchase.order,
+comme flux de décaissement simulé.
+```
+
 ---
 
 ## 5. Champs proposés sur les devis

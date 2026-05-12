@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Cash Guard form: smart button for purchase simulation orders -->
+    <record id="view_cash_guard_form_purchase_simulation" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.form.purchase.simulation</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="inherit_id" ref="dorevia_cash_guard.view_dorevia_cash_guard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box_purchase_sim"
+                     invisible="not include_simulation">
+                    <button name="action_view_purchase_simulation_orders"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-shopping-cart"
+                            invisible="not include_simulation">
+                        <field name="simulation_purchase_count"
+                               string="Achats simulés"
+                               widget="statinfo"/>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
