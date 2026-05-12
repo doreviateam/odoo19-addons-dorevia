@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from unittest.mock import patch
 
 from odoo import fields
-from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
 
 class TestPurchaseSimulation(TransactionCase):
-    """Tests V1.1 for dorevia_cash_simulation_purchase — purchase order simulation."""
+    """Tests V1.1 for dorevia_cash_simulation_purchase — purchase order simulation via Cash Guard selection."""
 
     @classmethod
     def setUpClass(cls):
@@ -44,23 +43,41 @@ class TestPurchaseSimulation(TransactionCase):
     def _future(self, days=30):
         return self._today() + timedelta(days=days)
 
-    def _past(self, days=1):
-        return self._today() - timedelta(days=days)
+    def _future_dt(self, days=30):
+        return datetime.combine(self._future(days), datetime.min.time())
 
-    def _create_guard(self, include_simulation=False, threshold=0.0):
+    def _create_guard(self, include_simulation=False, sale_orders=None, purchase_orders=None):
         with patch.object(fields.Date, "context_today", return_value=self._today()):
-            return self.env["dorevia.cash.guard"].create(
-                {
-                    "date_from": "2026-05-01",
-                    "date_to": "2026-07-31",
-                    "bank_journal_id": self.bank_journal.id,
-                    "company_id": self.company.id,
-                    "alert_threshold": threshold,
-                    "include_simulation": include_simulation,
-                }
-            )
+            vals = {
+                "date_from": "2026-05-01",
+                "date_to": "2026-07-31",
+                "bank_journal_id": self.bank_journal.id,
+                "company_id": self.company.id,
+                "alert_threshold": 0.0,
+                "include_simulation": include_simulation,
+            }
+            if sale_orders:
+                vals["simulation_sale_order_ids"] = [(6, 0, sale_orders.ids)]
+            if purchase_orders:
+                vals["simulation_purchase_order_ids"] = [(6, 0, purchase_orders.ids)]
+            return self.env["dorevia.cash.guard"].create(vals)
 
-    def _create_po(self, amount=1000.0, simulation=False, due_date=None, state="draft"):
+    def _create_sale_quote(self, amount=1000.0, validity_date=None):
+        product = self.env["product.product"].create(
+            {"name": "Prod Vente Sim", "list_price": amount}
+        )
+        return self.env["sale.order"].create(
+            {
+                "partner_id": self.partner.id,
+                "company_id": self.company.id,
+                "validity_date": validity_date or self._future(20),
+                "order_line": [
+                    (0, 0, {"product_id": product.id, "product_uom_qty": 1, "price_unit": amount}),
+                ],
+            }
+        )
+
+    def _create_po(self, amount=1000.0, date_planned=None, state="draft"):
         product = self.env["product.product"].create(
             {"name": "Prod Achat Simulation", "list_price": amount}
         )
@@ -76,18 +93,12 @@ class TestPurchaseSimulation(TransactionCase):
                             "product_id": product.id,
                             "product_qty": 1,
                             "price_unit": amount,
+                            "date_planned": date_planned or self._future_dt(20),
                         },
                     )
                 ],
             }
         )
-        if simulation:
-            order.write(
-                {
-                    "cash_simulation_ok": True,
-                    "cash_simulation_due_date": due_date or self._future(),
-                }
-            )
         if state == "sent":
             order.state = "sent"
         return order
@@ -108,129 +119,44 @@ class TestPurchaseSimulation(TransactionCase):
                         guard.action_recompute_projection()
 
     # ──────────────────────────────────────────────────────────────────────
-    # 1. Contraintes de validation
+    # 1. Éligibilité PO
     # ──────────────────────────────────────────────────────────────────────
 
-    def test_activation_without_date_raises(self):
-        order = self._create_po(simulation=False)
-        with self.assertRaises(ValidationError):
-            order.write({"cash_simulation_ok": True})
-
-    def test_activation_with_past_date_raises(self):
-        order = self._create_po(simulation=False)
-        with self.assertRaises(ValidationError):
-            order.write(
-                {
-                    "cash_simulation_ok": True,
-                    "cash_simulation_due_date": self._past(),
-                }
-            )
-
-    def test_activation_with_future_date_ok(self):
-        order = self._create_po(simulation=False)
-        order.write(
-            {
-                "cash_simulation_ok": True,
-                "cash_simulation_due_date": self._future(),
-            }
+    def test_eligible_draft_po(self):
+        sale = self._create_sale_quote()
+        po = self._create_po(date_planned=self._future_dt(20))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
         )
-        self.assertTrue(order.cash_simulation_ok)
-        self.assertEqual(order.cash_simulation_due_date, self._future())
+        eligible = guard._get_eligible_purchase_simulation_orders()
+        self.assertIn(po, eligible)
 
-    def test_date_change_to_past_on_active_simulation_raises(self):
-        order = self._create_po(simulation=True, due_date=self._future())
-        with self.assertRaises(ValidationError):
-            order.write({"cash_simulation_due_date": self._past()})
-
-    def test_unrelated_write_on_stale_simulation_ok(self):
-        """Modifying an unrelated field on a stale simulation must not raise."""
-        order = self._create_po(simulation=True, due_date=self._future(1))
-        with patch.object(fields.Date, "today", return_value=self._future(5)):
-            order.write({"notes": "test"})
-
-    # ──────────────────────────────────────────────────────────────────────
-    # 2. Éligibilité
-    # ──────────────────────────────────────────────────────────────────────
-
-    def test_eligible_draft_simulation(self):
-        order = self._create_po(simulation=True, due_date=self._future())
-        self.assertTrue(order.cash_simulation_eligible)
-
-    def test_eligible_sent_simulation(self):
-        order = self._create_po(simulation=True, due_date=self._future(), state="sent")
-        self.assertTrue(order.cash_simulation_eligible)
-
-    def test_not_eligible_unmarked(self):
-        order = self._create_po(simulation=False)
-        self.assertFalse(order.cash_simulation_eligible)
-
-    def test_confirmed_order_not_eligible(self):
-        order = self._create_po(simulation=True, due_date=self._future())
-        self.assertTrue(order.cash_simulation_eligible)
-        order.button_confirm()
-        order.invalidate_recordset()
-        self.assertFalse(order.cash_simulation_eligible)
-
-    def test_cancelled_order_not_eligible(self):
-        order = self._create_po(simulation=True, due_date=self._future())
-        order.button_cancel()
-        order.invalidate_recordset()
-        self.assertFalse(order.cash_simulation_eligible)
-
-    # ──────────────────────────────────────────────────────────────────────
-    # 3. Domaine de recherche
-    # ──────────────────────────────────────────────────────────────────────
-
-    def test_search_excludes_other_company(self):
-        company_b = self.env["res.company"].create({"name": "Société B Achat"})
-        partner_b = self.env["res.partner"].create({"name": "Fournisseur B"})
-        product_b = self.env["product.product"].create(
-            {"name": "Prod B", "list_price": 500}
+    def test_confirmed_po_not_eligible(self):
+        sale = self._create_sale_quote()
+        po = self._create_po(date_planned=self._future_dt(20))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
         )
-        order_b = (
-            self.env["purchase.order"]
-            .with_company(company_b)
-            .create(
-                {
-                    "partner_id": partner_b.id,
-                    "company_id": company_b.id,
-                    "order_line": [
-                        (
-                            0,
-                            0,
-                            {
-                                "product_id": product_b.id,
-                                "product_qty": 1,
-                                "price_unit": 500,
-                            },
-                        ),
-                    ],
-                }
-            )
-        )
-        order_b.write(
-            {
-                "cash_simulation_ok": True,
-                "cash_simulation_due_date": self._future(),
-            }
-        )
-        guard = self._create_guard(include_simulation=True)
-        orders = guard._search_eligible_purchase_simulation_orders()
-        self.assertNotIn(order_b, orders)
+        po.button_confirm()
+        guard.invalidate_recordset()
+        eligible = guard._get_eligible_purchase_simulation_orders()
+        self.assertNotIn(po, eligible)
 
-    def test_search_excludes_stale_date(self):
-        order = self._create_po(simulation=True, due_date=self._future(1))
-        guard = self._create_guard(include_simulation=True)
-        with patch.object(fields.Date, "today", return_value=self._future(5)):
-            orders = guard._search_eligible_purchase_simulation_orders()
-        self.assertNotIn(order, orders)
+    def test_po_outside_period_not_eligible(self):
+        sale = self._create_sale_quote()
+        po = self._create_po(date_planned=self._future_dt(120))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
+        )
+        eligible = guard._get_eligible_purchase_simulation_orders()
+        self.assertNotIn(po, eligible)
 
     # ──────────────────────────────────────────────────────────────────────
-    # 4. Projection Cash Guard — montants négatifs
+    # 2. Projection — montants négatifs
     # ──────────────────────────────────────────────────────────────────────
 
     def test_simulation_off_no_impact(self):
-        self._create_po(simulation=True, due_date=self._future(), amount=5000)
+        po = self._create_po(amount=5000, date_planned=self._future_dt(20))
         guard = self._create_guard(include_simulation=False)
         self._recompute_with_zero_balance(guard)
         meta = guard._split_exercise_periods()
@@ -240,88 +166,89 @@ class TestPurchaseSimulation(TransactionCase):
         self.assertEqual(total, 0.0)
 
     def test_simulation_on_subtracts_amount(self):
-        order = self._create_po(
-            simulation=True, due_date=self._future(), amount=5000
+        sale = self._create_sale_quote()
+        po = self._create_po(amount=5000, date_planned=self._future_dt(20))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
         )
-        guard = self._create_guard(include_simulation=True)
         self._recompute_with_zero_balance(guard)
         meta = guard._split_exercise_periods()
         sit = guard.situation_date
         with patch.object(fields.Date, "context_today", return_value=self._today()):
-            buckets = guard._manual_line_net_by_week_index(meta, sit)
+            buckets = guard._get_purchase_simulation_buckets(meta, sit)
         total = sum(buckets.values())
-        self.assertAlmostEqual(total, -order.amount_total, places=2)
-
-    def test_simulation_bucket_correct_week(self):
-        due = self._future(20)
-        self._create_po(simulation=True, due_date=due, amount=3000)
-        guard = self._create_guard(include_simulation=True)
-        self._recompute_with_zero_balance(guard)
-        meta = guard._split_exercise_periods()
-        sit = guard.situation_date
-        expected_idx = guard._week_index_for_date(meta, due)
-        self.assertIsNotNone(expected_idx)
-        with patch.object(fields.Date, "context_today", return_value=self._today()):
-            buckets = guard._manual_line_net_by_week_index(meta, sit)
-        self.assertIn(expected_idx, buckets)
-        self.assertLess(buckets[expected_idx], 0.0)
+        self.assertAlmostEqual(total, -po.amount_total, places=2)
 
     # ──────────────────────────────────────────────────────────────────────
-    # 5. Combinaison ventes + achats
+    # 3. Combinaison ventes + achats
     # ──────────────────────────────────────────────────────────────────────
 
     def test_sale_and_purchase_simulation_combined(self):
-        """Sale inflow and purchase outflow combine correctly."""
-        sale_product = self.env["product.product"].create(
-            {"name": "Prod Vente Sim", "list_price": 3000}
+        sale = self._create_sale_quote(amount=3000, validity_date=self._future(15))
+        po = self._create_po(amount=1000, date_planned=self._future_dt(15))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
         )
-        sale_order = self.env["sale.order"].create(
-            {
-                "partner_id": self.partner.id,
-                "company_id": self.company.id,
-                "order_line": [
-                    (0, 0, {"product_id": sale_product.id, "product_uom_qty": 1, "price_unit": 3000}),
-                ],
-            }
-        )
-        due = self._future(15)
-        sale_order.write(
-            {"cash_simulation_ok": True, "cash_simulation_due_date": due}
-        )
-        purchase_order = self._create_po(
-            simulation=True, due_date=due, amount=1000
-        )
-
-        guard = self._create_guard(include_simulation=True)
         self._recompute_with_zero_balance(guard)
         meta = guard._split_exercise_periods()
         sit = guard.situation_date
         with patch.object(fields.Date, "context_today", return_value=self._today()):
             buckets = guard._manual_line_net_by_week_index(meta, sit)
         total = sum(buckets.values())
-        expected_net = sale_order.amount_total - purchase_order.amount_total
+        expected_net = sale.amount_total - po.amount_total
         self.assertAlmostEqual(total, expected_net, places=2)
 
     # ──────────────────────────────────────────────────────────────────────
-    # 6. Smart button achats
+    # 4. Smart button achats
     # ──────────────────────────────────────────────────────────────────────
 
     def test_purchase_simulation_count(self):
-        self._create_po(simulation=True, due_date=self._future())
-        self._create_po(simulation=True, due_date=self._future())
-        self._create_po(simulation=False)
-        guard = self._create_guard(include_simulation=True)
+        sale = self._create_sale_quote()
+        po1 = self._create_po(date_planned=self._future_dt(20))
+        po2 = self._create_po(date_planned=self._future_dt(25))
+        guard = self._create_guard(
+            include_simulation=True,
+            sale_orders=sale,
+            purchase_orders=po1 | po2,
+        )
         guard.invalidate_recordset()
         self.assertEqual(guard.simulation_purchase_count, 2)
 
     def test_purchase_simulation_count_off(self):
-        self._create_po(simulation=True, due_date=self._future())
         guard = self._create_guard(include_simulation=False)
         guard.invalidate_recordset()
         self.assertEqual(guard.simulation_purchase_count, 0)
 
     def test_action_view_purchase_simulation_orders(self):
-        self._create_po(simulation=True, due_date=self._future())
-        guard = self._create_guard(include_simulation=True)
+        sale = self._create_sale_quote()
+        po = self._create_po(date_planned=self._future_dt(20))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
+        )
         action = guard.action_view_purchase_simulation_orders()
         self.assertEqual(action["res_model"], "purchase.order")
+
+    # ──────────────────────────────────────────────────────────────────────
+    # 5. Toggle OFF vide les PO
+    # ──────────────────────────────────────────────────────────────────────
+
+    def test_toggle_off_clears_purchase_orders(self):
+        sale = self._create_sale_quote()
+        po = self._create_po(date_planned=self._future_dt(20))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
+        )
+        with patch.object(fields.Date, "context_today", return_value=self._today()):
+            with patch.object(
+                type(guard), "_compute_bank_balance_at_date", return_value=0.0
+            ):
+                with patch.object(
+                    type(guard), "_compute_bank_confirmation_rate", return_value=0.0
+                ):
+                    with patch.object(
+                        type(guard),
+                        "_search_open_invoice_moves",
+                        return_value=self.env["account.move"],
+                    ):
+                        guard.write({"include_simulation": False})
+        self.assertFalse(guard.simulation_purchase_order_ids)

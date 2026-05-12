@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Cash Guard form: smart button for purchase simulation orders -->
+    <!-- Cash Guard form: purchase simulation orders + smart button -->
     <record id="view_cash_guard_form_purchase_simulation" model="ir.ui.view">
         <field name="name">dorevia.cash.guard.form.purchase.simulation</field>
         <field name="model">dorevia.cash.guard</field>
         <field name="inherit_id" ref="dorevia_cash_guard.view_dorevia_cash_guard_form"/>
         <field name="arch" type="xml">
+
+            <!-- Smart button for purchase simulation orders -->
             <xpath expr="//sheet" position="inside">
                 <div class="oe_button_box" name="button_box_purchase_sim"
                      invisible="not include_simulation">
@@ -21,6 +23,16 @@
                     </button>
                 </div>
             </xpath>
+
+            <!-- Commandes achat under simulation_sale_order_ids (left column) -->
+            <xpath expr="//field[@name='simulation_sale_order_ids']" position="after">
+                <field name="simulation_purchase_order_ids"
+                       widget="many2many_tags"
+                       invisible="not include_simulation"
+                       placeholder="Sélectionner les commandes achat à simuler"
+                       domain="[('state', 'in', ['draft', 'sent']), ('invoice_ids', '=', False), ('company_id', '=', company_id), ('currency_id', '=', currency_id), ('date_planned', '!=', False)]"/>
+            </xpath>
+
         </field>
     </record>
 

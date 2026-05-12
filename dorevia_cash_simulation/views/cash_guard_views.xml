@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Cash Guard form: simulation toggle + smart button -->
+    <!-- Cash Guard form: simulation toggle + sale orders + smart button -->
     <record id="view_cash_guard_form_simulation" model="ir.ui.view">
         <field name="name">dorevia.cash.guard.form.simulation</field>
         <field name="model">dorevia.cash.guard</field>
@@ -18,15 +18,20 @@
                             icon="fa-line-chart"
                             invisible="not include_simulation">
                         <field name="simulation_order_count"
-                               string="Simulations"
+                               string="Devis simulés"
                                widget="statinfo"/>
                     </button>
                 </div>
             </xpath>
 
-            <!-- Toggle after comfort_threshold_rate -->
-            <xpath expr="//field[@name='comfort_threshold_rate']" position="after">
+            <!-- Mode simulation + Devis under Journaux (left column) -->
+            <xpath expr="//field[@name='bank_journal_id']" position="after">
                 <field name="include_simulation"/>
+                <field name="simulation_sale_order_ids"
+                       widget="many2many_tags"
+                       invisible="not include_simulation"
+                       placeholder="Sélectionner les devis à simuler"
+                       domain="[('state', 'in', ['draft', 'sent']), ('invoice_ids', '=', False), ('company_id', '=', company_id), ('currency_id', '=', currency_id), ('validity_date', '!=', False)]"/>
             </xpath>
 
         </field>
