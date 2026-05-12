@@ -240,7 +240,7 @@ class DoreviaCashGuard(models.Model):
     weekly_line_ids = fields.One2many(
         "dorevia.cash.guard.week",
         "guard_id",
-        string="Suivi de trésorerie",
+        string="Détail de projection",
     )
     projection_period_move_ids = fields.One2many(
         "dorevia.cash.guard.period.move",

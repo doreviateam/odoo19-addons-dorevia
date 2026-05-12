@@ -6,13 +6,13 @@ from odoo.exceptions import ValidationError
 
 class DoreviaCashGuardWeek(models.Model):
     _name = "dorevia.cash.guard.week"
-    _description = "Solde de trésorerie Cash Guard"
+    _description = "Détail de projection"
     _rec_name = "week_label"
     _order = "guard_id, week_index"
 
     guard_id = fields.Many2one(
         "dorevia.cash.guard",
-        string="Document de projection",
+        string="Projet de trésorerie",
         required=True,
         ondelete="cascade",
         index=True,
@@ -117,12 +117,29 @@ class DoreviaCashGuardWeek(models.Model):
         index=True,
     )
 
+    @api.depends("week_label")
+    def _compute_display_name(self):
+        for rec in self:
+            rec.display_name = _("Détail de projection — %s", rec.week_label or "")
+
     @api.depends("projected_balance", "guard_id.alert_threshold")
     def _compute_margin_amount(self):
         for line in self:
             th = line.guard_id.alert_threshold or 0.0
             proj = line.projected_balance or 0.0
             line.margin_amount = proj - th
+
+    def action_view_period_documents(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Documents — %s", self.week_label or ""),
+            "res_model": "dorevia.cash.guard.period.move",
+            "view_mode": "list",
+            "domain": [("week_id", "=", self.id)],
+            "context": {"create": False, "delete": False},
+            "target": "new",
+        }
 
     @api.constrains("guard_id", "week_index")
     def _check_week_index_unique(self):

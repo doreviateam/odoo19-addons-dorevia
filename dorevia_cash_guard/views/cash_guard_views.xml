@@ -268,6 +268,62 @@
         </field>
     </record>
 
+    <record id="view_dorevia_cash_guard_week_form" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.week.form</field>
+        <field name="model">dorevia.cash.guard.week</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group string="Contexte">
+                            <field name="guard_id" string="Projet de trésorerie"/>
+                            <field name="week_label" string="Période"/>
+                            <field name="date_from" string="Date de début"/>
+                            <field name="date_to" string="Date de fin"/>
+                            <field name="period_type" string="État"/>
+                        </group>
+                        <group string="Trésorerie">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="projected_balance" string="Solde projeté"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="margin_amount" string="Couverture"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="alert_threshold" string="Seuil d'alerte"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="risk_status" string="Statut"/>
+                        </group>
+                    </group>
+                    <separator string="Documents de la période"/>
+                    <field name="projection_move_ids" readonly="1">
+                        <list create="false" delete="false"
+                              default_order="projected_date asc, signed_amount asc"
+                              decoration-danger="display_status == 'risk'"
+                              decoration-warning="display_status == 'tension'"
+                              decoration-info="display_status == 'warning'"
+                              decoration-success="display_status == 'safe'">
+                            <field name="currency_id" column_invisible="1"/>
+                            <field name="is_simulation" column_invisible="1"/>
+                            <field name="display_status" string="Statut"/>
+                            <field name="move_name" string="Document"/>
+                            <field name="partner_id" string="Partenaire"/>
+                            <field name="document_type_label" string="Type"/>
+                            <field name="invoice_date_due" string="Échéance"/>
+                            <field name="signed_amount" string="Impact"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <button name="action_open_source_document" type="object"
+                                    string=" " title="Ouvrir le document"
+                                    icon="fa-external-link"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="action_dorevia_cash_guard" model="ir.actions.act_window">
         <field name="name">Projets de trésorerie</field>
         <field name="res_model">dorevia.cash.guard</field>

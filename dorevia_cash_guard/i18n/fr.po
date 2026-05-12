@@ -187,9 +187,8 @@ msgstr "Cash Guard soldes multi-société utilisateur"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__weekly_line_ids
-#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
-msgid "Suivi de trésorerie"
-msgstr "Projection"
+msgid "Détail de projection"
+msgstr "Détail de projection"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__liquidity_journal_ids
@@ -247,8 +246,8 @@ msgstr "Date du point bas projeté"
 
 #. module: dorevia_cash_guard
 #: model:ir.model,name:dorevia_cash_guard.model_dorevia_cash_guard_week
-msgid "Solde de trésorerie Cash Guard"
-msgstr "Solde de trésorerie Cash Guard"
+msgid "Détail de projection"
+msgstr "Détail de projection"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__periodicity
@@ -408,3 +407,35 @@ msgstr "Écritures bancaires non rapprochées"
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__days_overdue_label
 msgid "Retard"
 msgstr "Retard"
+
+#. module: dorevia_cash_guard
+#: code:addons/dorevia_cash_guard/models/cash_guard_week.py:0
+#, python-format
+msgid "Détail de projection — %s"
+msgstr "Détail de projection — %s"
+
+#. module: dorevia_cash_guard
+#: code:addons/dorevia_cash_guard/models/cash_guard_week.py:0
+#, python-format
+msgid "Documents — %s"
+msgstr "Documents — %s"
+
+#. module: dorevia_cash_guard
+#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
+msgid "Contexte"
+msgstr "Contexte"
+
+#. module: dorevia_cash_guard
+#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
+msgid "Trésorerie"
+msgstr "Trésorerie"
+
+#. module: dorevia_cash_guard
+#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
+msgid "Documents de la période"
+msgstr "Documents de la période"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__guard_id
+msgid "Projet de trésorerie"
+msgstr "Projet de trésorerie"
