@@ -54,8 +54,8 @@ msgstr "Trésorerie"
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
-msgid "Synthèse"
-msgstr "Synthèse"
+msgid "Synthèse Trésorerie"
+msgstr "Synthèse Trésorerie"
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
@@ -189,7 +189,12 @@ msgstr "Cash Guard soldes multi-société utilisateur"
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__weekly_line_ids
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
 msgid "Suivi de trésorerie"
-msgstr "Suivi de trésorerie"
+msgstr "Projection"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__liquidity_journal_ids
+msgid "Journaux"
+msgstr "Journaux"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__date_from
@@ -212,8 +217,8 @@ msgstr ""
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
-msgid "Situation constatée"
-msgstr "Situation constatée"
+msgid "Situation"
+msgstr "Situation"
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
@@ -367,7 +372,7 @@ msgstr "Confort"
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__bank_confirmation_rate
 msgid "Taux de confirmation bancaire"
-msgstr "Taux de confirmation bancaire"
+msgstr "Confirmation"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__bank_unreconciled_amount

@@ -342,7 +342,7 @@ Lecture métier :
 - **< 100 %** : une partie des mouvements reste à confirmer ou des paiements sont en attente de rapprochement ;
 - **0 %** : aucune confirmation bancaire détectée.
 
-Le taux est affiché dans le bloc **Situation constatée** avec un widget barre de progression.
+Le taux est affiché dans le bloc **Situation** avec un widget barre de progression.
 
 ---
 

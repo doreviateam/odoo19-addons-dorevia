@@ -107,6 +107,7 @@
                             <field name="company_id"/>
                             <field name="responsible_id"/>
                             <field name="liquidity_journal_ids" widget="many2many_tags"
+                                   string="Journaux"
                                    domain="[('type','in',('bank','cash')), ('company_id','=', company_id)]"/>
                             <field name="bank_journal_id" invisible="1"/>
                         </group>
@@ -119,9 +120,9 @@
                             <field name="risk_status" readonly="1"/>
                         </group>
                     </group>
-                    <group string="Synthèse">
+                    <group string="Synthèse Trésorerie">
                         <field name="currency_id" invisible="1"/>
-                        <group string="Situation constatée">
+                        <group string="Situation">
                             <div colspan="2"
                                  invisible="observed_balance &gt;= 0"
                                  class="alert alert-danger mb-2 p-2"
@@ -135,7 +136,7 @@
                                    string="Solde constaté"
                                    readonly="1"/>
                             <field name="bank_confirmation_rate"
-                                   string="Confirmation bancaire"
+                                   string="Confirmation"
                                    readonly="1"
                                    widget="progressbar"/>
                             <label for="bank_unreconciled_amount"
@@ -169,7 +170,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Suivi de trésorerie">
+                        <page string="Projection">
                             <field name="weekly_line_ids" readonly="1">
                                 <list default_order="week_index asc"
                                       decoration-danger="risk_status == 'risk'"
@@ -216,85 +217,43 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="Détail projection">
-                            <notebook>
-                                <page string="Non sécurisées seulement">
-                                    <field name="projection_unsecured_period_move_ids">
-                                        <list create="false"
-                                              delete="false"
-                                              editable="bottom"
-                                              default_order="period_risk_sequence asc, week_index asc, projected_date asc, signed_amount asc, id asc"
-                                              decoration-danger="period_risk_status == 'risk'"
-                                              decoration-warning="period_risk_status == 'tension'"
-                                              decoration-info="period_risk_status == 'warning'"
-                                              decoration-success="period_risk_status == 'safe'">
-                                            <field name="currency_id" column_invisible="1" readonly="1"/>
-                                            <field name="period_risk_sequence" column_invisible="1" readonly="1"/>
-                                            <field name="week_index" column_invisible="1" readonly="1"/>
-                                            <field name="period_risk_status" string="Statut" readonly="1"/>
-                                            <field name="week_label" string="Période" readonly="1"/>
-                                            <field name="move_id" column_invisible="1" readonly="1"/>
-                                            <field name="move_name" string="Facture" readonly="1"/>
-                                            <field name="partner_id" string="Partenaire" readonly="1"/>
-                                            <field name="move_type" string="Type" readonly="1"/>
-                                            <field name="invoice_date_due" string="Échéance" readonly="1"/>
-                                            <field name="days_overdue_label" string="Retard" readonly="1"/>
-                                            <field name="signed_amount" string="Impact"
-                                                   readonly="1"
-                                                   widget="monetary"
-                                                   sum="Impact net"
-                                                   options="{'currency_field': 'currency_id'}"/>
-                                            <field name="is_overdue_label" string="Échue" readonly="1"/>
-                                            <button name="action_open_source_invoice" type="object" string=" " title="Ouvrir la facture" icon="fa-external-link"/>
-                                            <field name="week_invoice_net_amount" string="Impact net période"
-                                                   optional="hide"
-                                                   readonly="1"
-                                                   widget="monetary"
-                                                   options="{'currency_field': 'currency_id'}"/>
-                                            <field name="week_invoice_move_count" string="Nb pièces" optional="hide" readonly="1"/>
-                                            <field name="projected_date" string="Date projetée" optional="hide" readonly="1"/>
-                                        </list>
-                                    </field>
-                                </page>
-                                <page string="Toutes">
-                                    <field name="projection_period_move_ids">
-                                        <list create="false"
-                                              delete="false"
-                                              editable="bottom"
-                                              default_order="period_risk_sequence asc, week_index asc, projected_date asc, signed_amount asc, id asc"
-                                              decoration-danger="period_risk_status == 'risk'"
-                                              decoration-warning="period_risk_status == 'tension'"
-                                              decoration-info="period_risk_status == 'warning'"
-                                              decoration-success="period_risk_status == 'safe'">
-                                            <field name="currency_id" column_invisible="1" readonly="1"/>
-                                            <field name="period_risk_sequence" column_invisible="1" readonly="1"/>
-                                            <field name="week_index" column_invisible="1" readonly="1"/>
-                                            <field name="period_risk_status" string="Statut" readonly="1"/>
-                                            <field name="week_label" string="Période" readonly="1"/>
-                                            <field name="move_id" column_invisible="1" readonly="1"/>
-                                            <field name="move_name" string="Facture" readonly="1"/>
-                                            <field name="partner_id" string="Partenaire" readonly="1"/>
-                                            <field name="move_type" string="Type" readonly="1"/>
-                                            <field name="invoice_date_due" string="Échéance" readonly="1"/>
-                                            <field name="days_overdue_label" string="Retard" readonly="1"/>
-                                            <field name="signed_amount" string="Impact"
-                                                   readonly="1"
-                                                   widget="monetary"
-                                                   sum="Impact net"
-                                                   options="{'currency_field': 'currency_id'}"/>
-                                            <field name="is_overdue_label" string="Échue" readonly="1"/>
-                                            <button name="action_open_source_invoice" type="object" string=" " title="Ouvrir la facture" icon="fa-external-link"/>
-                                            <field name="week_invoice_net_amount" string="Impact net période"
-                                                   optional="hide"
-                                                   readonly="1"
-                                                   widget="monetary"
-                                                   options="{'currency_field': 'currency_id'}"/>
-                                            <field name="week_invoice_move_count" string="Nb pièces" optional="hide" readonly="1"/>
-                                            <field name="projected_date" string="Date projetée" optional="hide" readonly="1"/>
-                                        </list>
-                                    </field>
-                                </page>
-                            </notebook>
+                        <page string="Facturation">
+                            <field name="projection_period_move_ids">
+                                <list create="false"
+                                      delete="false"
+                                      editable="bottom"
+                                      default_order="period_risk_sequence asc, week_index asc, projected_date asc, signed_amount asc, id asc"
+                                      decoration-danger="period_risk_status == 'risk'"
+                                      decoration-warning="period_risk_status == 'tension'"
+                                      decoration-info="period_risk_status == 'warning'"
+                                      decoration-success="period_risk_status == 'safe'">
+                                    <field name="currency_id" column_invisible="1" readonly="1"/>
+                                    <field name="period_risk_sequence" column_invisible="1" readonly="1"/>
+                                    <field name="week_index" column_invisible="1" readonly="1"/>
+                                    <field name="period_risk_status" string="Statut" readonly="1"/>
+                                    <field name="week_label" string="Période" readonly="1"/>
+                                    <field name="move_id" column_invisible="1" readonly="1"/>
+                                    <field name="move_name" string="Facture" readonly="1"/>
+                                    <field name="partner_id" string="Partenaire" readonly="1"/>
+                                    <field name="move_type" string="Type" readonly="1"/>
+                                    <field name="invoice_date_due" string="Échéance" readonly="1"/>
+                                    <field name="days_overdue_label" string="Retard" readonly="1"/>
+                                    <field name="signed_amount" string="Impact"
+                                           readonly="1"
+                                           widget="monetary"
+                                           sum="Impact net"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="is_overdue_label" string="Échue" readonly="1"/>
+                                    <button name="action_open_source_invoice" type="object" string=" " title="Ouvrir la facture" icon="fa-external-link"/>
+                                    <field name="week_invoice_net_amount" string="Impact net période"
+                                           optional="hide"
+                                           readonly="1"
+                                           widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="week_invoice_move_count" string="Nb pièces" optional="hide" readonly="1"/>
+                                    <field name="projected_date" string="Date projetée" optional="hide" readonly="1"/>
+                                </list>
+                            </field>
                         </page>
                         <page string="Notes">
                             <field name="note"/>
