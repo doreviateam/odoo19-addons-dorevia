@@ -99,6 +99,7 @@
                 </header>
                 <sheet>
                     <widget name="web_ribbon" title="Archivé" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_button_box" name="button_box"/>
                     <field name="state" invisible="1"/>
                     <field name="active" invisible="1"/>
                     <group>
@@ -217,25 +218,26 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="Facturation">
+                        <page string="Documents">
                             <field name="projection_period_move_ids">
                                 <list create="false"
                                       delete="false"
                                       editable="bottom"
                                       default_order="period_risk_sequence asc, week_index asc, projected_date asc, signed_amount asc, id asc"
-                                      decoration-danger="period_risk_status == 'risk'"
-                                      decoration-warning="period_risk_status == 'tension'"
-                                      decoration-info="period_risk_status == 'warning'"
-                                      decoration-success="period_risk_status == 'safe'">
+                                      decoration-danger="display_status == 'risk'"
+                                      decoration-warning="display_status == 'tension'"
+                                      decoration-info="display_status == 'warning'"
+                                      decoration-success="display_status == 'safe'">
                                     <field name="currency_id" column_invisible="1" readonly="1"/>
                                     <field name="period_risk_sequence" column_invisible="1" readonly="1"/>
                                     <field name="week_index" column_invisible="1" readonly="1"/>
-                                    <field name="period_risk_status" string="Statut" readonly="1"/>
+                                    <field name="is_simulation" column_invisible="1" readonly="1"/>
+                                    <field name="display_status" string="Statut" readonly="1"/>
                                     <field name="week_label" string="Période" readonly="1"/>
                                     <field name="move_id" column_invisible="1" readonly="1"/>
-                                    <field name="move_name" string="Facture" readonly="1"/>
+                                    <field name="move_name" string="Document" readonly="1"/>
                                     <field name="partner_id" string="Partenaire" readonly="1"/>
-                                    <field name="move_type" string="Type" readonly="1"/>
+                                    <field name="document_type_label" string="Type" readonly="1"/>
                                     <field name="invoice_date_due" string="Échéance" readonly="1"/>
                                     <field name="days_overdue_label" string="Retard" readonly="1"/>
                                     <field name="signed_amount" string="Impact"
@@ -244,7 +246,7 @@
                                            sum="Impact net"
                                            options="{'currency_field': 'currency_id'}"/>
                                     <field name="is_overdue_label" string="Échue" readonly="1"/>
-                                    <button name="action_open_source_invoice" type="object" string=" " title="Ouvrir la facture" icon="fa-external-link"/>
+                                    <button name="action_open_source_document" type="object" string=" " title="Ouvrir le document" icon="fa-external-link"/>
                                     <field name="week_invoice_net_amount" string="Impact net période"
                                            optional="hide"
                                            readonly="1"

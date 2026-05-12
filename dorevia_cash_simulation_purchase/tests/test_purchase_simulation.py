@@ -268,3 +268,68 @@ class TestPurchaseSimulation(TransactionCase):
                     ):
                         guard.write({"include_simulation": False})
         self.assertFalse(guard.simulation_purchase_order_ids)
+
+    # ──────────────────────────────────────────────────────────────────────
+    # 6. Onglet Documents — lignes simulées achats
+    # ──────────────────────────────────────────────────────────────────────
+
+    def test_documents_tab_purchase_simulation(self):
+        """Mode simulation ON: Documents tab includes eligible purchase simulation rows."""
+        sale = self._create_sale_quote()
+        po = self._create_po(amount=4000, date_planned=self._future_dt(20))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
+        )
+        self._recompute_with_zero_balance(guard)
+        purchase_rows = guard.projection_period_move_ids.filtered(
+            lambda r: r.is_simulation and r.purchase_order_id
+        )
+        self.assertEqual(len(purchase_rows), 1)
+        row = purchase_rows[0]
+        self.assertEqual(row.purchase_order_id, po)
+        self.assertEqual(row.document_type_label, "Commande achat simulée")
+        self.assertEqual(row.display_status, "simulation")
+        self.assertAlmostEqual(row.signed_amount, -po.amount_total, places=2)
+        self.assertEqual(row.explanation_type, "outflow")
+        self.assertEqual(row.move_name, po.name)
+        self.assertEqual(row.partner_id, po.partner_id)
+        self.assertFalse(row.is_overdue)
+        self.assertFalse(row.move_id)
+
+    def test_documents_tab_combined_sale_and_purchase(self):
+        """Documents tab shows both sale and purchase simulation rows."""
+        sale = self._create_sale_quote(amount=3000, validity_date=self._future(15))
+        po = self._create_po(amount=1000, date_planned=self._future_dt(15))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
+        )
+        self._recompute_with_zero_balance(guard)
+        sim_rows = guard.projection_period_move_ids.filtered("is_simulation")
+        sale_rows = sim_rows.filtered(lambda r: r.sale_order_id)
+        purchase_rows = sim_rows.filtered(lambda r: r.purchase_order_id)
+        self.assertEqual(len(sale_rows), 1)
+        self.assertEqual(len(purchase_rows), 1)
+        self.assertGreater(sale_rows[0].signed_amount, 0)
+        self.assertLess(purchase_rows[0].signed_amount, 0)
+
+    def test_documents_tab_simulation_off_no_purchase_rows(self):
+        """Mode simulation OFF: no purchase simulation rows in Documents."""
+        guard = self._create_guard(include_simulation=False)
+        self._recompute_with_zero_balance(guard)
+        sim_rows = guard.projection_period_move_ids.filtered("is_simulation")
+        self.assertFalse(sim_rows)
+
+    def test_documents_tab_action_open_purchase_order(self):
+        """Clicking the link button on a purchase simulation row opens the PO."""
+        sale = self._create_sale_quote()
+        po = self._create_po(amount=2000, date_planned=self._future_dt(20))
+        guard = self._create_guard(
+            include_simulation=True, sale_orders=sale, purchase_orders=po
+        )
+        self._recompute_with_zero_balance(guard)
+        purchase_row = guard.projection_period_move_ids.filtered(
+            lambda r: r.is_simulation and r.purchase_order_id
+        )[0]
+        action = purchase_row.action_open_source_document()
+        self.assertEqual(action["res_model"], "purchase.order")
+        self.assertEqual(action["res_id"], po.id)

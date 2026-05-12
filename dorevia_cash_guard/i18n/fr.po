@@ -348,8 +348,33 @@ msgstr "Le montant du flux complémentaire doit être positif ou nul."
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
-msgid "Ouvrir la facture"
-msgstr "Ouvrir la facture"
+msgid "Ouvrir le document"
+msgstr "Ouvrir le document"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__document_type_label
+msgid "Type"
+msgstr "Type"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__display_status
+msgid "Statut"
+msgstr "Statut"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_period_move__display_status__simulation
+msgid "Simulation"
+msgstr "Simulation"
+
+#. module: dorevia_cash_guard
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__is_simulation
+msgid "Simulation"
+msgstr "Simulation"
+
+#. module: dorevia_cash_guard
+#: model:ir.model,name:dorevia_cash_guard.model_dorevia_cash_guard_period_move
+msgid "Document de projection"
+msgstr "Document de projection"
 
 #. module: dorevia_cash_guard
 #: code:addons/dorevia_cash_guard/models/cash_guard_period_move.py:0

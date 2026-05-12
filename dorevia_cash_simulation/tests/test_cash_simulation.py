@@ -310,3 +310,51 @@ class TestCashSimulation(TransactionCase):
         eligible = guard._get_eligible_sale_simulation_orders()
         self.assertNotIn(order, eligible)
         self.assertEqual(guard.simulation_order_count, 0)
+
+    # ──────────────────────────────────────────────────────────────────────
+    # 9. Onglet Documents — lignes simulées
+    # ──────────────────────────────────────────────────────────────────────
+
+    def test_documents_tab_simulation_off_no_simulated_rows(self):
+        """Mode simulation OFF: Documents tab shows no simulation rows."""
+        guard = self._create_guard(include_simulation=False)
+        self._recompute_with_zero_balance(guard)
+        sim_rows = guard.projection_period_move_ids.filtered("is_simulation")
+        self.assertFalse(sim_rows)
+
+    def test_documents_tab_simulation_on_shows_sale_simulation(self):
+        """Mode simulation ON: Documents tab includes eligible simulated quotes."""
+        order = self._create_quote(amount=3000, validity_date=self._future(20))
+        guard = self._create_guard(include_simulation=True, sale_orders=order)
+        self._recompute_with_zero_balance(guard)
+        sim_rows = guard.projection_period_move_ids.filtered("is_simulation")
+        self.assertEqual(len(sim_rows), 1)
+        row = sim_rows[0]
+        self.assertEqual(row.sale_order_id, order)
+        self.assertEqual(row.document_type_label, "Devis client simulé")
+        self.assertEqual(row.display_status, "simulation")
+        self.assertAlmostEqual(row.signed_amount, order.amount_total, places=2)
+        self.assertEqual(row.explanation_type, "inflow")
+        self.assertEqual(row.move_name, order.name)
+        self.assertEqual(row.partner_id, order.partner_id)
+        self.assertEqual(row.invoice_date_due, order.validity_date)
+        self.assertFalse(row.is_overdue)
+        self.assertFalse(row.move_id)
+
+    def test_documents_tab_simulation_ineligible_excluded(self):
+        """A non-eligible selected order does not appear in Documents."""
+        order = self._create_quote(amount=2000, validity_date=date(2026, 9, 15))
+        guard = self._create_guard(include_simulation=True, sale_orders=order)
+        self._recompute_with_zero_balance(guard)
+        sim_rows = guard.projection_period_move_ids.filtered("is_simulation")
+        self.assertFalse(sim_rows)
+
+    def test_documents_tab_action_open_sale_order(self):
+        """Clicking the link button on a simulated row opens the sale order."""
+        order = self._create_quote(amount=1000, validity_date=self._future(20))
+        guard = self._create_guard(include_simulation=True, sale_orders=order)
+        self._recompute_with_zero_balance(guard)
+        sim_row = guard.projection_period_move_ids.filtered("is_simulation")[0]
+        action = sim_row.action_open_source_document()
+        self.assertEqual(action["res_model"], "sale.order")
+        self.assertEqual(action["res_id"], order.id)

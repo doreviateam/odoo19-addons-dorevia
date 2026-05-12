@@ -81,6 +81,46 @@ class DoreviaCashGuard(models.Model):
             buckets[week_idx] = buckets.get(week_idx, 0.0) + net
         return buckets
 
+    def _get_simulation_period_move_rows(self, meta, sit, weeks_by_index):
+        rows = super()._get_simulation_period_move_rows(meta, sit, weeks_by_index)
+        if not self.include_simulation:
+            return rows
+        for order in self._get_eligible_sale_simulation_orders():
+            week_idx = self._week_index_for_date(meta, order.validity_date)
+            if week_idx is None:
+                continue
+            week = weeks_by_index.get(week_idx)
+            if not week:
+                continue
+            rows.append(
+                {
+                    "guard_id": self.id,
+                    "week_id": week.id,
+                    "sale_order_id": order.id,
+                    "partner_id": order.partner_id.id if order.partner_id else False,
+                    "move_name": order.name or "",
+                    "invoice_date_due": order.validity_date,
+                    "projected_date": order.validity_date,
+                    "amount_residual": order.amount_total,
+                    "signed_amount": order.amount_total,
+                    "currency_id": self.company_id.currency_id.id,
+                    "company_id": self.company_id.id,
+                    "explanation_type": "inflow",
+                    "is_overdue": False,
+                    "days_overdue": 0,
+                    "is_simulation": True,
+                    "document_type_label": "Devis client simulé",
+                    "display_status": "simulation",
+                    "_sort": (
+                        week.week_index,
+                        order.validity_date,
+                        order.amount_total,
+                        100000 + order.id,
+                    ),
+                }
+            )
+        return rows
+
     def action_view_simulation_orders(self):
         self.ensure_one()
         orders = self._get_eligible_sale_simulation_orders()
@@ -100,6 +140,15 @@ class DoreviaCashGuard(models.Model):
                 }
             )
         return action
+
+    def action_reset_period_to_defaults(self):
+        self.with_context(skip_cash_guard_recompute=True).write(
+            {
+                "include_simulation": False,
+                "simulation_sale_order_ids": [(5, 0, 0)],
+            }
+        )
+        return super().action_reset_period_to_defaults()
 
     def write(self, vals):
         if "include_simulation" in vals and not vals["include_simulation"]:

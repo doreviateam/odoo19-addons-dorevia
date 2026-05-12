@@ -4,11 +4,19 @@ from odoo import _, api, fields, models
 from odoo.exceptions import AccessError
 
 
+_MOVE_TYPE_LABELS = {
+    "out_invoice": "Facture client",
+    "in_invoice": "Facture fournisseur",
+    "out_refund": "Avoir client",
+    "in_refund": "Avoir fournisseur",
+}
+
+
 class DoreviaCashGuardPeriodMove(models.Model):
-    """Détail V1.3 : pièces ``account.move`` expliquant l'impact factures par maille (dérivé, régénéré)."""
+    """Document expliquant la projection : factures ouvertes + documents simulés (dérivé, régénéré)."""
 
     _name = "dorevia.cash.guard.period.move"
-    _description = "Pièce de projection (factures ouvertes)"
+    _description = "Document de projection"
     _order = "sequence, id"
 
     _cash_guard_period_move_guard_move_uniq = models.Constraint(
@@ -45,8 +53,19 @@ class DoreviaCashGuardPeriodMove(models.Model):
     )
     period_risk_status = fields.Selection(
         related="week_id.risk_status",
-        string="Statut",
+        string="Statut période",
         store=True,
+        readonly=True,
+    )
+    display_status = fields.Selection(
+        [
+            ("safe", "Confort"),
+            ("warning", "Vigilance"),
+            ("tension", "Tension"),
+            ("risk", "Risque"),
+            ("simulation", "Simulation"),
+        ],
+        string="Statut",
         readonly=True,
     )
     period_risk_sequence = fields.Integer(
@@ -66,10 +85,19 @@ class DoreviaCashGuardPeriodMove(models.Model):
         string="Nb pièces période",
         readonly=True,
     )
+    is_simulation = fields.Boolean(
+        string="Simulation",
+        default=False,
+        readonly=True,
+    )
+    document_type_label = fields.Char(
+        string="Type",
+        readonly=True,
+    )
     move_id = fields.Many2one(
         "account.move",
         string="Pièce comptable",
-        required=True,
+        required=False,
         ondelete="cascade",
         index=True,
     )
@@ -153,7 +181,14 @@ class DoreviaCashGuardPeriodMove(models.Model):
         for line in self:
             line.period_risk_sequence = order.get(line.week_id.risk_status, 99)
 
-    def action_open_source_invoice(self):
+    def action_open_source_document(self):
+        """Ouvre le document source : facture, devis ou commande achat (extensible)."""
+        self.ensure_one()
+        if self.move_id:
+            return self._action_open_invoice()
+        return False
+
+    def _action_open_invoice(self):
         """Ouvre la facture / avoir source (droits ``account.move`` standards)."""
         self.ensure_one()
         move = self.move_id
@@ -171,3 +206,7 @@ class DoreviaCashGuardPeriodMove(models.Model):
             "view_mode": "form",
             "target": "new",
         }
+
+    def action_open_source_invoice(self):
+        """Alias conservé pour compatibilité descendante."""
+        return self.action_open_source_document()

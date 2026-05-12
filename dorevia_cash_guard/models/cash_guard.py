@@ -1117,9 +1117,20 @@ class DoreviaCashGuard(models.Model):
                 }
             )
 
+    def _get_simulation_period_move_rows(self, meta, sit, weeks_by_index):
+        """Hook pour les modules simulation : retourne les lignes Documents simulés.
+
+        Chaque ligne doit contenir une clé ``_sort`` pour le tri unifié.
+        Conçu pour être étendu par ``dorevia_cash_simulation`` et
+        ``dorevia_cash_simulation_purchase``.
+        """
+        return []
+
     def _sync_projection_period_moves(self):
-        """V1.3 — lignes dérivées listant les factures/avoirs ouverts par maille (régénération complète)."""
+        """Régénère les lignes Documents : factures ouvertes + documents simulés retenus."""
         self.ensure_one()
+        from .cash_guard_period_move import _MOVE_TYPE_LABELS
+
         PeriodMove = self.env["dorevia.cash.guard.period.move"].sudo()
         PeriodMove.search([("guard_id", "=", self.id)]).unlink()
         meta = self._split_exercise_periods()
@@ -1161,9 +1172,18 @@ class DoreviaCashGuard(models.Model):
                     "explanation_type": expl,
                     "is_overdue": is_overdue,
                     "days_overdue": days_overdue,
+                    "is_simulation": False,
+                    "document_type_label": _MOVE_TYPE_LABELS.get(
+                        move.move_type, move.move_type or ""
+                    ),
+                    "display_status": week.risk_status or "safe",
                     "_sort": (week.week_index, proj_date, signed, move.id),
                 }
             )
+
+        sim_rows = self._get_simulation_period_move_rows(meta, sit, weeks_by_index)
+        rows.extend(sim_rows)
+
         rows.sort(key=lambda r: r["_sort"])
         seq = 10
         for item in rows:
