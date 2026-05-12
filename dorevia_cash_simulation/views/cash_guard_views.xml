@@ -8,20 +8,17 @@
         <field name="inherit_id" ref="dorevia_cash_guard.view_dorevia_cash_guard_form"/>
         <field name="arch" type="xml">
 
-            <!-- Smart button for simulation orders -->
-            <xpath expr="//sheet" position="inside">
-                <div class="oe_button_box" name="button_box"
-                     invisible="not include_simulation">
-                    <button name="action_view_simulation_orders"
-                            type="object"
-                            class="oe_stat_button"
-                            icon="fa-line-chart"
-                            invisible="not include_simulation">
-                        <field name="simulation_order_count"
-                               string="Devis simulés"
-                               widget="statinfo"/>
-                    </button>
-                </div>
+            <!-- Smart button for simulation sale orders -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_simulation_orders"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-line-chart"
+                        invisible="not include_simulation">
+                    <field name="simulation_order_count"
+                           string="Devis simulés"
+                           widget="statinfo"/>
+                </button>
             </xpath>
 
             <!-- Mode simulation + Devis under Journaux (left column) -->
