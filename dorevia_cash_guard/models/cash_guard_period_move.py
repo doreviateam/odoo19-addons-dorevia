@@ -106,6 +106,11 @@ class DoreviaCashGuardPeriodMove(models.Model):
         string="Partenaire",
         readonly=True,
     )
+    responsible_id = fields.Many2one(
+        "res.users",
+        string="Responsable",
+        readonly=True,
+    )
     move_type = fields.Selection(
         related="move_id.move_type",
         readonly=True,

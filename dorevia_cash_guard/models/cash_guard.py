@@ -1161,6 +1161,7 @@ class DoreviaCashGuard(models.Model):
                     "week_id": week.id,
                     "move_id": move.id,
                     "partner_id": move.partner_id.id if move.partner_id else False,
+                    "responsible_id": move.invoice_user_id.id if move.invoice_user_id else False,
                     "move_name": move.name or "",
                     "invoice_date": move.invoice_date,
                     "invoice_date_due": move.invoice_date_due,

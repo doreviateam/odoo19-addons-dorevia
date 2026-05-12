@@ -49,8 +49,8 @@ msgstr "Flux complémentaires"
 
 #. module: dorevia_cash_guard
 #: model:ir.actions.act_window,name:dorevia_cash_guard.action_dorevia_cash_guard
-msgid "Trésorerie"
-msgstr "Trésorerie"
+msgid "Projets de trésorerie"
+msgstr "Projets de trésorerie"
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form

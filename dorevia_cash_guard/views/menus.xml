@@ -10,7 +10,7 @@
 
     <menuitem
         id="menu_dorevia_cash_guard_points"
-        name="Trésorerie"
+        name="Projets de trésorerie"
         parent="menu_dorevia_cash_guard_root"
         action="action_dorevia_cash_guard"
         groups="dorevia_cash_guard.group_cash_guard_user"
