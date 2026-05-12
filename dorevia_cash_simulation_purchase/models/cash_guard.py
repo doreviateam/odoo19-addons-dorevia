@@ -151,7 +151,7 @@ class DoreviaCashGuard(models.Model):
             self.simulation_purchase_order_ids
         )
 
-    @api.constrains("include_simulation", "simulation_purchase_order_ids")
+    @api.constrains("include_simulation", "simulation_sale_order_ids", "simulation_purchase_order_ids")
     def _check_simulation_has_orders(self):
         super()._check_simulation_has_orders()
 
