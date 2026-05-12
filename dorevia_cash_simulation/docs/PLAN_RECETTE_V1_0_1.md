@@ -76,15 +76,16 @@ Statut : `OK / KO`
 
 ---
 
-## 4. Test 2 — Mode simulation ON sans devis
+## 4. Test 2 — Mode simulation ON sans aucun document
 
 ### Action
 
-Activer le mode simulation sans sélectionner de devis :
+Activer le mode simulation sans sélectionner ni devis ni commande achat :
 
 ```text
 Mode simulation = ON
 Devis = (vide)
+Commandes achat = (vide)
 Sauvegarder
 ```
 
@@ -92,7 +93,32 @@ Sauvegarder
 
 ```text
 Odoo bloque la sauvegarde avec un message :
-« Le mode simulation nécessite au moins un devis sélectionné. »
+« Le mode simulation nécessite au moins un document de simulation sélectionné (devis ou commande achat). »
+```
+
+Statut : `OK / KO`
+
+---
+
+## 4bis. Test 2bis — Mode simulation ON avec uniquement des achats
+
+### Action
+
+```text
+Mode simulation = ON
+Devis = (vide)
+Commandes achat = P1
+Sauvegarder / Actualiser
+```
+
+### Résultat attendu
+
+```text
+Sauvegarde OK (au moins un document de simulation est présent).
+P1 est pris en compte pour −500 € (décaissement simulé).
+Le smart button « Achats simulés » affiche 1.
+Le smart button « Devis simulés » affiche 0.
+Le solde projeté diminue de 500 €.
 ```
 
 Statut : `OK / KO`
@@ -263,7 +289,8 @@ Statut : `OK / KO`
 | ----------- | ------- | ------ |
 | Tests automatiques | 28 tests verts (16 + 12) | OK / KO |
 | Simulation OFF | Champs vidés, projection prudente | OK / KO |
-| Simulation ON sans devis | Blocage | OK / KO |
+| Simulation ON sans document | Blocage (ni devis ni achat) | OK / KO |
+| Simulation ON achats seuls | OK, impact −500 € | OK / KO |
 | Simulation ON avec D1+D2 | Impact +3 000 € | OK / KO |
 | Devis confirmé dans M2M | Exclu du calcul, visible dans M2M | OK / KO |
 | validity_date hors période | Exclu | OK / KO |

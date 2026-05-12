@@ -232,6 +232,22 @@ class TestPurchaseSimulation(TransactionCase):
     # 5. Toggle OFF vide les PO
     # ──────────────────────────────────────────────────────────────────────
 
+    def test_simulation_on_with_purchase_only_ok(self):
+        """Mode simulation ON with purchase orders only (no sale orders) must be allowed."""
+        po = self._create_po(date_planned=self._future_dt(20))
+        guard = self._create_guard(
+            include_simulation=True, purchase_orders=po
+        )
+        self.assertTrue(guard.include_simulation)
+        self.assertIn(po, guard.simulation_purchase_order_ids)
+        self.assertFalse(guard.simulation_sale_order_ids)
+
+    def test_simulation_on_without_any_document_raises(self):
+        """Mode simulation ON with neither sale nor purchase orders must raise."""
+        from odoo.exceptions import ValidationError
+        with self.assertRaises(ValidationError):
+            self._create_guard(include_simulation=True)
+
     def test_toggle_off_clears_purchase_orders(self):
         sale = self._create_sale_quote()
         po = self._create_po(date_planned=self._future_dt(20))
