@@ -269,7 +269,7 @@
     </record>
 
     <record id="action_dorevia_cash_guard" model="ir.actions.act_window">
-        <field name="name">Projets de trésorerie</field>
+        <field name="name">Trésorerie</field>
         <field name="res_model">dorevia.cash.guard</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_dorevia_cash_guard_search"/>
