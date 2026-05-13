@@ -5,6 +5,7 @@
 **Type** : évolution UX / fonctionnelle  
 **Statut** : **Implémenté et recetté GO V1.1** (terrain 2026-05-13 — voir `docs/PV_RECETTE_MANUELLE_V1.md`, module `19.0.2.0.0`, `SPEC_CASH_FLOW_TRAJECTORY.md` § 5.5, `README.md` parcours V1.1)  
 **Références V1** : `docs/SPEC_CASH_FLOW_TRAJECTORY.md`, `docs/PV_RECETTE_MANUELLE_V1.md`  
+**Doctrine transverse** : `../../docs/cash/DOCTRINE_CASH_MODULES.md` (racine dépôt `odoo19-addons-dorevia`)  
 **Recette manuelle** : `docs/RECETTE_MANUELLE_V1.md`
 
 ---

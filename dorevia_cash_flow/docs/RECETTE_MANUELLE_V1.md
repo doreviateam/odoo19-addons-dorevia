@@ -3,7 +3,7 @@
 **Module** : `dorevia_cash_flow`  
 **Version cible** : **V1.1** (parcours nominal : trajectoire de **référence** sans sélection préalable) ; le parcours **assistant + bouton** reste disponible en **secondaire**.  
 **Rôle testeur** : utilisateur métier ou fonctionnel avec droits Cash Guard  
-**Références** : `SPEC_CASH_FLOW_TRAJECTORY.md` (§ 5.5 V1.1), `docs/TICKET_CASH_FLOW_V1_1_TRAJECTOIRE_REFERENCE.md`, `RECETTE_VUE_GRAPH.md`, `RECETTE_FONCTIONNELLE_V1.md`
+**Références** : `SPEC_CASH_FLOW_TRAJECTORY.md` (§ 5.5 V1.1), `docs/TICKET_CASH_FLOW_V1_1_TRAJECTOIRE_REFERENCE.md`, **[Doctrine modules Cash](../../docs/cash/DOCTRINE_CASH_MODULES.md)** (rôles Cash / lecture vs projection), `RECETTE_VUE_GRAPH.md`, `RECETTE_FONCTIONNELLE_V1.md`
 
 Ce document est le **guide d’exécution** : actions dans l’interface, observations, critères de succès. Le cadrage objectifs / hors périmètre détaillé reste dans `RECETTE_FONCTIONNELLE_V1.md`.
 

@@ -2,6 +2,8 @@
 
 Extension Odoo du module `dorevia_cash_guard` dédiée à la simulation de trésorerie à partir de devis clients.
 
+**Doctrine Cash** : ce module relève de la couche **hypothèses / simulation** ; il enrichit Cash Guard et ne constitue pas une trajectoire de référence concurrente de **`dorevia_cash_flow`**. Voir **[Doctrine modules Cash](../docs/cash/DOCTRINE_CASH_MODULES.md)**.
+
 ---
 
 ## 1. Objectif
@@ -24,8 +26,9 @@ Le module `dorevia_cash_simulation` ajoute un niveau d'hypothèse contrôlé.
 
 | Module                    | Rôle                                                                  |
 | ------------------------- | --------------------------------------------------------------------- |
-| `dorevia_cash_guard`      | Projection prudente, basée sur les données réelles ou quasi certaines |
-| `dorevia_cash_simulation` | Projection enrichie avec des hypothèses issues de devis               |
+| `dorevia_cash_flow`       | Lecture graphique de la **trajectoire de référence** (données déjà dans les mailles Cash Guard) |
+| `dorevia_cash_guard`      | Atelier de **projection** : données réelles ou quasi certaines, mailles, audit |
+| `dorevia_cash_simulation` | **Hypothèses** : enrichissement contrôlé (ex. devis), sans trajectoire de référence concurrente |
 
 Un devis utilisé en simulation n'est pas :
 

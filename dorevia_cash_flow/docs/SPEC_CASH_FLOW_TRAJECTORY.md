@@ -273,7 +273,8 @@ La vue **Graph native** Odoo V1 ne couvre en général **pas** ces repères dans
 
 ## 5.5 V1.1 — Trajectoire de référence (sélection automatique)
 
-Document de cadrage / recette associé : **`docs/TICKET_CASH_FLOW_V1_1_TRAJECTOIRE_REFERENCE.md`**.
+Document de cadrage / recette associé : **`docs/TICKET_CASH_FLOW_V1_1_TRAJECTOIRE_REFERENCE.md`**.  
+Doctrine transverse Cash (positionnement vs Cash Guard et simulation) : **`../../docs/cash/DOCTRINE_CASH_MODULES.md`**.
 
 **Objectif** : le parcours principal ne impose plus de choisir une projection dans un formulaire avant d’afficher la courbe.
 

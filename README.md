@@ -111,6 +111,7 @@ Si la réponse est non, il n’entre pas dans ce répertoire.
 
 ## Références
 
+- [Doctrine modules Cash](./docs/cash/DOCTRINE_CASH_MODULES.md) — rôles Cash Flow / Cash Guard / simulation, chaîne fonctionnelle, UX
 - [Architecture des lots HelloAsso (Zedocs)](../Zedocs/odoo19/modules/helloasso-dorevia/ARCHITECTURE_LOTS_HELLOASSO_ODOO19.md)
 - [Recette seed de démonstration Odoo 19 pour Lynki](../Zedocs/odoo19/socle/RECETTE_SEED_DEMO_ODOO19_POUR_LYNKI.md)
 - [Index Zedocs](../Zedocs/README.md)

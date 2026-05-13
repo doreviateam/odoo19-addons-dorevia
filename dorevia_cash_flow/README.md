@@ -29,6 +29,8 @@ Il fournit une **vue graphique d’analyse**, en combinant les données comptabl
 
 Cette distinction évite de confondre l’outil opérationnel de projection avec la vue d’analyse graphique.
 
+**Doctrine transverse (Cash Guard / Cash Flow / simulation)** : voir **[Doctrine modules Cash](../docs/cash/DOCTRINE_CASH_MODULES.md)** dans ce dépôt.
+
 ---
 
 ## Menu cible
@@ -244,6 +246,7 @@ Documents et preuves conservés dans le dépôt :
 | Recette fonctionnelle (checklist étendue) | `docs/RECETTE_FONCTIONNELLE_V1.md` |
 | Limites vue Graph native | `docs/RECETTE_VUE_GRAPH.md` |
 | Ticket V1.1 (cadrage) | `docs/TICKET_CASH_FLOW_V1_1_TRAJECTOIRE_REFERENCE.md` |
+| Doctrine modules Cash (transverse, dépôt) | `../docs/cash/DOCTRINE_CASH_MODULES.md` |
 | Capture de preuve V1.1 (terrain) | `docs/captures/recette_cash_flow_trajectory_20260513_002.png` |
 
 La capture **`recette_cash_flow_trajectory_20260513.png`** (V1) peut rester comme archive si présente ; la preuve **V1.1** attendue dans le dépôt est le fichier **`_002`** référencé dans le PV.
