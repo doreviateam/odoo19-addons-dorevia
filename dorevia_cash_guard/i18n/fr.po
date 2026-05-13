@@ -141,6 +141,16 @@ msgid "Projection"
 msgstr "Projection"
 
 #. module: dorevia_cash_guard
+#: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_treasury_root
+msgid "Trésorerie"
+msgstr "Trésorerie"
+
+#. module: dorevia_cash_guard
+#: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_points
+msgid "Projections de trésorerie"
+msgstr "Projections de trésorerie"
+
+#. module: dorevia_cash_guard
 #: code:addons/dorevia_cash_guard/models/cash_guard.py:0
 #, python-format
 msgid "Nouveau"

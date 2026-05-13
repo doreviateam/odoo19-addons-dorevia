@@ -33,7 +33,7 @@ Le principe directeur est simple :
 | Élément | Valeur |
 |---|---|
 | Module technique | `dorevia_cash_guard` |
-| Entrée menu (racine Comptabilité) | Projection de trésorerie |
+| Entrée menu (racine Comptabilité) | **Projection** (famille) ; **Trésorerie** (sous-famille cash) ; **Accueil graphique** / **Projections de trésorerie** (avec `dorevia_cash_flow`) |
 | Objet principal | Document de projection (`dorevia.cash.guard`) |
 | Lignes techniques | Flux complémentaires (non exposées dans l'UI métier standard) |
 | Référentiel pivot | Postes budgétaires |
@@ -44,7 +44,7 @@ Le principe directeur est simple :
 
 **Doctrine Cash (lecture / projection / simulation)** : le périmètre de ce module s’inscrit dans la chaîne décrite dans **[Doctrine modules Cash](../docs/cash/DOCTRINE_CASH_MODULES.md)** — `dorevia_cash_guard` est l’**atelier de projection** ; la **trajectoire de référence** en lecture synthétique est portée par **`dorevia_cash_flow`** lorsqu’il est installé.
 
-> Avec **`dorevia_cash_flow`** installé : menu **Projection > Cockpit trésorerie** — même trajectoire de référence qu’en Analyse, **lecture seule** sur la courbe, raccourcis atelier (implémentation dans `dorevia_cash_flow`, voir README du module). Cadrage produit : `docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md`.
+> Avec **`dorevia_cash_flow`** installé : **Projection > Trésorerie > Accueil graphique** — même trajectoire de référence qu’en Analyse (**Trajectoire (Analyse)**), **lecture seule** sur la courbe, raccourcis atelier (`dorevia_cash_flow`). Cadrage : `docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md`.
 
 Le module ne remplace pas la comptabilité générale.
 

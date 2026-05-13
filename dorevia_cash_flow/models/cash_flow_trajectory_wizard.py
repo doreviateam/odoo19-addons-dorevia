@@ -165,8 +165,8 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
                 _(
                     "Aucune projection hebdomadaire active avec des lignes calculées n'a été trouvée "
                     "pour la société « %(company)s ». "
-                    "Veuillez créer ou actualiser une projection de trésorerie dans les Projections "
-                    "de trésorerie (Cash Guard).",
+                    "Veuillez créer ou actualiser une projection de trésorerie dans "
+                    "Projection > Trésorerie > Projections de trésorerie.",
                     company=company.display_name,
                 )
             )
@@ -187,7 +187,7 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
                 _(
                     "Aucune projection hebdomadaire active avec des lignes calculées n'a été trouvée "
                     "pour la société « %(company)s ». "
-                    "Créez ou actualisez une projection depuis Projection > Trésorerie.",
+                    "Créez ou actualisez une projection depuis Projection > Trésorerie > Projections de trésorerie.",
                     company=company.display_name,
                 )
             )
@@ -196,7 +196,7 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
         action.setdefault("params", {})
         action["params"]["cockpit"] = True
         action["params"]["guard_id"] = guard.id
-        action["name"] = _("Cockpit trésorerie")
+        action["name"] = _("Accueil graphique")
         return action
 
     def action_refresh_points_from_guard(self):
@@ -221,15 +221,15 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
                 _(
                     "Seules les projections à périodicité « Semaine » sont prises en charge pour "
                     "la trajectoire de trésorerie. Ouvrez ou créez une projection hebdomadaire dans "
-                    "les Projections de trésorerie (Cash Guard)."
+                    "Projection > Trésorerie > Projections de trésorerie."
                 )
             )
         if not guard.weekly_line_ids:
             raise UserError(
                 _(
                     "Aucune maille de projection n'est disponible pour ce document. "
-                    "Ouvrez la projection dans les Projections de trésorerie (Cash Guard) et "
-                    "actualisez le calcul avant d'afficher la trajectoire."
+                    "Ouvrez la projection dans Projection > Trésorerie > Projections de trésorerie "
+                    "et actualisez le calcul avant d'afficher la trajectoire."
                 )
             )
 

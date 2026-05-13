@@ -17,9 +17,9 @@
                 <sheet>
                     <div class="alert alert-info mb-3" role="alert">
                         <p class="mb-0">
-                            Parcours secondaire : choisissez une projection Cash Guard puis
+                            Parcours secondaire (souvent sous <strong>Analyse</strong>) : choisissez une projection Cash Guard puis
                             <strong>Afficher la trajectoire</strong> pour ouvrir le graphique de pilotage.
-                            Le menu principal ouvre directement la trajectoire de référence (V1.1).
+                            Le parcours principal cash est <strong>Projection &gt; Trésorerie &gt; Accueil graphique</strong> (V1.1).
                         </p>
                     </div>
                     <div class="text-muted mb-3 small">
@@ -86,14 +86,14 @@
     </record>
 
     <record id="action_dorevia_cash_flow_trajectory_wizard" model="ir.actions.act_window">
-        <field name="name">Trajectoire (choix de projection)</field>
+        <field name="name">Trajectoire — choix projection (Analyse)</field>
         <field name="res_model">dorevia.cash.flow.trajectory.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
 
     <record id="action_dorevia_cash_flow_trajectory_reference" model="ir.actions.server">
-        <field name="name">Trajectoire de trésorerie</field>
+        <field name="name">Trajectoire (Analyse)</field>
         <field name="model_id" ref="model_dorevia_cash_flow_trajectory_wizard"/>
         <field name="state">code</field>
         <field name="code">

@@ -6,9 +6,8 @@
 
 ## État actuel de l’UI vs cible cockpit
 
-> La trajectoire de référence est consultable dans `dorevia_cash_flow` via **Comptabilité > Analyse > Gestion > Trajectoire de trésorerie**.  
-> Avec **`dorevia_cash_flow`** installé, **Projection > Cockpit trésorerie** affiche la **même** trajectoire de référence en lecture seule, avec raccourcis atelier (implémentation dans `dorevia_cash_flow` pour éviter une dépendance circulaire Guard → Flow).  
-> **Projection > Trésorerie** ouvre toujours la liste des documents de projection.
+> **Parcours nominal** : **Projection > Trésorerie > Accueil graphique** (même trajectoire de référence, lecture seule, raccourcis atelier ; implémentation `dorevia_cash_flow`). **Atelier** : **Projection > Trésorerie > Projections de trésorerie**.  
+> **Raccourcis Analyse** : **Trajectoire (Analyse)** et **Trajectoire — choix projection (Analyse)** (secondaires, libellés explicites).
 
 ---
 
@@ -47,17 +46,17 @@ Faire de l’entrée **Cash Guard** une **page d’accueil / cockpit** centrée 
 
 ## Critères d’acceptation (brouillon)
 
-- [x] Menu ou première vue Cash Guard présente un **cockpit** avec la trajectoire de référence visible (**Projection > Cockpit trésorerie**, livré dans `dorevia_cash_flow`).  
+- [x] Menu **Projection > Trésorerie > Accueil graphique** avec trajectoire de référence visible (livré dans `dorevia_cash_flow`).  
 - [x] La trajectoire est **strictement alignée** avec l’écran Cash Flow équivalent (même résolution de référence, même `_prepare_chart_action` / client action).  
-- [x] Aucun contrôle d’UI sur la courbe dans ce contexte qui **modifie** la trajectoire sans passer par les écrans / flux prévus (pas « Changer de projection » sur le graphique cockpit ; audit via lien dédié).  
-- [x] Les **actions d’atelier** principales sont accessibles depuis le cockpit (ouvrir projection, actualiser, liste, audit, vue Analyse).  
+- [x] Aucun contrôle d’UI sur la courbe dans ce contexte qui **modifie** la trajectoire sans passer par les écrans / flux prévus (pas « Changer de projection » sur l’accueil graphique ; audit via lien dédié).  
+- [x] Les **actions d’atelier** principales sont accessibles depuis l’accueil graphique (ouvrir projection, actualiser, liste, audit, vue Analyse).  
 - [x] README / doctrine mis à jour en lien avec cette livraison.
 
 ---
 
 ## Notes d’implémentation (à affiner en conception)
 
-- **Dépendance** : le cockpit est livré dans **`dorevia_cash_flow`** (`action_open_guard_cockpit`, menu **Projection > Cockpit trésorerie**) pour éviter `dorevia_cash_guard` → `dorevia_cash_flow` (cycle).  
+- **Dépendance** : l’accueil graphique est livré dans **`dorevia_cash_flow`** (`action_open_guard_cockpit`, menu sous **Projection > Trésorerie**) pour éviter `dorevia_cash_guard` → `dorevia_cash_flow` (cycle). Hiérarchie menus : **Trésorerie** = dossier ; enfants **Accueil graphique** puis **Projections de trésorerie** (`dorevia_cash_guard/views/menus.xml`).  
 - **Rafraîchissement** : `action_refresh_points_from_guard` sur l’assistant régénère les points après `action_recompute_projection` sur le document Guard.
 
 ---

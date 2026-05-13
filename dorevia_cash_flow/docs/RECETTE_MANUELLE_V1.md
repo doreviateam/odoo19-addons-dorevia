@@ -13,8 +13,9 @@ Ce document est le **guide d’exécution** : actions dans l’interface, observ
 
 | Menu | Rôle |
 |------|------|
-| **Comptabilité > Analyse > Trajectoire de trésorerie** | **Parcours nominal V1.1** : ouverture **directe** du graphique de pilotage (projection de référence résolue automatiquement). |
-| **Comptabilité > Analyse > Trajectoire (choix de projection)** | **Parcours secondaire** : assistant + sélection manuelle d’une projection puis **Afficher la trajectoire**. |
+| **Comptabilité > Projection > Trésorerie > Accueil graphique** | **Parcours nominal V1.1** (prioritaire navigation cash) : ouverture **directe** du graphique de pilotage (projection de référence résolue automatiquement). |
+| **Comptabilité > Analyse > … > Trajectoire (Analyse)** | **Même parcours nominal** (raccourci secondaire sous Analyse ; sous-menu intermédiaire *Gestion* selon la base). |
+| **Comptabilité > Analyse > … > Trajectoire — choix projection (Analyse)** | **Parcours secondaire** : assistant + sélection manuelle d’une projection puis **Afficher la trajectoire**. |
 
 ---
 
@@ -22,7 +23,7 @@ Ce document est le **guide d’exécution** : actions dans l’interface, observ
 
 | # | Contrôle | ☐ |
 |---|-----------|---|
-| A1 | Modules `account`, `dorevia_cash_guard`, `dorevia_cash_flow` installés (version **≥ 19.0.2.0.0** pour la V1.1 menu direct) | ☐ |
+| A1 | Modules `account`, `dorevia_cash_guard`, `dorevia_cash_flow` installés (Cash Flow **≥ 19.0.2.2.0** pour la hiérarchie Projection > Trésorerie ; Cash Guard **≥ 19.0.5.3.9** pour le menu dossier Trésorerie) | ☐ |
 | A2 | Utilisateur dans le groupe autorisé pour Cash Guard | ☐ |
 | A3 | Pour la société courante : au moins une projection **hebdomadaire**, **active**, avec **mailles hebdomadaires** calculées (`weekly_line_ids`), **date de situation** et **seuil d’alerte** cohérents | ☐ |
 | A4 | **Optionnel mais recommandé** : identifier dans Cash Guard la projection attendue comme **référence** (parmi les actives hebdo avec mailles : celle avec la **date de situation la plus récente**) ; noter **date de situation**, **seuil**, **solde constaté** pour contrôle croisé avec le bandeau du graphique | ☐ |
@@ -44,7 +45,7 @@ Pour la **ligne verticale** « situation », le **plein / pointillé** (constat�
 
 | Pas | Action (manuelle) | Contrôles (observer) | OK | Observations |
 |-----|-------------------|----------------------|----|----------------|
-| M1 | Ouvrir **Comptabilité > Analyse > Trajectoire de trésorerie** | Le **graphique de pilotage** s’affiche **directement** dans la zone principale (pas d’étape obligatoire d’assistant au préalable) ; pas d’erreur bloquante ; le libellé du menu est clair ; on n’est pas dans le menu opérationnel des projections Cash Guard | ☐ | |
+| M1 | Ouvrir **Comptabilité > Projection > Trésorerie > Accueil graphique** **ou** **Comptabilité > Analyse > … > Trajectoire (Analyse)** | Le **graphique de pilotage** s’affiche **directement** dans la zone principale (pas d’étape obligatoire d’assistant au préalable) ; pas d’erreur bloquante ; le libellé du menu est clair ; en parcours Projection, l’entrée **Projections de trésorerie** reste l’atelier liste | ☐ | |
 | M2 | Lire le **bandeau / sous-titre** sous le titre du graphique | Le **nom de la projection** utilisée est affiché ; la **date de situation** et le **seuil d’alerte** sont rappelés et cohérents avec la projection de référence attendue (cf. règle : société courante, active, hebdomadaire, mailles présentes, `situation_date` la plus récente — voir § 5.5 de la spec) | ☐ | |
 | M3 | Vérifier la présence du **point bas** dans le bandeau (si données) | **Point bas** (montant + date) et/ou **message d’information** affichés lorsque la courbe et les calculs le permettent ; pas de bandeau vide alors que la courbe est chargée | ☐ | |
 | M4 | Regarder la **courbe** principale | **Une seule** trajectoire de solde dans le temps ; pas deux courbes « concurrentes » ; pas de chute artificielle à zéro sur le constaté | ☐ | |
@@ -53,7 +54,7 @@ Pour la **ligne verticale** « situation », le **plein / pointillé** (constat�
 | M7 | Repérer la **ligne horizontale** de seuil | **Cible** : ligne visible sur le graphique ; valeur cohérente avec le sous-titre. **Acceptable** : seuil dans le sous-titre sans ligne sur la Graph native ; *RECETTE_VUE_GRAPH.md*. | ☐ | |
 | M8 | Vérifier l’**axe des dates** (graduations) | Ordre chronologique logique ; horizon projeté d’environ **90 jours** après la date de situation | ☐ | |
 | M9 | Vérifier l’**axe des montants** | Libellés en **soldes** (monnaie), pas une lecture « flux mensuels » trompeuse | ☐ | |
-| M10 | Cliquer **Liste des points** | Fenêtre avec liste + vue Graph **native** possible ; cohérence des valeurs avec la courbe (audit) | ☐ | |
+| M10 | Depuis un graphique **avec** les boutons du bandeau standard, cliquer **Liste des points** (ex. parcours **Trajectoire (Analyse)** ou **Vue Analyse** depuis l’accueil graphique) | Fenêtre avec liste + vue Graph **native** possible ; cohérence des valeurs avec la courbe (audit) | ☐ | |
 
 ---
 
@@ -63,7 +64,7 @@ Pour la **ligne verticale** « situation », le **plein / pointillé** (constat�
 
 | Pas | Action (manuelle) | Contrôles (observer) | OK | Observations |
 |-----|-------------------|----------------------|----|----------------|
-| S1 | Ouvrir **Comptabilité > Analyse > Trajectoire (choix de projection)** **ou**, depuis le graphique, cliquer **Changer de projection** | Un **assistant** (formulaire) s’ouvre ; le champ projection est disponible | ☐ | |
+| S1 | Ouvrir **Comptabilité > Analyse > … > Trajectoire — choix projection (Analyse)** **ou**, depuis le graphique (hors accueil graphique), cliquer **Changer de projection** | Un **assistant** (formulaire) s’ouvre ; le champ projection est disponible | ☐ | |
 | S2 | Choisir une projection **hebdomadaire** | Domaine cohérent (société, actif, semaine) ; date de situation et seuil visibles sur le formulaire | ☐ | |
 | S3 | Cliquer **Afficher la trajectoire** | Le graphique de pilotage s’ouvre comme en parcours nominal ; les contrôles M4–M10 s’appliquent | ☐ | |
 
@@ -95,7 +96,7 @@ Après **M10** : trier par date ; segments **Constaté** puis **Projeté** ; pas
 
 **Action** : pour la société courante, désactiver ou archiver toutes les projections hebdomadaires avec mailles **ou** ne laisser que des projections sans mailles calculées ; ouvrir **Trajectoire de trésorerie** (menu nominal).
 
-**Contrôle** : message **clair** (pas de courbe vide trompeuse) invitant à créer ou actualiser une projection dans **Projections de trésorerie** (Cash Guard).
+**Contrôle** : message **clair** (pas de courbe vide trompeuse) invitant à créer ou actualiser une projection dans **Projection > Trésorerie > Projections de trésorerie**.
 
 | OK | Observations |
 |----|----------------|
