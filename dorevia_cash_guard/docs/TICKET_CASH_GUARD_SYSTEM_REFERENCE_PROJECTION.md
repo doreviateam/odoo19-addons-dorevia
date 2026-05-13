@@ -106,14 +106,15 @@ Ce ticket formalise l’**écart** à combler entre cet état et la décision pr
 
 ---
 
-## Sous-ticket dev (optionnel)
+## Sous-ticket dev
 
-Pour découper la revue : ouvrir un ticket « Impl `is_system_reference` + contraintes + résolution Flow » en lien avec ce document.
+Implémentation code et tests : **`TICKET_IMPL_CASH_GUARD_SYSTEM_REFERENCE.md`** (champ, unicité, résolution Flow, protection, action admin, tests).
 
 ---
 
 ## Références
 
 - `docs/cash/DOCTRINE_CASH_MODULES.md`  
+- `dorevia_cash_guard/docs/TICKET_IMPL_CASH_GUARD_SYSTEM_REFERENCE.md` — implémentation (code + tests)  
 - `dorevia_cash_flow/docs/SPEC_CASH_FLOW_TRAJECTORY.md` § 5.5  
 - `dorevia_cash_flow/models/cash_flow_trajectory_wizard.py` (`_resolve_reference_guard`)

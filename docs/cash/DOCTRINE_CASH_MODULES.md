@@ -168,5 +168,6 @@ Ticket d’évolution associé : `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME
 - `dorevia_cash_flow/docs/TICKET_CASH_FLOW_V1_1_TRAJECTOIRE_REFERENCE.md` — cadrage ticket V1.1.
 - `dorevia_cash_guard/README.md` — atelier de projection.
 - `dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md` — projection de référence **système** (cible produit, périmètre technique).
+- `dorevia_cash_guard/docs/TICKET_IMPL_CASH_GUARD_SYSTEM_REFERENCE.md` — implémentation code + tests (sous-ticket dev).
 - `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md` — accueil graphique / trajectoire (lecture seule, réutilisation Cash Flow).
 - `dorevia_cash_simulation/README.md` — hypothèses devis / extension Cash Guard.
