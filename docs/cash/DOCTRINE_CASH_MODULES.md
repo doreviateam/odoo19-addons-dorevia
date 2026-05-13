@@ -60,7 +60,7 @@ Trajectoire affichée   (reflète les montants déjà présents dans les mailles
 
 **Parcours nominal métier** : ouvrir **Projection > Trésorerie > Accueil graphique** → voir la trajectoire — **sans** prérequis du type « aller dans Projections de trésorerie, choisir le document 1, activer, recalculer, revenir ». Si la référence **manque**, la remédiation relève du **système** ou de l’**administration**, pas d’une obligation fonctionnelle équivalente pour l’utilisateur métier dans le même parcours.
 
-**Implémentation** : l’heuristique actuelle de résolution (premier Guard éligible) est un **palliatif** tant qu’une **référence système explicite** n’est pas livrée — voir **`dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`**.
+**Implémentation** : l’heuristique actuelle de résolution (premier Guard éligible) est un **palliatif** tant qu’une **référence système explicite** n’est pas livrée — voir **`dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`** (V1 : projection standard **`is_system_reference`**, unicité par société, résolution prioritaire Cash Flow, protection archivage / suppression, message admin si absence).
 
 ---
 
