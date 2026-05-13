@@ -19,8 +19,12 @@ Ce que vous y trouvez :
 - **Un formulaire par projection** : vous définissez la période, les journaux bancaires à suivre, et un seuil d'alerte.
 - **L'onglet Projection** : une ligne par semaine avec le solde projeté, la couverture par rapport au seuil, et un statut couleur (Confort / Vigilance / Tension / Risque). La colonne Documents indique les lignes qui contiennent des pièces détaillées.
 - **L'onglet Documents** : la liste de toutes les factures et pièces qui expliquent la projection, avec leur échéance, leur impact et un lien pour les ouvrir.
-- **Le détail d'une période** : en cliquant sur une ligne de projection, vous voyez le contexte (projet, dates) et les indicateurs de trésorerie, ainsi que les documents rattachés à cette période.
-- **La synthèse** : en haut du formulaire, le solde constaté, la projection finale, le point bas et la couverture minimum.
+- **Le détail d'une période** : en cliquant sur une ligne de projection, vous voyez le contexte (projection de trésorerie, dates) et les indicateurs de trésorerie, ainsi que les documents rattachés à cette période.
+- **La synthèse Trésorerie** : deux blocs côte à côte.
+  - **Situation** : date, solde constaté, confirmation (rapprochement bancaire), puis **Total impact** — total net des impacts de tous les documents (factures et simulations) listés dans l’onglet Documents ; l’infobulle indique : *Somme des impacts des documents réels et simulés sur l’ensemble de la projection.*
+  - **Projection** : projection finale, point bas, date du point bas, couverture minimum.
+
+**Lecture pédagogique** : pour relier les chiffres entre eux, on peut souvent lire *solde constaté + total impact ≈ projection finale* lorsque les documents expliquent l’essentiel du mouvement par rapport au constaté — par exemple **1 740,67 € + 100,00 € = 1 840,67 €**. La projection intègre d’autres éléments dans le moteur de calcul ; cette égalité sert surtout de **repère** pour comprendre le rôle des documents.
 
 ---
 

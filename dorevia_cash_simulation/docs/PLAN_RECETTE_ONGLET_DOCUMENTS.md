@@ -306,6 +306,34 @@ Statut : `OK / KO`
 
 ---
 
+## 12. Synthèse formulaire — Total impact et lecture globale
+
+### Contexte
+
+Le formulaire **Projections de trésorerie** expose une **Synthèse Trésorerie** en deux colonnes. Le champ **Total impact** (sous **Confirmation** dans **Situation**) agrège la somme des impacts de tous les documents (réels + simulés) sur l’ensemble de la projection.
+
+### Action
+
+```text
+Ouvrir une projection avec documents (factures et/ou simulation).
+Vérifier le bloc Situation : après Confirmation, le champ Total impact est visible.
+Survoler Total impact : l’aide affiche la phrase sur documents réels et simulés.
+Comparer mentalement : solde constaté + total impact ≈ projection finale
+  lorsque les documents portent l’essentiel du delta (ex. 1 740,67 € + 100,00 € = 1 840,67 €).
+```
+
+### Résultat attendu
+
+```text
+Total impact est affiché sous Confirmation.
+Infobulle : « Somme des impacts des documents réels et simulés sur l'ensemble de la projection. »
+Les chiffres de la synthèse restent cohérents avec l’onglet Documents (somme des impacts).
+```
+
+Statut : `OK / KO`
+
+---
+
 ## Grille de décision
 
 | Zone testée | Attendu | Statut |
@@ -321,6 +349,7 @@ Statut : `OK / KO`
 | Réinitialiser | Simulation OFF, documents vidés, projection prudente | OK / KO |
 | Aucun effet comptable | Aucun flux réel créé | OK / KO |
 | Cohérence impacts | Signes +/− corrects, somme cohérente | OK / KO |
+| Synthèse — Total impact | Sous Confirmation, aide conforme, lecture solde + total ≈ projection (repère) | OK / KO |
 
 ---
 
@@ -339,6 +368,7 @@ Les échéances utilisent validity_date (ventes) et date_planned (achats).
 Les liens d'ouverture fonctionnent.
 Réinitialiser remet la projection en mode prudent.
 Aucune facture, écriture comptable ou paiement n'est créé.
+Le Total impact en synthèse est cohérent avec la somme des impacts de l’onglet Documents.
 ```
 
 Limite maintenue :
