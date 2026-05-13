@@ -93,6 +93,12 @@ class DoreviaCashGuardWeek(models.Model):
         string="Pièces de projection",
         readonly=True,
     )
+    period_documents_impact_net = fields.Monetary(
+        string="Impact net",
+        compute="_compute_period_documents_impact_net",
+        currency_field="currency_id",
+        help="Somme des impacts (factures et simulations) des documents de la période.",
+    )
     min_balance = fields.Monetary(string="Point bas")
     risk_status = fields.Selection(
         [
@@ -120,6 +126,13 @@ class DoreviaCashGuardWeek(models.Model):
         readonly=True,
         index=True,
     )
+
+    @api.depends("projection_move_ids", "projection_move_ids.signed_amount")
+    def _compute_period_documents_impact_net(self):
+        for rec in self:
+            rec.period_documents_impact_net = sum(
+                (m.signed_amount or 0.0) for m in rec.projection_move_ids
+            )
 
     @api.depends("invoice_move_count")
     def _compute_document_count_label(self):

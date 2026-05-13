@@ -316,13 +316,19 @@
                             <field name="signed_amount" string="Impact"
                                    readonly="1"
                                    widget="monetary"
-                                   sum="Impact net"
                                    options="{'currency_field': 'currency_id'}"/>
                             <button name="action_open_source_document" type="object"
                                     string=" " title="Ouvrir le document"
                                     icon="fa-external-link"/>
                         </list>
                     </field>
+                    <group>
+                        <field name="period_documents_impact_net"
+                               string="Impact net (documents)"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"
+                               readonly="1"/>
+                    </group>
                 </sheet>
             </form>
         </field>
