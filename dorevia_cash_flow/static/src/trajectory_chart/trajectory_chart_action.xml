@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="dorevia_cash_flow.TrajectoryChartAction">
+        <div class="o_dorevia_cf_trajectory d-flex flex-column h-100 overflow-auto p-3 bg-view">
+            <div t-if="state.loading" class="d-flex align-items-center justify-content-center flex-grow-1 text-muted">
+                Chargement de la trajectoire…
+            </div>
+            <div t-elif="state.error" class="alert alert-danger mb-0" role="alert">
+                <t t-esc="state.error"/>
+            </div>
+            <t t-else="">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                    <h4 class="mb-0 text-900">Trajectoire de trésorerie</h4>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary btn-sm" t-on-click="onChangeProjection">
+                            Changer de projection
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" t-on-click="onOpenList">
+                            Liste des points
+                        </button>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3" t-if="state.subtitle">
+                    <t t-esc="state.subtitle"/>
+                </p>
+                <div class="position-relative border rounded bg-white shadow-sm">
+                    <svg
+                        t-att-viewBox="state.viewBox"
+                        preserveAspectRatio="xMidYMid meet"
+                        class="w-100 d-block"
+                        style="min-height: 400px;"
+                    >
+                        <!-- Grille légère -->
+                        <g class="text-400" stroke="currentColor" stroke-opacity="0.15" fill="none">
+                            <t t-foreach="state.hGridLines" t-as="hg" t-key="hg_index">
+                                <line t-att-x1="hg.x1" t-att-y1="hg.y" t-att-x2="hg.x2" t-att-y2="hg.y" pointer-events="none"/>
+                            </t>
+                        </g>
+                        <!-- Seuil d'alerte (horizontal) -->
+                        <t t-if="state.thresholdLine">
+                            <line
+                                t-att-x1="state.thresholdLine.x1"
+                                t-att-y1="state.thresholdLine.y"
+                                t-att-x2="state.thresholdLine.x2"
+                                t-att-y2="state.thresholdLine.y"
+                                stroke="#c0392b"
+                                stroke-width="1.5"
+                                stroke-dasharray="5 3"
+                                opacity="0.9"
+                                pointer-events="none"
+                            />
+                            <text
+                                t-att-x="state.thresholdLine.labelX"
+                                t-att-y="state.thresholdLine.labelY"
+                                text-anchor="end"
+                                fill="#c0392b"
+                                font-size="11"
+                                font-family="system-ui, sans-serif"
+                                pointer-events="none"
+                            >
+                                Seuil d'alerte
+                            </text>
+                        </t>
+                        <!-- Date de situation (vertical) -->
+                        <t t-if="state.situationLine">
+                            <line
+                                t-att-x1="state.situationLine.x"
+                                t-att-y1="state.situationLine.y1"
+                                t-att-x2="state.situationLine.x"
+                                t-att-y2="state.situationLine.y2"
+                                stroke="#7f8c8d"
+                                stroke-width="1.5"
+                                stroke-dasharray="4 3"
+                                pointer-events="none"
+                            />
+                            <text
+                                t-att-x="state.situationLine.labelX"
+                                t-att-y="state.situationLine.labelY"
+                                fill="#7f8c8d"
+                                font-size="11"
+                                font-family="system-ui, sans-serif"
+                                pointer-events="none"
+                            >
+                                Situation
+                            </text>
+                        </t>
+                        <!-- Constaté : trait plein -->
+                        <path
+                            t-if="state.pathActual"
+                            t-att-d="state.pathActual"
+                            fill="none"
+                            stroke="#1b6ec2"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            pointer-events="none"
+                        />
+                        <!-- Projeté : trait pointillé -->
+                        <path
+                            t-if="state.pathProjected"
+                            t-att-d="state.pathProjected"
+                            fill="none"
+                            stroke="#1b6ec2"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-dasharray="7 5"
+                            opacity="0.92"
+                            pointer-events="none"
+                        />
+                        <!-- Points : zone de survol élargie + infobulle native (<title>) -->
+                        <t t-foreach="state.vertexMarkers" t-as="vm" t-key="vm_index">
+                            <g class="o_dorevia_cf_point">
+                                <title><t t-esc="vm.title"/></title>
+                                <circle
+                                    t-att-cx="vm.cx"
+                                    t-att-cy="vm.cy"
+                                    r="14"
+                                    fill="transparent"
+                                    stroke="none"
+                                    class="o_dorevia_cf_point-hit"
+                                />
+                                <circle
+                                    t-att-cx="vm.cx"
+                                    t-att-cy="vm.cy"
+                                    r="3.5"
+                                    t-att-fill="vm.fill"
+                                    stroke="#fff"
+                                    stroke-width="1"
+                                    pointer-events="none"
+                                />
+                            </g>
+                        </t>
+                        <!-- Axes -->
+                        <line
+                            t-att-x1="state.axes.left"
+                            t-att-y1="state.axes.top"
+                            t-att-x2="state.axes.left"
+                            t-att-y2="state.axes.bottom"
+                            stroke="#bdc3c7"
+                            stroke-width="1"
+                            pointer-events="none"
+                        />
+                        <line
+                            t-att-x1="state.axes.left"
+                            t-att-y1="state.axes.bottom"
+                            t-att-x2="state.axes.right"
+                            t-att-y2="state.axes.bottom"
+                            stroke="#bdc3c7"
+                            stroke-width="1"
+                            pointer-events="none"
+                        />
+                        <!-- Graduations -->
+                        <t t-foreach="state.xTicks" t-as="tk" t-key="tk_index">
+                            <text
+                                t-att-x="tk.x"
+                                t-att-y="tk.y"
+                                text-anchor="middle"
+                                fill="#6c757d"
+                                font-size="10"
+                                font-family="system-ui, sans-serif"
+                                pointer-events="none"
+                            >
+                                <t t-esc="tk.label"/>
+                            </text>
+                        </t>
+                        <t t-foreach="state.yTicks" t-as="yt" t-key="yt_index">
+                            <text
+                                t-att-x="yt.x"
+                                t-att-y="yt.y"
+                                text-anchor="end"
+                                fill="#6c757d"
+                                font-size="10"
+                                font-family="system-ui, sans-serif"
+                                pointer-events="none"
+                            >
+                                <t t-esc="yt.label"/>
+                            </text>
+                        </t>
+                    </svg>
+                </div>
+                <div class="d-flex flex-wrap gap-4 mt-3 small text-muted align-items-center">
+                    <span class="d-flex align-items-center gap-2">
+                        <span class="d-inline-block rounded" style="width: 28px; height: 3px; background: #1b6ec2;"/>
+                        Constaté (jusqu'à la date de situation)
+                    </span>
+                    <span class="d-flex align-items-center gap-2">
+                        <svg width="36" height="10" aria-hidden="true">
+                            <line x1="0" y1="5" x2="36" y2="5" stroke="#1b6ec2" stroke-width="3" stroke-dasharray="7 5"/>
+                        </svg>
+                        Projeté (après la date de situation)
+                    </span>
+                    <span class="d-flex align-items-center gap-2">
+                        <span class="d-inline-block border-start border-2" style="height: 14px; border-color: #7f8c8d !important; border-style: dashed !important;"/>
+                        Ligne date de situation
+                    </span>
+                    <span class="d-flex align-items-center gap-2">
+                        <span class="d-inline-block rounded" style="width: 28px; height: 0; border-top: 2px dashed #c0392b;"/>
+                        Seuil d'alerte
+                    </span>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

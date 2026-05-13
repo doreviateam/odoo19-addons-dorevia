@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Parent : account.menu_finance_reports = menu standard « Reporting » / traduction
+        souvent « Analyse » sous Comptabilité (README : Comptabilité > Analyse > …).
+        Voir docs/SPEC_CASH_FLOW_TRAJECTORY.md § 8 si le parent doit être ajusté selon la base.
+    -->
+    <menuitem
+        id="menu_dorevia_cash_flow_trajectory"
+        name="Trajectoire de trésorerie"
+        parent="account.menu_finance_reports"
+        action="action_dorevia_cash_flow_trajectory_reference"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="95"
+    />
+    <menuitem
+        id="menu_dorevia_cash_flow_trajectory_select"
+        name="Trajectoire (choix de projection)"
+        parent="account.menu_finance_reports"
+        action="action_dorevia_cash_flow_trajectory_wizard"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="96"
+    />
+</odoo>
