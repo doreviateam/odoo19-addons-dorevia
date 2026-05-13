@@ -296,6 +296,11 @@
                                    widget="monetary"
                                    options="{'currency_field': 'currency_id'}"/>
                             <field name="risk_status" string="Statut"/>
+                            <field name="period_documents_impact_net"
+                                   string="Total Impact"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"
+                                   readonly="1"/>
                         </group>
                     </group>
                     <separator string="Documents de la période"/>
@@ -324,14 +329,6 @@
                                     icon="fa-external-link"/>
                         </list>
                     </field>
-                    <separator string="Total Impact"/>
-                    <group>
-                        <field name="period_documents_impact_net"
-                               string="Somme des impacts"
-                               widget="monetary"
-                               options="{'currency_field': 'currency_id'}"
-                               readonly="1"/>
-                    </group>
                 </sheet>
             </form>
         </field>
