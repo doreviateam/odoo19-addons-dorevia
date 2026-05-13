@@ -4,6 +4,13 @@
 **Dépendance doctrine** : `docs/cash/DOCTRINE_CASH_MODULES.md` (§ *Réutilisation de la trajectoire de référence dans Cash Guard*)  
 **Rapport avec Cash Flow** : cette évolution **ne remet pas en cause** le **GO V1.1** de `dorevia_cash_flow`. Elle formalise l’étape suivante : faire de la trajectoire la **vérité de référence visible au cœur** de l’expérience Cash (y compris depuis l’entrée atelier).
 
+## État actuel de l’UI vs cible cockpit
+
+> À l’état actuel, la trajectoire de référence est consultable dans `dorevia_cash_flow` via **Comptabilité > Analyse > Gestion > Trajectoire de trésorerie**.  
+> Cash Guard reste l’atelier de projection, accessible via le menu **Projection > Trésorerie**.  
+> Ce ticket décrit une évolution UX future : afficher cette même trajectoire de référence en lecture seule dans un cockpit d’accueil Cash Guard, avec les actions d’atelier autour.  
+> Cette évolution n’est pas encore implémentée et ne remet pas en cause la séparation actuelle des rôles.
+
 ---
 
 ## Objectif
