@@ -231,7 +231,7 @@ class DoreviaCashGuard(models.Model):
             "un vrai cycle de validation pourra s’appuyer sur des snapshots plus tard."
         ),
     )
-    responsible_id = fields.Many2one("res.users", string="Responsable", index=True)
+    responsible_id = fields.Many2one("res.users", string="Resp.", index=True)
     line_ids = fields.One2many(
         "dorevia.cash.guard.line",
         "guard_id",

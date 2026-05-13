@@ -238,7 +238,7 @@
                                     <field name="move_id" column_invisible="1" readonly="1"/>
                                     <field name="move_name" string="Document" readonly="1"/>
                                     <field name="partner_id" string="Partenaire" readonly="1"/>
-                                    <field name="responsible_id" string="Responsable" readonly="1" optional="show"/>
+                                    <field name="responsible_id" string="Resp." readonly="1" optional="show"/>
                                     <field name="document_type_label" string="Type" readonly="1"/>
                                     <field name="invoice_date_due" string="Échéance" readonly="1"/>
                                     <field name="days_overdue_label" string="Retard" readonly="1"/>
@@ -311,7 +311,7 @@
                             <field name="display_status" string="Statut" readonly="1"/>
                             <field name="move_name" string="Document" readonly="1"/>
                             <field name="partner_id" string="Partenaire" readonly="1"/>
-                            <field name="responsible_id" string="Responsable" readonly="1"/>
+                            <field name="responsible_id" string="Resp." readonly="1"/>
                             <field name="document_type_label" string="Type" readonly="1"/>
                             <field name="invoice_date_due" string="Échéance" readonly="1"/>
                             <field name="signed_amount" string="Impact"
