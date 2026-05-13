@@ -44,6 +44,8 @@ Le principe directeur est simple :
 
 **Doctrine Cash (lecture / projection / simulation)** : le périmètre de ce module s’inscrit dans la chaîne décrite dans **[Doctrine modules Cash](../docs/cash/DOCTRINE_CASH_MODULES.md)** — `dorevia_cash_guard` est l’**atelier de projection** ; la **trajectoire de référence** en lecture synthétique est portée par **`dorevia_cash_flow`** lorsqu’il est installé.
 
+> Voir également `docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md` pour l’évolution UX prévue : accueil Cash Guard en cockpit, réutilisant la trajectoire de référence `dorevia_cash_flow` en lecture seule, avec les actions d’atelier autour.
+
 Le module ne remplace pas la comptabilité générale.
 
 Il s’appuie sur les écritures comptables, les postes budgétaires et le rapprochement bancaire pour produire une **projection de trésorerie** (constat + factures ouvertes à l’échéance), sans équivalent d’une prévision métier complète (budget attendu, simulations avancées : hors périmètre actuel).
