@@ -245,112 +245,134 @@ export class TrajectoryChartAction extends Component {
             axes: { left: ML, right: W - MR, top: MT, bottom: H - MB },
             wizardId: null,
             currencyCode: "EUR",
+            cockpitMode: false,
+            guardId: null,
+            cockpitRefreshing: false,
         });
 
         onWillStart(async () => {
-            const wizardId =
-                this.props.action?.params?.wizard_id ??
-                this.props.action?.context?.default_wizard_id ??
-                null;
-            if (!wizardId) {
+            await this.loadTrajectory();
+        });
+    }
+
+    isCockpit() {
+        return Boolean(this.props.action?.params?.cockpit);
+    }
+
+    async loadTrajectory() {
+        this.state.loading = true;
+        this.state.error = "";
+        this.state.cockpitMode = this.isCockpit();
+        const params = this.props.action?.params || {};
+        this.state.guardId = params.guard_id ?? null;
+
+        const wizardId =
+            this.props.action?.params?.wizard_id ??
+            this.props.action?.context?.default_wizard_id ??
+            null;
+        if (!wizardId) {
+            this.state.loading = false;
+            this.state.error = "Paramètre assistant manquant (wizard_id).";
+            return;
+        }
+        this.state.wizardId = wizardId;
+        try {
+            const wizards = await this.orm.read(
+                "dorevia.cash.flow.trajectory.wizard",
+                [wizardId],
+                [
+                    "guard_id",
+                    "situation_date",
+                    "alert_threshold",
+                    "currency_id",
+                    "chart_date_end",
+                    "fiscal_date_from",
+                ]
+            );
+            if (!wizards.length) {
+                this.state.error =
+                    "Assistant introuvable ou expiré. Rouvrez la trajectoire depuis le menu.";
                 this.state.loading = false;
-                this.state.error = "Paramètre assistant manquant (wizard_id).";
                 return;
             }
-            this.state.wizardId = wizardId;
-            try {
-                const wizards = await this.orm.read(
-                    "dorevia.cash.flow.trajectory.wizard",
-                    [wizardId],
-                    [
-                        "guard_id",
-                        "situation_date",
-                        "alert_threshold",
-                        "currency_id",
-                        "chart_date_end",
-                        "fiscal_date_from",
-                    ]
-                );
-                if (!wizards.length) {
-                    this.state.error = "Assistant introuvable ou expiré. Rouvrez la trajectoire depuis le menu.";
-                    this.state.loading = false;
-                    return;
-                }
-                const wiz = wizards[0];
-                const currencyId = wiz.currency_id?.[0];
-                let currencyCode = "EUR";
-                if (currencyId) {
-                    const cur = await this.orm.read("res.currency", [currencyId], ["name"]);
-                    if (cur.length && cur[0].name) {
-                        currencyCode = cur[0].name;
-                    }
-                }
-
-                const pointRecs = await this.orm.searchRead(
-                    "dorevia.cash.flow.trajectory.point",
-                    [["wizard_id", "=", wizardId]],
-                    ["anchor_date", "balance", "segment", "label", "sequence"],
-                    { order: "sequence, id" }
-                );
-                if (!pointRecs.length) {
-                    this.state.error = "Aucun point de trajectoire. Utilisez « Afficher la trajectoire » depuis l'assistant.";
-                    this.state.loading = false;
-                    return;
-                }
-
-                const layout = computeLayout(
-                    pointRecs,
-                    wiz.situation_date,
-                    wiz.alert_threshold,
-                    currencyCode
-                );
-                if (!layout) {
-                    this.state.error = "Impossible de calculer le graphique (dates invalides).";
-                    this.state.loading = false;
-                    return;
-                }
-
-                const guardName = wiz.guard_id?.[1] || "";
-                const wizAfter = await this.orm.read(
-                    "dorevia.cash.flow.trajectory.wizard",
-                    [wizardId],
-                    [
-                        "min_balance_on_curve",
-                        "min_balance_date_on_curve",
-                        "info_message",
-                    ]
-                );
-                const w2 = wizAfter[0] || {};
-                const extra = [];
-                if (w2.min_balance_date_on_curve) {
-                    extra.push(
-                        `Point bas : ${formatMoney(w2.min_balance_on_curve ?? 0, currencyCode, 2)} (${w2.min_balance_date_on_curve})`
-                    );
-                }
-                if (w2.info_message) {
-                    extra.push(String(w2.info_message));
-                }
-                this.state.subtitle = [
-                    guardName ? `Projection : ${guardName}` : "",
-                    wiz.situation_date ? `Date de situation : ${wiz.situation_date}` : "",
-                    wiz.alert_threshold != null
-                        ? `Seuil d'alerte : ${formatMoney(wiz.alert_threshold, currencyCode, 2)}`
-                        : "",
-                    ...extra,
-                ]
-                    .filter(Boolean)
-                    .join(" · ");
-
-                Object.assign(this.state, layout);
-                this.state.currencyCode = currencyCode;
-            } catch (e) {
-                this.state.error =
-                    (e && (e.message || e.data?.message)) ||
-                    "Erreur lors du chargement de la trajectoire.";
-            } finally {
-                this.state.loading = false;
+            const wiz = wizards[0];
+            if (!this.state.guardId && wiz.guard_id?.[0]) {
+                this.state.guardId = wiz.guard_id[0];
             }
-        });
+            const currencyId = wiz.currency_id?.[0];
+            let currencyCode = "EUR";
+            if (currencyId) {
+                const cur = await this.orm.read("res.currency", [currencyId], ["name"]);
+                if (cur.length && cur[0].name) {
+                    currencyCode = cur[0].name;
+                }
+            }
+
+            const pointRecs = await this.orm.searchRead(
+                "dorevia.cash.flow.trajectory.point",
+                [["wizard_id", "=", wizardId]],
+                ["anchor_date", "balance", "segment", "label", "sequence"],
+                { order: "sequence, id" }
+            );
+            if (!pointRecs.length) {
+                this.state.error =
+                    "Aucun point de trajectoire. Utilisez « Afficher la trajectoire » depuis l'assistant.";
+                this.state.loading = false;
+                return;
+            }
+
+            const layout = computeLayout(
+                pointRecs,
+                wiz.situation_date,
+                wiz.alert_threshold,
+                currencyCode
+            );
+            if (!layout) {
+                this.state.error = "Impossible de calculer le graphique (dates invalides).";
+                this.state.loading = false;
+                return;
+            }
+
+            const guardName = wiz.guard_id?.[1] || "";
+            const wizAfter = await this.orm.read(
+                "dorevia.cash.flow.trajectory.wizard",
+                [wizardId],
+                [
+                    "min_balance_on_curve",
+                    "min_balance_date_on_curve",
+                    "info_message",
+                ]
+            );
+            const w2 = wizAfter[0] || {};
+            const extra = [];
+            if (w2.min_balance_date_on_curve) {
+                extra.push(
+                    `Point bas : ${formatMoney(w2.min_balance_on_curve ?? 0, currencyCode, 2)} (${w2.min_balance_date_on_curve})`
+                );
+            }
+            if (w2.info_message) {
+                extra.push(String(w2.info_message));
+            }
+            this.state.subtitle = [
+                guardName ? `Projection : ${guardName}` : "",
+                wiz.situation_date ? `Date de situation : ${wiz.situation_date}` : "",
+                wiz.alert_threshold != null
+                    ? `Seuil d'alerte : ${formatMoney(wiz.alert_threshold, currencyCode, 2)}`
+                    : "",
+                ...extra,
+            ]
+                .filter(Boolean)
+                .join(" · ");
+
+            Object.assign(this.state, layout);
+            this.state.currencyCode = currencyCode;
+        } catch (e) {
+            this.state.error =
+                (e && (e.message || e.data?.message)) ||
+                "Erreur lors du chargement de la trajectoire.";
+        } finally {
+            this.state.loading = false;
+        }
     }
 
     async onChangeProjection() {
@@ -383,6 +405,52 @@ export class TrajectoryChartAction extends Component {
             },
             target: "new",
         });
+    }
+
+    async onOpenGuardForm() {
+        if (!this.state.guardId) {
+            return;
+        }
+        await this.actionService.doAction({
+            type: "ir.actions.act_window",
+            name: "Projection de trésorerie",
+            res_model: "dorevia.cash.guard",
+            res_id: this.state.guardId,
+            views: [[false, "form"]],
+            target: "current",
+        });
+    }
+
+    async onOpenGuardList() {
+        await this.actionService.doAction("dorevia_cash_guard.action_dorevia_cash_guard");
+    }
+
+    async onOpenTrajectoryWizard() {
+        await this.actionService.doAction("dorevia_cash_flow.action_dorevia_cash_flow_trajectory_wizard");
+    }
+
+    async onOpenReferenceTrajectoryMenu() {
+        await this.actionService.doAction("dorevia_cash_flow.action_dorevia_cash_flow_trajectory_reference");
+    }
+
+    async onCockpitRefresh() {
+        if (!this.state.guardId || !this.state.wizardId) {
+            return;
+        }
+        this.state.cockpitRefreshing = true;
+        try {
+            await this.orm.call("dorevia.cash.guard", "action_recompute_projection", [
+                this.state.guardId,
+            ]);
+            await this.orm.call(
+                "dorevia.cash.flow.trajectory.wizard",
+                "action_refresh_points_from_guard",
+                [this.state.wizardId]
+            );
+            await this.loadTrajectory();
+        } finally {
+            this.state.cockpitRefreshing = false;
+        }
     }
 }
 

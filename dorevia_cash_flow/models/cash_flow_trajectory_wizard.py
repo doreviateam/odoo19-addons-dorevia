@@ -173,6 +173,44 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
         wiz = self.create({"company_id": company.id, "guard_id": guard.id})
         return wiz._prepare_chart_action()
 
+    @api.model
+    def action_open_guard_cockpit(self):
+        """Accueil menu Projection : trajectoire de référence + raccourcis atelier (lecture seule).
+
+        Même résolution de projection et même graphique que le menu Analyse ; les actions
+        d'atelier ouvrent Cash Guard sans dupliquer la logique de courbe.
+        """
+        company = self.env.company
+        guard = self._resolve_reference_guard()
+        if not guard:
+            raise UserError(
+                _(
+                    "Aucune projection hebdomadaire active avec des lignes calculées n'a été trouvée "
+                    "pour la société « %(company)s ». "
+                    "Créez ou actualisez une projection depuis Projection > Trésorerie.",
+                    company=company.display_name,
+                )
+            )
+        wiz = self.create({"company_id": company.id, "guard_id": guard.id})
+        action = wiz._prepare_chart_action()
+        action.setdefault("params", {})
+        action["params"]["cockpit"] = True
+        action["params"]["guard_id"] = guard.id
+        action["name"] = _("Cockpit trésorerie")
+        return action
+
+    def action_refresh_points_from_guard(self):
+        """Reconstruit les points à partir du document Guard (après actualisation projection)."""
+        self.ensure_one()
+        self._ensure_guard_eligible()
+        self.point_ids.unlink()
+        Point = self.env["dorevia.cash.flow.trajectory.point"].sudo()
+        for vals in self._build_point_rows():
+            vals["wizard_id"] = self.id
+            Point.create(vals)
+        self.invalidate_recordset(["point_ids"])
+        return True
+
     def _ensure_guard_eligible(self):
         self.ensure_one()
         guard = self.guard_id

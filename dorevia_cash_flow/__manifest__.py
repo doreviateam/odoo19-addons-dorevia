@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia Cash Flow",
-    "version": "19.0.2.0.0",
+    "version": "19.0.2.1.0",
     "category": "Accounting",
     "summary": "Trajectoire de trésorerie : restitution graphique à partir des projections Cash Guard.",
     "description": """
@@ -20,6 +20,7 @@ Voir README.md et docs/SPEC_CASH_FLOW_TRAJECTORY.md ; ticket V1.1 : docs/TICKET_
         "security/ir.model.access.csv",
         "views/cash_flow_trajectory_views.xml",
         "views/menus.xml",
+        "views/cash_guard_bridge_menus.xml",
     ],
     "assets": {
         "web.assets_backend": [

@@ -328,6 +328,7 @@ Doctrine transverse Cash (positionnement vs Cash Guard et simulation) : **`../..
 ## 8. Points ouverts (implémentation)
 
 1. **Parent du menu « Comptabilité > Analyse »** : implémentation V1 retenue — **`account.menu_finance_reports`** (menu standard *Reporting* / traduction souvent *Analyse*). Ajuster le `parent` dans `views/menus.xml` si une personnalisation du projet place les rapports d’analyse ailleurs.
+2. **Cockpit sous Projection** : entrée **Projection > Cockpit trésorerie** dans `views/cash_guard_bridge_menus.xml` — même résolution de référence et même client action que la trajectoire Analyse ; paramètre `cockpit` sur l’action client pour masquer les contrôles d’audit sur le graphique et afficher les raccourcis atelier (sans second moteur graphique).
 
 Les arbitrages groupes, périodicité, rendu Graph vs OWL et recalcul automatique sont **clos** pour la V1 (section « Décisions validées V1 »).
 

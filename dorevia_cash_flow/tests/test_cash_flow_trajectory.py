@@ -188,3 +188,36 @@ class TestCashFlowTrajectory(TransactionCase):
         )
         self.assertEqual(wiz.guard_id, g_new)
         self.assertTrue(wiz.point_ids)
+
+    def test_guard_cockpit_same_guard_and_points_as_reference(self):
+        guard = self._create_week_guard()
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 15)):
+            with patch.object(type(guard), "_compute_bank_balance_at_date", return_value=0.0):
+                guard.action_recompute_projection()
+        action_ref = self.env["dorevia.cash.flow.trajectory.wizard"].action_open_reference_trajectory()
+        action_ck = self.env["dorevia.cash.flow.trajectory.wizard"].action_open_guard_cockpit()
+        self.assertTrue(action_ck["params"].get("cockpit"))
+        self.assertEqual(action_ck["params"].get("guard_id"), guard.id)
+        wiz_r = self.env["dorevia.cash.flow.trajectory.wizard"].browse(
+            action_ref["params"]["wizard_id"]
+        )
+        wiz_c = self.env["dorevia.cash.flow.trajectory.wizard"].browse(
+            action_ck["params"]["wizard_id"]
+        )
+        self.assertEqual(wiz_r.guard_id, wiz_c.guard_id)
+        self.assertEqual(len(wiz_r.point_ids), len(wiz_c.point_ids))
+
+    def test_action_refresh_points_from_guard_idempotent(self):
+        guard = self._create_week_guard()
+        with patch.object(fields.Date, "context_today", return_value=date(2026, 5, 15)):
+            with patch.object(type(guard), "_compute_bank_balance_at_date", return_value=0.0):
+                guard.action_recompute_projection()
+        wiz = self.env["dorevia.cash.flow.trajectory.wizard"].create(
+            {"guard_id": guard.id, "company_id": self.company.id}
+        )
+        wiz.action_open_chart()
+        n = len(wiz.point_ids)
+        self.assertTrue(n)
+        wiz.action_refresh_points_from_guard()
+        self.assertEqual(len(wiz.point_ids), n)
+

@@ -43,13 +43,18 @@ Libellé anglais possible :
 
 **Accounting > Reporting > Cash Flow Trajectory**
 
-Ce placement est **volontaire** : il s’agit d’une lecture d’**analyse**, pas d’un écran de saisie ni de génération de projection. Le rapport n’est **pas** rattaché au menu opérationnel des **Projections de trésorerie**.
+Ce placement est **volontaire** : il s’agit d’une lecture d’**analyse**, pas d’un écran de saisie ni de génération de projection. Le rapport n’est **pas** rattaché au menu opérationnel des **Projections de trésorerie** au sens historique ; en complément, un **cockpit** sous **Projection** réutilise le **même** client action graphique pour les utilisateurs qui entrent par l’atelier (voir § *Cockpit sous Projection*).
+
+### Cockpit sous Projection (atelier)
+
+Lorsque **`dorevia_cash_flow`** est installé, le menu **Comptabilité > Projection > Cockpit trésorerie** ouvre la **même** trajectoire de référence que **Trajectoire de trésorerie** sous Analyse, en **lecture seule** sur la courbe, avec des raccourcis (ouvrir la projection, actualiser le calcul, liste des projections, audit autre projection, ouverture de la vue Analyse).  
+La déclaration XML de ce menu vit dans **`dorevia_cash_flow`** (`views/cash_guard_bridge_menus.xml`) : le module dépend déjà de `dorevia_cash_guard`, ce qui évite une dépendance circulaire.
 
 ### V1.1 — Parcours nominal (trajectoire de référence)
 
 Depuis la **V1.1**, l’entrée de menu **Trajectoire de trésorerie** ouvre **directement** le graphique de pilotage pour la **société courante** : le module choisit automatiquement une projection Cash Guard **active**, **hebdomadaire**, avec **mailles calculées**, la plus récente au sens de la **date de situation** (`situation_date` décroissante). Aucune sélection manuelle n’est requise dans ce parcours.
 
-- **Parcours secondaire** : menu **Trajectoire (choix de projection)** ou bouton **Changer de projection** sur le graphique pour cibler un autre document (audit, comparaison).
+- **Parcours secondaire** : menu **Trajectoire (choix de projection)** ou bouton **Changer de projection** sur le graphique (hors mode cockpit) pour cibler un autre document (audit, comparaison).
 - **Données manquantes** : message explicite invitant à créer ou actualiser une projection dans Cash Guard (sans recalcul automatique déclenché par Cash Flow).
 
 ## Intention fonctionnelle

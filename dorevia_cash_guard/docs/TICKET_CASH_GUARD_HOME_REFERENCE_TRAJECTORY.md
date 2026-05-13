@@ -6,10 +6,9 @@
 
 ## État actuel de l’UI vs cible cockpit
 
-> À l’état actuel, la trajectoire de référence est consultable dans `dorevia_cash_flow` via **Comptabilité > Analyse > Gestion > Trajectoire de trésorerie**.  
-> Cash Guard reste l’atelier de projection, accessible via le menu **Projection > Trésorerie**.  
-> Ce ticket décrit une évolution UX future : afficher cette même trajectoire de référence en lecture seule dans un cockpit d’accueil Cash Guard, avec les actions d’atelier autour.  
-> Cette évolution n’est pas encore implémentée et ne remet pas en cause la séparation actuelle des rôles.
+> La trajectoire de référence est consultable dans `dorevia_cash_flow` via **Comptabilité > Analyse > Gestion > Trajectoire de trésorerie**.  
+> Avec **`dorevia_cash_flow`** installé, **Projection > Cockpit trésorerie** affiche la **même** trajectoire de référence en lecture seule, avec raccourcis atelier (implémentation dans `dorevia_cash_flow` pour éviter une dépendance circulaire Guard → Flow).  
+> **Projection > Trésorerie** ouvre toujours la liste des documents de projection.
 
 ---
 
@@ -48,18 +47,18 @@ Faire de l’entrée **Cash Guard** une **page d’accueil / cockpit** centrée 
 
 ## Critères d’acceptation (brouillon)
 
-- [ ] Menu ou première vue Cash Guard présente un **cockpit** avec la trajectoire de référence visible.  
-- [ ] La trajectoire est **strictement alignée** avec l’écran Cash Flow équivalent (même projection de référence, même période / repères selon règles produit).  
-- [ ] Aucun contrôle d’UI sur la courbe dans ce contexte qui **modifie** la trajectoire sans passer par les écrans / flux prévus (Guard pour données, Flow pour lecture).  
-- [ ] Les **actions d’atelier** listées ci-dessus sont accessibles depuis l’accueil (liens ou boutons clairs).  
-- [ ] README ou SPEC Cash Guard mis à jour ; doctrine déjà mise à jour en amont.
+- [x] Menu ou première vue Cash Guard présente un **cockpit** avec la trajectoire de référence visible (**Projection > Cockpit trésorerie**, livré dans `dorevia_cash_flow`).  
+- [x] La trajectoire est **strictement alignée** avec l’écran Cash Flow équivalent (même résolution de référence, même `_prepare_chart_action` / client action).  
+- [x] Aucun contrôle d’UI sur la courbe dans ce contexte qui **modifie** la trajectoire sans passer par les écrans / flux prévus (pas « Changer de projection » sur le graphique cockpit ; audit via lien dédié).  
+- [x] Les **actions d’atelier** principales sont accessibles depuis le cockpit (ouvrir projection, actualiser, liste, audit, vue Analyse).  
+- [x] README / doctrine mis à jour en lien avec cette livraison.
 
 ---
 
 ## Notes d’implémentation (à affiner en conception)
 
-- Vérifier **dépendance module** `dorevia_cash_guard` → `dorevia_cash_flow` si l’accueil embarque obligatoirement le graphique ; ou comportement **dégradé** (message + lien vers Cash Flow) si Flow absent — à trancher produit.  
-- Réutiliser de préférence une **action client** / **embed** documentée côté Cash Flow pour éviter la duplication.
+- **Dépendance** : le cockpit est livré dans **`dorevia_cash_flow`** (`action_open_guard_cockpit`, menu **Projection > Cockpit trésorerie**) pour éviter `dorevia_cash_guard` → `dorevia_cash_flow` (cycle).  
+- **Rafraîchissement** : `action_refresh_points_from_guard` sur l’assistant régénère les points après `action_recompute_projection` sur le document Guard.
 
 ---
 

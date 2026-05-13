@@ -9,7 +9,36 @@
                 <t t-esc="state.error"/>
             </div>
             <t t-else="">
-                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                <div t-if="state.cockpitMode" class="border rounded p-3 mb-3 bg-light">
+                    <h4 class="mb-2 text-900">Cockpit trésorerie</h4>
+                    <p class="text-muted small mb-3">
+                        Trajectoire de <strong>référence</strong> (même calcul que Comptabilité &gt; Analyse).
+                        La courbe n’est pas modifiable ici : ouvrez la projection pour paramétrer et recalculer.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <button type="button" class="btn btn-primary btn-sm" t-on-click="onOpenGuardForm">
+                            Ouvrir la projection
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary btn-sm"
+                            t-att-disabled="state.cockpitRefreshing"
+                            t-on-click="onCockpitRefresh"
+                        >
+                            Actualiser la projection
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" t-on-click="onOpenGuardList">
+                            Toutes les projections
+                        </button>
+                        <button type="button" class="btn btn-link btn-sm py-0" t-on-click="onOpenTrajectoryWizard">
+                            Audit — autre projection
+                        </button>
+                        <button type="button" class="btn btn-link btn-sm py-0" t-on-click="onOpenReferenceTrajectoryMenu">
+                            Vue Analyse (plein écran)
+                        </button>
+                    </div>
+                </div>
+                <div t-if="!state.cockpitMode" class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
                     <h4 class="mb-0 text-900">Trajectoire de trésorerie</h4>
                     <div class="btn-group">
                         <button type="button" class="btn btn-secondary btn-sm" t-on-click="onChangeProjection">
@@ -20,6 +49,7 @@
                         </button>
                     </div>
                 </div>
+                <h5 t-if="state.cockpitMode" class="mb-2 text-900">Courbe de référence (lecture seule)</h5>
                 <p class="text-muted small mb-3" t-if="state.subtitle">
                     <t t-esc="state.subtitle"/>
                 </p>
