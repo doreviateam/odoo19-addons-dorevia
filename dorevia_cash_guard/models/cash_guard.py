@@ -259,7 +259,7 @@ class DoreviaCashGuard(models.Model):
         string="Total impact",
         compute="_compute_total_documents_impact",
         currency_field="currency_id",
-        help="Somme des impacts (factures et simulations) sur toutes les périodes du projet.",
+        help="Somme des impacts des documents réels et simulés sur l'ensemble de la projection.",
     )
     note = fields.Text(string="Notes")
 

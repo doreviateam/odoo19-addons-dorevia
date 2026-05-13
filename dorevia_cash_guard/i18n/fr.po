@@ -462,8 +462,8 @@ msgstr "Total impact"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,help:dorevia_cash_guard.field_dorevia_cash_guard__total_documents_impact
-msgid "Somme des impacts (factures et simulations) sur toutes les périodes du projet."
-msgstr "Somme des impacts (factures et simulations) sur toutes les périodes du projet."
+msgid "Somme des impacts des documents réels et simulés sur l'ensemble de la projection."
+msgstr "Somme des impacts des documents réels et simulés sur l'ensemble de la projection."
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
