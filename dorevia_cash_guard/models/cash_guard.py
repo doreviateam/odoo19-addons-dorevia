@@ -255,6 +255,12 @@ class DoreviaCashGuard(models.Model):
         compute="_compute_projection_unsecured_period_move_ids",
         readonly=True,
     )
+    total_documents_impact = fields.Monetary(
+        string="Total impact",
+        compute="_compute_total_documents_impact",
+        currency_field="currency_id",
+        help="Somme des impacts (factures et simulations) sur toutes les périodes du projet.",
+    )
     note = fields.Text(string="Notes")
 
     @api.model
@@ -274,6 +280,13 @@ class DoreviaCashGuard(models.Model):
                 guard.projection_period_move_ids.filtered(
                     lambda line: line.period_risk_status in ("risk", "tension", "warning")
                 )
+            )
+
+    @api.depends("projection_period_move_ids", "projection_period_move_ids.signed_amount")
+    def _compute_total_documents_impact(self):
+        for guard in self:
+            guard.total_documents_impact = sum(
+                (line.signed_amount or 0.0) for line in guard.projection_period_move_ids
             )
 
     @api.model

@@ -140,6 +140,11 @@
                                    string="Confirmation"
                                    readonly="1"
                                    widget="progressbar"/>
+                            <field name="total_documents_impact"
+                                   string="Total impact"
+                                   readonly="1"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
                             <label for="bank_unreconciled_amount"
                                    string="À rapprocher"
                                    invisible="bank_unreconciled_amount == 0"/>
