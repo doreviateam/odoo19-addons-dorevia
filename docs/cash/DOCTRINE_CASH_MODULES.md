@@ -162,6 +162,7 @@ Ticket d’évolution associé : `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME
 
 ## Références utiles
 
+- `docs/cash/PV_RECETTE_NAVIGATION_CASH.md` — PV recette navigation Cash (**GO**), captures sous `docs/cash/captures/`.
 - `dorevia_cash_flow/README.md` — parcours V1.1, menu nominal.
 - `dorevia_cash_flow/docs/SPEC_CASH_FLOW_TRAJECTORY.md` — § 5.5 résolution de référence.
 - `dorevia_cash_flow/views/cash_guard_bridge_menus.xml` — **Accueil graphique** sous **Projection > Trésorerie**.
