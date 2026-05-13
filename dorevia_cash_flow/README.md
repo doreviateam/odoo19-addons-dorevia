@@ -229,9 +229,9 @@ Le menu d’accès est rattaché au menu standard comptable **`account.menu_fina
 
 ---
 
-## Livraison V1 (clôture fonctionnelle)
+## Livraison V1 / V1.1 (clôture fonctionnelle)
 
-**Décision** : **GO V1** (recette terrain validée).
+**Décision** : **GO V1** (recette initiale 2026-05-13) puis **GO V1.1** (relance recette après lecture module — même jour, run **`RECETTE CASH FLOW V1 20260513-002`**).
 
 Documents et preuves conservés dans le dépôt :
 
@@ -243,9 +243,10 @@ Documents et preuves conservés dans le dépôt :
 | Procès-verbal de recette | `docs/PV_RECETTE_MANUELLE_V1.md` |
 | Recette fonctionnelle (checklist étendue) | `docs/RECETTE_FONCTIONNELLE_V1.md` |
 | Limites vue Graph native | `docs/RECETTE_VUE_GRAPH.md` |
-| Capture de preuve (terrain) | `docs/captures/recette_cash_flow_trajectory_20260513.png` |
+| Ticket V1.1 (cadrage) | `docs/TICKET_CASH_FLOW_V1_1_TRAJECTOIRE_REFERENCE.md` |
+| Capture de preuve V1.1 (terrain) | `docs/captures/recette_cash_flow_trajectory_20260513_002.png` |
 
-Exemple de run documenté dans le PV : **`RECETTE CASH FLOW V1 20260513-001`**.
+La capture **`recette_cash_flow_trajectory_20260513.png`** (V1) peut rester comme archive si présente ; la preuve **V1.1** attendue dans le dépôt est le fichier **`_002`** référencé dans le PV.
 
 **Hors périmètre reporté** (évolutions ultérieures) : enrichissements graphiques avancés, comparaison N-1 / N-2, exports dédiés, intégration plus poussée avec Cash Guard — à traiter dans des livraisons séparées.
 

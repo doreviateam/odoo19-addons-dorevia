@@ -1,21 +1,21 @@
-# PV de recette manuelle — Trajectoire de trésorerie V1
+# PV de recette manuelle — Trajectoire de trésorerie V1 / V1.1
 
 **Date** : 13 mai 2026  
 **Environnement** : `tenant_o8`  
 **URL** : `http://localhost:18079`  
 **Module** : `dorevia_cash_flow`  
-**Version** : `19.0.1.1.0`  
-**Run** : `RECETTE CASH FLOW V1 20260513-001`  
-**Projection Cash Guard** : id `1407`  
+**Version** : `19.0.2.0.0`  
+**Run** : `RECETTE CASH FLOW V1 20260513-002`  
+**Projection Cash Guard** : id `1417`  
 **Plan exécuté** : `docs/RECETTE_MANUELLE_V1.md`
 
 ---
 
 ## 1. Décision
 
-**GO V1**
+**GO V1.1**
 
-La trajectoire de trésorerie V1 est validée : le wizard s'ouvre depuis le menu attendu, la projection hebdomadaire est sélectionnable, le graphique de pilotage affiche une seule trajectoire, les repères de situation et de seuil sont visibles, et la liste des points permet l'audit des valeurs.
+La trajectoire de trésorerie est validée sur le parcours nominal V1.1 : le menu principal ouvre directement le graphique de référence, sans sélection manuelle préalable. Le parcours secondaire de choix de projection reste disponible et fonctionnel.
 
 ---
 
@@ -25,7 +25,7 @@ La trajectoire de trésorerie V1 est validée : le wizard s'ouvre depuis le menu
 | -------- | -------- |
 | Modules `account`, `dorevia_cash_guard`, `dorevia_cash_flow` installés | OK |
 | Utilisateur avec droits Cash Guard | OK |
-| Projection hebdomadaire avec mailles calculées | OK |
+| Projection hebdomadaire active avec mailles calculées | OK |
 | Date de situation, seuil et solde constaté relevés | OK |
 
 Valeurs relevées :
@@ -51,7 +51,7 @@ docker exec sandbox-odoo19-odoo-1 odoo server -c /etc/odoo/odoo.conf -d tenant_o
 Résultat :
 
 ```text
-0 failed, 0 error(s) of 4 tests
+0 failed, 0 error(s) of 7 tests
 ```
 
 Statut : **OK**
@@ -62,18 +62,24 @@ Statut : **OK**
 
 | Pas | Contrôle | Résultat | Observation |
 | --- | -------- | -------- | ----------- |
-| M1 | Menu Comptabilité / Analyse / Trajectoire de trésorerie | OK | Menu observé : `Facturation/Analyse/Trajectoire de trésorerie` |
-| M2 | Projection hebdomadaire sélectionnable, date et seuil visibles | OK | `RECETTE CASH FLOW V1 20260513-001` |
-| M3 | Bouton `Afficher la trajectoire` ouvre le graphique de pilotage | OK | Action client `dorevia_cash_flow_trajectory_chart` |
-| M4 | Une seule ligne de solde, sans courbes concurrentes | OK | Une trajectoire unique, segmentée visuellement |
+| M1 | Menu nominal `Trajectoire de trésorerie` | OK | Menu observé : `Facturation/Analyse/Trajectoire de trésorerie`, action serveur directe |
+| M2 | Bandeau du graphique | OK | Projection `RECETTE CASH FLOW V1 20260513-002`, situation `2026-05-13`, seuil `3 000,00 €` |
+| M3 | Point bas dans le bandeau | OK | `0,00 €` au `2026-01-07` |
+| M4 | Courbe unique sans courbes concurrentes | OK | Une trajectoire unique, segmentée visuellement |
 | M5 | Ligne verticale de situation | OK | Ligne `Situation` visible sur le graphique |
 | M6 | Trait plein / pointillé | OK | Constaté plein, projeté pointillé |
 | M7 | Ligne horizontale de seuil | OK | Ligne `Seuil d'alerte` visible à `3 000,00 €` |
-| M8 | Sous-titre cohérent | OK | Projection, date de situation et seuil affichés |
-| M9 | Axe dates chronologique, horizon +90 jours | OK | Dernier point projeté au `2026-08-11` |
-| M10 | Axe montants en soldes | OK | Axe en euros, lecture de solde |
-| M11 | Point bas et date du point bas | OK | Point bas calculé : `0,00 €` au `2026-01-07` |
-| M12 | Liste des points accessible | OK | Liste ouverte : `1-32 / 32` |
+| M8 | Axe dates chronologique, horizon +90 jours | OK | Dernier point projeté au `2026-08-11` |
+| M9 | Axe montants en soldes | OK | Axe en euros, lecture de solde |
+| M10 | Liste des points accessible | OK | Liste ouverte : `1-32 / 32`, segments `Constaté` puis `Projeté` |
+
+Parcours secondaire :
+
+| Pas | Contrôle | Résultat | Observation |
+| --- | -------- | -------- | ----------- |
+| S1 | Menu `Trajectoire (choix de projection)` | OK | Assistant de sélection disponible |
+| S2 | Sélection projection hebdomadaire | OK | Date de situation, seuil et horizon visibles |
+| S3 | `Afficher la trajectoire` | OK | Même graphique de pilotage, action client `dorevia_cash_flow_trajectory_chart` |
 
 ---
 
@@ -81,8 +87,8 @@ Statut : **OK**
 
 | Contrôle | Résultat | Observation |
 | -------- | -------- | ----------- |
-| C1 — Pas de recalcul intempestif | OK | Ouverture en lecture des points générés ; pas de remise à zéro Cash Guard observée |
-| C2 — Liste des points vs courbe | OK | Dates triées, segments `Constaté` puis `Projeté`, aucune valeur fantaisiste intercalée |
+| C1 — Pas de recalcul intempestif Cash Guard | OK | Cash Flow lit les mailles existantes ; pas de recalcul Cash Guard automatique |
+| C2 — Liste des points vs courbe | OK | Dates triées, segments cohérents, aucune valeur artificielle intercalée |
 
 ---
 
@@ -90,31 +96,44 @@ Statut : **OK**
 
 | Cas | Résultat | Observation |
 | --- | -------- | ----------- |
+| L0 — Aucune projection exploitable | OK | Message clair invitant à créer ou actualiser une projection Cash Guard |
 | L1 — Projection non hebdomadaire | OK | Message clair : seules les projections à périodicité `Semaine` sont prises en charge |
 | L2 — Projection sans mailles hebdo | OK | Message clair invitant à actualiser le calcul depuis Cash Guard |
 | L3 — Horizon projeté | OK | Aucun point projeté au-delà de `situation + 90 jours` |
 
 ---
 
-## 7. Preuve visuelle
+## 7. Corrections appliquées pendant la relance
 
-Capture du graphique de pilotage V1 (fichier attendu dans le dépôt au chemin ci-dessous ; à conserver en versionning avec le PV) :
+| Fichier | Correction |
+| ------- | ---------- |
+| `views/cash_flow_trajectory_views.xml` | Retrait de `groups_id` sur `ir.actions.server`, champ invalide en Odoo 19 ; le contrôle d'accès reste porté par les menus sécurisés |
+| `tests/test_cash_flow_trajectory.py` | Réutilisation d'un poste budgétaire existant pour le compte bancaire si présent, afin de respecter l'unicité des comptes par poste actif |
 
-![Trajectoire de trésorerie V1](captures/recette_cash_flow_trajectory_20260513.png)
+---
+
+## 8. Preuve visuelle
+
+Capture du graphique de pilotage V1.1 :
+
+![Trajectoire de trésorerie V1.1](captures/recette_cash_flow_trajectory_20260513_002.png)
 
 La capture montre :
 
+- ouverture directe sur le graphique de référence ;
+- bouton `Changer de projection` disponible ;
+- bouton `Liste des points` disponible ;
 - une trajectoire unique de trésorerie ;
 - le segment constaté en trait plein ;
 - le segment projeté en pointillé ;
 - la ligne verticale `Situation` ;
 - la ligne horizontale `Seuil d'alerte` ;
-- le sous-titre avec projection, date de situation et seuil.
+- le sous-titre avec projection, date de situation, seuil et point bas.
 
 ---
 
-## 8. Conclusion
+## 9. Conclusion
 
-La recette manuelle V1 décrite dans `RECETTE_MANUELLE_V1.md` est validée.
+La recette manuelle V1 / V1.1 décrite dans `RECETTE_MANUELLE_V1.md` est validée.
 
-Décision : **GO V1**
+Décision : **GO V1.1**
