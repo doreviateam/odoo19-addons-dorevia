@@ -307,13 +307,16 @@
                               decoration-success="display_status == 'safe'">
                             <field name="currency_id" column_invisible="1"/>
                             <field name="is_simulation" column_invisible="1"/>
-                            <field name="display_status" string="Statut"/>
-                            <field name="move_name" string="Document"/>
-                            <field name="partner_id" string="Partenaire"/>
-                            <field name="document_type_label" string="Type"/>
-                            <field name="invoice_date_due" string="Échéance"/>
+                            <field name="display_status" string="Statut" readonly="1"/>
+                            <field name="move_name" string="Document" readonly="1"/>
+                            <field name="partner_id" string="Partenaire" readonly="1"/>
+                            <field name="responsible_id" string="Responsable" readonly="1"/>
+                            <field name="document_type_label" string="Type" readonly="1"/>
+                            <field name="invoice_date_due" string="Échéance" readonly="1"/>
                             <field name="signed_amount" string="Impact"
+                                   readonly="1"
                                    widget="monetary"
+                                   sum="Impact net"
                                    options="{'currency_field': 'currency_id'}"/>
                             <button name="action_open_source_document" type="object"
                                     string=" " title="Ouvrir le document"
