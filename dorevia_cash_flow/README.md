@@ -39,6 +39,8 @@ Cette distinction évite de confondre l’outil opérationnel de projection avec
 
 **Comptabilité > Projection > Trésorerie > Accueil graphique**
 
+**Doctrine** : la **projection de trésorerie de référence** doit être une **donnée système** préparée côté Cash Guard (pas un prérequis « choisir un document » pour l’utilisateur métier) — voir **`../../docs/cash/DOCTRINE_CASH_MODULES.md`** (§ *Projection de référence système*) et **`dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`**. Tant que ce mécanisme n’est pas livré, la résolution repose sur l’heuristique documentée en SPEC § 5.5.
+
 Lecture de la **trajectoire de référence** en **lecture seule** sur le graphique, avec raccourcis atelier (ouvrir la projection, actualiser le calcul, liste des projections, audit autre projection, ouverture de la vue Analyse).  
 La déclaration XML de ce menu vit dans **`dorevia_cash_flow`** (`views/cash_guard_bridge_menus.xml`) : le module dépend déjà de `dorevia_cash_guard`, ce qui évite une dépendance circulaire.
 

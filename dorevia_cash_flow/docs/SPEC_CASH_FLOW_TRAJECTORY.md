@@ -286,6 +286,8 @@ Doctrine transverse Cash (positionnement vs Cash Guard et simulation) : **`../..
 4. au moins une ligne dans `weekly_line_ids` (mailles calculées) ;
 5. parmi les candidats, tri **`situation_date` décroissant**, puis `write_date`, puis `id` — **premier** document retenu.
 
+**Cible produit (projection de référence système)** : la règle ci-dessus est un **palliatif** tant qu’une projection **explicitement désignée** et **maintenue** par Cash Guard (système / administrateur) n’existe pas — voir **`dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`**. L’objectif est que l’utilisateur métier n’ait **pas** à préparer manuellement une projection pour le parcours nominal **Accueil graphique** ; Cash Flow **lit** cette donnée, **sans** créer de document Guard.
+
 **Ouverture menu** : `ir.actions.server` exécute `action_open_reference_trajectory()` — création d’un transient wizard avec le `guard_id` résolu, génération des `dorevia.cash.flow.trajectory.point`, retour `ir.actions.client` vers le graphique de pilotage (identique au flux « Afficher la trajectoire » après sélection manuelle).
 
 **Absence de candidat** : `UserError` avec message orientant vers la création ou l’actualisation d’une projection dans Cash Guard — **aucune** courbe vide.

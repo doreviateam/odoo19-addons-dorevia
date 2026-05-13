@@ -44,7 +44,7 @@ Le principe directeur est simple :
 
 **Doctrine Cash (lecture / projection / simulation)** : le périmètre de ce module s’inscrit dans la chaîne décrite dans **[Doctrine modules Cash](../docs/cash/DOCTRINE_CASH_MODULES.md)** — `dorevia_cash_guard` est l’**atelier de projection** ; la **trajectoire de référence** en lecture synthétique est portée par **`dorevia_cash_flow`** lorsqu’il est installé.
 
-> Avec **`dorevia_cash_flow`** installé : **Projection > Trésorerie > Accueil graphique** — même trajectoire de référence qu’en Analyse (**Trajectoire (Analyse)**), **lecture seule** sur la courbe, raccourcis atelier (`dorevia_cash_flow`). Cadrage : `docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md`.
+> Avec **`dorevia_cash_flow`** installé : **Projection > Trésorerie > Accueil graphique** — même trajectoire de référence qu’en Analyse (**Trajectoire (Analyse)**), **lecture seule** sur la courbe, raccourcis atelier (`dorevia_cash_flow`). **Cible produit** : la projection de référence est une **donnée système** Guard, pas un prérequis manuel métier — voir `docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`. Cadrage UI : `docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md`.
 
 Le module ne remplace pas la comptabilité générale.
 

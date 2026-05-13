@@ -57,7 +57,8 @@ Faire de l’entrée **Cash Guard** une **page d’accueil / cockpit** centrée 
 ## Notes d’implémentation (à affiner en conception)
 
 - **Dépendance** : l’accueil graphique est livré dans **`dorevia_cash_flow`** (`action_open_guard_cockpit`, menu sous **Projection > Trésorerie**) pour éviter `dorevia_cash_guard` → `dorevia_cash_flow` (cycle). Hiérarchie menus : **Trésorerie** = dossier ; enfants **Accueil graphique** puis **Projections de trésorerie** (`dorevia_cash_guard/views/menus.xml`).  
-- **Rafraîchissement** : `action_refresh_points_from_guard` sur l’assistant régénère les points après `action_recompute_projection` sur le document Guard.
+- **Rafraîchissement** : `action_refresh_points_from_guard` sur l’assistant régénère les points après `action_recompute_projection` sur le document Guard.  
+- **Donnée de référence** : la doctrine impose une **projection de référence système** côté Guard (pas un prérequis manuel métier pour l’Accueil graphique) — voir `TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`.
 
 ---
 
