@@ -272,6 +272,7 @@
     <record id="view_dorevia_cash_guard_week_form" model="ir.ui.view">
         <field name="name">dorevia.cash.guard.week.form</field>
         <field name="model">dorevia.cash.guard.week</field>
+        <field name="priority" eval="1"/>
         <field name="arch" type="xml">
             <form create="false" edit="false" delete="false">
                 <sheet>
@@ -316,15 +317,17 @@
                             <field name="signed_amount" string="Impact"
                                    readonly="1"
                                    widget="monetary"
+                                   sum="Impact net"
                                    options="{'currency_field': 'currency_id'}"/>
                             <button name="action_open_source_document" type="object"
                                     string=" " title="Ouvrir le document"
                                     icon="fa-external-link"/>
                         </list>
                     </field>
+                    <separator string="Total Impact"/>
                     <group>
                         <field name="period_documents_impact_net"
-                               string="Impact net (documents)"
+                               string="Somme des impacts"
                                widget="monetary"
                                options="{'currency_field': 'currency_id'}"
                                readonly="1"/>

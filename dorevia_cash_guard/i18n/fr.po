@@ -452,5 +452,10 @@ msgstr "Somme des impacts (factures et simulations) des documents de la période
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
-msgid "Impact net (documents)"
-msgstr "Impact net (documents)"
+msgid "Total Impact"
+msgstr "Total Impact"
+
+#. module: dorevia_cash_guard
+#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
+msgid "Somme des impacts"
+msgstr "Somme des impacts"
