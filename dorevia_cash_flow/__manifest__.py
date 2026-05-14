@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia Cash Flow",
-    "version": "19.0.2.3.14",
+    "version": "19.0.2.3.17",
     "category": "Accounting",
     "summary": "Trajectoire de trésorerie : restitution graphique à partir des projections Cash Guard.",
     "description": """

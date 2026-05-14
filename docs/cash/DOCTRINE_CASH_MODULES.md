@@ -58,9 +58,9 @@ Trajectoire affichée   (reflète les montants déjà présents dans les mailles
 
 **`dorevia_cash_flow`** **consomme** cette référence pour construire les **points** et afficher la **trajectoire**. Il **ne doit pas** créer ni posséder en silence la **vie** d’un document Guard de référence : pas de fabrication opaque d’une projection « pour les beaux yeux du graphique » hors cadre Guard.
 
-**Parcours nominal métier** : ouvrir **Projection > Trésorerie > Projections de trésorerie > Accueil graphique** → voir la trajectoire — **sans** prérequis du type « aller dans **Projections** (liste atelier), choisir le document 1, activer, recalculer, revenir ». Si la référence **manque**, la remédiation relève du **système** ou de l’**administration**, pas d’une obligation fonctionnelle équivalente pour l’utilisateur métier dans le même parcours.
+**Parcours nominal métier** : ouvrir **Comptabilité > Projection de trésorerie > Cash Flow** → voir la trajectoire — **sans** prérequis du type « aller dans **Cash Guards** (liste), choisir le document 1, activer, recalculer, revenir ». Si la référence **manque**, la remédiation relève du **système** ou de l’**administration**, pas d’une obligation fonctionnelle équivalente pour l’utilisateur métier dans le même parcours.
 
-**Stabilité vs contexte de navigation** : le parcours **référence** (**Accueil graphique**, **Trajectoire (Analyse)**) résout la projection **sans** s’appuyer sur `active_id` / `default_*` pour choisir le document, et le client graphique ne retombe pas sur un `wizard_id` implicite de contexte. **Accueil graphique** reste la **trajectoire de référence** (libellé produit ; cible `is_system_reference`). Il est **légitime** d’afficher une **trajectoire contextualisée** (projection ou simulation de travail) à partir de l’assistant ou d’autres parcours métier : dans ce cas le **mode** et la **source** doivent être **visibles et explicites** (bandeau, titre d’action) — une hypothèse **ne se présente jamais** comme la référence système.
+**Stabilité vs contexte de navigation** : le parcours **référence** (**Cash Flow**, **Trajectoire (Analyse)**) résout la projection **sans** s’appuyer sur `active_id` / `default_*` pour choisir le document, et le client graphique ne retombe pas sur un `wizard_id` implicite de contexte. **Cash Flow** reste la **trajectoire de référence** (libellé produit ; cible `is_system_reference`). Il est **légitime** d’afficher une **trajectoire contextualisée** (projection ou simulation de travail) à partir de l’assistant ou d’autres parcours métier : dans ce cas le **mode** et la **source** doivent être **visibles et explicites** (bandeau, titre d’action) — une hypothèse **ne se présente jamais** comme la référence système.
 
 **Implémentation** : l’heuristique actuelle de résolution (premier Guard éligible) est un **palliatif** tant qu’une **référence système explicite** n’est pas livrée — voir **`dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`** (V1 : projection standard **`is_system_reference`**, unicité par société, résolution prioritaire Cash Flow, protection archivage / suppression, message admin si absence).
 
@@ -76,7 +76,7 @@ Trajectoire affichée   (reflète les montants déjà présents dans les mailles
 | **Fait** | Identifie la **projection de référence** fournie par Cash Guard (règles documentées dans `dorevia_cash_flow` / SPEC), construit les points de courbe, affiche le graphique de pilotage (repères situation / seuil, constaté / projeté). |
 | **Ne fait pas** | Créer ou maintenir le **document** de projection de référence sur `dorevia.cash.guard` ; recalcul de projection ; logique de simulation ; atelier d’hypothèses ; écriture sur les documents Cash Guard. |
 
-L’**Accueil graphique** et les raccourcis **Analyse** sont les **entrées de lecture** : ouverture directe sur la trajectoire lorsque la référence est **disponible** (voir § *Projection de référence système*). Un parcours secondaire permet de choisir une **autre** projection pour audit.
+**Cash Flow** et les raccourcis **Analyse** sont les **entrées de lecture** : ouverture directe sur la trajectoire lorsque la référence est **disponible** (voir § *Projection de référence système*). Un parcours secondaire permet de choisir une **autre** projection pour audit.
 
 ---
 
@@ -85,7 +85,7 @@ L’**Accueil graphique** et les raccourcis **Analyse** sont les **entrées de l
 | | |
 |--|--|
 | **Rôle** | **Atelier de projection** : préparer, structurer, documenter et contrôler les projections. |
-| **Fait** | Journaux suivis, date de situation, seuils, calcul des mailles, explication des tensions, recalcul à la demande, traçabilité des hypothèses intégrées au document de projection. **Cible** : maintenir une **projection de référence système** par société pour alimenter Cash Flow sans prérequis manuel métier sur le parcours nominal — voir `dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`. Peut **réafficher** la trajectoire (Cash Flow) en **lecture seule** (**Accueil graphique**) — voir § *Réutilisation dans Cash Guard*. |
+| **Fait** | Journaux suivis, date de situation, seuils, calcul des mailles, explication des tensions, recalcul à la demande, traçabilité des hypothèses intégrées au document de projection. **Cible** : maintenir une **projection de référence système** par société pour alimenter Cash Flow sans prérequis manuel métier sur le parcours nominal — voir `dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`. Peut **réafficher** la trajectoire (Cash Flow) en **lecture seule** (**Cash Flow**) — voir § *Réutilisation dans Cash Guard*. |
 | **Ne fait pas** | Porter une **deuxième** trajectoire graphique « officielle » concurrente de Cash Flow, ni un second moteur de courbe / de points dupliqué ; **ne pas modifier** la trajectoire de référence depuis l’UI Cash Guard lorsqu’elle est embarquée en réutilisation. |
 
 Cash Guard reste la **source contrôlée** des mailles et des hypothèses portées par le document de projection.
@@ -125,9 +125,9 @@ Ticket d’évolution associé : `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME
 
 ### État actuel de l’UI vs cible cockpit
 
-> **Parcours nominal** : **Comptabilité > Projection > Trésorerie > Projections de trésorerie > Accueil graphique** — même trajectoire de référence (`dorevia_cash_flow`), lecture seule sur la courbe, raccourcis atelier. **Atelier** : **Projection > Trésorerie > Projections de trésorerie > Projections**. **Budgets** : entrée **Projection > Budgets** (menu budget existant, **hors** sous-menu Trésorerie).  
+> **Parcours nominal** : **Comptabilité > Projection de trésorerie > Cash Flow** — même trajectoire de référence (`dorevia_cash_flow`), lecture seule sur la courbe, raccourcis atelier. **Atelier** : **Comptabilité > Projection de trésorerie > Cash Guards**. **Budgets** : entrée **Comptabilité > Projection de trésorerie > Budgets** (menu budget existant, sous la même racine **Projection de trésorerie**).  
 > **Raccourcis Analyse** (secondaire, libellés explicites) : **Trajectoire (Analyse)** et **Trajectoire — choix projection (Analyse)** sous **Comptabilité > Analyse** (chemin intermédiaire *Gestion* selon la base).  
-> Le ticket `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md` formalise le cadrage ; les menus **Accueil graphique** sont déclarés dans **`dorevia_cash_flow`** pour respecter la dépendance module (pas de cycle Guard → Flow).
+> Le ticket `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md` formalise le cadrage ; le menu **Cash Flow** est déclaré dans **`dorevia_cash_flow`** pour respecter la dépendance module (pas de cycle Guard → Flow).
 
 ---
 
@@ -147,10 +147,10 @@ Ticket d’évolution associé : `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME
 
 ## Règles UX (à aligner progressivement)
 
-- **Trajectoire de référence** = lecture **Accueil graphique** (**Projection > Trésorerie > Projections de trésorerie**) ou raccourci **Trajectoire (Analyse)** ; pas l’atelier de saisie.
-- **Projections** (liste Cash Guard) = **atelier** de travail, recalcul, audit (**Projection > Trésorerie > Projections de trésorerie > Projections**). Le dossier menu **Projections de trésorerie** regroupe lecture (**Accueil graphique**) et atelier (**Projections**).
+- **Trajectoire de référence** = lecture **Cash Flow** (**Comptabilité > Projection de trésorerie**) ou raccourci **Trajectoire (Analyse)** ; pas l’atelier de saisie.
+- **Cash Guards** (liste Cash Guard) = **atelier** de travail, recalcul, audit (**Comptabilité > Projection de trésorerie > Cash Guards**). Le menu **Projection de trésorerie** regroupe lecture (**Cash Flow**) et atelier (**Cash Guards**).
 - **Simulation** (ventes / achats / …) = **hypothèses** ; titres et menus doivent éviter « trajectoire officielle » en doublon de Cash Flow.
-- **Accueil graphique** : **Projection > Trésorerie > Projections de trésorerie > Accueil graphique** (`dorevia_cash_flow`) — voir tickets `TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md` (UI) et `TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md` (donnée de référence).
+- **Cash Flow** : **Comptabilité > Projection de trésorerie > Cash Flow** (`dorevia_cash_flow`) — voir tickets `TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md` (UI) et `TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md` (donnée de référence).
 - Les **README** des modules Cash (`dorevia_cash_flow`, `dorevia_cash_guard`, `dorevia_cash_simulation`, …) doivent **renvoyer à ce document** pour le positionnement relatif.
 
 ---
@@ -167,10 +167,10 @@ Ticket d’évolution associé : `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME
 - `docs/cash/PV_RECETTE_NAVIGATION_CASH.md` — PV recette navigation Cash (**GO**), captures sous `docs/cash/captures/`.
 - `dorevia_cash_flow/README.md` — parcours V1.1, menu nominal.
 - `dorevia_cash_flow/docs/SPEC_CASH_FLOW_TRAJECTORY.md` — § 5.5 résolution de référence.
-- `dorevia_cash_flow/views/cash_guard_bridge_menus.xml` — **Accueil graphique** sous le dossier **Projections de trésorerie** (**Projection > Trésorerie**).
+- `dorevia_cash_flow/views/cash_guard_bridge_menus.xml` — **Cash Flow** sous **Comptabilité > Projection de trésorerie** (parent racine Cash Guard).
 - `dorevia_cash_flow/docs/TICKET_CASH_FLOW_V1_1_TRAJECTOIRE_REFERENCE.md` — cadrage ticket V1.1.
 - `dorevia_cash_guard/README.md` — atelier de projection.
 - `dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md` — projection de référence **système** (cible produit, périmètre technique).
 - `dorevia_cash_guard/docs/TICKET_IMPL_CASH_GUARD_SYSTEM_REFERENCE.md` — implémentation code + tests (sous-ticket dev).
-- `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md` — accueil graphique / trajectoire (lecture seule, réutilisation Cash Flow).
+- `dorevia_cash_guard/docs/TICKET_CASH_GUARD_HOME_REFERENCE_TRAJECTORY.md` — cockpit / trajectoire (lecture seule, réutilisation Cash Flow).
 - `dorevia_cash_simulation/README.md` — hypothèses devis / extension Cash Guard.

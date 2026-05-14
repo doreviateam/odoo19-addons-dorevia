@@ -91,7 +91,7 @@ Si aucune projection exploitable n’est trouvée, afficher un message clair.
 
 Exemple :
 
-> Aucune projection hebdomadaire active avec des lignes calculées n’a été trouvée pour la société courante. Veuillez créer ou actualiser une projection de trésorerie dans Projections de trésorerie.
+> Aucune projection hebdomadaire active avec des lignes calculées n’a été trouvée pour la société courante. Veuillez créer ou actualiser une projection de trésorerie dans **Comptabilité > Projection de trésorerie > Cash Guards**.
 
 Le rapport ne doit pas afficher une courbe vide ou trompeuse.
 

@@ -51,7 +51,7 @@ class DoreviaCashGuard(models.Model):
         groups="dorevia_cash_guard.group_cash_guard_manager",
         help=(
             "Au plus une projection active par société. Utilisée en priorité par la trajectoire "
-            "de référence (Accueil graphique) et recalculée par le cron quotidien dédié ; "
+            "de référence (menu Cash Flow) et recalculée par le cron quotidien dédié ; "
             "les autres projections ne sont pas mises à jour automatiquement."
         ),
     )

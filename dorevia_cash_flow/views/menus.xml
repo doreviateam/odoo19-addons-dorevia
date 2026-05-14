@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--
-        Parcours principal cash : Comptabilité > Projection > Trésorerie > Projections de trésorerie > Accueil graphique
-        (déclaré dans cash_guard_bridge_menus.xml). Ici : raccourcis sous Analyse / Reporting, libellés explicites « (Analyse) » pour éviter
-        deux portes concurrentes sans contexte. Voir README et SPEC § 8.
+        Parcours principal : Comptabilité > Projection de trésorerie > Cash Flow (cockpit).
+        Raccourcis sous Analyse / Reporting : libellés « Trajectoire (Analyse) ».
     -->
     <menuitem
         id="menu_dorevia_cash_flow_trajectory"

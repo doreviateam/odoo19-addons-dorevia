@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="action_dorevia_cash_flow_guard_cockpit" model="ir.actions.server">
-        <field name="name">Accueil graphique</field>
+        <field name="name">Cash Flow</field>
         <field name="model_id" ref="model_dorevia_cash_flow_trajectory_wizard"/>
         <field name="state">code</field>
         <field name="code">
@@ -11,8 +11,8 @@ action = env["dorevia.cash.flow.trajectory.wizard"].action_open_guard_cockpit()
 
     <menuitem
         id="menu_dorevia_cash_flow_guard_cockpit"
-        name="Accueil graphique"
-        parent="dorevia_cash_guard.menu_dorevia_cash_guard_projections_hub"
+        name="Cash Flow"
+        parent="dorevia_cash_guard.menu_dorevia_cash_guard_root"
         action="action_dorevia_cash_flow_guard_cockpit"
         groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="10"

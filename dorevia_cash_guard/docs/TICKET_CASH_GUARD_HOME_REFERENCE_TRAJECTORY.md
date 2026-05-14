@@ -6,7 +6,7 @@
 
 ## État actuel de l’UI vs cible cockpit
 
-> **Parcours nominal** : **Projection > Trésorerie > Projections de trésorerie > Accueil graphique** (même trajectoire de référence, lecture seule, raccourcis atelier ; implémentation `dorevia_cash_flow`). **Atelier** : **Projection > Trésorerie > Projections de trésorerie > Projections**.  
+> **Parcours nominal** : **Comptabilité > Projection de trésorerie > Cash Flow** (même trajectoire de référence, lecture seule, raccourcis atelier ; implémentation `dorevia_cash_flow`). **Atelier** : **Comptabilité > Projection de trésorerie > Cash Guards**.  
 > **Raccourcis Analyse** : **Trajectoire (Analyse)** et **Trajectoire — choix projection (Analyse)** (secondaires, libellés explicites).
 
 ---
@@ -46,19 +46,19 @@ Faire de l’entrée **Cash Guard** une **page d’accueil / cockpit** centrée 
 
 ## Critères d’acceptation (brouillon)
 
-- [x] Menu **Projection > Trésorerie > Projections de trésorerie > Accueil graphique** avec trajectoire de référence visible (livré dans `dorevia_cash_flow`).  
+- [x] Menu **Comptabilité > Projection de trésorerie > Cash Flow** avec trajectoire de référence visible (livré dans `dorevia_cash_flow`).  
 - [x] La trajectoire est **strictement alignée** avec l’écran Cash Flow équivalent (même résolution de référence, même `_prepare_chart_action` / client action).  
-- [x] Aucun contrôle d’UI sur la courbe dans ce contexte qui **modifie** la trajectoire sans passer par les écrans / flux prévus (pas « Changer de projection » sur l’accueil graphique ; audit via lien dédié).  
-- [x] Les **actions d’atelier** principales sont accessibles depuis l’accueil graphique (ouvrir projection, actualiser, liste, audit, vue Analyse).  
+- [x] Aucun contrôle d’UI sur la courbe dans ce contexte qui **modifie** la trajectoire sans passer par les écrans / flux prévus (pas « Changer de projection » sur **Cash Flow** ; audit via lien dédié).
+- [x] Les **actions d’atelier** principales sont accessibles depuis **Cash Flow** (ouvrir projection, actualiser, liste, audit, vue Analyse).  
 - [x] README / doctrine mis à jour en lien avec cette livraison.
 
 ---
 
 ## Notes d’implémentation (à affiner en conception)
 
-- **Dépendance** : l’accueil graphique est livré dans **`dorevia_cash_flow`** (`action_open_guard_cockpit`, menu sous le dossier **Projections de trésorerie**) pour éviter `dorevia_cash_guard` → `dorevia_cash_flow` (cycle). Hiérarchie menus : **Trésorerie** → **Projections de trésorerie** (dossier) ; enfants **Accueil graphique** puis **Projections** (`dorevia_cash_guard/views/menus.xml` + `dorevia_cash_flow/views/cash_guard_bridge_menus.xml`).  
-- **Rafraîchissement** : `action_refresh_points_from_guard` sur l’assistant régénère les points après `action_recompute_projection` sur le document Guard.  
-- **Donnée de référence** : la doctrine impose une **projection de référence système** côté Guard (pas un prérequis manuel métier pour l’Accueil graphique) — voir `TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`.
+- **Dépendance** : **Cash Flow** est livré dans **`dorevia_cash_flow`** (`action_open_guard_cockpit`, menu enfant de **`menu_dorevia_cash_guard_root`**) pour éviter `dorevia_cash_guard` → `dorevia_cash_flow` (cycle). Hiérarchie menus : racine **Projection de trésorerie** (`dorevia_cash_guard/views/menus.xml`) ; enfants **Cash Flow** puis **Cash Guards** (`dorevia_cash_flow/views/cash_guard_bridge_menus.xml` + Guard).
+- **Rafraîchissement** : `action_refresh_points_from_guard` sur l’assistant régénère les points après `action_recompute_projection` sur le document Guard.
+- **Donnée de référence** : la doctrine impose une **projection de référence système** côté Guard (pas un prérequis manuel métier pour **Cash Flow**) — voir `TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`.
 
 ---
 

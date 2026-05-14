@@ -50,8 +50,8 @@ msgstr "Flux complémentaires"
 #. module: dorevia_cash_guard
 #: model:ir.actions.act_window,name:dorevia_cash_guard.action_dorevia_cash_guard
 #: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_points
-msgid "Projections"
-msgstr "Projections"
+msgid "Cash Guards"
+msgstr "Cash Guards"
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
@@ -146,21 +146,19 @@ msgstr "Seul un manager Cash Guard peut rouvrir un document de projection."
 
 #. module: dorevia_cash_guard
 #: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_root
+msgid "Projection de trésorerie"
+msgstr "Projection de trésorerie"
+
+#. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__projected_balance
 msgid "Projection"
 msgstr "Projection"
 
 #. module: dorevia_cash_guard
-#: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_treasury_root
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
 msgid "Trésorerie"
 msgstr "Trésorerie"
-
-#. module: dorevia_cash_guard
-#: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_projections_hub
-msgid "Projections de trésorerie"
-msgstr "Projections de trésorerie"
 
 #. module: dorevia_cash_guard
 #: code:addons/dorevia_cash_guard/models/cash_guard.py:0

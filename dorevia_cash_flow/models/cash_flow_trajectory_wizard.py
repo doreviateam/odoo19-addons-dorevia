@@ -155,7 +155,7 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
 
     @api.model
     def _cash_flow_chart_isolation_env(self):
-        """Contexte minimal pour le graphique de référence (Accueil / Trajectoire Analyse).
+        """Contexte minimal pour le graphique de référence (Cash Flow / Trajectoire Analyse).
 
         Évite que ``active_id``, ``active_ids``, ``default_*`` ou autres clés de navigation
         orientent la résolution ou les ``create`` d'assistant : la courbe de référence ne
@@ -221,7 +221,7 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
                     "Aucune projection hebdomadaire active avec des lignes calculées n'a été trouvée "
                     "pour la société « %(company)s ». "
                     "Veuillez créer ou actualiser une projection de trésorerie dans "
-                    "Projection > Trésorerie > Projections de trésorerie > Projections.",
+                    "Comptabilité > Projection de trésorerie > Cash Guards.",
                     company=company.display_name,
                 )
             )
@@ -232,7 +232,7 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
 
     @api.model
     def action_open_guard_cockpit(self):
-        """Accueil menu Projection : trajectoire de référence + raccourcis atelier (lecture seule).
+        """Cockpit Comptabilité : trajectoire de référence + raccourcis atelier (lecture seule).
 
         Cible : projection **système** taguée référence (`is_system_reference`, ticket impl. Guard) ;
         tant qu'elle n'existe pas, même résolution heuristique que `action_open_reference_trajectory` / SPEC § 5.5.
@@ -247,7 +247,7 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
                 _(
                     "Aucune projection hebdomadaire active avec des lignes calculées n'a été trouvée "
                     "pour la société « %(company)s ». "
-                    "Créez ou actualisez une projection depuis Projection > Trésorerie > Projections de trésorerie > Projections.",
+                    "Créez ou actualisez une projection depuis Comptabilité > Projection de trésorerie > Cash Guards.",
                     company=company.display_name,
                 )
             )
@@ -258,7 +258,7 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
         action.setdefault("params", {})
         action["params"]["cockpit"] = True
         action["params"]["guard_id"] = guard.id
-        action["name"] = _("Accueil graphique")
+        action["name"] = _("Cash Flow")
         return action
 
     def action_refresh_points_from_guard(self):
@@ -283,14 +283,14 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
                 _(
                     "Seules les projections à périodicité « Semaine » sont prises en charge pour "
                     "la trajectoire de trésorerie. Ouvrez ou créez une projection hebdomadaire dans "
-                    "Projection > Trésorerie > Projections de trésorerie > Projections."
+                    "Comptabilité > Projection de trésorerie > Cash Guards."
                 )
             )
         if not guard.weekly_line_ids:
             raise UserError(
                 _(
                     "Aucune maille de projection n'est disponible pour ce document. "
-                    "Ouvrez la projection dans Projection > Trésorerie > Projections de trésorerie > Projections "
+                    "Ouvrez la projection dans Comptabilité > Projection de trésorerie > Cash Guards "
                     "et actualisez le calcul avant d'afficher la trajectoire."
                 )
             )

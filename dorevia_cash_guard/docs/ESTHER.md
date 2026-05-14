@@ -6,7 +6,7 @@ Vous avez besoin de savoir, **avant qu'il ne soit trop tard**, si votre trésore
 
 ## La solution
 
-Nous vous livrons un ensemble de trois modules complémentaires qui s'intègrent directement dans votre Odoo, rubrique **Comptabilité > Projection > Trésorerie > Projections de trésorerie** (lecture et atelier).
+Nous vous livrons un ensemble de trois modules complémentaires qui s'intègrent directement dans votre Odoo, rubrique **Comptabilité > Projection de trésorerie** (lecture **Cash Flow** et atelier **Cash Guards**).
 
 ---
 

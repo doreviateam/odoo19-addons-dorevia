@@ -17,7 +17,7 @@
                     <t t-esc="state.modeBanner"/>
                 </div>
                 <div t-if="state.cockpitMode" class="border rounded p-3 mb-3 bg-light">
-                    <h4 class="mb-2 text-900">Projection de trésorerie</h4>
+                    <h4 class="mb-2 text-900">Cash Flow</h4>
                     <p class="text-muted small mb-3" t-if="state.subtitle">
                         <t t-esc="state.subtitle"/>
                     </p>
@@ -31,7 +31,7 @@
                             Actualiser
                         </button>
                         <button type="button" class="btn btn-secondary btn-sm" t-on-click="onOpenGuardForm">
-                            Ouvrir l’atelier
+                            Ouvrir Cash Guards
                         </button>
                         <button type="button" class="btn btn-secondary btn-sm" t-on-click="onOpenGuardList">
                             Toutes les projections

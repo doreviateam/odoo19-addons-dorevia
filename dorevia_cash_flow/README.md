@@ -16,16 +16,14 @@ Le rapport permet de lire **une seule trajectoire** : à chaque date, **le solde
 - les périodes de vigilance ou de tension.
 
 Ce module ne crée **pas** un nouveau moteur de projection de trésorerie.  
-Il fournit une **vue graphique d’analyse**, en combinant les données comptables constatées et les lignes **déjà produites** par les **Projections de trésorerie** (module `dorevia_cash_guard` et dépendances éventuelles).
-
----
+Il fournit une **vue graphique d’analyse**, en combinant les données comptables constatées et les lignes **déjà produites** par les **projections de trésorerie** (documents Cash Guard, module `dorevia_cash_guard` et dépendances éventuelles).
 
 ## Vocabulaire produit
 
 | Libellé | Signification |
 | --- | --- |
-| **Projections de trésorerie** | Sous-domaine menu sous **Trésorerie** : regroupe **Accueil graphique** (lecture référence) et **Projections** (liste atelier). Le module `dorevia_cash_guard` produit et maintient les documents de projection. |
-| **Projections** | Entrée menu **liste atelier** : consulter, créer, recalculer ou auditer les documents Cash Guard. |
+| **Projection de trésorerie** | Rubrique **Comptabilité** : regroupe **Cash Flow** (cockpit, trajectoire de lecture) et **Cash Guards** (liste et configuration). Le module `dorevia_cash_guard` produit et maintient les documents de projection. |
+| **Cash Guards** | Entrée menu **liste atelier** : consulter, créer, recalculer ou auditer les documents Cash Guard. |
 | **Trajectoire de trésorerie** | Le rapport graphique fourni par `dorevia_cash_flow` : lecture d’analyse, distincte de l’écran de saisie ou de recalcul de projection. |
 
 Cette distinction évite de confondre l’outil opérationnel de projection avec la vue d’analyse graphique.
@@ -38,7 +36,7 @@ Cette distinction évite de confondre l’outil opérationnel de projection avec
 
 **Parcours principal (pilotage cash)** — même courbe, même moteur :
 
-**Comptabilité > Projection > Trésorerie > Projections de trésorerie > Accueil graphique**
+**Comptabilité > Projection de trésorerie > Cash Flow**
 
 **Doctrine** : la **projection de trésorerie de référence** doit être une **donnée système** préparée côté Cash Guard (pas un prérequis « choisir un document » pour l’utilisateur métier) — voir **`../../docs/cash/DOCTRINE_CASH_MODULES.md`** (§ *Projection de référence système*) et **`dorevia_cash_guard/docs/TICKET_CASH_GUARD_SYSTEM_REFERENCE_PROJECTION.md`**. Tant que ce mécanisme n’est pas livré, la résolution repose sur l’heuristique documentée en SPEC § 5.5.
 
@@ -47,7 +45,7 @@ La déclaration XML de ce menu vit dans **`dorevia_cash_flow`** (`views/cash_gua
 
 **Atelier** (documents de projection) :
 
-**Comptabilité > Projection > Trésorerie > Projections de trésorerie > Projections**
+**Comptabilité > Projection de trésorerie > Cash Guards**
 
 ### Raccourcis sous Analyse (secondaire)
 
@@ -60,11 +58,11 @@ Libellé anglais possible (Reporting) : à aligner sur la traduction des menus `
 
 ### V1.1 — Parcours nominal (trajectoire de référence)
 
-Depuis la **V1.1**, l’entrée **Accueil graphique** (Projection) ou **Trajectoire (Analyse)** ouvre **directement** le graphique de pilotage pour la **société courante** : le module choisit automatiquement une projection Cash Guard **active**, **hebdomadaire**, avec **mailles calculées**, la plus récente au sens de la **date de situation** (`situation_date` décroissante). Aucune sélection manuelle n’est requise dans ce parcours.
+Depuis la **V1.1**, l’entrée **Cash Flow** (Comptabilité) ou **Trajectoire (Analyse)** ouvre **directement** le graphique de pilotage pour la **société courante** : le module choisit automatiquement une projection Cash Guard **active**, **hebdomadaire**, avec **mailles calculées**, la plus récente au sens de la **date de situation** (`situation_date` décroissante). Aucune sélection manuelle n’est requise dans ce parcours.
 
-- **Parcours secondaire** : menu **Trajectoire — choix projection (Analyse)** ou bouton **Changer de projection** sur le graphique (hors mode accueil graphique) pour cibler un autre document (audit, comparaison).
+- **Parcours secondaire** : menu **Trajectoire — choix projection (Analyse)** ou bouton **Changer de projection** sur le graphique (hors mode cockpit / projection de référence) pour cibler un autre document (audit, comparaison).
 - **Indépendance (référence)** : la résolution **référence** et le client ne s’appuient pas sur le contexte de navigation pour **choisir** la projection ; le parcours **contextualisé** (assistant) affiche la projection sélectionnée avec **libellés et bandeau** qui distinguent **référence système** vs **hypothèse** (dont **simulation** lorsque `include_simulation` est actif).
-- **Données manquantes** : message explicite invitant à créer ou actualiser une projection dans **Projection > Trésorerie > Projections de trésorerie > Projections** (sans recalcul automatique déclenché par Cash Flow).
+- **Données manquantes** : message explicite invitant à créer ou actualiser une projection dans **Comptabilité > Projection de trésorerie > Cash Guards** (sans recalcul automatique déclenché par Cash Flow).
 
 ## Intention fonctionnelle
 
@@ -75,7 +73,7 @@ La lecture attendue est une courbe simple :
 - axe X : semaines ;
 - axe Y : montant de trésorerie ;
 - granularité : hebdomadaire ;
-- période couverte par la courbe : du **début de l’exercice comptable courant** jusqu’à **date de situation + 90 jours** (aligné sur l’horizon standard des **Projections de trésorerie**).
+- période couverte par la courbe : du **début de l’exercice comptable courant** jusqu’à **date de situation + 90 jours** (aligné sur l’horizon standard des **mailles de projection** Cash Guard).
 
 La courbe doit permettre d’identifier rapidement :
 
@@ -93,7 +91,7 @@ Le rapport doit rester simple, lisible et robuste.
 
 ### Parcours principal (V1.1)
 
-1. ouvrir **Comptabilité > Projection > Trésorerie > Projections de trésorerie > Accueil graphique** (parcours nominal) **ou** **Comptabilité > Analyse > … > Trajectoire (Analyse)** (raccourci secondaire) ;
+1. ouvrir **Comptabilité > Projection de trésorerie > Cash Flow** (parcours nominal) **ou** **Comptabilité > Analyse > … > Trajectoire (Analyse)** (raccourci secondaire) ;
 2. voir **directement** la courbe de trajectoire de **référence** pour la société courante (projection résolue automatiquement) ;
 3. lire date de situation, seuil, point bas et segments constaté / projeté sur le graphique de pilotage.
 
@@ -121,7 +119,7 @@ La trajectoire graphique se compose de deux segments :
 - du **début de l’exercice comptable courant** ;
 - jusqu’à la **date de situation** (incluse ou borne selon convention d’affichage retenue en implémentation).
 
-Cette partie s’appuie sur les **soldes réels** de trésorerie issus des **journaux** suivis par la projection (banque / caisse), comme pour le constaté dans **Projections de trésorerie**.
+Cette partie s’appuie sur les **soldes réels** de trésorerie issus des **journaux** suivis par la projection (banque / caisse), comme pour le constaté dans les **documents Cash Guard**.
 
 ### 2. Période projetée
 
@@ -129,7 +127,7 @@ Règle métier V1 :
 
 > La partie projetée couvre la période allant de la **date de situation** jusqu’à **date de situation + 90 jours**.
 
-C’est l’**horizon standard** aligné sur les **Projections de trésorerie** (Cash Guard).  
+C’est l’**horizon standard** aligné sur les **projections hebdomadaires** Cash Guard.  
 Si le modèle expose déjà un champ technique de fin de période **équivalent** à cette règle (par ex. `date_to` recalé sur situation + 90 jours), l’implémentation peut s’y appuyer ; le README documente la **règle métier** : **situation + 90 jours**.
 
 Cette partie s’appuie sur les **lignes déjà produites** par la projection (mailles hebdomadaires, etc.), **sans recalcul** dans `dorevia_cash_flow`.
@@ -157,7 +155,7 @@ Le module restitue graphiquement une trajectoire combinant :
 
 ## Comportement attendu
 
-Depuis **Projection > Trésorerie > Projections de trésorerie > Accueil graphique** ou **Trajectoire (Analyse)**, l’utilisateur obtient la **trajectoire de référence** (V1.1) ou, via le menu secondaire **Trajectoire — choix projection (Analyse)**, ouvre un assistant pour **choisir** une projection puis afficher la courbe.
+Depuis **Comptabilité > Projection de trésorerie > Cash Flow** ou **Trajectoire (Analyse)**, l’utilisateur obtient la **trajectoire de référence** (V1.1) ou, via le menu secondaire **Trajectoire — choix projection (Analyse)**, ouvre un assistant pour **choisir** une projection puis afficher la courbe.
 
 La courbe doit afficher :
 
@@ -177,7 +175,7 @@ La distinction constaté / projeté peut être visuelle (trait plein / pointill�
 | Zone | Nature | Source |
 | --- | --- | --- |
 | Constaté | Données réelles | Soldes issus des journaux de trésorerie suivis |
-| Projeté | Données déjà calculées | Lignes produites par **Projections de trésorerie** |
+| Projeté | Données déjà calculées | Lignes produites par la **projection Cash Guard** |
 
 ---
 
@@ -206,7 +204,7 @@ Ne pas intégrer dans cette première version :
 - analyse multi-scénarios avancée ;
 - comparaison de plusieurs projections ;
 - consolidation multi-sociétés ;
-- modification du fonctionnement du module **Projections de trésorerie** ;
+- modification du fonctionnement du module **`dorevia_cash_guard`** (projection de trésorerie) ;
 - création d’un nouveau workflow métier.
 
 **Note** : si la projection sélectionnée contient déjà des montants issus d’autres modules (y compris simulation), `dorevia_cash_flow` peut les **restituer tels qu’ils figurent** dans les lignes de projection, **sans les recalculer ni les interpréter**. Hors périmètre = **aucune logique propre** à la simulation **dans** ce module.
@@ -217,7 +215,7 @@ Ne pas intégrer dans cette première version :
 
 Le module `dorevia_cash_flow` est installable sans erreur.
 
-Les entrées **Projection > Trésorerie > Projections de trésorerie > Accueil graphique** et **Analyse > … > Trajectoire (Analyse)** ouvrent directement le graphique de référence (V1.1).
+Les entrées **Comptabilité > Projection de trésorerie > Cash Flow** et **Analyse > … > Trajectoire (Analyse)** ouvrent directement le graphique de référence (V1.1).
 
 Un second menu sous Analyse, **Trajectoire — choix projection (Analyse)**, permet le parcours avec sélection manuelle.
 
@@ -233,7 +231,7 @@ Les montants projetés correspondent aux lignes de projection existantes.
 
 Le rapport permet d’identifier le point bas sur la période affichée.
 
-Le module ne modifie pas le comportement des **Projections de trésorerie**.
+Le module ne modifie pas le comportement de **`dorevia_cash_guard`** (documents de projection).
 
 ---
 

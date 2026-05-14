@@ -648,7 +648,7 @@ export class TrajectoryChartAction extends Component {
         }
         await this.actionService.doAction({
             type: "ir.actions.act_window",
-            name: "Projection de trésorerie",
+            name: "Cash Guards",
             res_model: "dorevia.cash.guard",
             res_id: this.state.guardId,
             views: [[false, "form"]],

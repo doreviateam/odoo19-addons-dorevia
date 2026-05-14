@@ -2,33 +2,17 @@
 <odoo>
     <menuitem
         id="menu_dorevia_cash_guard_root"
-        name="Projection"
+        name="Projection de trésorerie"
         parent="account.menu_finance_entries"
         groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="90"
     />
 
-    <!-- Trésorerie : sous-famille cash ; sous-domaine « Projections de trésorerie » = lecture + atelier -->
-    <menuitem
-        id="menu_dorevia_cash_guard_treasury_root"
-        name="Trésorerie"
-        parent="menu_dorevia_cash_guard_root"
-        groups="dorevia_cash_guard.group_cash_guard_user"
-        sequence="10"
-    />
-
-    <menuitem
-        id="menu_dorevia_cash_guard_projections_hub"
-        name="Projections de trésorerie"
-        parent="menu_dorevia_cash_guard_treasury_root"
-        groups="dorevia_cash_guard.group_cash_guard_user"
-        sequence="10"
-    />
-
+    <!-- Liste / configuration des projections (atelier) — sous « Projection de trésorerie » -->
     <menuitem
         id="menu_dorevia_cash_guard_points"
-        name="Projections"
-        parent="menu_dorevia_cash_guard_projections_hub"
+        name="Cash Guards"
+        parent="menu_dorevia_cash_guard_root"
         action="action_dorevia_cash_guard"
         groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="20"
@@ -49,6 +33,6 @@
 
     <record id="base_account_budget.menu_act_budget_view" model="ir.ui.menu">
         <field name="parent_id" ref="menu_dorevia_cash_guard_root"/>
-        <field name="sequence">20</field>
+        <field name="sequence">25</field>
     </record>
 </odoo>

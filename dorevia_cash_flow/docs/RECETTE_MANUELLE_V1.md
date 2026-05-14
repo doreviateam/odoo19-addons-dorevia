@@ -13,7 +13,7 @@ Ce document est le **guide d’exécution** : actions dans l’interface, observ
 
 | Menu | Rôle |
 |------|------|
-| **Comptabilité > Projection > Trésorerie > Projections de trésorerie > Accueil graphique** | **Parcours nominal V1.1** : ouverture **directe** du graphique ; **Projection de trésorerie** + une ligne **Trajectoire de référence · Situation · Seuil · Point bas** ; projection de référence résolue automatiquement (règles documentées en SPEC / ticket référence système). |
+| **Comptabilité > Projection de trésorerie > Cash Flow** | **Parcours nominal V1.1** : ouverture **directe** du graphique ; **Cash Flow** + une ligne **Trajectoire de référence · Situation · Seuil · Point bas** ; projection de référence résolue automatiquement (règles documentées en SPEC / ticket référence système). |
 | **Comptabilité > Analyse > … > Trajectoire (Analyse)** | **Même parcours nominal** (raccourci secondaire sous Analyse ; sous-menu intermédiaire *Gestion* selon la base). |
 | **Comptabilité > Analyse > … > Trajectoire — choix projection (Analyse)** | **Parcours secondaire** : assistant + sélection manuelle d’une projection puis **Afficher la trajectoire**. |
 
@@ -23,7 +23,7 @@ Ce document est le **guide d’exécution** : actions dans l’interface, observ
 
 | # | Contrôle | ☐ |
 |---|-----------|---|
-| A1 | Modules `account`, `dorevia_cash_guard`, `dorevia_cash_flow` installés (Cash Flow **≥ 19.0.2.3.3** pour le hub **Projections de trésorerie** et les modes référence / contextualisé ; Cash Guard **≥ 19.0.5.4.0** pour le dossier **Trésorerie** + hub) | ☐ |
+| A1 | Modules `account`, `dorevia_cash_guard`, `dorevia_cash_flow` installés (Cash Flow **≥ 19.0.2.3.17** pour le menu **Projection de trésorerie** et les modes référence / contextualisé ; Cash Guard **≥ 19.0.5.6.2** pour la racine **Projection de trésorerie** + **Cash Guards**) | ☐ |
 | A2 | Utilisateur dans le groupe autorisé pour Cash Guard | ☐ |
 | A3 | Pour la société courante : au moins une projection **hebdomadaire**, **active**, avec **mailles hebdomadaires** calculées (`weekly_line_ids`), **date de situation** et **seuil d’alerte** cohérents | ☐ |
 | A4 | **Optionnel mais recommandé** : identifier dans Cash Guard la projection attendue comme **référence** (parmi les actives hebdo avec mailles : celle avec la **date de situation la plus récente**) ; noter **date de situation**, **seuil**, **point bas** pour contrôle croisé avec la **ligne de contexte** sous le titre **Projection de trésorerie** | ☐ |
@@ -45,8 +45,8 @@ Pour la **ligne verticale** « situation », le **plein / pointillé** (constat�
 
 | Pas | Action (manuelle) | Contrôles (observer) | OK | Observations |
 |-----|-------------------|----------------------|----|----------------|
-| M1 | Ouvrir **Comptabilité > Projection > Trésorerie > Projections de trésorerie > Accueil graphique** **ou** **Comptabilité > Analyse > … > Trajectoire (Analyse)** | Le **graphique** s’affiche **directement** ; encadré **Projection de trésorerie** avec une **ligne de contexte** commençant par **Trajectoire de référence** (Situation, Seuil, Point bas) ; pas de libellés techniques type spec / fallback ; pas d’erreur bloquante ; sous **Trésorerie**, le dossier **Projections de trésorerie** regroupe **Accueil graphique** (lecture) et **Projections** (liste atelier) | ☐ | |
-| M2 | Lire la **ligne de contexte** sous **Projection de trésorerie** (parcours Accueil graphique) ou le sous-titre (Trajectoire Analyse) | **Situation**, **seuil** et **point bas** (si présents) sont cohérents avec la projection de référence attendue pour la société (règle documentée en SPEC, usage interne) | ☐ | |
+| M1 | Ouvrir **Comptabilité > Projection de trésorerie > Cash Flow** **ou** **Comptabilité > Analyse > … > Trajectoire (Analyse)** | Le **graphique** s’affiche **directement** ; encadré **Cash Flow** avec une **ligne de contexte** commençant par **Trajectoire de référence** (Situation, Seuil, Point bas) ; pas de libellés techniques type spec / fallback ; pas d’erreur bloquante ; le menu **Projection de trésorerie** regroupe **Cash Flow** (lecture) et **Cash Guards** (liste / configuration) | ☐ | |
+| M2 | Lire la **ligne de contexte** sous **Cash Flow** (parcours **Cash Flow**) ou le sous-titre (Trajectoire Analyse) | **Situation**, **seuil** et **point bas** (si présents) sont cohérents avec la projection de référence attendue pour la société (règle documentée en SPEC, usage interne) | ☐ | |
 | M3 | Vérifier la présence du **point bas** dans la ligne de contexte (si données) | **Point bas** (montant + date) et/ou **message d’information** affichés lorsque la courbe et les calculs le permettent ; pas de ligne vide alors que la courbe est chargée | ☐ | |
 | M4 | Regarder la **courbe** principale | **Une seule** trajectoire de solde dans le temps ; pas deux courbes « concurrentes » ; pas de chute artificielle à zéro sur le constaté | ☐ | |
 | M5 | Repérer la **ligne verticale** « situation » | **Cible** : ligne verticale visible ; à gauche **constaté**, à droite **projeté**. **Acceptable** : date de situation claire dans le sous-titre + *RECETTE_VUE_GRAPH.md* si Graph native seule — noter la réserve. | ☐ | |
@@ -96,7 +96,7 @@ Après **M10** : trier par date ; segments **Constaté** puis **Projeté** ; pas
 
 **Action** : pour la société courante, désactiver ou archiver toutes les projections hebdomadaires avec mailles **ou** ne laisser que des projections sans mailles calculées ; ouvrir **Trajectoire de trésorerie** (menu nominal).
 
-**Contrôle** : message **clair** (pas de courbe vide trompeuse) invitant à créer ou actualiser une projection dans **Projection > Trésorerie > Projections de trésorerie > Projections**.
+**Contrôle** : message **clair** (pas de courbe vide trompeuse) invitant à créer ou actualiser une projection dans **Comptabilité > Projection de trésorerie > Cash Guards**.
 
 | OK | Observations |
 |----|----------------|
