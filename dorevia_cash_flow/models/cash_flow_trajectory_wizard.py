@@ -74,6 +74,13 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
         currency_field="currency_id",
         readonly=True,
     )
+    comfort_threshold_amount = fields.Monetary(
+        string="Seuil de confort",
+        compute="_compute_comfort_threshold_amount",
+        currency_field="currency_id",
+        readonly=True,
+        help="Montant aligné sur Cash Guard : seuil d'alerte × (1 + taux de confort %).",
+    )
     currency_id = fields.Many2one(
         "res.currency",
         related="guard_id.currency_id",
@@ -98,6 +105,14 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
         "wizard_id",
         string="Points",
     )
+
+    @api.depends("guard_id", "guard_id.alert_threshold", "guard_id.comfort_threshold_rate")
+    def _compute_comfort_threshold_amount(self):
+        for wiz in self:
+            g = wiz.guard_id
+            wiz.comfort_threshold_amount = (
+                g._comfort_threshold_amount() if g else 0.0
+            )
 
     @api.depends("guard_id", "guard_id.situation_date", "guard_id.company_id")
     def _compute_chart_bounds(self):
@@ -139,60 +154,107 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
                 wiz.info_message = ""
 
     @api.model
-    def _resolve_reference_guard(self):
-        """Projection Cash Guard de référence pour la société courante (V1.1)."""
-        company = self.env.company
+    def _cash_flow_chart_isolation_env(self):
+        """Contexte minimal pour le graphique de référence (Accueil / Trajectoire Analyse).
+
+        Évite que ``active_id``, ``active_ids``, ``default_*`` ou autres clés de navigation
+        orientent la résolution ou les ``create`` d'assistant : la courbe de référence ne
+        doit pas dépendre du formulaire ouvert par l'utilisateur.
+        """
+        ctx = {}
+        for key in ("lang", "tz", "uid"):
+            if key in self.env.context:
+                ctx[key] = self.env.context[key]
+        if "allowed_company_ids" in self.env.context:
+            ctx["allowed_company_ids"] = self.env.context["allowed_company_ids"]
+        else:
+            ctx["allowed_company_ids"] = [self.env.company.id]
+        return self.env(context=ctx)
+
+    @api.model
+    def _resolve_reference_guard(self, env=None):
+        """Projection Cash Guard de référence pour la société courante (V1.1).
+
+        Priorité à une projection avec ``is_system_reference`` (active, hebdomadaire, mailles).
+        Sinon heuristique documentée SPEC § 5.5 (actif, hebdo, mailles, tri ``situation_date``).
+
+        :param env: environnement à utiliser (ex. ``_cash_flow_chart_isolation_env()``) ;
+            défaut ``self.env``.
+        """
+        env = env or self.env
+        company = env.company
+        domain_system = [
+            ("company_id", "=", company.id),
+            ("active", "=", True),
+            ("periodicity", "=", "week"),
+            ("is_system_reference", "=", True),
+        ]
+        system_candidates = env["dorevia.cash.guard"].search(
+            domain_system, order="write_date desc, id desc"
+        )
+        for guard in system_candidates:
+            if guard.weekly_line_ids:
+                return guard
+
         domain = [
             ("company_id", "=", company.id),
             ("active", "=", True),
             ("periodicity", "=", "week"),
         ]
-        candidates = self.env["dorevia.cash.guard"].search(
+        candidates = env["dorevia.cash.guard"].search(
             domain, order="situation_date desc, write_date desc, id desc"
         )
         for guard in candidates:
             if guard.weekly_line_ids:
                 return guard
-        return self.env["dorevia.cash.guard"].browse()
+        return env["dorevia.cash.guard"].browse()
 
     @api.model
     def action_open_reference_trajectory(self):
         """Parcours nominal menu : courbe immédiate sans sélection utilisateur (V1.1)."""
-        company = self.env.company
-        guard = self._resolve_reference_guard()
+        iso_env = self._cash_flow_chart_isolation_env()
+        company = iso_env.company
+        guard = self._resolve_reference_guard(iso_env)
         if not guard:
             raise UserError(
                 _(
                     "Aucune projection hebdomadaire active avec des lignes calculées n'a été trouvée "
                     "pour la société « %(company)s ». "
                     "Veuillez créer ou actualiser une projection de trésorerie dans "
-                    "Projection > Trésorerie > Projections de trésorerie.",
+                    "Projection > Trésorerie > Projections de trésorerie > Projections.",
                     company=company.display_name,
                 )
             )
-        wiz = self.create({"company_id": company.id, "guard_id": guard.id})
-        return wiz._prepare_chart_action()
+        wiz = iso_env["dorevia.cash.flow.trajectory.wizard"].create(
+            {"company_id": company.id, "guard_id": guard.id}
+        )
+        return wiz._prepare_chart_action({"trajectory_mode": "reference"})
 
     @api.model
     def action_open_guard_cockpit(self):
         """Accueil menu Projection : trajectoire de référence + raccourcis atelier (lecture seule).
 
-        Même résolution de projection et même graphique que le menu Analyse ; les actions
-        d'atelier ouvrent Cash Guard sans dupliquer la logique de courbe.
+        Cible : projection **système** taguée référence (`is_system_reference`, ticket impl. Guard) ;
+        tant qu'elle n'existe pas, même résolution heuristique que `action_open_reference_trajectory` / SPEC § 5.5.
+
+        Même graphique que le menu Analyse ; les actions d'atelier ouvrent Cash Guard sans dupliquer la logique de courbe.
         """
-        company = self.env.company
-        guard = self._resolve_reference_guard()
+        iso_env = self._cash_flow_chart_isolation_env()
+        company = iso_env.company
+        guard = self._resolve_reference_guard(iso_env)
         if not guard:
             raise UserError(
                 _(
                     "Aucune projection hebdomadaire active avec des lignes calculées n'a été trouvée "
                     "pour la société « %(company)s ». "
-                    "Créez ou actualisez une projection depuis Projection > Trésorerie > Projections de trésorerie.",
+                    "Créez ou actualisez une projection depuis Projection > Trésorerie > Projections de trésorerie > Projections.",
                     company=company.display_name,
                 )
             )
-        wiz = self.create({"company_id": company.id, "guard_id": guard.id})
-        action = wiz._prepare_chart_action()
+        wiz = iso_env["dorevia.cash.flow.trajectory.wizard"].create(
+            {"company_id": company.id, "guard_id": guard.id}
+        )
+        action = wiz._prepare_chart_action({"trajectory_mode": "reference"})
         action.setdefault("params", {})
         action["params"]["cockpit"] = True
         action["params"]["guard_id"] = guard.id
@@ -221,14 +283,14 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
                 _(
                     "Seules les projections à périodicité « Semaine » sont prises en charge pour "
                     "la trajectoire de trésorerie. Ouvrez ou créez une projection hebdomadaire dans "
-                    "Projection > Trésorerie > Projections de trésorerie."
+                    "Projection > Trésorerie > Projections de trésorerie > Projections."
                 )
             )
         if not guard.weekly_line_ids:
             raise UserError(
                 _(
                     "Aucune maille de projection n'est disponible pour ce document. "
-                    "Ouvrez la projection dans Projection > Trésorerie > Projections de trésorerie "
+                    "Ouvrez la projection dans Projection > Trésorerie > Projections de trésorerie > Projections "
                     "et actualisez le calcul avant d'afficher la trajectoire."
                 )
             )
@@ -303,7 +365,17 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
 
         return rows
 
-    def _prepare_chart_action(self):
+    def _chart_contextualized_kind(self):
+        """Sous-type d'affichage pour le mode contextualisé (bandeau client)."""
+        self.ensure_one()
+        guard = self.guard_id
+        if not guard:
+            return "projection"
+        if "include_simulation" in guard._fields and guard.include_simulation:
+            return "simulation"
+        return "projection"
+
+    def _prepare_chart_action(self, extra_chart_params=None):
         self.ensure_one()
         self._ensure_guard_eligible()
         self.point_ids.unlink()
@@ -312,13 +384,23 @@ class DoreviaCashFlowTrajectoryWizard(models.TransientModel):
             vals["wizard_id"] = self.id
             Point.create(vals)
         self.invalidate_recordset(["point_ids"])
+        extra = dict(extra_chart_params or {})
+        trajectory_mode = extra.pop("trajectory_mode", "contextualized")
+        params = {"wizard_id": self.id, "trajectory_mode": trajectory_mode}
+        if trajectory_mode == "contextualized":
+            params["contextualized_kind"] = self._chart_contextualized_kind()
+        params.update(extra)
+        if trajectory_mode == "reference":
+            chart_name = _("Trajectoire de référence")
+        elif params.get("contextualized_kind") == "simulation":
+            chart_name = _("Trajectoire de simulation")
+        else:
+            chart_name = _("Trajectoire contextualisée")
         return {
             "type": "ir.actions.client",
             "tag": "dorevia_cash_flow_trajectory_chart",
-            "name": _("Trajectoire de trésorerie"),
-            "params": {
-                "wizard_id": self.id,
-            },
+            "name": chart_name,
+            "params": params,
             "target": "current",
         }
 

@@ -17,6 +17,11 @@
                 <field name="forecast_final_balance" string="Projection finale"/>
                 <field name="forecast_min_balance" string="Point bas"/>
                 <field name="risk_status"/>
+                <field
+                    name="is_system_reference"
+                    optional="hide"
+                    groups="dorevia_cash_guard.group_cash_guard_manager"
+                />
             </list>
         </field>
     </record>
@@ -34,6 +39,13 @@
                 <separator/>
                 <filter name="filter_active" string="Actifs" domain="[('active', '=', True)]"/>
                 <filter name="filter_archived" string="Archivés" domain="[('active', '=', False)]"/>
+                <separator groups="dorevia_cash_guard.group_cash_guard_manager"/>
+                <filter
+                    name="filter_system_reference"
+                    string="Référence système"
+                    domain="[('is_system_reference', '=', True)]"
+                    groups="dorevia_cash_guard.group_cash_guard_manager"
+                />
             </search>
         </field>
     </record>
@@ -116,6 +128,10 @@
                             <field name="date_from"/>
                             <field name="date_to"/>
                             <field name="periodicity"/>
+                            <field
+                                name="is_system_reference"
+                                groups="dorevia_cash_guard.group_cash_guard_manager"
+                            />
                             <field name="alert_threshold"/>
                             <field name="comfort_threshold_rate"/>
                             <field name="risk_status" readonly="1"/>
@@ -340,7 +356,7 @@
     </record>
 
     <record id="action_dorevia_cash_guard" model="ir.actions.act_window">
-        <field name="name">Projections de trésorerie</field>
+        <field name="name">Projections</field>
         <field name="res_model">dorevia.cash.guard</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_dorevia_cash_guard_search"/>

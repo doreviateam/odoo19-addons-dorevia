@@ -15,7 +15,7 @@
 | **Point bas** | Calculé **exclusivement** sur les points **effectivement affichés** dans la courbe. `guard.forecast_min_balance` / `min_balance_date` : **contrôle** ou tests uniquement, pas source d’affichage du point bas du rapport. |
 | **Seuil d’alerte** | Afficher dans le graph **si** la vue Graph le permet **sans complexifier** la V1 (ex. mesure secondaire). **À défaut** (ou en complément) : bandeau / en-tête du wizard avec seuil + point bas. **Priorité V1** : courbe lisible, point bas, séparation constaté / projeté. |
 | **Sécurité** | Même périmètre que la **lecture des projections Cash Guard** : groupe **`dorevia_cash_guard.group_cash_guard_user`** pour le menu et l’accès aux transients. Pas d’élargissement aux seuls utilisateurs comptables sans ce groupe tant que les droits ne sont pas repris en revue produit. |
-| **Recalcul** | **Interdit** : `dorevia_cash_flow` ne doit **jamais** appeler automatiquement `action_recompute_projection()`. Si `weekly_line_ids` est vide ou manifestement obsolète : **message** invitant l’utilisateur à ouvrir le document dans **Projections de trésorerie** (Cash Guard) et à y déclencher le recalcul. |
+| **Recalcul** | **Interdit** : `dorevia_cash_flow` ne doit **jamais** appeler automatiquement `action_recompute_projection()`. Si `weekly_line_ids` est vide ou manifestement obsolète : **message** invitant l’utilisateur à ouvrir le document dans **Projections** (liste atelier : **Projection > Trésorerie > Projections de trésorerie > Projections**, Cash Guard) et à y déclencher le recalcul. |
 | **Extensibilité** | Le transient `dorevia.cash.flow.trajectory.point` inclut `series_key`, `series_label`, `series_type`, `fiscal_week_index` pour préparer V2+ **sans** ajouter de séries comparatives en V1 (voir § 2.3.1). |
 
 ---
@@ -122,7 +122,7 @@ En V1, la vue Graph n’emploie **pas** `segment` comme dimension de série (voi
 ### 2.4 Sécurité
 
 - **Règles d’accès** : droits CRUD sur les transients réservés aux utilisateurs autorisés à utiliser le rapport (même périmètre que Cash Guard en lecture).
-- **Groupes (V1 validé)** : menu `ir.ui.menu`, actions et modèles `dorevia.cash.flow.*` — **`groups="dorevia_cash_guard.group_cash_guard_user"`** (identique à la lecture des **Projections de trésorerie**). Pas d’accès élargi aux seuls groupes comptables génériques sans ce groupe en V1.
+- **Groupes (V1 validé)** : menu `ir.ui.menu`, actions et modèles `dorevia.cash.flow.*` — **`groups="dorevia_cash_guard.group_cash_guard_user"`** (identique à l’accès aux documents **Projections** / Cash Guard). Pas d’accès élargi aux seuls groupes comptables génériques sans ce groupe en V1.
 
 ---
 
@@ -237,7 +237,7 @@ Le modèle `dorevia.cash.guard` autorise `periodicity` ∈ `week` / `month` / `q
 | --- | --- |
 | Semaine constatée sans écriture | `_compute_bank_balance_at_date` retourne quand même un solde (souvent plat) — **point affiché**. |
 | Aucune maille projetée dans l’horizon (donnée vide) | Afficher message « Pas de mailles projetées pour cet horizon » + constaté seul si applicable. |
-| `weekly_line_ids` vide ou données manifestement absentes | **Aucun** appel à `guard.action_recompute_projection()` depuis `dorevia_cash_flow`. Afficher un **message explicite** invitant l’utilisateur à ouvrir le document dans **Projections de trésorerie** (Cash Guard) et à y lancer le recalcul / actualisation. Ne pas ouvrir de vue Graph vide sans explication. |
+| `weekly_line_ids` vide ou données manifestement absentes | **Aucun** appel à `guard.action_recompute_projection()` depuis `dorevia_cash_flow`. Afficher un **message explicite** invitant l’utilisateur à ouvrir le document dans **Projections** (**Projection > Trésorerie > Projections de trésorerie > Projections**, Cash Guard) et à y lancer le recalcul / actualisation. Ne pas ouvrir de vue Graph vide sans explication. |
 
 ---
 
@@ -290,6 +290,10 @@ Doctrine transverse Cash (positionnement vs Cash Guard et simulation) : **`../..
 
 **Ouverture menu** : `ir.actions.server` exécute `action_open_reference_trajectory()` — création d’un transient wizard avec le `guard_id` résolu, génération des `dorevia.cash.flow.trajectory.point`, retour `ir.actions.client` vers le graphique de pilotage (identique au flux « Afficher la trajectoire » après sélection manuelle).
 
+**Isolation contexte (navigation) — mode référence** : l’ouverture **Accueil graphique** / **Trajectoire (Analyse)** s’exécute dans un **environnement minimal** (`_cash_flow_chart_isolation_env`) pour la **résolution** de la projection et le `create` de l’assistant : pas de réutilisation d’`active_id`, `active_ids`, `default_*` à cette étape. Le client OWL ne lit que `params.wizard_id` (pas de repli sur `context.default_wizard_id`). Les paramètres d’action incluent **`trajectory_mode: reference`** pour ce parcours.
+
+**Mode contextualisé / hypothèse** : depuis l’assistant (**Afficher la trajectoire** après choix d’une projection), l’action client porte **`trajectory_mode: contextualized`** et, si le document a le mode simulation actif (`include_simulation` lorsque le module simulation est présent), **`contextualized_kind: simulation`** sinon **`projection`**. Le bandeau et le sous-titre du graphique rappellent explicitement que ce n’est **pas** la trajectoire de référence système. Toute évolution « voir cette simulation en grand » / « comparer à la référence » reste un parcours **nommé** distinct.
+
 **Absence de candidat** : `UserError` avec message orientant vers la création ou l’actualisation d’une projection dans Cash Guard — **aucune** courbe vide.
 
 **Parcours secondaire** : `ir.actions.act_window` sur le wizard (formulaire) + bouton **Changer de projection** côté client action — **aucun** recalcul Cash Guard automatique depuis `dorevia_cash_flow`.
@@ -330,7 +334,7 @@ Doctrine transverse Cash (positionnement vs Cash Guard et simulation) : **`../..
 ## 8. Points ouverts (implémentation)
 
 1. **Parent du menu « Comptabilité > Analyse »** : implémentation V1 retenue — **`account.menu_finance_reports`** (menu standard *Reporting* / traduction souvent *Analyse*). Ajuster le `parent` dans `views/menus.xml` si une personnalisation du projet place les rapports d’analyse ailleurs.
-2. **Accueil graphique sous Projection > Trésorerie** : entrée **Accueil graphique** dans `views/cash_guard_bridge_menus.xml` (parent menu **Trésorerie** défini dans `dorevia_cash_guard`) — même résolution de référence et même client action que la trajectoire ; paramètre `cockpit` sur l’action client pour masquer les contrôles d’audit sur le graphique et afficher les raccourcis atelier (sans second moteur graphique). Menus **Analyse** renommés **Trajectoire (Analyse)** / **Trajectoire — choix projection (Analyse)** (raccourcis secondaires, séquence basse dans la liste).
+2. **Accueil graphique sous Projection > Trésorerie > Projections de trésorerie** : entrée **Accueil graphique** dans `views/cash_guard_bridge_menus.xml` (parent = menu hub **`menu_dorevia_cash_guard_projections_hub`** dans `dorevia_cash_guard`) — même résolution de référence et même client action que la trajectoire ; paramètre `cockpit` sur l’action client pour masquer les contrôles d’audit sur le graphique et afficher les raccourcis atelier (sans second moteur graphique). Menus **Analyse** renommés **Trajectoire (Analyse)** / **Trajectoire — choix projection (Analyse)** (raccourcis secondaires, séquence basse dans la liste).
 
 Les arbitrages groupes, périodicité, rendu Graph vs OWL et recalcul automatique sont **clos** pour la V1 (section « Décisions validées V1 »).
 

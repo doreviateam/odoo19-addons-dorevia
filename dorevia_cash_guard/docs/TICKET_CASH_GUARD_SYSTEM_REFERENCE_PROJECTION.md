@@ -16,11 +16,11 @@
 
 - **Non** : imposer à l’utilisateur métier, dans le **parcours nominal**, de **créer**, **activer** ou **choisir manuellement** une projection pour que l’**Accueil graphique** fonctionne.  
 - **Non** : que `dorevia_cash_flow` **fabrique** ou **installe** silencieusement un document `dorevia.cash.guard` de référence sans cadre explicite côté Guard (pas de « magie » hors périmètre Guard).  
-- **Oui** : la **projection de référence** est une **donnée système** (ou pilotée **administrateur**), **hebdomadaire**, avec **date de situation**, **mailles** à jour, **identifiable** comme telle ; l’utilisateur métier ouvre **Projection > Trésorerie > Accueil graphique** et voit **directement** la trajectoire.
+- **Oui** : la **projection de référence** est une **donnée système** (ou pilotée **administrateur**), **hebdomadaire**, avec **date de situation**, **mailles** à jour, **identifiable** comme telle ; l’utilisateur métier ouvre **Projection > Trésorerie > Projections de trésorerie > Accueil graphique** et voit **directement** la trajectoire.
 
 **Parcours nominal attendu** :
 
-1. Ouvrir **Projection > Trésorerie > Accueil graphique** ;  
+1. Ouvrir **Projection > Trésorerie > Projections de trésorerie > Accueil graphique** ;  
 2. Voir la trajectoire de référence.
 
 Si la référence **n’existe pas encore** : message clair + **remédiation** hors parcours métier courant (initialisation système, cron, assistant admin, ou action support) — **pas** « allez fabriquer votre référence à la main » comme étape obligatoire du même parcours.
@@ -75,7 +75,7 @@ Pistes validées comme **périmètre à cadrer techniquement** (une ou plusieurs
 
 ## Messages utilisateur — actuel vs cible
 
-**Tant que le ticket n’est pas implémenté**, les messages peuvent encore orienter vers l’atelier (**Projection > Trésorerie > Projections de trésorerie**) — acceptable transitoirement.
+**Tant que le ticket n’est pas implémenté**, les messages peuvent encore orienter vers l’atelier (**Projection > Trésorerie > Projections de trésorerie > Projections**) — acceptable transitoirement.
 
 **Cible** après livraison : ne **pas** faire porter la responsabilité à l’utilisateur métier pour un défaut de **donnée système**. Exemple de formulation :
 

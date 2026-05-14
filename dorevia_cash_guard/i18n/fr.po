@@ -49,8 +49,9 @@ msgstr "Flux complémentaires"
 
 #. module: dorevia_cash_guard
 #: model:ir.actions.act_window,name:dorevia_cash_guard.action_dorevia_cash_guard
-msgid "Projections de trésorerie"
-msgstr "Projections de trésorerie"
+#: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_points
+msgid "Projections"
+msgstr "Projections"
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
@@ -79,8 +80,12 @@ msgstr "Réinitialiser"
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
-msgid "Remet les dates sur la situation à date et une fin à +90 jours, puis recalcule la projection."
-msgstr "Remet les dates sur la situation à date et une fin à +90 jours, puis recalcule la projection."
+msgid ""
+"Remet les dates sur la situation à date et une fin à +90 jours, puis "
+"recalcule la projection."
+msgstr ""
+"Remet les dates sur la situation à date et une fin à +90 jours, puis "
+"recalcule la projection."
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
@@ -108,8 +113,12 @@ msgstr "Le journal suivi doit être de type Banque ou Caisse."
 #. module: dorevia_cash_guard
 #: code:addons/dorevia_cash_guard/models/cash_guard.py:0
 #, python-format
-msgid "Chaque journal doit appartenir à la même société que le document de projection."
-msgstr "Chaque journal doit appartenir à la même société que le document de projection."
+msgid ""
+"Chaque journal doit appartenir à la même société que le document de "
+"projection."
+msgstr ""
+"Chaque journal doit appartenir à la même société que le document de "
+"projection."
 
 #. module: dorevia_cash_guard
 #: code:addons/dorevia_cash_guard/models/cash_guard.py:0
@@ -137,16 +146,19 @@ msgstr "Seul un manager Cash Guard peut rouvrir un document de projection."
 
 #. module: dorevia_cash_guard
 #: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_root
+#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__projected_balance
 msgid "Projection"
 msgstr "Projection"
 
 #. module: dorevia_cash_guard
 #: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_treasury_root
+#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
 msgid "Trésorerie"
 msgstr "Trésorerie"
 
 #. module: dorevia_cash_guard
-#: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_points
+#: model:ir.ui.menu,name:dorevia_cash_guard.menu_dorevia_cash_guard_projections_hub
 msgid "Projections de trésorerie"
 msgstr "Projections de trésorerie"
 
@@ -197,6 +209,7 @@ msgstr "Cash Guard soldes multi-société utilisateur"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__weekly_line_ids
+#: model:ir.model,name:dorevia_cash_guard.model_dorevia_cash_guard_week
 msgid "Détail de projection"
 msgstr "Détail de projection"
 
@@ -218,21 +231,17 @@ msgstr "Date de fin"
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,help:dorevia_cash_guard.field_dorevia_cash_guard__situation_date
 msgid ""
-"Calculée automatiquement : date du jour, bornée entre la date de début et "
-"la date de fin. Référence pour le solde de trésorerie constaté."
+"Calculée automatiquement : date du jour, bornée entre la date de début et la "
+"date de fin. Référence pour le solde de trésorerie constaté."
 msgstr ""
-"Calculée automatiquement : date du jour, bornée entre la date de début et "
-"la date de fin. Référence pour le solde de trésorerie constaté."
+"Calculée automatiquement : date du jour, bornée entre la date de début et la "
+"date de fin. Référence pour le solde de trésorerie constaté."
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
+#: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_week__period_type__current
 msgid "Situation"
 msgstr "Situation"
-
-#. module: dorevia_cash_guard
-#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
-msgid "Projection"
-msgstr "Projection"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__observed_balance
@@ -253,11 +262,6 @@ msgstr "Projection minimum"
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__min_balance_date
 msgid "Date du point bas projeté"
 msgstr "Date du point bas projeté"
-
-#. module: dorevia_cash_guard
-#: model:ir.model,name:dorevia_cash_guard.model_dorevia_cash_guard_week
-msgid "Détail de projection"
-msgstr "Détail de projection"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__periodicity
@@ -305,11 +309,6 @@ msgid "Solde"
 msgstr "Solde"
 
 #. module: dorevia_cash_guard
-#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__projected_balance
-msgid "Projection"
-msgstr "Projection"
-
-#. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__margin_amount
 msgid "Couverture"
 msgstr "Couverture"
@@ -331,6 +330,7 @@ msgstr "Décaissements projetés (factures)"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_week__risk_status
+#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__display_status
 msgid "Statut"
 msgstr "Statut"
 
@@ -338,11 +338,6 @@ msgstr "Statut"
 #: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_week__period_type__historical
 msgid "Constaté"
 msgstr "Constaté"
-
-#. module: dorevia_cash_guard
-#: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_week__period_type__current
-msgid "Situation"
-msgstr "Situation"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_week__period_type__forecast
@@ -366,16 +361,7 @@ msgid "Type"
 msgstr "Type"
 
 #. module: dorevia_cash_guard
-#: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__display_status
-msgid "Statut"
-msgstr "Statut"
-
-#. module: dorevia_cash_guard
 #: model:ir.model.fields.selection,name:dorevia_cash_guard.selection__dorevia_cash_guard_period_move__display_status__simulation
-msgid "Simulation"
-msgstr "Simulation"
-
-#. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard_period_move__is_simulation
 msgid "Simulation"
 msgstr "Simulation"
@@ -437,11 +423,6 @@ msgstr "Contexte"
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
-msgid "Trésorerie"
-msgstr "Trésorerie"
-
-#. module: dorevia_cash_guard
-#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
 msgid "Documents de la période"
 msgstr "Documents de la période"
 
@@ -457,8 +438,10 @@ msgstr "Impact net"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,help:dorevia_cash_guard.field_dorevia_cash_guard_week__period_documents_impact_net
-msgid "Somme des impacts (factures et simulations) des documents de la période."
-msgstr "Somme des impacts (factures et simulations) des documents de la période."
+msgid ""
+"Somme des impacts (factures et simulations) des documents de la période."
+msgstr ""
+"Somme des impacts (factures et simulations) des documents de la période."
 
 #. module: dorevia_cash_guard
 #: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_week_form
@@ -467,15 +450,15 @@ msgstr "Total Impact"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,field_description:dorevia_cash_guard.field_dorevia_cash_guard__total_documents_impact
+#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
 msgid "Total impact"
 msgstr "Total impact"
 
 #. module: dorevia_cash_guard
 #: model:ir.model.fields,help:dorevia_cash_guard.field_dorevia_cash_guard__total_documents_impact
-msgid "Somme des impacts des documents réels et simulés sur l'ensemble de la projection."
-msgstr "Somme des impacts des documents réels et simulés sur l'ensemble de la projection."
-
-#. module: dorevia_cash_guard
-#: model_terms:ir.ui.view,arch_db:dorevia_cash_guard.view_dorevia_cash_guard_form
-msgid "Total impact"
-msgstr "Total impact"
+msgid ""
+"Somme des impacts des documents réels et simulés sur l'ensemble de la "
+"projection."
+msgstr ""
+"Somme des impacts des documents réels et simulés sur l'ensemble de la "
+"projection."

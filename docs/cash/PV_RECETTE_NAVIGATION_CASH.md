@@ -7,9 +7,9 @@
 | Recette | Navigation Cash apres reorganisation des menus |
 | Date d'execution | 2026-05-13 |
 | Base Odoo | `tenant_o8` |
-| Branche / commit | `feature/shop-mvp22-visible-wave1` — navigation menus **21368ad** ; **GO** recette ; preuves versionnées dans le même dépôt (voir captures ci-dessous) |
+| Branche / commit | `feature/shop-mvp22-visible-wave1` — navigation menus (hub **Projections de trésorerie**) ; **GO** recette initiale 2026-05-13 ; **note** : captures du 2026-05-13 = hiérarchie plate sous Trésorerie ; après livraison hub, prévoir **nouvelle passe** + captures si besoin |
 | Modules controles | `dorevia_cash_flow`, `dorevia_cash_guard`, `base_account_budget` |
-| Versions attendues | Cash Flow `19.0.2.2.0`, Cash Guard `19.0.5.3.9` |
+| Versions attendues | Cash Flow `19.0.2.3.0`, Cash Guard `19.0.5.4.0` |
 | Verdict | **GO** |
 
 ## Pre-requis verifies
@@ -18,8 +18,8 @@
 | --- | --- |
 | Mise a jour `dorevia_cash_guard,dorevia_cash_flow` | OK - commande `-u dorevia_cash_guard,dorevia_cash_flow` executee sans erreur bloquante |
 | Backend Odoo recharge | OK - conteneur Odoo redemarre |
-| Version `dorevia_cash_flow` installee | OK - `19.0.2.2.0` |
-| Version `dorevia_cash_guard` installee | OK - `19.0.5.3.9` |
+| Version `dorevia_cash_flow` installee | OK - `19.0.2.3.0` (attendu) |
+| Version `dorevia_cash_guard` installee | OK - `19.0.5.4.0` (attendu) |
 | Droits utilisateur Cash Guard | OK - utilisateur `admin` membre du groupe `Utilisateur Cash Guard` |
 | Projection de reference disponible | OK - `Projection 1`, id `1409`, active, periodique semaine, date de situation `2026-05-13`, 13 mailles hebdomadaires |
 
@@ -28,12 +28,12 @@
 | Point de controle | Resultat |
 | --- | --- |
 | Menu principal `Comptabilite > Projection > Tresorerie` | OK - dossier `Projection`, sous-dossier `Tresorerie` visibles cote utilisateur |
-| Ordre des entrees sous `Tresorerie` | OK - `Accueil graphique` en sequence 10, `Projections de tresorerie` en sequence 20 |
+| Ordre des entrees sous `Tresorerie` | OK - dossier **Projections de tresorerie** (sequence 10) ; sous ce dossier : **Accueil graphique** (10) puis **Projections** / liste atelier (20) |
 | `Accueil graphique` | OK - ouverture directe de la trajectoire de reference, sans selection manuelle obligatoire |
 | Bandeau de lecture | OK - titre `Accueil graphique`, mention trajectoire de reference, message de lecture non modifiable et boutons atelier |
 | Donnees affichees | OK - projection `Projection 1`, date de situation `2026-05-13`, seuil d'alerte `1 800,00 EUR`, point bas affiche |
 | Lecture graphique | OK - legende presente : constate en trait plein, projete en pointille, ligne date de situation, ligne seuil d'alerte |
-| Atelier Cash Guard | OK - `Projections de tresorerie` ouvre la liste atelier Cash Guard avec `Projection 1` |
+| Atelier Cash Guard | OK - **Projections** (liste) ouvre l'atelier avec `Projection 1` |
 | Entrees Analyse secondaires | OK - `Analyse > Gestion > Trajectoire (Analyse)` et `Analyse > Gestion > Trajectoire - choix projection (Analyse)` visibles |
 | `Trajectoire (Analyse)` | OK - ouvre la meme trajectoire avec controles d'audit `Changer de projection` et `Liste des points` |
 | `Trajectoire - choix projection (Analyse)` | OK - ouvre l'assistant secondaire de choix de projection |
@@ -42,8 +42,9 @@
 
 La navigation est comprehensible selon le cadrage demande :
 
-> Je lis la situation dans **Accueil graphique**.  
-> Je travaille les hypotheses dans **Projections de tresorerie**.  
+> Je lis la situation dans **Accueil graphique** (sous **Projections de tresorerie**).  
+> Je travaille les hypotheses dans **Projections** (liste atelier, meme sous-menu).  
+> Je gere les budgets sous **Projection > Budgets** (hors Tresorerie).  
 > J'utilise Analyse pour audit / diagnostic.
 
 ## Details observes
@@ -55,27 +56,24 @@ Captures conservees :
 
 ### Accueil graphique
 
-Parcours controle : **Comptabilite > Projection > Tresorerie > Accueil graphique**.
+Parcours controle : **Comptabilite > Projection > Tresorerie > Projections de tresorerie > Accueil graphique**.
 
 Resultat observe :
 
-- titre : `Accueil graphique` ;
-- sous-titre : trajectoire de `reference` ;
+- titre principal encadre : `Projection de trésorerie` ;
+- ligne de contexte : `Trajectoire de référence · Situation : … · Seuil : … · Point bas : …` (formulation métier, sans jargon technique) ;
 - projection resolue automatiquement : `Projection 1` ;
-- date de situation : `2026-05-13` ;
-- seuil d'alerte : `1 800,00 EUR` ;
-- point bas affiche : `0,00 EUR (2026-01-07)` ;
-- controles atelier : `Ouvrir la projection`, `Actualiser la projection`, `Toutes les projections` ;
-- raccourcis audit : `Audit - autre projection`, `Vue Analyse (plein ecran)` ;
+- controles atelier : `Actualiser`, `Ouvrir l'atelier`, `Toutes les projections` ;
+- raccourcis audit : `Vue analyse`, `Audit / autre projection` ;
 - pas de passage obligatoire par l'assistant de selection.
 
 ### Atelier Cash Guard
 
-Parcours controle : **Comptabilite > Projection > Tresorerie > Projections de tresorerie**.
+Parcours controle : **Comptabilite > Projection > Tresorerie > Projections de tresorerie > Projections**.
 
 Resultat observe :
 
-- ouverture de la vue liste `Projections de tresorerie` ;
+- ouverture de la vue liste **Projections** (action liste Cash Guard) ;
 - document `Projection 1` visible ;
 - donnees principales visibles : periodicite `Semaine`, date de situation `13 mai`, seuil `1 800,00`, solde constate `1 740,67`, projection finale `1 840,67`, point bas `1 640,67`, statut `Tension`.
 
@@ -93,7 +91,7 @@ Resultat observe :
 
 **GO**.
 
-La nouvelle organisation est coherente cote utilisateur : le parcours nominal de lecture est bien **Projection > Tresorerie > Accueil graphique**, l'atelier de travail reste **Projections de tresorerie**, et les entrees **Analyse** sont correctement positionnees comme outils d'audit / diagnostic.
+La nouvelle organisation est coherente cote utilisateur : le parcours nominal de lecture est **Projection > Tresorerie > Projections de tresorerie > Accueil graphique** (trajectoire de reference systeme ; heuristique transitoire tant que `is_system_reference` n'est pas livre), l'atelier est **Projections** sous le meme dossier, **Budgets** reste **Projection > Budgets**, et les entrees **Analyse** restent des raccourcis d'audit / diagnostic.
 
 ## Traçabilité dépôt
 

@@ -7,7 +7,8 @@ import { useService } from "@web/core/utils/hooks";
 const W = 920;
 const H = 440;
 const ML = 78;
-const MR = 28;
+/** Marge droite : bandeau pour libellés de seuils (hors zone de lecture de la courbe). */
+const MR = 72;
 const MT = 36;
 const MB = 56;
 
@@ -32,6 +33,45 @@ function formatShortDate(ms) {
     return `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}`;
 }
 
+function formatFrDate(value) {
+    if (!value) {
+        return "";
+    }
+    const s = String(value).slice(0, 10);
+    const ms = parseDate(s);
+    if (!ms) {
+        return String(value);
+    }
+    const dt = new Date(ms);
+    const d = dt.getDate();
+    const m = dt.getMonth() + 1;
+    const y = dt.getFullYear();
+    return `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`;
+}
+
+/** Année de référence du graphique (priorité : date de situation, sinon premier point). */
+function chartReferenceYear(situationDateStr, points) {
+    const yearFrom = (s) => {
+        if (!s) {
+            return null;
+        }
+        const head = String(s).slice(0, 10);
+        const y = parseInt(head.slice(0, 4), 10);
+        return Number.isFinite(y) && y >= 1970 && y <= 2100 ? y : null;
+    };
+    const fromSit = yearFrom(situationDateStr);
+    if (fromSit !== null) {
+        return fromSit;
+    }
+    if (points && points.length) {
+        const fromPt = yearFrom(points[0].anchor_date);
+        if (fromPt !== null) {
+            return fromPt;
+        }
+    }
+    return new Date().getFullYear();
+}
+
 function formatMoney(amount, currencyCode, digits) {
     if (amount === null || amount === undefined || Number.isNaN(amount)) {
         return "";
@@ -45,6 +85,23 @@ function formatMoney(amount, currencyCode, digits) {
         }).format(amount);
     } catch {
         return String(Math.round(amount * 100) / 100);
+    }
+}
+
+/** Montants cockpit / sous-titres métier (séparateurs milliers à la française). */
+function formatMoneyFr(amount, currencyCode, digits) {
+    if (amount === null || amount === undefined || Number.isNaN(amount)) {
+        return "";
+    }
+    try {
+        return new Intl.NumberFormat("fr-FR", {
+            style: "currency",
+            currency: currencyCode || "EUR",
+            maximumFractionDigits: digits,
+            minimumFractionDigits: Math.min(2, digits),
+        }).format(amount);
+    } catch {
+        return formatMoney(amount, currencyCode, digits);
     }
 }
 
@@ -76,7 +133,7 @@ function buildPathD(xs, ys) {
     return d;
 }
 
-function computeLayout(points, situationDateStr, threshold, currencyCode) {
+function computeLayout(points, situationDateStr, alertThreshold, comfortThreshold, currencyCode) {
     const situationMs = parseDate(situationDateStr);
     const times = points.map((p) => parseDate(p.anchor_date)).filter((t) => t !== null);
     const balances = points.map((p) => p.balance ?? 0);
@@ -90,9 +147,13 @@ function computeLayout(points, situationDateStr, threshold, currencyCode) {
     }
     let vMin = Math.min(...balances);
     let vMax = Math.max(...balances);
-    if (threshold !== null && threshold !== undefined && !Number.isNaN(threshold)) {
-        vMin = Math.min(vMin, threshold);
-        vMax = Math.max(vMax, threshold);
+    if (alertThreshold !== null && alertThreshold !== undefined && !Number.isNaN(alertThreshold)) {
+        vMin = Math.min(vMin, alertThreshold);
+        vMax = Math.max(vMax, alertThreshold);
+    }
+    if (comfortThreshold !== null && comfortThreshold !== undefined && !Number.isNaN(comfortThreshold)) {
+        vMin = Math.min(vMin, comfortThreshold);
+        vMax = Math.max(vMax, comfortThreshold);
     }
     if (vMin === vMax) {
         vMin -= 1;
@@ -137,23 +198,74 @@ function computeLayout(points, situationDateStr, threshold, currencyCode) {
                   x: xSit,
                   y1: MT,
                   y2: MT + ch,
-                  labelX: Math.min(xSit + 6, ML + cw - 70),
-                  labelY: MT + 14,
+                  /** Libellé sous l’axe des abscisses, centré sur la ligne (hors zone de tracé). */
+                  labelX: Math.max(ML + 22, Math.min(xSit, ML + cw - 22)),
+                  labelY: MT + ch + 5,
               }
             : null;
 
-    let thresholdLine = null;
-    if (threshold !== null && threshold !== undefined && !Number.isNaN(threshold)) {
-        const yT = yScale(threshold);
-        if (yT >= MT - 2 && yT <= MT + ch + 2) {
-            thresholdLine = {
-                x1: ML,
-                x2: ML + cw,
-                y: yT,
-                labelX: ML + cw - 2,
-                labelY: yT - 6,
-            };
+    let comfortThresholdLine = null;
+    const alertVal =
+        alertThreshold !== null && alertThreshold !== undefined && !Number.isNaN(alertThreshold)
+            ? alertThreshold
+            : null;
+    const comfortVal =
+        comfortThreshold !== null &&
+        comfortThreshold !== undefined &&
+        !Number.isNaN(comfortThreshold)
+            ? comfortThreshold
+            : null;
+    let yComfort = null;
+    if (
+        comfortVal !== null &&
+        (alertVal === null || comfortVal > alertVal + 1e-6)
+    ) {
+        const yC = yScale(comfortVal);
+        if (yC >= MT - 2 && yC <= MT + ch + 2) {
+            yComfort = yC;
         }
+    }
+
+    let yAlert = null;
+    if (alertVal !== null) {
+        const yT = yScale(alertVal);
+        if (yT >= MT - 2 && yT <= MT + ch + 2) {
+            yAlert = yT;
+        }
+    }
+
+    let comfortLabelY = yComfort;
+    let alertLabelY = yAlert;
+    if (
+        yComfort !== null &&
+        yAlert !== null &&
+        Math.abs(yAlert - yComfort) < 22
+    ) {
+        comfortLabelY = yComfort - 10;
+        alertLabelY = yAlert + 10;
+    }
+
+    /** Juste à droite du cadre de tracé (bord « axe » droit du graphique). */
+    const labelX = ML + cw + 2;
+    if (yComfort !== null) {
+        comfortThresholdLine = {
+            x1: ML,
+            x2: ML + cw,
+            y: yComfort,
+            labelX,
+            labelY: comfortLabelY,
+        };
+    }
+
+    let thresholdLine = null;
+    if (yAlert !== null) {
+        thresholdLine = {
+            x1: ML,
+            x2: ML + cw,
+            y: yAlert,
+            labelX,
+            labelY: alertLabelY,
+        };
     }
 
     const yStep = niceStep(vMax - vMin, 5);
@@ -188,6 +300,9 @@ function computeLayout(points, situationDateStr, threshold, currencyCode) {
         hGridLines.push({ x1: ML, x2: ML + cw, y: gy });
     }
 
+    const moneyDigits = vMax - vMin > 500 ? 0 : 2;
+    const BAL_EPS = 0.005;
+
     const vertexMarkers = points.map((p, i) => {
         const seg =
             p.segment === "projected"
@@ -195,14 +310,37 @@ function computeLayout(points, situationDateStr, threshold, currencyCode) {
                 : p.segment === "actual"
                   ? "Constaté"
                   : String(p.segment || "");
-        const bal = formatMoney(p.balance ?? 0, currencyCode, 2);
+        const curr = Number(p.balance ?? 0) || 0;
+        const prevBal = i > 0 ? Number(points[i - 1].balance ?? 0) || 0 : null;
+        const differsFromPrev =
+            prevBal === null ? true : Math.abs(curr - prevBal) > BAL_EPS;
+        const showValueLabel = Math.abs(curr) > BAL_EPS && differsFromPrev;
+        const valueLabel = formatMoney(curr, currencyCode, moneyDigits);
         const lbl = p.label ? ` · ${p.label}` : "";
-        const title = `${p.anchor_date || ""} — ${bal} (${seg})${lbl}`;
+        const title = `${p.anchor_date || ""} — ${formatMoney(curr, currencyCode, 2)} (${seg})${lbl}`;
+        const dx = 6;
+        const dyBelow = 10;
+        let valueLabelX = xs[i] + dx;
+        let valueLabelAnchor = "start";
+        const plotRight = ML + cw;
+        if (valueLabelX > plotRight - 48) {
+            valueLabelX = xs[i] - dx;
+            valueLabelAnchor = "end";
+        }
+        let valueLabelY = ys[i] + dyBelow;
+        if (valueLabelY > MT + ch - 4) {
+            valueLabelY = MT + ch - 4;
+        }
         return {
             cx: xs[i],
             cy: ys[i],
             fill: p.segment === "projected" ? "#5dade2" : "#1b6ec2",
             title,
+            showValueLabel,
+            valueLabel,
+            valueLabelX,
+            valueLabelY,
+            valueLabelAnchor,
         };
     });
 
@@ -211,6 +349,7 @@ function computeLayout(points, situationDateStr, threshold, currencyCode) {
         pathActual,
         pathProjected,
         situationLine,
+        comfortThresholdLine,
         thresholdLine,
         xTicks,
         yTicks,
@@ -233,10 +372,16 @@ export class TrajectoryChartAction extends Component {
             loading: true,
             error: "",
             subtitle: "",
+            modeBanner: "",
+            modeAlertVariant: "warning",
+            trajectoryMode: "contextualized",
+            contextualizedKind: "projection",
+            pageTitle: "Trajectoire de trésorerie",
             viewBox: `0 0 ${W} ${H}`,
             pathActual: "",
             pathProjected: "",
             situationLine: null,
+            comfortThresholdLine: null,
             thresholdLine: null,
             xTicks: [],
             yTicks: [],
@@ -248,6 +393,10 @@ export class TrajectoryChartAction extends Component {
             cockpitMode: false,
             guardId: null,
             cockpitRefreshing: false,
+            /** Repères d’analyse (libellés graphique, légende, valeurs aux ruptures) — masqués par défaut. */
+            showRefChartLabels: false,
+            /** Année affichée au-dessus du graphique (référence projection). */
+            chartHeadingYear: null,
         });
 
         onWillStart(async () => {
@@ -262,14 +411,35 @@ export class TrajectoryChartAction extends Component {
     async loadTrajectory() {
         this.state.loading = true;
         this.state.error = "";
+        this.state.chartHeadingYear = null;
         this.state.cockpitMode = this.isCockpit();
         const params = this.props.action?.params || {};
         this.state.guardId = params.guard_id ?? null;
+        const trajectoryMode = params.trajectory_mode || "contextualized";
+        const contextualizedKind = params.contextualized_kind || "projection";
+        this.state.trajectoryMode = trajectoryMode;
+        this.state.contextualizedKind = contextualizedKind;
+        if (trajectoryMode === "reference") {
+            this.state.modeAlertVariant = "success";
+            this.state.modeBanner =
+                "Trajectoire de référence — pilotage système (vérité cash de référence, non hypothèse utilisateur).";
+            this.state.pageTitle = "Trajectoire de référence";
+        } else if (contextualizedKind === "simulation") {
+            this.state.modeAlertVariant = "warning";
+            this.state.modeBanner =
+                "Trajectoire de simulation — hypothèse ; ne remplace pas la trajectoire de référence système.";
+            this.state.pageTitle = "Trajectoire de simulation";
+        } else {
+            this.state.modeAlertVariant = "warning";
+            this.state.modeBanner =
+                "Trajectoire contextualisée — projection métier sélectionnée ; ne remplace pas la trajectoire de référence système.";
+            this.state.pageTitle = "Trajectoire contextualisée";
+        }
+        if (this.state.cockpitMode && trajectoryMode === "reference") {
+            this.state.modeBanner = "";
+        }
 
-        const wizardId =
-            this.props.action?.params?.wizard_id ??
-            this.props.action?.context?.default_wizard_id ??
-            null;
+        const wizardId = this.props.action?.params?.wizard_id ?? null;
         if (!wizardId) {
             this.state.loading = false;
             this.state.error = "Paramètre assistant manquant (wizard_id).";
@@ -284,6 +454,7 @@ export class TrajectoryChartAction extends Component {
                     "guard_id",
                     "situation_date",
                     "alert_threshold",
+                    "comfort_threshold_amount",
                     "currency_id",
                     "chart_date_end",
                     "fiscal_date_from",
@@ -321,10 +492,19 @@ export class TrajectoryChartAction extends Component {
                 return;
             }
 
+            this.state.chartHeadingYear = chartReferenceYear(wiz.situation_date, pointRecs);
+
+            const comfortRaw = wiz.comfort_threshold_amount;
+            const comfortNum =
+                comfortRaw === false || comfortRaw === null || comfortRaw === undefined
+                    ? null
+                    : Number(comfortRaw);
+
             const layout = computeLayout(
                 pointRecs,
                 wiz.situation_date,
                 wiz.alert_threshold,
+                comfortNum,
                 currencyCode
             );
             if (!layout) {
@@ -353,16 +533,67 @@ export class TrajectoryChartAction extends Component {
             if (w2.info_message) {
                 extra.push(String(w2.info_message));
             }
-            this.state.subtitle = [
-                guardName ? `Projection : ${guardName}` : "",
-                wiz.situation_date ? `Date de situation : ${wiz.situation_date}` : "",
-                wiz.alert_threshold != null
-                    ? `Seuil d'alerte : ${formatMoney(wiz.alert_threshold, currencyCode, 2)}`
-                    : "",
-                ...extra,
-            ]
-                .filter(Boolean)
-                .join(" · ");
+            if (this.state.cockpitMode && trajectoryMode === "reference") {
+                const parts = ["Trajectoire de référence"];
+                if (wiz.situation_date) {
+                    parts.push(`Situation au ${formatFrDate(wiz.situation_date)}`);
+                }
+                if (wiz.alert_threshold != null && !Number.isNaN(wiz.alert_threshold)) {
+                    parts.push(`Alerte : ${formatMoneyFr(wiz.alert_threshold, currencyCode, 2)}`);
+                }
+                const comfortCockpit =
+                    wiz.comfort_threshold_amount !== false &&
+                    wiz.comfort_threshold_amount !== null &&
+                    wiz.comfort_threshold_amount !== undefined
+                        ? Number(wiz.comfort_threshold_amount)
+                        : null;
+                const alertNum = Number(wiz.alert_threshold ?? 0);
+                if (
+                    comfortCockpit !== null &&
+                    !Number.isNaN(comfortCockpit) &&
+                    comfortCockpit > alertNum + 1e-6
+                ) {
+                    parts.push(`Confort : ${formatMoneyFr(comfortCockpit, currencyCode, 2)}`);
+                }
+                if (w2.min_balance_date_on_curve) {
+                    parts.push(
+                        `Point bas : ${formatMoneyFr(w2.min_balance_on_curve ?? 0, currencyCode, 2)} le ${formatFrDate(w2.min_balance_date_on_curve)}`
+                    );
+                }
+                this.state.subtitle = parts.join(" · ");
+            } else {
+                const src =
+                    trajectoryMode === "reference"
+                        ? "Source : référence résolue (pilotage système)"
+                        : contextualizedKind === "simulation"
+                          ? "Source : hypothèse simulation (document)"
+                          : "Source : projection contextualisée (assistant)";
+                this.state.subtitle = [
+                    src,
+                    guardName ? `Projection : ${guardName}` : "",
+                    wiz.situation_date ? `Date de situation : ${wiz.situation_date}` : "",
+                    wiz.alert_threshold != null
+                        ? `Seuil d'alerte : ${formatMoney(wiz.alert_threshold, currencyCode, 2)}`
+                        : "",
+                    (() => {
+                        const c = Number(wiz.comfort_threshold_amount);
+                        const a = Number(wiz.alert_threshold ?? 0);
+                        if (
+                            wiz.comfort_threshold_amount !== false &&
+                            wiz.comfort_threshold_amount !== null &&
+                            wiz.comfort_threshold_amount !== undefined &&
+                            !Number.isNaN(c) &&
+                            c > a + 1e-6
+                        ) {
+                            return `Seuil de confort : ${formatMoney(c, currencyCode, 2)}`;
+                        }
+                        return "";
+                    })(),
+                    ...extra,
+                ]
+                    .filter(Boolean)
+                    .join(" · ");
+            }
 
             Object.assign(this.state, layout);
             this.state.currencyCode = currencyCode;
@@ -373,6 +604,10 @@ export class TrajectoryChartAction extends Component {
         } finally {
             this.state.loading = false;
         }
+    }
+
+    toggleShowRefChartLabels(ev) {
+        this.state.showRefChartLabels = Boolean(ev.target?.checked);
     }
 
     async onChangeProjection() {

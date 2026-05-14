@@ -18,8 +18,9 @@
                     <div class="alert alert-info mb-3" role="alert">
                         <p class="mb-0">
                             Parcours secondaire (souvent sous <strong>Analyse</strong>) : choisissez une projection Cash Guard puis
-                            <strong>Afficher la trajectoire</strong> pour ouvrir le graphique de pilotage.
-                            Le parcours principal cash est <strong>Projection &gt; Trésorerie &gt; Accueil graphique</strong> (V1.1).
+                            <strong>Afficher la trajectoire</strong> pour ouvrir le graphique en mode
+                            <strong>contextualisé</strong> (ce n’est pas la trajectoire de référence système — bandeau explicite à l’ouverture).
+                            Le parcours principal cash est <strong>Projection &gt; Trésorerie &gt; Projections de trésorerie &gt; Accueil graphique</strong> (V1.1, <strong>trajectoire de référence</strong>).
                         </p>
                     </div>
                     <div class="text-muted mb-3 small">
@@ -38,6 +39,7 @@
                         </group>
                         <group string="Seuil et point bas (courbe affichée)">
                             <field name="alert_threshold" readonly="1"/>
+                            <field name="comfort_threshold_amount" readonly="1"/>
                             <field name="min_balance_on_curve" readonly="1" invisible="not point_ids"/>
                             <field name="min_balance_date_on_curve" readonly="1" invisible="not point_ids"/>
                             <field name="info_message" readonly="1" invisible="not info_message"/>

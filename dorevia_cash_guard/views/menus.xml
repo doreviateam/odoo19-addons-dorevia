@@ -8,7 +8,7 @@
         sequence="90"
     />
 
-    <!-- Sous-famille cash : lecture (Cash Flow) + atelier (liste Guard) -->
+    <!-- Trésorerie : sous-famille cash ; sous-domaine « Projections de trésorerie » = lecture + atelier -->
     <menuitem
         id="menu_dorevia_cash_guard_treasury_root"
         name="Trésorerie"
@@ -18,9 +18,17 @@
     />
 
     <menuitem
-        id="menu_dorevia_cash_guard_points"
+        id="menu_dorevia_cash_guard_projections_hub"
         name="Projections de trésorerie"
         parent="menu_dorevia_cash_guard_treasury_root"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_dorevia_cash_guard_points"
+        name="Projections"
+        parent="menu_dorevia_cash_guard_projections_hub"
         action="action_dorevia_cash_guard"
         groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="20"

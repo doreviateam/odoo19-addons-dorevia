@@ -43,6 +43,18 @@ class DoreviaCashGuard(models.Model):
             "(masquée des vues par défaut ; lignes et analyses restent liées au même document)."
         ),
     )
+    is_system_reference = fields.Boolean(
+        string="Référence système (cockpit / trajectoire)",
+        default=False,
+        copy=False,
+        tracking=True,
+        groups="dorevia_cash_guard.group_cash_guard_manager",
+        help=(
+            "Au plus une projection active par société. Utilisée en priorité par la trajectoire "
+            "de référence (Accueil graphique) et recalculée par le cron quotidien dédié ; "
+            "les autres projections ne sont pas mises à jour automatiquement."
+        ),
+    )
     date_from = fields.Date(
         string="Date de début",
         required=True,
@@ -322,6 +334,7 @@ class DoreviaCashGuard(models.Model):
             vals["situation_date"] = self._situation_date_for_period(df, dt)
         records = super().create(vals_list)
         records._sync_legacy_bank_journal_from_liquidity()
+        records._enforce_single_system_reference_for_records(records)
         records.action_recompute_projection()
         return records
 
@@ -389,6 +402,39 @@ class DoreviaCashGuard(models.Model):
                 raise ValidationError(
                     _("Le nom du document de projection doit être unique par société.")
                 )
+
+    @api.constrains("is_system_reference", "active", "periodicity")
+    def _check_system_reference_weekly(self):
+        for guard in self:
+            if guard.is_system_reference and guard.active and guard.periodicity != "week":
+                raise ValidationError(
+                    _(
+                        "Une projection marquée comme référence système doit avoir la "
+                        "périodicité « Semaine »."
+                    )
+                )
+
+    def _demote_other_system_reference(self):
+        """Désactive le drapeau sur les autres projections actives de la même société."""
+        self.ensure_one()
+        if not (self.is_system_reference and self.active):
+            return
+        others = self.env["dorevia.cash.guard"].sudo().search(
+            [
+                ("company_id", "=", self.company_id.id),
+                ("is_system_reference", "=", True),
+                ("active", "=", True),
+                ("id", "!=", self.id),
+            ]
+        )
+        if others:
+            others.write({"is_system_reference": False})
+
+    def _enforce_single_system_reference_for_records(self, records):
+        """Après create/write : au plus une référence active par société (priorité à l'id le plus élevé)."""
+        tagged = records.filtered(lambda g: g.is_system_reference and g.active)
+        for guard in tagged.sorted(key=lambda g: g.id, reverse=True):
+            guard._demote_other_system_reference()
 
     def _liquidity_journals(self):
         """Périmètre banque + caisse : préférence aux journaux explicites, sinon journal V1."""
@@ -1337,11 +1383,31 @@ class DoreviaCashGuard(models.Model):
         res = super().write(vals)
         if "liquidity_journal_ids" in vals:
             self._sync_legacy_bank_journal_from_liquidity()
+        if any(k in vals for k in ("is_system_reference", "active")):
+            self._enforce_single_system_reference_for_records(self)
         if self.env.context.get("skip_cash_guard_recompute"):
             return res
         if set(vals) & self._RECOMPUTE_GUARD_WRITE_FIELDS:
             self.action_recompute_projection()
         return res
+
+    @api.model
+    def _cron_recompute_system_reference_projections(self):
+        """Recalcul quotidien : uniquement les projections ``is_system_reference`` actives (cockpit / trajectoire).
+
+        Les projections de travail ou simulations ne sont pas recalculées ici ; l'utilisateur
+        déclenche ``action_recompute_projection`` ou « Actualiser » sur le document concerné.
+        """
+        guards = self.sudo().search(
+            [
+                ("is_system_reference", "=", True),
+                ("active", "=", True),
+                ("periodicity", "=", "week"),
+            ]
+        )
+        for guard in guards:
+            guard.with_company(guard.company_id).sudo().action_recompute_projection()
+        return True
 
     @api.model
     def _cron_recompute_open_points(self):

@@ -12,7 +12,7 @@ action = env["dorevia.cash.flow.trajectory.wizard"].action_open_guard_cockpit()
     <menuitem
         id="menu_dorevia_cash_flow_guard_cockpit"
         name="Accueil graphique"
-        parent="dorevia_cash_guard.menu_dorevia_cash_guard_treasury_root"
+        parent="dorevia_cash_guard.menu_dorevia_cash_guard_projections_hub"
         action="action_dorevia_cash_flow_guard_cockpit"
         groups="dorevia_cash_guard.group_cash_guard_user"
         sequence="10"
