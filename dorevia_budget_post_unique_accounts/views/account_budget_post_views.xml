@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_budget_post_search_inherit_active" model="ir.ui.view">
+        <field name="name">account.budget.post.search.inherit.active</field>
+        <field name="model">account.budget.post</field>
+        <field name="inherit_id" ref="base_account_budget.view_budget_post_search"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <separator/>
+                <filter name="active" string="Actifs" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Archivés" domain="[('active', '=', False)]"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_budget_post_tree_inherit_active" model="ir.ui.view">
+        <field name="name">account.budget.post.tree.inherit.active</field>
+        <field name="model">account.budget.post</field>
+        <field name="inherit_id" ref="base_account_budget.view_budget_post_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="active" widget="boolean_toggle" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_budget_post_form_inherit_active" model="ir.ui.view">
+        <field name="name">account.budget.post.form.inherit.active</field>
+        <field name="model">account.budget.post</field>
+        <field name="inherit_id" ref="base_account_budget.view_budget_post_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group" position="before">
+                <widget name="web_ribbon" title="Archivé" bg_color="text-bg-danger" invisible="active"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="active" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

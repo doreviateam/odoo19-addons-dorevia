@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Parcours principal : Comptabilité > Projection de trésorerie > Cash Flow (cockpit).
+        Raccourcis sous Analyse / Reporting : libellés « Trajectoire (Analyse) ».
+    -->
+    <menuitem
+        id="menu_dorevia_cash_flow_trajectory"
+        name="Trajectoire (Analyse)"
+        parent="account.menu_finance_reports"
+        action="action_dorevia_cash_flow_trajectory_reference"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="190"
+    />
+    <menuitem
+        id="menu_dorevia_cash_flow_trajectory_select"
+        name="Trajectoire — choix projection (Analyse)"
+        parent="account.menu_finance_reports"
+        action="action_dorevia_cash_flow_trajectory_wizard"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="191"
+    />
+</odoo>

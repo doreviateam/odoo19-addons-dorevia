@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dorevia_cash_flow_trajectory_wizard_user,dorevia.cash.flow.trajectory.wizard user,model_dorevia_cash_flow_trajectory_wizard,dorevia_cash_guard.group_cash_guard_user,1,1,1,1
+access_dorevia_cash_flow_trajectory_point_user,dorevia.cash.flow.trajectory.point user,model_dorevia_cash_flow_trajectory_point,dorevia_cash_guard.group_cash_guard_user,1,1,1,1

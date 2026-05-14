@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_dorevia_cash_guard" model="ir.sequence">
+        <field name="name">Projection de trésorerie (références)</field>
+        <field name="code">dorevia.cash.guard</field>
+        <field name="prefix">CG/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

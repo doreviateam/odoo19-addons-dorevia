@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dorevia_cash_flow_trajectory_wizard_form" model="ir.ui.view">
+        <field name="name">dorevia.cash.flow.trajectory.wizard.form</field>
+        <field name="model">dorevia.cash.flow.trajectory.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Trajectoire — choix de projection">
+                <header>
+                    <button
+                        name="action_open_chart"
+                        type="object"
+                        string="Afficher la trajectoire"
+                        class="btn-primary"
+                        data-hotkey="q"
+                    />
+                </header>
+                <sheet>
+                    <div class="alert alert-info mb-3" role="alert">
+                        <p class="mb-0">
+                            Parcours secondaire (souvent sous <strong>Analyse</strong>) : choisissez une projection Cash Guard puis
+                            <strong>Afficher la trajectoire</strong> pour ouvrir le graphique en mode
+                            <strong>contextualisé</strong> (ce n’est pas la trajectoire de référence système — bandeau explicite à l’ouverture).
+                            Le parcours principal cash est <strong>Comptabilité &gt; Projection de trésorerie &gt; Cash Flow</strong> (V1.1, <strong>trajectoire de référence</strong>).
+                        </p>
+                    </div>
+                    <div class="text-muted mb-3 small">
+                        <strong>Repères sur le graphique :</strong> après « Afficher la trajectoire », la vue dédiée trace la <strong>ligne verticale</strong> à la date de situation,
+                        la <strong>ligne horizontale</strong> au seuil d'alerte, et distingue <strong>constaté</strong> (trait plein) / <strong>projeté</strong> (trait pointillé).
+                        Le <strong>point bas</strong> et les montants de synthèse restent indiqués dans ce panneau.
+                    </div>
+                    <group>
+                        <group string="Projection et dates">
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="guard_id" options="{'no_create': True}"/>
+                            <field name="situation_date" string="Date de situation (bascule constaté → projeté)"/>
+                            <field name="fiscal_date_from" readonly="1"/>
+                            <field name="chart_date_end" readonly="1"/>
+                        </group>
+                        <group string="Seuil et point bas (courbe affichée)">
+                            <field name="alert_threshold" readonly="1"/>
+                            <field name="comfort_threshold_amount" readonly="1"/>
+                            <field name="min_balance_on_curve" readonly="1" invisible="not point_ids"/>
+                            <field name="min_balance_date_on_curve" readonly="1" invisible="not point_ids"/>
+                            <field name="info_message" readonly="1" invisible="not info_message"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button
+                        name="action_open_chart"
+                        type="object"
+                        string="Afficher la trajectoire"
+                        class="btn-primary"
+                    />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dorevia_cash_flow_trajectory_point_graph" model="ir.ui.view">
+        <field name="name">dorevia.cash.flow.trajectory.point.graph</field>
+        <field name="model">dorevia.cash.flow.trajectory.point</field>
+        <field name="arch" type="xml">
+            <graph string="Trajectoire de trésorerie" type="line" stacked="False">
+                <field name="anchor_date" type="row"/>
+                <field name="balance" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_dorevia_cash_flow_trajectory_point_list" model="ir.ui.view">
+        <field name="name">dorevia.cash.flow.trajectory.point.list</field>
+        <field name="model">dorevia.cash.flow.trajectory.point</field>
+        <field name="arch" type="xml">
+            <list string="Points" create="0" edit="0" delete="0">
+                <field name="sequence" column_invisible="1"/>
+                <field name="anchor_date"/>
+                <field name="label"/>
+                <field name="segment"/>
+                <field name="series_label" optional="hide"/>
+                <field name="fiscal_week_index" optional="hide"/>
+                <field name="balance"/>
+                <field name="alert_threshold" optional="hide"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dorevia_cash_flow_trajectory_wizard" model="ir.actions.act_window">
+        <field name="name">Trajectoire — choix projection (Analyse)</field>
+        <field name="res_model">dorevia.cash.flow.trajectory.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_dorevia_cash_flow_trajectory_reference" model="ir.actions.server">
+        <field name="name">Trajectoire (Analyse)</field>
+        <field name="model_id" ref="model_dorevia_cash_flow_trajectory_wizard"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env["dorevia.cash.flow.trajectory.wizard"].action_open_reference_trajectory()
+        </field>
+    </record>
+</odoo>

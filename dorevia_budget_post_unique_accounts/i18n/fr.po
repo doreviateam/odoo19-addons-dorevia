@@ -1,0 +1,24 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dorevia_budget_post_unique_accounts
+#
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#. module: dorevia_budget_post_unique_accounts
+#: model:ir.model.fields,field_description:dorevia_budget_post_unique_accounts.field_account_budget_post__active
+msgid "Actif"
+msgstr "Actif"
+
+#. module: dorevia_budget_post_unique_accounts
+#: code:addons/dorevia_budget_post_unique_accounts/models/account_budget_post.py:0
+#, python-format
+msgid ""
+"Ce compte comptable (%(code)s) est déjà associé au poste budgétaire actif « "
+"%(post)s ». Un compte ne peut appartenir qu’à un seul poste budgétaire actif. "
+"Archivez l’autre poste ou retirez le compte de celui-ci."
+msgstr ""
+"Ce compte comptable (%(code)s) est déjà associé au poste budgétaire actif « "
+"%(post)s ». Un compte ne peut appartenir qu’à un seul poste budgétaire actif. "
+"Archivez l’autre poste ou retirez le compte de celui-ci."

@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dorevia_cash_guard_tree" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.tree</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="not active">
+                <field name="active" column_invisible="1"/>
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="periodicity" optional="show"/>
+                <field name="situation_date" optional="show"/>
+                <field name="liquidity_journal_ids" widget="many2many_tags" optional="show"/>
+                <field name="alert_threshold"/>
+                <field name="observed_balance" string="Solde constaté"/>
+                <field name="forecast_final_balance" string="Projection finale"/>
+                <field name="forecast_min_balance" string="Point bas"/>
+                <field name="risk_status"/>
+                <field
+                    name="is_system_reference"
+                    optional="hide"
+                    groups="dorevia_cash_guard.group_cash_guard_manager"
+                />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dorevia_cash_guard_search" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.search</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="situation_date"/>
+                <field name="liquidity_journal_ids"/>
+                <field name="company_id"/>
+                <filter name="filter_risk" string="Risque" domain="[('risk_status', '=', 'risk')]"/>
+                <separator/>
+                <filter name="filter_active" string="Actifs" domain="[('active', '=', True)]"/>
+                <filter name="filter_archived" string="Archivés" domain="[('active', '=', False)]"/>
+                <separator groups="dorevia_cash_guard.group_cash_guard_manager"/>
+                <filter
+                    name="filter_system_reference"
+                    string="Référence système"
+                    domain="[('is_system_reference', '=', True)]"
+                    groups="dorevia_cash_guard.group_cash_guard_manager"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="view_dorevia_cash_guard_line_tree" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.line.tree</field>
+        <field name="model">dorevia.cash.guard.line</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" default_order="projection_date asc,sequence asc,id asc">
+                <field name="projection_date"/>
+                <field name="sequence"/>
+                <field name="budget_post_id"/>
+                <field name="label"/>
+                <field name="line_type"/>
+                <field name="direction"/>
+                <field name="projected_amount"/>
+                <field name="signed_projected_amount" readonly="1"/>
+                <field name="realized_amount"/>
+                <field name="signed_realized_amount" readonly="1"/>
+                <field name="variance_amount" readonly="1"/>
+                <field name="balance_after_line" readonly="1"/>
+                <field name="cash_state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dorevia_cash_guard_line_search" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.line.search</field>
+        <field name="model">dorevia.cash.guard.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="label"/>
+                <field name="budget_post_id"/>
+                <field name="guard_id"/>
+                <field name="line_type"/>
+                <field name="cash_state"/>
+                <filter name="filter_planned" string="Prévu" domain="[('line_type', '=', 'planned')]"/>
+                <filter name="filter_simulated" string="Simulé" domain="[('line_type', '=', 'simulated')]"/>
+                <filter name="filter_reconciled" string="Rapproché" domain="[('cash_state', '=', 'reconciled')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_dorevia_cash_guard_form" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.form</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_reset_period_to_defaults" type="object"
+                            string="Réinitialiser"
+                            class="btn-secondary"
+                            invisible="not active"
+                            title="Remet les dates sur la situation à date et une fin à +90 jours, puis recalcule la projection."/>
+                    <!-- Recalcul automatique à l’ouverture ; entrée technique équivalente au réalignement +90 j. -->
+                    <button name="action_recompute_projection" type="object" string="Actualiser et réaligner la période"
+                            class="btn-secondary" invisible="1"
+                            context="{'cash_guard_actualiser_realign': True}"/>
+                    <button name="action_archive" type="object" string="Archiver" class="btn-secondary"
+                            invisible="not active"/>
+                    <button name="action_unarchive" type="object" string="Restaurer" class="btn-secondary"
+                            invisible="active"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archivé" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_button_box" name="button_box"/>
+                    <field name="state" invisible="1"/>
+                    <field name="active" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id"/>
+                            <field name="responsible_id"/>
+                            <field name="liquidity_journal_ids" widget="many2many_tags"
+                                   string="Journaux"
+                                   domain="[('type','in',('bank','cash')), ('company_id','=', company_id)]"/>
+                            <field name="bank_journal_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="periodicity"/>
+                            <field
+                                name="is_system_reference"
+                                groups="dorevia_cash_guard.group_cash_guard_manager"
+                            />
+                            <field name="alert_threshold"/>
+                            <field name="comfort_threshold_rate"/>
+                            <field name="risk_status" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Synthèse Trésorerie">
+                        <field name="currency_id" invisible="1"/>
+                        <group string="Situation">
+                            <div colspan="2"
+                                 invisible="observed_balance &gt;= 0"
+                                 class="alert alert-danger mb-2 p-2"
+                                 role="alert">
+                                <strong>Attention :</strong> le solde constaté est négatif.
+                            </div>
+                            <field name="situation_date"
+                                   string="Date"
+                                   readonly="1"/>
+                            <field name="observed_balance"
+                                   string="Solde constaté"
+                                   readonly="1"/>
+                            <field name="bank_confirmation_rate"
+                                   string="Confirmation"
+                                   readonly="1"
+                                   widget="progressbar"/>
+                            <field name="total_documents_impact"
+                                   string="Total impact"
+                                   readonly="1"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <label for="bank_unreconciled_amount"
+                                   string="À rapprocher"
+                                   invisible="bank_unreconciled_amount == 0"/>
+                            <div invisible="bank_unreconciled_amount == 0"
+                                 class="d-flex align-items-center gap-2">
+                                <field name="bank_unreconciled_amount"
+                                       readonly="1"
+                                       class="oe_inline"/>
+                                <button name="action_open_bank_reconciliation"
+                                        type="object"
+                                        class="btn btn-link p-0"
+                                        icon="fa-external-link"
+                                        title="Voir les écritures à rapprocher"/>
+                            </div>
+                        </group>
+                        <group string="Projection">
+                            <field name="forecast_final_balance"
+                                   string="Projection finale"
+                                   readonly="1"/>
+                            <field name="forecast_min_balance"
+                                   string="Point bas"
+                                   readonly="1"/>
+                            <field name="min_balance_date"
+                                   string="Date du point bas"
+                                   readonly="1"/>
+                            <field name="forecast_min_margin"
+                                   string="Couverture min."
+                                   readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Projection">
+                            <field name="weekly_line_ids" readonly="1">
+                                <list default_order="week_index asc"
+                                      decoration-danger="risk_status == 'risk'"
+                                      decoration-warning="risk_status == 'tension'"
+                                      decoration-info="risk_status == 'warning'"
+                                      decoration-success="risk_status == 'safe'">
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="alert_threshold" column_invisible="1"/>
+                                    <field name="week_label"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="period_type" string="État"/>
+                                    <field name="closing_balance"
+                                           column_invisible="1"
+                                           widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="projected_balance" string="Projection"
+                                           widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="margin_amount" string="Couverture"
+                                           widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="risk_status" string="Statut"/>
+                                    <field name="document_count_label" string="Documents"/>
+                                </list>
+                            </field>
+                        </page>
+                        <!-- Masqué tant que le rôle métier des flux manuels n’est pas recadré (invisible inconditionnelle : ni groupe_no_one ni admin ne réaffichent l’onglet). Modèle + menu « Flux complémentaires » inchangés. -->
+                        <page string="Flux complémentaires" invisible="1">
+                            <field name="line_ids" context="{'default_projection_date': date_from}">
+                                <list editable="bottom" default_order="projection_date asc,sequence asc,id asc">
+                                    <field name="projection_date"/>
+                                    <field name="sequence"/>
+                                    <field name="budget_post_id"/>
+                                    <field name="label"/>
+                                    <field name="line_type"/>
+                                    <field name="direction"/>
+                                    <field name="projected_amount"/>
+                                    <field name="signed_projected_amount" readonly="1"/>
+                                    <field name="realized_amount"/>
+                                    <field name="signed_realized_amount" readonly="1"/>
+                                    <field name="variance_amount" readonly="1"/>
+                                    <field name="balance_after_line" readonly="1"/>
+                                    <field name="cash_state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Documents">
+                            <field name="projection_period_move_ids">
+                                <list create="false"
+                                      delete="false"
+                                      editable="bottom"
+                                      default_order="period_risk_sequence asc, week_index asc, projected_date asc, signed_amount asc, id asc"
+                                      decoration-danger="display_status == 'risk'"
+                                      decoration-warning="display_status == 'tension'"
+                                      decoration-info="display_status == 'warning'"
+                                      decoration-success="display_status == 'safe'">
+                                    <field name="currency_id" column_invisible="1" readonly="1"/>
+                                    <field name="period_risk_sequence" column_invisible="1" readonly="1"/>
+                                    <field name="week_index" column_invisible="1" readonly="1"/>
+                                    <field name="is_simulation" column_invisible="1" readonly="1"/>
+                                    <field name="display_status" string="Statut" readonly="1"/>
+                                    <field name="week_label" string="Période" readonly="1"/>
+                                    <field name="move_id" column_invisible="1" readonly="1"/>
+                                    <field name="move_name" string="Document" readonly="1"/>
+                                    <field name="partner_id" string="Partenaire" readonly="1"/>
+                                    <field name="responsible_id" string="Resp." readonly="1" optional="show"/>
+                                    <field name="document_type_label" string="Type" readonly="1"/>
+                                    <field name="invoice_date_due" string="Échéance" readonly="1"/>
+                                    <field name="days_overdue_label" string="Retard" readonly="1"/>
+                                    <field name="signed_amount" string="Impact"
+                                           readonly="1"
+                                           widget="monetary"
+                                           sum="Impact net"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="is_overdue_label" string="Échue" readonly="1"/>
+                                    <button name="action_open_source_document" type="object" string=" " title="Ouvrir le document" icon="fa-external-link"/>
+                                    <field name="week_invoice_net_amount" string="Impact net période"
+                                           optional="hide"
+                                           readonly="1"
+                                           widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="week_invoice_move_count" string="Nb pièces" optional="hide" readonly="1"/>
+                                    <field name="projected_date" string="Date projetée" optional="hide" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dorevia_cash_guard_week_form" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.week.form</field>
+        <field name="model">dorevia.cash.guard.week</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group string="Contexte">
+                            <field name="guard_id" string="Projection de trésorerie"/>
+                            <field name="week_label" string="Période"/>
+                            <field name="date_from" string="Date de début"/>
+                            <field name="date_to" string="Date de fin"/>
+                            <field name="period_type" string="État"/>
+                        </group>
+                        <group string="Trésorerie">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="projected_balance" string="Solde projeté"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="margin_amount" string="Couverture"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="alert_threshold" string="Seuil d'alerte"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="risk_status" string="Statut"/>
+                            <field name="period_documents_impact_net"
+                                   string="Total Impact"
+                                   widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+                    <separator string="Documents de la période"/>
+                    <field name="projection_move_ids" readonly="1">
+                        <list create="false" delete="false"
+                              default_order="projected_date asc, signed_amount asc"
+                              decoration-danger="display_status == 'risk'"
+                              decoration-warning="display_status == 'tension'"
+                              decoration-info="display_status == 'warning'"
+                              decoration-success="display_status == 'safe'">
+                            <field name="currency_id" column_invisible="1"/>
+                            <field name="is_simulation" column_invisible="1"/>
+                            <field name="display_status" string="Statut" readonly="1"/>
+                            <field name="move_name" string="Document" readonly="1"/>
+                            <field name="partner_id" string="Partenaire" readonly="1"/>
+                            <field name="responsible_id" string="Resp." readonly="1"/>
+                            <field name="document_type_label" string="Type" readonly="1"/>
+                            <field name="invoice_date_due" string="Échéance" readonly="1"/>
+                            <field name="signed_amount" string="Impact"
+                                   readonly="1"
+                                   widget="monetary"
+                                   sum="Impact net"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <button name="action_open_source_document" type="object"
+                                    string=" " title="Ouvrir le document"
+                                    icon="fa-external-link"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dorevia_cash_guard" model="ir.actions.act_window">
+        <field name="name">Cash Guards</field>
+        <field name="res_model">dorevia.cash.guard</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_dorevia_cash_guard_search"/>
+    </record>
+
+    <record id="action_dorevia_cash_guard_line" model="ir.actions.act_window">
+        <field name="name">Flux complémentaires</field>
+        <field name="res_model">dorevia.cash.guard.line</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_dorevia_cash_guard_line_search"/>
+    </record>
+</odoo>

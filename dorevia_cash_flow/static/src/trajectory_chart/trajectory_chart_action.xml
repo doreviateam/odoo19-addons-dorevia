@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="dorevia_cash_flow.TrajectoryChartAction">
+        <div class="o_dorevia_cf_trajectory d-flex flex-column h-100 overflow-auto p-3 bg-view">
+            <div t-if="state.loading" class="d-flex align-items-center justify-content-center flex-grow-1 text-muted">
+                Chargement de la trajectoire…
+            </div>
+            <div t-elif="state.error" class="alert alert-danger mb-0" role="alert">
+                <t t-esc="state.error"/>
+            </div>
+            <t t-else="">
+                <div
+                    t-if="state.modeBanner"
+                    role="status"
+                    t-attf-class="alert mb-3 py-2 px-3 small {{ state.modeAlertVariant === 'success' ? 'alert-success' : 'alert-warning' }}"
+                >
+                    <t t-esc="state.modeBanner"/>
+                </div>
+                <div t-if="state.cockpitMode" class="border rounded p-3 mb-3 bg-light">
+                    <h4 class="mb-2 text-900">Cash Flow</h4>
+                    <p class="text-muted small mb-3" t-if="state.subtitle">
+                        <t t-esc="state.subtitle"/>
+                    </p>
+                    <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-sm"
+                            t-att-disabled="state.cockpitRefreshing"
+                            t-on-click="onCockpitRefresh"
+                        >
+                            Actualiser
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" t-on-click="onOpenGuardForm">
+                            Ouvrir Cash Guards
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" t-on-click="onOpenGuardList">
+                            Toutes les projections
+                        </button>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <button type="button" class="btn btn-link btn-sm py-0" t-on-click="onOpenReferenceTrajectoryMenu">
+                            Vue analyse
+                        </button>
+                        <button type="button" class="btn btn-link btn-sm py-0" t-on-click="onOpenTrajectoryWizard">
+                            Audit / autre projection
+                        </button>
+                    </div>
+                </div>
+                <div t-if="!state.cockpitMode" class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                    <h4 class="mb-0 text-900"><t t-esc="state.pageTitle"/></h4>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary btn-sm" t-on-click="onChangeProjection">
+                            Changer de projection
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" t-on-click="onOpenList">
+                            Liste des points
+                        </button>
+                    </div>
+                </div>
+                <h5 t-if="!state.cockpitMode" class="mb-2 text-900">Trajectoire de trésorerie</h5>
+                <p class="text-muted small mb-3" t-if="state.subtitle and !state.cockpitMode">
+                    <t t-esc="state.subtitle"/>
+                </p>
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                    <h6 class="mb-0 text-900 fw-semibold me-2" style="min-width: 0;">
+                        Projection de trésorerie <t t-esc="state.chartHeadingYear"/>
+                    </h6>
+                    <div class="form-check form-switch mb-0 flex-shrink-0 ms-sm-auto">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="o_dorevia_cf_show_ref_chart_labels"
+                            t-att-checked="state.showRefChartLabels ? true : undefined"
+                            t-on-change="toggleShowRefChartLabels"
+                        />
+                        <label class="form-check-label text-muted small" for="o_dorevia_cf_show_ref_chart_labels">
+                            Afficher les repères
+                        </label>
+                    </div>
+                </div>
+                <div class="position-relative border rounded bg-white shadow-sm">
+                    <svg
+                        t-att-viewBox="state.viewBox"
+                        preserveAspectRatio="xMidYMid meet"
+                        class="w-100 d-block"
+                        style="min-height: 400px;"
+                    >
+                        <!-- Grille légère -->
+                        <g class="text-400" stroke="currentColor" stroke-opacity="0.15" fill="none">
+                            <t t-foreach="state.hGridLines" t-as="hg" t-key="hg_index">
+                                <line t-att-x1="hg.x1" t-att-y1="hg.y" t-att-x2="hg.x2" t-att-y2="hg.y" pointer-events="none"/>
+                            </t>
+                        </g>
+                        <!-- Seuil de confort (horizontal, au-dessus du seuil d'alerte) -->
+                        <t t-if="state.comfortThresholdLine">
+                            <line
+                                t-att-x1="state.comfortThresholdLine.x1"
+                                t-att-y1="state.comfortThresholdLine.y"
+                                t-att-x2="state.comfortThresholdLine.x2"
+                                t-att-y2="state.comfortThresholdLine.y"
+                                stroke="#1e8449"
+                                stroke-width="1"
+                                stroke-linecap="round"
+                                opacity="0.82"
+                                pointer-events="none"
+                            />
+                        </t>
+                        <!-- Seuil d'alerte (horizontal) -->
+                        <t t-if="state.thresholdLine">
+                            <line
+                                t-att-x1="state.thresholdLine.x1"
+                                t-att-y1="state.thresholdLine.y"
+                                t-att-x2="state.thresholdLine.x2"
+                                t-att-y2="state.thresholdLine.y"
+                                stroke="#c0392b"
+                                stroke-width="1"
+                                stroke-linecap="round"
+                                opacity="0.78"
+                                pointer-events="none"
+                            />
+                        </t>
+                        <!-- Date de situation (vertical) -->
+                        <t t-if="state.situationLine">
+                            <line
+                                t-att-x1="state.situationLine.x"
+                                t-att-y1="state.situationLine.y1"
+                                t-att-x2="state.situationLine.x"
+                                t-att-y2="state.situationLine.y2"
+                                stroke="#7f8c8d"
+                                stroke-width="1.5"
+                                stroke-dasharray="4 3"
+                                pointer-events="none"
+                            />
+                        </t>
+                        <!-- Constaté : trait plein -->
+                        <path
+                            t-if="state.pathActual"
+                            t-att-d="state.pathActual"
+                            fill="none"
+                            stroke="#1b6ec2"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            pointer-events="none"
+                        />
+                        <!-- Projeté : trait pointillé -->
+                        <path
+                            t-if="state.pathProjected"
+                            t-att-d="state.pathProjected"
+                            fill="none"
+                            stroke="#1b6ec2"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-dasharray="7 5"
+                            opacity="0.92"
+                            pointer-events="none"
+                        />
+                        <!-- Points : zone de survol élargie + infobulle native (<title>) -->
+                        <t t-foreach="state.vertexMarkers" t-as="vm" t-key="vm_index">
+                            <g class="o_dorevia_cf_point">
+                                <title><t t-esc="vm.title"/></title>
+                                <circle
+                                    t-att-cx="vm.cx"
+                                    t-att-cy="vm.cy"
+                                    r="14"
+                                    fill="transparent"
+                                    stroke="none"
+                                    class="o_dorevia_cf_point-hit"
+                                />
+                                <circle
+                                    t-att-cx="vm.cx"
+                                    t-att-cy="vm.cy"
+                                    r="3.5"
+                                    t-att-fill="vm.fill"
+                                    stroke="#fff"
+                                    stroke-width="1"
+                                    pointer-events="none"
+                                />
+                                <text
+                                    t-if="vm.showValueLabel and state.showRefChartLabels"
+                                    t-att-x="vm.valueLabelX"
+                                    t-att-y="vm.valueLabelY"
+                                    t-att-text-anchor="vm.valueLabelAnchor"
+                                    dominant-baseline="middle"
+                                    fill="#7a8794"
+                                    font-size="9"
+                                    font-weight="400"
+                                    font-family="system-ui, sans-serif"
+                                    opacity="0.88"
+                                    pointer-events="none"
+                                >
+                                    <t t-esc="vm.valueLabel"/>
+                                </text>
+                            </g>
+                        </t>
+                        <!-- Axes -->
+                        <line
+                            t-att-x1="state.axes.left"
+                            t-att-y1="state.axes.top"
+                            t-att-x2="state.axes.left"
+                            t-att-y2="state.axes.bottom"
+                            stroke="#bdc3c7"
+                            stroke-width="1"
+                            pointer-events="none"
+                        />
+                        <line
+                            t-att-x1="state.axes.left"
+                            t-att-y1="state.axes.bottom"
+                            t-att-x2="state.axes.right"
+                            t-att-y2="state.axes.bottom"
+                            stroke="#bdc3c7"
+                            stroke-width="1"
+                            pointer-events="none"
+                        />
+                        <!-- Graduations -->
+                        <t t-foreach="state.xTicks" t-as="tk" t-key="tk_index">
+                            <text
+                                t-att-x="tk.x"
+                                t-att-y="tk.y"
+                                text-anchor="middle"
+                                fill="#6c757d"
+                                font-size="10"
+                                font-family="system-ui, sans-serif"
+                                pointer-events="none"
+                            >
+                                <t t-esc="tk.label"/>
+                            </text>
+                        </t>
+                        <t t-foreach="state.yTicks" t-as="yt" t-key="yt_index">
+                            <text
+                                t-att-x="yt.x"
+                                t-att-y="yt.y"
+                                text-anchor="end"
+                                fill="#6c757d"
+                                font-size="10"
+                                font-family="system-ui, sans-serif"
+                                pointer-events="none"
+                            >
+                                <t t-esc="yt.label"/>
+                            </text>
+                        </t>
+                        <!-- Libellés repères : hors zone de tracé, au plus près des axes -->
+                        <g t-if="state.showRefChartLabels" class="o_dorevia_cf_ref_labels" pointer-events="none">
+                            <t t-if="state.situationLine">
+                                <text
+                                    t-att-x="state.situationLine.labelX"
+                                    t-att-y="state.situationLine.labelY"
+                                    text-anchor="middle"
+                                    dominant-baseline="hanging"
+                                    fill="#8b95a8"
+                                    font-size="9"
+                                    font-weight="400"
+                                    font-family="system-ui, sans-serif"
+                                    opacity="0.88"
+                                >
+                                    <title>Date de situation</title>
+                                    Situation
+                                </text>
+                            </t>
+                            <t t-if="state.comfortThresholdLine">
+                                <text
+                                    t-att-x="state.comfortThresholdLine.labelX"
+                                    t-att-y="state.comfortThresholdLine.labelY"
+                                    text-anchor="start"
+                                    dominant-baseline="middle"
+                                    fill="#8b95a8"
+                                    font-size="9"
+                                    font-weight="400"
+                                    font-family="system-ui, sans-serif"
+                                    opacity="0.88"
+                                >
+                                    <title>Seuil de confort</title>
+                                    Confort
+                                </text>
+                            </t>
+                            <t t-if="state.thresholdLine">
+                                <text
+                                    t-att-x="state.thresholdLine.labelX"
+                                    t-att-y="state.thresholdLine.labelY"
+                                    text-anchor="start"
+                                    dominant-baseline="middle"
+                                    fill="#8b95a8"
+                                    font-size="9"
+                                    font-weight="400"
+                                    font-family="system-ui, sans-serif"
+                                    opacity="0.88"
+                                >
+                                    <title>Seuil d'alerte</title>
+                                    Alerte
+                                </text>
+                            </t>
+                        </g>
+                    </svg>
+                </div>
+                <t t-if="state.showRefChartLabels">
+                <div class="mt-3 w-100 small text-muted o_dorevia_cf_legend">
+                    <div
+                        class="d-flex flex-nowrap gap-3 gap-md-4 align-items-center pb-1 overflow-x-auto"
+                        style="-webkit-overflow-scrolling: touch;"
+                        role="group"
+                        aria-label="Légende du graphique"
+                    >
+                    <span class="d-flex align-items-center gap-2 flex-shrink-0">
+                        <span class="d-inline-block rounded" style="width: 28px; height: 3px; background: #1b6ec2;"/>
+                        Constaté (jusqu'à la date de situation)
+                    </span>
+                    <span class="d-flex align-items-center gap-2 flex-shrink-0">
+                        <svg width="36" height="10" aria-hidden="true" class="flex-shrink-0">
+                            <line x1="0" y1="5" x2="36" y2="5" stroke="#1b6ec2" stroke-width="3" stroke-dasharray="7 5"/>
+                        </svg>
+                        Projeté (après la date de situation)
+                    </span>
+                    <span class="d-flex align-items-center gap-2 flex-shrink-0">
+                        <span class="d-inline-block border-start border-2" style="height: 14px; border-color: #7f8c8d !important; border-style: dashed !important;"/>
+                        Ligne date de situation
+                    </span>
+                    <span class="d-flex align-items-center gap-2 flex-shrink-0">
+                        <span class="d-inline-block rounded" style="width: 28px; height: 0; border-top: 1px solid rgba(30, 132, 73, 0.82);"/>
+                        Seuil de confort
+                    </span>
+                    <span class="d-flex align-items-center gap-2 flex-shrink-0">
+                        <span class="d-inline-block rounded" style="width: 28px; height: 0; border-top: 1px solid rgba(192, 57, 43, 0.78);"/>
+                        Seuil d'alerte
+                    </span>
+                    </div>
+                </div>
+                <p class="small text-muted mt-2 mb-0 lh-sm">
+                    <span class="d-block d-sm-inline">Sous le seuil d'alerte : zone tendue</span>
+                    <span class="d-none d-sm-inline"> · </span>
+                    <span class="d-block d-sm-inline">entre seuil d'alerte et seuil de confort : vigilance</span>
+                    <span class="d-none d-sm-inline"> · </span>
+                    <span class="d-block d-sm-inline">au-dessus du seuil de confort : zone confortable.</span>
+                </p>
+                </t>
+            </t>
+        </div>
+    </t>
+</templates>

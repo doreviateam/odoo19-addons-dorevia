@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_dorevia_cash_guard_root"
+        name="Projection de trésorerie"
+        parent="account.menu_finance_entries"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="90"
+    />
+
+    <!-- Liste / configuration des projections (atelier) — sous « Projection de trésorerie » -->
+    <menuitem
+        id="menu_dorevia_cash_guard_points"
+        name="Cash Guards"
+        parent="menu_dorevia_cash_guard_root"
+        action="action_dorevia_cash_guard"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="20"
+    />
+
+    <menuitem
+        id="menu_dorevia_cash_guard_lines"
+        name="Flux complémentaires"
+        parent="menu_dorevia_cash_guard_root"
+        action="action_dorevia_cash_guard_line"
+        groups="dorevia_cash_guard.group_cash_guard_user"
+        sequence="30"
+    />
+
+    <record id="menu_dorevia_cash_guard_lines" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="base_account_budget.menu_act_budget_view" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_dorevia_cash_guard_root"/>
+        <field name="sequence">25</field>
+    </record>
+</odoo>
