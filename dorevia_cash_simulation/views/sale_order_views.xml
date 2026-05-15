@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- V1 simulation fields removed from sale.order.
+         Kept as empty data file for clean module upgrade. -->
+</odoo>

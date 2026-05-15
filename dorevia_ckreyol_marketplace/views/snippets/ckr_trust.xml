@@ -2,8 +2,8 @@
 <odoo>
 
     <!-- ========================================================== -->
-    <!-- Snippet : Bloc 7 - Bloc confiance (WIREFRAME § 3)         -->
-    <!-- 3 axes exactement : Achat / Livraison / Contact.          -->
+    <!-- Snippet : Bloc 7 — Réassurance (MVP2, preuve douce)        -->
+    <!-- Statique, 4 repères, ton sobre — pas de sur-promesse.      -->
     <!-- ========================================================== -->
 
     <template id="ckr_snippet_trust" name="C-Kreyol: Bloc confiance">
@@ -11,43 +11,58 @@
             <div class="ckr-container">
 
                 <header class="ckr-section-title">
-                    <span class="ckr-section-title__eyebrow ckr-section-title__eyebrow--rule">Engagements</span>
-                    <h2>Acheter en confiance</h2>
+                    <span class="ckr-section-title__eyebrow ckr-section-title__eyebrow--rule">En pratique</span>
+                    <h2>Quelques repères</h2>
                 </header>
 
                 <div class="ckr-trust__grid">
 
                     <div class="ckr-trust__item">
                         <span class="ckr-trust__item__icon" aria-hidden="true">
-                            <i class="fa fa-lock"></i>
+                            <i class="fa fa-leaf"></i>
                         </span>
-                        <h3>Achat</h3>
-                        <p>
-                            Paiement securise par nos prestataires bancaires standards.
-                            Vos donnees restent protegees a chaque etape.
-                        </p>
+                        <div class="ckr-trust__item__body">
+                            <h3>Produits sélectionnés avec soin</h3>
+                            <p>
+                                Produits issus de producteurs et partenaires de confiance.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="ckr-trust__item">
                         <span class="ckr-trust__item__icon" aria-hidden="true">
                             <i class="fa fa-truck"></i>
                         </span>
-                        <h3>Livraison</h3>
-                        <p>
-                            Expedition depuis Nantes, delais communiques avec prudence.
-                            Pas de promesse que nous ne pourrions tenir.
-                        </p>
+                        <div class="ckr-trust__item__body">
+                            <h3>Expédition depuis la France</h3>
+                            <p>
+                                Préparation et envoi depuis la métropole.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="ckr-trust__item">
+                        <span class="ckr-trust__item__icon" aria-hidden="true">
+                            <i class="fa fa-lock"></i>
+                        </span>
+                        <div class="ckr-trust__item__body">
+                            <h3>Paiement sécurisé</h3>
+                            <p>
+                                Transactions protégées.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="ckr-trust__item">
                         <span class="ckr-trust__item__icon" aria-hidden="true">
                             <i class="fa fa-envelope-o"></i>
                         </span>
-                        <h3>Contact</h3>
-                        <p>
-                            Un SAV humain, joignable par e-mail, pour repondre a toutes
-                            vos questions sur les produits ou les commandes.
-                        </p>
+                        <div class="ckr-trust__item__body">
+                            <h3>Support disponible</h3>
+                            <p>
+                                Une question&#160;? Nous sommes joignables.
+                            </p>
+                        </div>
                     </div>
 
                 </div>

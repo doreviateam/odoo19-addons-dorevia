@@ -13,8 +13,9 @@ Portee :
     1. Suppression des 3 entrees natives installees par `website` et
        `website_sale` sous le menu racine (Home, Shop, Contact us)
        pour eviter les doublons avec le menu Option B.
-    2. Creation des 6 entrees Option B :
-       Boutique, Collections, Offrir, Recettes, A propos, Contact.
+    2. Creation / mise a jour du menu Option B :
+       Boutique, Collections, Communaute (#, enfants : Idées cadeaux, Recettes,
+       Blog), A propos, Contact.
     3. Nettoyage d eventuels website.page stale pointant sur "/" qui
        auraient ete crees par des versions anterieures du module
        (desormais la homepage reste portee par website.homepage_page
@@ -23,30 +24,130 @@ Portee :
 Idempotent : on peut rejouer la sequence a l install comme au
 upgrade (voir migrations/19.0.1.0.1/post-migration.py).
 
-Reference : docs/STRUCTURE_MENU_PRINCIPAL.md, ADR-CKR-003.
+Reference : docs/direction/STRUCTURE_MENU_PRINCIPAL.md, ADR-CKR-003.
 """
 
 import logging
 
+from odoo.api import Environment, SUPERUSER_ID
+
 _logger = logging.getLogger(__name__)
 
+# Clé ``ir.config_parameter`` — alignée sur
+# ``controllers/website_sale_ckr.CKR_FEATURED_COLLECTION_PARAM`` (SPEC §4.6).
+CKR_FEATURED_COLLECTION_PARAM = (
+    "dorevia_ckreyol_marketplace.featured_collection_id"
+)
 
+# Entrées racine (hors groupe Communauté).
+# (nom, url, sequence) — doctrine : navigation catalogue via conteneur /shop.
 CKR_MENU_ITEMS = [
-    # (nom, url, sequence)
     ("Boutique",    "/shop",        10),
-    ("Collections", "/collections", 20),
-    ("Offrir",      "/offrir",      30),
-    ("Recettes",    "/recettes",    40),
+    ("Collections", "/shop?ckr_collection_scope=all", 20),
     ("A propos",    "/a-propos",    50),
     ("Contact",     "/contact",     60),
 ]
+
+# Parent « Communauté » + sous-menus (navbar regroupée).
+CKR_COMMUNITY_PARENT = ("Communauté", "#", 30)
+CKR_COMMUNITY_CHILDREN = [
+    ("Idées cadeaux", "/offrir",    10),
+    ("Recettes",    "/recettes",    20),
+    ("Blog",        "/blog",        30),
+]
+CKR_COMMUNITY_URLS = frozenset(url for _name, url, _seq in CKR_COMMUNITY_CHILDREN)
 
 # URLs des entrees natives a retirer du menu racine du site.
 NATIVE_MENU_URLS_TO_REMOVE = ("/", "/shop", "/contactus")
 
 
+def _sync_community_menu_for_website(website, root, Menu):
+    """Crée le menu « Communauté » et rattache Idées cadeaux / Recettes / Blog."""
+    name, url, sequence = CKR_COMMUNITY_PARENT
+    community = Menu.search(
+        [
+            ("parent_id", "=", root.id),
+            ("website_id", "=", website.id),
+            ("name", "=", name),
+        ],
+        limit=1,
+    )
+    if community:
+        community.write({"url": url, "sequence": sequence})
+    else:
+        community = Menu.create(
+            {
+                "name": name,
+                "url": url,
+                "parent_id": root.id,
+                "website_id": website.id,
+                "sequence": sequence,
+            }
+        )
+
+    for child_name, child_url, child_seq in CKR_COMMUNITY_CHILDREN:
+        candidates = Menu.search(
+            [
+                ("website_id", "=", website.id),
+                ("url", "=", child_url),
+            ]
+        )
+        at_root = candidates.filtered(lambda m: m.parent_id == root)
+        target = at_root[:1] or candidates[:1]
+        vals = {
+            "name": child_name,
+            "parent_id": community.id,
+            "sequence": child_seq,
+        }
+        if target:
+            target.write(vals)
+        else:
+            Menu.create(
+                {
+                    "name": child_name,
+                    "url": child_url,
+                    "parent_id": community.id,
+                    "website_id": website.id,
+                    "sequence": child_seq,
+                }
+            )
+
+    # Racine : supprimer les doublons si l'entrée existe déjà sous Communauté ;
+    # sinon rattache la première occurrence résiduelle.
+    meta = {u: (n, s) for n, u, s in CKR_COMMUNITY_CHILDREN}
+    for child_url in CKR_COMMUNITY_URLS:
+        dup_roots = Menu.search(
+            [
+                ("parent_id", "=", root.id),
+                ("website_id", "=", website.id),
+                ("url", "=", child_url),
+            ],
+        )
+        under_comm = Menu.search(
+            [
+                ("parent_id", "=", community.id),
+                ("website_id", "=", website.id),
+                ("url", "=", child_url),
+            ],
+            limit=1,
+        )
+        for stray in dup_roots:
+            if under_comm:
+                stray.unlink()
+            else:
+                cname, cseq = meta[child_url]
+                stray.write(
+                    {
+                        "name": cname,
+                        "parent_id": community.id,
+                        "sequence": cseq,
+                    }
+                )
+                under_comm = stray
+
+
 def _sync_ckr_menus(env):
-    """Purge les 3 natifs et cree les 6 entrees Option B sur chaque site."""
+    """Purge les 3 natifs et synchronise le menu Option B sur chaque site."""
     Website = env["website"]
     Menu = env["website.menu"]
     Page = env["website.page"]
@@ -81,15 +182,23 @@ def _sync_ckr_menus(env):
             )
             native.unlink()
 
-        # 2. Creation / mise a jour des 6 entrees Option B.
+        # 2. Creation / mise a jour des entrees racine (hors Communauté).
         for name, url, sequence in CKR_MENU_ITEMS:
             existing = Menu.search([
                 ("parent_id", "=", root.id),
                 ("name", "=", name),
                 ("website_id", "=", website.id),
             ], limit=1)
+            # Compatibilite retroactive: renommer les entrees existantes
+            # en se basant sur l'URL pour eviter un doublon "Offrir".
+            if not existing:
+                existing = Menu.search([
+                    ("parent_id", "=", root.id),
+                    ("url", "=", url),
+                    ("website_id", "=", website.id),
+                ], limit=1)
             if existing:
-                existing.write({"url": url, "sequence": sequence})
+                existing.write({"name": name, "url": url, "sequence": sequence})
             else:
                 Menu.create({
                     "name": name,
@@ -99,7 +208,10 @@ def _sync_ckr_menus(env):
                     "sequence": sequence,
                 })
 
-    # 3. Nettoyage : si un website.page "/" stale (non standard) est
+        # 3. Groupe Communauté (sous-menus : Idées cadeaux, Recettes, Blog).
+        _sync_community_menu_for_website(website, root, Menu)
+
+    # 4. Nettoyage : si un website.page "/" stale (non standard) est
     #    present (versions precedentes du module), on le retire pour
     #    laisser website.homepage_page piloter la homepage.
     stale = Page.search([("url", "=", "/")])
@@ -116,6 +228,56 @@ def _sync_ckr_menus(env):
     _logger.info("[C-Kreyol] sync_ckr_menus : OK.")
 
 
-def post_init_hook(env):
-    """Declenche a l install initial du module."""
+def _ensure_featured_collection_parameter(env):
+    """Garantit la présence du paramètre Incontournables sans écraser sa valeur.
+
+    Volontairement **hors fichier data XML** : un upgrade module ne doit pas
+    repasser l'id collection à ``0`` après configuration BO / exploitation.
+    """
+    ICP = env["ir.config_parameter"].sudo()
+    if ICP.search([("key", "=", CKR_FEATURED_COLLECTION_PARAM)], limit=1):
+        return
+    ICP.set_param(CKR_FEATURED_COLLECTION_PARAM, "0")
+    _logger.info(
+        "[C-Kreyol] Paramètre %s créé (défaut 0).",
+        CKR_FEATURED_COLLECTION_PARAM,
+    )
+
+
+def _whitelist_crm_lead_pro_form_fields(cr):
+    """Autorise les champs CRM MVP03 / rappel sur les formulaires Website.
+
+    ``formbuilder_whitelist`` exige le groupe Designer ; en hook superuser on
+    applique la même mise à jour SQL que le core (voir ``website_form.py``).
+    """
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+        SET website_form_blacklisted = FALSE
+        WHERE model = %s AND name IN %s
+        """,
+        (
+            "crm.lead",
+            (
+                "referred",
+                "ckr_activity_type",
+                "ckr_callback_slot",
+                "ckr_callback_date",
+                "ckr_callback_window",
+            ),
+        ),
+    )
+
+
+def _whitelist_crm_lead_referred_for_website_form(cr):
+    """Compat : ancien nom ; délègue à ``_whitelist_crm_lead_pro_form_fields``."""
+    _whitelist_crm_lead_pro_form_fields(cr)
+
+
+def post_init_hook(cr, registry):
+    """Déclenché à l'installation initiale du module (signature Odoo standard)."""
+    env = Environment(cr, SUPERUSER_ID, {})
+    _whitelist_crm_lead_pro_form_fields(cr)
     _sync_ckr_menus(env)
+    _ensure_featured_collection_parameter(env)
+    env["website"].ckr_ensure_showcase_featured_on_empty_websites()

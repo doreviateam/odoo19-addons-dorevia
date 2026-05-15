@@ -3,16 +3,20 @@
 
 Matérialise le **patron Hybride H1** acté successivement pour :
 
-* **Kits / Pack** — [CONTRAT_URL_PACKS.md §12](../docs/phase_2/CONTRAT_URL_PACKS.md)
+* **Kits / Pack** — [CONTRAT_URL_PACKS.md §12](../docs/mvp_01/CONTRAT_URL_PACKS.md)
   (module 19.0.1.1.0) : ``/kits`` → **301** → ``/shop?ckr_mode=pack``.
-* **Promotions** — [CONTRAT_URL_PROMOTIONS.md §12](../docs/phase_2/CONTRAT_URL_PROMOTIONS.md)
+* **Promotions** — [CONTRAT_URL_PROMOTIONS.md §12](../docs/mvp_01/CONTRAT_URL_PROMOTIONS.md)
   (module 19.0.1.2.0) : ``/promotions`` → **301** → ``/shop?ckr_mode=promo``.
-* **Catégories** — [CONTRAT_URL_CATEGORIES.md §12](../docs/phase_2/CONTRAT_URL_CATEGORIES.md)
-  (module 19.0.1.3.0) : ``/categories`` → **301** → ``/shop/category/<id>-<slug>``
-  (**cible native** Odoo ; pas de ``ckr_mode`` — le filtre est celui du
-  standard ``website_sale``).
-* **Origines** — [CONTRAT_URL_ORIGINES.md §13](../docs/phase_2/CONTRAT_URL_ORIGINES.md)
-  + [SPEC_IMPL_ORIGINES.md](../docs/phase_2/SPEC_IMPL_ORIGINES.md)
+* **Incontournables** — [SPEC_SHOP_PORTES.md §4.6](../docs/mvp_01/SPEC_SHOP_PORTES.md) :
+  ``/incontournables`` → **301** → ``/shop?ckr_mode=featured`` ; périmètre =
+  une ``ckr.shop.collection`` désignée par paramètre système
+  (réutilisation du filtre ``ckr_collection_*`` / ``_search_get_detail``).
+* **Catégories** — [CONTRAT_URL_CATEGORIES.md §12](../docs/mvp_01/CONTRAT_URL_CATEGORIES.md)
+  (module 19.0.1.3.0, doctrine conteneur) : ``/categories`` → **301** →
+  ``/shop?ckr_category=<id>-<slug>`` (filtre standard ``website_sale`` via
+  ``_search_get_detail`` ; pas de ``ckr_mode``).
+* **Origines** — [CONTRAT_URL_ORIGINES.md §13](../docs/mvp_01/CONTRAT_URL_ORIGINES.md)
+  + [SPEC_IMPL_ORIGINES.md](../docs/mvp_01/SPEC_IMPL_ORIGINES.md)
   (module 19.0.1.4.0) : ``/origines`` → **301** → ``/shop?ckr_mode=origin``
   (catalogue complet + bandeau) ; paramètre **répétable**
   ``ckr_origin=<slug>`` pour filtrer en **OU** sur les
@@ -21,14 +25,14 @@ Matérialise le **patron Hybride H1** acté successivement pour :
   ``ckr.shop.origin`` pour les métadonnées éditoriales §3.1. Repli
   **HTTP 302** sur ``/shop`` nu en cas de slug inconnu / non publié
   / orphelin (SPEC_IMPL §3.3).
-* **Collections** — [CONTRAT_URL_COLLECTIONS.md](../docs/phase_2/CONTRAT_URL_COLLECTIONS.md)
-  + [SPEC_IMPL_COLLECTIONS.md](../docs/phase_2/SPEC_IMPL_COLLECTIONS.md)
+* **Collections** — [CONTRAT_URL_COLLECTIONS.md](../docs/mvp_01/CONTRAT_URL_COLLECTIONS.md)
+  + [SPEC_IMPL_COLLECTIONS.md](../docs/mvp_01/SPEC_IMPL_COLLECTIONS.md)
   (module 19.0.1.6.0, MOA 2026-04-22). Rupture doctrinale par rapport
   aux portes précédentes : les **URL visiteur** sont **nobles** —
   ``/collections``, ``/collections/<slug>``, et **S1** union
   ``/collections/union/<slug-1>/…/<slug-n>`` (**n ≥ 2**) —
   **sans** redirection 301 vers ``/shop?ckr_mode=collection`` (cf.
-  [CONTRAT §4.3](../docs/phase_2/CONTRAT_URL_COLLECTIONS.md)). En
+  [CONTRAT §4.3](../docs/mvp_01/CONTRAT_URL_COLLECTIONS.md)). En
   coulisse la lecture réutilise le rendu ``/shop`` via l'attribut
   **non-persistant** ``request._ckr_collection_ctx`` (ADR local —
   alternative explicite au détour par la query string technique
@@ -40,7 +44,7 @@ Matérialise le **patron Hybride H1** acté successivement pour :
   un seul segment). **302** + message **flash session one-shot**
   (``ckr_collection_notice``) pour les replis (**repli A** V1 —
   pas de recomposition partielle si au moins un slug de l'union
-  est invalide, cf. [SPEC_IMPL §6](../docs/phase_2/SPEC_IMPL_COLLECTIONS.md)).
+  est invalide, cf. [SPEC_IMPL §6](../docs/mvp_01/SPEC_IMPL_COLLECTIONS.md)).
   Priorité ``ckr_mode`` figée **en dernier** : non-régression
   absolue des portes déjà livrées.
 
@@ -51,17 +55,18 @@ Doctrine (ADR-CKR-007, 008) :
   (**Collections**) ou alias 301 (**Pack / Promo / Origines**) ;
 * ce qui change d'une porte à l'autre, c'est le **mode de lecture** ;
 * le paramètre **``ckr_mode``** est **whitelisté** : seules les valeurs
-  connues (``pack``, ``promo``, ``origin``, ``collection``) sont
+  connues (``pack``, ``promo``, ``featured``, ``origin``, ``collection``) sont
   interprétées, les autres sont silencieusement ignorées (pas de 40x,
   pas de log ; pour éviter toute dérive de crawler) ;
 * **conflit multi-``ckr_mode``** (SPEC_IMPL §4 Origines, §5.1
-  Collections) : une seule valeur est effective par requête, selon
-  la **priorité déterministe** ``pack`` > ``promo`` > ``origin`` >
-  ``collection`` (**Collections en dernier** — non-régression
+  Collections ; porte **Incontournables** SPEC §4.6) : une seule valeur
+  est effective par requête, selon la **priorité déterministe**
+  ``pack`` > ``promo`` > ``featured`` > ``origin`` > ``collection``
+  (**Collections en dernier** — non-régression
   absolue des portes livrées ; cohérent avec le fait que
   ``/shop?ckr_mode=collection…`` n'est **pas** une URL publique de
   référence, cf. [CONTRAT_URL_COLLECTIONS §4.3]
-  (../docs/phase_2/CONTRAT_URL_COLLECTIONS.md)) ; implémentation via
+  (../docs/mvp_01/CONTRAT_URL_COLLECTIONS.md)) ; implémentation via
   le helper unique :func:`_ckr_effective_mode`.
 
 Conception technique :
@@ -83,12 +88,18 @@ Conception technique :
       référencé depuis les ``product.template`` standard ; profil CK
       ``ckr.shop.origin`` publié pour la décoration / routage.
 """
+from werkzeug.exceptions import NotFound
 from werkzeug.urls import url_encode
 
-from odoo import _, http
+from odoo import _, fields, http, tools
 from odoo.fields import Domain
 from odoo.http import request
+from odoo.tools.translate import LazyTranslate
+
+from odoo.addons.website_sale.const import SHOP_PATH
 from odoo.addons.website_sale.controllers.main import WebsiteSale
+
+_lt = LazyTranslate(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -107,15 +118,34 @@ from odoo.addons.website_sale.controllers.main import WebsiteSale
 # ---------------------------------------------------------------------------
 CKR_MODE_PARAM = "ckr_mode"
 CKR_ORIGIN_PARAM = "ckr_origin"
+# Filtre Collections sur ``/shop`` (paramètres répétables, combinables aux chips).
+CKR_COLLECTION_QUERY_PARAM = "ckr_collection"
+# Vue « toutes les collections visibles » sans lister les slugs (union éditoriale).
+CKR_COLLECTION_SCOPE_PARAM = "ckr_collection_scope"
+CKR_COLLECTION_SCOPE_ALL = "all"
+# Facettes catégories publiques sur ``/shop`` (répétable, OU intra-groupe).
+CKR_CATEGORY_PARAM = "ckr_category"
 
 CKR_MODE_PACK = "pack"
 CKR_MODE_PROMO = "promo"
+CKR_MODE_FEATURED = "featured"
 CKR_MODE_ORIGIN = "origin"
 CKR_MODE_COLLECTION = "collection"
+
+# Modes réservés aux **chips** commerciaux (AND avec les facettes sidebar).
+CKR_COMMERCIAL_MODES = frozenset({
+    CKR_MODE_PACK,
+    CKR_MODE_PROMO,
+    CKR_MODE_FEATURED,
+})
+
+# Paramètre système : id ``ckr.shop.collection`` « Incontournables » (SPEC §4.6).
+CKR_FEATURED_COLLECTION_PARAM = "dorevia_ckreyol_marketplace.featured_collection_id"
 
 CKR_MODES_ALLOWED = frozenset({
     CKR_MODE_PACK,
     CKR_MODE_PROMO,
+    CKR_MODE_FEATURED,
     CKR_MODE_ORIGIN,
     CKR_MODE_COLLECTION,
 })
@@ -134,6 +164,7 @@ CKR_MODES_ALLOWED = frozenset({
 CKR_MODE_PRIORITY = (
     CKR_MODE_PACK,
     CKR_MODE_PROMO,
+    CKR_MODE_FEATURED,
     CKR_MODE_ORIGIN,
     CKR_MODE_COLLECTION,
 )
@@ -141,6 +172,7 @@ CKR_MODE_PRIORITY = (
 CKR_MODE_TITLES = {
     CKR_MODE_PACK: "Kits",
     CKR_MODE_PROMO: "Promotions",
+    CKR_MODE_FEATURED: "Incontournables",
     # Valeur de **repli** : le titre affiché du bandeau Origines suit la
     # règle dynamique SPEC_IMPL §6.1 (nom visiteur si exactement une
     # origine est active, sinon « Origines »).
@@ -165,6 +197,7 @@ CKR_CANONICAL_PATH = "/shop"
 CKR_ALIAS_MODE = {
     "/kits": CKR_MODE_PACK,
     "/promotions": CKR_MODE_PROMO,
+    "/incontournables": CKR_MODE_FEATURED,
     "/origines": CKR_MODE_ORIGIN,
 }
 
@@ -221,11 +254,12 @@ def _ckr_candidate_modes(post=None):
 def _ckr_effective_mode(post=None):
     """Mode effectif unique pour la requête courante (priorité §4).
 
-    Règle (SPEC_IMPL_ORIGINES §4) : parmi les valeurs ``ckr_mode``
-    whitelistées lues dans la requête, retenir la **première** dans
-    l'ordre ``pack`` > ``promo`` > ``origin``. Toute autre valeur est
-    ignorée ; aucune erreur HTTP n'est levée — une requête malformée
-    retombe au pire sur ``/shop`` nu.
+    Règle (SPEC_IMPL_ORIGINES §4 + SPEC_SHOP_PORTES §4.6) : parmi les
+    valeurs ``ckr_mode`` whitelistées lues dans la requête, retenir la
+    **première** dans l'ordre ``pack`` > ``promo`` > ``featured`` >
+    ``origin`` > ``collection``. Toute autre valeur est ignorée ;
+    aucune erreur HTTP n'est levée — une requête malformée retombe au
+    pire sur ``/shop`` nu.
 
     :returns: valeur CK (str) si au moins un mode whitelisté est
         présent, sinon ``None``.
@@ -328,6 +362,148 @@ def _ckr_canonical_origin_slugs(post=None):
     return sorted({p.slug for p in profiles if p.slug})
 
 
+def _ckr_read_category_slugs(post=None):
+    values = []
+    if request and getattr(request, "httprequest", None):
+        values.extend(request.httprequest.args.getlist(CKR_CATEGORY_PARAM))
+    if not values and post and post.get(CKR_CATEGORY_PARAM):
+        raw = post.get(CKR_CATEGORY_PARAM)
+        if isinstance(raw, (list, tuple)):
+            values.extend(raw)
+        else:
+            values.append(raw)
+    seen = set()
+    out = []
+    for item in values:
+        if item and item not in seen:
+            seen.add(item)
+            out.append(item)
+    return out
+
+
+def _ckr_resolve_public_categories_from_slugs(slugs, website):
+    if not slugs or not website:
+        return request.env["product.public.category"].browse()
+    IrHttp = request.env["ir.http"].sudo()
+    Category = request.env["product.public.category"].sudo()
+    want = {(s or "").strip() for s in slugs if (s or "").strip()}
+    if not want:
+        return Category.browse()
+    domain = [
+        "|",
+        ("website_id", "=", False),
+        ("website_id", "=", int(website.id)),
+    ]
+    candidates = Category.search(domain)
+    found = Category.browse()
+    for c in candidates:
+        if IrHttp._slug(c) in want:
+            found |= c
+    return found
+
+
+def _ckr_canonical_category_slugs(post=None):
+    website = getattr(request, "website", None) if request else None
+    slugs = _ckr_read_category_slugs(post)
+    if not website or not slugs:
+        return []
+    cats = _ckr_resolve_public_categories_from_slugs(slugs, website)
+    IrHttp = request.env["ir.http"].sudo()
+    return sorted({IrHttp._slug(c) for c in cats if c})
+
+
+def _ckr_modes_for_commercial_chip_probe(commercial_target):
+    """Ensemble ``ckr_mode`` équivalent à un clic sur une chip commerciale.
+
+    Les valeurs ``pack`` / ``promo`` / ``featured`` de la query sont retirées
+    puis remplacées par ``commercial_target`` ; origines, collections,
+    ``ckr_mode=origin|collection``, facettes CK inchangés — aligné sur
+    :func:`_ckr_build_shop_url_with_commercial`.
+    """
+    if commercial_target not in CKR_COMMERCIAL_MODES:
+        raise ValueError(
+            "commercial_target doit être dans CKR_COMMERCIAL_MODES, "
+            "obtenu %r" % (commercial_target,)
+        )
+    base = _ckr_candidate_modes()
+    return (base - CKR_COMMERCIAL_MODES) | {commercial_target}
+
+
+def _ckr_build_shop_url_with_commercial(commercial_modes, shop_path=None):
+    """Chemin boutique (souvent ``shop_path``) + facettes inchangées + chips commerciaux."""
+    base = ((shop_path or CKR_CANONICAL_PATH) or CKR_CANONICAL_PATH).rstrip("/") or CKR_CANONICAL_PATH
+    if not request or not getattr(request, "httprequest", None):
+        return base
+    args = request.httprequest.args
+    pairs = []
+    for key in args.keys():
+        for v in args.getlist(key):
+            if key == CKR_MODE_PARAM and v in CKR_COMMERCIAL_MODES:
+                continue
+            pairs.append((key, v))
+    for m in sorted(commercial_modes, key=lambda x: CKR_MODE_PRIORITY.index(x)):
+        pairs.append((CKR_MODE_PARAM, m))
+    qs = url_encode(pairs)
+    return f"{base}?{qs}" if qs else base
+
+
+def _ckr_shop_container_base_path():
+    """Préfixe ``…/shop`` depuis le chemin HTTP courant (support ``/fr/shop/category/…``)."""
+    if not request or not getattr(request, "httprequest", None):
+        return CKR_CANONICAL_PATH
+    path = request.httprequest.path or ""
+    marker = "/shop/category/"
+    if marker in path:
+        i = path.index(marker)
+        return path[: i + len("/shop")] or CKR_CANONICAL_PATH
+    p = path.rstrip("/")
+    if p.endswith("/shop"):
+        return p
+    return CKR_CANONICAL_PATH
+
+
+def _ckr_shop_redirect_category_path_to_query(category):
+    """Doctrine boutique : tout le catalogue vit sous ``/shop?…``, pas ``/shop/category/…``."""
+    if not category or not request or not getattr(request, "httprequest", None):
+        return None
+    path = request.httprequest.path or ""
+    marker = "/shop/category/"
+    if marker not in path:
+        return None
+    IrHttp = request.env["ir.http"].sudo()
+    slug = IrHttp._slug(category)
+    if not slug:
+        return None
+    args = request.httprequest.args
+    existing_lower = {
+        (x or "").strip().lower() for x in args.getlist(CKR_CATEGORY_PARAM) if x
+    }
+    pairs = []
+    for key in args.keys():
+        for v in args.getlist(key):
+            pairs.append((key, v))
+    if slug.lower() not in existing_lower:
+        pairs.append((CKR_CATEGORY_PARAM, slug))
+    shop_base = _ckr_shop_container_base_path()
+    qs = url_encode(pairs)
+    url = f"{shop_base}?{qs}" if qs else shop_base
+    return request.redirect(url, code=302)
+
+
+def _ckr_build_shop_url_clear_collections():
+    """``/shop`` sans paramètres collections (case « Toutes » du groupe)."""
+    if not request or not getattr(request, "httprequest", None):
+        return CKR_CANONICAL_PATH
+    pairs = []
+    for key in request.httprequest.args.keys():
+        if key in (CKR_COLLECTION_QUERY_PARAM, CKR_COLLECTION_SCOPE_PARAM):
+            continue
+        for v in request.httprequest.args.getlist(key):
+            pairs.append((key, v))
+    qs = url_encode(pairs)
+    return f"{CKR_CANONICAL_PATH}?{qs}" if qs else CKR_CANONICAL_PATH
+
+
 def _ckr_resolve_promo_template_ids():
     """Résout la source de vérité A2 (pricelist datée) côté contrôleur.
 
@@ -386,17 +562,25 @@ def _ckr_collection_ctx_set(kind, collections):
     }
 
 
+_CKR_FLASH_ONCE_PER_REQUEST = "_ckr_collection_flash_delivered"
+
+
 def _ckr_collection_flash_consume():
     """Lit puis **retire** le message flash Collections de la session.
 
-    Consommation « one-shot » : appelée par ``_get_additional_shop_values``
-    au moment du rendu de ``/collections`` (après 302). Aucune
-    retransmission en query string — alignement CONTRAT §8.
+    Consommation « one-shot » session : appelée depuis ``_get_additional_shop_values``.
+    Si le hook est invoqué plusieurs fois **dans la même requête HTTP** (cas fréquent),
+    on ne ``pop`` qu'une fois et on réutilise la valeur — sinon le message disparaît
+    avant le rendu QWeb du ``/shop``.
     """
     if not request or not getattr(request, "session", None):
         return ""
+    if getattr(request, _CKR_FLASH_ONCE_PER_REQUEST, None) is not None:
+        return getattr(request, _CKR_FLASH_ONCE_PER_REQUEST) or ""
     notice = request.session.pop(CKR_COLLECTION_FLASH_SESSION_KEY, "")
-    return notice or ""
+    value = notice or ""
+    setattr(request, _CKR_FLASH_ONCE_PER_REQUEST, value)
+    return value
 
 
 def _ckr_collection_flash_set(notice=None):
@@ -409,9 +593,9 @@ def _ckr_collection_flash_set(notice=None):
 
 
 def _ckr_collection_redirect_unavailable():
-    """302 vers ``/collections`` avec message flash (repli CONTRAT §8)."""
+    """302 vers ``/shop`` avec message flash (repli CONTRAT §8, conteneur unique)."""
     _ckr_collection_flash_set()
-    return request.redirect(CKR_COLLECTION_BASE_PATH, code=302)
+    return request.redirect(CKR_CANONICAL_PATH, code=302)
 
 
 def _ckr_collection_union_canonical_path(slugs):
@@ -442,6 +626,113 @@ def _ckr_collection_resolve_template_ids(collections):
     return list({pid for pid in collections.product_template_ids.ids})
 
 
+def _ckr_resolve_featured_collection():
+    """Résout la collection « Incontournables » (SPEC_SHOP_PORTES §4.6).
+
+    Source : ``ir.config_parameter``
+    ``dorevia_ckreyol_marketplace.featured_collection_id`` → id
+    ``ckr.shop.collection``. Valeur ``0`` ou id inexistant / non visible
+    → recordset vide (repli 302 depuis ``_get_search_options``).
+    """
+    if not request:
+        return None
+    raw = (
+        request.env["ir.config_parameter"]
+        .sudo()
+        .get_param(CKR_FEATURED_COLLECTION_PARAM, "0")
+    )
+    try:
+        cid = int(str(raw).strip() or "0")
+    except ValueError:
+        return request.env["ckr.shop.collection"].browse()
+    if not cid:
+        return request.env["ckr.shop.collection"].browse()
+    Collection = request.env["ckr.shop.collection"].sudo()
+    coll = Collection.browse(cid).exists()
+    # ``request.website`` peut être un recordset **vide** (routage sans
+    # site résolu — ex. requêtes outil avec ``X-Odoo-Database``). Dans
+    # ce cas, passer ce recordset à ``_ckr_is_visible`` fausse le test
+    # ``website_id`` (empty.id ≠ coll.website_id.id → faux négatif).
+    web = getattr(request, "website", None)
+    if web is not None and not web.id:
+        web = None
+    if not coll or not coll._ckr_is_visible(website=web):
+        return Collection.browse()
+    return coll
+
+
+def _ckr_mode_sort_key(mode):
+    return CKR_MODE_PRIORITY.index(mode)
+
+
+def _ckr_sidebar_facet_omit_get():
+    """Facettes temporairement neutralisées (comptage sidebar / relaxation)."""
+    om = getattr(request, "_ckr_sidebar_facet_omit", None) if request else None
+    if not om:
+        return frozenset()
+    return frozenset(om)
+
+
+def _ckr_collection_constraint_id_sets(kwargs=None, modes_override=None):
+    """Ensembles d'ids produits (templates) à intersecter : Incontournables + ctx collections.
+
+    :param modes_override: si fourni, remplace la lecture des modes depuis la requête
+        (sonde visibilité chips / parité domaine).
+    """
+    if modes_override is not None:
+        candidates = set(modes_override)
+    else:
+        candidates = _ckr_candidate_modes(kwargs)
+    omit = _ckr_sidebar_facet_omit_get()
+    id_sets = []
+    if CKR_MODE_FEATURED in candidates:
+        coll = _ckr_resolve_featured_collection()
+        if coll:
+            id_sets.append(
+                set(_ckr_collection_resolve_template_ids(coll))
+            )
+        else:
+            id_sets.append(set())
+    ctx = _ckr_collection_ctx_get()
+    if ctx is not None:
+        # Relaxation uniquement pour la facette sidebar ``ckr_collection`` sur ``/shop`` :
+        # garder les resserrements Featured / routes ``/collections…`` inchangés.
+        if (
+            "collection" in omit
+            and getattr(request, "_ckr_collection_ctx_from_shop_query", False)
+        ):
+            pass
+        else:
+            id_sets.append(
+                set(
+                    _ckr_collection_resolve_template_ids(ctx.get("collections"))
+                )
+            )
+    return id_sets
+
+
+def _ckr_merge_intersect_template_ids(id_sets):
+    """Intersection des ensembles ; ``None`` si aucune contrainte collections."""
+    if not id_sets:
+        return None
+    acc = None
+    for s in id_sets:
+        if acc is None:
+            acc = set(s)
+        else:
+            acc &= s
+    return list(acc)
+
+
+def _ckr_apply_collection_filters_to_options(options, kwargs):
+    id_sets = _ckr_collection_constraint_id_sets(kwargs)
+    if not id_sets:
+        return
+    merged = _ckr_merge_intersect_template_ids(id_sets)
+    options["ckr_collection_only"] = True
+    options["ckr_collection_template_ids"] = merged
+
+
 class WebsiteSaleCKR(WebsiteSale):
     """Extension de ``WebsiteSale`` pour les portes Explorer (Hybride H1).
 
@@ -460,123 +751,144 @@ class WebsiteSaleCKR(WebsiteSale):
     # remontée sous forme de réponse HTTP par le framework.
     def _get_search_options(self, **kwargs):
         options = super()._get_search_options(**kwargs)
-        mode = _ckr_effective_mode(kwargs)
-        if mode == CKR_MODE_PACK:
+        candidates = _ckr_candidate_modes(kwargs)
+        # Portes commerciales **cumulables** (AND) : plusieurs `ckr_mode`
+        # distincts peuvent coexister dans la query (ex. promo + origine).
+        if CKR_MODE_PACK in candidates:
             options["ckr_pack_only"] = True
-        elif mode == CKR_MODE_PROMO:
+        if CKR_MODE_PROMO in candidates:
             options["ckr_promo_only"] = True
-        elif mode == CKR_MODE_ORIGIN:
-            profiles, requested, invalid = _ckr_resolve_origin_profiles(kwargs)
-            if invalid:
-                # Slugs demandés mais aucun résolu → 302 /shop nu
-                # (§3.3). On court-circuite la recherche pour éviter
-                # tout rendu avec contexte erroné.
-                raise _CKR_ORIGIN_INVALID_REDIRECT()
-            options["ckr_origin_only"] = True
-            # Liste d'ids catalogue à consommer par `_search_get_detail`
-            # (évite un second lookup SQL dans le modèle).
-            options["ckr_origin_attribute_value_ids"] = (
-                profiles.mapped("attribute_value_id").ids if requested else []
-            )
-        # --- Porte Collections : lecture noble /collections[/…] --------
-        # Le contexte `_ckr_collection_ctx` est posé par les routes
-        # `ckr_collections_*` **avant** l'appel à `super().shop()`. Ce
-        # chemin est **distinct** du dispatcher `ckr_mode=` ci-dessus :
-        # aucun flag `ckr_mode=collection` n'est attendu côté visiteur
-        # (CONTRAT §4.3). On reste donc **additif** — pas de `elif`.
-        ctx = _ckr_collection_ctx_get()
-        if ctx is not None:
-            options["ckr_collection_only"] = True
-            # Pré-calcul des template_ids éligibles — consommé par
-            # ``product.template._search_get_detail`` (point unique de
-            # filtrage catalogue `/shop` en Odoo 19 : `_get_shop_domain`
-            # n'est plus appliqué par `_shop_lookup_products`). Le fait
-            # de **toujours** injecter la clé (même liste vide) garantit
-            # que la vue générale / unitaire / union filtrent strictement
-            # leur périmètre ; sans collection visible résolue le
-            # résultat est canoniquement vide (état vide §12 A pris en
-            # charge par le bandeau).
-            options["ckr_collection_template_ids"] = list(
-                _ckr_collection_resolve_template_ids(ctx.get("collections"))
-            )
+        if CKR_MODE_FEATURED in candidates:
+            coll = _ckr_resolve_featured_collection()
+            if not coll:
+                raise _CKR_FEATURED_INVALID_REDIRECT()
+        profiles, requested, invalid = _ckr_resolve_origin_profiles(kwargs)
+        if invalid:
+            raise _CKR_ORIGIN_INVALID_REDIRECT()
+        omit_sidebar = _ckr_sidebar_facet_omit_get()
+        if "origin" not in omit_sidebar:
+            if requested:
+                options["ckr_origin_only"] = True
+                options["ckr_origin_attribute_value_ids"] = (
+                    profiles.mapped("attribute_value_id").ids
+                )
+            elif CKR_MODE_ORIGIN in candidates:
+                options["ckr_origin_only"] = True
+                options["ckr_origin_attribute_value_ids"] = []
+        _ckr_apply_collection_filters_to_options(options, kwargs)
+
+        # Facettes ``ckr_category=…`` : même périmètre que ``_get_shop_domain`` ; la grille
+        # Odoo 19 passe par ``_search_get_detail`` (pas ``_get_shop_domain``).
+        website = getattr(request, "website", None) if request else None
+        cat_slugs = (
+            []
+            if "category" in omit_sidebar
+            else _ckr_read_category_slugs(kwargs)
+        )
+        query_cats = (
+            _ckr_resolve_public_categories_from_slugs(cat_slugs, website)
+            if website and cat_slugs
+            else request.env["product.public.category"].browse()
+        )
+        IrHttp = request.env["ir.http"].sudo()
+        want_cats = set(cat_slugs)
+        got_cats = {IrHttp._slug(c) for c in query_cats} if query_cats else set()
+        if cat_slugs and want_cats != got_cats:
+            options["ckr_category_invalid"] = True
+        elif query_cats:
+            options["ckr_public_category_ids"] = list(query_cats.ids)
+
         return options
 
     # ------------------------------------------------------------------
     # Hook 2 : cohérence du calcul min/max prix (domaine boutique complet)
     # ------------------------------------------------------------------
     def _get_shop_domain(
-        self, search, category, attribute_value_dict, search_in_description=True
+        self,
+        search,
+        category,
+        attribute_value_dict,
+        search_in_description=True,
+        *,
+        _ckr_chip_commercial_probe=None,
     ):
+        website = getattr(request, "website", None) if request else None
+        cat_slugs = _ckr_read_category_slugs()
+        query_cats = (
+            _ckr_resolve_public_categories_from_slugs(cat_slugs, website)
+            if website and cat_slugs
+            else request.env["product.public.category"].browse()
+        )
+        path_category = None if cat_slugs else category
+        IrHttp = request.env["ir.http"].sudo()
+        want_cats = set(cat_slugs)
+        got_cats = {IrHttp._slug(c) for c in query_cats} if query_cats else set()
+        if cat_slugs and want_cats != got_cats:
+            domain = super()._get_shop_domain(
+                search,
+                path_category,
+                attribute_value_dict,
+                search_in_description=search_in_description,
+            )
+            return Domain.AND([domain, Domain([("id", "=", 0)])])
         domain = super()._get_shop_domain(
             search,
-            category,
+            path_category,
             attribute_value_dict,
             search_in_description=search_in_description,
         )
-        mode = _ckr_effective_mode()
-        if mode == CKR_MODE_PACK:
+        if query_cats:
+            domain = Domain.AND(
+                [
+                    domain,
+                    Domain([("public_categ_ids", "in", query_cats.ids)]),
+                ]
+            )
+        if _ckr_chip_commercial_probe is not None:
+            candidates = _ckr_modes_for_commercial_chip_probe(
+                _ckr_chip_commercial_probe
+            )
+        else:
+            candidates = _ckr_candidate_modes()
+        if CKR_MODE_PACK in candidates:
             domain = Domain.AND([domain, Domain([("pack_ok", "=", True)])])
-        elif mode == CKR_MODE_PROMO:
+        if CKR_MODE_PROMO in candidates:
             promo_ids = _ckr_resolve_promo_template_ids()
             if promo_ids is None:
-                # Cas « global promo » : toute la boutique est en promo.
-                # Aucun filtre supplémentaire ; le bandeau « Promotions »
-                # reste affiché et le contexte de porte tient.
                 pass
             elif not promo_ids:
-                # Aucune promo active : forcer l'ensemble vide via un
-                # domaine canoniquement impossible. Préférable à une
-                # exception ou une 404 : le template d'état vide dédié
-                # prend le relais côté vue.
                 domain = Domain.AND([domain, Domain([("id", "=", 0)])])
             else:
                 domain = Domain.AND(
                     [domain, Domain([("id", "in", list(promo_ids))])]
                 )
-        elif mode == CKR_MODE_ORIGIN:
-            # SPEC_IMPL §3.2 : `ckr_mode=origin` seul = catalogue complet
-            # (aucun filtre implicite). On ne restreint que si au moins
-            # un profil publié a été résolu.
-            profiles, requested, invalid = _ckr_resolve_origin_profiles()
-            if requested and not invalid:
-                value_ids = profiles.mapped("attribute_value_id").ids
-                if value_ids:
-                    domain = Domain.AND(
-                        [
-                            domain,
-                            Domain(
-                                [
-                                    (
-                                        "attribute_line_ids.value_ids",
-                                        "in",
-                                        value_ids,
-                                    )
-                                ]
-                            ),
-                        ]
-                    )
-        # --- Porte Collections : filtre OU sur M2M produit ↔ collection -
-        # SPEC_IMPL §3.2 / §5.2 : le filtre est l'union des
-        # `product_template_ids` de toutes les collections résolues pour
-        # la lecture courante (générale = toutes visibles, unitaire = 1,
-        # union = n ≥ 2). Le domaine produit final est `('id', 'in',
-        # [ids])`, ce qui fonctionne de concert avec le calcul min/max
-        # prix natif (Odoo applique ce domaine en amont de la pagination
-        # et des facettes).
-        ctx = _ckr_collection_ctx_get()
-        if ctx is not None:
-            collections = ctx.get("collections")
-            template_ids = _ckr_collection_resolve_template_ids(collections)
-            if template_ids:
+        id_sets = _ckr_collection_constraint_id_sets(modes_override=candidates)
+        if id_sets:
+            merged = _ckr_merge_intersect_template_ids(id_sets)
+            if merged:
                 domain = Domain.AND(
-                    [domain, Domain([("id", "in", template_ids)])]
+                    [domain, Domain([("id", "in", merged)])]
                 )
             else:
-                # Aucune ligne M2M résolue : on force un ensemble vide
-                # (état vide §12 A pour la vue unitaire, liste vide pour
-                # la vue générale/union). Préférable à l'absence de
-                # filtre, qui afficherait le catalogue entier.
                 domain = Domain.AND([domain, Domain([("id", "=", 0)])])
+        profiles, requested, invalid = _ckr_resolve_origin_profiles()
+        if requested and not invalid:
+            value_ids = profiles.mapped("attribute_value_id").ids
+            if value_ids:
+                domain = Domain.AND(
+                    [
+                        domain,
+                        Domain(
+                            [
+                                (
+                                    "attribute_line_ids.value_ids",
+                                    "in",
+                                    value_ids,
+                                )
+                            ]
+                        ),
+                    ]
+                )
         return domain
 
     # ------------------------------------------------------------------
@@ -588,40 +900,295 @@ class WebsiteSaleCKR(WebsiteSale):
         result = super()._shop_get_query_url_kwargs(
             search, min_price, max_price, order=order, tags=tags, **kwargs
         )
-        mode = _ckr_effective_mode(kwargs)
-        if mode:
-            result[CKR_MODE_PARAM] = mode
-        if mode == CKR_MODE_ORIGIN:
-            # Re-sérialisation des slugs dans l'ordre canonique §3.4
-            # (tri lexicographique), pour garantir des liens internes
-            # stables et alignés sur l'URL canonique.
-            canonical_slugs = _ckr_canonical_origin_slugs(kwargs)
-            if canonical_slugs:
-                result[CKR_ORIGIN_PARAM] = canonical_slugs
+        modes = sorted(_ckr_candidate_modes(kwargs), key=_ckr_mode_sort_key)
+        if modes:
+            result[CKR_MODE_PARAM] = modes
+        cat_slugs = _ckr_canonical_category_slugs(kwargs)
+        if cat_slugs:
+            result[CKR_CATEGORY_PARAM] = cat_slugs
+        canonical_slugs = _ckr_canonical_origin_slugs(kwargs)
+        _profiles, _req, invalid = _ckr_resolve_origin_profiles(kwargs)
+        if canonical_slugs and not invalid:
+            result[CKR_ORIGIN_PARAM] = canonical_slugs
+        if request and getattr(request, "httprequest", None):
+            args = request.httprequest.args
+            scope = (args.get(CKR_COLLECTION_SCOPE_PARAM) or "").strip().lower()
+            if scope == CKR_COLLECTION_SCOPE_ALL:
+                result[CKR_COLLECTION_SCOPE_PARAM] = CKR_COLLECTION_SCOPE_ALL
+            cols = sorted(
+                {
+                    (s or "").strip().lower()
+                    for s in args.getlist(CKR_COLLECTION_QUERY_PARAM)
+                    if (s or "").strip()
+                }
+            )
+            if cols:
+                result[CKR_COLLECTION_QUERY_PARAM] = cols
         return result
+
+    def _ckr_sidebar_combine_search_detail_domains(self, fragments):
+        """Concatène les fragments ``base_domain`` issue de ``_search_get_detail`` (ET)."""
+        if not fragments:
+            return Domain([(1, "=", 1)])
+        merged = Domain(fragments[0])
+        for fragment in fragments[1:]:
+            merged &= Domain(fragment)
+        return merged
+
+    def _ckr_sidebar_count_templates_with_omit(
+        self,
+        *,
+        omit_facet,
+        values,
+        kwargs,
+        domain_extra_terms=None,
+    ):
+        """Compte ``product.template`` comme la grille (``_search_get_detail``), facette retirée.
+
+        ``omit_facet`` ∈ {``category``, ``collection``, ``origin``} : relaxation du groupe
+        affiché pour que les compteurs latéraux restent cohérents avec le catalogue courant.
+        ``domain_extra_terms`` : terme(s) additionnel(s) AND (ex. une collection ou une catégorie).
+        """
+        if not request:
+            return 0
+        extra = domain_extra_terms or []
+        wk = dict(kwargs or {})
+        if omit_facet == "category":
+            wk["category"] = None
+        # Parité avec les variables ``shop()`` (recherche, attributs catalogue, prix, tri…).
+        if values:
+            for k in ("attrib", "tags", "min_price", "max_price", "order"):
+                if (
+                    values.get(k) is not None
+                    and (k not in wk or wk.get(k) is None)
+                ):
+                    wk[k] = values.get(k)
+        order = (
+            wk.get("order")
+            or (values or {}).get("order")
+            or "name asc"
+        )
+        wk["order"] = order
+        Product = request.env["product.template"].sudo()
+        website = request.website
+        try:
+            request._ckr_sidebar_facet_omit = frozenset({omit_facet})
+            options = self._get_search_options(**wk)
+            detail = Product._search_get_detail(website, order, options)
+        finally:
+            if hasattr(request, "_ckr_sidebar_facet_omit"):
+                delattr(request, "_ckr_sidebar_facet_omit")
+        merged = self._ckr_sidebar_combine_search_detail_domains(
+            list(detail.get("base_domain") or [])
+        )
+        if extra:
+            merged &= Domain(extra)
+        return Product.search_count(merged)
+
+    def _ckr_get_price_filter_shop_values(self, values, **kwargs):
+        """Calcule ou corrige les bornes du filtre Prix pour le domaine boutique **réel**.
+
+        Cas couverts :
+
+        - Vue native désactivée : Odoo n'injecte pas ``available_*`` ;
+        - **Facettes CK** (``ckr_category``, ``ckr_collection``, ``ckr_origin``,
+          modes commerce, etc.) : le noyau fournit souvent ``available_min_price`` /
+          ``available_max_price`` **sans** ces contraintes, ce qui fige la plage
+          (ex. ``0``, ``0``) alors que la grille reflète bien le domaine étendu
+          dans ``_get_shop_domain``.
+
+        On recalcule donc **systématiquement** min/max catalogue depuis
+        ``_get_shop_domain`` (liste produits alignée avec la grille), puis on
+        redéfinit ``min_price`` / ``max_price`` affichés comme le standard Odoo
+        (``sel or available_*``), en lisant aussi ``request.httprequest.args``
+        lorsque les paramètres de route ne sont pas dans ``post``.
+
+        Second repli : lorsque ``list_price`` est nul part (prix porté par la
+        liste de prix seulement, cas fréquent), ``MIN/MAX(list_price)`` ramène
+        ``0`` ; on aligne alors la plage sur ``price_reduce`` comme la grille
+        via ``_get_sales_prices``.
+        """
+        current = values or {}
+        category = current.get("category")
+        attrib_values = current.get("attrib_values")
+        if attrib_values is None:
+            attrib_values = {}
+        search = (
+            (kwargs or {}).get("search")
+            or current.get("original_search")
+            or current.get("search")
+            or ""
+        )
+
+        website = request.website
+        company_currency = website.company_id.sudo().currency_id
+        conversion_rate = request.env["res.currency"]._get_conversion_rate(
+            company_currency,
+            request.website.currency_id,
+            request.website.company_id,
+            fields.Date.today(),
+        )
+
+        Product = request.env["product.template"].with_context(bin_size=True)
+        domain = self._get_shop_domain(search, category, attrib_values)
+        query = Product._search(domain)
+        sql = query.select(
+            tools.SQL(
+                "COALESCE(MIN(list_price), 0) * %(conversion_rate)s, "
+                "COALESCE(MAX(list_price), 0) * %(conversion_rate)s",
+                conversion_rate=conversion_rate,
+            )
+        )
+        available_min_price, available_max_price = request.env.execute_query(sql)[0]
+        if (
+            website
+            and available_max_price is not None
+            and float(available_max_price) <= 0.0
+        ):
+            scanned = Product.search(domain)
+            if scanned:
+                by_tmpl = scanned._get_sales_prices(website)
+                shown = [
+                    float(entry["price_reduce"])
+                    for entry in by_tmpl.values()
+                    if isinstance(entry, dict)
+                    and entry.get("price_reduce") is not None
+                ]
+                if shown:
+                    available_min_price = min(shown)
+                    available_max_price = max(shown)
+
+        # Alignement avec ``WebsiteSale.shop()`` (website_sale) pour les valeurs **affichées**
+        # du curseur : ``min_price`` / ``max_price`` « sélection » vs bornes catalogue.
+        #
+        # Les paramètres de route ``min_price`` / ``max_price`` sont **absents** du dict
+        # ``post`` passé à ``_get_additional_shop_values(values, **post)`` (consommés par la
+        # signature ``shop(..., min_price=0, max_price=0, **post)``). Si la vue native
+        # ``filter_products_price`` est désactivée, Odoo n'injecte pas non plus ``min_price`` /
+        # ``max_price`` dans ``values`` — alors l'ancienne logique retombait systématiquement
+        # sur ``available_*``, alors que la grille appliquait bien le filtre via ``options``.
+        req_args = getattr(getattr(request, "httprequest", None), "args", None)
+        kw = kwargs or {}
+
+        def _pick_selection_float(key):
+            if key in current:
+                try:
+                    return float(current[key])
+                except (TypeError, ValueError):
+                    pass
+            if req_args is not None and key in req_args:
+                try:
+                    return float(req_args.get(key))
+                except (TypeError, ValueError):
+                    pass
+            if key in kw:
+                try:
+                    return float(kw[key])
+                except (TypeError, ValueError):
+                    pass
+            return None
+
+        sel_min = _pick_selection_float("min_price")
+        sel_max = _pick_selection_float("max_price")
+        if sel_min is None:
+            sel_min = 0.0
+        if sel_max is None:
+            sel_max = 0.0
+        min_price = sel_min or available_min_price
+        max_price = sel_max or available_max_price
+        return {
+            "min_price": min_price,
+            "max_price": max_price,
+            "available_min_price": tools.float_round(available_min_price, 2),
+            "available_max_price": tools.float_round(available_max_price, 2),
+        }
+
+    def _ckr_shop_clear_filters_button_visible(self, result, values, kwargs):
+        """Indique si le bouton « Effacer les filtres » doit être affiché.
+
+        Le gabarit Odoo utilise ``isFilteringByPrice``, qui compare la sélection aux
+        bornes **catalogue**. Après recalcul CK des bornes sur le domaine courant, la
+        plage affichée peut coïncider avec ``min_price``/``max_price`` alors que la
+        query HTTP contient encore des filtres prix — le bouton disparaissait à tort.
+        On combine donc attributs / tags / facettes CK et présence de ``min_price`` /
+        ``max_price`` **strictement positives** dans la requête.
+        """
+        vals = values or {}
+        attrib_values = vals.get("attrib_values") or {}
+        if attrib_values:
+            return True
+        tags = vals.get("tags")
+        if tags:
+            return True
+        if result.get("ckr_shop_sidebar_active_category_slugs"):
+            return True
+        if result.get("ckr_shop_sidebar_active_collection_slugs"):
+            return True
+        if result.get("ckr_shop_sidebar_active_origin_slugs"):
+            return True
+        req = getattr(request, "httprequest", None)
+        args = req.args if req else None
+        if args:
+            for key in ("min_price", "max_price"):
+                if key not in args:
+                    continue
+                raw = args.get(key)
+                if raw is None or raw == "":
+                    continue
+                try:
+                    if float(raw) > 0.0:
+                        return True
+                except (TypeError, ValueError):
+                    continue
+        return False
+
+    def _ckr_shop_chip_has_products(self, chip_mode, values, kwargs):
+        """True si le slot commercial ``chip_mode`` mène à au moins un template (domaine ``/shop``)."""
+        if chip_mode not in CKR_COMMERCIAL_MODES:
+            return False
+        vals = values or {}
+        category = vals.get("category")
+        attrib_values = vals.get("attrib_values")
+        if attrib_values is None:
+            attrib_values = {}
+        search = (
+            (kwargs or {}).get("search")
+            or vals.get("original_search")
+            or vals.get("search")
+            or ""
+        )
+        domain = self._get_shop_domain(
+            search,
+            category,
+            attrib_values,
+            _ckr_chip_commercial_probe=chip_mode,
+        )
+        return bool(request.env["product.template"].sudo().search_count(domain))
 
     # ------------------------------------------------------------------
     # Hook 4 : variables QWeb pour le titre visiteur + état vide
     # ------------------------------------------------------------------
     def _get_additional_shop_values(self, values, **kwargs):
         result = super()._get_additional_shop_values(values, **kwargs)
+        # Tuile wishlist CK (`ckr_shop_classic_tile_restore.xml`) : le QWeb lit
+        # `products_in_wishlist`. Si `website_sale_wishlist` n'alimente pas le
+        # contexte (module absent, ou MRO des contrôleurs sans son hook), une
+        # NameError au rendu produit une erreur HTTP 500 sur `/shop`.
+        result.setdefault("products_in_wishlist", None)
+        result.update(self._ckr_get_price_filter_shop_values(values, **kwargs))
+        candidates = _ckr_candidate_modes(kwargs)
         mode = _ckr_effective_mode(kwargs)
-        if mode == CKR_MODE_PACK:
+        search_term = (kwargs or {}).get("search") or (values or {}).get("search") or ""
+        has_search = bool(str(search_term).strip())
+        has_category = bool((values or {}).get("category"))
+        if CKR_MODE_PACK in candidates:
             result.update(
                 {
                     "ckr_pack_mode": True,
                     "ckr_pack_title": CKR_MODE_TITLES[CKR_MODE_PACK],
                 }
             )
-        elif mode == CKR_MODE_PROMO:
-            # Recalcul de l'état vide pour le bandeau : on ne peut pas se
-            # reposer sur le simple nombre de produits affichés par la
-            # page courante (paginée, filtrée par facettes), on requête la
-            # source de vérité une seconde fois — coût négligeable, la
-            # méthode est un ``search`` sur ``product.pricelist.item``
-            # scopé à la pricelist courante. Permet au visiteur de voir
-            # un message dédié plutôt qu'une page boutique « vide » qui
-            # pourrait laisser croire à un catalogue en rupture.
+        if CKR_MODE_PROMO in candidates:
             promo_ids = _ckr_resolve_promo_template_ids()
             is_empty = promo_ids is not None and not promo_ids
             result.update(
@@ -631,17 +1198,33 @@ class WebsiteSaleCKR(WebsiteSale):
                     "ckr_promo_empty": is_empty,
                 }
             )
-        elif mode == CKR_MODE_ORIGIN:
-            profiles, requested, _invalid = _ckr_resolve_origin_profiles(kwargs)
-            # État vide = au moins une origine valide résolue mais
-            # `search_count = 0` (origine(s) valide(s) sans produit).
-            # On lit `search_count` tel que calculé par le standard
-            # Odoo pour éviter une seconde requête SQL.
+        if CKR_MODE_FEATURED in candidates:
+            coll = _ckr_resolve_featured_collection()
+            template_ids = (
+                _ckr_collection_resolve_template_ids(coll) if coll else []
+            )
+            is_empty = not template_ids
+            result.update(
+                {
+                    "ckr_featured_mode": True,
+                    "ckr_featured_title": CKR_MODE_TITLES[CKR_MODE_FEATURED],
+                    "ckr_featured_collection": coll,
+                    "ckr_featured_empty": is_empty,
+                }
+            )
+        profiles, origin_requested, _origin_invalid = _ckr_resolve_origin_profiles(
+            kwargs
+        )
+        # Porte « Origines » (``ckr_mode=origin``) : hero contextualisé. Facette ``ckr_origin=…``
+        # seule sur ``/shop`` : filtre catalogue inchangé, pas de hero porte Origines.
+        origin_porte_seule = (
+            origin_requested and CKR_MODE_ORIGIN not in candidates
+        )
+        if (
+            CKR_MODE_ORIGIN in candidates or origin_requested
+        ) and not origin_porte_seule:
             search_count = (values or {}).get("search_count") or 0
             is_empty = bool(profiles) and not search_count
-            # Titre dynamique (SPEC_IMPL §6.1) : état vide dédié §6.1
-            # (titre figé) ; sinon `name_visitor` si exactement une
-            # origine publiée est active ; sinon repli « Origines ».
             if is_empty:
                 title = _("Aucun produit pour cette sélection.")
                 context_phrase = ""
@@ -659,7 +1242,7 @@ class WebsiteSaleCKR(WebsiteSale):
                     "ckr_origin_context_phrase": context_phrase,
                     "ckr_origin_filtered": bool(profiles),
                     "ckr_origin_profiles": profiles,
-                    "ckr_origin_requested": requested,
+                    "ckr_origin_requested": origin_requested,
                     "ckr_origin_empty": is_empty,
                 }
             )
@@ -700,26 +1283,398 @@ class WebsiteSaleCKR(WebsiteSale):
                     "ckr_collection_subtext": subtext,
                     "ckr_collection_collections": collections,
                     "ckr_collection_empty": is_empty_single,
-                    # Flash : message « one-shot » consommé au rendu de
-                    # la vue générale (/collections) après un 302. Pour
-                    # éviter de le ré-afficher sur les lectures
-                    # unitaires / union suivantes dans la même session,
-                    # la consommation est effectuée quel que soit le
-                    # `kind` (sémantique one-shot stricte § CONTRAT §8).
-                    "ckr_collection_flash": _ckr_collection_flash_consume(),
-                    # Lien « Retour aux collections » (§12 A).
-                    "ckr_collection_base_path": CKR_COLLECTION_BASE_PATH,
+                    "ckr_collection_base_path": _ckr_build_shop_url_clear_collections(),
                 }
             )
+        # Flash Collections : toujours consommé ici pour que `/shop` nu après un 302
+        # inclue bien le libellé (sans ctx collection en requête, le bloc ``if ctx`` ci‑dessus
+        # ne tourne pas — sinon message en session mais jamais injecté dans le template).
+        flash_deliver = _ckr_collection_flash_consume()
+        result["ckr_collection_flash"] = flash_deliver or ""
+        # QWeb Vague 1 (barre B + hero A) : booléens / recordsets optionnels
+        # toujours définis pour éviter les NameError dans les `t-if` / `len`.
+        for _k, _d in (
+            ("ckr_collection_mode", False),
+            ("ckr_shop_show_shop_query_collection_empty_intro", False),
+            ("ckr_pack_mode", False),
+            ("ckr_promo_mode", False),
+            ("ckr_featured_mode", False),
+            ("ckr_origin_mode", False),
+            ("ckr_promo_empty", False),
+            ("ckr_featured_empty", False),
+            ("ckr_origin_empty", False),
+            ("ckr_collection_empty", False),
+            ("ckr_origin_filtered", False),
+            ("ckr_shop_hero_retail_lane", False),
+            ("ckr_shop_sidebar_suppress_attribute_ids", []),
+            ("ckr_shop_sidebar_active_origin_slugs", []),
+            ("ckr_shop_sidebar_active_collection_slugs", []),
+            ("ckr_shop_shortcut_modes", []),
+            ("ckr_shop_sidebar_active_category_slugs", []),
+            ("ckr_shop_sidebar_price_expanded", False),
+            ("ckr_shop_has_sidebar_facets", False),
+            ("ckr_shop_chip_href_promo", CKR_CANONICAL_PATH),
+            ("ckr_shop_chip_href_featured", CKR_CANONICAL_PATH),
+            ("ckr_shop_chip_href_pack", CKR_CANONICAL_PATH),
+            ("ckr_shop_chip_href_reset", CKR_CANONICAL_PATH),
+            ("ckr_shop_show_chip_promo", False),
+            ("ckr_shop_show_chip_featured", False),
+            ("ckr_shop_show_chip_pack", False),
+        ):
+            result.setdefault(_k, _d)
+        # Filtres collections depuis ``/shop?ckr_collection=…`` : filtre métier inchangé
+        # mais hero vitrine retail (contrat boutique / test 04c) — pas « porte Collections ».
+        if getattr(request, "_ckr_collection_ctx_from_shop_query", False):
+            result["ckr_collection_mode"] = False
+        # États vides §12 A + flash RC-09 : même sans ``ckr_collection_mode`` QWeb,
+        # afficher l’intro / rebonds si facette sidebar + collection unitaire vide.
+        shop_q = getattr(request, "_ckr_collection_ctx_from_shop_query", False)
+        sq_col_empty_intro = False
+        if shop_q:
+            ctx0 = _ckr_collection_ctx_get()
+            if ctx0:
+                sq_col_empty_intro = bool(
+                    ctx0.get("kind") == CKR_COLLECTION_KIND_SINGLE
+                    and ctx0.get("collections")
+                    and result.get("ckr_collection_empty")
+                )
+        result["ckr_shop_show_shop_query_collection_empty_intro"] = sq_col_empty_intro
+        if "ckr_origin_profiles" not in result:
+            result["ckr_origin_profiles"] = request.env["ckr.shop.origin"].browse(
+                []
+            )
+        # --- Orchestration page boutique (MVP2.2 — brief conformité visuelle) ---
+        # Un seul bloc éditorial principal : le hero QWeb (`ckr_shop_hero_*`).
+        # Les bandeaux historiques par porte restent dans les vues mais sont
+        # neutralisés par `ckr_shop_show_legacy_banners` pour éviter tout
+        # double emploi avec ce hero.
+        #
+        # * ckr_shop_show_hero — True hors recherche (y compris catégorie,
+        #   origines, collections, packs / promos / incontournables).
+        # * ckr_shop_show_shortcuts — True hors recherche (chips + rail sur le
+        #   même conteneur ``/shop``).
+        # * ckr_shop_hero_retail_lane — hero vitrine « Mi Boutik La » : show_hero,
+        #   pas de catégorie native ``/shop/category/…`` (has_category), pas de
+        #   porte origines / collections *affichées* (``ckr_origin_mode``,
+        #   ``ckr_collection_mode``). Les facettes sidebar (``ckr_collection`` /
+        #   ``ckr_origin`` / ``ckr_category``) **ne** sortent pas du cadre catalogue.
+        #   Les **chips commerciaux** (``ckr_mode`` promo / featured / pack) **ne**
+        #   changent **pas** le hero : seule la grille et l’état des chips varient.
+        # * ckr_shop_show_legacy_banners — désactivé (pas de retour bandeaux).
+        show_hero = not has_search
+        show_shortcuts = not has_search
+        shortcut_modes = sorted(
+            candidates & CKR_COMMERCIAL_MODES,
+            key=_ckr_mode_sort_key,
+        )
+        result["ckr_shop_shortcut_modes"] = shortcut_modes
+        result["ckr_shop_shortcut_mode"] = mode
+        origin_slugs = _ckr_canonical_origin_slugs(kwargs)
+        origin_portal = CKR_MODE_ORIGIN in candidates and not origin_slugs
+        origin_facet = bool(origin_slugs)
+        cat_facet = bool(_ckr_canonical_category_slugs(kwargs))
+        http_args = (
+            request.httprequest.args
+            if request and getattr(request, "httprequest", None)
+            else None
+        )
+        coll_facet = bool(
+            http_args.getlist(CKR_COLLECTION_QUERY_PARAM) if http_args else []
+        )
+        result["ckr_shop_has_sidebar_facets"] = bool(
+            cat_facet or coll_facet or origin_facet
+        )
+        # Règle UX : hero retail tant qu’on n’a pas quitté le « socle » boutique par
+        # catégorie native, porte origines/collections ou facettes CK — **sauf** les
+        # seuls modes commerciaux chips (promo / featured / pack) qui réutilisent ce
+        # même hero.
+        hero_retail_lane = (
+            show_hero
+            and not has_category
+            and not any(
+                result.get(k)
+                for k in (
+                    "ckr_collection_mode",
+                    "ckr_origin_mode",
+                )
+            )
+        )
+        result["ckr_shop_bar_show_all"] = (
+            not has_search
+            and not has_category
+            and not shortcut_modes
+            and not origin_portal
+            and not origin_facet
+            and not cat_facet
+            and not coll_facet
+        )
+        # Chips commerciaux : même grammaire canonique `/shop?ckr_mode=…` (PAS de
+        # routes externes type `/promotions`). Base HTTP = préfixe langue inclus,
+        # normalisé hors suffixe `/shop/category/…` lorsque pertinent.
+        _shop_chip_base = _ckr_shop_container_base_path()
+        result["ckr_shop_chip_href_promo"] = _ckr_build_shop_url_with_commercial(
+            {CKR_MODE_PROMO}, shop_path=_shop_chip_base
+        )
+        result["ckr_shop_chip_href_featured"] = _ckr_build_shop_url_with_commercial(
+            {CKR_MODE_FEATURED}, shop_path=_shop_chip_base
+        )
+        result["ckr_shop_chip_href_pack"] = _ckr_build_shop_url_with_commercial(
+            {CKR_MODE_PACK}, shop_path=_shop_chip_base
+        )
+        # Chip « Toute la sélection » — reset global aligné sur « Effacer les filtres »
+        # ``website_sale`` : une navigation vers le chemin boutique **sans** query
+        # retire en une fois filtres Odoo (recherche, attributs,
+        # prix, tri…) et paramètres CK (`ckr_mode`, `ckr_origin`, `ckr_collection`,
+        # `ckr_category`, `ckr_collection_scope`, …). « Toutes » en sidebar reste
+        # un état d’affichage sans paramètre dédié.
+        result["ckr_shop_chip_href_reset"] = (
+            values or {}
+        ).get("shop_path") or _shop_chip_base
+        if show_shortcuts:
+            result["ckr_shop_show_chip_promo"] = self._ckr_shop_chip_has_products(
+                CKR_MODE_PROMO, values, kwargs
+            )
+            result["ckr_shop_show_chip_featured"] = self._ckr_shop_chip_has_products(
+                CKR_MODE_FEATURED, values, kwargs
+            )
+            result["ckr_shop_show_chip_pack"] = self._ckr_shop_chip_has_products(
+                CKR_MODE_PACK, values, kwargs
+            )
+        else:
+            result["ckr_shop_show_chip_promo"] = False
+            result["ckr_shop_show_chip_featured"] = False
+            result["ckr_shop_show_chip_pack"] = False
+        result["ckr_shop_show_hero"] = show_hero
+        result["ckr_shop_show_shortcuts"] = show_shortcuts
+        result["ckr_shop_hero_retail_lane"] = hero_retail_lane
+        result["ckr_shop_show_legacy_banners"] = False
+        # --- Sidebar E2 (navigation CK) : blocs Collections / Origines (maquette §4) --
+        # Cases à cocher + JS (`ckr_shop_sidebar.js`) : `/collections/…`, union, et
+        # `ckr_mode=origin` / `ckr_origin` sur `/shop` ; pas de second moteur métier.
+        web = getattr(request, "website", None)
+        if web is not None and not web.id:
+            web = None
+        Collection = request.env["ckr.shop.collection"].sudo()
+        Origin = request.env["ckr.shop.origin"].sudo()
+        result["ckr_sidebar_collections"] = Collection.search(
+            Collection._ckr_visible_domain(website=web),
+            order="sequence, name, id",
+        )
+        origin_dom = [("website_published", "=", True)]
+        if web is not None:
+            origin_dom.append(("website_id", "in", [False, web.id]))
+        origins_rs = Origin.search(
+            origin_dom, order="sequence, name_visitor, id"
+        )
+        origins_rs = Origin._ckr_merge_sidebar_origins(origins_rs, web)
+        result["ckr_sidebar_origins"] = origins_rs
+        # Une seule navigation « Origines » dans le rail : si le bloc CK est
+        # alimenté, masquer la facette attribut `ckr_product_attribute_origin`
+        # (évite Origines + Origine en doublon, même moteur métier en coulisse).
+        suppress_attr_ids = []
+        if origins_rs:
+            origin_attr = request.env.ref(
+                "dorevia_ckreyol_marketplace.ckr_product_attribute_origin",
+                raise_if_not_found=False,
+            )
+            if origin_attr:
+                suppress_attr_ids = [origin_attr.id]
+        result["ckr_shop_sidebar_suppress_attribute_ids"] = suppress_attr_ids
+        # État cases à cocher sidebar (alignement maquette §4 — pas seulement des liens).
+        result["ckr_shop_sidebar_active_origin_slugs"] = list(
+            _ckr_canonical_origin_slugs()
+        )
+        result["ckr_shop_sidebar_active_category_slugs"] = list(
+            _ckr_canonical_category_slugs()
+        )
+        # Collections sidebar : slugs issus **uniquement** de la query
+        # (`ckr_collection=…`), pas du ctx « toutes collections » (scope=all),
+        # pour que « Toutes » reste l’état sans filtre sur ce groupe.
+        raw_q_coll = []
+        if http_args:
+            seen_q = set()
+            for s in http_args.getlist(CKR_COLLECTION_QUERY_PARAM):
+                v = (s or "").strip().lower()
+                if v and v not in seen_q:
+                    seen_q.add(v)
+                    raw_q_coll.append(v)
+        if raw_q_coll:
+            Collection_q = request.env["ckr.shop.collection"].sudo()
+            coll_resolved = Collection_q._ckr_resolve_visible_slugs(
+                raw_q_coll, website=getattr(request, "website", None)
+            )
+            result["ckr_shop_sidebar_active_collection_slugs"] = sorted(
+                {c.slug for c in coll_resolved if getattr(c, "slug", None)}
+            )
+        else:
+            result["ckr_shop_sidebar_active_collection_slugs"] = []
+
+        # Sidebar : ne lister que les items menant à au moins un produit (domaine = grille,
+        # facette du groupe relâchée), sauf les sélections déjà actives (pour pouvoir les
+        # décocher même si le résultat courant est vide).
+        active_origin_slugs = set(result["ckr_shop_sidebar_active_origin_slugs"])
+        active_category_slugs = set(result["ckr_shop_sidebar_active_category_slugs"])
+        active_collection_slugs = set(result["ckr_shop_sidebar_active_collection_slugs"])
+
+        coll_rows = []
+        for coll in result["ckr_sidebar_collections"]:
+            tpl_ids = _ckr_collection_resolve_template_ids(coll)
+            if not tpl_ids:
+                n = 0
+            else:
+                n = self._ckr_sidebar_count_templates_with_omit(
+                    omit_facet="collection",
+                    values=values,
+                    kwargs=kwargs,
+                    domain_extra_terms=[("id", "in", list(tpl_ids))],
+                )
+            slug = (getattr(coll, "slug", None) or "").strip()
+            if n > 0 or (slug and slug in active_collection_slugs):
+                coll_rows.append({"coll": coll})
+        result["ckr_sidebar_collection_rows"] = coll_rows
+
+        orig_rows = []
+        for orig in result["ckr_sidebar_origins"]:
+            vid = orig.attribute_value_id.id
+            if not vid:
+                n = 0
+            else:
+                n = self._ckr_sidebar_count_templates_with_omit(
+                    omit_facet="origin",
+                    values=values,
+                    kwargs=kwargs,
+                    domain_extra_terms=[
+                        ("attribute_line_ids.value_ids", "in", [vid])
+                    ],
+                )
+            slug = (getattr(orig, "slug", None) or "").strip()
+            if n > 0 or (slug and slug in active_origin_slugs):
+                orig_rows.append({"origin": orig})
+        result["ckr_sidebar_origin_rows"] = orig_rows
+
+        categories_for_sidebar = (values or {}).get("categories")
+        if categories_for_sidebar:
+            IrHttp = request.env["ir.http"].sudo()
+            cat_rows = []
+            for cat in categories_for_sidebar:
+                n = self._ckr_sidebar_count_templates_with_omit(
+                    omit_facet="category",
+                    values=values,
+                    kwargs=kwargs,
+                    domain_extra_terms=[
+                        ("public_categ_ids", "child_of", int(cat.id)),
+                    ],
+                )
+                slug = IrHttp._slug(cat)
+                if n > 0 or (slug and slug in active_category_slugs):
+                    cat_rows.append({"cat": cat})
+            result["ckr_sidebar_category_rows"] = cat_rows
+        else:
+            result["ckr_sidebar_category_rows"] = None
+
+        # Bloc Prix : toujours déplié (ajustement transversal du catalogue).
+        result["ckr_shop_sidebar_price_expanded"] = True
+        result["ckr_shop_show_clear_filters"] = self._ckr_shop_clear_filters_button_visible(
+            result, values, kwargs
+        )
         return result
 
     # ------------------------------------------------------------------
     # Surcharge `shop()` : repli HTTP 302 /shop nu pour référence invalide
     # ------------------------------------------------------------------
-    # Intercepte le signal interne _CKR_ORIGIN_INVALID_REDIRECT levé
-    # depuis `_get_search_options` (SPEC_IMPL §3.3). Aucune autre
-    # logique métier n'est ajoutée ici — la surcharge reste strictement
-    # limitée au try/except requis pour le repli.
+    # Intercepte les signaux internes _CKR_ORIGIN_INVALID_REDIRECT et
+    # _CKR_FEATURED_INVALID_REDIRECT levés depuis `_get_search_options`
+    # (SPEC_IMPL §3.3 origines ; SPEC_SHOP_PORTES §4.6 Incontournables).
+    # Aucune autre logique métier n'est ajoutée ici — la surcharge reste
+    # strictement limitée au try/except requis pour le repli.
+    def _ckr_redirect_shop_strip_collection_params(self, set_slugs=None):
+        """302 vers ``/shop`` en retirant les paramètres collections."""
+        if not request or not getattr(request, "httprequest", None):
+            return request.redirect(CKR_CANONICAL_PATH, code=302)
+        args = request.httprequest.args
+        pairs = []
+        for key in args.keys():
+            if key in (CKR_COLLECTION_QUERY_PARAM, CKR_COLLECTION_SCOPE_PARAM):
+                continue
+            for v in args.getlist(key):
+                pairs.append((key, v))
+        if set_slugs:
+            for s in set_slugs:
+                pairs.append((CKR_COLLECTION_QUERY_PARAM, s))
+        qs = url_encode(pairs)
+        url = f"{CKR_CANONICAL_PATH}?{qs}" if qs else CKR_CANONICAL_PATH
+        return request.redirect(url, code=302)
+
+    def _ckr_shop_bootstrap_collection_from_query(self):
+        """Pose ``_ckr_collection_ctx`` depuis ``/shop?ckr_collection=…``."""
+        if not request or not getattr(request, "httprequest", None):
+            return None
+        if getattr(request, "_ckr_collection_ctx", None) is not None:
+            return None
+        req_path = request.httprequest.path or ""
+        if "/shop/category/" in req_path:
+            return None
+        path_trim = req_path.rstrip("/")
+        if path_trim != CKR_CANONICAL_PATH and not path_trim.endswith("/shop"):
+            return None
+        args = request.httprequest.args
+        scope = (args.get(CKR_COLLECTION_SCOPE_PARAM) or "").strip().lower()
+        raw_slugs = args.getlist(CKR_COLLECTION_QUERY_PARAM)
+        if scope == CKR_COLLECTION_SCOPE_ALL and not raw_slugs:
+            Collection = request.env["ckr.shop.collection"].sudo()
+            collections = Collection.search(
+                Collection._ckr_visible_domain(website=request.website)
+            )
+            _ckr_collection_ctx_set(CKR_COLLECTION_KIND_GENERAL, collections)
+            request._ckr_collection_ctx_from_shop_query = True
+            return None
+        if not raw_slugs:
+            return None
+        normalized = []
+        seen = set()
+        for s in raw_slugs:
+            v = (s or "").strip().lower()
+            if not v or v in seen:
+                continue
+            seen.add(v)
+            normalized.append(v)
+        if not normalized:
+            return None
+        collections = (
+            request.env["ckr.shop.collection"]
+            .sudo()
+            ._ckr_resolve_visible_slugs(normalized, website=request.website)
+        )
+        if len(collections) != len(normalized):
+            _ckr_collection_flash_set()
+            valid = sorted({c.slug for c in collections if c.slug})
+            return self._ckr_redirect_shop_strip_collection_params(
+                set_slugs=valid if valid else None
+            )
+        if len(collections) == 1:
+            kind = CKR_COLLECTION_KIND_SINGLE
+        else:
+            kind = CKR_COLLECTION_KIND_UNION
+        _ckr_collection_ctx_set(kind, collections)
+        request._ckr_collection_ctx_from_shop_query = True
+        return None
+
+    # Même décorateur que ``WebsiteSale.shop`` (Odoo 19) : sans lui, le dispatcher
+    # journalise « … is not decorated by @route() » pour les surcharges de routes.
+    @http.route(
+        [
+            SHOP_PATH,
+            f"{SHOP_PATH}/page/<int:page>",
+            f'{SHOP_PATH}/category/<model("product.public.category"):category>',
+            f'{SHOP_PATH}/category/<model("product.public.category"):category>/page/<int:page>',
+        ],
+        type="http",
+        auth="public",
+        website=True,
+        list_as_website_content=_lt("Shop"),
+        sitemap=WebsiteSale.sitemap_shop,
+        handle_params_access_error=lambda e, **kwargs: NotFound.code,
+    )
     def shop(
         self,
         page=0,
@@ -727,9 +1682,15 @@ class WebsiteSaleCKR(WebsiteSale):
         search="",
         min_price=0.0,
         max_price=0.0,
-        ppg=False,
+        tags="",
         **post,
     ):
+        early = self._ckr_shop_bootstrap_collection_from_query()
+        if early:
+            return early
+        redir_cat = _ckr_shop_redirect_category_path_to_query(category)
+        if redir_cat:
+            return redir_cat
         try:
             return super().shop(
                 page=page,
@@ -737,10 +1698,12 @@ class WebsiteSaleCKR(WebsiteSale):
                 search=search,
                 min_price=min_price,
                 max_price=max_price,
-                ppg=ppg,
+                tags=tags,
                 **post,
             )
         except _CKR_ORIGIN_INVALID_REDIRECT:
+            return request.redirect(CKR_CANONICAL_PATH, code=302)
+        except _CKR_FEATURED_INVALID_REDIRECT:
             return request.redirect(CKR_CANONICAL_PATH, code=302)
 
     # ==================================================================
@@ -783,15 +1746,12 @@ class WebsiteSaleCKR(WebsiteSale):
         sitemap=True,
     )
     def ckr_collections_general(self, **post):
-        """Vue générale — produits appartenant à **au moins une**
-        collection visible (CONTRAT §5, SPEC_IMPL §3.1).
-        """
-        Collection = request.env["ckr.shop.collection"].sudo()
-        collections = Collection.search(
-            Collection._ckr_visible_domain(website=request.website)
+        """Ancienne URL noble → conteneur unique ``/shop`` (filtre collections)."""
+        target = "{path}?{qs}".format(
+            path=CKR_CANONICAL_PATH,
+            qs=url_encode([(CKR_COLLECTION_SCOPE_PARAM, CKR_COLLECTION_SCOPE_ALL)]),
         )
-        _ckr_collection_ctx_set(CKR_COLLECTION_KIND_GENERAL, collections)
-        return self.shop(**post)
+        return request.redirect(target, code=301)
 
     @http.route(
         "/collections/<string:slug>",
@@ -822,8 +1782,11 @@ class WebsiteSaleCKR(WebsiteSale):
         )
         if not collections:
             return _ckr_collection_redirect_unavailable()
-        _ckr_collection_ctx_set(CKR_COLLECTION_KIND_SINGLE, collections)
-        return self.shop(**post)
+        target = "{path}?{qs}".format(
+            path=CKR_CANONICAL_PATH,
+            qs=url_encode([(CKR_COLLECTION_QUERY_PARAM, collections.slug)]),
+        )
+        return request.redirect(target, code=301)
 
     @http.route(
         "/collections/union",
@@ -903,38 +1866,43 @@ class WebsiteSaleCKR(WebsiteSale):
         if len(collections) == 1:
             if raw_count > 1:
                 return request.redirect(
-                    "{base}/{slug}".format(
-                        base=CKR_COLLECTION_BASE_PATH,
-                        slug=collections.slug,
+                    "{path}?{qs}".format(
+                        path=CKR_CANONICAL_PATH,
+                        qs=url_encode(
+                            [(CKR_COLLECTION_QUERY_PARAM, collections.slug)]
+                        ),
                     ),
                     code=301,
                 )
             return _ckr_collection_redirect_unavailable()
 
-        # n ≥ 2 : vérifier ordre canonique (tri lexicographique strict
-        # sur les slugs normalisés — identique à la logique §9 contrat).
         canonical_slugs = sorted(normalized)
-        canonical_path = _ckr_collection_union_canonical_path(canonical_slugs)
-        # `request.httprequest.path` est la cible canonique côté Werkzeug
-        # (inclut le préfixe website le cas échéant, mais `/collections…`
-        # n'est pas un préfixe localisé par défaut). On compare sur la
-        # forme nue pour éviter les faux 301 sur trailing slash.
-        current_path = (request.httprequest.path or "").rstrip("/")
-        if current_path != canonical_path:
-            return request.redirect(canonical_path, code=301)
-
-        _ckr_collection_ctx_set(CKR_COLLECTION_KIND_UNION, collections)
-        return self.shop(**post)
+        pairs = [(CKR_COLLECTION_QUERY_PARAM, s) for s in canonical_slugs]
+        return request.redirect(
+            "{path}?{qs}".format(
+                path=CKR_CANONICAL_PATH,
+                qs=url_encode(pairs),
+            ),
+            code=301,
+        )
 
 
 # ---------------------------------------------------------------------------
-# Exception interne : signal court-circuit 302 /shop pour origine invalide
+# Exceptions internes : signaux court-circuit 302 /shop nu
 # ---------------------------------------------------------------------------
 class _CKR_ORIGIN_INVALID_REDIRECT(Exception):
     """Signal interne levé depuis ``_get_search_options`` pour déclencher
     un repli HTTP 302 vers ``/shop`` nu lorsqu'une sélection
     ``ckr_origin`` ne résout aucun profil publié (SPEC_IMPL §3.3).
     Intercepté par ``WebsiteSaleCKR.shop``.
+    """
+
+
+class _CKR_FEATURED_INVALID_REDIRECT(Exception):
+    """Signal interne levé lorsque ``ckr_mode=featured`` est demandé mais
+    la collection configurée (paramètre ``featured_collection_id``) est
+    absente ou non visible (SPEC_SHOP_PORTES §4.6). Même repli 302 que
+    l'origine invalide. Intercepté par ``WebsiteSaleCKR.shop``.
     """
 
 
@@ -966,6 +1934,17 @@ class WebsiteSaleCKRAliases(http.Controller):
         return self._ckr_redirect(CKR_MODE_PROMO, kwargs)
 
     @http.route(
+        "/incontournables",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def ckr_incontournables_alias(self, **kwargs):
+        """Alias visiteur **Incontournables** → ``/shop?ckr_mode=featured`` (301)."""
+        return self._ckr_redirect(CKR_MODE_FEATURED, kwargs)
+
+    @http.route(
         "/origines", type="http", auth="public", website=True, sitemap=False
     )
     def ckr_origines_alias(self, **kwargs):
@@ -982,31 +1961,38 @@ class WebsiteSaleCKRAliases(http.Controller):
         "/categories", type="http", auth="public", website=True, sitemap=False
     )
     def ckr_categories_alias(self, **kwargs):
-        """Alias visiteur **Catégories** → URL native ``/shop/category/…``.
+        """Alias visiteur **Catégories** → ``/shop?ckr_category=…`` (conteneur).
 
-        Ne réutilise pas ``_ckr_redirect`` : la cible n’est pas
-        ``/shop?ckr_mode=…`` mais le chemin standard Odoo résolu par
-        ``product.public.category._ckr_get_explorer_entry_shop_path``.
-        Les paramètres de query entrants sont préservés **sauf**
-        ``ckr_mode`` (évite un mélange incohérent avec les modes Pack /
-        Promo). Si aucune catégorie publique n’est résoluble, retombe
-        sur ``/shop`` nu (301).
+        Résolution de la catégorie d’entrée :
+        ``product.public.category._ckr_resolve_explorer_public_category``.
+        Query entrants : préservés **sauf** ``ckr_mode`` et ``ckr_category``
+        (la cible Explorer prime). Sans catégorie résoluble et sans autre
+        paramètre : **301** ``/shop`` nu.
         """
         website = request.website
-        path = request.env["product.public.category"]._ckr_get_explorer_entry_shop_path(
-            website
+        Category = request.env["product.public.category"]
+        cat = Category._ckr_resolve_explorer_public_category(website)
+        params = []
+        for k, v in kwargs.items():
+            if k in (CKR_MODE_PARAM, CKR_CATEGORY_PARAM):
+                continue
+            if v is None or v == "":
+                continue
+            if isinstance(v, (list, tuple)):
+                for item in v:
+                    if item not in (None, ""):
+                        params.append((k, item))
+            else:
+                params.append((k, v))
+        if cat:
+            slug = request.env["ir.http"].sudo()._slug(cat)
+            params.append((CKR_CATEGORY_PARAM, slug))
+        elif not params:
+            return request.redirect(CKR_CANONICAL_PATH, code=301)
+        target = "{path}?{qs}".format(
+            path=CKR_CANONICAL_PATH,
+            qs=url_encode(params),
         )
-        if not path:
-            path = CKR_CANONICAL_PATH
-        params = {
-            k: v
-            for k, v in kwargs.items()
-            if k != CKR_MODE_PARAM and v is not None and v != ""
-        }
-        if params:
-            target = "{path}?{qs}".format(path=path, qs=url_encode(params))
-        else:
-            target = path
         return request.redirect(target, code=301)
 
     # ------------------------------------------------------------------

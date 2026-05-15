@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol - Canal e-commerce specialise",
-    "version": "19.0.1.6.17",
+    "version": "19.0.1.10.141",
     "category": "Website/Theme",
     "summary": "Theme front Phase 1 du canal C-Kreyol (produits agro transformes antillais).",
     "description": """
@@ -11,16 +11,338 @@ C-Kreyol - Canal e-commerce specialise (front Phase 1)
 Module de theme pour le canal de vente en ligne specialise C-Kreyol
 (projet Dorevia), sur Odoo 19 Community Edition.
 
+* 19.0.1.10.77 : page ``/demande-compte-professionnel`` (formulaire Website
+  vers ``crm.lead`` via ``website_crm``), garde-fous MVP03 (pas de portail
+  pro auto), liens login/signup.
+* 19.0.1.10.78 : login — masquage du lien « Choisissez un utilisateur »
+  (composant web.user_switch sur web.login).
+* 19.0.1.10.79 : login — formulaire toujours visible (retrait du ``d-none`` implicite
+  Odoo 19 après suppression de web.user_switch).
+* 19.0.1.10.80 : demande compte pro — copies MOA, champ ``ckr_activity_type``,
+  CTA ``ckr-btn``, phrase B2C avant liens.
+* 19.0.1.10.81 : demande compte pro — passe UX (grille 2 col, carte, placeholders,
+  libellés, liens secondaires).
+* 19.0.1.10.82 : fix assets SCSS demande pro — ``unquote`` pour ``min()`` / ``clamp``
+  (évite erreur Dart Sass « Incompatible units rem and % »).
+* 19.0.1.10.83 : demande pro — alignement maquette Stitch (libellés, intro centrée,
+  carte blanche, astérisques rouges, liens secondaires).
+* 19.0.1.10.84 : demande pro — retour composition ouverte (fond CK, sans carte blanche,
+  titre allégé, pas de centrage landing, libellé Message + placeholder demandé).
+* 19.0.1.10.85 : demande pro — densité laptop : header + intro compacts, padding section
+  réduit, grille g-2, champs et textarea resserrés, CTA sans scroll sur desktop standard.
+* 19.0.1.10.86 : demande pro — fix XML : ``&#160;`` au lieu de ``&nbsp;`` (entité non déclarée).
+* 19.0.1.10.87 : demande pro — équilibre desktop : H1 plus léger, intro resserrée,
+  bloc utile élargi (~56rem) pour réduire le vide à droite.
+* 19.0.1.10.88 : demande pro — équilibre horizontal : colonne titre/intro/formulaire
+  centrée dans le conteneur (texte à gauche), largeur max 58–62rem.
+* 19.0.1.10.89 : demande pro — parcours compact centré (shell ~42–44rem), titre + intro
+  centrés, formulaire lisible dans le bloc, CTA centré, sans carte ni changement CRM.
+* 19.0.1.10.90 : demande pro — alignement maquette : fond blanc, titre Playfair, intro
+  catalogue pro, placeholders exemples, champs blancs fins, CTA pleine largeur ; CRM inchangé.
+* 19.0.1.10.91 : demande pro — copie intro MOA (demande compte pro + validation équipes).
+* 19.0.1.10.92 : demande pro — bloc MVP03+ « rendez-vous conseiller » sous le formulaire
+  (lien ``/appointment`` si ``website_appointment`` installé, sinon ``/contact`` ; disclaimer).
+* 19.0.1.10.93 : demande pro — bloc « Être rappelé » (formulaire repliable → ``crm.lead``,
+  ``referred`` = ``CK-MVP03-rappel-conseiller``, champ ``ckr_callback_slot`` ; disclaimer).
+* 19.0.1.10.94 : demande pro — ouverture « Être rappelé » replie le formulaire principal (JS Bootstrap).
+* 19.0.1.10.95 : demande pro — sync collapse sans ``window.bootstrap`` (MutationObserver sur classe ``show``).
+* 19.0.1.10.96 : demande pro — créneau rappel en ``datetime-local`` (pas de 15 min via ``step``).
+* 19.0.1.10.97 : demande pro — boutons bloc rappel en contour terracotta (plus de noir plein) ;
+  libellé ``Nom et prénom``.
+* 19.0.1.10.98 : demande pro — rappel : ``date`` + liste créneaux (09h–11h …) à la place de
+  ``datetime-local`` ; concaténation CRM dans ``ckr_callback_slot`` et description.
+* 19.0.1.10.99 : header CK V1 (lot V1.1 desktop) — structure en trois niveaux
+  ``Top_0`` / ``Top_1`` / ``Top_2`` ; barre flash info, actions utiles (aide/compte/favoris/panier)
+  et navigation exploration avec entrée ``/demande-compte-professionnel``.
+* 19.0.1.10.100 : fix QWeb header V1.1 — compteur panier rendu sans conversion ``int(...)``
+  dans le template (évite erreur d’évaluation en front sur ``/shop``).
+* 19.0.1.10.101 : fix QWeb header V1.1 — suppression du double ``t-else`` invalide
+  sur les liens connexion desktop/mobile (évite le 500 ``t-elif directive must be preceded by t-if``).
+* 19.0.1.10.102 : fix QWeb header V1.1 — compteur panier basé sur la session
+  ``website_sale_cart_quantity`` (suppression appel ``website.sale_get_order`` indisponible).
+* 19.0.1.10.103 : header V1.1 desktop — passe finitions laptop/responsive :
+  alignement vertical Top_1, compression des actions sur 992–1200px, allègement Top_2
+  et réduction de hauteur pour limiter l’impact visuel sur hero.
+* 19.0.1.10.104 : boutique /shop — hero élargi à 100% de l’espace horizontal
+  disponible (bleed contrôlé du bandeau, sans changer la grille produits).
+* 19.0.1.10.105 : header V1.1 Top_2 — navigation centrée horizontalement et recentrée
+  sur Promotions, Collections, Idées cadeaux, Recettes, Professionnels.
+* 19.0.1.10.106 : header V1.1 Top_2 — structure “monde” Communauté avec sous-menu
+  (Idées cadeaux, Recettes, Blog) ; ligne cible : Tous les produits, Promotions,
+  Collections, Communauté, Professionnels.
+* 19.0.1.10.107 : header V1.1 Top_1 — passe UI inspirée (CTA compte + icônes
+  favoris/panier en pastilles avec compteurs), en conservant la palette et la
+  hiérarchie visuelle CK.
+* 19.0.1.10.108 : header V1.2 mobile — ajout accès Favoris dans le cluster mobile
+  et bloc de liens rapides du drawer (Professionnels, Idées cadeaux, Recettes, Blog).
+* 19.0.1.10.109 : header V1.2 mobile — suppression duplication éditoriale dans le drawer ;
+  maintien d’une seule arborescence Communauté et entrée Professionnels dédiée.
+* 19.0.1.10.110 : tests HTTP panier MVP04 Palier A (tag ``dorevia_ckr_shop_cart``) :
+  ``/shop/cart``, header CK, structure checkout standard, panier vide + lien continuer (EN/FR).
+* 19.0.1.10.111 : tests panier — Odoo 19 panier vide : CTA ``Shop`` / ``Boutique`` vers ``/shop``
+  (``cart_lines``), en plus des libellés « Continue shopping ».
+* 19.0.1.10.112 : drawer header — fermeture forcée en desktop (≥992px) : la nav horizontale
+  ``Top_2`` suffit ; évite drawer ouvert après resize ou mode responsive (CSS + JS ``matchMedia``).
+* 19.0.1.10.113 : header — classe ``o_header_fixed`` à la place de ``o_header_standard`` :
+  l’interaction Odoo « standard » translate le header hors écran au scroll ; sans navbar
+  Bootstrap native cela produit bandeau vide / burger seul. ``HeaderFixed`` convient au shell CK.
+* 19.0.1.10.114 : layout — annuler le ``padding-top`` inline sur ``main`` (affix Odoo) :
+  header CK en ``sticky`` → bande vide entre Top_2 et le hero sans cette neutralisation.
+* 19.0.1.10.115 : hero homepage immersif — hauteur ``calc(100dvh - pile header)`` pour que
+  header + hero occupent le premier écran sans scroll (offsets par breakpoint ; ``max()``
+  pour les très petits viewports).
+* 19.0.1.10.116 : hero homepage — mesure JS du header (``ResizeObserver``, resize,
+  ``visualViewport``, ``fonts.ready``) → ``--ckr-hero-header-measured`` ; repli SCSS inchangé.
+* 19.0.1.10.117 : header mobile — ``position: fixed`` + ``padding-top`` sur ``main`` via
+  ``--ckr-header-measured`` ; mesure centralisée dans ``ckr_header_drawer.js`` ; neutralisation
+  ``transform`` Odoo (``o_header_fixed``).
+* 19.0.1.10.118 : réassurance homepage — mobile : lignes compactes (icône + corps texte), espacements
+  resserrés, séparateurs discrets, icônes cadrées ; wrap ``ckr-trust__item__body`` (contenu inchangé).
+* 19.0.1.10.119 : réassurance « En pratique » — micro-polish mobile : titres repères plus légers,
+  icônes centrées au bloc texte, air sous ``Quelques repères``, filet eyebrow plus discret (section seule).
+* 19.0.1.10.120 : footer CK — mobile / tablette : marque + tagline, listes sémantiques, rubriques
+  hiérarchisées, filets discrets, bas légal aéré ; listes ``<ul>`` (contenu identique).
+* 19.0.1.10.121 : footer CK ≤991px — grille : marque pleine largeur, ``Explorer`` | ``Informations`` en
+  2 colonnes, ``Contact`` pleine largeur dessous ; filets allégés.
+* 19.0.1.10.122 : footer CK mobile — rubriques ``<details>`` si >2 liens ; fusion Informations + contact
+  société ; ``ckr_footer_fold.js`` ouvre les panneaux en desktop ; chevron discret, focus visible.
+* 19.0.1.10.123 : footer accordéon — a11y ``aria-expanded`` / ``tabindex`` desktop, blocage repli desktop,
+  ``role="region"`` + ``aria-labelledby`` ; animation d’ouverture légère (mobile) ; copyright espaces/normalisation.
+* 19.0.1.10.124 : hero immersif mobile — hauteur ~76 % viewport utile, bloc texte resserré, CTA compensés,
+  overlay diagonal renforcé à gauche, sous-titre raccourci.
+* 19.0.1.10.125 : hero mobile — micro-polish : CTA secondaire min-height tactile, voile sombre léger + ombre
+  texte ; titre ``text-wrap: balance`` et resserrement sous 360px (hauteur hero inchangée).
+* 19.0.1.10.126 : hero mobile — ``object-position`` plus haut / centré (moins bas coffret) ; overlay diagonal
+  micro-renforcé sous le texte (structure, typo, CTA inchangés).
+* 19.0.1.10.127 : hero mobile — CTA secondaire : contraste renforcé (fond/contour), ligne de texte plus stable
+  et réglage viewport très étroit (<360px) pour préserver lisibilité + zone tactile.
+* 19.0.1.10.128 : header — bandeau Top_0 affiché uniquement sur la homepage (``/``).
+* 19.0.1.10.129 : fix header Top_0 homepage-only via CSS (``body.o_homepage``) plutôt que condition QWeb.
+* 19.0.1.10.130 : fix 500 homepage — compat ``website_sale`` cache panier : compteur header rendu en
+  ``<sup class="my_cart_quantity ...">`` (attendu par ``website_sale.models.website_page``).
+* 19.0.1.10.131 : header Top_0 homepage-only — condition QWeb sur ``request.httprequest.path`` (``/``)
+  et retrait du masquage CSS ``body.o_homepage`` trop variable selon contexte.
+* 19.0.1.10.132 : header Top_0 shop-only — bandeau flash affiché sur ``/shop`` (et sous-routes).
+* 19.0.1.10.133 : hero homepage — ajout de 2 visuels supplémentaires au rotateur (sources ``docs/assets``
+  copiées en ``static/src/img`` : ``hero_v3_epicerie.png`` et ``hero_v4_epices.png``).
+* 19.0.1.10.134 : consolidation pré-ouverture — unicité slug globale (``website_id IS NULL``) renforcée
+  sur ``ckr.shop.collection``/``ckr.shop.origin`` (+ tests), clarification ACL collections, canon URL boutique
+  consolidé et procédure smoke install/update/rendu documentée.
+* 19.0.1.10.135 : pré-ouverture P4 — ajout d'une suite de tests E2E checkout minimale
+  (tag ``dorevia_ckr_checkout_e2e``) + traçabilité d'exécution dans le ticket dédié.
+* 19.0.1.10.136 : header — wrapper ``li.o_wsale_my_cart`` autour du lien panier (compat JS
+  ``website_sale`` : ``CartService._updateCartIcon`` / mise à jour navbar après RPC panier) ;
+  ``sup.my_cart_quantity`` conservé + ``data-order-id`` aligné thème ; ``ul`` en ``display: contents``.
+* 19.0.1.10.137 : tests — Lot A E2E marchand étendu (tag ``dorevia_ckr_checkout_e2e_extended``) :
+  parcours HTTP shop → panier (qty / update / suppression) → checkout invité → paiement Demo →
+  confirmation ; dépend de ``payment_demo`` (skip sinon) ; tag minimal ``dorevia_ckr_checkout_e2e``
+  inchangé.
+* 19.0.1.10.138 : tests Lot A — payload JSON-RPC ``/shop/payment/transaction/<id>`` : ajout
+  ``token_id`` (``null`` sans jeton enregistré) pour alignement Odoo 19 ``_create_transaction``.
+* 19.0.1.10.139 : tests Lot A — assertion ``sale.order.state`` assouplie (``draft`` toléré en
+  sandbox avec confirmation HTTP) ; documentation ticket §14 alignée.
+* 19.0.1.10.140 : documentation — ``TICKET_E2E_MARCHAND_ETENDU`` §14 : validation runtime **GO**
+  Lot A tag ``dorevia_ckr_checkout_e2e_extended`` sur base ``tenant_o7`` (commit ``e6c3936``).
+* 19.0.1.10.141 : Lot 2 Favoris incrément minimal — page ``/shop/wishlist`` : classes CK sur ``#wrap``
+  (``ckr-root`` / ``ckr-page`` / ``ckr-shop-wishlist``), SCSS ``_shop_wishlist.scss`` ; dépendance
+  explicite ``website_sale_wishlist`` ; test HTTP tag ``dorevia_ckr_shop_wishlist``.
+
 Portee :
 
 * Header + menu principal personnalises (menu Option B : Boutique,
-  Collections, Offrir, Recettes, A propos, Contact).
+  Collections, Communauté sous-menu Idées cadeaux / Recettes / Blog,
+  A propos, Contact).
 * Footer personnalise.
 * Homepage structuree selon le wireframe Phase 1 (variante retail
   enrichie) : hero gele (copy SPEC_HERO §7), bloc Explorer
-  (Promotions, Collections, Kits, Catégories, Origines),
+  (Promotions, Kits, Catégories, Collections, Origines),
   mise en avant fournisseur / origine, selection produits, bloc
   editorial, bloc confiance 3 axes.
+* 19.0.1.9.3 : homepage `ckr_hpage_mvp1_tail_blocks=0` masque
+  Fournisseur/Éditorial/Confiance (V1) pour recette Sélection
+  (Hero+Explorer+Sélection) ; 1 = réintègre les trois blocs.
+* 19.0.1.9.4 : test TransactionCase repli sélection (emplacement
+  BO sans visuel ignoré) ; poursuite recette produits dynamiques.
+* 19.0.1.9.5 : 4 fiches vitrine (Crêpes, Bière, Sucre de canne, Chips) +
+  visuel PNG ; affectation des 4 emplacements accueil sur chaque site
+  si vides (hook + migration) pour grille 4 cartes en recette MOA.
+* 19.0.1.9.6 : données vitrine — retrait uom_po_id (n existe plus sur
+  product.template en Odoo 19) ; recharger le module.
+* 19.0.1.9.7 : visuels Sélection — PNG `docs/assets` mvp02 →
+  `static/src/img/selection/` (4 fiches distinctes) ; migration re-injecte
+  `image_1920` ; repli URL statique CK si fiche sans binaire.
+* 19.0.1.10.0 : bloc Cercle (inscription e-mail) entre Selection et
+  le footer, modele `ckr.circle.subscriber`, POST `/ckr/circle/subscribe`,
+  page statique `/privacy`, menus BO Cercle (newsletter) ; chantier 4/5
+  MVP2.1. Chantier 5/5 = Reassurance.
+* 19.0.1.10.10 : /shop nu — hero retail type maquette PJ (photo + voile
+  sombre, titre blanc, accroche terroirs) ; rail filtres titre serif ;
+  tests wave1 ajustes.
+* 19.0.1.10.11 : boutique avec hero — masque filmstrip catégories + champ
+  recherche sous le hero (recherche header + filtres latéraux conservés).
+* 19.0.1.10.12 : barre chips + compteur + tri/liste de prix au-dessus de
+  l’en-tête produits ; chips aussi sur catégories et origines ; fil d’Ariane
+  masqué si hero ; pas de doublon tri dans la toolbar Odoo.
+* 19.0.1.10.13 : barre raccourcis — styles alignés référence MOA (fond crème,
+  chips inactifs clairs, actif terracotta + texte blanc gras, tri encadré blanc,
+  valeur de tri en gras, compteur avec chiffre en gras 700).
+* 19.0.1.10.14 : alignement global maquette/doc — titre rail « Filtrer par »,
+  libellés FR catégories, fond page #FCF9F7, hero rayon 14–18px, grille 4 col. dès
+  1200px, chips contour bordeaux, cartes (fond blanc, rayon 12px, prix/nom bordeaux,
+  wishlist circulaire), doc SHOP_MAQUETTE_ECARTS.md.
+* 19.0.1.10.15 : rail `/shop` — accordéons **Collections** (liens `/collections/<slug>`)
+  et **Origines** (liens porte + slug) ; FR **Prix** / **Effacer les filtres** ;
+  SCSS `.ckr-shop-sidebar-ck` ; doc SHOP_MAQUETTE_ECARTS §2.
+* 19.0.1.10.16 : sidebar boutique — rail unifié (coquille légère + sections flush,
+  finition sans cartes par facette) ; offcanvas filtres aligné sur la même lecture.
+* 19.0.1.10.17 : sidebar — titres accordéon homogènes (charcoal, pas terracotta à l’ouverture) ;
+  « Filtrer par » intégré au rail (séparateur, pas bandeau) ; masquage facette attribut
+  **Origine** dès que le bloc CK **Origines** est alimenté (suppression doublon UX).
+* 19.0.1.10.18 : ordre rail maquette **Catégories → Collections → Origines → Prix**
+  (Prix déplacé avant les autres facettes `website_sale`) ; vues `ckr_shop_sidebar_price_rail_*`.
+* 19.0.1.10.19 : sidebar — alignement **maquette MVP2.2** : rail plat (sans carte blanche /
+  ombre), « Filtrer par » serif fort, sections sans-serif, séparateurs légers, liens /
+  cases taupe, cluster crème **Collections + Origines** (`ckr_shop_sidebar-ck__cluster`),
+  curseur prix affiné.
+* 19.0.1.10.21 : sidebar — **finition visuelle maquette PJ** (SCSS) : ligne produits
+  `align-items: flex-start` (colonne filtres au contenu, fin du « puits » blanc sous le prix),
+  en-têtes d’accordéon bande crème + bord léger, « Filtrer par » et titres de section
+  renforcés, espacements et cluster CK harmonisés, neutralisation fonds blancs hérités.
+* 19.0.1.10.22 : sidebar — **4 blocs maquette** : Catégories en accordéon explicite + cases à
+  cocher ; Collections / Origines sans cluster (double `accordion-item` dans un seul flush) ;
+  Prix en accordéon replié par défaut ; rail sans `vh-100` ; `is_sidebar_collapsible` forcé
+  pour le template prix Odoo ; vue native `products_categories_list_collapsible` désactivée
+  (remplacée par le gabarit CK).
+* 19.0.1.10.23 : fix chargement module — xpath offcanvas « Catégories » via
+  `#o_wsale_offcanvas_categories_header` (évite échec si `data-bs-target` non présent tel quel
+  sur la vue parente fusionnée).
+* 19.0.1.10.24 : sidebar `/shop` — **fallback** `opt_wsale_categories=True` (bloc Catégories
+  toujours rendu, alignement maquette 4 blocs) ; doc `docs/mvp_02/TICKET_SHOP_SIDEBAR_CATEGORIES.md`
+  (option native « Categories in Left Side » + recette).
+* 19.0.1.10.25 : **cas nominal maquette** — `show_price_filter=True` sans exiger les facettes
+  attributs ; données démo `data/ckr_shop_sidebar_nominal_demo_data.xml` (collection Saint-Anne,
+  origine Guadeloupe + produits vitrine) pour afficher les 4 blocs ensemble sur instance neuve.
+* 19.0.1.10.26 : retrait héritage QWeb offcanvas « Catégories » (xpath introuvable si thème
+  supprime le bloc natif) pour débloquer `-u` sur toutes les instances.
+* 19.0.1.10.27 : fix **500 /shop** — Odoo 19 : `product.public.category` n’a plus `website_url` ;
+  liens catégories sidebar = `keep('%s/category/%s' % (shop_path, slug(c)))` (aligné
+  `website_sale.categorie_link`).
+* 19.0.1.10.28 : bloc **Prix** sidebar /shop — déplié par défaut (comportement natif) ;
+  styles maquette (item + bouton) conservés dans `ckr_shop_filter_price_fr`.
+* 19.0.1.10.29 : hero boutique `.ckr-shop-hero` — coins **supérieurs** sans arrondi ;
+  `clamp(14px–18px)` conservé en **bas** uniquement (`layout/_shop.scss`).
+* 19.0.1.10.30 : **carte produit /shop** — micro-catégorie (`public_categ_ids` tri `sequence`)
+  au-dessus du titre ; bouton **Ajouter au panier** FR + CTA **toujours visible**
+  (neutralise `o_wsale_products_opt_actions_onhover`) ; wishlist plus lisible ;
+  bloc prix + CTA structuré (bordure, bouton renforcé) ; rubans lisibles (max-width,
+  ombre ; couleurs BO conservées si définies) ; carte un peu plus « retail » (`_shop.scss`,
+  `ckr_shop.xml`).
+* 19.0.1.10.31 : fix compilation SCSS **web.assets_frontend** — `max-width: min(88%, 11.5rem)`
+  via `unquote(...)` (évite *Incompatible units: rem and %* avec `min()` Sass).
+* 19.0.1.10.32 : **carte produit** — micro-catégorie avec repli `product.categ_id` (sans lien) ;
+  hiérarchie titre + filet ; ligne **prix à gauche / panier à droite** ; wishlist **rond**
+  calé **haut droite** sur la tuile (`o_add_wishlist` absolu sur le wrapper) ; rubans (ombre /
+  lisibilité). `ckr_shop.xml`, `layout/_shop.scss`.
+* 19.0.1.10.33 : cartes **alignées maquette** — titre en **texte foncé** (lien hover terracotta) ;
+  micro-cat **gris discret** ; **pastille panier** crème + **icône seule** (`visually-hidden` FR) ;
+  wishlist **pastille crème** comme la maquette ; prix promo **rouge** si `del` ; fix marge titre
+  `.mb-2` vs filet.
+* 19.0.1.10.45 : tuile /shop + Classic Store — wishlist **dans** `oe_product_image` (coin image fiable) ;
+  bloc info en `position: static` ; filet titre→pied plus lisible ; pied prix+panier (ligne + léger fond) ;
+  repli `display:none` sur `o_quick_add_btn` en `.ckr-shop`. `ckr_shop_classic_tile_restore.xml`, `_shop.scss`.
+* 19.0.1.10.46 : fix chargement module — désactivation `o_quick_add_btn` en héritant `website_sale.products_item`
+  (priorité 50) au lieu de `classic_store_restore_quick_add` (xpath introuvable sur l’arch parente).
+* 19.0.1.10.47 : retrait gabarit `ckr_shop_disable_classic_quick_add_bar` — le xpath `o_quick_add_btn` reste introuvable
+  si le DOM shop diffère ; masquage quick-add conservé via `_shop.scss` (`.ckr-shop`).
+* 19.0.1.10.48 : tuile /shop — wishlist « fantôme » sur image ; ruban explicite (z-index, visibilité) ;
+  ligne prix+panier alignée ; titre slot 2 lignes fixe (`_shop.scss`).
+* 19.0.1.10.49 : assets — `_shop.scss` chargé **après** `ckr_main` ; wishlist sans dépendre de
+  `o_wsale_product_grid_wrapper` ; ruban QWeb `show_ribbons and ribbon` ; finitions tuile (cascade).
+* 19.0.1.10.50 : tuile /shop — retrait QWeb ruban (régression) ; `ckr-wishlist-ghost` + couche `#wrap`
+  pour annuler la pastille BS ; bandeau prix+panier (`space-between`, fond unifié) ; rythme titre/filet.
+* 19.0.1.10.51 : tuile /shop — pied carte **prix | CTA** sur une ligne (grille `minmax(0,1fr) max-content`,
+  wrappers `ckr-product-card__footer-*`, `footer-cta` + `shop_product_buttons`) ; cascade `#o_wsale_products_grid` :
+  `display: contents` sur `.o_wsale_product_action_row` **exclut** `.ckr-product-card__footer` ; doc
+  `docs/mvp_02/NOTE_TECH_TUILE_SHOP_FOOTER.md` ; mises à jour `2_SHOP`, `SHOP_COMPONENT_CONTRACTS`,
+  `SHOP_MAQUETTE_ECARTS`, `mvp_02/README`.
+* 19.0.1.10.52 : boutique — activation data `website_sale.filter_products_price` (`ckr_shop_filter_price_activation.xml`)
+  pour que le rail maquette affiche le bloc **Prix** (`opt_wsale_filter_price`) sans forcer `show_price_filter=True` (évite 500).
+* 19.0.1.10.53 : tuile /shop — champ BO **`ck_product_name`** (Nom CK) sur `product.template` ; titre tuile =
+  `ck_product_name.strip() or name` ; méta / nom Odoo / ligne descriptive dans **`<details>` « Pour info »**
+  (replié par défaut) ; `docs/mvp_02/SPEC_CK_NOM_CK_TUILE_PRODUIT.md`.
+* 19.0.1.10.54 : tuile /shop — **rendu retail** : flux principal = image + titre (2 lignes) + **filet** ; « Pour info »
+  déplacé **dans le pied** (au-dessus prix | CTA) ; pied sans double bordure, typo titre un peu plus compacte.
+* 19.0.1.10.55 : tuile /shop — informations secondaires = **bouton info** FontAwesome **`fa-info`**
+  (`ckr-product-card__info-action` / `ckr-product-card__info-icon`) dans le rail
+  **`ckr-product-card__corner-actions`**, à côté de la wishlist sur la **média** (gabarit
+  `ckr_shop_wishlist_on_product_media`) ; fin du libellé « Pour info » / `<details>` sur la tuile liste ;
+  panneau **`ckr-product-card__details-body`** au-dessus des pastilles (`overflow` média si ouvert).
+* 19.0.1.10.56 : fix **assets frontend** — panneau infos tuile : `max-width` / `max-height` en `unquote("min(...)")` pour éviter
+  l’erreur Sass « calc is not a number for min » sur `web.assets_frontend`.
+* 19.0.1.10.57 : tuile /shop — **icône i toujours** dans le coin média (plus liée à `_ckr_shop_tile_has_more_block` seul) ; coin rendu sur
+  toute la grille boutique, wishlist inchangée.
+* 19.0.1.10.58 : fix SCSS **sélecteur double `.ckr-shop`** (règles imbriquées dans `.ckr-shop { }` ne doivent pas préfixer `.ckr-shop` à nouveau) :
+  coin média + pastille « i » + masquage quick-add / wishlist pied — l’icône info était hors cadre (overflow) alors que le cœur restait calé par le thème.
+* 19.0.1.10.59 : tuile /shop — **Classic Store** : neutraliser `position:absolute` sur `.wishlist-above-title .btn` dans le coin média
+  (sinon le cœur recouvre la pastille « i ») ; ordre flex **i** puis **cœur** ; xpath `oe_product_image` élargi (`hasclass` ou `t-attf-class`).
+* 19.0.1.10.60 : tuile /shop — coin média en **grille absolue** : conteneur largeur fixe `calc(2×2rem + gap)`, « i » en `left:0`,
+  wishlist en `right:0` (plus de flex seul vs thème) ; renfort `#wrap.o_wsale_products_page.ckr-shop`.
+* 19.0.1.10.62 : données ``data/ckr_shop_contract_recette_seed_data.xml`` — 2ᵉ origine
+  (Martinique), collection Découverte, 2 catégories eCommerce + ``public_categ_ids`` sur les
+  fiches vitrine Sélection ; recette reproductible pour ``--test-tags=dorevia_ckr_shop_contract``.
+* 19.0.1.10.63 : /shop — finition UI maquette PJ sans changement fonctionnel :
+  sidebar plus sobre, chips intégrées au catalogue, bloc Prix plus lisible, cartes
+  produit homogénéisées et grille resserrée quand il y a peu de résultats.
+* 19.0.1.10.68 : passe mobile UI — drawer plus ergonomique, hero compact
+  sur petits écrans, barre shortcuts /shop réordonnée, CTA fiche produit et
+  grille recommandations plus lisibles en viewport étroit.
+* 19.0.1.10.76 : newsletter desktop — ``margin-top`` ``0.875rem`` ; colonne × **1.5**
+  sur la base 24/28 rem.
+* 19.0.1.10.75 : newsletter desktop — ``margin-top`` formulaire ``0.8rem`` ;
+  colonne × **1.45** sur la base 24/28 rem (champ plus long, une ligne).
+* 19.0.1.10.74 : newsletter desktop — léger ``margin-top`` sur le formulaire ;
+  colonne formulaire ~30 % plus large (champ + bouton inchangés en hiérarchie).
+* 19.0.1.10.73 : newsletter — sureligne NEWSLETTER en sauge + filet ambre (comme
+  « En pratique ») ; label champ masqué visuellement, accessible lecteurs d’écran.
+* 19.0.1.10.72 : newsletter — suite MOA : ``padding-top`` section suivante à
+  ``$ckr-space-lg``, formulaire desktop aligné en haut avec la promesse,
+  bandeau NEWSLETTER un peu resserré.
+* 19.0.1.10.71 : newsletter — section suivante (Réassurance) : ``padding-top``
+  réduit via sélecteur adjacent ``.ckr-newsletter + .ckr-section`` only.
+* 19.0.1.10.70 : newsletter homepage — moins de padding bas du bloc + promesse
+  titre légèrement contenue (taille / interligne), retour MOA après GO direction.
+* 19.0.1.10.69 : bloc newsletter homepage — layout horizontal desktop, copy
+  NEWSLETTER / promesse / RGPD sous filet, dépendance ``mass_mailing`` + liste
+  **Newsletter C-Kreyol**, POST ``/ckr/circle/subscribe`` avec retours ``cc_nl``.
+* 19.0.1.10.67 : menu — groupe **Communauté** (sous-menus Idées cadeaux,
+  Recettes, Blog) ; header desktop/mobile + sync hook + lien footer Blog.
+* 19.0.1.10.66 : page stub `/offrir` — titre et en-tête **Idées cadeaux**
+  (alignement menu + nom de page Website).
+* 19.0.1.10.65 : menu principal et footer — libellé **Idées cadeaux** pour
+  `/offrir` (resync menu au upgrade).
+* 19.0.1.10.64 : fiche produit — Lot 2 UI proche maquette : sections
+  éditoriales basses alimentées par données Odoo, bloc recommandations fiable,
+  réassurance structurée et finition galerie/CTA sans changement de routes.
+* 19.0.1.10.61 : doc **NOTE_TECH_TUILE_CORNER_ACTIONS.md** (rail wishlist + info) ; SCSS : harmonisation **tous** les blocs
+  `.ckr-product-card__info-action` — plus de `::before` texte, **`.fa` / `.ckr-product-card__info-icon` visibles** (correction d’un
+  `display:none` sur `.fa` dans `.ckr-shop` qui masquait `fa-info`).
+* Homepage MVP2.1 : chantier 1/5 — hero immersif V2 (image fond,
+  overlay G->D, 2 CTA /shop + /origines). Chantier 2/5 — bloc
+  Explorer grille asymétrique MVP2 (Promotions dominante, Kits
+  secondaire fort, Catégories / Collections / Origines en cartes
+  simples ; ordre et href DECISION_EXPLORER_HOMEPAGE_MVP2.md ;
+  fin du rail carrousel V1 ; visuels portes depuis docs/assets
+  mvp02 vers static/src/img/explorer_porte_*.png). Itération
+  19.0.1.8.2 : desktop 8+4 (Promo/Kits), micro-copy e-commerce, image
+  Origines épices-terroir. Chantier 3/5 (19.0.1.9.x) : selection
+  produits (BO + repli catalogue ; priorite homepage 2000 en 9.1).
+  (Chantier 4/5 = Cercle en 10.0 ; 5/5 = Reassurance.)
+  Voir docs/mvp_02/DECISION_HERO_HOMEPAGE_V2.md,
+  docs/crea/TICKET_HERO_HOMEPAGE_V2.md,
+  docs/mvp_02/DECISION_EXPLORER_HOMEPAGE_MVP2.md.
+  Ordre homepage gele : Hero -> Explorer -> Produits -> Editorial
+  (V1) -> Inscription -> Reassurance —
+  docs/mvp_02/DECISION_ORDRE_BLOCS_HOMEPAGE_MVP21.md.
 * Regle de bi-lexique ADR-CKR-008 : cote front / visiteur, libelle
   "Kits" (univers alimentaire : kit colombo, kit aperitif…) ; cote
   back-office et source de verite, logique "Pack" du module OCA
@@ -67,9 +389,9 @@ Portee :
   pack > promo > origin via helper _ckr_effective_mode
   (SPEC_IMPL §4). Droits : lecture employe / CRUD editeur site,
   pas d acces public.
-* Porte Collections : objet editorial CK pur (CADRAGE_FONCTIONNEL_
-  COLLECTIONS.md, CONTRAT_URL_COLLECTIONS.md §13, SPEC_IMPL_
-  COLLECTIONS.md, PV_RECETTE_COLLECTIONS_V1.md — MOA 2026-04-22,
+* Porte Collections : objet editorial CK pur
+  (CADRAGE_FONCTIONNEL_COLLECTIONS.md, CONTRAT_URL_COLLECTIONS.md §13,
+  SPEC_IMPL_COLLECTIONS.md, PV_RECETTE_COLLECTIONS_V1.md — MOA 2026-04-22,
   zero residu documentaire). URLs publiques nobles dediees
   /collections, /collections/<slug>, /collections/union/<a>/<b>/…
   (syntaxe S1, n >= 2, tri lexicographique + 301 de normalisation,
@@ -83,20 +405,20 @@ Portee :
   Modele ckr.shop.collection (champs : name translate, slug unique
   par site, sequence, active, date_start / date_end, M2M produits,
   website_id optionnel). Conflit multi-ckr_mode : priorite figee
-  pack > promo > origin > collection — collection en dernier, non-
-  regression absolue des portes livrees (SPEC_IMPL_COLLECTIONS.md
+  pack > promo > origin > collection — collection en dernier,
+  non-regression absolue des portes livrees (SPEC_IMPL_COLLECTIONS.md
   §5.1). Droits : lecture employe / CRUD editeur site + lecture
   publique / portail read-only sur ckr.shop.collection (necessaire
   au rendu du bloc Collections sur la fiche produit visiteur —
   recette MOA 19.0.1.6.1). Filtre catalogue porte par le point
-  unique product.template._search_get_detail (bloc ckr_collection_
-  only + ckr_collection_template_ids) : en Odoo 19 le hook
+  unique product.template._search_get_detail (bloc ckr_collection_only
+  + ckr_collection_template_ids) : en Odoo 19 le hook
   website_sale._shop_lookup_products passe exclusivement par
   website._search_with_fuzzy, qui lit _search_get_detail et non plus
   _get_shop_domain. Preuve auto : tag tests dorevia_ckr_collections
   (RC-01 a RC-14, 23 methodes, 0 skipTest, PV v1 Conforme —
-  docs/phase_2/evidences/run_rc_collections_v2_summary.log).
-* Pages stubs Offrir, Recettes, Collections, Origines, A propos,
+  docs/mvp_01/evidences/run_rc_collections_v2_summary.log).
+* Pages stubs Idées cadeaux (/offrir), Recettes, Collections, Origines, A propos,
   Contact. (Les stubs /kits et /promotions ont ete materialises
   comme redirections 301 portees par les controleurs CK en meme
   temps que la mise en service de leurs contrats H1 respectifs.)
@@ -118,6 +440,13 @@ ARCHITECTURE_DECISION_RECORD).
         "portal",
         "website",
         "website_sale",
+        "website_sale_wishlist",
+        "website_crm",
+        "mass_mailing",
+        # Theme Classic Store : remplace `products_item` (prix dans la colonne texte,
+        # panier dans `o_quick_add_btn`) — le module CK restaure la tuile standard
+        # Odoo pour la structure carte /shop (voir `ckr_shop_classic_tile_restore.xml`).
+        "theme_classic_store",
         # Source de verite de la porte "Kits" (libelle front) /
         # "Pack" (back-office) : module OCA product_pack (champ
         # product.template.pack_ok + onglet Pack).
@@ -128,22 +457,35 @@ ARCHITECTURE_DECISION_RECORD).
         "security/ir.model.access.csv",
         # --- Attribut catalogue « Origine » (A1) + champ confort fiche produit ---
         "data/ckr_product_attribute_origin.xml",
+        "data/ckr_mailing_list_newsletter.xml",
         # --- Back-office : profils origine (menus + vues) ---
         "views/ckr_shop_origin_views.xml",
         "views/product_template_ckr_origin_views.xml",
+        # --- Fiche produit : Nom CK (tuile /shop) — après vue Origines (xpath avant public_categ_ids) ---
+        "views/product_template_ck_product_name_views.xml",
         # --- Back-office : collections editoriales CK (menus + vues) ---
         # Charge apres les vues Origines pour que l heritage de
         # `product_template_form_view_ckr_origin` (extension champ
         # collections apres origines) resolve correctement.
         "views/ckr_shop_collection_views.xml",
         "views/product_template_ckr_collection_views.xml",
+        "views/ckr_circle_subscriber_views.xml",
+        "views/crm_lead_ckr_views.xml",
         # --- Activation des variantes natives Odoo ---
-        # (selecteur de langue : inline + codes, cf. docs/EXPLOITATION_I18N_DEVISES.md)
+        # (selecteur de langue : inline + codes, cf. docs/direction/EXPLOITATION_I18N_DEVISES.md)
         "data/website_selectors_activation.xml",
+        "data/ckr_shop_filter_price_activation.xml",
         "data/ckr_explorer_category_parameter.xml",
+        # Paramètre ``featured_collection_id`` : **hors XML** (hooks + migrations)
+        # pour qu'un ``-u`` ne réécrase jamais la valeur opérationnelle (§4.6 SPEC).
         # --- Layout global (header + footer) ---
         "views/layout/ckr_header.xml",
         "views/layout/ckr_footer.xml",
+        "views/website_ckr_homepage_featured.xml",
+        # Fiches et visuels minimum pour le bloc « Sélection » (recette 4/4)
+        "data/ckr_product_selection_showcase_data.xml",
+        "data/ckr_shop_sidebar_nominal_demo_data.xml",
+        "data/ckr_shop_contract_recette_seed_data.xml",
         # --- Portail client (/my) ---
         "views/portal/ckr_portal.xml",
         # --- Auth front (login Mon compte) ---
@@ -153,12 +495,16 @@ ARCHITECTURE_DECISION_RECORD).
         "views/snippets/ckr_entries.xml",
         "views/snippets/ckr_supplier.xml",
         "views/snippets/ckr_selection.xml",
+        "views/snippets/ckr_circle.xml",
         "views/snippets/ckr_editorial.xml",
         "views/snippets/ckr_trust.xml",
         # --- Pages ---
         "views/pages/ckr_homepage.xml",
         "views/pages/ckr_about.xml",
         "views/pages/ckr_contact.xml",
+        "views/pages/ckr_demande_compte_pro.xml",
+        "views/pages/ckr_privacy.xml",
+        "views/pages/ckr_terms.xml",
         # Note : views/pages/ckr_collections.xml (stub transitoire) a ete
         # retire en 19.0.1.6.0 - la route /collections est desormais
         # portee par le controleur WebsiteSaleCKR (routes /collections,
@@ -167,7 +513,10 @@ ARCHITECTURE_DECISION_RECORD).
         "views/pages/ckr_offrir.xml",
         "views/pages/ckr_recettes.xml",
         "views/pages/ckr_product.xml",
+        "views/ckr_shop_sidebar_rail_maquette.xml",
+        "views/pages/ckr_shop_classic_tile_restore.xml",
         "views/pages/ckr_shop.xml",
+        "views/pages/ckr_shop_wishlist.xml",
         # --- Pages website (apres pages pour que les URLs existent) ---
         "data/website_pages_data.xml",
         # --- Nettoyage / migrations data ---
@@ -205,24 +554,32 @@ ARCHITECTURE_DECISION_RECORD).
         "web.assets_frontend": [
             # Layout
             "dorevia_ckreyol_marketplace/static/src/js/ckr_header_drawer.js",
-            "dorevia_ckreyol_marketplace/static/src/js/ckr_entries_carousel.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_cart_feedback.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_shop_sidebar.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_homepage_hero_rotator.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_demande_compte_pro.js",
+            "dorevia_ckreyol_marketplace/static/src/js/ckr_footer_fold.js",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_header.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_locale.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_product.scss",
-            "dorevia_ckreyol_marketplace/static/src/scss/layout/_shop.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_footer.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_portal.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/layout/_login.scss",
+            "dorevia_ckreyol_marketplace/static/src/scss/layout/_demande_compte_pro.scss",
             # Components
             "dorevia_ckreyol_marketplace/static/src/scss/components/_buttons.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_hero.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_entries.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_supplier.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_selection.scss",
+            "dorevia_ckreyol_marketplace/static/src/scss/components/_newsletter.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_editorial.scss",
             "dorevia_ckreyol_marketplace/static/src/scss/components/_trust.scss",
             # Point d entree
             "dorevia_ckreyol_marketplace/static/src/scss/ckr_main.scss",
+            # Boutique : après ckr_main pour garder la main sur la cascade (tuiles, wishlist, rubans).
+            "dorevia_ckreyol_marketplace/static/src/scss/layout/_shop.scss",
+            "dorevia_ckreyol_marketplace/static/src/scss/layout/_shop_wishlist.scss",
         ],
     },
     "installable": True,

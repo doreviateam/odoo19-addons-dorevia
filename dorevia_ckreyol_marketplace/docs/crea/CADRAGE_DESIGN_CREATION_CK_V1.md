@@ -431,7 +431,7 @@ Il doit être pensé comme une extension naturelle de la boutique.
 
 ### Axes
 
-- Offrir
+- Idées cadeaux
 - Cuisiner
 - Découvrir
 - Associer

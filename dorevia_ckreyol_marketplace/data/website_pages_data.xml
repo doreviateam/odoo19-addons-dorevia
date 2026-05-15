@@ -32,6 +32,41 @@
         <field name="view_id" ref="ckr_page_contact"/>
     </record>
 
+    <!-- Demande compte professionnel (MVP03 — formulaire → CRM via website_crm) -->
+    <record id="website_page_demande_compte_pro" model="website.page">
+        <field name="name">Demande d'ouverture de compte professionnel</field>
+        <field name="url">/demande-compte-professionnel</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_demande_compte_pro"/>
+    </record>
+
+    <record id="website_page_demande_compte_pro_merci" model="website.page">
+        <field name="name">Merci — demande compte professionnel</field>
+        <field name="url">/demande-compte-pro-merci</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_demande_compte_pro_merci"/>
+    </record>
+
+    <!-- Politique de confidentialite (lien formulaire Cercle -> /privacy) -->
+    <record id="website_page_privacy" model="website.page">
+        <field name="name">Confidentialite</field>
+        <field name="url">/privacy</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_privacy"/>
+    </record>
+
+    <!-- Mentions legales + CGV (footer, politique confidentialite -> /terms) -->
+    <record id="website_page_terms" model="website.page">
+        <field name="name">Mentions legales et CGV</field>
+        <field name="url">/terms</field>
+        <field name="website_published">True</field>
+        <field name="is_published">True</field>
+        <field name="view_id" ref="ckr_page_terms"/>
+    </record>
+
     <!-- Collections (porte Explorer - URL noble dediee, MOA 2026-04-22) :  -->
     <!-- La page stub historique /collections (website_page_collections,    -->
     <!-- template ckr_page_collections) est RETIREE. La route /collections  -->
@@ -41,17 +76,17 @@
     <!--   * /collections/<slug>                → vue unitaire                 -->
     <!--   * /collections/union/<s1>/<s2>/…     → lecture union S1            -->
     <!-- (contrat d URL URLs nobles acte le 2026-04-22, cf.                 -->
-    <!-- docs/phase_2/CONTRAT_URL_COLLECTIONS.md §4.1-§4.6 et                -->
-    <!-- docs/phase_2/SPEC_IMPL_COLLECTIONS.md §3).                          -->
+    <!-- docs/mvp_01/CONTRAT_URL_COLLECTIONS.md §4.1-§4.6 et                -->
+    <!-- docs/mvp_01/SPEC_IMPL_COLLECTIONS.md §3).                          -->
     <!-- Pas de redirection vers /shop?ckr_mode=collection cote visiteur    -->
     <!-- (CONTRAT §4.3) : le rendu reutilise /shop en coulisse via           -->
     <!-- request._ckr_collection_ctx et les hooks natifs WebsiteSale.        -->
     <!-- Nettoyage des installations existantes :                            -->
     <!-- data/ckr_cleanup_collections_stub.xml.                              -->
 
-    <!-- Offrir (stub) -->
+    <!-- Idées cadeaux (stub, URL historique /offrir) -->
     <record id="website_page_offrir" model="website.page">
-        <field name="name">Offrir</field>
+        <field name="name">Idées cadeaux</field>
         <field name="url">/offrir</field>
         <field name="website_published">True</field>
         <field name="is_published">True</field>
@@ -73,7 +108,7 @@
     <!-- est desormais portee par un controleur Python qui effectue une     -->
     <!-- redirection HTTP 301 vers la destination canonique                 -->
     <!-- /shop?ckr_mode=pack (contrat d'URL Hybride H1, acte le 2026-04-21, -->
-    <!-- cf. docs/phase_2/CONTRAT_URL_PACKS.md §12 et                       -->
+    <!-- cf. docs/mvp_01/CONTRAT_URL_PACKS.md §12 et                       -->
     <!-- controllers/website_sale_ckr.py).                                   -->
     <!-- Nettoyage des installations existantes : data/ckr_cleanup_kits_stub.xml. -->
 
@@ -83,8 +118,8 @@
     <!-- est desormais portee par un controleur Python qui effectue une     -->
     <!-- redirection HTTP 301 vers la destination canonique                 -->
     <!-- /shop?ckr_mode=origin (contrat d'URL Hybride H1, acte le           -->
-    <!-- 2026-04-22, cf. docs/phase_2/CONTRAT_URL_ORIGINES.md §13 et        -->
-    <!-- docs/phase_2/SPEC_IMPL_ORIGINES.md).                               -->
+    <!-- 2026-04-22, cf. docs/mvp_01/CONTRAT_URL_ORIGINES.md §13 et        -->
+    <!-- docs/mvp_01/SPEC_IMPL_ORIGINES.md).                               -->
     <!-- Nettoyage des installations existantes :                           -->
     <!-- data/ckr_cleanup_origines_stub.xml.                                -->
 

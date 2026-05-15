@@ -2,42 +2,54 @@
 <odoo>
 
     <!-- ========================================================== -->
-    <!-- Snippet : Bloc 2 - Hero homepage (copy gele SPEC § 7)     -->
+    <!-- Snippet : Bloc 2 - Hero homepage                            -->
+    <!--                                                             -->
+    <!-- V1 (pre MVP2.1) : composition split texte gauche / visuel  -->
+    <!--   droite, copy SPEC_HERO_HOMEPAGE §7.                       -->
+    <!-- Cible MVP2.1 (decision MOA) : hero immersif, image produit -->
+    <!--   en fond, overlay leger, texte aligne a gauche, 2 CTA.     -->
+    <!--   Voir docs/mvp_02/DECISION_HERO_HOMEPAGE_V2.md et          -->
+    <!--   docs/crea/TICKET_HERO_HOMEPAGE_V2.md.                     -->
+    <!-- CTA secondaire : lecture Origines sous le conteneur /shop   -->
+    <!--   (doctrine boutique unique — pas de lien vers /origines). -->
     <!-- ========================================================== -->
 
     <template id="ckr_snippet_hero" name="C-Kreyol: Hero homepage">
-        <section class="ckr-hero ckr-root">
+        <section class="ckr-hero ckr-hero--immersive ckr-root"
+                 data-ckr-hero-rotate-interval="60000">
+            <div class="ckr-hero__media" aria-hidden="true">
+                <img src="/dorevia_ckreyol_marketplace/static/src/img/hero_macro.png"
+                     alt=""
+                     loading="eager"
+                     fetchpriority="high"
+                     class="ckr-hero__bg ckr-hero__bg--layer-a is-active"/>
+                <img src="/dorevia_ckreyol_marketplace/static/src/img/hero_v2_immersive.png"
+                     alt=""
+                     loading="lazy"
+                     class="ckr-hero__bg ckr-hero__bg--layer-b"/>
+                <span class="ckr-hero__overlay"/>
+            </div>
+
             <div class="ckr-hero__inner">
-
                 <div class="ckr-hero__content">
-                    <span class="ckr-hero__eyebrow">Agro transformés des Antilles</span>
-
                     <h1 class="ckr-hero__title">
-                        C-Kreyol : une sélection d'agro transformés antillais
+                        Retrouvez les saveurs et savoir-faire créoles.
                     </h1>
 
                     <p class="ckr-hero__subtitle">
-                        Biscuits, douceurs et épicerie des Antilles — sélectionnés avec soin pour
-                        vous faire découvrir des origines lisibles et des saveurs authentiques.
+                        Produits des territoires créoles, sélectionnés auprès de producteurs
+                        et créateurs de confiance.
                     </p>
 
                     <div class="ckr-hero__cta">
                         <a href="/shop" class="ckr-btn ckr-btn--primary ckr-btn--lg">
-                            Découvrir la boutique
+                            Découvrir la sélection
                         </a>
-                        <a href="#explorer-catalogue" class="ckr-btn ckr-btn--secondary">
-                            Explorer le catalogue
+                        <a href="/shop?ckr_mode=origin" class="ckr-btn ckr-btn--secondary ckr-btn--lg">
+                            Explorer les origines
                         </a>
                     </div>
                 </div>
-
-                <div class="ckr-hero__visual">
-                    <img src="/dorevia_ckreyol_marketplace/static/src/img/hero_macro.png"
-                         alt="Biscuits et douceurs des Antilles — gros plan matière, lumière naturelle"
-                         loading="eager"
-                         fetchpriority="high"/>
-                </div>
-
             </div>
         </section>
     </template>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="ckr_page_terms" name="C-Kreyol: Mentions legales et CGV">
+        <t t-call="website.layout">
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <h1>Mentions légales et conditions</h1>
+                        <p class="ckr-lead">
+                            Les présentes informations visent à identifier l’éditeur du site
+                            <strong>C-Kréyòl</strong> et à présenter le cadre applicable aux
+                            commandes réalisées sur la boutique en ligne.
+                        </p>
+
+                        <h2>Éditeur du site</h2>
+                        <p>
+                            Le présent site (marque <strong>C-Kréyòl</strong>)
+                            est édité dans le cadre de l’activité de <strong>Dorevia</strong>,
+                            dont le siège d’exploitation est situé à <strong>Nantes</strong>
+                            (France).
+                        </p>
+                        <p>
+                            <strong>Contact</strong>&#160;:
+                            <a href="mailto:contact@c-kreyol.fr">contact@c-kreyol.fr</a>
+                            — voir également la page
+                            <a href="/contact">Contact</a>.
+                        </p>
+                        <p>
+                            Pour les mentions complémentaires exigées par la réglementation
+                            (forme juridique, capital social, immatriculation RCS, numéro de TVA
+                            intracommunautaire, directeur de la publication), l’éditeur s’efforce
+                            de tenir des informations à jour&#160;; toute précision peut être
+                            demandée à l’adresse ci-dessus.
+                        </p>
+
+                        <h2>Hébergement</h2>
+                        <p>
+                            Conformément aux obligations de publication (notamment
+                            <a href="https://www.economie.gouv.fr/entreprises/developper-son-entreprise/innover-et-numeriser-son-entreprise/mentions-sur-votre-site-internet-les-obligations-respecter"
+                               rel="noopener noreferrer"
+                               target="_blank">economie.gouv.fr</a>),
+                            le <strong>prestataire d’hébergement</strong> assurant le stockage direct
+                            du présent site sur ses équipements est le suivant&#160;:
+                        </p>
+                        <ul>
+                            <li><strong>Nom</strong>&#160;: OVHcloud</li>
+                            <li><strong>Raison sociale</strong>&#160;: OVH SAS</li>
+                            <li>
+                                <strong>Adresse du siège social</strong>&#160;:
+                                2&#160;rue Kellermann, 59100 Roubaix, France
+                            </li>
+                            <li>
+                                <strong>Téléphone</strong>&#160;:
+                                <a href="tel:+33972101007">+33&#160;(0)9&#160;72&#160;10&#160;10&#160;07</a>
+                            </li>
+                        </ul>
+                        <p>
+                            <strong>RCS</strong> Lille Métropole 424&#160;761&#160;419 — capital social
+                            50&#160;000&#160;000&#160;€ — <strong>TVA</strong> intracommunautaire
+                            FR&#160;22&#160;424&#160;761&#160;419 (informations publiées par l’hébergeur,
+                            <a href="https://www.ovhcloud.com/fr/terms-and-conditions/"
+                               rel="noopener noreferrer"
+                               target="_blank">ovhcloud.com</a>).
+                        </p>
+                        <p>
+                            Si l’<strong>infrastructure réelle</strong> du site venait à être confiée
+                            à un autre prestataire, la présente section doit être <strong>mise à
+                            jour sans délai</strong> pour refléter le nouvel hébergeur (mêmes
+                            catégories d’informations&#160;: nom, raison sociale, adresse, téléphone).
+                        </p>
+
+                        <h2>Propriété intellectuelle</h2>
+                        <p>
+                            L’ensemble des éléments composant le site (structure, textes, visuels,
+                            logos, marques lorsqu’ils sont protégés) sont la propriété de l’éditeur
+                            ou font l’objet d’une autorisation d’utilisation. Toute reproduction ou
+                            représentation non autorisée est interdite.
+                        </p>
+
+                        <h2>Données personnelles</h2>
+                        <p>
+                            Le traitement des données collectées sur ce site est décrit dans la
+                            <a href="/privacy">politique de confidentialité</a>.
+                        </p>
+
+                        <h2 id="cgv">Conditions générales de vente</h2>
+                        <p>
+                            Les commandes passées sur la <strong>boutique en ligne</strong> sont
+                            soumises aux <strong>conditions générales de vente</strong> présentées
+                            et acceptées électroniquement lors du tunnel de commande, ainsi qu’au
+                            droit français applicable aux ventes de biens et prestations associées.
+                        </p>
+                        <p>
+                            Pour toute question avant ou après achat (rétractation, garantie,
+                            livraison, paiement), contactez
+                            <a href="mailto:contact@c-kreyol.fr">contact@c-kreyol.fr</a>
+                            ou utilisez le
+                            <a href="/contact">formulaire de contact</a>.
+                        </p>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+</odoo>

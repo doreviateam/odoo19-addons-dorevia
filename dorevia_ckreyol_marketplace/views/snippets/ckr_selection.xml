@@ -2,83 +2,63 @@
 <odoo>
 
     <!-- ========================================================== -->
-    <!-- Snippet : Bloc 5 - Selection produits (WIREFRAME § 3)     -->
-    <!-- Grille courte - pas de carrousel principal.               -->
-    <!-- Phase 1 : packshots en placeholder ; a terme on branche   -->
-    <!-- sur product.template (selection manuelle ou tag).         -->
+    <!-- Snippet : Bloc 5 - Sélection produits (MVP2.1)            -->
+    <!-- 4 produits dynamiques website_sale — TICKET                -->
+    <!-- SELECTION-PRODUITS-HOMEPAGE-MVP21,                         -->
+    <!-- DECISION_PRODUITS_HOMEPAGE_MVP21.md                        -->
+    <!-- Config : site Web → 4 champs Produit 1/4 … 4/4.           -->
     <!-- ========================================================== -->
 
     <template id="ckr_snippet_selection" name="C-Kreyol: Selection produits">
-        <section class="ckr-section ckr-selection ckr-root">
+        <t t-set="ckr_sel_cards" t-value="website.sudo()._get_ckr_homepage_selection_cards()"/>
+        <section class="ckr-section ckr-selection ckr-selection--band ckr-root">
             <div class="ckr-container">
 
-                <header class="ckr-section-title">
-                    <span class="ckr-section-title__eyebrow ckr-section-title__eyebrow--rule">Selection</span>
-                    <h2>Quelques produits reperes</h2>
+                <header class="ckr-section-title ckr-section-title--center">
+                    <span class="ckr-section-title__eyebrow ckr-section-title__eyebrow--rule">Sélection</span>
+                    <h2>Notre sélection du moment</h2>
+                    <p class="ckr-section-title__intro">
+                        Quatre produits du catalogue, prix visiteur — ouvrez la fiche pour le détail.
+                    </p>
                 </header>
 
-                <div class="ckr-selection__grid">
-
-                    <a href="/shop" class="ckr-selection__card">
-                        <div class="ckr-selection__card__img">
-                            <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_maniocookies.png"
-                                 alt="Maniocookies - biscuits au manioc"/>
-                        </div>
-                        <div class="ckr-selection__card__head">
-                            <h3>Maniocookies</h3>
-                            <span class="ckr-selection__card__price">Voir en boutique</span>
-                        </div>
-                        <!--
-                            V1 : origine rendue en statique (placeholder homepage).
-                            V1.x (bascule donnee reelle) : remplacer ce <p> par un rendu
-                            conditionnel t-if="product.x_ckr_origin" + verification de
-                            couverture globale >= 80 % sur la selection (regle §9.4 du
-                            document gele), pilotee au niveau du template parent ou du
-                            controleur qui resout la selection. Si couverture < 80 %,
-                            masquer la ligne sur TOUTES les cartes - jamais de melange.
-                        -->
-                        <p class="ckr-selection__card__origin">Guadeloupe</p>
-                    </a>
-
-                    <a href="/shop" class="ckr-selection__card">
-                        <div class="ckr-selection__card__img">
-                            <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_crackers.png"
-                                 alt="Crackers sales de manioc"/>
-                        </div>
-                        <div class="ckr-selection__card__head">
-                            <h3>Manioc Crakers sale</h3>
-                            <span class="ckr-selection__card__price">Voir en boutique</span>
-                        </div>
-                        <!-- §9.4 : origine statique V1 (voir doctrine sur carte 1) -->
-                        <p class="ckr-selection__card__origin">Sainte-Anne</p>
-                    </a>
-
-                    <a href="/shop" class="ckr-selection__card">
-                        <div class="ckr-selection__card__img">
-                            <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_pates.png"
-                                 alt="Pates de manioc"/>
-                        </div>
-                        <div class="ckr-selection__card__head">
-                            <h3>Manio Pates</h3>
-                            <span class="ckr-selection__card__price">Voir en boutique</span>
-                        </div>
-                        <!-- §9.4 : origine statique V1 (voir doctrine sur carte 1) -->
-                        <p class="ckr-selection__card__origin">Mayotte</p>
-                    </a>
-
-                    <a href="/shop" class="ckr-selection__card">
-                        <div class="ckr-selection__card__img">
-                            <img src="/dorevia_ckreyol_marketplace/static/src/img/packshot_crackers.png"
-                                 alt="Manio Crakers sucres"/>
-                        </div>
-                        <div class="ckr-selection__card__head">
-                            <h3>Manio Crakers sucre</h3>
-                            <span class="ckr-selection__card__price">Voir en boutique</span>
-                        </div>
-                        <!-- §9.4 : origine statique V1 (voir doctrine sur carte 1) -->
-                        <p class="ckr-selection__card__origin">Guadeloupe</p>
-                    </a>
-
+                <div t-if="ckr_sel_cards" class="ckr-selection__grid" role="list">
+                    <t t-foreach="ckr_sel_cards" t-as="card">
+                        <a t-att-href="card['product'].website_url"
+                           class="ckr-selection__card"
+                           role="listitem">
+                            <div class="ckr-selection__card__img">
+                                <!-- URL Odoo /web/image/... ou repli statique module (9.7) -->
+                                <img t-if="card.get('listing_image_url')"
+                                    t-att-src="card.get('listing_image_url')"
+                                    t-att-alt="card['product'].name"
+                                    loading="lazy"
+                                    class="ckr-selection__card__image"/>
+                                <div t-else="" class="ckr-selection__card__photo-fallback" aria-hidden="true">
+                                    <span class="ckr-selection__card__photo-fallback-mark">C-K</span>
+                                </div>
+                            </div>
+                            <div class="ckr-selection__card__head">
+                                <h3 t-esc="card['product'].name"/>
+                                <t t-set="ckr_comb" t-value="card.get('combination_info') or {}"/>
+                                <span class="ckr-selection__card__price"
+                                      t-esc="ckr_comb.get('price', 0)"
+                                      t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            </div>
+                            <p t-if="card.get('show_origin') and card.get('origin')"
+                               class="ckr-selection__card__origin"
+                               t-esc="card['origin']"/>
+                            <span class="ckr-selection__card__product-cta">Voir le produit</span>
+                        </a>
+                    </t>
+                </div>
+                <div t-else="" class="ckr-selection__empty" role="status">
+                    <p class="ckr-selection__empty-hint">
+                        Aucun produit publié à mettre en avant pour le moment.
+                        Indiquez jusqu’à quatre articles dans
+                        <strong>Site web → Configuration → Sites</strong>
+                        (groupe C-Kreyol), ou publiez des produits dans la boutique.
+                    </p>
                 </div>
 
                 <div class="ckr-selection__cta">

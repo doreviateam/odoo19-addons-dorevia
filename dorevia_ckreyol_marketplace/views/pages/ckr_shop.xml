@@ -19,6 +19,670 @@
         <xpath expr="//div[@id='wrap'][hasclass('o_wsale_products_page')]" position="attributes">
             <attribute name="class" add="ckr-shop ckr-root ckr-page" separator=" "/>
         </xpath>
+        <xpath expr="//div[@id='wrap'][hasclass('o_wsale_products_page')]" position="inside">
+            <!-- Défense CSS héritée : pas de glyphe fantôme sur `.ckr-product-card__info-action` ; `fa-info` visible. -->
+            <style id="ckr_shop_corner_actions_style">
+                #wrap.o_wsale_products_page .ckr-product-card__corner-actions &gt; .ckr-product-card__info-action::before,
+                #wrap.o_wsale_products_page .ckr-product-card__corner-actions &gt; .ckr-product-card__info-action::after {
+                    content: none !important;
+                    display: none !important;
+                }
+
+                #wrap.o_wsale_products_page .ckr-product-card__corner-actions &gt; .ckr-product-card__info-action &gt; .ckr-product-card__info-icon {
+                    display: inline-flex !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                }
+            </style>
+            <!-- Typo nom produit grille : priorité sur thèmes / bundles (même principe que corner_actions). -->
+            <style id="ckr_shop_product_name_retail_style">
+                /* Sans `form.oe_product_cart` : certains thèmes / Odoo 19 utilisent un autre conteneur. */
+                #wrap.o_wsale_products_page.ckr-shop h2.o_wsale_products_item_title,
+                #wrap.o_wsale_products_page.ckr-shop h3.o_wsale_products_item_title,
+                #wrap.o_wsale_products_page.ckr-shop h6.o_wsale_products_item_title {
+                    font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif !important;
+                    font-size: clamp(0.84rem, 0.2vw + 0.77rem, 0.93rem) !important;
+                    font-weight: 500 !important;
+                    line-height: 1.22 !important;
+                    letter-spacing: 0.015em !important;
+                    font-style: normal !important;
+                    color: rgba(0, 0, 0, 0.74) !important;
+                    display: block !important;
+                    overflow: hidden !important;
+                    min-height: calc(2 * 1.22 * 1em) !important;
+                    height: calc(2 * 1.22 * 1em) !important;
+                    max-height: calc(2 * 1.22 * 1em) !important;
+                    margin: 0 !important;
+                    border-bottom: none !important;
+                    -webkit-font-smoothing: antialiased !important;
+                }
+                #wrap.o_wsale_products_page.ckr-shop a.ckr-product-card__name-link {
+                    color: rgba(0, 0, 0, 0.74) !important;
+                    font-family: inherit !important;
+                    font-weight: inherit !important;
+                    font-size: inherit !important;
+                    line-height: inherit !important;
+                    letter-spacing: inherit !important;
+                    text-decoration: none !important;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp: 2 !important;
+                    overflow: hidden !important;
+                    word-break: break-word !important;
+                    max-height: 100% !important;
+                }
+                #wrap.o_wsale_products_page.ckr-shop a.ckr-product-card__name-link span {
+                    color: inherit !important;
+                    font-family: inherit !important;
+                    font-size: inherit !important;
+                    font-weight: inherit !important;
+                    line-height: inherit !important;
+                    letter-spacing: inherit !important;
+                }
+                #wrap.o_wsale_products_page.ckr-shop a.ckr-product-card__name-link:hover,
+                #wrap.o_wsale_products_page.ckr-shop a.ckr-product-card__name-link:focus-visible {
+                    color: #A0522D !important;
+                }
+            </style>
+        </xpath>
+    </template>
+
+    <!-- Maquette MVP2.2 §4 : titre de rail « Filtrer par » + réinitialisation globale (même bloc DOM). -->
+    <template id="ckr_shop_sidebar_filter_heading"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: titre rail Filtrer par"
+              priority="27">
+        <!--
+            Conteneur unique : garantit l’ordre « Filtrer par » → « Effacer les filtres » → filtres,
+            sans dépendre d’un xpath « after » fragile lors du merge QWeb (réordonnancement rail).
+        -->
+        <xpath expr="//aside[@id='products_grid_before']/div[hasclass('o_wsale_products_grid_before_rail')]/*[1]"
+               position="before">
+            <div class="ckr-shop-sidebar__heading-cluster">
+                <!-- Chemin boutique nu pour le JS sidebar (chips masqués en recherche, etc.). -->
+                <span class="ckr-js-shop-base d-none" t-att-data-ckr-shop-base="shop_path" aria-hidden="true"/>
+                <h2 class="ckr-shop-sidebar__filter-heading ckr-root">Filtrer par</h2>
+                <!-- ``ckr_shop_show_clear_filters`` : contrôleur ; évite l’écart ``isFilteringByPrice`` / bornes CK. -->
+                <div t-if="ckr_shop_show_clear_filters"
+                     class="ckr-shop-sidebar__clear-filters pb-2 mb-2 border-bottom border-secondary-subtle">
+                    <a t-att-href="keep(attribute_values=0, tags=0, min_price=0, max_price=0, ckr_mode=0, ckr_category=0, ckr_origin=0, ckr_collection=0, ckr_collection_scope=0)"
+                       t-attf-class="btn btn-{{navClass}} d-flex align-items-center py-1 w-100"
+                       title="Clear Filters">
+                        <small class="mx-auto"><b>Effacer les filtres</b></small>
+                        <i class="oi oi-close" role="presentation"/>
+                    </a>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Masque la facette attribut « Origine » catalogue quand le bloc CK Origines est affiché. -->
+    <template id="ckr_shop_sidebar_suppress_origin_attribute_facet"
+              inherit_id="website_sale.product_attribute_filters_form"
+              name="C-Kreyol: pas de doublon facette Origine / rail CK"
+              priority="55">
+        <xpath expr="//form[contains(@t-attf-class, 'js_attributes')]//t[@t-foreach='attributes']/div[contains(@t-attf-class, 'accordion-item')]"
+               position="attributes">
+            <attribute name="t-if">a.value_ids and len(a.value_ids) &gt; 1 and (not ckr_shop_sidebar_suppress_attribute_ids or a.id not in ckr_shop_sidebar_suppress_attribute_ids)</attribute>
+        </xpath>
+    </template>
+
+    <!--
+        Catégories — maquette §4 (accordéon + cases à cocher, même lecture que les 3 autres blocs).
+
+        Rendu :
+        * Desktop : dans `#products_grid_before` → `div.products_categories.accordion` → ce bloc
+          (`accordion-item` « Catégories »).
+        * Mobile (offcanvas) : le titre visible est le bouton natif « Catégories »
+          (`ckr_shop_offcanvas_categories_fr`) ; ici `isOffcanvas=True` → liste seule
+          (sans second accordéon imbriqué).
+
+        Côté module CK, `opt_wsale_categories` est forcé True (`ckr_shop_sidebar_rail_maquette.xml`)
+        pour garantir le bloc en sidebar. Sans ce module, il dépend de la vue
+        `website_sale.products_categories` (voir TICKET_SHOP_SIDEBAR_CATEGORIES.md).
+        Liste = catégories **racines** du site (comme le `<ul>` standard), pas l’arbre récursif
+        `categories_recursive` (décision CK pour parité cases à cocher maquette).
+    -->
+    <template id="ckr_shop_categories_list_maquette"
+              inherit_id="website_sale.products_categories_list"
+              name="C-Kreyol: catégories rail — accordéon + cases à cocher"
+              priority="100">
+        <xpath expr="//div[@name='wsale_products_categories_list']/parent::*" position="replace">
+            <t>
+                <!-- Bloc neutre (« Toutes ») = replié ; facette active = ouvert -->
+                <div t-if="not isOffcanvas"
+                     class="accordion-item border-0 bg-transparent ckr-shop-filter-section">
+                    <!-- bool explicites : QWeb évite tout ambiguïté sur liste / record vide -->
+                    <t t-set="ckr_sidebar_cat_expand"
+                       t-value="bool(category) or bool(ckr_shop_sidebar_active_category_slugs)"/>
+                    <h3 id="ckr_sidebar_categories_heading" class="accordion-header mb-0">
+                        <button type="button"
+                                t-attf-class="accordion-button shadow-none ckr-shop-sidebar__accordion-btn{{ ' collapsed' if not ckr_sidebar_cat_expand else '' }}"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#ckr_sidebar_categories_body"
+                                aria-controls="ckr_sidebar_categories_body"
+                                t-att-aria-expanded="'true' if ckr_sidebar_cat_expand else 'false'">
+                            <span class="fw-semibold">Catégories</span>
+                        </button>
+                    </h3>
+                    <div id="ckr_sidebar_categories_body"
+                         t-attf-class="accordion-collapse collapse{{ ' show' if ckr_sidebar_cat_expand else '' }}"
+                         aria-labelledby="ckr_sidebar_categories_heading">
+                        <div class="accordion-body pt-0 pb-3 px-0">
+                            <div name="wsale_products_categories_list" t-attf-class="wsale_products_categories_list">
+                                <ul class="list-unstyled mb-0 ckr-shop-sidebar-catchecks">
+                                    <li>
+                                        <div class="form-check mb-2">
+                                            <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                                <input type="checkbox"
+                                                       class="form-check-input flex-shrink-0 ckr-sidebar-cat-check ckr-sidebar-cat-all"
+                                                       t-att-checked="not category and not ckr_shop_sidebar_active_category_slugs"/>
+                                                <span>Toutes</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <t t-if="ckr_sidebar_category_rows is not None">
+                                        <t t-foreach="ckr_sidebar_category_rows" t-as="row">
+                                            <li>
+                                                <div class="form-check mb-2">
+                                                    <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                                        <input type="checkbox"
+                                                               class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
+                                                               t-att-checked="(category and row['cat'].id in category.parents_and_self.ids) or (slug(row['cat']) in ckr_shop_sidebar_active_category_slugs)"
+                                                               t-att-data-category-slug="slug(row['cat'])"/>
+                                                        <span class="ckr-shop-sidebar-catchecks__name" t-field="row['cat'].name"/>
+                                                    </label>
+                                                </div>
+                                            </li>
+                                        </t>
+                                    </t>
+                                    <t t-if="ckr_sidebar_category_rows is None">
+                                        <t t-foreach="categories" t-as="c">
+                                            <li>
+                                                <div class="form-check mb-2">
+                                                    <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                                        <input type="checkbox"
+                                                               class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
+                                                               t-att-checked="(category and c.id in category.parents_and_self.ids) or (slug(c) in ckr_shop_sidebar_active_category_slugs)"
+                                                               t-att-data-category-slug="slug(c)"/>
+                                                        <span class="ckr-shop-sidebar-catchecks__name" t-field="c.name"/>
+                                                    </label>
+                                                </div>
+                                            </li>
+                                        </t>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div t-if="isOffcanvas"
+                     name="wsale_products_categories_list"
+                     t-attf-class="wsale_products_categories_list">
+                    <ul class="list-unstyled mb-0 ckr-shop-sidebar-catchecks">
+                        <li>
+                            <div class="form-check mb-2">
+                                <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                    <input type="checkbox"
+                                           class="form-check-input flex-shrink-0 ckr-sidebar-cat-check ckr-sidebar-cat-all"
+                                           t-att-checked="not category and not ckr_shop_sidebar_active_category_slugs"/>
+                                    <span>Toutes</span>
+                                </label>
+                            </div>
+                        </li>
+                        <t t-if="ckr_sidebar_category_rows is not None">
+                            <t t-foreach="ckr_sidebar_category_rows" t-as="row">
+                                <li>
+                                    <div class="form-check mb-2">
+                                        <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                            <input type="checkbox"
+                                                   class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
+                                                   t-att-checked="(category and row['cat'].id in category.parents_and_self.ids) or (slug(row['cat']) in ckr_shop_sidebar_active_category_slugs)"
+                                                   t-att-data-category-slug="slug(row['cat'])"/>
+                                            <span class="ckr-shop-sidebar-catchecks__name" t-field="row['cat'].name"/>
+                                        </label>
+                                    </div>
+                                </li>
+                            </t>
+                        </t>
+                        <t t-if="ckr_sidebar_category_rows is None">
+                            <t t-foreach="categories" t-as="c">
+                                <li>
+                                    <div class="form-check mb-2">
+                                        <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                            <input type="checkbox"
+                                                   class="form-check-input flex-shrink-0 ckr-sidebar-cat-check"
+                                                   t-att-checked="(category and c.id in category.parents_and_self.ids) or (slug(c) in ckr_shop_sidebar_active_category_slugs)"
+                                                   t-att-data-category-slug="slug(c)"/>
+                                            <span class="ckr-shop-sidebar-catchecks__name" t-field="c.name"/>
+                                        </label>
+                                    </div>
+                                </li>
+                            </t>
+                        </t>
+                    </ul>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Blocs Collections + Origines CK (accordéons distincts, même gabarit que Catégories / Prix). -->
+    <template id="ckr_shop_sidebar_ck_sections" name="C-Kreyol: sidebar Collections + Origines">
+        <div t-if="ckr_sidebar_collections or ckr_sidebar_origins"
+             class="ckr-shop-sidebar-ck ckr-root"
+             t-att-data-ckr-shop-base="shop_path">
+            <div class="accordion accordion-flush ckr-shop-sidebar-ck__accordion">
+                <div t-if="ckr_sidebar_collections"
+                     class="accordion-item border-0 bg-transparent ckr-shop-filter-section">
+                    <t t-set="ckr_sidebar_coll_expand"
+                       t-value="bool(ckr_shop_sidebar_active_collection_slugs)"/>
+                    <h3 id="ckr_sidebar_collections_heading" class="accordion-header mb-0">
+                        <button type="button"
+                                t-attf-class="accordion-button shadow-none ckr-shop-sidebar__accordion-btn{{ ' collapsed' if not ckr_sidebar_coll_expand else '' }}"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#ckr_sidebar_collections_body"
+                                aria-controls="ckr_sidebar_collections_body"
+                                t-att-aria-expanded="'true' if ckr_sidebar_coll_expand else 'false'">
+                            <span class="fw-semibold">Collections</span>
+                        </button>
+                    </h3>
+                    <div id="ckr_sidebar_collections_body"
+                         t-attf-class="accordion-collapse collapse{{ ' show' if ckr_sidebar_coll_expand else '' }}"
+                         aria-labelledby="ckr_sidebar_collections_heading">
+                        <div class="accordion-body pt-0 pb-3 px-0">
+                            <div class="ckr-shop-sidebar-ck__collections-form">
+                                <div class="form-check mb-2">
+                                    <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                        <input type="checkbox"
+                                               class="form-check-input flex-shrink-0 ckr-sidebar-collection-check ckr-sidebar-collection-all"
+                                               t-att-checked="not ckr_shop_sidebar_active_collection_slugs"/>
+                                        <span>Toutes</span>
+                                    </label>
+                                </div>
+                                <t t-foreach="ckr_sidebar_collection_rows" t-as="row">
+                                    <div class="form-check mb-2">
+                                        <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                            <input type="checkbox"
+                                                   class="form-check-input flex-shrink-0 ckr-sidebar-collection-check"
+                                                   t-att-data-slug="row['coll'].slug"
+                                                   t-att-checked="row['coll'].slug in ckr_shop_sidebar_active_collection_slugs"/>
+                                            <span t-out="row['coll'].name"/>
+                                        </label>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div t-if="ckr_sidebar_origins"
+                     class="accordion-item border-0 bg-transparent ckr-shop-filter-section">
+                    <t t-set="ckr_sidebar_origin_expand"
+                       t-value="bool(ckr_shop_sidebar_active_origin_slugs)"/>
+                    <h3 id="ckr_sidebar_origins_heading" class="accordion-header mb-0">
+                        <button type="button"
+                                t-attf-class="accordion-button shadow-none ckr-shop-sidebar__accordion-btn{{ ' collapsed' if not ckr_sidebar_origin_expand else '' }}"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#ckr_sidebar_origins_body"
+                                aria-controls="ckr_sidebar_origins_body"
+                                t-att-aria-expanded="'true' if ckr_sidebar_origin_expand else 'false'">
+                            <span class="fw-semibold">Origines</span>
+                        </button>
+                    </h3>
+                    <div id="ckr_sidebar_origins_body"
+                         t-attf-class="accordion-collapse collapse{{ ' show' if ckr_sidebar_origin_expand else '' }}"
+                         aria-labelledby="ckr_sidebar_origins_heading">
+                        <div class="accordion-body pt-0 pb-3 px-0">
+                            <div class="ckr-shop-sidebar-ck__origins-form">
+                                <div class="form-check mb-2">
+                                    <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                        <input type="checkbox"
+                                               class="form-check-input flex-shrink-0 ckr-sidebar-origin-check ckr-sidebar-origin-all"
+                                               t-att-checked="not ckr_shop_sidebar_active_origin_slugs"/>
+                                        <span>Toutes</span>
+                                    </label>
+                                </div>
+                                <t t-foreach="ckr_sidebar_origin_rows" t-as="row">
+                                    <div class="form-check mb-2">
+                                        <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0">
+                                            <input type="checkbox"
+                                                   class="form-check-input flex-shrink-0 ckr-sidebar-origin-check"
+                                                   t-att-data-slug="row['origin'].slug"
+                                                   t-att-checked="row['origin'].slug in ckr_shop_sidebar_active_origin_slugs"/>
+                                            <span t-out="row['origin'].display_name_visitor"/>
+                                        </label>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!--
+        Bloc Prix autonome CK.
+
+        Ne dépend pas de l'état actif/inactif de la vue native
+        `website_sale.filter_products_price` dans l'éditeur backend.
+        Le contrôleur CK recalcule `available_min_price` / `available_max_price`
+        si Odoo ne les injecte pas.
+    -->
+    <template id="ckr_shop_filter_products_price_standalone"
+              name="C-Kreyol: filtre Prix autonome">
+        <t t-set="isDisabled" t-value="available_min_price == available_max_price"/>
+        <div id="o_wsale_price_range_option"
+             t-attf-class="position-relative {{_classes}} {{isDisabled and 'opacity-75 pe-none user-select-none'}}">
+            <t t-if="is_sidebar_collapsible">
+                <!-- Toujours déplié si le serveur le demande ; ne pas replier lorsque la
+                     plage est dégénérée (min=max) — l’état inactif reste sur le conteneur. -->
+                <t t-set="ckr_sidebar_price_expand"
+                   t-value="bool(ckr_shop_sidebar_price_expanded)"/>
+                <div class="accordion-item border-0 bg-transparent ckr-shop-filter-section">
+                    <div class="accordion-header h6 mb-0">
+                        <button type="button"
+                                t-attf-class="accordion-button px-0 bg-transparent shadow-none ckr-shop-sidebar__accordion-btn{{ ' collapsed' if not ckr_sidebar_price_expand else '' }}"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#o_wsale_price_range_option_inner"
+                                aria-controls="o_wsale_price_range_option_inner"
+                                t-att-aria-expanded="'true' if ckr_sidebar_price_expand else 'false'">
+                            <b>Prix</b>
+                        </button>
+                    </div>
+                    <div id="o_wsale_price_range_option_inner"
+                         t-attf-class="accordion-collapse collapse{{ ' show' if ckr_sidebar_price_expand else '' }}">
+                        <input type="range"
+                               multiple="multiple"
+                               t-attf-class="form-range range-with-input {{_classes_input}}"
+                               t-att-data-currency="website.currency_id.symbol"
+                               t-att-data-currency-position="website.currency_id.position"
+                               t-att-data-url="keep(min_price=0, max_price=0)"
+                               t-att-step="website.currency_id.rounding"
+                               t-att-min="'%f' % (available_min_price)"
+                               t-att-max="'%f' % (available_max_price)"
+                               t-att-value="'%f,%f' % (min_price, max_price)"/>
+                    </div>
+                </div>
+            </t>
+            <t t-else="">
+                <label t-attf-class="m-0 h6 o_products_attributes_title {{_classes_title}}">
+                    <b>Prix</b>
+                </label>
+                <input type="range"
+                       multiple="multiple"
+                       t-attf-class="form-range range-with-input {{_classes_input}}"
+                       t-att-data-currency="website.currency_id.symbol"
+                       t-att-data-currency-position="website.currency_id.position"
+                       t-att-data-url="keep(min_price=0, max_price=0)"
+                       t-att-step="website.currency_id.rounding"
+                       t-att-min="'%f' % (available_min_price)"
+                       t-att-max="'%f' % (available_max_price)"
+                       t-att-value="'%f,%f' % (min_price, max_price)"/>
+            </t>
+        </div>
+    </template>
+
+    <template id="ckr_shop_sidebar_ck_sections_inject"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: injecte Collections + Origines dans le rail filtres"
+              priority="26">
+        <!-- Odoo 19 : classe `products_attributes_filters` sur `t-attf-class`, pas sur `class` (cf. website_sale.products). -->
+        <xpath expr="//aside[@id='products_grid_before']//div[contains(@t-attf-class, 'products_attributes_filters')]"
+               position="before">
+            <t t-call="dorevia_ckreyol_marketplace.ckr_shop_sidebar_ck_sections"/>
+        </xpath>
+    </template>
+
+    <!-- Maquette §4 : ordre rail Catégories → Collections → Origines → Prix → (autres facettes Odoo). -->
+    <!-- Standard Odoo place le prix après les attributs ; on le duplique avant le bloc facettes puis on retire l’ancien nœud. -->
+    <template id="ckr_shop_sidebar_price_rail_order"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: bloc Prix après Collections/Origines"
+              priority="29">
+        <xpath expr="//aside[@id='products_grid_before']//div[contains(@t-attf-class, 'products_attributes_filters')]"
+               position="before">
+            <t t-if="opt_wsale_filter_price"
+               t-call="dorevia_ckreyol_marketplace.ckr_shop_filter_products_price_standalone">
+                <t t-set="_classes"
+                   t-valuef="{{is_sidebar_collapsible and 'accordion accordion-flush'}} {{is_sidebar_collapsible and (opt_wsale_categories or len(attributes) &gt; 0) and 'border-top'}}"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="ckr_shop_sidebar_price_rail_remove_duplicate"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: retire le bloc Prix bas de rail (doublon)"
+              priority="30">
+        <xpath expr="//aside[@id='products_grid_before']//div[contains(@t-attf-class, 'products_attributes_filters')]/following-sibling::t[@t-call='website_sale.filter_products_price']"
+               position="replace">
+            <t/>
+        </xpath>
+    </template>
+
+    <!-- Libellés FR — fourchette de prix (sidebar). -->
+    <template id="ckr_shop_filter_price_fr"
+              inherit_id="website_sale.filter_products_price"
+              name="C-Kreyol: prix sidebar FR"
+              priority="60">
+        <xpath expr="//button[hasclass('accordion-button')]//b" position="replace">
+            <b>Prix</b>
+        </xpath>
+        <!-- Odoo 19 : le label « hors accordéon » utilise `t-attf-class="h6 …"`, pas `class`. -->
+        <xpath expr="//label[contains(@t-attf-class, 'h6')]//b" position="replace">
+            <b>Prix</b>
+        </xpath>
+        <xpath expr="//div[@id='o_wsale_price_range_option']//div[hasclass('accordion-item')]" position="attributes">
+            <attribute name="class" add="border-0 bg-transparent ckr-shop-filter-section" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='o_wsale_price_range_option']//button[@data-bs-toggle='collapse']" position="attributes">
+            <attribute name="class" add="ckr-shop-sidebar__accordion-btn" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="ckr_shop_clear_filters_remove_legacy_slot"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: retire le bouton Effacer natif (milieu du rail)"
+              priority="62">
+        <!--
+            Slot Odoo d’origine : ``py-3 border-bottom`` (pas le bloc CK dans ``heading-cluster``).
+            Odoo 19 interdit ``@title`` comme sélecteur xpath dans les héritages de vue QWeb.
+        -->
+        <xpath expr="//aside[@id='products_grid_before']//div[hasclass('py-3')][hasclass('border-bottom')][.//i[hasclass('oi-close')]]"
+               position="replace">
+            <t/>
+        </xpath>
+    </template>
+
+    <!-- MVP2.2 Vague 1 — Lot A : hero pleine largeur (au-dessus sidebar + grille) -->
+    <!-- Copy alignée sur les bandeaux porte existants ; image module optionnelle. -->
+    <template id="ckr_shop_hero_wave1"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: hero boutique Vague 1"
+              priority="25">
+        <xpath expr="//div[@id='o_wsale_container']/div[hasclass('o_wsale_products_main_row')]" position="before">
+            <section t-if="ckr_shop_show_hero"
+                     t-attf-class="ckr-shop-hero ckr-root#{' ckr-shop-hero--asset ckr-shop-hero--retail' if ckr_shop_hero_retail_lane else ' ckr-shop-hero--context'}"
+                     aria-labelledby="ckr-shop-hero-heading">
+                <div class="ckr-shop-hero__bg" aria-hidden="true"/>
+                <div class="ckr-container ckr-shop-hero__inner">
+                    <div t-if="ckr_collection_flash"
+                         class="ckr-shop-hero__flash"
+                         role="status"
+                         aria-live="polite"
+                         t-esc="ckr_collection_flash"/>
+                    <header class="ckr-shop-hero__header">
+                        <span t-if="not ckr_shop_hero_retail_lane"
+                              class="ckr-shop-hero__eyebrow">Explorer</span>
+                        <!-- Vitrine unique : chips commerciaux (promo / featured / pack) conservent le même h1 / intro que /shop nu. -->
+                        <t t-set="ckr_shop_hero_default_title"
+                           t-value="ckr_shop_hero_retail_lane"/>
+                        <h1 id="ckr-shop-hero-heading"
+                            t-attf-class="ckr-shop-hero__title#{' ckr-shop-hero__title--nowrap' if ckr_shop_hero_default_title else ''}">
+                            <t t-if="ckr_shop_hero_retail_lane">Mi Boutik La</t>
+                            <t t-elif="ckr_pack_mode" t-out="ckr_pack_title or 'Kits'"/>
+                            <t t-elif="ckr_promo_mode" t-out="ckr_promo_title or 'Promotions'"/>
+                            <t t-elif="ckr_featured_mode" t-out="ckr_featured_title or 'Incontournables'"/>
+                            <t t-elif="ckr_origin_mode" t-out="ckr_origin_title or 'Origines'"/>
+                            <t t-elif="ckr_collection_mode" t-out="ckr_collection_title or 'Collections'"/>
+                            <t t-elif="category" t-out="category.name"/>
+                            <!-- /shop nu : libellés alignés maquette retail créa (hors pixel-perfect). -->
+                            <t t-else="">Mi Boutik La</t>
+                        </h1>
+                        <!-- Intro : portes hors vitrine ; /shop nu **ou** chips commerciaux seuls = même accroche retail. -->
+                        <div class="ckr-shop-hero__intro">
+                            <t t-if="ckr_shop_hero_retail_lane and not ckr_shop_show_shop_query_collection_empty_intro">
+                                <p>
+                                    Explorez l’excellence des terroirs créoles à travers notre sélection
+                                    rigoureuse de produits d’exception.
+                                </p>
+                            </t>
+                            <t t-elif="ckr_shop_show_shop_query_collection_empty_intro">
+                                <p class="ckr-shop-hero__intro--muted">
+                                    Aucun produit n’est affiché pour cette collection pour le moment.
+                                </p>
+                                <p class="ckr-shop-hero__rebounds">
+                                    <a t-att-href="ckr_collection_base_path or '/shop?ckr_collection_scope=all'"
+                                       class="ckr-shop-hero__cta">Retour aux collections</a>
+                                </p>
+                            </t>
+                            <t t-elif="ckr_pack_mode">
+                                <p>
+                                    Kits colombo, apéritif, découverte… coffrets et assortiments prêts à partager.
+                                    Une lecture dédiée de la boutique, filtrée sur les produits identifiés comme
+                                    <strong>packs</strong> en back-office.
+                                </p>
+                            </t>
+                            <t t-elif="ckr_promo_mode">
+                                <p t-if="not ckr_promo_empty">
+                                    Offres du moment : une lecture de la boutique filtrée sur les produits
+                                    dont le prix est <strong>effectivement réduit</strong> par la liste de prix
+                                    en cours. Les avantages s’appliquent automatiquement à la caisse.
+                                </p>
+                                <p t-if="ckr_promo_empty" class="ckr-shop-hero__intro--muted">
+                                    Aucune offre en cours pour le moment. Revenez bientôt :
+                                    de nouvelles promotions peuvent être activées à tout moment côté catalogue.
+                                </p>
+                            </t>
+                            <t t-elif="ckr_featured_mode">
+                                <p t-if="not ckr_featured_empty">
+                                    Une sélection issue de la collection éditoriale
+                                    <strong t-out="ckr_featured_collection and ckr_featured_collection.name or 'Incontournables'"/>.
+                                </p>
+                                <p t-if="ckr_featured_empty" class="ckr-shop-hero__intro--muted">
+                                    Cette sélection ne contient pas encore de produit visible.
+                                </p>
+                            </t>
+                            <t t-elif="ckr_origin_mode">
+                                <t t-if="not ckr_origin_empty">
+                                    <p t-if="not ckr_origin_filtered">
+                                        Parcourez le catalogue par origine.
+                                    </p>
+                                    <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) == 1 and ckr_origin_context_phrase"
+                                       t-esc="ckr_origin_context_phrase"/>
+                                    <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) == 1 and not ckr_origin_context_phrase">
+                                        Produits issus de <t t-out="ckr_origin_title"/>.
+                                    </p>
+                                    <p t-if="ckr_origin_filtered and len(ckr_origin_profiles) &gt; 1">
+                                        Produits issus des origines sélectionnées.
+                                    </p>
+                                </t>
+                                <t t-if="ckr_origin_empty">
+                                    <p class="ckr-shop-hero__intro--muted">
+                                        Cette origine n’a pas encore de produit disponible.
+                                    </p>
+                                    <p class="ckr-shop-hero__rebounds">
+                                        <a t-att-href="shop_path or '/shop'" class="ckr-shop-hero__cta">Voir tout le catalogue</a>
+                                        <a t-attf-href="{{ shop_path or '/shop' }}?ckr_mode=origin" class="ckr-shop-hero__cta ckr-shop-hero__cta--secondary">Parcourir les origines</a>
+                                    </p>
+                                </t>
+                            </t>
+                            <t t-elif="ckr_collection_mode">
+                                <p t-if="not ckr_collection_empty"
+                                   t-esc="ckr_collection_subtext"/>
+                                <t t-if="ckr_collection_empty">
+                                    <p class="ckr-shop-hero__intro--muted">
+                                        Aucun produit n’est affiché pour cette collection pour le moment.
+                                    </p>
+                                    <p class="ckr-shop-hero__rebounds">
+                                        <a t-att-href="ckr_collection_base_path or '/shop?ckr_collection_scope=all'"
+                                           class="ckr-shop-hero__cta">Retour aux collections</a>
+                                    </p>
+                                </t>
+                            </t>
+                            <t t-elif="category">
+                                <div t-if="category.website_description"
+                                     class="ckr-shop-hero__category-desc"
+                                     t-field="category.website_description"/>
+                                <p t-else="">
+                                    Retrouvez la sélection <strong t-out="category.name"/> dans notre boutique,
+                                    avec la même exigence de sourcing et de gourmandise qu’en rayon.
+                                </p>
+                            </t>
+                            <t t-else="">
+                                <p>
+                                    Explorez l’excellence des terroirs créoles à travers notre sélection
+                                    rigoureuse de produits d’exception.
+                                </p>
+                            </t>
+                        </div>
+                    </header>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- MVP2.2 Vague 1 — Lot B : barre commerciale (chips + compteur léger) -->
+    <template id="ckr_shop_explorer_shortcuts"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: barre commerciale boutique (Explorer)"
+              priority="29">
+        <!-- Au-dessus de l'en-tête Odoo : ordre maquette (chips + compteur + tri). -->
+        <xpath expr="//div[@id='products_grid']/header[@id='o_wsale_products_header']" position="before">
+            <nav t-if="ckr_shop_show_shortcuts"
+                 class="ckr-shop-shortcuts ckr-root"
+                 role="navigation"
+                 aria-label="Offres boutique"
+                 t-att-data-ckr-shop-base="shop_path">
+                <div class="ckr-container ckr-shop-shortcuts__inner">
+                    <div class="ckr-shop-shortcuts__chips">
+                        <!-- Même principe que « Effacer les filtres » : grille `/shop` nu, sans query. -->
+                        <a t-att-href="ckr_shop_chip_href_reset"
+                           t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if ckr_shop_bar_show_all else ''}">
+                            Toute la sélection
+                        </a>
+                        <a t-if="ckr_shop_show_chip_promo"
+                           t-att-href="ckr_shop_chip_href_promo"
+                           t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if 'promo' in ckr_shop_shortcut_modes else ''}">
+                            Promotions
+                        </a>
+                        <a t-if="ckr_shop_show_chip_featured"
+                           t-att-href="ckr_shop_chip_href_featured"
+                           t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if 'featured' in ckr_shop_shortcut_modes else ''}">
+                            Incontournables
+                        </a>
+                        <a t-if="ckr_shop_show_chip_pack"
+                           t-att-href="ckr_shop_chip_href_pack"
+                           t-attf-class="ckr-shop-shortcuts__link#{' ckr-shop-shortcuts__link--active' if 'pack' in ckr_shop_shortcut_modes else ''}">
+                            Kits / Packs
+                        </a>
+                    </div>
+                    <div class="ckr-shop-shortcuts__right">
+                        <p t-if="search_count" class="ckr-shop-shortcuts__count">
+                            <span class="ckr-shop-shortcuts__count-n" t-out="search_count"/>
+                            <span class="ckr-shop-shortcuts__count-label">
+                                <t t-if="search_count == 1"> produit</t>
+                                <t t-else=""> produits</t>
+                            </span>
+                        </p>
+                        <div t-if="not opt_wsale_floating_bar and (hasPricelistDropdown or is_view_active('website_sale.sort'))"
+                             class="ckr-shop-shortcuts__tools">
+                            <t t-if="hasPricelistDropdown" t-call="website_sale.pricelist_list"/>
+                            <t t-if="is_view_active('website_sale.sort')" t-call="website_sale.sort"/>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </xpath>
     </template>
 
     <!-- ========================================================== -->
@@ -40,7 +704,7 @@
               name="C-Kreyol: bandeau porte Kits (/shop?ckr_mode=pack)"
               priority="31">
         <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
-            <section t-if="ckr_pack_mode"
+            <section t-if="ckr_shop_show_legacy_banners and ckr_pack_mode"
                      id="ckr-shop-pack-banner"
                      class="ckr-shop-pack-banner ckr-root"
                      aria-labelledby="ckr-shop-pack-banner-heading">
@@ -85,7 +749,7 @@
               name="C-Kreyol: bandeau porte Promotions (/shop?ckr_mode=promo)"
               priority="32">
         <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
-            <section t-if="ckr_promo_mode"
+            <section t-if="ckr_shop_show_legacy_banners and ckr_promo_mode"
                      id="ckr-shop-promo-banner"
                      t-attf-class="ckr-shop-promo-banner ckr-root#{' ckr-shop-promo-banner--empty' if ckr_promo_empty else ''}"
                      aria-labelledby="ckr-shop-promo-banner-heading">
@@ -155,7 +819,7 @@
               name="C-Kreyol: bandeau porte Origines (/shop?ckr_mode=origin)"
               priority="33">
         <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
-            <section t-if="ckr_origin_mode"
+            <section t-if="ckr_shop_show_legacy_banners and ckr_origin_mode"
                      id="ckr-shop-origin-banner"
                      t-attf-class="ckr-shop-origin-banner ckr-root#{' ckr-shop-origin-banner--empty' if ckr_origin_empty else ''}"
                      aria-labelledby="ckr-shop-origin-banner-heading">
@@ -195,10 +859,10 @@
                                 Cette origine n’a pas encore de produit disponible.
                             </p>
                             <p class="ckr-shop-origin-banner__empty-rebounds">
-                                <a href="/shop" class="ckr-shop-origin-banner__empty-cta">
+                                <a t-att-href="shop_path or '/shop'" class="ckr-shop-origin-banner__empty-cta">
                                     Voir tout le catalogue &#8594;
                                 </a>
-                                <a href="/shop?ckr_mode=origin"
+                                <a t-attf-href="{{ shop_path or '/shop' }}?ckr_mode=origin"
                                    class="ckr-shop-origin-banner__empty-cta ckr-shop-origin-banner__empty-cta--secondary">
                                     Parcourir les origines
                                 </a>
@@ -242,13 +906,48 @@
     <!-- smoke). Toute modification de formulation = mise a jour      -->
     <!-- croisee PV + SPEC_IMPL + template.                           -->
     <!-- ========================================================== -->
+    <!-- Bandeau porte « Incontournables » sur /shop?ckr_mode=featured -->
+    <!-- SPEC_SHOP_PORTES §4.6 — filtre = même mécanique que Collections. -->
+    <!-- ========================================================== -->
+
+    <template id="ckr_shop_featured_banner"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: bandeau Incontournables (/shop?ckr_mode=featured)"
+              priority="34">
+        <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
+            <section t-if="ckr_shop_show_legacy_banners and ckr_featured_mode"
+                     id="ckr-shop-featured-banner"
+                     t-attf-class="ckr-shop-featured-banner ckr-root#{' ckr-shop-featured-banner--empty' if ckr_featured_empty else ''}"
+                     aria-labelledby="ckr-shop-featured-banner-heading">
+                <div class="ckr-container">
+                    <header class="ckr-section-title ckr-section-title--compact">
+                        <span class="ckr-section-title__eyebrow">Explorer</span>
+                        <h1 id="ckr-shop-featured-banner-heading"
+                            class="ckr-shop-featured-banner__title"
+                            t-esc="ckr_featured_title or 'Incontournables'"/>
+                        <p t-if="not ckr_featured_empty"
+                           class="ckr-section-title__intro">
+                            Une sélection issue de la collection éditoriale
+                            <strong t-esc="ckr_featured_collection and ckr_featured_collection.name or 'Incontournables'"/>.
+                        </p>
+                        <p t-if="ckr_featured_empty"
+                           class="ckr-section-title__intro ckr-shop-featured-banner__empty-msg">
+                            Cette sélection ne contient pas encore de produit visible.
+                        </p>
+                    </header>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
 
     <template id="ckr_shop_collection_banner"
               inherit_id="website_sale.products"
               name="C-Kreyol: bandeau porte Collections (/collections[/…])"
-              priority="34">
+              priority="35">
         <xpath expr="//div[@id='oe_structure_website_sale_products_1']" position="before">
-            <section t-if="ckr_collection_mode"
+            <section t-if="ckr_shop_show_legacy_banners and ckr_collection_mode"
                      id="ckr-shop-collection-banner"
                      t-attf-class="ckr-shop-collection-banner ckr-root#{' ckr-shop-collection-banner--empty' if ckr_collection_empty else ''}"
                      aria-labelledby="ckr-shop-collection-banner-heading">
@@ -283,7 +982,7 @@
                                 Aucun produit n’est affiché pour cette collection pour le moment.
                             </p>
                             <p class="ckr-shop-collection-banner__empty-rebounds">
-                                <a t-att-href="ckr_collection_base_path or '/collections'"
+                                <a t-att-href="ckr_collection_base_path or '/shop?ckr_collection_scope=all'"
                                    class="ckr-shop-collection-banner__empty-cta">
                                     Retour aux collections
                                 </a>
@@ -292,6 +991,93 @@
                     </header>
                 </div>
             </section>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Grille /shop : forcer options tuile (CTA + wishlist visibles). -->
+    <!-- Sans `o_wsale_products_opt_has_cta`, Odoo ne rend pas le bouton panier (éditeur seul). -->
+    <!-- ========================================================== -->
+    <template id="ckr_shop_product_grid_force_tile_options"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: grille shop — CTA + wishlist tuiles"
+              priority="56">
+        <xpath expr="//section[@id='o_wsale_products_grid']//t[@t-call='website_sale.products_item']/t[@t-set='design_field']"
+               position="replace">
+            <t t-set="_ckr_df0"
+               t-value="' '.join([c for c in (website.shop_opt_products_design_classes or '').split() if c and c != 'o_wsale_products_opt_actions_onhover'])"/>
+            <t t-set="design_field"
+               t-value="_ckr_df0 + ('' if 'o_wsale_products_opt_has_cta' in _ckr_df0 else ' o_wsale_products_opt_has_cta') + ('' if 'o_wsale_products_opt_has_wishlist' in _ckr_df0 else ' o_wsale_products_opt_has_wishlist')"/>
+        </xpath>
+    </template>
+
+    <!-- Grille : retirer `o_wsale_products_opt_actions_onhover` (preset Website).
+         Sinon Odoo masque le bloc actions sur mobile et n’affiche le CTA qu’au survol desktop —
+         incompatible avec la tuile d’achat CK (panier visible par défaut sur la ligne prix). -->
+    <template id="ckr_shop_products_grid_strip_actions_onhover"
+              inherit_id="website_sale.products"
+              name="C-Kreyol: grille /shop — pas de CTA réservé au survol"
+              priority="62">
+        <xpath expr="//section[@id='o_wsale_products_grid']" position="before">
+            <t t-set="ckr_shop_grid_design_classes"
+               t-value="' '.join([c for c in (website.shop_opt_products_design_classes or '').split() if c and c != 'o_wsale_products_opt_actions_onhover'])"/>
+        </xpath>
+        <xpath expr="//section[@id='o_wsale_products_grid']" position="attributes">
+            <attribute name="t-attf-class">o_wsale_products_grid_table grid
+                                        {{grid_md_allow_custom_cols and 'o_wsale_products_grid_table_md'}}
+                                        {{ckr_shop_grid_design_classes}}</attribute>
+        </xpath>
+    </template>
+
+    <!-- ========================================================== -->
+    <!-- Tuile produit /shop — structure stricte (présentation seule). -->
+    <!--                                                             -->
+    <!-- 1) Image pleine largeur, ratio stable, arrondis hauts.      -->
+    <!-- 2) Badge ruban Odoo dans la média (SCSS discret).           -->
+    <!-- 3) Bloc texte : méta utile → nom (2 lignes) → sous-info →   -->
+    <!--    ligne prix + CTA (pied carte).                           -->
+    <!-- 4) Coin média : `ckr_shop_wishlist_on_product_media` — rail             -->
+    <!--    `ckr-product-card__corner-actions` (wishlist + `fa-info`) sur image ; -->
+    <!--    SCSS : halo / calage sous `.ckr-product-card__media` (voir _shop.scss). -->
+    <!-- Pas de déplacement des champs image / prix / variantes.      -->
+    <!-- ========================================================== -->
+    <!-- Classes carte + média. Structure texte / filet / pied : `ckr_shop_restore_standard_product_information`. -->
+    <template id="ckr_shop_product_tile_v1"
+              inherit_id="website_sale.products_item"
+              name="C-Kreyol: carte produit — classes form + image"
+              priority="52">
+        <xpath expr="//form[contains(@t-attf-class, 'oe_product_cart') or hasclass('oe_product_cart')]" position="attributes">
+            <attribute name="class" add="ckr-product-card" separator=" "/>
+        </xpath>
+        <!-- Odoo 19 : `oe_product_image` est dans `t-attf-class`, pas dans `class` (hasclass ne matche pas). -->
+        <xpath expr="//form[contains(@t-attf-class, 'oe_product_cart') or hasclass('oe_product_cart')]//div[contains(@t-attf-class, 'oe_product_image')]" position="attributes">
+            <attribute name="class" add="ckr-product-card__media" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- Tuile : libellés FR + CTA visible ; repli fiche plus court si pas de quick add. -->
+    <template id="ckr_shop_product_tile_add_to_cart_fr"
+              inherit_id="website_sale.shop_product_buttons"
+              name="C-Kreyol: bouton / lien panier tuile FR"
+              priority="55">
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="attributes">
+            <attribute name="aria-label">Ajouter au panier</attribute>
+            <attribute name="title">Ajouter au panier</attribute>
+            <attribute name="class" add="ckr-product-card__cart-btn" separator=" "/>
+        </xpath>
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]//span[hasclass('o_label')]" position="replace">
+            <span class="o_label">Ajouter</span>
+        </xpath>
+        <!-- Produit sans ajout rapide : même pastille, ouverture fiche (même intention maquette). -->
+        <xpath expr="//div[hasclass('o_wsale_product_action_row')]" position="inside">
+            <a t-if="not product._website_show_quick_add() and product.website_published"
+               t-att-href="product_href"
+               class="btn btn-primary o_wsale_product_btn_primary ckr-product-card__cart-btn ckr-product-card__cart-btn--pdp"
+               aria-label="Voir le produit"
+               title="Voir le produit">
+                <i class="fa fa-fw fa-arrow-right o_not-animable" role="presentation"/>
+                <span class="o_label">Voir</span>
+            </a>
         </xpath>
     </template>
 

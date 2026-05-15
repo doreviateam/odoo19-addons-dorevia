@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Page : Offrir (stub Phase 1) -->
-    <template id="ckr_page_offrir" name="C-Kreyol: Offrir">
+    <!-- Page : Idées cadeaux (stub Phase 1, URL /offrir) -->
+    <template id="ckr_page_offrir" name="C-Kreyol: Idées cadeaux">
         <t t-call="website.layout">
             <main class="ckr-page ckr-root">
                 <section class="ckr-section">
                     <div class="ckr-container">
-                        <span class="ckr-section-title__eyebrow">C-Kreyol</span>
-                        <h1>Offrir</h1>
+                        <span class="ckr-section-title__eyebrow">C-Kréyòl</span>
+                        <h1>Idées cadeaux</h1>
                         <p class="ckr-lead">
                             Des idees cadeaux et des attentions selectionnees parmi nos produits,
                             pour faire decouvrir les saveurs des Antilles.

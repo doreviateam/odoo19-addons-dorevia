@@ -210,6 +210,34 @@ class CkrShopCollection(models.Model):
                     % slug
                 )
 
+    @api.constrains("slug", "website_id")
+    def _check_slug_scope_uniqueness(self):
+        """Renforce l'unicité quand ``website_id`` est ``NULL``.
+
+        PostgreSQL autorise plusieurs lignes ``NULL`` dans une contrainte
+        ``unique(website_id, slug)``. On verrouille donc côté Python :
+        - slug unique pour le même site quand ``website_id`` est défini ;
+        - slug unique global quand ``website_id`` est vide.
+        """
+        for record in self:
+            slug = (record.slug or "").strip()
+            if not slug:
+                continue
+            domain = [("id", "!=", record.id), ("slug", "=", slug)]
+            if record.website_id:
+                domain.append(("website_id", "=", record.website_id.id))
+                scope_label = _("sur le site « %s »") % (record.website_id.name,)
+            else:
+                domain.append(("website_id", "=", False))
+                scope_label = _("dans le périmètre global (sans site)")
+            if self.sudo().search_count(domain):
+                raise ValidationError(
+                    _(
+                        "Le slug de collection « %(slug)s » existe déjà %(scope)s."
+                    )
+                    % {"slug": slug, "scope": scope_label}
+                )
+
     @api.constrains("date_start", "date_end")
     def _check_date_range(self):
         """Bornes cohérentes : ``date_start <= date_end`` si toutes deux fournies."""

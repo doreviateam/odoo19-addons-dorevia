@@ -3,7 +3,7 @@
 // ============================================================================
 
 // Specificite renforcee (header#top.ckr-header) pour gagner sur les
-// regles standard Odoo (.o_header_standard, .o_header_is_scrolled...)
+// regles Website Odoo (.o_header_fixed / .o_header_is_scrolled / fond transparent…)
 // sans recourir uniquement a !important.
 header#top.ckr-header,
 .ckr-header {
@@ -31,6 +31,71 @@ header#top.ckr-header,
 }
 
 .ckr-header {
+    &__top0 {
+        border-bottom: 1px solid $ckr-border;
+        background: $ckr-bg-soft;
+    }
+
+    &__top0-inner {
+        max-width: $ckr-container-max;
+        margin: 0 auto;
+        padding: 0.32rem $ckr-container-px;
+        font-size: 0.81rem;
+        font-weight: $ckr-weight-medium;
+        // Top_0 color A/B (crea):
+        // A: #8F4E2E
+        // B: #9A5A38 (active)
+        color: #9a5a38;
+        text-align: center;
+    }
+
+    &__top0-rotator {
+        position: relative;
+        min-height: 1.35rem;
+    }
+
+    &__top0-item {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-wrap: balance;
+        opacity: 0;
+        animation: ckrTop0Rotate 32s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &__top0-item {
+            animation: none;
+            opacity: 0;
+        }
+        &__top0-item:not(:first-child) {
+            display: none;
+        }
+        &__top0-item:first-child {
+            position: static;
+            display: inline-flex;
+            opacity: 1;
+        }
+    }
+
+    &__top0-item--1 { animation-delay: 0s; }
+    &__top0-item--2 { animation-delay: 8s; }
+    &__top0-item--3 { animation-delay: 16s; }
+    &__top0-item--4 { animation-delay: 24s; }
+
+    @media (max-width: 991.98px) {
+        &__top0-inner {
+            padding-top: 0.28rem;
+            padding-bottom: 0.28rem;
+            font-size: 0.76rem;
+        }
+
+        &__top0-rotator {
+            min-height: 1.25rem;
+        }
+    }
 
     &__inner {
         display: flex;
@@ -42,13 +107,164 @@ header#top.ckr-header,
         margin: 0 auto;
         padding: $ckr-space-md $ckr-container-px;
         overflow: visible;
+        min-height: 64px;
 
         @media (max-width: 991.98px) {
             // Rapprocher logo et actions : padding lateral serre, pas de gap inutile
             // entre les deux blocs (le cluster + burger forment l alignement a droite).
+            flex-wrap: wrap;
+            align-items: center;
             gap: $ckr-space-xs;
-            padding: $ckr-space-sm 10px;
-            min-height: 52px;
+            padding: 0.42rem 10px 0.34rem;
+            min-height: 48px;
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            gap: $ckr-space-sm;
+            padding-top: $ckr-space-sm;
+            padding-bottom: $ckr-space-sm;
+            min-height: 58px;
+        }
+    }
+
+    &__search-desktop {
+        margin-left: $ckr-space-sm;
+        flex: 1 1 420px;
+        min-width: 260px;
+        max-width: 560px;
+
+        form {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(154, 90, 56, 0.65);
+            border-radius: 8px;
+            background: #fff;
+            min-height: 44px;
+            overflow: hidden;
+            transition: border-color $ckr-transition-fast, box-shadow $ckr-transition-fast;
+
+            &:focus-within {
+                border-color: #9a5a38;
+                box-shadow: 0 0 0 2px rgba(154, 90, 56, 0.14);
+            }
+        }
+
+        input {
+            flex: 1 1 auto;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-style: italic;
+            color: $ckr-text;
+            padding: 0.6rem 0.9rem;
+
+            &::placeholder {
+                color: rgba($ckr-text, 0.65);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        button {
+            flex: 0 0 44px;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-left: 1px solid rgba(154, 90, 56, 0.45);
+            background: transparent;
+            color: #9a5a38;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: color $ckr-transition-fast, background-color $ckr-transition-fast;
+
+            &:hover,
+            &:focus {
+                color: $ckr-primary;
+                background: $ckr-bg-soft;
+                outline: none;
+            }
+
+            i {
+                font-size: 1.45rem;
+            }
+        }
+    }
+
+    // Recherche mobile visible (commerce-first) : seconde ligne dédiée.
+    &__search-mobile {
+        width: 100%;
+        flex: 1 0 100%;
+        margin-top: 0.28rem;
+
+        form {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(154, 90, 56, 0.6);
+            border-radius: 8px;
+            background: #fff;
+            min-height: 40px;
+            overflow: hidden;
+        }
+
+        input {
+            flex: 1 1 auto;
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 0.96rem;
+            color: $ckr-text;
+            padding: 0.5rem 0.74rem;
+
+            &::placeholder {
+                color: rgba($ckr-text, 0.65);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        button {
+            flex: 0 0 40px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-left: 1px solid rgba(154, 90, 56, 0.45);
+            background: transparent;
+            color: #9a5a38;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &:hover,
+            &:focus {
+                background: $ckr-bg-soft;
+                color: $ckr-primary;
+                outline: none;
+            }
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1199.98px) {
+        &__search-desktop {
+            flex-basis: 340px;
+            max-width: 420px;
+            min-width: 220px;
+
+            input {
+                font-size: 0.9rem;
+                padding-left: 0.7rem;
+                padding-right: 0.7rem;
+            }
         }
     }
 
@@ -67,15 +283,35 @@ header#top.ckr-header,
             display: block;
         }
 
+        .ckr-wordmark--a,
+        .ckr-wordmark--b,
+        .ckr-wordmark--c {
+            display: none;
+        }
+
+        &--logo-a .ckr-wordmark--a {
+            display: block;
+        }
+
+        &--logo-b .ckr-wordmark--b {
+            display: block;
+        }
+
+        &--logo-c .ckr-wordmark--c {
+            display: block;
+        }
+
         @media (max-width: 991.98px) {
             min-width: 0;
-            flex-shrink: 1;
+            // Le logo restait trop discret face au cluster d'actions (retour recette mobile).
+            // On limite le shrink pour préserver la lisibilité sans agrandir fortement le header.
+            flex-shrink: 0.6;
 
             .ckr-wordmark {
-                height: 30px;
+                height: 32px;
                 // min() CSS natif : unquote obligatoire (sinon Dart Sass min()
                 // melange vw et px et echoue a la compilation du bundle).
-                max-width: unquote("min(172px, 52vw)");
+                max-width: unquote("min(188px, 56vw)");
             }
         }
 
@@ -95,7 +331,7 @@ header#top.ckr-header,
             display: flex;
         }
 
-        a {
+        > a {
             color: $ckr-text;
             font-size: 0.95rem;
             font-weight: $ckr-weight-medium;
@@ -115,6 +351,75 @@ header#top.ckr-header,
         }
     }
 
+    &__nav-dropdown {
+        position: relative;
+
+        &[open] .ckr-header__nav-summary {
+            color: $ckr-primary;
+            border-bottom-color: $ckr-primary;
+        }
+    }
+
+    &__nav-summary {
+        list-style: none;
+        cursor: pointer;
+        color: $ckr-text;
+        font-size: 0.95rem;
+        font-weight: $ckr-weight-medium;
+        letter-spacing: 0.01em;
+        padding: $ckr-space-xs 0;
+        border-bottom: 2px solid transparent;
+        transition: color $ckr-transition-fast, border-color $ckr-transition-fast;
+
+        &::-webkit-details-marker,
+        &::marker {
+            display: none;
+        }
+
+        &:hover,
+        &:focus-visible {
+            color: $ckr-primary;
+            border-bottom-color: $ckr-primary;
+            outline: none;
+        }
+    }
+
+    &__nav-dropdown-panel {
+        position: absolute;
+        top: calc(100% + 2px);
+        left: 0;
+        z-index: 1070;
+        min-width: 12.5rem;
+        padding: $ckr-space-xs 0;
+        margin: 0;
+        background-color: $ckr-bg;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-md;
+        box-shadow: $ckr-shadow-lg;
+
+        a {
+            display: block;
+            padding: $ckr-space-sm $ckr-space-lg;
+            color: $ckr-text;
+            font-size: 0.92rem;
+            font-weight: $ckr-weight-medium;
+            text-decoration: none;
+            border-bottom: 1px solid $ckr-border;
+            transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &:hover,
+            &:focus {
+                background-color: $ckr-bg-soft;
+                color: $ckr-primary;
+                text-decoration: none;
+            }
+        }
+    }
+
     // --- Utilitaires (cluster + burger) -------------------------------------
     // Important : on restreint les styles "icone-bouton" aux enfants directs
     // du cluster pour ne pas les appliquer aux <a> du menu déroulant compte
@@ -125,9 +430,14 @@ header#top.ckr-header,
         flex-shrink: 0;
         gap: $ckr-space-sm;
         overflow: visible;
+        margin-left: auto;
 
         @media (max-width: 991.98px) {
             gap: 6px;
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            gap: $ckr-space-xs;
         }
     }
 
@@ -135,20 +445,43 @@ header#top.ckr-header,
     &__action-cluster {
         display: inline-flex;
         align-items: center;
-        gap: 0;
+        gap: $ckr-space-xs;
         overflow: visible;
         position: relative;
+
+        // Wrapper compat ``website_sale`` : ``ul`` n'occupe pas la flexbox (les ``li``
+        // participent comme enfants directs pour les styles > a du cluster mobile).
+        .ckr-header__cart-sale-compat {
+            display: contents;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        // Classic Store : `.o_wsale_my_cart { padding: 10px }` désaligne le cluster ;
+        // on impose le même gabarit que les sœurs (cœur, compte).
+        li.o_wsale_my_cart.nav-item {
+            display: inline-flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0 !important;
+        }
 
         // Icônes d'action : enfants directs uniquement.
         > a {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
+            gap: $ckr-space-xs;
+            width: auto;
             height: 40px;
+            padding: 0 $ckr-space-sm;
             border-radius: $ckr-radius-pill;
             color: $ckr-text;
             text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: $ckr-weight-medium;
             transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
 
             &:hover,
@@ -159,30 +492,260 @@ header#top.ckr-header,
             }
 
             i {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
         }
 
         @media (max-width: 991.98px) {
-            padding: 2px 4px;
+            // Calage mobile : même encombrement visuel que le bouton burger voisin.
+            // (évite un cluster légèrement plus haut qui paraît désaxé).
+            padding: 0 4px;
             gap: 0;
             background-color: $ckr-bg-soft;
             border: 1px solid $ckr-border;
             border-radius: $ckr-radius-pill;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            align-self: center;
 
             > a,
+            li.o_wsale_my_cart > a,
             .ckr-header__user-toggle {
                 width: 44px;
                 height: 44px;
                 min-width: 44px;
                 min-height: 44px;
+                padding: 0;
 
                 &:hover,
                 &:focus {
                     background-color: rgba(255, 255, 255, 0.45);
                 }
+
+                i {
+                    display: block;
+                    line-height: 1;
+                }
             }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            gap: 4px;
+
+            > a {
+                font-size: 0.84rem;
+                padding-left: 0.45rem;
+                padding-right: 0.45rem;
+            }
+        }
+    }
+
+    &__link-signup {
+        border: 1px solid rgba($ckr-text, 0.6);
+        background: transparent;
+        color: $ckr-text;
+    }
+
+    &__link-signin {
+        border: 1px solid $ckr-text;
+        background: $ckr-text;
+        color: #fff !important;
+
+        &:hover,
+        &:focus {
+            background: lighten($ckr-text, 8%);
+            color: #fff !important;
+        }
+    }
+
+    // Pastilles circulaires (favoris + panier) : même gabarit — le lien panier est sous
+    // ``li.o_wsale_my_cart`` donc il ne reçoit pas les ``> a`` du cluster ; le flex ici
+    // assure le centrage optique du glyphe (FA / line-height).
+    &__link-favorites,
+    &__link-cart {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box;
+        width: 44px !important;
+        min-width: 44px;
+        max-width: 44px;
+        height: 44px !important;
+        min-height: 44px;
+        max-height: 44px;
+        padding: 0 !important;
+        margin: 0;
+        border: 2px solid rgba($ckr-text, 0.65);
+        border-radius: 999px;
+        background: #fff;
+        color: $ckr-text;
+        position: relative;
+        flex-shrink: 0;
+
+        i {
+            font-size: 1.2rem !important;
+            line-height: 1 !important;
+            margin: 0 !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            width: 1.35rem;
+            height: 1.35rem;
+        }
+
+        &:hover,
+        &:focus {
+            border-color: $ckr-primary;
+            background: rgba($ckr-primary, 0.08);
+            color: $ckr-primary;
+        }
+    }
+
+    // ``fa-shopping-bag`` : compensation optique légère (glyphe vs cercle).
+    &__link-cart i.fa-shopping-bag {
+        transform: translateY(0.05rem);
+    }
+
+    &__counter-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.55rem;
+        height: 1.55rem;
+        padding: 0 0.35rem;
+        border-radius: $ckr-radius-pill;
+        background: #111;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: $ckr-weight-semibold;
+        line-height: 1;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+    }
+
+    &__top2 {
+        // Navigation horizontale N2 : desktop large uniquement.
+        border-top: 1px solid $ckr-border;
+        background: $ckr-bg;
+
+        @media (max-width: 991.98px) {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-width: 0 !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+        }
+
+        @media (min-width: 992px) {
+            display: block !important;
+            visibility: visible !important;
+            height: auto !important;
+            margin: 0 !important;
+            overflow: visible !important;
+            pointer-events: auto !important;
+        }
+    }
+
+    &__top2-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: $ckr-space-lg;
+        max-width: $ckr-container-max;
+        margin: 0 auto;
+        padding: $ckr-space-sm $ckr-container-px;
+
+        > a,
+        .ckr-header__top2-summary {
+            color: $ckr-text;
+            font-size: 0.92rem;
+            font-weight: $ckr-weight-medium;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+            cursor: pointer;
+
+            &:hover,
+            &:focus {
+                color: $ckr-primary;
+                border-bottom-color: $ckr-primary;
+                text-decoration: none;
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            gap: $ckr-space-md;
+            padding-top: $ckr-space-xs;
+            padding-bottom: $ckr-space-xs;
+
+            > a {
+                font-size: 0.86rem;
+            }
+        }
+    }
+
+    &__top2-dropdown {
+        position: relative;
+
+        &[open] .ckr-header__top2-summary {
+            color: $ckr-primary;
+            border-bottom-color: $ckr-primary;
+        }
+    }
+
+    &__top2-summary {
+        list-style: none;
+
+        &::-webkit-details-marker,
+        &::marker {
+            display: none;
+        }
+    }
+
+    &__top2-dropdown-panel {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1070;
+        min-width: 11rem;
+        background: $ckr-bg;
+        border: 1px solid $ckr-border;
+        border-radius: $ckr-radius-md;
+        box-shadow: $ckr-shadow-lg;
+        padding: $ckr-space-xs 0;
+
+        a {
+            display: block;
+            padding: $ckr-space-sm $ckr-space-md;
+            color: $ckr-text;
+            font-size: 0.9rem;
+            text-decoration: none;
+
+            &:hover,
+            &:focus {
+                background: $ckr-bg-soft;
+                color: $ckr-primary;
+                text-decoration: none;
+            }
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1120px) {
+        &__link-signup {
+            display: none !important;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1040px) {
+        &__search-desktop,
+        &__link-help {
+            display: none !important;
         }
     }
 
@@ -219,12 +782,16 @@ header#top.ckr-header,
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
+        gap: $ckr-space-xs;
+        width: auto;
         height: 40px;
+        padding: 0 $ckr-space-sm;
         border-radius: $ckr-radius-pill;
         color: $ckr-text;
         text-decoration: none;
         background: transparent;
+        font-size: 0.9rem;
+        font-weight: $ckr-weight-medium;
         cursor: pointer;
         user-select: none;
         transition: background-color $ckr-transition-fast, color $ckr-transition-fast;
@@ -238,7 +805,13 @@ header#top.ckr-header,
         }
 
         i {
-            font-size: 1.1rem;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 991.98px) {
+            width: 44px;
+            min-width: 44px;
+            padding: 0;
         }
     }
 
@@ -285,14 +858,15 @@ header#top.ckr-header,
         }
     }
 
-    // --- Bouton burger (mobile) ---------------------------------------------
+    // --- Bouton menu mobile / tablette --------------------------------------
     &__burger {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         width: 40px;
         height: 40px;
-        background: transparent;
+        border-radius: $ckr-radius-pill;
+        background-color: transparent;
         border: none;
         color: $ckr-text;
         cursor: pointer;
@@ -304,14 +878,14 @@ header#top.ckr-header,
             height: 44px;
             min-width: 44px;
             min-height: 44px;
-            border-radius: $ckr-radius-pill;
+            align-self: center;
             background-color: $ckr-bg-soft;
             border: 1px solid $ckr-border;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
 
         @media (min-width: 992px) {
-            display: none;
+            display: none !important;
         }
 
         &:focus-visible {
@@ -321,7 +895,33 @@ header#top.ckr-header,
 
         i {
             font-size: 1.35rem;
+            line-height: 1;
+            display: block;
         }
+    }
+}
+
+// Navigation horizontale N2 : renfort spécificité (#wrapwrap + header) pour gagner sur
+// tout ``nav { display: flex }`` ou équivalent chargé après le bundle CK.
+#wrapwrap header#top.ckr-header nav.ckr-header__top2 {
+    @media (max-width: 991.98px) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-width: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+
+    @media (min-width: 992px) {
+        display: block !important;
+        visibility: visible !important;
+        height: auto !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        pointer-events: auto !important;
     }
 }
 
@@ -330,6 +930,36 @@ header#top.ckr-header,
 // il faut donc forcer les deux axes simultanément.
 #wrapwrap {
     overflow: visible !important;
+}
+
+// Interaction Website (BaseHeader.adjustMainPadding) : padding-top inline sur
+// <main> quand le header reçoit ``o_header_affixed`` — prévu pour un header
+// ``position: fixed`` hors flux. Notre ``header#top.ckr-header`` reste en
+// ``position: sticky`` et le bloc principal suit naturellement dans le flux ;
+// ce padding duplique la hauteur du header → bande beige vide entre Top_2 et
+// le hero (souvent visible après scroll).
+#wrapwrap > main {
+    padding-top: 0 !important;
+}
+
+// Mobile (<lg) : ``position: sticky`` est souvent cassé (conteneur de scroll,
+// WebKit). On force un bandeau type « top-fixed » ; le décalage du contenu
+// repose sur ``--ckr-header-measured`` (``ckr_header_drawer.js``).
+// Odoo HeaderFixed peut appliquer ``transform`` au scroll : il faut le neutraliser.
+@media (max-width: 991.98px) {
+    header#top.ckr-header.o_header_fixed {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        transform: none !important;
+        will-change: auto !important;
+    }
+
+    #wrapwrap > main {
+        padding-top: var(--ckr-header-measured, 6.75rem) !important;
+    }
 }
 
 // ============================================================================
@@ -374,6 +1004,14 @@ header#top.ckr-header,
                  calc(#{$ckr-space-lg} + env(safe-area-inset-left, 0px));
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+
+        @media (max-width: 575.98px) {
+            width: unquote("min(360px, 92vw)");
+            padding-top: calc(#{$ckr-space-md} + env(safe-area-inset-top, 0px));
+            padding-right: calc(#{$ckr-space-md} + env(safe-area-inset-right, 0px));
+            padding-bottom: calc(#{$ckr-space-md} + env(safe-area-inset-bottom, 0px));
+            padding-left: calc(#{$ckr-space-md} + env(safe-area-inset-left, 0px));
+        }
     }
 
     &__backdrop {
@@ -390,6 +1028,9 @@ header#top.ckr-header,
 
     &__close {
         align-self: flex-end;
+        position: sticky;
+        top: 0;
+        z-index: 1;
         background: transparent;
         border: none;
         color: $ckr-text;
@@ -403,6 +1044,31 @@ header#top.ckr-header,
         }
     }
 
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: $ckr-space-sm;
+        padding-bottom: $ckr-space-sm;
+        border-bottom: 1px solid $ckr-border;
+
+        &:last-of-type {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+    }
+
+    &__group-title {
+        padding: $ckr-space-xs 0;
+        font-family: $ckr-font-sans;
+        font-size: 0.78rem;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: $ckr-text-muted;
+    }
+
     &__nav {
         display: flex;
         flex-direction: column;
@@ -414,7 +1080,7 @@ header#top.ckr-header,
             align-items: center;
             min-height: 48px;
             font-family: $ckr-font-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: $ckr-text;
             padding: $ckr-space-sm 0;
             border-bottom: 1px solid $ckr-border;
@@ -431,6 +1097,13 @@ header#top.ckr-header,
                 outline: 2px solid $ckr-primary;
                 outline-offset: 2px;
             }
+        }
+
+        a.ckr-drawer__sublink {
+            padding-left: $ckr-space-md;
+            font-family: $ckr-font-sans;
+            font-size: 0.98rem;
+            border-bottom: 1px solid $ckr-border;
         }
     }
 
@@ -479,10 +1152,106 @@ header#top.ckr-header,
     &__toggle:checked ~ &__panel {
         transform: translateX(0);
     }
+
+    // Desktop (lg+) : la barre N2 porte la navigation. Le drawer reste
+    // inaccessible même si le checkbox conserve un état checked après resize.
+    @media (min-width: 992px) {
+        &__toggle:checked ~ &__backdrop {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        &__toggle:checked ~ &__panel {
+            transform: translateX(100%);
+            visibility: hidden;
+            pointer-events: none;
+        }
+    }
+}
+
+#wrapwrap header#top.ckr-header {
+    @media (min-width: 992px) {
+        .ckr-drawer__backdrop,
+        .ckr-drawer__panel {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+    }
 }
 
 // Verrouillage du scroll page quand le drawer est ouvert (classe posee par JS).
 html.ckr-drawer-open,
 body.ckr-drawer-open {
     overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    html.ckr-drawer-open,
+    body.ckr-drawer-open {
+        overflow: visible;
+    }
+}
+
+@keyframes ckrTop0Rotate {
+    0%,
+    18% {
+        opacity: 1;
+    }
+    24%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.ckr-cart-feedback {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 1080;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(154, 90, 56, 0.42);
+    border-radius: 10px;
+    background: #fff;
+    color: $ckr-text;
+    box-shadow: 0 8px 24px rgba(44, 44, 44, 0.16);
+    font-size: 0.84rem;
+    transform: translateY(6px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity $ckr-transition-fast, transform $ckr-transition-fast, visibility $ckr-transition-fast;
+
+    &.is-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    &__msg {
+        font-weight: $ckr-weight-medium;
+    }
+
+    &__link {
+        color: #8d3b26;
+        font-weight: $ckr-weight-semibold;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+            color: #8d3b26;
+        }
+    }
+
+    @media (max-width: 991.98px) {
+        right: 10px;
+        left: 10px;
+        bottom: 10px;
+        justify-content: space-between;
+        font-size: 0.8rem;
+    }
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Données de recette reproductibles — contrat HTTP ``dorevia_ckr_shop_contract``.
+
+        Complète ``ckr_shop_sidebar_nominal_demo_data.xml`` pour exécuter les scénarios
+        multi-valeurs (2 origines, 2 collections, 2 catégories eCommerce visibles)
+        sans passage par un shell Odoo.
+
+        * Origine Martinique + valeur d’attribut catalogue ;
+        * Collection « Découverte » (même jeu produits vitrine que Saint-Anne) ;
+        * Deux ``product.public.category`` rattachées au site par défaut + lien
+          ``public_categ_ids`` sur les 4 fiches vitrine Sélection.
+
+        ``noupdate=1`` : installation initiale / premier chargement ; une base déjà
+        enrichie manuellement avec les mêmes slugs peut exiger un nettoyage des
+        doublons avant ``-u`` si contrainte d’unicité.
+    -->
+    <data noupdate="1">
+        <record id="ckr_attr_value_origin_martinique_demo" model="product.attribute.value">
+            <field name="name">Martinique</field>
+            <field name="attribute_id" ref="ckr_product_attribute_origin"/>
+        </record>
+
+        <record id="ckr_shop_origin_demo_martinique" model="ckr.shop.origin">
+            <field name="attribute_value_id" ref="ckr_attr_value_origin_martinique_demo"/>
+            <field name="slug">martinique</field>
+            <field name="name_visitor">Martinique</field>
+            <field name="website_published" eval="True"/>
+        </record>
+
+        <record id="ckr_shop_collection_demo_decouverte" model="ckr.shop.collection">
+            <field name="name">Collection Découverte</field>
+            <field name="slug">decouverte</field>
+            <field name="active" eval="True"/>
+            <field name="sequence" eval="15"/>
+            <field
+                name="product_template_ids"
+                eval="[(6, 0, [
+                    ref('product_template_ckr_sel_crepes'),
+                    ref('product_template_ckr_sel_chips'),
+                ])]"
+            />
+        </record>
+
+        <record id="ckr_shop_contract_recette_category_biscuits" model="product.public.category">
+            <field name="name">CKR Recette Biscuits</field>
+            <field name="website_id" ref="website.default_website"/>
+        </record>
+        <record id="ckr_shop_contract_recette_category_boissons" model="product.public.category">
+            <field name="name">CKR Recette Boissons</field>
+            <field name="website_id" ref="website.default_website"/>
+        </record>
+
+        <record id="product_template_ckr_sel_crepes" model="product.template">
+            <field name="public_categ_ids" eval="[(4, ref('ckr_shop_contract_recette_category_biscuits'))]"/>
+        </record>
+        <record id="product_template_ckr_sel_chips" model="product.template">
+            <field name="public_categ_ids" eval="[(4, ref('ckr_shop_contract_recette_category_biscuits'))]"/>
+        </record>
+        <record id="product_template_ckr_sel_biere" model="product.template">
+            <field name="public_categ_ids" eval="[(4, ref('ckr_shop_contract_recette_category_boissons'))]"/>
+        </record>
+        <record id="product_template_ckr_sel_sucre" model="product.template">
+            <field name="public_categ_ids" eval="[(4, ref('ckr_shop_contract_recette_category_boissons'))]"/>
+        </record>
+    </data>
+</odoo>

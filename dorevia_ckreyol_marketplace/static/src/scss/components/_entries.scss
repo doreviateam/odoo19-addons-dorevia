@@ -1,127 +1,164 @@
 // ============================================================================
-// C-Kreyol - Bloc 3 : Explorer / Par où commencer (Phase 2, ADR-008)
-// Cinq portes catalogue — carrousel (4 cartes / page en largeur, pas à pas manuel + rail scrollable)
+// C-Kreyol - Bloc 3 : Explorer / Par où commencer (MVP2 — grille asymétrique)
+// Visuels : static/src/img/explorer_porte_*.png (sources docs/assets mvp02)
 // ============================================================================
 
 .ckr-entries {
-    &__carousel {
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $ckr-space-md;
         margin-top: $ckr-space-sm;
     }
 
-    &__carousel-inner {
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr) auto;
-        gap: $ckr-space-xs;
-        align-items: center;
+    @media (min-width: 768px) and (max-width: 991.98px) {
+        &__grid {
+            grid-template-columns: repeat(6, 1fr);
+        }
 
-        @media (min-width: 768px) {
-            gap: $ckr-space-md;
+        &__card--promo,
+        &__card--kits {
+            grid-column: 1 / -1;
+        }
+
+        &__card--tile:nth-of-type(3) {
+            grid-column: 1 / span 2;
+        }
+
+        &__card--tile:nth-of-type(4) {
+            grid-column: 3 / span 2;
+        }
+
+        &__card--tile:nth-of-type(5) {
+            grid-column: 5 / span 2;
         }
     }
 
-    &__viewport {
-        // Scroll horizontal stable (scrollLeft croissant = avance) meme si la page est en RTL.
-        direction: ltr;
-        min-width: 0;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        scroll-padding-inline: $ckr-space-xs;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-        outline: none;
-        // Largeur réelle du rail : base du calcul « 4 cartes par page » (100cqi).
-        container-type: inline-size;
-        container-name: ckr-explorer;
-
-        &:focus-visible {
-            box-shadow: 0 0 0 2px $ckr-bg, 0 0 0 4px rgba($ckr-primary, 0.45);
-            border-radius: $ckr-radius-md;
+    // Desktop : 8+4 = Promotions nettement dominante, Kits secondaire
+    // fort (plus étroit) ; écart de hauteur d’image renforcé (§ médias).
+    @media (min-width: 992px) {
+        &__grid {
+            grid-template-columns: repeat(12, 1fr);
+            align-items: stretch;
         }
 
-        // Défilement par page (JS) : éviter le snap carte par carte en zone large.
-        @media (min-width: 992px) {
-            scroll-snap-type: none;
-        }
-    }
-
-    &__track {
-        display: flex;
-        gap: $ckr-space-md;
-        padding-bottom: $ckr-space-xs;
-
-        .ckr-entries__card {
-            scroll-snap-align: start;
-            // Mobile / tablette : une carte lisible + aperçu du suivant.
-            // unquote : éviter que Sass traite min() comme sa fonction compile-time
-            // (incompatible avec les unités cqi du navigateur).
-            flex: 0 0 #{unquote("min(22rem, calc(100cqi * 0.88))")};
-        }
-    }
-
-    &__nav {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        width: 2.625rem;
-        height: 2.625rem;
-        padding: 0;
-        border: 1px solid $ckr-border;
-        border-radius: $ckr-radius-pill;
-        background-color: $ckr-bg;
-        color: $ckr-primary;
-        box-shadow: $ckr-shadow-sm;
-        cursor: pointer;
-        transition: background-color $ckr-transition-base,
-                    border-color $ckr-transition-base,
-                    color $ckr-transition-base,
-                    box-shadow $ckr-transition-base,
-                    opacity $ckr-transition-fast;
-
-        @media (min-width: 768px) {
-            width: 3rem;
-            height: 3rem;
+        &__card--promo {
+            grid-column: 1 / span 8;
+            grid-row: 1;
         }
 
-        &:hover:not(:disabled),
-        &:focus-visible:not(:disabled) {
-            background-color: $ckr-bg-accent;
-            border-color: rgba(160, 82, 45, 0.35);
-            color: $ckr-primary-dark;
-            box-shadow: $ckr-shadow-md;
+        &__card--kits {
+            grid-column: 9 / span 4;
+            grid-row: 1;
         }
 
-        &:disabled {
-            opacity: 0.38;
-            cursor: not-allowed;
+        &__card--tile:nth-of-type(3) {
+            grid-column: 1 / span 4;
+            grid-row: 2;
         }
-    }
 
-    &__nav-icon {
-        display: block;
+        &__card--tile:nth-of-type(4) {
+            grid-column: 5 / span 4;
+            grid-row: 2;
+        }
+
+        &__card--tile:nth-of-type(5) {
+            grid-column: 9 / span 4;
+            grid-row: 2;
+        }
     }
 
     &__card {
         position: relative;
         display: flex;
         flex-direction: column;
-        gap: $ckr-space-md;
-        padding: $ckr-space-xl $ckr-space-lg;
+        padding: 0;
+        gap: 0;
+        overflow: hidden;
         background-color: $ckr-bg;
         border: 1px solid $ckr-border;
         border-radius: $ckr-radius-lg;
         color: $ckr-text;
         text-decoration: none;
-        min-height: 188px;
+        min-height: 0;
         box-shadow: $ckr-shadow-sm;
         transition: transform $ckr-transition-base,
-                    background-color $ckr-transition-base,
-                    border-color $ckr-transition-base,
-                    box-shadow $ckr-transition-base;
+            border-color $ckr-transition-base,
+            box-shadow $ckr-transition-base;
 
-        // Accent marque discret en tete de carte (désirabilité sans bruit).
+        &:focus-visible {
+            outline: 2px solid rgba($ckr-primary, 0.45);
+            outline-offset: 3px;
+        }
+
+        &:hover,
+        &:focus {
+            transform: translateY(-4px);
+            border-color: rgba(160, 82, 45, 0.35);
+            box-shadow: $ckr-shadow-lg;
+            text-decoration: none;
+            color: $ckr-text;
+
+            .ckr-entries__card__body {
+                background-color: $ckr-bg-accent;
+            }
+
+            .ckr-entries__card__arrow {
+                color: $ckr-primary-dark;
+            }
+        }
+    }
+
+    &__card__media {
+        position: relative;
+        width: 100%;
+        flex-shrink: 0;
+        overflow: hidden;
+        background-color: $ckr-bg-soft;
+
+        &--promo {
+            height: 12.5rem;
+
+            @media (min-width: 992px) {
+                height: 16.5rem;
+            }
+        }
+
+        &--kits {
+            height: 10.5rem;
+
+            @media (min-width: 992px) {
+                height: 12rem;
+            }
+        }
+
+        &--tile {
+            height: 8rem;
+
+            @media (min-width: 992px) {
+                height: 9rem;
+            }
+        }
+    }
+
+    &__card__img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    &__card__body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: $ckr-space-sm;
+        flex: 1;
+        padding: $ckr-space-sm $ckr-space-lg $ckr-space-md;
+        background-color: $ckr-bg;
+        transition: background-color $ckr-transition-base;
+
         &::before {
             content: "";
             position: absolute;
@@ -134,23 +171,8 @@
             opacity: 0.85;
         }
 
-        &:hover,
-        &:focus {
-            transform: translateY(-5px);
-            background-color: $ckr-bg-accent;
-            border-color: rgba(160, 82, 45, 0.35);
-            box-shadow: $ckr-shadow-lg;
-            text-decoration: none;
-            color: $ckr-text;
-
-            .ckr-entries__card__arrow {
-                color: $ckr-primary-dark;
-            }
-        }
-
         h3 {
             font-family: $ckr-font-serif;
-            font-size: unquote("clamp(1.35rem, 2.2vw, 1.6rem)");
             font-weight: $ckr-weight-semibold;
             margin: $ckr-space-sm 0 0 0;
             color: $ckr-text;
@@ -161,31 +183,60 @@
             margin: 0;
             flex: 1;
             color: $ckr-text-muted;
-            font-size: 0.98rem;
-            line-height: 1.58;
-            max-width: none;
-        }
-
-        &__arrow {
-            margin-top: auto;
-            padding-top: $ckr-space-xs;
-            color: $ckr-primary;
-            font-weight: $ckr-weight-semibold;
-            letter-spacing: 0.03em;
             font-size: 0.9rem;
+            line-height: 1.45;
+            max-width: 42ch;
         }
     }
-}
 
-// 4 cartes entières visibles (non tronquées) quand la zone de défilement ≥ 900px.
-@container ckr-explorer (min-width: 900px) {
-    .ckr-entries__track .ckr-entries__card {
-        flex: 0 0 #{unquote("calc((100cqi - 3 * #{$ckr-space-md}) / 4)")};
+    &__card__arrow {
+        margin-top: auto;
+        padding-top: $ckr-space-xs;
+        color: $ckr-primary;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: 0.03em;
+        font-size: 0.9rem;
+    }
+
+    &__card--promo .ckr-entries__card__body::before {
+        height: 4px;
+        opacity: 0.95;
+    }
+
+    &__card--promo .ckr-entries__card__body {
+        gap: $ckr-space-md;
+        padding: $ckr-space-md $ckr-space-lg $ckr-space-lg;
+
+        h3 {
+            font-size: unquote("clamp(1.55rem, 2.8vw, 1.95rem)");
+            letter-spacing: -0.03em;
+        }
+
+        p {
+            font-size: 0.95rem;
+            max-width: 48ch;
+        }
+    }
+
+    &__card--kits .ckr-entries__card__body h3 {
+        font-size: unquote("clamp(1.28rem, 2vw, 1.55rem)");
+    }
+
+    &__card--tile .ckr-entries__card__body {
+        &::before {
+            height: 2px;
+            opacity: 0.75;
+        }
+
+        h3 {
+            font-size: unquote("clamp(1.2rem, 2vw, 1.4rem)");
+        }
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .ckr-entries__viewport {
-        scroll-behavior: auto;
+    .ckr-entries__card:hover,
+    .ckr-entries__card:focus {
+        transform: none;
     }
 }

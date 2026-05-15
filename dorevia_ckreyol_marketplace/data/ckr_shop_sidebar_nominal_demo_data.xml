@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Données de référence — sidebar /shop « cas nominal » maquette (4 blocs visibles).
+
+        * Collection éditoriale + profil Origine publiés, sans website_id (tous sites).
+        * Produits rattachés : fiches vitrine Sélection (ckr_product_selection_showcase_data).
+
+        noupdate=1 : une installation existante conserve les enregistrements si modifiés en BO.
+        Nouvelle install : création au premier chargement du module.
+
+        Recette : /shop en desktop — Catégories (fallback CK) + Collections + Origines + Prix.
+    -->
+    <data noupdate="1">
+        <record id="ckr_attr_value_origin_guadeloupe_demo" model="product.attribute.value">
+            <field name="name">Guadeloupe</field>
+            <field name="attribute_id" ref="ckr_product_attribute_origin"/>
+        </record>
+
+        <record id="ckr_shop_origin_demo_guadeloupe" model="ckr.shop.origin">
+            <field name="attribute_value_id" ref="ckr_attr_value_origin_guadeloupe_demo"/>
+            <field name="slug">guadeloupe</field>
+            <field name="name_visitor">Guadeloupe</field>
+            <field name="website_published" eval="True"/>
+        </record>
+
+        <record id="ckr_shop_collection_demo_saint_anne" model="ckr.shop.collection">
+            <field name="name">Collection Saint-Anne</field>
+            <field name="slug">saint-anne</field>
+            <field name="active" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field
+                name="product_template_ids"
+                eval="[(6, 0, [
+                    ref('product_template_ckr_sel_crepes'),
+                    ref('product_template_ckr_sel_chips'),
+                ])]"
+            />
+        </record>
+    </data>
+</odoo>

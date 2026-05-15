@@ -3,8 +3,8 @@
 
 Couche CK **légère** (pas A5) qui **décore** et **route** la lecture
 visiteur de la porte Origines (voir
-``docs/phase_2/CONTRAT_URL_ORIGINES.md`` §13 et
-``docs/phase_2/SPEC_IMPL_ORIGINES.md`` §2.2 / §2.3) :
+``docs/mvp_01/CONTRAT_URL_ORIGINES.md`` §13 et
+``docs/mvp_01/SPEC_IMPL_ORIGINES.md`` §2.2 / §2.3) :
 
 * la **vérité catalogue** « ce produit est rattaché à telle origine »
   reste portée par le **socle standard Odoo** — un
@@ -159,6 +159,26 @@ class CkrShopOrigin(models.Model):
                     % slug
                 )
 
+    @api.constrains("slug", "website_id")
+    def _check_slug_scope_uniqueness(self):
+        """Empêche les doublons de slug en scope global ``website_id=NULL``."""
+        for record in self:
+            slug = (record.slug or "").strip()
+            if not slug:
+                continue
+            domain = [("id", "!=", record.id), ("slug", "=", slug)]
+            if record.website_id:
+                domain.append(("website_id", "=", record.website_id.id))
+                scope_label = _("sur le site « %s »") % (record.website_id.name,)
+            else:
+                domain.append(("website_id", "=", False))
+                scope_label = _("dans le périmètre global (sans site)")
+            if self.sudo().search_count(domain):
+                raise ValidationError(
+                    _("Le slug d'origine « %(slug)s » existe déjà %(scope)s.")
+                    % {"slug": slug, "scope": scope_label}
+                )
+
     @api.depends("name_visitor", "attribute_value_id.name")
     def _compute_display_name_visitor(self):
         for record in self:
@@ -169,6 +189,44 @@ class CkrShopOrigin(models.Model):
     # ------------------------------------------------------------------
     # Résolution pour le contrôleur (SPEC_IMPL §3.2 / §5)
     # ------------------------------------------------------------------
+    @api.model
+    def _ckr_sidebar_origin_prefer(self, new_o, old_o, website=None):
+        """Choisit le profil à afficher quand plusieurs lignes partagent la même valeur catalogue."""
+
+        def tier(rec):
+            if website and rec.website_id and rec.website_id.id == website.id:
+                return 0
+            if not rec.website_id:
+                return 1
+            return 2
+
+        tn, to = tier(new_o), tier(old_o)
+        if tn != to:
+            return new_o if tn < to else old_o
+        if new_o.sequence != old_o.sequence:
+            return new_o if new_o.sequence < old_o.sequence else old_o
+        return new_o if new_o.id < old_o.id else old_o
+
+    @api.model
+    def _ckr_merge_sidebar_origins(self, origins, website=None):
+        """Dédoublonne le rail Origines (même ``attribute_value_id``, ex. profil global + profil site)."""
+        if not origins:
+            return origins
+        best_by_value = {}
+        for o in origins:
+            vid = o.attribute_value_id.id
+            prev = best_by_value.get(vid)
+            if prev is None:
+                best_by_value[vid] = o
+            else:
+                best_by_value[vid] = self._ckr_sidebar_origin_prefer(
+                    o, prev, website=website
+                )
+        merged = self.browse([best_by_value[k].id for k in sorted(best_by_value.keys())])
+        return merged.sorted(
+            key=lambda r: (r.sequence, r.name_visitor or "", r.id),
+        )
+
     @api.model
     def _ckr_resolve_published_slugs(self, slugs, website=None):
         """Résout un itérable de slugs en profils publiés (sans doublons).

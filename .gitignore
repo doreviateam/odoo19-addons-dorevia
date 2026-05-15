@@ -16,3 +16,12 @@ build/
 # Environnements locaux
 .env
 .venv/
+
+# Addons e-commerce locaux pédagogiques (hors dépôt, préfixe local_ecommerce_)
+local_*/
+
+# Apprentissage Odoo 19 / website — hors périmètre livraison clients
+pro_website_base/
+pure_root_oils_extension/
+
+Zedocs/*

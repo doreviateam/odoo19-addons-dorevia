@@ -1,18 +1,45 @@
 // ============================================================================
-// C-Kreyol - Bloc 7 : Bloc confiance (WIREFRAME § 3)
-// 3 axes exactement : Achat / Livraison / Contact.
+// C-Kreyol — Bloc 7 : Réassurance (MVP2, 4 repères)
+// Mobile : lignes compactes (icône | titre + texte), séparateurs discrets.
+// Tablette : 2 colonnes ; desktop : 4 colonnes (pile icône → texte).
 // ============================================================================
 
 .ckr-trust {
     background-color: $ckr-bg;
+
+    // Micro-polish mobile : équilibre titre « Quelques repères » / liste + filet eyebrow discret.
+    .ckr-section-title__eyebrow--rule::before {
+        width: 36px;
+        background-color: rgba($ckr-accent, 0.42);
+    }
+
+    @media (max-width: 767.98px) {
+        &.ckr-section {
+            padding-top: $ckr-space-xl;
+            padding-bottom: $ckr-space-xl;
+        }
+
+        .ckr-section-title {
+            // Un peu d’air sous le h2 avant la liste (intention lisible, pas coincée).
+            margin-bottom: $ckr-space-lg;
+        }
+    }
 
     &__grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: $ckr-space-xl;
 
+        @media (max-width: 767.98px) {
+            gap: 0;
+        }
+
         @media (min-width: 768px) {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (min-width: 1024px) {
+            grid-template-columns: repeat(4, 1fr);
         }
     }
 
@@ -22,20 +49,26 @@
         align-items: flex-start;
         gap: $ckr-space-sm;
 
-        // Icone lineaire charcoal (gel §9 fil rouge V1, Lot C) : remplace
-        // la pilule ambree qui passait "icon-badge" au lieu de "sobre
-        // Direction A". La doctrine de montee en gamme V1 privilegie la
-        // discretion typographique plutot que le marqueur visuel.
+        &__body {
+            display: flex;
+            flex-direction: column;
+            gap: $ckr-space-xs;
+            flex: 1;
+            min-width: 0;
+        }
+
+        // Icone lineaire charcoal (gel §9 fil rouge V1, Lot C)
         &__icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
             width: 32px;
             height: 32px;
             background-color: transparent;
             color: $ckr-text;
-            font-size: 1.35rem;
-            margin-bottom: $ckr-space-sm;
+            font-size: 1.25rem;
+            line-height: 1;
             border-radius: 0;
         }
 
@@ -52,6 +85,47 @@
             line-height: 1.55;
             color: $ckr-text-muted;
             font-size: 0.95rem;
+        }
+
+        // --- Mobile : ligne retail compacte, séparateurs très légers ----------
+        @media (max-width: 767.98px) {
+            flex-direction: row;
+            align-items: center;
+            gap: $ckr-space-md;
+            padding: $ckr-space-sm 0;
+            border-bottom: 1px solid rgba($ckr-text, 0.09);
+
+            &:first-child {
+                padding-top: 0;
+            }
+
+            &:last-child {
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+            &__icon {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1.125rem;
+            }
+
+            &__body {
+                gap: 0.28rem;
+                padding-top: 0;
+            }
+
+            h3 {
+                font-size: 1rem;
+                font-weight: $ckr-weight-medium;
+                line-height: 1.35;
+                letter-spacing: -0.008em;
+            }
+
+            p {
+                font-size: 0.875rem;
+                line-height: 1.45;
+            }
         }
     }
 }

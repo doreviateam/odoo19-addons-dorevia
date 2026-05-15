@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Page publique : demande d'ouverture de compte professionnel (MVP03).
+         Maquette : colonne centrée, fond clair, titre serif — sans carte lourde.
+         Formulaire Website → crm.lead via website_crm ; champs masqués + website_form_input_filter. -->
+
+    <template id="ckr_page_demande_compte_pro" name="C-Kreyol: Demande ouverture compte professionnel">
+        <t t-call="website.layout">
+            <t t-set="logged_partner" t-value="request.env['website.visitor']._get_visitor_from_request().partner_id"/>
+            <t t-set="ckr_pro_form_values" t-value="{
+                'email_from': request.params.get('email_from', ''),
+                'contact_name': request.params.get('contact_name', ''),
+                'partner_name': request.params.get('partner_name', ''),
+                'phone': request.params.get('phone', ''),
+                'ckr_activity_type': request.params.get('ckr_activity_type', ''),
+                'description': request.params.get('description', ''),
+            }"/>
+            <span class="hidden" data-for="ckr_demande_compte_pro_form" t-att-data-values="ckr_pro_form_values"/>
+            <main class="ckr-page ckr-root ckr-page--demande-pro">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <div class="ckr-demande-pro__shell">
+                        <h1 class="ckr-demande-pro__title text-center">Demande d&apos;ouverture de compte professionnel</h1>
+
+                        <div class="ckr-demande-pro__intro text-center">
+                            <p class="ckr-demande-pro__intro-lead mb-0">
+                                Demandez l&apos;ouverture d&apos;un compte professionnel pour accéder à notre catalogue de produits artisanaux et aux conditions réservées aux professionnels.
+                            </p>
+                            <p class="ckr-demande-pro__intro-note mb-0">
+                                La création de compte est soumise à validation par nos équipes.
+                            </p>
+                        </div>
+
+                        <div class="ckr-demande-pro__form">
+                            <!-- Repliable quand le bloc « Être rappelé » est ouvert (voir ckr_demande_compte_pro.js). -->
+                            <div id="ckrDemandeProMainFormCollapse" class="collapse show">
+                            <section class="s_website_form ckr-demande-pro__website-form" data-vcss="001" data-snippet="s_website_form">
+                                <div class="container px-0">
+                                    <form id="ckr_demande_compte_pro_form"
+                                          action="/website/form/"
+                                          method="post"
+                                          enctype="multipart/form-data"
+                                          class="o_mark_required"
+                                          data-mark="*"
+                                          data-model_name="crm.lead"
+                                          data-success-mode="redirect"
+                                          data-success-page="/demande-compte-pro-merci"
+                                          data-pre-fill="true">
+                                        <div class="s_website_form_rows row g-3 s_col_no_bgcolor">
+                                            <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
+                                                <input type="hidden"
+                                                       name="referred"
+                                                       class="form-control s_website_form_input"
+                                                       value="CK-MVP03-demande-compte-pro"/>
+                                            </div>
+                                            <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
+                                                <input type="hidden"
+                                                       name="name"
+                                                       class="form-control s_website_form_input"
+                                                       value="Demande compte pro C-Kreyol MVP03"/>
+                                            </div>
+
+                                            <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_partner_name">
+                                                    <span class="s_website_form_label_content">Entreprise</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <input id="ckr_pro_partner_name" type="text" class="form-control s_website_form_input" name="partner_name" required="" placeholder="Nom de votre entreprise" data-fill-with="commercial_company_name"/>
+                                            </div>
+                                            <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_contact_name">
+                                                    <span class="s_website_form_label_content">Nom et prénom du contact</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <input id="ckr_pro_contact_name" type="text" class="form-control s_website_form_input" name="contact_name" required="" placeholder="Jean Dupont" data-fill-with="name"/>
+                                            </div>
+
+                                            <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_email">
+                                                    <span class="s_website_form_label_content">Adresse e-mail</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <input id="ckr_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" placeholder="contact@entreprise.com" data-fill-with="email"/>
+                                            </div>
+                                            <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_phone">
+                                                    <span class="s_website_form_label_content">Téléphone</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <input id="ckr_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" required="" placeholder="01 23 45 67 89" data-fill-with="phone"/>
+                                            </div>
+
+                                            <div class="mb-0 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="selection" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_activity">
+                                                    <span class="s_website_form_label_content">Type d&apos;activité</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <select id="ckr_pro_activity"
+                                                        name="ckr_activity_type"
+                                                        class="form-control form-select s_website_form_input"
+                                                        required=""
+                                                        title="Sélectionnez votre secteur">
+                                                    <option value="">Sélectionnez votre secteur</option>
+                                                    <option value="boutique_epicerie">Boutique / épicerie fine</option>
+                                                    <option value="restaurant_traiteur">Restaurant / traiteur</option>
+                                                    <option value="distributeur">Distributeur</option>
+                                                    <option value="collectivite_ce">Collectivité / comité d&apos;entreprise</option>
+                                                    <option value="association">Association / organisation</option>
+                                                    <option value="autre">Autre</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
+                                                <label class="s_website_form_label" for="ckr_pro_description">
+                                                    <span class="s_website_form_label_content">Message</span>
+                                                    <span class="s_website_form_mark"> *</span>
+                                                </label>
+                                                <textarea id="ckr_pro_description" class="form-control s_website_form_input" name="description" required="" rows="3" placeholder="Décrivez brièvement vos besoins et les volumes envisagés…"></textarea>
+                                            </div>
+
+                                            <div class="mb-0 py-0 col-12 s_website_form_submit s_website_form_no_submit_label text-center" data-name="Submit Button">
+                                                <a href="#" role="button" class="btn ckr-btn ckr-btn--primary s_website_form_send w-100">Envoyer la demande</a>
+                                                <span id="s_website_form_result"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </section>
+                            </div>
+                        </div>
+
+                        <!-- MVP03+ : rappel conseiller (formulaire repliable ; ≠ demande compte pro). -->
+                        <div class="ckr-demande-pro__rappel text-center">
+                            <p class="ckr-demande-pro__rappel-kicker mb-1">
+                                Besoin d&apos;échanger avant de déposer votre demande ?
+                            </p>
+                            <p class="ckr-demande-pro__rappel-lead small text-muted mb-3 mb-lg-2">
+                                Laissez-nous vos coordonnées et un créneau de disponibilité. Un conseiller C-Kréyòl pourra vous rappeler pour comprendre votre activité et vos besoins.
+                            </p>
+                            <button type="button"
+                                    class="btn ckr-btn w-100 ckr-demande-pro__rappel-toggle"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#ckrDemandeProRappelCollapse"
+                                    aria-expanded="false"
+                                    aria-controls="ckrDemandeProRappelCollapse">
+                                Être rappelé
+                            </button>
+                            <div id="ckrDemandeProRappelCollapse"
+                                 class="collapse ckr-demande-pro__rappel-collapse text-start">
+                                <section class="s_website_form ckr-demande-pro__rappel-form"
+                                         data-vcss="001"
+                                         data-snippet="s_website_form">
+                                    <div class="container px-0">
+                                        <form id="ckr_demande_compte_pro_rappel_form"
+                                              action="/website/form/"
+                                              method="post"
+                                              enctype="multipart/form-data"
+                                              class="o_mark_required"
+                                              data-mark="*"
+                                              data-model_name="crm.lead"
+                                              data-success-mode="redirect"
+                                              data-success-page="/demande-compte-pro-merci"
+                                              data-pre-fill="true">
+                                            <div class="s_website_form_rows row g-2 s_col_no_bgcolor">
+                                                <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
+                                                    <input type="hidden"
+                                                           name="referred"
+                                                           class="form-control s_website_form_input"
+                                                           value="CK-MVP03-rappel-conseiller"/>
+                                                </div>
+                                                <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
+                                                    <input type="hidden"
+                                                           name="name"
+                                                           class="form-control s_website_form_input"
+                                                           value="Rappel conseiller C-Kreyol MVP03"/>
+                                                </div>
+
+                                                <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                                    <label class="s_website_form_label" for="ckr_rappel_contact_name">
+                                                        <span class="s_website_form_label_content">Nom et prénom</span>
+                                                        <span class="s_website_form_mark"> *</span>
+                                                    </label>
+                                                    <input id="ckr_rappel_contact_name"
+                                                           type="text"
+                                                           class="form-control s_website_form_input"
+                                                           name="contact_name"
+                                                           required=""
+                                                           placeholder="Nom et prénom"
+                                                           data-fill-with="name"/>
+                                                </div>
+
+                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
+                                                    <label class="s_website_form_label" for="ckr_rappel_phone">
+                                                        <span class="s_website_form_label_content">Téléphone</span>
+                                                        <span class="s_website_form_mark"> *</span>
+                                                    </label>
+                                                    <input id="ckr_rappel_phone"
+                                                           type="tel"
+                                                           class="form-control s_website_form_input"
+                                                           name="phone"
+                                                           required=""
+                                                           placeholder="01 23 45 67 89"
+                                                           data-fill-with="phone"/>
+                                                </div>
+                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
+                                                    <label class="s_website_form_label" for="ckr_rappel_email">
+                                                        <span class="s_website_form_label_content">Adresse e-mail</span>
+                                                        <span class="s_website_form_mark"> *</span>
+                                                    </label>
+                                                    <input id="ckr_rappel_email"
+                                                           type="email"
+                                                           class="form-control s_website_form_input"
+                                                           name="email_from"
+                                                           required=""
+                                                           placeholder="contact@entreprise.com"
+                                                           data-fill-with="email"/>
+                                                </div>
+
+                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="date" data-name="Field">
+                                                    <label class="s_website_form_label" for="ckr_rappel_date">
+                                                        <span class="s_website_form_label_content">Date souhaitée</span>
+                                                        <span class="s_website_form_mark"> *</span>
+                                                    </label>
+                                                    <input id="ckr_rappel_date"
+                                                           type="date"
+                                                           class="form-control s_website_form_input ckr-demande-pro__input-date"
+                                                           name="ckr_callback_date"
+                                                           required=""
+                                                           title="Jour de disponibilité pour un rappel"/>
+                                                </div>
+                                                <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="selection" data-name="Field">
+                                                    <label class="s_website_form_label" for="ckr_rappel_window">
+                                                        <span class="s_website_form_label_content">Créneau souhaité</span>
+                                                        <span class="s_website_form_mark"> *</span>
+                                                    </label>
+                                                    <select id="ckr_rappel_window"
+                                                            name="ckr_callback_window"
+                                                            class="form-control form-select s_website_form_input"
+                                                            required=""
+                                                            title="Plage horaire préférée">
+                                                        <option value="">Sélectionnez un créneau</option>
+                                                        <option value="h09_11">09h–11h</option>
+                                                        <option value="h11_13">11h–13h</option>
+                                                        <option value="h14_16">14h–16h</option>
+                                                        <option value="h16_18">16h–18h</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
+                                                    <label class="s_website_form_label" for="ckr_rappel_message">
+                                                        <span class="s_website_form_label_content">Message</span>
+                                                        <span class="s_website_form_mark"> *</span>
+                                                    </label>
+                                                    <textarea id="ckr_rappel_message"
+                                                              class="form-control s_website_form_input"
+                                                              name="description"
+                                                              required=""
+                                                              rows="2"
+                                                              placeholder="Quelques lignes sur votre activité ou votre besoin…"></textarea>
+                                                </div>
+
+                                                <div class="mb-0 py-0 col-12 s_website_form_submit s_website_form_no_submit_label text-center" data-name="Submit Button">
+                                                    <a href="#" role="button" class="btn ckr-btn btn-sm s_website_form_send w-100 ckr-demande-pro__rappel-send">Envoyer</a>
+                                                    <span id="ckr_rappel_form_result"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </section>
+                            </div>
+                            <p class="ckr-demande-pro__rappel-disclaimer small text-muted mt-2 mb-0">
+                                Un rappel ne remplace pas la demande de compte professionnel et ne garantit ni validation ni accès aux tarifs pro.
+                            </p>
+                        </div>
+
+                        <div class="ckr-demande-pro__secondary text-center">
+                            <p class="small text-muted mb-1">
+                                Vous souhaitez commander à titre personnel ?
+                            </p>
+                            <p class="small text-muted mb-0">
+                                <a href="/web/signup">Créer un compte particulier</a>
+                                ·
+                                <a href="/web/login">Connexion</a>
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+    <template id="ckr_page_demande_compte_pro_merci" name="C-Kreyol: Merci — demande compte pro">
+        <t t-call="website.layout">
+            <main class="ckr-page ckr-root">
+                <section class="ckr-section">
+                    <div class="ckr-container">
+                        <h1>Demande bien reçue</h1>
+                        <p class="ckr-lead">
+                            Merci pour votre message. Notre équipe examine les demandes de compte professionnel
+                            avant toute validation ; vous serez recontacté si des précisions sont nécessaires.
+                        </p>
+                        <p class="mt-4">
+                            <a href="/shop" class="btn ckr-btn ckr-btn--primary">Continuer sur la boutique</a>
+                        </p>
+                    </div>
+                </section>
+            </main>
+        </t>
+    </template>
+
+</odoo>

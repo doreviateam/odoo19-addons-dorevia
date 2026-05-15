@@ -14,10 +14,10 @@
 | 1 | [TICKET_HOMEPAGE_APPETENCE_PARTITION_V1.md](TICKET_HOMEPAGE_APPETENCE_PARTITION_V1.md) | Périmètre Phase A, gels techniques, critères d’acceptation |
 | 2 | [PLATEFORME_MARQUE_CK_V1.md](PLATEFORME_MARQUE_CK_V1.md) | Ton, promesse, personnalité, ce qu’il faut éviter (folklore, sur-promesse) |
 | 3 | [CADRAGE_DESIGN_CREATION_CK_V1.md](CADRAGE_DESIGN_CREATION_CK_V1.md) | Ambition perçue, densité, rythme §11, images §14, critères échec §19 |
-| 4 | [SPEC_HERO_HOMEPAGE.md](../SPEC_HERO_HOMEPAGE.md) §7 | **Copy hero gelé** (titre, sous-texte, CTA) — Phase A **ne change pas** le texte hero sans amendement SPEC |
-| 5 | [BRIEF_VISUEL_HERO_PHASE1.md](../BRIEF_VISUEL_HERO_PHASE1.md) | Production du **visuel hero** (ratios, ambiance, livrables) |
+| 4 | [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) §7 | **Copy hero gelé** (titre, sous-texte, CTA) — Phase A **ne change pas** le texte hero sans amendement SPEC |
+| 5 | [BRIEF_VISUEL_HERO_PHASE1.md](../direction/BRIEF_VISUEL_HERO_PHASE1.md) | Production du **visuel hero** (ratios, ambiance, livrables) |
 | 6 | [PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md](PROPOSITION_HOMEPAGE_MONTEE_EN_GAMME_V1.md) §9 | Gels layout / composants V1 |
-| 7 | [CHARTE_GRAPHIQUE_PHASE1.md](../CHARTE_GRAPHIQUE_PHASE1.md), [DIRECTIONS_ARTISTIQUES_PHASE1.md](../DIRECTIONS_ARTISTIQUES_PHASE1.md) | Palette, typo, photo, interdits |
+| 7 | [CHARTE_GRAPHIQUE_PHASE1.md](../direction/CHARTE_GRAPHIQUE_PHASE1.md), [DIRECTIONS_ARTISTIQUES_PHASE1.md](../direction/DIRECTIONS_ARTISTIQUES_PHASE1.md) | Palette, typo, photo, interdits |
 
 ---
 
@@ -47,8 +47,8 @@
 
 ### 4.1 Hero
 
-- **Copy** : **conforme [SPEC_HERO_HOMEPAGE.md](../SPEC_HERO_HOMEPAGE.md) §7** — pas de retouche marketing dans le QWeb sans **amendement SPEC** + historique.
-- **Visuel** : suivre [BRIEF_VISUEL_HERO_PHASE1.md](../BRIEF_VISUEL_HERO_PHASE1.md) — image **solide** (cadrage §8.1 cadrage design : promesse claire, tenue au site, pas de spectacle vide). Priorité : **matière**, lumière naturelle, continuité avec la charte Direction A.
+- **Copy** : **conforme [SPEC_HERO_HOMEPAGE.md](../direction/SPEC_HERO_HOMEPAGE.md) §7** — pas de retouche marketing dans le QWeb sans **amendement SPEC** + historique.
+- **Visuel** : suivre [BRIEF_VISUEL_HERO_PHASE1.md](../direction/BRIEF_VISUEL_HERO_PHASE1.md) — image **solide** (cadrage §8.1 cadrage design : promesse claire, tenue au site, pas de spectacle vide). Priorité : **matière**, lumière naturelle, continuité avec la charte Direction A.
 - **CTA / layout** : inchangés (gel V1 §9).
 
 ### 4.2 Explorer (5 portes)

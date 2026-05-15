@@ -1,5 +1,7 @@
 // ============================================================================
 // C-Kreyol - Footer personnalise (Charte § 9.3, ADR-CKR-003)
+// ≤991px : rubriques >2 liens en <details> ; marque + légal toujours visibles.
+// Desktop : panneaux ouverts (voir ckr_footer_fold.js).
 // ============================================================================
 
 .ckr-footer {
@@ -21,32 +23,52 @@
         grid-template-columns: 1fr;
         gap: $ckr-space-xl;
 
-        @media (min-width: 576px) {
-            grid-template-columns: repeat(2, 1fr);
+        @media (max-width: 991.98px) {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            column-gap: clamp(1.1rem, 4.5vw, 1.85rem);
+            row-gap: $ckr-space-sm;
         }
 
         @media (min-width: 992px) {
-            grid-template-columns: 1.2fr repeat(3, 1fr);
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: $ckr-space-xl;
+        }
+    }
+
+    @media (max-width: 991.98px) {
+        &__brand {
+            grid-column: 1 / -1;
+        }
+
+        &__grid > &__col:nth-child(2) {
+            grid-column: 1;
+            min-width: 0;
+        }
+
+        &__grid > &__col:nth-child(3) {
+            grid-column: 2;
+            min-width: 0;
         }
     }
 
     &__brand {
         display: flex;
         flex-direction: column;
-        gap: $ckr-space-sm;
-
-        p {
-            margin: 0;
-            line-height: 1.55;
-            max-width: 28ch;
-            color: rgba(245, 241, 232, 0.75);
-        }
+        gap: $ckr-space-md;
     }
 
-    // Wordmark marque (HTML) : taille lisible sur fond charcoal (charte §9.3).
+    &__tagline {
+        margin: 0;
+        max-width: 36ch;
+        line-height: 1.65;
+        letter-spacing: 0.01em;
+        color: rgba(245, 241, 232, 0.78);
+        font-size: 0.9rem;
+    }
+
     &__wordmark {
         align-self: flex-start;
-        margin: 0 0 $ckr-space-sm 0;
+        margin: 0;
         font-family: $ckr-font-serif;
         font-weight: $ckr-weight-semibold;
         font-size: unquote("clamp(2rem, 4.5vw, 2.75rem)");
@@ -56,7 +78,11 @@
     }
 
     &__wordmark-inner {
-        display: inline-block;
+        display: inline-flex;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        word-break: keep-all;
+        overflow-wrap: normal;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
     }
 
@@ -71,9 +97,123 @@
     }
 
     &__col {
+        min-width: 0;
+    }
+
+    // ----- Accordéon natif (mobile : replié par défaut ; desktop : ouvert via JS) -----
+    &__fold {
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: transparent;
+    }
+
+    &__fold-summary {
+        list-style: none;
+        cursor: pointer;
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
         gap: $ckr-space-sm;
+        min-height: 2.75rem;
+        padding: $ckr-space-xs 0;
+        margin: 0;
+        border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+        transition: border-color $ckr-transition-fast, color $ckr-transition-fast;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::marker {
+            display: none;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgba($ckr-accent, 0.65);
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+
+        &:hover .ckr-footer__title {
+            color: rgba(245, 241, 232, 1);
+        }
+    }
+
+    &__fold .ckr-footer__title {
+        font-family: $ckr-font-sans;
+        font-size: 0.68rem;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: rgba(245, 241, 232, 0.92);
+        margin: 0;
+        flex: 1;
+        min-width: 0;
+        text-align: left;
+        line-height: 1.35;
+        // Le clic / focus porte sur `<summary>` (contrôle disclosure).
+        pointer-events: none;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__fold-chevron {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        color: rgba($ckr-accent, 0.85);
+        font-size: 1rem;
+        transition: transform $ckr-transition-base;
+
+        .fa {
+            transition: transform $ckr-transition-base;
+        }
+    }
+
+    &__fold[open] .ckr-footer__fold-chevron .fa {
+        transform: rotate(180deg);
+    }
+
+    @media (max-width: 991.98px) {
+        &__fold[open] .ckr-footer__fold-summary {
+            border-bottom-color: rgba(245, 241, 232, 0.14);
+            padding-bottom: $ckr-space-xs;
+        }
+    }
+
+    &__fold-panel {
+        padding-top: $ckr-space-xs;
+        padding-bottom: $ckr-space-xs;
+        overflow-x: hidden;
+    }
+
+    @media (max-width: 991.98px) {
+        &__fold[open] .ckr-footer__fold-panel {
+            padding-top: $ckr-space-sm;
+            animation: ckr-footer-panel-reveal $ckr-transition-base forwards;
+        }
+    }
+
+    @keyframes ckr-footer-panel-reveal {
+        from {
+            opacity: 0;
+            transform: translateY(-2px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     &__title {
@@ -82,7 +222,33 @@
         font-weight: $ckr-weight-semibold;
         letter-spacing: 0.02em;
         color: $ckr-bg;
-        margin: 0 0 $ckr-space-xs 0;
+        margin: 0 0 $ckr-space-sm 0;
+    }
+
+    &__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    &__list li {
+        margin: 0;
+        padding: 0;
+    }
+
+    &__list-gap {
+        margin-top: $ckr-space-sm;
+        padding-top: $ckr-space-sm;
+        border-top: 1px solid rgba(245, 241, 232, 0.09);
+    }
+
+    &__list a {
+        display: block;
+        padding: 0.4rem 0;
+        line-height: 1.45;
     }
 
     a {
@@ -118,11 +284,112 @@
             gap: $ckr-space-md;
         }
     }
+
+    &__copyright {
+        line-height: 1.55;
+    }
+
+    @media (max-width: 991.98px) {
+        padding-top: $ckr-space-2xl;
+        padding-bottom: $ckr-space-xl;
+
+        &__brand {
+            padding-bottom: $ckr-space-lg;
+            border-bottom: 1px solid rgba(245, 241, 232, 0.12);
+        }
+
+        &__wordmark {
+            font-size: unquote("clamp(2.05rem, 5vw, 2.65rem)");
+        }
+
+        &__tagline {
+            max-width: 38ch;
+            font-size: 0.88rem;
+            line-height: 1.62;
+        }
+
+        &__list a {
+            min-height: 2.35rem;
+            display: flex;
+            align-items: center;
+            padding: 0.28rem 0;
+            font-size: 0.88rem;
+        }
+
+        &__legal {
+            margin-top: $ckr-space-xl;
+            padding-top: $ckr-space-lg;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: $ckr-space-md;
+            border-top-color: rgba(245, 241, 232, 0.12);
+        }
+
+        &__copyright {
+            font-size: 0.82rem;
+            color: rgba(245, 241, 232, 0.72);
+            width: 100%;
+            padding-bottom: 2px;
+        }
+
+        &__legal ul {
+            width: 100%;
+            padding-top: $ckr-space-md;
+            margin: 0;
+            border-top: 1px solid rgba(245, 241, 232, 0.08);
+            gap: $ckr-space-sm $ckr-space-lg;
+            row-gap: $ckr-space-sm;
+            font-size: 0.78rem;
+        }
+    }
+
+    // Desktop : accordéons ouverts = panneaux statiques (pas d’effet « app »).
+    @media (min-width: 992px) {
+        &__fold-summary {
+            cursor: default;
+            pointer-events: none;
+            min-height: 0;
+            padding: 0 0 $ckr-space-sm 0;
+            border-bottom: none;
+            justify-content: flex-start;
+        }
+
+        &__fold-chevron {
+            display: none !important;
+        }
+
+        &__fold .ckr-footer__title {
+            font-family: $ckr-font-serif;
+            font-size: 1rem;
+            font-weight: $ckr-weight-semibold;
+            letter-spacing: 0.02em;
+            text-transform: none;
+            color: $ckr-bg;
+            margin: 0 0 $ckr-space-sm 0;
+            line-height: 1.25;
+            pointer-events: none;
+        }
+
+        &__fold-panel {
+            padding: 0;
+            animation: none !important;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ckr-footer__fold-chevron .fa {
+        transition: none !important;
+    }
+
+    .ckr-footer__fold[open] .ckr-footer__fold-panel {
+        animation: none !important;
+    }
 }
 
 // ---------------------------------------------------------------------------
 // Odoo Website / Bootstrap : regles souvent plus specifiques sur #wrapwrap
-// (couleur des liens, :visited mauve, titres herites). On re-ancre sur #footer.
 // ---------------------------------------------------------------------------
 #footer.ckr-footer {
     h3.ckr-footer__title {
@@ -148,5 +415,21 @@
 
     .ckr-footer__wordmark-hyphen {
         color: $ckr-accent !important;
+    }
+
+    @media (max-width: 991.98px) {
+        .ckr-footer__fold .ckr-footer__title {
+            color: rgba(245, 241, 232, 0.92) !important;
+        }
+
+        .ckr-footer__legal ul a:link,
+        .ckr-footer__legal ul a:visited {
+            color: rgba(245, 241, 232, 0.58) !important;
+        }
+
+        .ckr-footer__legal ul a:hover,
+        .ckr-footer__legal ul a:focus {
+            color: $ckr-accent !important;
+        }
     }
 }

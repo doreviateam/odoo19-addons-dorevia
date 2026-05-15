@@ -1,17 +1,39 @@
 // ============================================================================
 // C-Kreyol - Bloc 5 : Selection produits (WIREFRAME § 3)
 // Grille courte, pas de carrousel principal.
+// Niveau visuel proche Hero / Explorer : bande légère, grille dense 4 col.
 // ============================================================================
 
 .ckr-selection {
-    &__grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: $ckr-space-md;
+    // Bandeau discret (aligné avec la densité des blocs MVP2.1)
+    &--band {
+        margin-top: $ckr-space-sm;
+        padding-top: $ckr-space-3xl;
+        padding-bottom: $ckr-space-3xl;
+        background: linear-gradient(
+            180deg,
+            rgba(160, 82, 45, 0.05) 0%,
+            transparent 45%,
+            rgba(90, 108, 95, 0.04) 100%
+        );
+        border-top: 1px solid rgba($ckr-border, 0.55);
+        border-bottom: 1px solid rgba($ckr-border, 0.4);
 
         @media (min-width: 768px) {
-            grid-template-columns: repeat(4, 1fr);
+            padding-top: 4.5rem;
+            padding-bottom: 4.5rem;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: $ckr-space-md;
+        // Pas de “trou” inutile : les cartes remplissent 4 emplacements sur desktop
+        @media (min-width: 768px) {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: $ckr-space-lg;
+            min-height: 0;
         }
     }
 
@@ -19,16 +41,16 @@
         display: flex;
         flex-direction: column;
         gap: $ckr-space-sm;
+        min-width: 0;
+        min-height: 100%;
         background-color: $ckr-bg;
         border: 1px solid $ckr-border;
-        border-radius: $ckr-radius-md;
+        border-radius: $ckr-radius-lg;
         padding: $ckr-space-md;
         text-decoration: none;
         color: $ckr-text;
-        // Ombre legere au repos : ancre visuellement la carte sans bruit,
-        // complete la montee d ombre au hover (Phase A — TICKET_HOMEPAGE_
-        // APPETENCE_PARTITION_V1.md, gel §9.4 inchange).
-        box-shadow: $ckr-shadow-sm;
+        // Ombre resserrée type vitrine (proche des cartes Explorer)
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
         transition: border-color $ckr-transition-fast,
                     box-shadow $ckr-transition-base,
                     transform $ckr-transition-fast;
@@ -54,11 +76,18 @@
         }
 
         &__img {
+            position: relative;
             width: 100%;
             aspect-ratio: unquote("1 / 1");
             background-color: $ckr-bg-soft;
             border-radius: $ckr-radius-sm;
             overflow: hidden;
+            // Évite le “gris vide” côté navigateur : fond terracotta très léger
+            background-image: linear-gradient(
+                135deg,
+                rgba(160, 82, 45, 0.08) 0%,
+                rgba(90, 108, 95, 0.06) 100%
+            );
 
             img {
                 width: 100%;
@@ -72,6 +101,31 @@
                 transform: scale(1);
                 transition: transform $ckr-transition-base;
             }
+        }
+
+        // Fallback propre (filet d’eau) si l’URL manque (ne doit pas se produire
+        // côté listing résolu) — jamais l’icône générique /web.
+        &__photo-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(
+                145deg,
+                rgba(160, 82, 45, 0.18) 0%,
+                rgba(245, 230, 211, 0.95) 50%,
+                rgba(90, 108, 95, 0.12) 100%
+            );
+        }
+
+        &__photo-fallback-mark {
+            font-family: $ckr-font-serif;
+            font-size: 0.9rem;
+            font-weight: $ckr-weight-semibold;
+            letter-spacing: 0.12em;
+            color: $ckr-primary;
+            opacity: 0.85;
         }
 
         &:hover &__img img,
@@ -126,10 +180,34 @@
             white-space: nowrap;
             flex: 0 0 auto;
         }
+
+        // CTA texte fiche (pas d’ajout panier sur la grille — MVP2.1).
+        &__product-cta {
+            margin-top: auto;
+            padding-top: $ckr-space-xs;
+            font-size: 0.85rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-primary;
+        }
     }
 
     &__cta {
         text-align: center;
         margin-top: $ckr-space-xl;
+    }
+
+    &__empty {
+        margin-top: $ckr-space-md;
+    }
+
+    &__empty-hint {
+        margin: 0;
+        text-align: center;
+        color: $ckr-text-muted;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        max-width: 40rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 }

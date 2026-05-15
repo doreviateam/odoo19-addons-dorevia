@@ -1,0 +1,275 @@
+// ============================================================================
+// Page demande compte professionnel (/demande-compte-professionnel)
+// Parcours centré type maquette : fond blanc, titre Playfair, intro courte,
+// grille compacte, champs blancs bordure légère, CTA terracotta pleine largeur.
+// ============================================================================
+
+.ckr-page--demande-pro {
+    --ckr-demande-pro-shell-max: 43rem;
+
+    @media (min-width: 992px) {
+        --ckr-demande-pro-shell-max: 46rem;
+    }
+
+    // Maquette : fond blanc pleine page (perçu « formulaire demande » sobre).
+    &.ckr-root {
+        background-color: #fff;
+    }
+
+    .ckr-section {
+        background-color: #fff;
+        padding-top: $ckr-space-md;
+        padding-bottom: $ckr-space-lg;
+
+        @media (min-width: 768px) {
+            padding-top: $ckr-space-sm;
+            padding-bottom: $ckr-space-md;
+        }
+    }
+
+    .ckr-demande-pro__shell {
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: var(--ckr-demande-pro-shell-max);
+    }
+
+    // Titre éditorial serif (charte CK), centré — lisible sans échelle hero.
+    h1.ckr-demande-pro__title {
+        font-family: $ckr-font-serif;
+        font-size: unquote("clamp(1.25rem, 2.4vw, 1.625rem)");
+        line-height: 1.2;
+        font-weight: $ckr-weight-semibold;
+        letter-spacing: unquote("-0.02em");
+        margin-bottom: $ckr-space-sm;
+        color: $ckr-text;
+    }
+
+    .ckr-demande-pro__intro {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+        margin-bottom: $ckr-space-md;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 38rem;
+
+        .ckr-demande-pro__intro-lead {
+            margin-bottom: 0;
+            font-family: $ckr-font-sans;
+            font-size: 0.9375rem;
+            line-height: 1.5;
+            color: $ckr-text-muted;
+        }
+
+        .ckr-demande-pro__intro-note {
+            margin-bottom: 0;
+            font-family: $ckr-font-sans;
+            font-size: 0.875rem;
+            line-height: 1.45;
+            color: $ckr-text-muted;
+        }
+    }
+
+    .ckr-demande-pro__website-form {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .s_website_form_field:not(.s_website_form_dnone) {
+        margin-bottom: 0;
+
+        .s_website_form_label {
+            width: 100% !important;
+            max-width: 100%;
+            display: block;
+            margin-bottom: 0.25rem;
+            padding-right: 0;
+            padding-top: 0;
+            font-family: $ckr-font-sans;
+            font-weight: $ckr-weight-semibold;
+            font-size: 0.8125rem;
+            color: $ckr-text;
+            text-align: left;
+        }
+
+        .s_website_form_label_content {
+            font-size: inherit;
+        }
+
+        .s_website_form_mark {
+            color: $ckr-primary;
+            font-weight: $ckr-weight-semibold;
+        }
+    }
+
+    // Champs blancs, bordure fine grise (contraste sur fond blanc).
+    .form-control,
+    .form-select {
+        border: 1px solid #d8d4cc;
+        border-radius: $ckr-radius-md;
+        font-family: $ckr-font-sans;
+        font-size: 0.9375rem;
+        line-height: 1.35;
+        background-color: #fff;
+        padding: 0.45rem 0.65rem;
+        min-height: 2.35rem;
+
+        &::placeholder {
+            color: #9a958c;
+        }
+
+        &:focus {
+            border-color: $ckr-primary;
+            box-shadow: 0 0 0 0.15rem rgba(160, 82, 45, 0.15);
+            background-color: #fff;
+        }
+    }
+
+    textarea.form-control {
+        min-height: unquote("clamp(2.85rem, 7.5vh, 3.5rem)");
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+        resize: vertical;
+    }
+
+    .s_website_form_submit {
+        margin-top: $ckr-space-sm;
+        padding-top: $ckr-space-sm !important;
+        padding-bottom: 0 !important;
+
+        .s_website_form_label {
+            display: none !important;
+        }
+
+        .s_website_form_send {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            padding-top: 0.65rem;
+            padding-bottom: 0.65rem;
+        }
+    }
+
+    // Rappel conseiller (MVP03+) : séparateur léger ; formulaire repliable plus discret que le principal.
+    .ckr-demande-pro__rappel {
+        margin-top: $ckr-space-lg;
+        padding-top: $ckr-space-md;
+        border-top: 1px solid $ckr-bg-soft;
+
+        .ckr-demande-pro__rappel-kicker {
+            font-family: $ckr-font-sans;
+            font-size: 0.9375rem;
+            font-weight: $ckr-weight-semibold;
+            color: $ckr-text;
+            line-height: 1.35;
+        }
+
+        .ckr-demande-pro__rappel-lead {
+            max-width: 28rem;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.45;
+        }
+
+        .ckr-demande-pro__rappel-disclaimer {
+            max-width: 32rem;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+
+        // Boutons rappel : contour terracotta / fond clair — sans hover noir du ``ckr-btn--secondary``.
+        .ckr-demande-pro__rappel-toggle.ckr-btn {
+            font-size: 0.9375rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            background-color: #fff;
+            color: $ckr-primary;
+            border: 2px solid rgba(160, 82, 45, 0.38);
+
+            &:hover,
+            &:focus {
+                background-color: rgba(160, 82, 45, 0.06);
+                color: $ckr-primary-dark;
+                border-color: $ckr-primary;
+            }
+
+            &[aria-expanded="true"] {
+                background-color: rgba(160, 82, 45, 0.09);
+                color: $ckr-primary-dark;
+                border-color: $ckr-primary;
+                box-shadow: none;
+            }
+
+            &:focus-visible {
+                outline: 3px solid rgba(160, 82, 45, 0.28);
+                outline-offset: 2px;
+            }
+
+            &:active {
+                transform: translateY(1px);
+            }
+        }
+
+        .ckr-demande-pro__rappel-send.ckr-btn {
+            background-color: #fff;
+            color: $ckr-primary;
+            border: 2px solid rgba(160, 82, 45, 0.35);
+            font-weight: $ckr-weight-medium;
+
+            &:hover,
+            &:focus {
+                background-color: rgba(160, 82, 45, 0.06);
+                color: $ckr-primary-dark;
+                border-color: rgba(160, 82, 45, 0.55);
+            }
+
+            &:focus-visible {
+                outline: 3px solid rgba(160, 82, 45, 0.28);
+                outline-offset: 2px;
+            }
+
+            &:active {
+                transform: translateY(1px);
+            }
+        }
+
+        .ckr-demande-pro__rappel-collapse {
+            max-width: 100%;
+        }
+
+        .ckr-demande-pro__rappel-form {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+        }
+
+        textarea.form-control {
+            min-height: 4rem;
+        }
+
+        input[type="date"].ckr-demande-pro__input-date {
+            min-height: 2.35rem;
+            color-scheme: light;
+        }
+    }
+
+    .ckr-demande-pro__secondary {
+        margin-top: $ckr-space-lg;
+
+        a:not(.btn):not(.ckr-btn) {
+            color: $ckr-primary;
+
+            &:hover,
+            &:focus {
+                color: $ckr-primary-dark;
+            }
+        }
+    }
+}

@@ -10,7 +10,10 @@
     <!--                                                            -->
     <!-- On preserve :                                             -->
     <!--   * id="top" sur <header> (attendu par d autres vues)     -->
-    <!--   * class o_header_standard (compatibilite configurator)  -->
+    <!--   * class o_header_fixed : interaction Website Odoo 19    -->
+    <!--     (affix / scroll) adaptee au header natif ; contourner  -->
+    <!--     ``o_header_standard`` qui applique translateY(-100%)  -->
+    <!--     au scroll et casse notre markup CK (bandeau vide).     -->
     <!--                                                            -->
     <!-- Reference : STRUCTURE_MENU_PRINCIPAL.md, CHARTE § 9.2     -->
     <!-- ========================================================== -->
@@ -35,7 +38,7 @@
               name="C-Kreyol: header personnalise"
               priority="99">
         <xpath expr="//header" position="replace">
-            <header id="top" class="ckr-header ckr-root o_header_standard">
+            <header id="top" class="ckr-header ckr-root o_header_fixed">
 
                 <!-- Hook de compatibilite : le JS standard                 -->
                 <!-- (website/static/src/js/content/auto_hide_menu.js, ~340) -->
@@ -49,32 +52,99 @@
                 <!-- Toggle mobile (checkbox hors ecran ; labels for= pilotent l etat) -->
                 <input type="checkbox" id="ckr_drawer_toggle" class="ckr-drawer__toggle" tabindex="-1"/>
 
-                <div class="ckr-header__inner">
+                <t t-set="ckr_cart_qty"
+                   t-value="request.session.get('website_sale_cart_quantity', 0) if request and request.session else 0"/>
+
+                <t t-set="ckr_path"
+                   t-value="(request.httprequest.path or '') if request and request.httprequest else ''"/>
+                <t t-if="ckr_path.startswith('/shop')">
+                    <div class="ckr-header__top0">
+                        <div class="ckr-header__top0-inner">
+                            <div class="ckr-header__top0-rotator" aria-label="Informations boutique">
+                                <span class="ckr-header__top0-item ckr-header__top0-item--1">Livraison offerte dès 69 € d’achat en France métropolitaine.</span>
+                                <span class="ckr-header__top0-item ckr-header__top0-item--2">Expédition rapide : commandes préparées sous 24 à 48 h ouvrées.</span>
+                                <span class="ckr-header__top0-item ckr-header__top0-item--3">Produits antillais sélectionnés auprès de producteurs de confiance.</span>
+                                <span class="ckr-header__top0-item ckr-header__top0-item--4">Demandes professionnelles étudiées par l’équipe C-Kréyòl.</span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+
+                <div class="ckr-header__inner ckr-header__top1">
+
+                    <!-- Panier website_sale : ``li.o_wsale_my_cart`` requis par le JS panier
+                         (CartService._updateCartIcon / updateCartNavBar). Sans ce wrapper,
+                         suppression ligne panier peut lever ``classList`` sur null. -->
+                    <t t-set="website_sale_order" t-value="request.cart"/>
 
                     <!-- Logo / brand (SVG inline : Playfair deja charge dans le head) -->
-                    <a href="/" class="ckr-header__brand" aria-label="C-Kreyol - Accueil">
+                    <a href="/" class="ckr-header__brand ckr-header__brand--logo-c" aria-label="C-Kréyòl - Accueil">
+                        <!-- Variantes logotype header : -->
+                        <!-- A (sobre), B (plus vivante), C (intermédiaire) -->
+                        <!-- Variante active par defaut : logo C -->
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             class="ckr-wordmark ckr-wordmark--header"
-                             viewBox="0 0 220 40"
+                             class="ckr-wordmark ckr-wordmark--header ckr-wordmark--a"
+                             viewBox="0 0 240 44"
                              preserveAspectRatio="xMinYMid meet"
                              focusable="false"
                              aria-hidden="true">
-                            <text x="0" y="30"
+                            <text x="0" y="32"
                                   font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
-                                  font-size="26"
+                                  font-size="28"
                                   font-weight="600"
-                                  letter-spacing="0.04em">
-                                <tspan fill="#2C2C2C">C</tspan><tspan fill="#A0522D">-</tspan><tspan fill="#2C2C2C">Kreyol</tspan>
+                                  letter-spacing="0.02em">
+                                <tspan fill="#2C2C2C">C</tspan><tspan fill="#8D3B26">-</tspan><tspan fill="#2C2C2C">Kréyòl</tspan>
+                            </text>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="ckr-wordmark ckr-wordmark--header ckr-wordmark--b"
+                             viewBox="0 0 240 44"
+                             preserveAspectRatio="xMinYMid meet"
+                             focusable="false"
+                             aria-hidden="true">
+                            <text x="0" y="32"
+                                  font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+                                  font-size="28"
+                                  font-style="italic"
+                                  font-weight="600"
+                                  letter-spacing="0.01em"
+                                  fill="#8D3B26">C-Kréyòl</text>
+                            <path d="M104 35 Q 120 39 138 35"
+                                  stroke="#8D3B26"
+                                  stroke-width="1.5"
+                                  fill="none"
+                                  stroke-linecap="round"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="ckr-wordmark ckr-wordmark--header ckr-wordmark--c"
+                             viewBox="0 0 240 44"
+                             preserveAspectRatio="xMinYMid meet"
+                             focusable="false"
+                             aria-hidden="true">
+                            <text x="0" y="32"
+                                  font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+                                  font-size="29"
+                                  font-style="italic"
+                                  font-weight="600"
+                                  letter-spacing="0.015em">
+                                <tspan fill="#2C2C2C">C</tspan><tspan fill="#8D3B26">-</tspan><tspan fill="#8D3B26">Kréyòl</tspan>
                             </text>
                         </svg>
                     </a>
 
-                    <!-- Menu principal desktop (itere sur les enfants du Top Menu du website courant) -->
-                    <nav class="ckr-header__nav" aria-label="Menu principal">
-                        <t t-foreach="website.menu_id.child_id" t-as="submenu">
-                            <a t-att-href="submenu.url" t-esc="submenu.name"/>
-                        </t>
-                    </nav>
+                    <div class="ckr-header__search-desktop d-none d-lg-inline-flex">
+                        <form action="/shop" method="get" role="search" aria-label="Recherche globale">
+                            <label class="visually-hidden" for="ckr_header_search_input">Recherche globale</label>
+                            <input id="ckr_header_search_input"
+                                   type="search"
+                                   name="search"
+                                   placeholder="Recherche rapide"
+                                   autocomplete="off"/>
+                            <button type="submit" title="Rechercher" aria-label="Rechercher">
+                                <i class="fa fa-search" aria-hidden="true"/>
+                            </button>
+                        </form>
+                    </div>
 
                     <!-- Utilitaires : locale (langue + devise) + cluster + burger -->
                     <div class="ckr-header__utils">
@@ -105,16 +175,27 @@
                         </div>
 
                         <div class="ckr-header__action-cluster">
-                            <a href="/shop" title="Rechercher un produit" aria-label="Rechercher">
-                                <i class="fa fa-search" aria-hidden="true"/>
+                            <a href="/contact"
+                               class="ckr-header__link-help d-none d-lg-inline-flex"
+                               title="Aide et contact"
+                               aria-label="Aide et contact">
+                                <span>Aide &amp; Contact</span>
+                            </a>
+                            <a t-if="website.user_id == user_id"
+                               href="/web/signup"
+                               class="ckr-header__link-signup d-none d-lg-inline-flex"
+                               title="Créer un compte"
+                               aria-label="Créer un compte">
+                                <span>Créer un compte</span>
                             </a>
                             <details t-if="website.user_id != user_id"
-                                     class="ckr-header__user-menu">
+                                     class="ckr-header__user-menu d-none d-lg-inline-flex">
                                 <summary class="ckr-header__user-toggle"
                                          role="button"
                                          title="Mon compte"
                                          aria-label="Menu Mon compte">
                                     <i class="fa fa-user-o" aria-hidden="true"/>
+                                    <span class="d-none d-lg-inline">Mon compte</span>
                                 </summary>
                                 <div class="ckr-header__user-dropdown" role="menu">
                                     <a class="ckr-header__user-item" role="menuitem" href="/my">Mon compte</a>
@@ -122,18 +203,45 @@
                                        href="/web/session/logout?redirect=/">Déconnexion</a>
                                 </div>
                             </details>
-                            <a t-else=""
+                            <a t-if="website.user_id == user_id"
                                href="/web/login?redirect=/my"
+                               class="ckr-header__link-signin d-none d-lg-inline-flex"
+                               title="Connexion"
+                               aria-label="Connexion">
+                                <span>Se connecter</span>
+                            </a>
+                            <a t-if="website.user_id == user_id"
+                               href="/web/login?redirect=/my"
+                               class="d-none"
                                title="Connexion"
                                aria-label="Connexion">
                                 <i class="fa fa-user-o" aria-hidden="true"/>
                             </a>
-                            <a href="/shop/cart" title="Mon panier" aria-label="Mon panier">
-                                <i class="fa fa-shopping-bag" aria-hidden="true"/>
+                            <a href="/shop"
+                               class="ckr-header__link-favorites"
+                               title="Favoris"
+                               aria-label="Favoris">
+                                <i class="fa fa-heart-o" aria-hidden="true"/>
+                                <span class="visually-hidden">Favoris</span>
                             </a>
+                            <ul class="ckr-header__cart-sale-compat">
+                                <li class="o_wsale_my_cart nav-item">
+                                    <a href="/shop/cart"
+                                       class="ckr-header__link-cart"
+                                       title="Mon panier"
+                                       aria-label="Mon panier">
+                                        <i class="fa fa-shopping-bag" aria-hidden="true"/>
+                                        <span class="visually-hidden">Panier</span>
+                                        <!-- Compat website_sale cache: attendu en <sup class="my_cart_quantity..."> -->
+                                        <sup class="my_cart_quantity ckr-header__counter-badge"
+                                             t-esc="ckr_cart_qty"
+                                             t-att-data-order-id="website_sale_order.id if website_sale_order else ''"/>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
 
-                        <!-- Burger mobile -->
+                        <!-- Bouton menu mobile / tablette -->
                         <label for="ckr_drawer_toggle"
                                id="ckr_drawer_burger"
                                class="ckr-header__burger"
@@ -146,9 +254,42 @@
                         </label>
                     </div>
 
+                    <div class="ckr-header__search-mobile d-lg-none">
+                        <form action="/shop" method="get" role="search" aria-label="Recherche rapide">
+                            <label class="visually-hidden" for="ckr_header_search_mobile_input">Recherche rapide</label>
+                            <input id="ckr_header_search_mobile_input"
+                                   type="search"
+                                   name="search"
+                                   placeholder="Recherche rapide"
+                                   autocomplete="off"/>
+                            <button type="submit" title="Rechercher" aria-label="Rechercher">
+                                <i class="fa fa-search" aria-hidden="true"/>
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
 
-                <!-- Drawer mobile -->
+                <nav class="ckr-header__top2 d-none d-lg-block" aria-label="Exploration boutique et contenus">
+                    <div class="ckr-header__top2-inner">
+                        <a href="/shop">Tous les produits</a>
+                        <a href="/promotions">Promotions</a>
+                        <a href="/collections">Collections</a>
+                        <details class="ckr-header__top2-dropdown">
+                            <summary class="ckr-header__top2-summary">
+                                Communauté
+                            </summary>
+                            <div class="ckr-header__top2-dropdown-panel" role="menu">
+                                <a role="menuitem" href="/offrir">Idées cadeaux</a>
+                                <a role="menuitem" href="/recettes">Recettes</a>
+                                <a role="menuitem" href="/blog">Blog</a>
+                            </div>
+                        </details>
+                        <a href="/demande-compte-professionnel">Professionnels</a>
+                    </div>
+                </nav>
+
+                <!-- Drawer mobile / tablette -->
                 <label for="ckr_drawer_toggle" class="ckr-drawer__backdrop" aria-hidden="true"></label>
                 <aside id="ckr_drawer_panel" class="ckr-drawer__panel" aria-label="Menu mobile">
                     <label for="ckr_drawer_toggle"
@@ -157,10 +298,23 @@
                            aria-label="Fermer le menu"
                            tabindex="0">&#215;</label>
 
-                    <nav class="ckr-drawer__nav" aria-label="Menu principal (mobile)">
+                    <nav class="ckr-drawer__nav" aria-label="Menu principal mobile">
                         <t t-foreach="website.menu_id.child_id" t-as="submenu_m">
-                            <a t-att-href="submenu_m.url" t-esc="submenu_m.name"/>
+                            <t t-if="submenu_m.child_id">
+                                <div class="ckr-drawer__group">
+                                    <div class="ckr-drawer__group-title" t-esc="submenu_m.name"/>
+                                    <t t-foreach="submenu_m.child_id" t-as="child_m">
+                                        <a class="ckr-drawer__sublink"
+                                           t-att-href="child_m.url"
+                                           t-esc="child_m.name"/>
+                                    </t>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <a t-att-href="submenu_m.url" t-esc="submenu_m.name"/>
+                            </t>
                         </t>
+                        <a href="/demande-compte-professionnel">Professionnels</a>
                     </nav>
 
                     <div t-if="website.user_id != user_id" class="ckr-drawer__account">

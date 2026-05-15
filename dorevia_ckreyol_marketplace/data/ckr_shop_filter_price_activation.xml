@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!--
+        Rail maquette CK : le bloc « Prix » repose sur `opt_wsale_filter_price`,
+        soit `is_view_active('website_sale.filter_products_price')`.
+        Cette vue est souvent inactive (thème / éditeur) : sans activation,
+        `show_price_filter` reste faux malgré `ckr_shop_sidebar_rail_maquette.xml`.
+
+        Aligné sur `data/website_selectors_activation.xml` : bascule `active`
+        sur la vue native `website_sale`.
+    -->
+    <record id="website_sale.filter_products_price" model="ir.ui.view">
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

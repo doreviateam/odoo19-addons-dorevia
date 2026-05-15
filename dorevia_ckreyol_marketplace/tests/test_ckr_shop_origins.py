@@ -13,6 +13,7 @@ Tag ``post_install`` : dépend de ``website_sale`` + données module
 (``ckr_product_attribute_origin``).
 """
 import html
+import uuid
 import re
 from urllib.parse import urlparse, parse_qs
 
@@ -98,11 +99,15 @@ class TestCkrOriginPVModel(TransactionCase):
 
     def test_pv_rc03_slug_unique_per_website(self):
         """RC-03 : unicité logique slug par site (contrainte SQL)."""
+        slug = "pv-uniq-slug-%s" % uuid.uuid4().hex[:12]
         Origin = self.env["ckr.shop.origin"]
+        Origin.search(
+            [("slug", "=", slug), ("website_id", "=", self.website.id)]
+        ).unlink()
         Origin.create(
             {
                 "attribute_value_id": self.val_g.id,
-                "slug": "pv-uniq-slug",
+                "slug": slug,
                 "name_visitor": "G",
                 "website_id": self.website.id,
             }
@@ -111,9 +116,30 @@ class TestCkrOriginPVModel(TransactionCase):
             Origin.create(
                 {
                     "attribute_value_id": self.val_m.id,
-                    "slug": "pv-uniq-slug",
+                    "slug": slug,
                     "name_visitor": "M",
                     "website_id": self.website.id,
+                }
+            )
+
+    def test_pv_rc03_slug_unique_for_global_scope(self):
+        """RC-03 : slug global unique quand ``website_id`` est ``NULL``."""
+        slug = "pv-global-slug-%s" % uuid.uuid4().hex[:12]
+        Origin = self.env["ckr.shop.origin"]
+        Origin.search([("slug", "=", slug), ("website_id", "=", False)]).unlink()
+        Origin.create(
+            {
+                "attribute_value_id": self.val_g.id,
+                "slug": slug,
+                "name_visitor": "Global A",
+            }
+        )
+        with self.assertRaises(ValidationError):
+            Origin.create(
+                {
+                    "attribute_value_id": self.val_m.id,
+                    "slug": slug,
+                    "name_visitor": "Global B",
                 }
             )
 
@@ -158,6 +184,37 @@ class TestCkrOriginPVModel(TransactionCase):
         )
         flat = str(detail.get("base_domain") or [])
         self.assertIn("attribute_line_ids.value_ids", flat)
+
+    def test_search_get_detail_ckr_public_category_restricts_domain(self):
+        """``ckr_public_category_ids`` : alignement grille / min-max / ``_get_shop_domain``."""
+        website = self.website
+        cat = self.env["product.public.category"].sudo().create(
+            {"name": "CKR Test Cat facet", "website_id": website.id}
+        )
+        detail = self.env["product.template"]._search_get_detail(
+            website,
+            "name asc",
+            _website_sale_search_options(
+                self.env,
+                ckr_public_category_ids=[cat.id],
+            ),
+        )
+        flat = str(detail.get("base_domain") or [])
+        self.assertIn("public_categ_ids", flat)
+        self.assertIn(str(cat.id), flat)
+
+    def test_search_get_detail_ckr_category_invalid_domain(self):
+        """Slug catégorie inconnu → domaine vide (cohérence filtre prix / sidebar)."""
+        detail = self.env["product.template"]._search_get_detail(
+            self.website,
+            "name asc",
+            _website_sale_search_options(
+                self.env,
+                ckr_category_invalid=True,
+            ),
+        )
+        domains = detail.get("base_domain") or []
+        self.assertIn([("id", "=", 0)], domains)
 
     def test_resolve_published_slugs_order(self):
         """Ordre stable des slugs résolus (contrôleur / modèle)."""
@@ -254,6 +311,7 @@ class TestCkrOriginPVHttp(HttpCase):
                 "type": "consu",
                 "sale_ok": True,
                 "website_published": True,
+                "description_sale": "Galettes de manioc croustillantes, fabriquées en Guadeloupe.",
                 "attribute_line_ids": [
                     (
                         0,
@@ -437,15 +495,32 @@ class TestCkrOriginPVHttp(HttpCase):
         self.assertEqual(origins, ["guadeloupe", "martinique"])
 
     def test_pv_rc12_product_page_origins_links(self):
-        """RC-12 : bloc origines + liens ``/shop?ckr_mode=origin&ckr_origin=``."""
+        """RC-12 : bloc origines informatif (non interactif) sur la fiche produit."""
         url = self.product_multi.website_url
         self.assertTrue(url.startswith("/"))
         resp = self.url_open(url, timeout=60)
         self.assertEqual(resp.status_code, 200)
         text = resp.text
         self.assertIn("ckr-product-origins", text)
-        self.assertIn("/shop?ckr_mode=origin&amp;ckr_origin=guadeloupe", text)
-        self.assertIn("/shop?ckr_mode=origin&amp;ckr_origin=martinique", text)
+        self.assertIn("ckr-product-origins__value", text)
+        self.assertIn("Guadeloupe", text)
+        self.assertIn("Martinique", text)
+        self.assertNotIn("ckr-product-origins__link", text)
+
+    def test_pv_rc12b_product_page_promise_line_fallback(self):
+        """MVP2.3 : promesse affichée si source propre, sinon bloc masqué."""
+        url_g = self.product_g.website_url
+        resp_g = self.url_open(url_g, timeout=60)
+        self.assertEqual(resp_g.status_code, 200)
+        text_g = resp_g.text
+        self.assertIn("ckr-product-promise", text_g)
+        self.assertIn("Galettes de manioc croustillantes", text_g)
+
+        url_m = self.product_m.website_url
+        resp_m = self.url_open(url_m, timeout=60)
+        self.assertEqual(resp_m.status_code, 200)
+        text_m = resp_m.text
+        self.assertNotIn("ckr-product-promise", text_m)
 
     def test_pv_rc13_regression_other_gates(self):
         """RC-13 : alias Kits / Promotions / Catégories / shop nu inchangés (301/200)."""
@@ -453,6 +528,12 @@ class TestCkrOriginPVHttp(HttpCase):
         self._assert_redirect("/promotions", 301, "ckr_mode=promo")
         r_cat = self.url_open("/categories", allow_redirects=False)
         self.assertEqual(r_cat.status_code, 301)
-        self.assertIn("/shop", r_cat.headers.get("Location", ""))
+        loc_cat = r_cat.headers.get("Location", "")
+        self.assertIn("/shop", loc_cat)
+        self.assertNotIn(
+            "/shop/category/",
+            loc_cat,
+            "Doctrine conteneur : /categories ne doit pas cibler /shop/category/….",
+        )
         r_shop = self.url_open("/shop", timeout=60)
         self.assertEqual(r_shop.status_code, 200)

@@ -192,7 +192,7 @@ Lecture selon 3 axes :
 
 Rubriques :
 
-- Offrir
+- Idées cadeaux
 - Cuisiner
 - Découvrir
 - Associer
@@ -253,5 +253,5 @@ En quelques secondes, le visiteur doit ressentir :
 
 | Date | Changement |
 |------|------------|
-| 2026-04-23 | Création et gel V1 — texte MOA repris tel quel ; référence CaribShopper en inspiration ; statut documentaire aligné avec les prompts `prompt_creative.md`, `prompt_dev.md`, `prompt_ticket.md`. |
+| 2026-04-23 | Création et gel V1 — texte MOA repris tel quel ; référence CaribShopper en inspiration ; statut documentaire aligné avec les prompts `docs/prompting/prompt_creative.md`, `docs/prompting/prompt_dev.md`, `docs/prompting/prompt_ticket.md`. |
 | 2026-04-23 | Ajout section **Documents complémentaires** — renvoi vers `CADRAGE_DESIGN_CREATION_CK_V1.md` (gel design & créa). |

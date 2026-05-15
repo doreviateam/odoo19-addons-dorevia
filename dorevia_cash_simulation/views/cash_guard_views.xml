@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Cash Guard form: simulation toggle + sale orders + smart button -->
+    <record id="view_cash_guard_form_simulation" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.form.simulation</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="inherit_id" ref="dorevia_cash_guard.view_dorevia_cash_guard_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Smart button for simulation sale orders -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_simulation_orders"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-line-chart"
+                        invisible="not include_simulation">
+                    <field name="simulation_order_count"
+                           string="Devis simulés"
+                           widget="statinfo"/>
+                </button>
+            </xpath>
+
+            <!-- Mode simulation + Devis under Journaux (left column) -->
+            <xpath expr="//field[@name='bank_journal_id']" position="after">
+                <field name="include_simulation"/>
+                <field name="simulation_sale_order_ids"
+                       widget="many2many_tags"
+                       invisible="not include_simulation"
+                       placeholder="Sélectionner les devis à simuler"
+                       domain="[('state', 'in', ['draft', 'sent']), ('invoice_ids', '=', False), ('company_id', '=', company_id), ('currency_id', '=', currency_id), ('validity_date', '!=', False)]"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Cash Guard list: optional simulation column -->
+    <record id="view_cash_guard_tree_simulation" model="ir.ui.view">
+        <field name="name">dorevia.cash.guard.tree.simulation</field>
+        <field name="model">dorevia.cash.guard</field>
+        <field name="inherit_id" ref="dorevia_cash_guard.view_dorevia_cash_guard_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='risk_status']" position="before">
+                <field name="include_simulation"
+                       string="Simulation"
+                       optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

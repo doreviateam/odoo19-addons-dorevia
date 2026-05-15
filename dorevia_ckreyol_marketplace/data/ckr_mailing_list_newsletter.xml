@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Liste utilisée par le bloc homepage (POST contrôleur) — ne pas renommer l’external id. -->
+        <record id="ckr_mailing_list_newsletter_ck" model="mailing.list">
+            <field name="name">Newsletter C-Kreyol</field>
+            <field name="is_public" eval="True"/>
+        </record>
+    </data>
+</odoo>

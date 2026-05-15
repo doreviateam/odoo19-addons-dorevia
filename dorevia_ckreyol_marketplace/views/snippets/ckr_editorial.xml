@@ -26,7 +26,7 @@
                         Des selections courtes, par saison ou par usage &#8212;
                         pour decouvrir l offre sans la parcourir en entier.
                     </p>
-                    <a href="/collections" class="ckr-editorial__link">
+                    <a href="/shop?ckr_collection_scope=all" class="ckr-editorial__link">
                         Voir les collections &#8594;
                     </a>
                 </div>
