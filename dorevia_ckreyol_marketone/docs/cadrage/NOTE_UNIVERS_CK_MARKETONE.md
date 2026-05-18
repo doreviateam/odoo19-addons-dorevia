@@ -286,9 +286,11 @@ Le savoir en prolongement.
 | 3 | **Consolidation portes Boutique** (6.1 + 6.2) | **GO** (2026-05-18) — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) |
 | 4 | **Culture** — territoires v1 | **GO MOA** `19.0.8.0.0` — `/culture/<slug>` (pilote `guadeloupe`) |
 | 5 | **Culture v2 légère** (`martinique`, `reunion`) | **GO MOA** `19.0.9.0.0` — 3 territoires Culture |
-| 6 | **Lot 6.3+** (Promotions, Kits, Collections…) | Gel MOA — socle Boutique stable |
-| 6 | **Savoirs** — recettes contributives (identifié → modération BO → publication) | Cadrage **futur** ; pas de forum, pas de publication automatique |
-| 7 | **Pas de code univers** | Tant qu’aucun ticket MOA dédié Culture / Savoirs n’est **GO** |
+| 6 | **Arbitrage prochaine étape** | **Ouvert** — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
+| 7 | **Lot 6.3+** (Promotions, Kits, Collections…) | Gel MOA — arbitrage requis |
+| 8 | **Savoirs** — recettes contributives | Candidat prioritaire (cadrage seul) — §7.3 |
+| 9 | **Culture v3** (hub léger) | Option arbitrage |
+| 10 | **Pas de code univers** | Tant qu’aucun ticket cadrage / exec enfant n’est **GO** |
 
 **Rappel** : `dorevia_ckreyol_marketplace` = mémoire d’intuitions (§4), **pas** source technique à copier.
 

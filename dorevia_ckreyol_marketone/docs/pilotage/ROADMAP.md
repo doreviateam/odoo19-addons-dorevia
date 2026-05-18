@@ -353,8 +353,18 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ---
 
+## Arbitrage prochaine étape
+
+| Étape | Statut |
+|-------|--------|
+| Ticket | **Ouvert** — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
+| Options | Culture v3 hub · **Savoirs v1 cadrage** (⭐ reco MOA) · Boutique 6.3 (une porte) |
+| Règle | **Une** orientation — pas de code avant décision |
+
+---
+
 ## Prochaine action
 
-1. **Culture v3+** ou **Lot 6.3+ Boutique** — décision MOA
-2. **Savoirs** — ticket séparé
-3. Grammaire Culture : **3 territoires** actifs (`guadeloupe`, `martinique`, `reunion`)
+1. **MOA** : arbitrage — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md)
+2. Ouvrir le **ticket de cadrage enfant** retenu (ex. Savoirs v1)
+3. Grammaire actuelle : Boutique stable + Culture **3 territoires** — Savoirs **non cadré**
