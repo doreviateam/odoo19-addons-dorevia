@@ -363,18 +363,20 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ---
 
-## Univers Savoirs — Recettes contributives v1 (cadrage)
+## Univers Savoirs — Recettes contributives v1
 
 | Étape | Statut |
 |-------|--------|
-| Cadrage | **Ouvert** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
-| Exécution | *Après GO cadrage* — `TICKET_MARKETONE_SAVOIRS_V1_EXEC` |
-| Workflow cible | Identifié → proposition → modération BO → publication |
+| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
+| ADR-028 + C9 | ✅ |
+| Exécution | **Ouverte** — [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) — `19.0.10.0.0` |
+| Modèle | `marketone.savoir.recipe` — workflow 5 états |
+| URLs | `/savoirs/<slug>`, `/savoirs/proposer` — pas de hub |
 
 ---
 
 ## Prochaine action
 
-1. **MOA** : valider cadrage Savoirs v1 (D1–D10)
-2. **Ne pas** ouvrir Culture v3, 6.3, ni exec Savoirs en parallèle
-3. Grammaire actuelle : Boutique + Culture **3 territoires** — Savoirs **en cadrage**
+1. **MOA** : valider ticket **exécution** Savoirs v1
+2. **Ne pas** ouvrir Culture v3, 6.3, en parallèle
+3. Trois univers : Boutique + Culture (3 territoires) + Savoirs (**cadré**, exec en attente)

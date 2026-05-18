@@ -399,6 +399,22 @@
 
 ---
 
+## ADR-028 — Savoirs v1 — recettes contributives (`marketone.savoir.recipe`)
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | **Acceptée — GO cadrage avec réserves légères** (exécution après GO ticket exec) |
+| **Version module cible** | `19.0.10.0.0` (proposition) |
+| **Contexte** | Arbitrage MOA : Option 2 Savoirs après Boutique stable et Culture v1+v2 GO. Troisième univers à cadrer avant Culture v3 ou Lot 6.3. |
+| **Décision** | Premier lot Savoirs : modèle minimal **`marketone.savoir.recipe`** avec états `draft` / `pending` / `published` / `rejected` / `archived` ; contributeur **portal** ; modération BO obligatoire ; URLs `/savoirs/<slug>`, `/savoirs/proposer` ; **pas** de hub `/savoirs` v1 ; produit lié **obligatoire** si publié ; bloc fiche « Idées & recettes » (0–3) **sous** CTA achat. **Pas** de `website_blog`, forum, commentaires, publication auto. |
+| **Contrats** | C9 ; C7.4 ; ADR-018, ADR-024 |
+| **Réserves** | (R1) modèle minimal ; (R2) pas de hub ; (R3) pas commentaires ; (R4) pas auto-publication ; (R5) recettes sous CTA ; (R6) pas 6.3/Culture v3 en parallèle |
+| **Tickets** | Cadrage : `TICKET_MARKETONE_SAVOIRS_V1_CADRAGE` (**clôturé**) · Exécution : `TICKET_MARKETONE_SAVOIRS_V1_EXEC` |
+| **Hors scope** | Hub Savoirs, menu header, notifications contributeur, SEO avancé, Culture v3, Lot 6.3 |
+
+---
+
 ## Décisions en attente (à trancher avant Lots 6.3+)
 
 | Sujet | Options | Décideur |

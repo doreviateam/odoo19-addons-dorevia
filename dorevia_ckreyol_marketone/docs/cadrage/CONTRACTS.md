@@ -147,6 +147,23 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 
 **Statut** : C8.v2 **GO MOA** (`19.0.9.0.0`, ADR-027, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md) acceptée.
 
+### C9 — Univers Savoirs — recettes contributives v1 (cadrage GO avec réserves 2026-05-18)
+
+| Élément | Règle |
+|---------|-------|
+| Univers | **Savoirs** — transmettre ; **hors** `/shop` |
+| Modèle | **`marketone.savoir.recipe`** minimal — **pas** `website_blog` comme conteneur principal |
+| Workflow | Portal identifié → proposition → modération BO → publication — **pas** d’auto-publication |
+| États | `draft`, `pending`, `published`, `rejected`, `archived` — pas `draft → published` sans modérateur |
+| URLs | `/savoirs/<slug-recette>`, `/savoirs/proposer` — **pas** de hub `/savoirs` v1 |
+| Liens | Produit **obligatoire** si publié ; origine / Culture optionnels ; fiche produit 0–3 recettes **sous** CTA achat |
+| Rôles | Contributeur, modérateur, éditeur, public |
+| Interdit v1 | Forum, commentaires, likes, hub index, contenu long sur `/shop` |
+| SEO | Documenter seulement |
+| Exécution | Après GO [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) (ADR-028) |
+
+**Statut** : C9 **contractuel** — exécution en attente GO MOA.
+
 ---
 
 ## C4 — Présentation front

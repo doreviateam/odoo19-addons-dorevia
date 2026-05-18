@@ -287,7 +287,8 @@ Le savoir en prolongement.
 | 4 | **Culture** — territoires v1 | **GO MOA** `19.0.8.0.0` — `/culture/<slug>` (pilote `guadeloupe`) |
 | 5 | **Culture v2 légère** (`martinique`, `reunion`) | **GO MOA** `19.0.9.0.0` — 3 territoires Culture |
 | 6 | **Arbitrage prochaine étape** | **GO MOA** — Option 2 Savoirs v1 — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
-| 7 | **Savoirs v1 cadrage** | **Ouvert** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
+| 7 | **Savoirs v1 cadrage** | **GO avec réserves** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
+| 7b | **Savoirs v1 exec** | **Ouvert** — [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) |
 | 8 | **Lot 6.3+** | **Reporté** (gel MOA) |
 | 9 | **Culture v3** (hub léger) | **Reporté** |
 | 10 | **Pas de code Savoirs** | Tant que cadrage / exec Savoirs n’est pas **GO** |

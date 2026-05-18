@@ -6,7 +6,7 @@
 | **Type** | **Cadrage / arbitrage produit** — aucun code |
 | **Statut** | **Clôturé — GO MOA** (2026-05-18) |
 | **Décision** | **Option 2** — Savoirs v1 — cadrage recettes contributives |
-| **Ticket enfant** | [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) — **ouvert** |
+| **Ticket enfant** | Cadrage **GO** — exec [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) **ouvert** |
 | **Version module actuelle** | `19.0.9.0.0` |
 | **Base** | `ckr-marketone-01` |
 | **ADR** | ADR-018, ADR-024, ADR-026, ADR-027 |
