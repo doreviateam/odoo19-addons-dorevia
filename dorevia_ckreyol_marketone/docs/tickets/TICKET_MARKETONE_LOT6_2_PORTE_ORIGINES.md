@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES` |
 | **Lot** | 6.2 — **Cadrage uniquement** (pas de code) |
-| **Statut** | **Ouvert** — en attente validation MOA |
+| **Statut** | **Clôturé — GO cadrage avec réserves** (2026-05-18) |
 | **Type** | Ticket de cadrage / arbitrage |
 | **Version cible module** | `19.0.7.0.0` (proposition, post-validation) |
 | **Base** | `ckr-marketone-01` |
@@ -102,7 +102,7 @@ Savoirs   — transmettre → hors scope Lot 6.2
 | **A — `marketone_mode=origin`** | `/shop?marketone_mode=origin` | **Recommandation** — aligné `CONTRACTS.md` C2 whitelist |
 | B — `marketone_mode=origines` | Libellé FR URL | Moins aligné contrats |
 
-**Décision MOA** : ☐ **`marketone_mode=origin`** — libellé visible : **Origines**
+**Décision MOA** : ☑ **`marketone_mode=origin`** — libellé visible : **Origines**
 
 ---
 
@@ -118,7 +118,7 @@ Legacy : `ckr_origin=<slug>` répétable, logique **OU**.
 
 **Recommandation cadrage** : **A** pour la facettes explicites + **D1** pour la porte seule.
 
-**Décision MOA** : ☐ Paramètre facette : _______________
+**Décision MOA** : ☑ **`marketone_origin=<slug>`** — pas `ckr_origin`
 
 ---
 
@@ -133,7 +133,7 @@ Legacy acté : **catalogue complet** + bandeau porte (pas de filtre caché).
 
 **Recommandation** : **A**.
 
-**Décision MOA** : ☐ _______________
+**Décision MOA** : ☑ **A** — catalogue complet + bandeau
 
 ---
 
@@ -148,7 +148,7 @@ Legacy acté : **catalogue complet** + bandeau porte (pas de filtre caché).
 
 **Recommandation cadrage** : **A** minimum ; **B** si MOA exige slugs stables et phrases visiteur **sans** dupliquer la liste produits.
 
-**Décision MOA** : ☐ A seul · ☐ A + profil Marketone léger
+**Décision MOA** : ☑ **A + profil Marketone léger** (`marketone.shop.origin` minimal)
 
 ---
 
@@ -158,7 +158,7 @@ Legacy acté : **catalogue complet** + bandeau porte (pas de filtre caché).
 |-------|----------------|--------|
 | `/origines` | **301** → `/shop?marketone_mode=origin` | `/origines` → 301 |
 
-**Décision MOA** : ☐ Alias `/origines` validé
+**Décision MOA** : ☑ Alias `/origines` → 301 → `/shop?marketone_mode=origin`
 
 ---
 
@@ -171,7 +171,7 @@ Legacy acté : **catalogue complet** + bandeau porte (pas de filtre caché).
 
 **Recommandation** : **A** (repli propre).
 
-**Décision MOA** : ☐ _______________
+**Décision MOA** : ☑ Redirect vers **`/shop` nu**
 
 ---
 
@@ -188,7 +188,7 @@ Niveau **minimal** (symétrique Lot 6.1) :
 
 **Interdit** : hero Explorer, chips multi-portes, sidebar portes dédiée, refonte grille.
 
-**Décision MOA** : ☐ Présentation minimale validée
+**Décision MOA** : ☑ Présentation minimale validée
 
 ---
 
@@ -200,9 +200,9 @@ Niveau **minimal** (symétrique Lot 6.1) :
 | B — Liens vers `/shop?marketone_origin=<slug>` | Orientation Boutique explicite |
 | C — Liens vers pages Culture (futur) | Hors 6.2 |
 
-**Recommandation cadrage** : **A** ou **B** — **pas** de bloc encyclopédique.
+**Recommandation cadrage** : lien optionnel vers la porte — **pas** de bloc encyclopédique.
 
-**Décision MOA** : ☐ _______________
+**Décision MOA** : ☑ Affichage léger + lien `/shop?marketone_mode=origin&marketone_origin=<slug>`
 
 ---
 
@@ -210,9 +210,9 @@ Niveau **minimal** (symétrique Lot 6.1) :
 
 | Sujet | Décision attendue |
 |-------|-------------------|
-| Pages territoire `/culture/…` ou équivalent | ☐ Report lot Culture dédié |
-| Hub « toutes les origines » éditorial | ☐ Non requis v1 (legacy §13.8) |
-| Liens depuis bandeau porte vers Culture | ☐ Optionnel post-6.2 ; pas bloquant |
+| Pages territoire `/culture/…` ou équivalent | ☑ Report lot Culture dédié |
+| Hub « toutes les origines » éditorial | ☑ Non requis v1 |
+| Liens depuis bandeau porte vers Culture | ☑ Post-6.2 optionnel ; pas bloquant |
 
 ---
 
@@ -220,7 +220,7 @@ Niveau **minimal** (symétrique Lot 6.1) :
 
 Comme Lot 6.1 : **documenter** canonical / noindex ; implémentation **hors** scope élargi sauf décision MOA.
 
-**Décision MOA** : ☐ Note doc seulement
+**Décision MOA** : ☑ Note doc seulement
 
 ---
 
@@ -233,9 +233,9 @@ Comme Lot 6.1 : **documenter** canonical / noindex ; implémentation **hors** sc
 | **A — Un seul `marketone_mode` actif** (whitelist, dernier ignoré ou priorité) | Simple — cohérent 6.1 |
 | B — Cumul featured + origin | Complexité — **non recommandé** Lot 6.2 |
 
-**Recommandation** : **A** — un mode ; facettes `marketone_origin` **en plus** du mode porte si MOA valide D2.
+**Recommandation** : **A** — un mode ; facettes `marketone_origin` **en plus** du mode porte.
 
-**Décision MOA** : ☐ _______________
+**Décision MOA** : ☑ Un seul `marketone_mode` — pas de cumul `featured` + `origin`
 
 ---
 
@@ -289,13 +289,13 @@ Comme Lot 6.1 : **documenter** canonical / noindex ; implémentation **hors** sc
 
 ### GO cadrage (autorise ticket d’exécution)
 
-- [ ] D1–D11 tranchées et consignées
-- [ ] Séparation Boutique (porte) / Culture (report) explicitée et acceptée
-- [ ] Source produit : attribut catalogue (+ profil Marketone si validé)
-- [ ] Canonique + alias `/origines` validés
-- [ ] Présentation minimale validée
-- [ ] Non-régression Lots 1–5 + 6.1 exigée
-- [ ] Une seule porte — Origines uniquement
+- [x] D1–D11 tranchées et consignées (ADR-025, C3.B)
+- [x] Séparation Boutique (porte) / Culture (report) explicitée et acceptée
+- [x] Source produit : attribut catalogue + profil `marketone.shop.origin` minimal
+- [x] Canonique + alias `/origines` validés
+- [x] Présentation minimale validée
+- [x] Non-régression Lots 1–5 + 6.1 exigée
+- [x] Une seule porte — Origines uniquement
 
 ### NO GO cadrage
 
@@ -309,23 +309,32 @@ Comme Lot 6.1 : **documenter** canonical / noindex ; implémentation **hors** sc
 ## Checklist validation MOA (cadrage)
 
 ```text
-[ ] Lot 6.2 limité à Origines (porte Boutique) uniquement
-[ ] ADR-024 / Note Univers pris comme référence
-[ ] Culture (récit territoire) reportée hors exécution 6.2
-[ ] Options D1–D11 documentées
-[ ] Pattern technique 6.1 (hooks website_sale) accepté
-[ ] Critère porte sans casser website_sale accepté
+[x] Lot 6.2 limité à Origines (porte Boutique) uniquement
+[x] ADR-024 / Note Univers pris comme référence
+[x] Culture (récit territoire) reportée hors exécution 6.2
+[x] Options D1–D11 documentées
+[x] Pattern technique 6.1 (hooks website_sale) accepté
+[x] Critère porte sans casser website_sale accepté
 
-Décision cadrage : [ ] GO cadrage  [ ] GO cadrage avec réserves  [ ] NO GO / report
+Décision cadrage : [ ] GO cadrage  [x] GO cadrage avec réserves  [ ] NO GO / report
+```
+
+**Réserves cadrage** (2026-05-18) :
+
+```text
+1. Profil marketone.shop.origin strictement minimal — pas de page Culture.
+2. Pages territoire Culture hors scope Lot 6.2.
+3. Pas de portage ckr.shop.origin.
+4. Fiche produit retail-first.
+5. Récit territoire préparé, pas implémenté dans /shop.
 ```
 
 ---
 
 ## Prochaine étape
 
-1. **MOA** : trancher D1–D11 et valider ce ticket de cadrage.
-2. **Archi** : CONTRATS C3.B + ADR-025 + ticket exécution.
-3. **Dev** : implémentation **uniquement** après GO ticket exécution.
+1. **MOA** : valider le ticket d’exécution [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md).
+2. **Dev** : implémentation `19.0.7.0.0` **après** GO exécution uniquement.
 
 ---
 

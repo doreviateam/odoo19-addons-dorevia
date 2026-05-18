@@ -104,7 +104,9 @@ Sites de **référence d'intention** (pas de copie) :
 | 5 | [`tickets/TICKET_MARKETONE_LOT5_CART_CHECKOUT.md`](tickets/TICKET_MARKETONE_LOT5_CART_CHECKOUT.md) | GO (`19.0.5.0.0`, 2026-05-18) |
 | 6.1 | [`tickets/TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md`](tickets/TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md) | Cadrage **GO avec réserves** (2026-05-18) |
 | 6.1 exec | [`tickets/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md`](tickets/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md) | **GO avec réserves** (`19.0.6.0.0`, 2026-05-18) |
-| 6.2 | [`tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) | **Ouvert** — cadrage Origines (ADR-024) |
+| 6.2 | [`tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) | **GO cadrage avec réserves** (2026-05-18) |
+| 6.2 exec | [`tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) | **Ouvert** — exécution (`19.0.7.0.0`) |
+| — | [`recette/RECETTE_MANUELLE_LOT6_2.md`](recette/RECETTE_MANUELLE_LOT6_2.md) | Recette manuelle Lot 6.2 (ébauche) |
 | — | [`cadrage/NOTE_UNIVERS_CK_MARKETONE.md`](cadrage/NOTE_UNIVERS_CK_MARKETONE.md) | Trois univers — **GO MOA** (ADR-024) |
 | — | [`recette/RECETTE_MANUELLE_LOT6_1.md`](recette/RECETTE_MANUELLE_LOT6_1.md) | Recette manuelle Lot 6.1 — GO avec réserves |
 | — | [`recette/RECETTE_MANUELLE_LOT5.md`](recette/RECETTE_MANUELLE_LOT5.md) | Recette manuelle Lot 5 |

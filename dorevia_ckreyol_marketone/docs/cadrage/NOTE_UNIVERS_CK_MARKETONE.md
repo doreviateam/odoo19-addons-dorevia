@@ -217,15 +217,14 @@ Audit **lecture seule** du module legacy `dorevia_ckreyol_marketplace` (Odoo 19)
 
 ## 7. Impacts futurs (planning indicatif)
 
-### 7.1 Lot 6.2 — porte Origines (Boutique, cadrage séparé)
+### 7.1 Lot 6.2 — porte Origines (Boutique — cadrage GO avec réserves)
 
 | Sujet | Orientation |
 |-------|-------------|
-| URL | `marketone_mode=origin` (à figer au cadrage) |
-| Filtre | Extension `_search_get_detail` — même doctrine que 6.1 |
-| Culture | Pages ou fiches territoire **hors** `/shop` ; liens depuis porte / fiche produit |
-| Legacy | S’inspirer de `ckr.shop.origin` (sémantique), pas du monolithe contrôleur |
-| Risque | Ne pas confondre facette catalogue et encyclopédie territoire sur la grille |
+| URL | `marketone_mode=origin` + `marketone_origin=<slug>` — ADR-025, C3.B |
+| Source | Attribut **Origine** + `marketone.shop.origin` minimal |
+| Culture | Pages territoire **hors** Lot 6.2 — lot Culture dédié |
+| Exécution | [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) après GO MOA |
 
 ### 7.2 Lots Culture (post-socle, espaces dédiés)
 

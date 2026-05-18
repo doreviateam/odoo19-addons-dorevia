@@ -349,7 +349,23 @@
 
 ---
 
-## Décisions en attente (à trancher avant Lots 6.2+)
+## ADR-025 — Lot 6.2 porte Origines (`marketone_mode=origin`)
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | **Acceptée — GO cadrage avec réserves** (exécution après GO ticket) |
+| **Version module cible** | `19.0.7.0.0` |
+| **Contexte** | ADR-024 : porte **Boutique** ; Culture (récit territoire) reportée. Lot 6.1 a validé le pattern `_search_get_detail` + `_get_search_options`. |
+| **Décision** | Porte **Origines** : `marketone_mode=origin`, facette `marketone_origin=<slug>`, alias `/origines` → 301. Vérité catalogue = attribut **Origine** ; profil **`marketone.shop.origin`** minimal (slug, phrase visiteur, visibilité) — **sans** portage `ckr.shop.origin`. Mode seul = catalogue complet + bandeau. Slug invalide → `/shop` nu. Présentation `/shop` minimale ; fiche produit origine légère avec lien optionnel vers la porte. **Un seul** `marketone_mode` actif. |
+| **Contrats** | C2, C3.B ; C7.4 ; ADR-024 |
+| **Réserves** | (1) profil Marketone strictement minimal — pas de page Culture ; (2) pages territoire hors scope ; (3) fiche retail-first ; (4) récit territoire préparé, pas implémenté dans `/shop` ; (5) SEO note doc seulement |
+| **Tickets** | Cadrage : `TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES` · Exécution : `TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC` |
+| **Hors scope** | Hub Culture, Savoirs, autres portes, JS, marketplace, cumul featured+origin |
+
+---
+
+## Décisions en attente (à trancher avant Lots 6.3+)
 
 | Sujet | Options | Décideur |
 |-------|---------|----------|

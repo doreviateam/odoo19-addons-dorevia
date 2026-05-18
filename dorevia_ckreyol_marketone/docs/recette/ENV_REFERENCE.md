@@ -161,9 +161,18 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   -d ckr-marketone-01 \
   -u dorevia_ckreyol_marketone \
   --test-enable --stop-after-init \
-  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4,dorevia_marketone_lot5,dorevia_marketone_lot6_1_featured \
+  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4,dorevia_marketone_lot5,dorevia_marketone_lot6_1_featured,dorevia_marketone_lot6_2_origin \
   --http-port=8071
 ```
+
+**Lot 6.2 — porte Origines** (`19.0.7.0.0`, cadrage **GO avec réserves** 2026-05-18) :
+
+| Prérequis | Détail |
+|-----------|--------|
+| Attribut catalogue | **Origine** — multi-valeurs, sans variante |
+| Profils BO | `marketone.shop.origin` : slug, nom visiteur, phrase, publié, `website_id` = site courant |
+| URL | `/shop?marketone_mode=origin` ; facette `marketone_origin=<slug>` ; alias `/origines` → 301 |
+| Recette | [`RECETTE_MANUELLE_LOT6_2.md`](RECETTE_MANUELLE_LOT6_2.md) |
 
 **Lot 6.1 — porte Incontournables** (`19.0.6.0.0`, **GO avec réserves** 2026-05-18) :
 

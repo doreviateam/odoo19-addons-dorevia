@@ -39,13 +39,20 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Paramètre | Valeurs (Lot 6.1) | Statut |
 |-----------|-------------------|--------|
 | `marketone_mode` | `featured` (libellé : Incontournables) | **Figé Lot 6.1** |
-| `marketone_mode` | `promo`, `pack`, `origin`, `collection` | Lots 6.2+ |
+| `marketone_mode` | `origin` (libellé : Origines) | **Figé Lot 6.2** |
+| `marketone_origin` | slug profil origine (répétable, OU) | **Figé Lot 6.2** |
+| `marketone_mode` | `promo`, `pack`, `collection` | Lots 6.3+ |
 | `marketone_collection` | slug collection | Lot 6.x collections |
 
 ```text
-/shop?marketone_mode=featured          # canonique Incontournables (Lot 6.1)
-/incontournables                       # alias 301 → ci-dessus
+/shop?marketone_mode=featured                    # canonique Incontournables (Lot 6.1)
+/incontournables                                 # alias 301 → ci-dessus
+/shop?marketone_mode=origin                      # canonique porte Origines (Lot 6.2)
+/shop?marketone_mode=origin&marketone_origin=<slug>   # facette origine (OU si plusieurs)
+/origines                                        # alias 301 → /shop?marketone_mode=origin
 ```
+
+> **Interdit** : paramètre legacy `ckr_origin` — préfixe `marketone_*` uniquement (C11.2).
 
 > Préfixe `marketone_*` (pas `ckr_*`) — C11.2.
 
@@ -60,8 +67,8 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | C3.3 | Whitelist stricte des paramètres URL ; paramètres inconnus ignorés silencieusement. |
 | C3.4 | Priorité déterministe si plusieurs modes : **pack > promo > featured > origin > collection** (reprise logique legacy validée MOA). |
 | C3.5 | Chaque porte s’appuie sur une **source de vérité** Odoo/OCA explicite — pas de liste produit codée en dur. |
-| C3.6 | **Lot 6.1** : un seul mode actif — `marketone_mode=featured` uniquement. |
-| C3.7 | **Lot 6.1** : filtres natifs Odoo sur `/shop` (sidebar, tri, attributs) **conservés**. |
+| C3.6 | **Un seul** `marketone_mode` actif par requête — pas de cumul (ex. `featured` + `origin`). |
+| C3.7 | Filtres natifs Odoo sur `/shop` (sidebar, tri, attributs) **conservés** (Lots 6.1+). |
 
 ### C3.A — Porte Incontournables (Lot 6.1 — figé cadrage 2026-05-18)
 
@@ -82,11 +89,32 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 |-------|--------|
 | Promotions | `product.pricelist.item` réducteur |
 | Kits/Packs | `product.template.pack_ok` (si `product_pack` activé) |
-| Origines | Attribut produit « Origine » |
+| Origines | Attribut produit « Origine » + `marketone.shop.origin` (C3.B) |
 | Collections éditoriales | Modèle ou mécanisme à définir (hors 6.1) |
 | Catégories merchandising | `product.public.category` (navigation générale) |
 
 **Statut** : C3.A **implémenté Lot 6.1** — GO avec réserves (recette MOA 2026-05-18). Prérequis BO : catégorie avec `website_id` site courant (cf. ADR-023).
+
+### C3.B — Porte Origines (Lot 6.2 — figé cadrage 2026-05-18)
+
+| Élément | Règle |
+|---------|-------|
+| Univers | **Boutique** — filtre / orientation `/shop` ; récit territoire **Culture** = lot dédié (hors 6.2) |
+| Mode URL | `marketone_mode=origin` |
+| Libellé MOA | **Origines** |
+| Facette | `marketone_origin=<slug>` — logique **OU** si plusieurs slugs ; **pas** `ckr_origin` |
+| Mode seul | `marketone_mode=origin` sans facette → **catalogue complet** + bandeau porte |
+| Entrée alias | `GET /origines` → **301** → `/shop?marketone_mode=origin` |
+| Source catalogue | Attribut produit **Origine** (`product.attribute` + `attribute_line_ids` sur template) |
+| Profil éditorial | `marketone.shop.origin` **minimal** : `attribute_value_id`, `slug`, `name_visitor`, `context_phrase`, `sequence`, `website_published`, `website_id` — **pas** page Culture, pas d’image/HTML long obligatoire |
+| Portage legacy | **Interdit** `ckr.shop.origin` |
+| Origine invalide | Redirect **`/shop` nu** (sans paramètres porte) |
+| Présentation `/shop` | Titre (Origines ou nom origine si une facette), intro courte, lien « Tous les produits », état vide sobre |
+| Fiche produit | Origine **légère** ; lien optionnel `/shop?marketone_mode=origin&marketone_origin=<slug>` — C7.4 retail-first |
+| SEO | `canonical` / `noindex` : **documenter** ; hors implémentation Lot 6.2 |
+| Cumul modes | **Un seul** `marketone_mode` — pas `featured` + `origin` |
+
+**Statut** : C3.B **contractuel Lot 6.2** — implémentation après GO ticket exécution (ADR-025).
 
 ---
 
@@ -196,6 +224,7 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Shop rendu | `dorevia_marketone_shop` | 3 |
 | Cart/checkout | `dorevia_marketone_lot5` | 5 |
 | Porte Incontournables | `dorevia_marketone_lot6_1_featured` | 6.1 |
+| Porte Origines | `dorevia_marketone_lot6_2_origin` | 6.2 |
 | Porte promo | `dorevia_marketone_promo` | 6.2+ |
 | … | … | 6 |
 

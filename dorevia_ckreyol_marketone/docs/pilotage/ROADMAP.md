@@ -236,8 +236,9 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 | Étape | Statut |
 |-------|--------|
 | ADR-024 / Note univers | **GO MOA** (2026-05-18) |
-| Cadrage | Ticket ouvert — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) |
-| Exécution | **Interdite** avant GO cadrage + ticket exec |
+| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) |
+| ADR-025 + C3.B | ✅ |
+| Exécution | Ticket ouvert — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) |
 
 **Principe** : porte **Boutique** (`/shop`) ; récit territoire **Culture** — lots dédiés ultérieurs.
 
@@ -310,6 +311,6 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. **Validation MOA** du cadrage [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) (D1–D11)
-2. Ticket d’exécution 6.2 **après** GO cadrage uniquement
-3. Conserver ADR-024 : Boutique / Culture / Savoirs — une porte à la fois
+1. **Validation MOA** du ticket d’exécution [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md)
+2. Implémentation `19.0.7.0.0` + recette `RECETTE_MANUELLE_LOT6_2.md`
+3. Conserver ADR-024 : Boutique (porte) / Culture (report) — une porte à la fois
