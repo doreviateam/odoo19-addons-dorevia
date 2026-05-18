@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="website.footer_custom" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <template id="marketone_footer"
+              inherit_id="website.layout"
+              name="Marketone: footer C-Kreyol"
+              priority="90">
+        <xpath expr="//div[hasclass('o_footer_copyright')]" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
+
+        <xpath expr="//div[@id='footer']" position="replace">
+            <div id="footer" class="marketone-footer" role="contentinfo">
+                <div class="marketone-footer__inner">
+                    <div class="marketone-footer__grid">
+                        <div class="marketone-footer__brand">
+                            <h2 class="marketone-footer__title">C-Kreyol</h2>
+                            <p class="marketone-footer__tagline">Épicerie fine créole — produits sélectionnés avec soin.</p>
+                        </div>
+                        <div class="marketone-footer__col">
+                            <p class="marketone-footer__heading">Boutique</p>
+                            <ul class="marketone-footer__links">
+                                <li><a href="/">Accueil</a></li>
+                                <li><a href="/shop">Boutique</a></li>
+                                <li><a href="/contactus">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div class="marketone-footer__col">
+                            <p class="marketone-footer__heading">Confiance</p>
+                            <ul class="marketone-footer__links">
+                                <li>Commande simple en ligne</li>
+                                <li>Service client à votre écoute</li>
+                                <li>Paiement sécurisé</li>
+                            </ul>
+                            <p class="marketone-footer__contact-note">Contact : à compléter</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="marketone-footer__bar">
+                    <p class="marketone-footer__copyright">© C-Kreyol</p>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

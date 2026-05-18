@@ -1,0 +1,41 @@
+// Header site — scope marketone-chrome.
+
+header.marketone-chrome {
+    font-family: $marketone-font-body;
+    background-color: $marketone-surface;
+    border-bottom: 1px solid rgba($marketone-border, 0.85);
+
+    .navbar-brand {
+        font-family: $marketone-font-heading;
+        font-size: 1.35rem;
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-text;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: $marketone-primary;
+        }
+    }
+
+    .marketone-chrome__brand-text {
+        display: inline-block;
+    }
+
+    .navbar-nav .nav-link {
+        font-family: $marketone-font-body;
+        font-size: $marketone-label;
+        font-weight: $marketone-weight-medium;
+        color: $marketone-text;
+
+        &:hover,
+        &:focus-visible {
+            color: $marketone-primary;
+        }
+    }
+
+    .navbar {
+        padding-block: $marketone-space-sm;
+    }
+}

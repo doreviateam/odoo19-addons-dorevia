@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_page_homepage"
+              inherit_id="website.homepage"
+              name="Marketone: Homepage C-Kreyol"
+              priority="16">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure marketone-root">
+                <section class="marketone-home-intro" aria-labelledby="marketone-home-title">
+                    <div class="marketone-home-intro__inner">
+                        <p class="marketone-home-intro__eyebrow">Épicerie fine créole</p>
+                        <h1 id="marketone-home-title" class="marketone-home-intro__title">C-Kreyol</h1>
+                        <p class="marketone-home-intro__lead">
+                            Une sélection sobre et soignée de produits du monde créole, pensée pour découvrir, offrir et partager.
+                        </p>
+                        <a href="/shop" class="marketone-home-intro__cta">Découvrir la boutique</a>
+                    </div>
+                </section>
+                <section class="marketone-home-reassurance" aria-label="Réassurance">
+                    <ul class="marketone-home-reassurance__list">
+                        <li class="marketone-home-reassurance__item">Produits sélectionnés avec soin</li>
+                        <li class="marketone-home-reassurance__item">Commande simple en ligne</li>
+                        <li class="marketone-home-reassurance__item">Service client à votre écoute</li>
+                    </ul>
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>

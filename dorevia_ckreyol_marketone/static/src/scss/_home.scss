@@ -1,0 +1,87 @@
+// Home C-Kreyol — Artisanal Terroir.
+
+.marketone-root {
+    .marketone-home-intro {
+        padding: $marketone-space-xl $marketone-gutter;
+        background-color: $marketone-bg;
+        border-bottom: 1px solid $marketone-border;
+    }
+
+    .marketone-home-intro__inner {
+        max-width: 40rem;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .marketone-home-intro__eyebrow {
+        margin: 0 0 $marketone-space-sm;
+        font-family: $marketone-font-body;
+        font-size: $marketone-label;
+        font-weight: $marketone-weight-semibold;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: $marketone-secondary;
+    }
+
+    .marketone-home-intro__title {
+        margin: 0 0 $marketone-space-md;
+        font-family: $marketone-font-heading;
+        font-size: $marketone-h1-mobile;
+        font-weight: $marketone-weight-semibold;
+        line-height: 1.12;
+        color: $marketone-text;
+
+        @media (min-width: 992px) {
+            font-size: $marketone-h1-desktop;
+        }
+    }
+
+    .marketone-home-intro__lead {
+        margin: 0 0 $marketone-space-lg;
+        font-size: $marketone-body-lg;
+        color: $marketone-text-muted;
+    }
+
+    .marketone-home-intro__cta {
+        @include marketone-btn-primary;
+        display: inline-block;
+        padding: 0.65rem 1.75rem;
+        text-decoration: none;
+    }
+
+    .marketone-home-reassurance {
+        padding: $marketone-space-lg $marketone-gutter $marketone-space-xl;
+        background-color: $marketone-bg-soft;
+    }
+
+    .marketone-home-reassurance__list {
+        display: flex;
+        flex-direction: column;
+        gap: $marketone-space-sm;
+        max-width: $marketone-container-max;
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+    }
+
+    .marketone-home-reassurance__item {
+        padding: $marketone-space-md;
+        border: 1px solid rgba($marketone-border, 0.9);
+        border-radius: $marketone-radius-lg;
+        background-color: $marketone-surface;
+        font-size: $marketone-body;
+        color: $marketone-text;
+        text-align: center;
+    }
+
+    @media (min-width: 768px) {
+        .marketone-home-reassurance__list {
+            flex-direction: row;
+            gap: $marketone-space-md;
+        }
+
+        .marketone-home-reassurance__item {
+            flex: 1 1 0;
+        }
+    }
+}

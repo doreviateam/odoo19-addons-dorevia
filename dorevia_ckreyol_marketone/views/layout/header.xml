@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="website.header_text_element" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <template id="marketone_header_chrome"
+              inherit_id="website.layout"
+              name="Marketone: header chrome C-Kreyol"
+              priority="90">
+        <xpath expr="//header" position="attributes">
+            <attribute name="t-attf-class" add="marketone-chrome" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="marketone_header_brand"
+              inherit_id="website.option_header_brand_logo"
+              name="Marketone: logo texte C-Kreyol"
+              priority="95">
+        <xpath expr="//a[@data-name='Navbar Logo']" position="replace">
+            <a data-name="Navbar Logo" href="/" t-attf-class="navbar-brand logo #{_link_class}">
+                <span class="marketone-chrome__brand-text">C-Kreyol</span>
+            </a>
+        </xpath>
+    </template>
+</odoo>

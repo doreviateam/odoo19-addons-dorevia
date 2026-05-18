@@ -1,0 +1,26 @@
+// Artisanal Terroir — tokens couleurs Marketone.
+
+$marketone-primary: #884523;
+$marketone-primary-container: #a65d39;
+$marketone-secondary: #4c6547;
+$marketone-secondary-container: #cbe8c2;
+
+$marketone-bg: #fff8f5;
+$marketone-bg-soft: #fbf2ed;
+$marketone-surface: #ffffff;
+$marketone-surface-container: #f5ece7;
+$marketone-surface-container-high: #efe6e2;
+
+$marketone-text: #1e1b18;
+$marketone-text-muted: #54433c;
+$marketone-text-inverse: #f8efea;
+
+$marketone-border: #d9c2b8;
+$marketone-outline: #86736b;
+
+$marketone-error: #ba1a1a;
+
+// Alias compatibilite Lots 2–3
+$marketone-primary-dark: $marketone-primary-container;
+$marketone-on-primary: #ffffff;
+$marketone-accent: $marketone-primary-container;

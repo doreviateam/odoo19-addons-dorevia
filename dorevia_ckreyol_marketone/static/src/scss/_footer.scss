@@ -1,0 +1,99 @@
+// Footer Marketone — Option A clair.
+
+.marketone-footer {
+    background-color: $marketone-surface-container;
+    color: $marketone-text;
+    border-top: 1px solid $marketone-border;
+    font-family: $marketone-font-body;
+
+    &__inner {
+        max-width: $marketone-container-max;
+        margin: 0 auto;
+        padding: $marketone-space-lg $marketone-gutter;
+    }
+
+    &__grid {
+        display: grid;
+        gap: $marketone-space-md;
+
+        @media (min-width: 768px) {
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: $marketone-space-lg;
+        }
+    }
+
+    &__title {
+        margin: 0 0 $marketone-space-sm;
+        font-family: $marketone-font-heading;
+        font-size: $marketone-h2-mobile;
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-text;
+
+        @media (min-width: 992px) {
+            font-size: $marketone-h2-desktop;
+        }
+    }
+
+    &__tagline {
+        margin: 0;
+        font-size: $marketone-body;
+        color: $marketone-text-muted;
+        line-height: $marketone-line-height;
+    }
+
+    &__heading {
+        margin: 0 0 $marketone-space-xs;
+        font-size: $marketone-label;
+        font-weight: $marketone-weight-semibold;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $marketone-secondary;
+    }
+
+    &__links {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li + li {
+            margin-top: 0.35rem;
+        }
+
+        a {
+            color: $marketone-text;
+            text-decoration: none;
+            font-size: $marketone-body;
+
+            &:hover,
+            &:focus-visible {
+                color: $marketone-primary;
+                text-decoration: underline;
+                text-underline-offset: 0.12em;
+            }
+        }
+    }
+
+    &__contact-note {
+        margin: 0;
+        font-size: $marketone-label;
+        color: $marketone-text-muted;
+        font-style: italic;
+    }
+
+    &__bar {
+        border-top: 1px solid rgba($marketone-border, 0.75);
+        background-color: $marketone-surface-container-high;
+        padding: $marketone-space-sm $marketone-gutter;
+        text-align: center;
+    }
+
+    &__copyright {
+        margin: 0;
+        font-size: $marketone-label-sm;
+        color: $marketone-text-muted;
+    }
+}
+
+footer#bottom .o_brand_promotion {
+    display: none;
+}

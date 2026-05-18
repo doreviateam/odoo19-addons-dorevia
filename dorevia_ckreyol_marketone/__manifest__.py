@@ -1,0 +1,38 @@
+# -*- coding: utf-8 -*-
+{
+    "name": "C-Kreyol Marketone",
+    "version": "19.0.3.1.0",
+    "category": "Website/Website",
+    "summary": "Canal e-commerce C-Kreyol — presentation et orientation (Marketone).",
+    "author": "Dorevia",
+    "license": "LGPL-3",
+    "depends": [
+        "portal",
+        "website",
+        "website_sale",
+    ],
+    "data": [
+        "views/layout/website_layout.xml",
+        "views/layout/header.xml",
+        "views/layout/footer.xml",
+        "views/pages/home.xml",
+        "views/pages/shop.xml",
+    ],
+    "assets": {
+        "web.assets_frontend": [
+            "dorevia_ckreyol_marketone/static/src/scss/_tokens_colors.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_tokens_typography.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_tokens_spacing.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_tokens_radius.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_layout.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_buttons.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_header.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_footer.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_home.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_shop.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/marketone.scss",
+        ],
+    },
+    "installable": True,
+    "application": False,
+}

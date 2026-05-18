@@ -1,0 +1,32 @@
+// Artisanal Terroir — typographie Marketone.
+
+$marketone-font-heading: "EB Garamond", Georgia, "Times New Roman", serif;
+$marketone-font-body:
+    "Hanken Grotesk",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+$marketone-h1-mobile: 2rem;
+$marketone-h1-desktop: 3rem;
+$marketone-h2-mobile: 1.6rem;
+$marketone-h2-desktop: 2rem;
+
+$marketone-body: 1rem;
+$marketone-body-lg: 1.125rem;
+$marketone-label: 0.875rem;
+$marketone-label-sm: 0.75rem;
+
+$marketone-font-size-base: $marketone-body;
+$marketone-line-height: 1.6;
+$marketone-weight-regular: 400;
+$marketone-weight-medium: 500;
+$marketone-weight-semibold: 600;
+
+// Alias Lots 2–3
+$marketone-font-serif: $marketone-font-heading;
+$marketone-font-sans: $marketone-font-body;
+$marketone-h1-size: $marketone-h1-mobile;
+$marketone-lead-size: $marketone-body-lg;

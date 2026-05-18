@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Polices Artisanal Terroir — Google Fonts provisoire (ADR-017). -->
+    <template id="marketone_layout_fonts"
+              inherit_id="website.layout"
+              name="Marketone: polices C-Kreyol"
+              priority="16">
+        <xpath expr="//head" position="inside">
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+            <link rel="stylesheet"
+                  href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&amp;family=Hanken+Grotesk:wght@400;500;600&amp;display=swap"/>
+        </xpath>
+    </template>
+</odoo>

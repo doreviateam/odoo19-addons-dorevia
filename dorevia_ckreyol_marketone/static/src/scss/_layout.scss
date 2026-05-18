@@ -1,0 +1,20 @@
+// Scope page contenu — marketone-root.
+
+.marketone-root {
+    font-family: $marketone-font-body;
+    font-size: $marketone-font-size-base;
+    line-height: $marketone-line-height;
+    color: $marketone-text;
+    background-color: $marketone-bg;
+
+    a.marketone-link {
+        color: $marketone-primary;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.15em;
+
+        &:hover,
+        &:focus-visible {
+            color: $marketone-primary-container;
+        }
+    }
+}

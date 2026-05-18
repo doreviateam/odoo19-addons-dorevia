@@ -1,0 +1,52 @@
+// Boutons Marketone — scopes autorises uniquement.
+
+@mixin marketone-btn-primary {
+    border-radius: $marketone-radius-pill;
+    background-color: $marketone-primary;
+    border-color: $marketone-primary;
+    color: $marketone-on-primary;
+    font-family: $marketone-font-body;
+    font-weight: $marketone-weight-semibold;
+
+    &:hover,
+    &:focus-visible {
+        background-color: $marketone-primary-container;
+        border-color: $marketone-primary-container;
+        color: $marketone-on-primary;
+    }
+}
+
+@mixin marketone-btn-secondary {
+    border-radius: $marketone-radius-pill;
+    background-color: transparent;
+    border: 1px solid $marketone-border;
+    color: $marketone-text;
+    font-family: $marketone-font-body;
+    font-weight: $marketone-weight-medium;
+
+    &:hover,
+    &:focus-visible {
+        background-color: $marketone-bg-soft;
+        border-color: $marketone-outline;
+        color: $marketone-text;
+    }
+}
+
+.marketone-root,
+.marketone-shop {
+    .btn-primary {
+        @include marketone-btn-primary;
+    }
+}
+
+header.marketone-chrome {
+    .btn-primary,
+    a.btn.btn-primary {
+        @include marketone-btn-primary;
+    }
+
+    .btn-outline-primary,
+    a.btn.btn-outline-primary {
+        @include marketone-btn-secondary;
+    }
+}
