@@ -357,14 +357,24 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 | Étape | Statut |
 |-------|--------|
-| Ticket | **Ouvert** — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
-| Options | Culture v3 hub · **Savoirs v1 cadrage** (⭐ reco MOA) · Boutique 6.3 (une porte) |
-| Règle | **Une** orientation — pas de code avant décision |
+| Ticket | **Clôturé — GO MOA** — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
+| Décision | **Option 2** — Savoirs v1 cadrage |
+| Reporté | Culture v3 · Boutique 6.3 |
+
+---
+
+## Univers Savoirs — Recettes contributives v1 (cadrage)
+
+| Étape | Statut |
+|-------|--------|
+| Cadrage | **Ouvert** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
+| Exécution | *Après GO cadrage* — `TICKET_MARKETONE_SAVOIRS_V1_EXEC` |
+| Workflow cible | Identifié → proposition → modération BO → publication |
 
 ---
 
 ## Prochaine action
 
-1. **MOA** : arbitrage — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md)
-2. Ouvrir le **ticket de cadrage enfant** retenu (ex. Savoirs v1)
-3. Grammaire actuelle : Boutique stable + Culture **3 territoires** — Savoirs **non cadré**
+1. **MOA** : valider cadrage Savoirs v1 (D1–D10)
+2. **Ne pas** ouvrir Culture v3, 6.3, ni exec Savoirs en parallèle
+3. Grammaire actuelle : Boutique + Culture **3 territoires** — Savoirs **en cadrage**

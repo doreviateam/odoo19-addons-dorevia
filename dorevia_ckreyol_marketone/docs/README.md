@@ -111,7 +111,8 @@ Sites de **référence d'intention** (pas de copie) :
 | Culture exec | [`tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) | **Clôturé — GO MOA** `19.0.8.0.0` |
 | Culture v2 cadrage | [`tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md`](tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md) | **GO cadrage avec réserves** (2026-05-18) |
 | Culture v2 exec | [`tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) | **Clôturé — GO MOA** `19.0.9.0.0` |
-| Arbitrage suite | [`tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) | **Ouvert** — Culture v3 / Savoirs v1 / Lot 6.3 |
+| Arbitrage suite | [`tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) | **Clôturé GO** — Option 2 Savoirs v1 |
+| Savoirs v1 cadrage | [`tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) | **Ouvert** — recettes contributives (sans code) |
 | — | [`recette/RECETTE_MANUELLE_LOT6_2.md`](recette/RECETTE_MANUELLE_LOT6_2.md) | Recette manuelle Lot 6.2 — GO |
 | — | [`cadrage/NOTE_UNIVERS_CK_MARKETONE.md`](cadrage/NOTE_UNIVERS_CK_MARKETONE.md) | Trois univers — **GO MOA** (ADR-024) |
 | — | [`recette/RECETTE_MANUELLE_LOT6_1.md`](recette/RECETTE_MANUELLE_LOT6_1.md) | Recette manuelle Lot 6.1 — GO avec réserves |
