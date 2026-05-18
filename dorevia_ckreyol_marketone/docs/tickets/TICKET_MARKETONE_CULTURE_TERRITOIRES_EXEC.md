@@ -5,12 +5,13 @@
 | **ID** | `TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC` |
 | **Univers** | **Culture** — découvrir |
 | **Lot** | Culture v1 — **une page territoire pilote** |
-| **Statut** | **Ouvert** — en attente validation MOA pour exécution |
-| **Version cible module** | `19.0.8.0.0` (proposition) |
+| **Statut** | **Clôturé — GO MOA** (2026-05-18) — `19.0.8.0.0` |
+| **Version module** | `19.0.8.0.0` |
 | **Base** | `ckr-marketone-01` |
 | **Prérequis** | Cadrage **GO avec réserves légères** — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) ; consolidation portes Boutique **GO** ; Lots 6.1 / 6.2 **GO** ; ADR-024 **GO** |
-| **ADR** | ADR-024, ADR-025, **ADR-026** (proposition) |
-| **Contrats** | **C8** (proposition) ; C7.4 ; non-régression C3.A / C3.B |
+| **ADR** | ADR-024, ADR-025, **ADR-026** |
+| **Contrats** | **C8** ; C7.4 ; non-régression C3.A / C3.B |
+| **Recette** | [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/RECETTE_MANUELLE_CULTURE_V1.md) — **GO MOA** |
 
 ---
 
@@ -25,7 +26,7 @@ comprend le territoire en quelques scrolls, et peut acheter via
 /shop?marketone_mode=origin&marketone_origin=<slug> — sans régression des portes Boutique.
 ```
 
-**Aucun code** tant que ce ticket d’exécution n’est pas validé MOA.
+**Livraison technique** : `19.0.8.0.0` — route `/culture/<slug>`, template scoped, liens Boutique, tests `dorevia_marketone_culture_v1`.
 
 ---
 
@@ -100,7 +101,7 @@ comprend le territoire en quelques scrolls, et peut acheter via
 
 | Zone | Attendu |
 |------|---------|
-| Tests auto existants | **76** tests portes Boutique — **0** régression |
+| Tests auto | **85** post-tests (Lots 1–6.2 + Culture v1) — **0** failed |
 | Tag tests | `dorevia_marketone_culture_v1` (proposition) — HTTP page pilote + liens |
 | Panier / checkout / featured / origin | Inchangés |
 
@@ -153,21 +154,21 @@ __manifest__.py                     # 19.0.8.0.0, assets, data si page XML seed 
 
 ### GO
 
-- [ ] `GET /culture/<slug-pilote>` → **200**, contenu court, classes `marketone-culture`
-- [ ] CTA vers porte Origines filtrée fonctionne
-- [ ] Liens depuis fiche (et bandeau faceté si prévu) → page Culture
-- [ ] **Aucun** contenu Culture ajouté sur `/shop` hors lien discret
-- [ ] `marketone.shop.origin` **non** modifié (champs inchangés)
-- [ ] 76 + tests culture v1 verts
-- [ ] Mobile 375 px — pas de débordement horizontal
+- [x] `GET /culture/<slug-pilote>` → **200**, contenu court, classes `marketone-culture` (auto)
+- [x] CTA vers porte Origines filtrée fonctionne (auto)
+- [x] Liens depuis fiche (et bandeau faceté si prévu) → page Culture (auto)
+- [x] **Aucun** contenu Culture ajouté sur `/shop` hors lien discret (auto)
+- [x] `marketone.shop.origin` **non** modifié (champs inchangés ; helpers URL seulement)
+- [x] 85 post-tests (Lots 1–6.2 + Culture v1) — **0** failed
+- [x] Mobile 375 px — pas de débordement horizontal (recette MOA)
 
 ### NO GO
 
-- [ ] Page encyclopédique ou blog-like
-- [ ] Hub Culture sur `/shop`
-- [ ] Grille produits sur page Culture
-- [ ] Régression featured / origin / tunnel
-- [ ] Extension encyclopédique `marketone.shop.origin`
+- [x] Page encyclopédique ou blog-like — **non constaté**
+- [x] Hub Culture sur `/shop` — **non constaté**
+- [x] Grille produits sur page Culture — **non constaté**
+- [x] Régression featured / origin / tunnel — **non constaté**
+- [x] Extension encyclopédique `marketone.shop.origin` — **non constaté**
 
 ---
 
@@ -177,13 +178,19 @@ __manifest__.py                     # 19.0.8.0.0, assets, data si page XML seed 
 [x] Cadrage Culture GO avec réserves légères
 [x] D1–D8 figées
 [x] Une page pilote uniquement
-[ ] GO pour implémentation  [ ] En attente  [ ] NO GO
+[x] GO pour implémentation — `19.0.8.0.0`
+[x] Recette MOA GO — slug pilote `guadeloupe`
+[ ] NO GO
 ```
+
+### Réserve exploitation (conservée)
+
+Après `-u dorevia_ckreyol_marketone` sur un **daemon Odoo déjà lancé**, redémarrer Odoo si `GET /culture/<slug>` répond **404** alors que le profil est publié (rechargement routing — alignement `/origines`, `/incontournables`).
 
 ---
 
 ## Prochaine étape
 
-1. **MOA** : valider ce ticket d’**exécution**.
-2. **Dev** : implémentation `19.0.8.0.0` **après** GO exécution uniquement.
-3. **Pas** de Lot 6.3 Boutique ni Savoirs en parallèle sans décision MOA.
+1. **Culture v2** (hub, pages supplémentaires, menu header) — ticket dédié, **après** décision MOA.
+2. **Lot 6.3+ Boutique** — **après** décision MOA (pas en parallèle sans arbitrage).
+3. **Savoirs** — ticket séparé.

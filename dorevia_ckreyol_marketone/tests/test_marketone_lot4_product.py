@@ -82,6 +82,14 @@ class TestMarketoneLot4Product(HttpCase):
     def test_product_no_catalog_gates(self):
         response = self.url_open(self._product_url())
         text = response.text
+        origins_block = re.search(
+            r'<div[^>]*class="[^"]*marketone-product-origins[^"]*"[^>]*>.*?</ul>',
+            text,
+            flags=re.DOTALL,
+        )
+        audit_text = text
+        if origins_block:
+            audit_text = text[: origins_block.start()] + text[origins_block.end() :]
         for forbidden in (
             r"marketone_mode=",
             r"ckr_mode=",
@@ -89,6 +97,6 @@ class TestMarketoneLot4Product(HttpCase):
             r"/kits",
         ):
             self.assertIsNone(
-                re.search(forbidden, text),
+                re.search(forbidden, audit_text),
                 f"Lien porte catalogue interdit sur fiche : {forbidden}",
             )

@@ -51,14 +51,15 @@ class ProductTemplate(models.Model):
                 if profile
                 else value.name
             )
-            if profile:
-                url = (
-                    f"/shop?marketone_mode=origin"
-                    f"&marketone_origin={profile.slug}"
-                )
-            else:
-                url = None
-            lines.append({"label": label, "url": url})
+            shop_url = profile._marketone_origin_shop_url() if profile else None
+            culture_url = profile._marketone_culture_url() if profile else None
+            lines.append(
+                {
+                    "label": label,
+                    "url": shop_url,
+                    "culture_url": culture_url,
+                }
+            )
         return lines
 
     def _search_get_detail(self, website, order, options):

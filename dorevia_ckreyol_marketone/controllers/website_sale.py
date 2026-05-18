@@ -225,6 +225,7 @@ class WebsiteSaleMarketone(WebsiteSale):
             "marketone.shop.origin"
         ].browse()
         result["marketone_origin_title"] = "Origines"
+        result["marketone_culture_url"] = False
         if result["marketone_origin_mode"]:
             profiles, facet_requested, _invalid = _marketone_resolve_origin_profiles(
                 kwargs
@@ -237,6 +238,10 @@ class WebsiteSaleMarketone(WebsiteSale):
             result["marketone_origin_empty"] = bool(
                 facet_requested and profiles and not search_count
             )
+            if facet_requested and len(profiles) == 1:
+                result["marketone_culture_url"] = profiles[
+                    0
+                ]._marketone_culture_url()
         return result
 
     @route(

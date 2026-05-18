@@ -108,7 +108,7 @@ Sites de **référence d'intention** (pas de copie) :
 | 6.2 exec | [`tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) | **GO** (`19.0.7.0.0`, 2026-05-18) |
 | — | [`tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) | **GO consolidation** (2026-05-18) — référence portes Boutique |
 | Culture | [`tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) | **GO cadrage** avec réserves légères (2026-05-18) |
-| Culture exec | [`tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) | **Ouvert** — page pilote `/culture/<slug>` (pas de code avant GO) |
+| Culture exec | [`tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) | **Clôturé — GO MOA** `19.0.8.0.0` |
 | — | [`recette/RECETTE_MANUELLE_LOT6_2.md`](recette/RECETTE_MANUELLE_LOT6_2.md) | Recette manuelle Lot 6.2 — GO |
 | — | [`cadrage/NOTE_UNIVERS_CK_MARKETONE.md`](cadrage/NOTE_UNIVERS_CK_MARKETONE.md) | Trois univers — **GO MOA** (ADR-024) |
 | — | [`recette/RECETTE_MANUELLE_LOT6_1.md`](recette/RECETTE_MANUELLE_LOT6_1.md) | Recette manuelle Lot 6.1 — GO avec réserves |

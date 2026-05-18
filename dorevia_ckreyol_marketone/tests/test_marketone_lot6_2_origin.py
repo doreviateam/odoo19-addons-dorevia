@@ -138,6 +138,10 @@ class TestMarketoneLot62OriginModel(TransactionCase):
         self.assertEqual(lines[0]["label"], "Guadeloupe")
         self.assertIn("marketone_mode=origin", lines[0]["url"])
         self.assertIn("guadeloupe-test", lines[0]["url"])
+        self.assertEqual(
+            lines[0]["culture_url"],
+            "/culture/guadeloupe-test",
+        )
 
 
 @tagged("post_install", "-at_install", "dorevia_marketone_lot6_2_origin")

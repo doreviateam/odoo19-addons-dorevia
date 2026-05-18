@@ -249,7 +249,7 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 |-------|--------|
 | Cadrage | **GO** — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) (clôturé, référence) |
 | Photographie | `/shop` · `/incontournables` → `featured` · `/origines` → `origin` |
-| Suite validée | **Culture / Territoires** — pas Lot 6.3 immédiat |
+| Suite validée | **Culture v1 GO** — Lot 6.3+ sur décision MOA |
 
 **Prérequis exploitation (consolidés)**
 
@@ -330,13 +330,17 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 |-------|--------|
 | Cadrage | **GO avec réserves légères** (2026-05-18) — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) |
 | ADR-026 + C8 | ✅ |
-| Exécution | **Ouverte** — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) — 1 page `/culture/<slug>` |
+| Exécution | **Clôturé — GO MOA** `19.0.8.0.0` — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) |
+| Recette | [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/RECETTE_MANUELLE_CULTURE_V1.md) — **GO** |
 | Grammaire URL | `/culture/guadeloupe` — alias Boutique `/origines` inchangé |
+| Tests | **85** post-tests (Lots 1–6.2 + Culture v1), **0** failed |
+
+**Réserve exploitation** : redémarrage Odoo post-`-u` si route Culture absente sur daemon déjà lancé.
 
 ---
 
 ## Prochaine action
 
-1. **MOA** : valider le ticket d’**exécution** Culture v1 (page pilote)
-2. **Implémentation** `19.0.8.0.0` — **après** GO exécution uniquement
-3. Lot 6.3+ Boutique — **après** Culture v1 (sauf décision MOA contraire)
+1. **Lot 6.3+ Boutique** (Promotions, Kits, Collections) — décision MOA
+2. **Culture v2** (hub, territoires additionnels, menu header) — ticket dédié
+3. **Savoirs** — ticket séparé

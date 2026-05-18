@@ -25,6 +25,21 @@
         color: $marketone-text-muted;
     }
 
+    .marketone-shop-origin-discover {
+        font-family: $marketone-font-body;
+        font-size: $marketone-body;
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-text-muted;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: $marketone-primary;
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+        }
+    }
+
     .marketone-shop-origin-back {
         font-family: $marketone-font-body;
         font-weight: $marketone-weight-semibold;

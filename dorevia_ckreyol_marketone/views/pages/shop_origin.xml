@@ -23,6 +23,13 @@
                    role="status">
                     Aucun produit ne correspond à cette sélection d'origine.
                 </p>
+                <p t-if="marketone_culture_url"
+                   class="marketone-shop-origin-discover-wrap">
+                    <a t-att-href="marketone_culture_url"
+                       class="marketone-shop-origin-discover">
+                        Découvrir ce territoire
+                    </a>
+                </p>
                 <p class="marketone-shop-origin-back-wrap">
                     <a href="/shop" class="marketone-shop-origin-back">
                         Tous les produits

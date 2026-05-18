@@ -21,5 +21,20 @@
                 text-underline-offset: 0.15em;
             }
         }
+
+        &__culture-link {
+            margin-left: $marketone-space-xs;
+            font-size: $marketone-label-sm;
+            font-weight: $marketone-weight-regular;
+            color: $marketone-text-muted;
+            text-decoration: none;
+
+            &:hover,
+            &:focus-visible {
+                color: $marketone-primary;
+                text-decoration: underline;
+                text-underline-offset: 0.15em;
+            }
+        }
     }
 }

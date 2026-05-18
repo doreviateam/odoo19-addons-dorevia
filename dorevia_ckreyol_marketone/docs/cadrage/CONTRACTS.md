@@ -131,7 +131,7 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | SEO | Documenter seulement — pas de chantier SEO avancé v1 |
 | Savoirs | Hors scope — ticket séparé |
 
-**Statut** : C8 **contractuel** — exécution après GO ticket [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) (ADR-026).
+**Statut** : C8 **GO MOA** (`19.0.8.0.0`, ADR-026, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/RECETTE_MANUELLE_CULTURE_V1.md) acceptée.
 
 ---
 

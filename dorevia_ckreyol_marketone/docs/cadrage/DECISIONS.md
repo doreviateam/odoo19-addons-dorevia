@@ -370,13 +370,14 @@
 | | |
 |---|---|
 | **Date** | 2026-05-18 |
-| **Statut** | **Acceptée — GO cadrage avec réserves légères** (exécution après GO ticket exec) |
-| **Version module cible** | `19.0.8.0.0` (proposition) |
+| **Statut** | **Acceptée — GO MOA** (`19.0.8.0.0`, 2026-05-18) |
+| **Version module** | `19.0.8.0.0` |
 | **Contexte** | ADR-024 : récit territoire = univers **Culture**. Lot 6.2 a livré la porte Boutique Origines ; le récit est reporté hors `/shop`. Consolidation portes Boutique **GO**. |
 | **Décision** | Premier lot Culture : **une page** territoire pilote via **`/culture/<slug>`** (pages `website` + présentation Marketone), contenu **court et visuel**, CTA vers porte Origines filtrée. **Pas** de modèle Culture dédié v1 ; **pas** d’extension encyclopédique de `marketone.shop.origin` ; **pas** de hub « toutes les origines » ; **pas** de contenu Culture long sur `/shop`. Liens contextuels depuis fiche produit et bandeau Origines facetté. Entrée menu header Culture **reportée**. SEO : note doc uniquement. |
 | **Contrats** | C8 ; C7.4 ; ADR-024, ADR-025 |
 | **Réserves** | (R1) page courte, élégante, visuelle ; (R2) pas de blog Culture ; (R3) pas de Culture long dans `/shop` ; (R4) profil origine Boutique inchangé ; (R5) Savoirs hors lot |
-| **Tickets** | Cadrage : `TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE` (**clôturé**) · Exécution : `TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC` |
+| **Tickets** | Cadrage : `TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE` (**clôturé**) · Exécution : `TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC` (**clôturé GO MOA**) |
+| **Réserves exploitation** | Redémarrage daemon post-`-u` si route `/culture/<slug>` absente (routing) |
 | **Hors scope** | Hub Culture, modèle ORM territoire (par défaut), Savoirs, Lot 6.3 Boutique, SEO avancé, portage marketplace |
 
 ---

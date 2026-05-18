@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_culture_territory"
+              name="Marketone: page Culture territoire">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure marketone-culture">
+                <article class="marketone-culture-territory"
+                         aria-labelledby="marketone-culture-title">
+                    <header class="marketone-culture-territory__header">
+                        <p class="marketone-culture-territory__eyebrow">Découvrir</p>
+                        <h1 id="marketone-culture-title"
+                            class="marketone-culture-territory__title"
+                            t-out="culture_profile.display_name_visitor"/>
+                        <p t-if="culture_profile.context_phrase"
+                           class="marketone-culture-territory__lead"
+                           t-out="culture_profile.context_phrase"/>
+                    </header>
+
+                    <div class="marketone-culture-territory__sections">
+                        <section class="marketone-culture-section"
+                                 aria-labelledby="marketone-culture-s1">
+                            <h2 id="marketone-culture-s1"
+                                class="marketone-culture-section__title">
+                                Terroir et identité
+                            </h2>
+                            <p class="marketone-culture-section__body">
+                                Un territoire créolophone où produits, savoir-faire
+                                et mémoire gustative se rencontrent — une invitation
+                                à comprendre l'origine avant l'achat.
+                            </p>
+                        </section>
+                        <section class="marketone-culture-section"
+                                 aria-labelledby="marketone-culture-s2">
+                            <h2 id="marketone-culture-s2"
+                                class="marketone-culture-section__title">
+                                Saveurs et rencontres
+                            </h2>
+                            <p class="marketone-culture-section__body">
+                                Épices, fruits, artisanat alimentaire : la sélection
+                                C-Kreyol met en lumière des produits ancrés dans
+                                ce territoire, choisis pour la boutique.
+                            </p>
+                        </section>
+                    </div>
+
+                    <footer class="marketone-culture-territory__actions">
+                        <a t-att-href="culture_shop_url"
+                           class="marketone-culture-territory__cta btn btn-primary">
+                            Acheter les produits de ce territoire
+                        </a>
+                        <a href="/shop"
+                           class="marketone-culture-territory__back">
+                            Tous les produits
+                        </a>
+                    </footer>
+                </article>
+            </div>
+        </t>
+    </template>
+</odoo>

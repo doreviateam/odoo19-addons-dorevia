@@ -6,7 +6,7 @@
 | **Univers** | **Culture** — découvrir |
 | **Type** | **Cadrage uniquement** — aucun code |
 | **Statut** | **Clôturé — GO cadrage avec réserves légères** (2026-05-18) |
-| **Exécution** | [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) — **ouvert**, en attente GO MOA |
+| **Exécution** | [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) — **clôturé GO MOA** `19.0.8.0.0` |
 | **Version module de référence** | `19.0.7.0.0` |
 | **Base** | `ckr-marketone-01` |
 | **Prérequis** | Socle Lots 1–5 **GO** ; portes 6.1 / 6.2 **GO** ; consolidation portes Boutique **GO** ; **ADR-024** / **NOTE_UNIVERS_CK_MARKETONE** **GO** |

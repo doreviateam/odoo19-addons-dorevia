@@ -161,9 +161,18 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   -d ckr-marketone-01 \
   -u dorevia_ckreyol_marketone \
   --test-enable --stop-after-init \
-  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4,dorevia_marketone_lot5,dorevia_marketone_lot6_1_featured,dorevia_marketone_lot6_2_origin \
+  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4,dorevia_marketone_lot5,dorevia_marketone_lot6_1_featured,dorevia_marketone_lot6_2_origin,dorevia_marketone_culture_v1 \
   --http-port=8071
 ```
+
+**Culture v1 — page territoire** (`19.0.8.0.0`, **GO MOA** 2026-05-18) :
+
+| Prérequis | Détail |
+|-----------|--------|
+| Profil BO | `marketone.shop.origin` publié, slug pilote ex. `guadeloupe` |
+| URL Culture | `GET /culture/<slug>` — ex. `/culture/guadeloupe` — **pas** de hub `/culture` |
+| CTA achetable | `/shop?marketone_mode=origin&marketone_origin=<slug>` |
+| Recette | [`RECETTE_MANUELLE_CULTURE_V1.md`](RECETTE_MANUELLE_CULTURE_V1.md) |
 
 **Lot 6.2 — porte Origines** (`19.0.7.0.0`, **GO MOA** 2026-05-18) :
 
@@ -191,7 +200,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
 | Produits | 2–3 produits publiés rattachés à la catégorie (manuel, pas de seed XML) |
 | Recette | [`RECETTE_MANUELLE_LOT6_1.md`](RECETTE_MANUELLE_LOT6_1.md) |
 
-**Exploitation sandbox** : après `-u dorevia_ckreyol_marketone`, un daemon Odoo déjà lancé (ex. port `18079`) peut nécessiter un **redémarrage du conteneur / service** pour que les routes alias `GET /incontournables` et `GET /origines` répondent en **301** (rechargement routing). Les runs `--stop-after-init` n’ont pas ce problème.
+**Exploitation sandbox** : après `-u dorevia_ckreyol_marketone`, un daemon Odoo déjà lancé (ex. port `18079`) peut nécessiter un **redémarrage du conteneur / service** pour que les routes alias `GET /incontournables`, `GET /origines` et `GET /culture/<slug>` soient prises en compte (rechargement routing). Les runs `--stop-after-init` n’ont pas ce problème.
 
 ```bash
 docker compose -f /Users/doreviateam/sandbox-odoo19/docker-compose.yml restart odoo

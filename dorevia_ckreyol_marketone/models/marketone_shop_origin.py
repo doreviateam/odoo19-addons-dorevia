@@ -88,3 +88,27 @@ class MarketoneShopOrigin(models.Model):
         records = self.sudo().search(domain)
         by_slug = {rec.slug: rec for rec in records}
         return self.browse([by_slug[s].id for s in normalized if s in by_slug])
+
+    @api.model
+    def _marketone_resolve_published_slug(self, slug, website=None):
+        """Profil publié pour un slug Culture (404 si absent ou invalide)."""
+        normalized = (slug or "").strip().lower()
+        if not normalized or not _SLUG_RE.match(normalized):
+            return self.browse()
+        domain = [("slug", "=", normalized), ("website_published", "=", True)]
+        if website is not None:
+            domain.append(("website_id", "in", [False, website.id]))
+        return self.sudo().search(domain, limit=1)
+
+    def _marketone_culture_url(self):
+        """URL page Culture v1 — même slug que le profil Boutique."""
+        self.ensure_one()
+        return f"/culture/{self.slug}"
+
+    def _marketone_origin_shop_url(self):
+        """URL porte Origines filtrée pour ce profil."""
+        self.ensure_one()
+        return (
+            f"/shop?marketone_mode=origin"
+            f"&marketone_origin={self.slug}"
+        )

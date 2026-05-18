@@ -1,0 +1,83 @@
+// Culture v1 — page territoire (scoped .marketone-culture).
+
+.marketone-culture {
+    .marketone-culture-territory {
+        max-width: 40rem;
+        margin: 0 auto;
+        padding: $marketone-space-lg $marketone-space-md $marketone-space-xl;
+    }
+
+    .marketone-culture-territory__eyebrow {
+        margin-bottom: $marketone-space-xs;
+        font-size: $marketone-label-sm;
+        font-weight: $marketone-weight-semibold;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: $marketone-text-muted;
+    }
+
+    .marketone-culture-territory__title {
+        margin-bottom: $marketone-space-sm;
+        font-family: $marketone-font-heading;
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        line-height: 1.2;
+        color: $marketone-text;
+    }
+
+    .marketone-culture-territory__lead {
+        max-width: 36rem;
+        margin-bottom: $marketone-space-lg;
+        font-size: $marketone-body-lg;
+        line-height: 1.55;
+        color: $marketone-text-muted;
+    }
+
+    .marketone-culture-territory__sections {
+        display: flex;
+        flex-direction: column;
+        gap: $marketone-space-md;
+        margin-bottom: $marketone-space-lg;
+    }
+
+    .marketone-culture-section__title {
+        margin-bottom: $marketone-space-xs;
+        font-family: $marketone-font-heading;
+        font-size: $marketone-h2-mobile;
+        color: $marketone-text;
+    }
+
+    .marketone-culture-section__body {
+        margin: 0;
+        font-size: $marketone-body;
+        line-height: 1.55;
+        color: $marketone-text-muted;
+    }
+
+    .marketone-culture-territory__actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $marketone-space-sm;
+        padding-top: $marketone-space-md;
+        border-top: 1px solid rgba($marketone-border, 0.85);
+    }
+
+    .marketone-culture-territory__cta {
+        font-family: $marketone-font-body;
+        font-weight: $marketone-weight-semibold;
+    }
+
+    .marketone-culture-territory__back {
+        font-size: $marketone-body;
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-primary;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: $marketone-primary-container;
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+        }
+    }
+}

@@ -21,6 +21,10 @@
                         <span t-else=""
                               class="marketone-product-origins__text"
                               t-out="line['label']"/>
+                        <a t-if="line.get('culture_url')"
+                           t-att-href="line['culture_url']"
+                           class="marketone-product-origins__culture-link"
+                           title="Découvrir ce territoire">Découvrir</a>
                     </li>
                 </ul>
             </div>
