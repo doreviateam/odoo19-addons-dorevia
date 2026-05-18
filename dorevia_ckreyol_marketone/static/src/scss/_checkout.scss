@@ -1,0 +1,43 @@
+// Lot 5 — checkout /shop/checkout (Artisanal Terroir).
+
+.marketone-checkout {
+    background-color: $marketone-bg;
+    color: $marketone-text;
+    font-family: $marketone-font-body;
+
+    .oe_website_sale.o_website_sale_checkout_container {
+        max-width: $marketone-container-max;
+    }
+
+    #shop_checkout {
+        h4,
+        h5,
+        .form-label,
+        label {
+            font-family: $marketone-font-body;
+            color: $marketone-text;
+        }
+
+        .card,
+        .o_address_card {
+            border-radius: $marketone-radius-md;
+            border-color: rgba($marketone-border, 0.95);
+        }
+    }
+
+    .btn-primary,
+    a.btn-primary {
+        @include marketone-btn-primary;
+    }
+
+    .btn-outline-primary,
+    .btn-secondary {
+        @include marketone-btn-secondary;
+    }
+
+    @media (max-width: 767.98px) {
+        #shop_checkout {
+            padding-inline: 0;
+        }
+    }
+}

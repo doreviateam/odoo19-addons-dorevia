@@ -1,0 +1,67 @@
+// Lot 5 — panier /shop/cart (Artisanal Terroir).
+
+.marketone-cart {
+    background-color: $marketone-bg-soft;
+    color: $marketone-text;
+    font-family: $marketone-font-body;
+
+    .oe_website_sale.o_website_sale_checkout_container {
+        max-width: $marketone-container-max;
+    }
+
+    #shop_cart {
+        h4,
+        .o_wsale_products_shop_title {
+            font-family: $marketone-font-heading;
+            font-weight: $marketone-weight-semibold;
+            color: $marketone-text;
+        }
+    }
+
+    #cart_products,
+    .js_cart_lines {
+        .o_cart_product {
+            padding-bottom: $marketone-space-md;
+            border-bottom: 1px solid rgba($marketone-border, 0.85);
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+
+        .o_cart_product_image .img,
+        .o_cart_product_image img {
+            border-radius: $marketone-radius-md;
+        }
+
+        .js_quantity,
+        .css_quantity input,
+        input.js_quantity {
+            font-family: $marketone-font-body;
+        }
+
+        .js_delete_product {
+            color: $marketone-text-muted;
+
+            &:hover,
+            &:focus-visible {
+                color: $marketone-primary;
+            }
+        }
+    }
+
+    .btn-primary,
+    a.btn-primary {
+        @include marketone-btn-primary;
+    }
+
+    .btn-outline-primary {
+        @include marketone-btn-secondary;
+    }
+
+    @media (max-width: 767.98px) {
+        #shop_cart {
+            padding-inline: 0;
+        }
+    }
+}

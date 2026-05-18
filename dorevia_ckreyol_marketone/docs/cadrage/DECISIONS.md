@@ -300,6 +300,21 @@
 
 ---
 
+## ADR-022 — Lot 5 panier / checkout smoke (`marketone-cart` / `marketone-checkout`)
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | **Acceptée — GO** (recette MOA 2026-05-18) |
+| **Version module cible** | `19.0.5.0.0` |
+| **Décision** | Lot 5 = smoke tunnel invité `website_sale` : scopes `marketone-cart` / `marketone-checkout` via `checkout_layout` (path HTTP, incl. `/shop/address` Odoo 19), SCSS scoped minimal, tests `dorevia_marketone_lot5` (12 tests, 49/49 non-régression). **Pas** de refonte checkout, JS, contrôleur, modèle, ni modification moteur panier / paiement. |
+| **Contrats** | C8.1–C8.2 ; C8.3 (`payment_demo`) = tag étendu optionnel, non bloquant GO. |
+| **Critère GO** | Visiteur invité : ajout → panier → modif / suppression → retour shop → 1ʳᵉ étape checkout sans 500 ; cohérence visuelle minimale Artisanal Terroir. |
+| **Recette MOA** | `docs/recette/RECETTE_MANUELLE_LOT5.md` — réserve : compteur panier `3` = test quantité recette, pas bug. |
+| **Ticket** | `docs/tickets/TICKET_MARKETONE_LOT5_CART_CHECKOUT.md` |
+
+---
+
 ## Décisions en attente (à trancher avant Lot 6)
 
 | Sujet | Options | Décideur |

@@ -2,8 +2,8 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut global** | Lot 4 **GO avec réserves mineures** ; Lot 5 suivant |
-| **Dernière mise à jour** | 2026-05-18 (recette MOA Lot 4) |
+| **Statut global** | Lots 1–5 **GO** — socle e-commerce stabilisé ; **Lot 6** (portes) suivant |
+| **Dernière mise à jour** | 2026-05-18 (recette MOA Lot 5) |
 | **Décision de départ** | Nouveau module, pas de copie mécanique de `dorevia_ckreyol_marketplace` |
 
 ---
@@ -17,7 +17,7 @@ Lot 2  Identité front minimale  ← GO (2026-05-18)
 Lot 3  Boutique /shop propre    ← LIVRÉ
 Lot 2.1 Design system minimal   ← GO avec réserves (`19.0.3.1.0`, 2026-05-18)
 Lot 4  Fiche produit            ← GO avec réserves mineures (`19.0.4.0.0`, 2026-05-18)
-Lot 5  Panier / checkout smoke
+Lot 5  Panier / checkout smoke   ← GO (`19.0.5.0.0`, 2026-05-18)
 Lot 6  Portes catalogue
 ```
 
@@ -192,22 +192,27 @@ Rendu visuel au moins au niveau Artisanal Terroir (Lot 2.1).
 
 ## Lot 5 — Panier / checkout smoke
 
-**Objectif** : sécuriser le tunnel standard Odoo.
+**Statut** : **GO** (`19.0.5.0.0`, recette MOA 2026-05-18).
 
-**Contenu attendu**
+**Ticket** : `docs/tickets/TICKET_MARKETONE_LOT5_CART_CHECKOUT.md`
 
-- Tests panier et checkout minimal (invité)
-- Pas de refonte checkout
-- Micro-ajustements visuels éventuels
+**Recette MOA** : [`docs/recette/RECETTE_MANUELLE_LOT5.md`](../recette/RECETTE_MANUELLE_LOT5.md)
 
-**Critère GO**
+**Livrables** : `cart.xml` (scope via `checkout_layout`), `_cart.scss`, `_checkout.scss`, tests `dorevia_marketone_lot5` (49/49 non-régression).
+
+**Réserves non bloquantes**
+
+- Compteur panier à `3` sur captures : test modification quantité en recette — pas bug.
+
+**Critère GO** — validé
 
 ```text
-Un client invité peut ajouter au panier et progresser dans le tunnel
-sans erreur 500 ni rupture visuelle majeure.
+Un visiteur invité peut ajouter un produit au panier, consulter le panier,
+modifier son panier et accéder au checkout standard Odoo sans erreur,
+avec une cohérence visuelle minimale et sans altérer website_sale.
 ```
 
-**Réserve** : E2E paiement avec `payment_demo` = tag séparé, non bloquant pour GO shop.
+Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-checkout`.
 
 ---
 
@@ -288,5 +293,5 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. Préparer le ticket **Lot 5** — panier / checkout smoke
-2. Exécution Lot 5 après GO ticket
+1. Préparer le ticket **Lot 6** — portes catalogue (une porte à la fois, prudence MOA)
+2. Trancher les décisions en attente (`cadrage/DECISIONS.md` § avant Lot 6)

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lot 5 : scope checkout via checkout_layout dans cart.xml (Odoo 19 : /shop/address). -->
+</odoo>

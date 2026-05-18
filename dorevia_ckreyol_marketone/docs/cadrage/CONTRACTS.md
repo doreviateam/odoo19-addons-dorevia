@@ -175,7 +175,7 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 |---------|----------------|-----|
 | Install | `dorevia_marketone_smoke` | 1 |
 | Shop rendu | `dorevia_marketone_shop` | 3 |
-| Cart/checkout | `dorevia_marketone_checkout` | 5 |
+| Cart/checkout | `dorevia_marketone_lot5` | 5 |
 | Porte promo | `dorevia_marketone_promo` | 6 |
 | … | … | 6 |
 

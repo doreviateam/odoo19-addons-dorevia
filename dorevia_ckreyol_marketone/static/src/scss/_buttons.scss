@@ -34,7 +34,9 @@
 
 .marketone-root,
 .marketone-shop,
-.marketone-product {
+.marketone-product,
+.marketone-cart,
+.marketone-checkout {
     .btn-primary {
         @include marketone-btn-primary;
     }

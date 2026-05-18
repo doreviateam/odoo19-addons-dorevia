@@ -303,4 +303,4 @@ Décision livraison : [ ] GO  [x] GO avec réserves  [ ] NO GO
 
 ## Prochaine étape
 
-**Lot 5** — panier / checkout smoke (ticket à préparer).
+**Lot 5** — [`TICKET_MARKETONE_LOT5_CART_CHECKOUT.md`](TICKET_MARKETONE_LOT5_CART_CHECKOUT.md) (GO 2026-05-18).
