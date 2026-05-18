@@ -1,0 +1,41 @@
+// Lot 6.1 — porte Incontournables (sous .marketone-shop uniquement).
+
+.marketone-shop {
+    .marketone-shop-featured-intro {
+        margin-bottom: $marketone-space-md;
+        padding-bottom: $marketone-space-sm;
+        border-bottom: 1px solid rgba($marketone-border, 0.85);
+    }
+
+    .marketone-shop-featured-title {
+        margin-bottom: $marketone-space-xs;
+    }
+
+    .marketone-shop-featured-lead {
+        max-width: 42rem;
+        margin-bottom: $marketone-space-sm;
+        font-size: $marketone-body;
+        line-height: 1.55;
+        color: $marketone-text-muted;
+    }
+
+    .marketone-shop-featured-empty {
+        margin-bottom: $marketone-space-sm;
+        font-size: $marketone-body;
+        color: $marketone-text-muted;
+    }
+
+    .marketone-shop-featured-back {
+        font-family: $marketone-font-body;
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-primary;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: $marketone-primary-container;
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+        }
+    }
+}

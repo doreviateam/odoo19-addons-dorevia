@@ -34,19 +34,24 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 
 **Statut** : doctrine figée — implémentation filtres en Lot 6.
 
-**Exemple cible (noms de paramètres à confirmer au Lot 6)**
+**Paramètres whitelistés** (amendement Lot 6.1 — 2026-05-18)
+
+| Paramètre | Valeurs (Lot 6.1) | Statut |
+|-----------|-------------------|--------|
+| `marketone_mode` | `featured` (libellé : Incontournables) | **Figé Lot 6.1** |
+| `marketone_mode` | `promo`, `pack`, `origin`, `collection` | Lots 6.2+ |
+| `marketone_collection` | slug collection | Lot 6.x collections |
 
 ```text
-/shop?marketone_mode=promo
-/shop?marketone_mode=pack
-/shop?marketone_collection=saint-anne
+/shop?marketone_mode=featured          # canonique Incontournables (Lot 6.1)
+/incontournables                       # alias 301 → ci-dessus
 ```
 
-> **Réserve Lot 0** : le legacy utilise le préfixe `ckr_*`. Marketone utilisera `marketone_*` pour éviter les collisions. La matrice fonctionnelle est identique ; les noms exacts seront figés dans un amendement de ce contrat avant Lot 6.
+> Préfixe `marketone_*` (pas `ckr_*`) — C11.2.
 
 ---
 
-## C3 — Filtres catalogue (futur Lot 6)
+## C3 — Filtres catalogue (Lot 6+)
 
 | ID | Règle |
 |----|-------|
@@ -55,19 +60,33 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | C3.3 | Whitelist stricte des paramètres URL ; paramètres inconnus ignorés silencieusement. |
 | C3.4 | Priorité déterministe si plusieurs modes : **pack > promo > featured > origin > collection** (reprise logique legacy validée MOA). |
 | C3.5 | Chaque porte s’appuie sur une **source de vérité** Odoo/OCA explicite — pas de liste produit codée en dur. |
+| C3.6 | **Lot 6.1** : un seul mode actif — `marketone_mode=featured` uniquement. |
+| C3.7 | **Lot 6.1** : filtres natifs Odoo sur `/shop` (sidebar, tri, attributs) **conservés**. |
 
-**Sources de vérité prévues** (alignées audit marketplace)
+### C3.A — Porte Incontournables (Lot 6.1 — figé cadrage 2026-05-18)
+
+| Élément | Règle |
+|---------|-------|
+| Mode URL | `marketone_mode=featured` |
+| Libellé MOA | **Incontournables** (pas le mot « featured » côté visiteur) |
+| Entrée alias | `GET /incontournables` → **301** → `/shop?marketone_mode=featured` |
+| Source produits | `ir.config_parameter` `dorevia_ckreyol_marketone.featured_public_category_id` → `product.public.category` nommée **Incontournables** |
+| Multi-catégories | Un produit peut avoir plusieurs catégories publiques ; le filtre porte = appartenance à cette catégorie |
+| Modèle custom | **Non** au Lot 6.1 (`marketone.shop.collection` reporté) |
+| Présentation | Titre + intro courte + lien « Tous les produits » sous `.marketone-shop` — pas de hero, pas de chips multi-portes |
+| SEO | `canonical` / `noindex` : **documenter** ; hors scope élargi exécution Lot 6.1 |
+
+**Sources de vérité — autres portes** (Lots 6.2+)
 
 | Porte | Source |
 |-------|--------|
 | Promotions | `product.pricelist.item` réducteur |
 | Kits/Packs | `product.template.pack_ok` (si `product_pack` activé) |
-| Incontournables | Collection « featured » (paramètre système) |
 | Origines | Attribut produit « Origine » |
-| Collections | M2M collection éditoriale (modèle à définir au Lot 6) |
-| Catégories | `product.public.category` |
+| Collections éditoriales | Modèle ou mécanisme à définir (hors 6.1) |
+| Catégories merchandising | `product.public.category` (navigation générale) |
 
-**Statut** : contrat futur — **non implémenté** Lots 1–5.
+**Statut** : C3.A **implémenté Lot 6.1** — GO avec réserves (recette MOA 2026-05-18). Prérequis BO : catégorie avec `website_id` site courant (cf. ADR-023).
 
 ---
 
@@ -176,7 +195,8 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Install | `dorevia_marketone_smoke` | 1 |
 | Shop rendu | `dorevia_marketone_shop` | 3 |
 | Cart/checkout | `dorevia_marketone_lot5` | 5 |
-| Porte promo | `dorevia_marketone_promo` | 6 |
+| Porte Incontournables | `dorevia_marketone_lot6_1_featured` | 6.1 |
+| Porte promo | `dorevia_marketone_promo` | 6.2+ |
 | … | … | 6 |
 
 ---

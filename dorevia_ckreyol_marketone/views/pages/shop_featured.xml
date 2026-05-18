@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_shop_featured_intro"
+              inherit_id="website_sale.products"
+              name="Marketone: porte Incontournables"
+              priority="18">
+        <xpath expr="//h1[hasclass('o_wsale_shop_title')]" position="attributes">
+            <attribute name="t-if">not category and not search and not marketone_featured_mode</attribute>
+        </xpath>
+        <xpath expr="//header[@id='o_wsale_products_header']" position="before">
+            <section t-if="marketone_featured_mode"
+                     class="marketone-shop-featured-intro"
+                     aria-labelledby="marketone-featured-title">
+                <h1 id="marketone-featured-title"
+                    class="marketone-shop-featured-title o_wsale_products_shop_title">
+                    Incontournables
+                </h1>
+                <p class="marketone-shop-featured-lead">
+                    Notre sélection de produits incontournables, choisis pour vous faire
+                    découvrir l'essentiel du terroir créole.
+                </p>
+                <p t-if="marketone_featured_empty"
+                   class="marketone-shop-featured-empty"
+                   role="status">
+                    Aucun produit n'est encore rattaché à cette sélection.
+                </p>
+                <p class="marketone-shop-featured-back-wrap">
+                    <a href="/shop" class="marketone-shop-featured-back">
+                        Tous les produits
+                    </a>
+                </p>
+            </section>
+        </xpath>
+    </template>
+</odoo>

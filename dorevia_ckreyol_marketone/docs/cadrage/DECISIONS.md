@@ -315,14 +315,30 @@
 
 ---
 
-## Décisions en attente (à trancher avant Lot 6)
+## ADR-023 — Lot 6.1 porte Incontournables (`marketone_mode=featured`)
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | **Acceptée — GO avec réserves** (cadrage + exécution + recette MOA) |
+| **Version module** | `19.0.6.0.0` |
+| **Décision** | Première porte catalogue : `marketone_mode=featured` sur `/shop`, alias `/incontournables` → 301, filtre via `product.public.category` référencée par paramètre système, hook `_search_get_detail` / `_get_search_options` / `_get_shop_domain` (alignement fourchette prix). Présentation minimale (titre Incontournables, intro, lien retour). **Pas** de modèle collection custom, tag, champ produit, JS, ni dépendance marketplace. |
+| **Contrats** | C2, C3.A ; non-régression C1, C8, scopes Lots 2–5 |
+| **Réserves cadrage** | (1) catégorie publique = source simple, collection éditoriale plus tard ; (2) SEO canonical/noindex documenté sans implémentation Lot 6.1 ; (3) filtres natifs Odoo conservés |
+| **Réserves recette MOA** | (4) la catégorie publique **doit** avoir `website_id` = site courant (sinon 500 sur featured) ; (5) après `-u` module, daemon long-running : **redémarrer Odoo** pour exposer `/incontournables` (routing HTTP) |
+| **Recette** | `docs/recette/RECETTE_MANUELLE_LOT6_1.md` — 60/60 tests auto |
+| **Tickets** | Cadrage : `TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES` · Exécution : `TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC` (**clôturé**) |
+
+---
+
+## Décisions en attente (à trancher avant Lots 6.2+)
 
 | Sujet | Options | Décideur |
 |-------|---------|----------|
-| Nom exact des paramètres URL | `marketone_mode` vs `mo_mode` | MOA + archi |
-| Modèle collections | Nouveau `marketone.shop.collection` vs réutilisation champs existants | MOA |
-| Alias HTTP legacy | Reprendre `/kits`, `/promotions` en 301 | MOA SEO |
+| Collections éditoriales avancées | Modèle `marketone.shop.collection` vs autre | MOA (post 6.1) |
+| Alias HTTP legacy | `/kits`, `/promotions`, etc. en 301 | MOA SEO — Lot 6.2+ |
 | `product_pack` | Dépendance optionnelle pour porte Kits | MOA |
+| SEO `canonical` / `noindex` | Politique indexation URLs portes | MOA SEO |
 
 ---
 

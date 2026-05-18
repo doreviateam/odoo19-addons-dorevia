@@ -100,6 +100,9 @@ Sites de **référence d'intention** (pas de copie) :
 | 2.1 | [`tickets/TICKET_MARKETONE_LOT2_1_DESIGN_SYSTEM_MINIMAL.md`](tickets/TICKET_MARKETONE_LOT2_1_DESIGN_SYSTEM_MINIMAL.md) | GO avec réserves (`19.0.3.1.0`) |
 | 4 | [`tickets/TICKET_MARKETONE_LOT4_PRODUCT.md`](tickets/TICKET_MARKETONE_LOT4_PRODUCT.md) | GO avec réserves mineures (`19.0.4.0.0`, 2026-05-18) |
 | 5 | [`tickets/TICKET_MARKETONE_LOT5_CART_CHECKOUT.md`](tickets/TICKET_MARKETONE_LOT5_CART_CHECKOUT.md) | GO (`19.0.5.0.0`, 2026-05-18) |
+| 6.1 | [`tickets/TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md`](tickets/TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md) | Cadrage **GO avec réserves** (2026-05-18) |
+| 6.1 exec | [`tickets/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md`](tickets/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md) | **GO avec réserves** (`19.0.6.0.0`, 2026-05-18) |
+| — | [`recette/RECETTE_MANUELLE_LOT6_1.md`](recette/RECETTE_MANUELLE_LOT6_1.md) | Recette manuelle Lot 6.1 — GO avec réserves |
 | — | [`recette/RECETTE_MANUELLE_LOT5.md`](recette/RECETTE_MANUELLE_LOT5.md) | Recette manuelle Lot 5 |
 
 ## Règle de lecture rapide

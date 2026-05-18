@@ -161,8 +161,23 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   -d ckr-marketone-01 \
   -u dorevia_ckreyol_marketone \
   --test-enable --stop-after-init \
-  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4,dorevia_marketone_lot5 \
+  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4,dorevia_marketone_lot5,dorevia_marketone_lot6_1_featured \
   --http-port=8071
+```
+
+**Lot 6.1 — porte Incontournables** (`19.0.6.0.0`, **GO avec réserves** 2026-05-18) :
+
+| Prérequis | Détail |
+|-----------|--------|
+| Paramètre système | `dorevia_ckreyol_marketone.featured_public_category_id` = id `product.public.category` « Incontournables » |
+| Catégorie BO | **Obligatoire** : `website_id` = site courant (**My Website** sur `ckr-marketone-01`) — sans rattachement site → **500** sur `/shop?marketone_mode=featured` |
+| Produits | 2–3 produits publiés rattachés à la catégorie (manuel, pas de seed XML) |
+| Recette | [`RECETTE_MANUELLE_LOT6_1.md`](RECETTE_MANUELLE_LOT6_1.md) |
+
+**Exploitation sandbox** : après `-u dorevia_ckreyol_marketone`, un daemon Odoo déjà lancé (ex. port `18079`) peut nécessiter un **redémarrage du conteneur / service** pour que la route `GET /incontournables` réponde en **301** (rechargement routing). Les runs `--stop-after-init` n’ont pas ce problème.
+
+```bash
+docker compose -f /Users/doreviateam/sandbox-odoo19/docker-compose.yml restart odoo
 ```
 
 ---

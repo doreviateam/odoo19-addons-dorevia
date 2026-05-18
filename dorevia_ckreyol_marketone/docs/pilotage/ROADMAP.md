@@ -2,8 +2,8 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut global** | Lots 1–5 **GO** — socle e-commerce stabilisé ; **Lot 6** (portes) suivant |
-| **Dernière mise à jour** | 2026-05-18 (recette MOA Lot 5) |
+| **Statut global** | Lots 1–5 **GO** ; **Lot 6.1 GO avec réserves** (`19.0.6.0.0`) |
+| **Dernière mise à jour** | 2026-05-18 (recette MOA Lot 6.1) |
 | **Décision de départ** | Nouveau module, pas de copie mécanique de `dorevia_ckreyol_marketplace` |
 
 ---
@@ -18,7 +18,7 @@ Lot 3  Boutique /shop propre    ← LIVRÉ
 Lot 2.1 Design system minimal   ← GO avec réserves (`19.0.3.1.0`, 2026-05-18)
 Lot 4  Fiche produit            ← GO avec réserves mineures (`19.0.4.0.0`, 2026-05-18)
 Lot 5  Panier / checkout smoke   ← GO (`19.0.5.0.0`, 2026-05-18)
-Lot 6  Portes catalogue
+Lot 6  Portes catalogue        ← 6.1 Incontournables GO avec réserves ; 6.2+ à cadrer séparément
 ```
 
 Chaque lot se clôture par une décision **GO / GO avec réserves / NO GO** humaine avant le lot suivant.
@@ -220,11 +220,18 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 
 **Objectif** : réintroduire prudemment l’orientation par portes (après stabilisation home / shop / product / cart / checkout).
 
-**Prérequis**
+**Stratégie** : **une porte à la fois** — démarrage par **Lot 6.1 Incontournables**.
 
-- Lots 1 à 5 validés
-- Contrats URL mis à jour dans `cadrage/CONTRACTS.md`
-- Un tag de test par porte
+**Lot 6.1 — Incontournables**
+
+| Étape | Statut |
+|-------|--------|
+| Cadrage | **GO avec réserves** (2026-05-18) — [`TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md`](../tickets/TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md) |
+| ADR-023 + CONTRATS C3.A | ✅ |
+| Exécution | **GO avec réserves** — `19.0.6.0.0`, 60/60 tests — [`TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md) (clôturé) |
+| Recette MOA | [`RECETTE_MANUELLE_LOT6_1.md`](../recette/RECETTE_MANUELLE_LOT6_1.md) — GO avec réserves |
+
+**Réserves recette** : catégorie avec `website_id` site courant ; redémarrage daemon après `-u` pour alias `/incontournables`.
 
 **Portes envisagées** (ordre indicatif)
 
@@ -293,5 +300,6 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. Préparer le ticket **Lot 6** — portes catalogue (une porte à la fois, prudence MOA)
-2. Trancher les décisions en attente (`cadrage/DECISIONS.md` § avant Lot 6)
+1. **Cadrage séparé** de la prochaine porte catalogue (Lot 6.2) — **une porte à la fois**, pas de multi-portes simultanées
+2. Ticket MOA dédié avant toute exécution 6.2+
+3. Conserver la doctrine : portes orientent, `website_sale` filtre, pas de moteur parallèle
