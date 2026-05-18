@@ -165,7 +165,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   --http-port=8071
 ```
 
-**Culture v2 légère — territoires additionnels** (`19.0.9.0.0`, exécution 2026-05-18) :
+**Culture v2 légère — territoires additionnels** (`19.0.9.0.0`, **GO MOA** 2026-05-18) :
 
 | Prérequis | Détail |
 |-----------|--------|

@@ -387,13 +387,14 @@
 | | |
 |---|---|
 | **Date** | 2026-05-18 |
-| **Statut** | **Acceptée — livrée** (`19.0.9.0.0`, 2026-05-18) |
+| **Statut** | **Acceptée — GO MOA** (`19.0.9.0.0`, 2026-05-18) |
 | **Version module** | `19.0.9.0.0` |
 | **Contexte** | Culture v1 **GO MOA** (ADR-026) : grammaire `/culture/<slug>` validée sur pilote `guadeloupe`. MOA : ne pas ouvrir Lot 6.3 Boutique ; prouver la **réplicabilité** éditoriale sans portail massif. |
 | **Décision** | Étendre Culture à **+2 territoires** (`martinique`, `reunion`) via la **même** infra v1 : sections génériques, variation BO limitée (`name_visitor`, `context_phrase`, slug). **Option A** : pas de code fonctionnel nouveau si slugs publiés — BO + recette + tests `dorevia_marketone_culture_v2`. **Pas** de hub `/culture`, **pas** de menu header, **pas** de liens croisés, **pas** d’images par territoire, **pas** de champs longs sur `marketone.shop.origin`. |
 | **Contrats** | C8 (v2) ; ADR-024, ADR-026 |
 | **Réserves** | (R1) slugs sous réserve profils BO ; (R2) pas de champs longs ; (R3) pas de hub ; (R4) pas de menu header ; (R5) pas de 6.3 / Savoirs en parallèle |
-| **Tickets** | Cadrage : `TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE` (**clôturé**) · Exécution : `TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC` (**livré technique**) |
+| **Tickets** | Cadrage : `TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE` (**clôturé**) · Exécution : `TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC` (**clôturé GO MOA**) |
+| **Réserves exploitation** | Redémarrage daemon post-`-u` si route `/culture/<slug>` absente |
 | **Hors scope** | Hub Culture, menu header, modèle Culture, Lot 6.3, Savoirs, SEO avancé |
 
 ---

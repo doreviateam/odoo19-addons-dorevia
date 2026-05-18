@@ -5,9 +5,9 @@
 | **ID** | `TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC` |
 | **Univers** | **Culture** — découvrir |
 | **Lot** | Culture v2 légère — **+2 territoires** (`martinique`, `reunion`) |
-| **Statut** | **Livré technique** — recette MOA en attente |
+| **Statut** | **Clôturé — GO MOA** (2026-05-18) — `19.0.9.0.0` |
 | **Version module** | `19.0.9.0.0` |
-| **Recette** | [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md) |
+| **Recette** | [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md) — **GO MOA** |
 | **Base** | `ckr-marketone-01` |
 | **Prérequis** | Cadrage v2 **GO avec réserves** — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md`](TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md) ; Culture v1 **GO MOA** `19.0.8.0.0` ; portes Boutique 6.1 / 6.2 **GO** ; **ADR-024**, **ADR-026**, **ADR-027** |
 | **ADR** | ADR-024, ADR-026, **ADR-027** |
@@ -171,15 +171,15 @@ __manifest__.py                             # 19.0.9.0.0
 - [x] Pas de hub ; pas de menu header ; pas de liens croisés (auto)
 - [x] `marketone.shop.origin` inchangé (champs)
 - [x] **91** post-tests — **0** failed
-- [ ] Recette MOA v2 validée
-- [ ] Mobile 375 px (recette MOA)
+- [x] Recette MOA v2 validée
+- [x] Mobile 375 px — pas de débordement horizontal (recette MOA)
 
 ### NO GO
 
-- [ ] Territoire v2 non accessible alors que profil publié (hors problème exploitation restart)
-- [ ] Régression Boutique / Culture v1
-- [ ] Hub ou liens croisés entre territoires
-- [ ] Extension encyclopédique du profil origine
+- [x] Territoire v2 non accessible — **non constaté**
+- [x] Régression Boutique / Culture v1 — **non constaté**
+- [x] Hub ou liens croisés — **non constaté**
+- [x] Extension encyclopédique du profil origine — **non constaté**
 
 ---
 
@@ -190,7 +190,8 @@ __manifest__.py                             # 19.0.9.0.0
 [x] D1–D8 figées
 [x] Point de contrôle BO validé (`reunion` créé)
 [x] GO pour implémentation — `19.0.9.0.0`
-[ ] Recette MOA GO  [ ] NO GO
+[x] Recette MOA GO — Culture v2 légère
+[ ] NO GO
 ```
 
 ### Réserve exploitation (conservée)
@@ -201,9 +202,9 @@ Après `-u` sur daemon déjà lancé : **redémarrer Odoo** si `GET /culture/<sl
 
 ## Prochaine étape
 
-1. **MOA** : recette [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md).
-2. **Culture v3+** (hub, menu) — ticket dédié.
-3. **Ne pas** ouvrir Lot 6.3 ni Savoirs en parallèle.
+1. **Culture v3+** (hub, menu header, territoires additionnels) — ticket dédié.
+2. **Lot 6.3+ Boutique** — décision MOA (gel actuel).
+3. **Savoirs** — ticket séparé.
 
 ---
 

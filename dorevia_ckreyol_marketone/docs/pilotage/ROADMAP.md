@@ -344,7 +344,9 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 | Étape | Statut |
 |-------|--------|
 | Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md) |
-| Exécution | **Livré** `19.0.9.0.0` — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) — recette MOA |
+| Exécution | **Clôturé — GO MOA** `19.0.9.0.0` — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) |
+| Recette | [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md) — **GO** |
+| Territoires | `guadeloupe`, `martinique`, `reunion` |
 | Tests | **91** post-tests, **0** failed |
 | ADR-027 + C8.v2 | ✅ |
 | Lot 6.3 Boutique | **Gel MOA** |
@@ -353,6 +355,6 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. **MOA** : recette Culture v2 — `martinique`, `reunion`, `guadeloupe`
-2. **Lot 6.3+ Boutique** — **pas** d’ouverture immédiate
-3. **Savoirs** — ticket séparé
+1. **Culture v3+** ou **Lot 6.3+ Boutique** — décision MOA
+2. **Savoirs** — ticket séparé
+3. Grammaire Culture : **3 territoires** actifs (`guadeloupe`, `martinique`, `reunion`)

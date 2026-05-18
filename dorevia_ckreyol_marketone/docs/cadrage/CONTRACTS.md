@@ -145,7 +145,7 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Tests | Tag `dorevia_marketone_culture_v2` ; non-régression **85+** tests |
 | Exécution | Après GO [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) (ADR-027) |
 
-**Statut** : C8.v2 **GO technique** (`19.0.9.0.0`, ADR-027, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md).
+**Statut** : C8.v2 **GO MOA** (`19.0.9.0.0`, ADR-027, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md) acceptée.
 
 ---
 

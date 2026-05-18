@@ -7,6 +7,7 @@
 | **URL** | http://localhost:18079 |
 | **ADR** | ADR-027 |
 | **Contrat** | C8.v2 |
+| **Statut recette** | **GO MOA** (2026-05-18) |
 | **Pilote v1** | [`RECETTE_MANUELLE_CULTURE_V1.md`](RECETTE_MANUELLE_CULTURE_V1.md) — `guadeloupe` |
 
 ---
@@ -18,8 +19,6 @@
 | `guadeloupe` | Publié — pilote v1 | renseigné | lié |
 | `martinique` | Publié | renseigné | lié |
 | `reunion` | Publié | renseigné | lié |
-
-**Point de contrôle** : sur `ckr-marketone-01`, les trois slugs doivent exister avec `website_published` et `website_id` = **My Website**. Créer `reunion` en BO si absent (aucun seed XML module).
 
 Produits : au moins **1 produit publié** par territoire v2 avec la valeur **Origine** correspondante.
 
@@ -37,16 +36,17 @@ Identique v1 : après `-u`, redémarrer Odoo si `/culture/<slug>` répond **404*
 
 | # | Scénario | URL / action | Attendu | MOA | Tech |
 |---|----------|--------------|---------|-----|------|
-| **1** | Martinique | `/culture/martinique` | **200**, `.marketone-culture`, chapô, sections, CTA | ☐ | ☐ |
-| **2** | La Réunion | `/culture/reunion` | **200**, même grammaire que Guadeloupe | ☐ | ☐ |
-| **3** | Pilote v1 | `/culture/guadeloupe` | **200** — non-régression | ☐ | ☐ |
-| **4** | CTA Martinique | Clic achetable | `/shop?marketone_mode=origin&marketone_origin=martinique` | ☐ | ☐ |
-| **5** | CTA Réunion | Clic achetable | `…&marketone_origin=reunion` | ☐ | ☐ |
-| **6** | Slug inconnu | `/culture/territoire-inconnu` | **404** | ☐ | ☐ |
-| **7** | Bandeau facetté | `/shop?marketone_mode=origin&marketone_origin=martinique` | Lien Découvrir → Culture | ☐ | ☐ |
-| **8** | Pas de hub | `/culture` | **404** ou pas de page index | ☐ | ☐ |
-| **9** | Pas de liens croisés | Page Martinique | **Pas** de lien vers `/culture/reunion` | ☐ | ☐ |
-| **10** | Non-régression Boutique | Featured, Origines, panier, checkout | Inchangé | ☐ | ☐ |
+| **1** | Martinique | `/culture/martinique` | **200**, `.marketone-culture`, chapô, sections, CTA | ☑ | ☑ |
+| **2** | La Réunion | `/culture/reunion` | **200**, même grammaire que Guadeloupe | ☑ | ☑ |
+| **3** | Pilote v1 | `/culture/guadeloupe` | **200** — non-régression | ☑ | ☑ |
+| **4** | CTA Martinique | Clic achetable | `/shop?marketone_mode=origin&marketone_origin=martinique` | ☑ | ☑ |
+| **5** | CTA Réunion | Clic achetable | `…&marketone_origin=reunion` | ☑ | ☑ |
+| **6** | Slug inconnu | `/culture/territoire-inconnu` | **404** | ☑ | ☑ |
+| **7** | Bandeau facetté | `/shop?marketone_mode=origin&marketone_origin=martinique` | Lien Découvrir → Culture | ☑ | ☑ |
+| **8** | Pas de hub | `/culture` | **404** | ☑ | ☑ |
+| **9** | Pas de liens croisés | Page Martinique | **Pas** de lien vers `/culture/reunion` | ☑ | ☑ |
+| **10** | Non-régression Boutique | Featured, Origines, panier, checkout | Inchangé | ☑ | ☑ |
+| — | Mobile 375 px | Pages Culture v2 | Pas de débordement horizontal | ☑ | — |
 
 ---
 
@@ -61,10 +61,15 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   --http-port=8071
 ```
 
-Non-régression complète : inclure `dorevia_marketone_culture_v1` et Lots 1–6.2 (**92+** post-tests attendus).
+| Périmètre | Résultat |
+|-----------|----------|
+| Tag `dorevia_marketone_culture_v2` | **6** post-tests, **0** failed |
+| Suite Lots 1–6.2 + Culture v1/v2 | **91** post-tests, **0** failed |
 
 ---
 
 ## Critère GO Culture v2 légère
 
 Les pages `/culture/martinique` et `/culture/reunion` prouvent la **réplicabilité** de la grammaire v1, avec CTA et liens Boutique fonctionnels, **sans** régression du pilote `guadeloupe` ni du socle Boutique.
+
+**Décision MOA** : **GO Culture v2 légère** — 2026-05-18.

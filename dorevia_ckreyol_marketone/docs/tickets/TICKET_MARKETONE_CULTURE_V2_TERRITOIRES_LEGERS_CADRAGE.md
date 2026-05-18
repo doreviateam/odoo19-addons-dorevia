@@ -6,7 +6,7 @@
 | **Univers** | **Culture** — découvrir |
 | **Type** | **Cadrage uniquement** — aucun code |
 | **Statut** | **Clôturé — GO cadrage avec réserves** (2026-05-18) |
-| **Exécution** | [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) — **livré technique** `19.0.9.0.0` |
+| **Exécution** | [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) — **clôturé GO MOA** `19.0.9.0.0` |
 | **Version module de référence** | `19.0.8.0.0` (Culture v1 **GO MOA**) |
 | **Version cible exécution** | `19.0.9.0.0` (proposition) |
 | **Base** | `ckr-marketone-01` |
