@@ -314,6 +314,6 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. **Cadrage Lot 6.3+** (Promotions, Kits, Collections…) — une porte à la fois (ADR-024)
-2. **Culture** : espaces découverte / récit territoire — tickets séparés
-3. Conserver la réserve exploitation : redémarrage Odoo après `-u` pour les alias HTTP (`/incontournables`, `/origines`)
+1. **Consolidation portes Boutique** — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) (cadrage 6.1 + 6.2, pas de code)
+2. **Suite recommandée post-consolidation** : premier cadrage **Culture / Territoires**, puis Lot 6.3+ (Promotions, Kits, Collections…)
+3. Réserve exploitation : redémarrage Odoo après `-u` pour `/incontournables` et `/origines`

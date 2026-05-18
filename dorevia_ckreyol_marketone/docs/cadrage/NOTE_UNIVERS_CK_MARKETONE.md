@@ -283,10 +283,11 @@ Le savoir en prolongement.
 |---|--------|--------|
 | 1 | Valider **ADR-024** et cette note (version consolidée) | **GO MOA** (2026-05-18) |
 | 2 | Lot 6.2 Origines — cadrage, exécution, recette | **GO** — `19.0.7.0.0`, commit `3c179ae` |
-| 3 | **Lot 6.3+** (Promotions, Kits, Collections…) | Cadrage MOA **à ouvrir** — une porte à la fois, univers **Boutique** |
-| 4 | **Culture** — espaces découvrir (territoires, producteurs, récits) | Tickets **séparés** ; pas de code sans ticket MOA **GO** |
-| 5 | **Savoirs** — recettes contributives (identifié → modération BO → publication) | Cadrage **futur** ; pas de forum, pas de publication automatique |
-| 6 | **Pas de code univers** | Tant qu’aucun ticket MOA dédié Culture / Savoirs n’est **GO** |
+| 3 | **Consolidation portes Boutique** (6.1 + 6.2) | [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) — cadrage **ouvert** |
+| 4 | **Lot 6.3+** (Promotions, Kits, Collections…) | Après consolidation — une porte à la fois |
+| 5 | **Culture** — espaces découvrir (territoires, producteurs, récits) | Suite **recommandée** post-consolidation ; pas de code sans ticket MOA **GO** |
+| 6 | **Savoirs** — recettes contributives (identifié → modération BO → publication) | Cadrage **futur** ; pas de forum, pas de publication automatique |
+| 7 | **Pas de code univers** | Tant qu’aucun ticket MOA dédié Culture / Savoirs n’est **GO** |
 
 **Rappel** : `dorevia_ckreyol_marketplace` = mémoire d’intuitions (§4), **pas** source technique à copier.
 
