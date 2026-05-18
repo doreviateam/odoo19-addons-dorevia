@@ -23,7 +23,7 @@ Lot 6  Portes catalogue        ← 6.1 Incontournables GO avec réserves ; 6.2+ 
 
 Chaque lot se clôture par une décision **GO / GO avec réserves / NO GO** humaine avant le lot suivant.
 
-**Doctrine produit** (ADR-018) : C-Kreyol articule **vendre, raconter, transmettre** sans les confondre. Lots 1-5 = socle e-commerce ; Lot 6 = portes catalogue ; lots suivants = éditorial et connaissance. Voir `cadrage/ARCHITECTURE.md` §2.
+**Doctrine produit** (ADR-018, **ADR-024**) : trois univers — **Boutique** (acheter), **Culture** (découvrir), **Savoirs** (transmettre). Lots 1-5 = socle e-commerce ; Lot 6 = portes catalogue (univers Boutique) ; lots suivants = espaces Culture et Savoirs. Note : [`cadrage/NOTE_UNIVERS_CK_MARKETONE.md`](../cadrage/NOTE_UNIVERS_CK_MARKETONE.md).
 
 **Inspirations MOA** (ADR-019) : 750g (connaissance / recettes), Caribshopper (e-commerce territoires caribéens) — références pour lots futurs, **pas** copie au socle ni élargissement du Lot 4.
 

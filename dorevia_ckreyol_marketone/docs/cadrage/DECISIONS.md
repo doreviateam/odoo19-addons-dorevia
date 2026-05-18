@@ -331,6 +331,24 @@
 
 ---
 
+## ADR-024 — Structuration C-Kreyol en trois univers : Boutique, Culture, Savoirs
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | **Acceptée — cadrage produit** (document uniquement, aucun code) |
+| **Contexte** | ADR-018 pose les trois dimensions (vendre, raconter, transmettre). Le MOA formalise le nommage **Boutique / Culture / Savoirs** pour structurer le site à terme, après stabilisation du socle e-commerce (Lots 1–5) et première porte catalogue (Lot 6.1). |
+| **Décision** | C-Kreyol est structuré en trois univers : **1. Boutique** — acheter ; **2. Culture** — découvrir ; **3. Savoirs** — transmettre. Les **portes catalogue** appartiennent d’abord à l’univers **Boutique** (orientation de la grille `/shop` sans moteur parallèle). Les contenus **Culture** et **Savoirs** seront introduits **progressivement** dans des **espaces dédiés**, pas en transformant `/shop` en portail éditorial. |
+| **Savoirs — contribution** | À terme, un **utilisateur identifié** pourra **proposer** une recette ; **publication** uniquement après **validation / modération** back-office. *Déposer une recette ≠ publier automatiquement.* |
+| **Formule** | *Ceux qui savent transmettent à ceux qui découvrent.* |
+| **Relation ADR-018** | ADR-024 **nomme** et **spatialise** les trois dimensions ; ADR-018 conserve l’agencement : produit d’abord, récit ensuite, savoir en prolongement. |
+| **Garde-fous** | Produit prioritaire au parcours d’achat ; éditorial enrichit sans brouiller ; Savoirs sans forum ouvert ; une porte catalogue par lot ; pas de code univers sans ticket MOA GO ; pas de dépendance marketplace. |
+| **Hors scope immédiat** | Implémentation navigation multi-univers ; module recette ; portes multiples simultanées ; copie code legacy `ckr_*`. |
+| **Note détaillée** | `docs/cadrage/NOTE_UNIVERS_CK_MARKETONE.md` (audit legacy, impacts Lots 6.2+, Culture, Savoirs) |
+| **Prochaine étape** | Cadrage **séparé** Lot 6.2 Origines (Boutique) ; tickets Culture et Savoirs ultérieurs. |
+
+---
+
 ## Décisions en attente (à trancher avant Lots 6.2+)
 
 | Sujet | Options | Décideur |

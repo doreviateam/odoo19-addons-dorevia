@@ -32,7 +32,13 @@ Cela inclut une logique de territoire, de langue, de culture, de production et d
 
 ## 2. Doctrine produit C-Kreyol
 
-Le site C-Kreyol porte trois dimensions complémentaires.
+Le site C-Kreyol porte trois dimensions complémentaires, nommées officiellement **trois univers** (voir [ADR-024](DECISIONS.md#adr-024--structuration-c-kreyol-en-trois-univers-boutique-culture-savoirs) et [NOTE_UNIVERS_CK_MARKETONE.md](NOTE_UNIVERS_CK_MARKETONE.md)) :
+
+| Univers | Verbe | Dimension ADR-018 |
+|---------|-------|-------------------|
+| **Boutique** | Acheter | Vendre (e-commerce) |
+| **Culture** | Découvrir | Raconter (éditorial culturel) |
+| **Savoirs** | Transmettre | Transmettre (partage de connaissance) |
 
 ### 2.1 E-commerce
 

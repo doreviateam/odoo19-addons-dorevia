@@ -66,6 +66,8 @@ Version courte :
 C-Kreyol articule trois dimensions — vendre, raconter, transmettre — sans jamais les confondre.
 ```
 
+**Trois univers** (cadrage MOA 2026-05-18) : **Boutique** (acheter) · **Culture** (découvrir) · **Savoirs** (transmettre) — voir [`cadrage/NOTE_UNIVERS_CK_MARKETONE.md`](cadrage/NOTE_UNIVERS_CK_MARKETONE.md) et ADR-024.
+
 Progression Marketone (voir [`cadrage/ARCHITECTURE.md`](cadrage/ARCHITECTURE.md) §2 et [`cadrage/DECISIONS.md`](cadrage/DECISIONS.md) ADR-018) :
 
 ```text
@@ -107,6 +109,6 @@ Sites de **référence d'intention** (pas de copie) :
 
 ## Règle de lecture rapide
 
-Pour comprendre le module : lire `cadrage/ARCHITECTURE.md`, puis `cadrage/CONTRACTS.md`, puis `pilotage/ROADMAP.md`.
+Pour comprendre le module : lire `cadrage/ARCHITECTURE.md`, puis `cadrage/CONTRACTS.md`, puis `cadrage/NOTE_UNIVERS_CK_MARKETONE.md` (univers Boutique / Culture / Savoirs), puis `pilotage/ROADMAP.md`.
 
 Pour exécuter ou vérifier un lot : partir du ticket dans `tickets/`, puis utiliser `recette/ENV_REFERENCE.md` pour les commandes.
