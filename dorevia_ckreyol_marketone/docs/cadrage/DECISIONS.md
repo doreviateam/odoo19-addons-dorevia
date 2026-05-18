@@ -285,6 +285,21 @@
 
 ---
 
+## ADR-021 — Lot 4 fiche produit `marketone-product`
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | Acceptée — **GO avec réserves mineures** (recette MOA 2026-05-18) |
+| **Version module** | `19.0.4.0.0` |
+| **Décision** | Lot 4 = ancre CSS `marketone-product` sur `website_sale.product` + `_product.scss` scoped ; pas de JS, contrôleur, modèle, seed XML, portes ni `_search_get_detail`. |
+| **Garde-fous** | ADR-018 / C7.4 : fiche retail, CTA prioritaire, pas encyclopédique ; niveau visuel ≥ Artisanal Terroir Lot 2.1. |
+| **Tests** | Tag `dorevia_marketone_lot4` ; 37/37 (smoke + lot2 + lot2_1 + lot3 + lot4). |
+| **Recette MOA** | `docs/recette/RECETTE_MANUELLE_LOT4.md` — réserve : compteur panier `2` = double clic recette, pas bug. |
+| **Ticket** | `docs/tickets/TICKET_MARKETONE_LOT4_PRODUCT.md` |
+
+---
+
 ## Décisions en attente (à trancher avant Lot 6)
 
 | Sujet | Options | Décideur |

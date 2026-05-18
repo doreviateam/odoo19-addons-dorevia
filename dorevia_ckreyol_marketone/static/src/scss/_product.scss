@@ -1,0 +1,124 @@
+// Lot 4 — fiche produit (Artisanal Terroir).
+
+.marketone-product {
+    background-color: $marketone-bg;
+    color: $marketone-text;
+    font-family: $marketone-font-body;
+
+    #product_detail {
+        padding-bottom: $marketone-space-lg;
+    }
+
+    .o_wsale_breadcrumb {
+        font-size: $marketone-label;
+
+        a {
+            color: $marketone-text-muted;
+            text-decoration: none;
+
+            &:hover,
+            &:focus-visible {
+                color: $marketone-primary;
+            }
+        }
+
+        .breadcrumb-item.active span {
+            color: $marketone-text;
+            font-weight: $marketone-weight-medium;
+        }
+    }
+
+    #product_details {
+        h1,
+        .o_wsale_product_details_content_section h1,
+        .product_title,
+        .oe_structure h1 {
+            font-family: $marketone-font-heading;
+            font-size: $marketone-h2-mobile;
+            font-weight: $marketone-weight-semibold;
+            line-height: 1.2;
+            color: $marketone-text;
+
+            @media (min-width: 992px) {
+                font-size: $marketone-h2-desktop;
+            }
+        }
+    }
+
+    .o_wsale_product_images {
+        .o_wsale_product_page_image,
+        .carousel,
+        .o_carousel_product_outer {
+            border-radius: $marketone-radius-md;
+            overflow: hidden;
+        }
+    }
+
+    .o_wsale_product_details_content_section_price,
+    .product_price {
+        margin-bottom: $marketone-space-sm;
+        font-family: $marketone-font-body;
+        color: $marketone-text;
+
+        .oe_price,
+        .oe_currency_value {
+            font-size: $marketone-body-lg;
+            font-weight: $marketone-weight-semibold;
+        }
+
+        .oe_default_price {
+            color: $marketone-text-muted;
+            font-weight: $marketone-weight-regular;
+        }
+    }
+
+    .o_wsale_product_details_content_section_cta {
+        .btn-primary,
+        #add_to_cart,
+        a.btn-primary {
+            @include marketone-btn-primary;
+        }
+    }
+
+    .o_wsale_product_details_content_section_attributes {
+        font-size: $marketone-body;
+        color: $marketone-text;
+
+        label,
+        .form-label {
+            font-weight: $marketone-weight-medium;
+        }
+    }
+
+    .o_wsale_product_details_content_section_accordion {
+        .accordion-button {
+            font-family: $marketone-font-body;
+            font-weight: $marketone-weight-medium;
+            color: $marketone-text;
+            background-color: $marketone-surface;
+        }
+
+        .accordion-body {
+            font-size: $marketone-body;
+            line-height: $marketone-line-height;
+            color: $marketone-text-muted;
+        }
+    }
+
+    #product_full_description,
+    .oe_structure {
+        font-size: $marketone-body;
+        line-height: $marketone-line-height;
+        color: $marketone-text-muted;
+    }
+
+    @media (max-width: 767.98px) {
+        #product_detail {
+            margin-top: 0;
+        }
+
+        #product_details {
+            padding-top: $marketone-space-sm;
+        }
+    }
+}

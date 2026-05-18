@@ -161,7 +161,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   -d ckr-marketone-01 \
   -u dorevia_ckreyol_marketone \
   --test-enable --stop-after-init \
-  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3 \
+  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4 \
   --http-port=8071
 ```
 
@@ -188,6 +188,14 @@ docker exec sandbox-odoo19-db-1 psql -U odoo -d postgres \
   -c 'DROP DATABASE IF EXISTS "ckr-marketone-01" WITH (FORCE);'
 # Puis reprendre la procédure de création § ci-dessus
 ```
+
+---
+
+## Recette manuelle MOA
+
+Plan de recette pas à pas (home, shop, fiche produit Lot 4, panier, grilles GO/NO GO) :
+
+→ [`RECETTE_MANUELLE.md`](RECETTE_MANUELLE.md)
 
 ---
 

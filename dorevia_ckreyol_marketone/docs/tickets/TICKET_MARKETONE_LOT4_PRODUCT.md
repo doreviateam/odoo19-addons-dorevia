@@ -4,7 +4,8 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_LOT4_PRODUCT` |
 | **Lot** | 4 — Fiche produit retail C-Kreyol |
-| **Statut** | Prêt pour validation humaine — **aucun code** |
+| **Statut** | **GO avec réserves mineures** (recette MOA 2026-05-18) |
+| **Version livrée** | `19.0.4.0.0` |
 | **Base** | `ckr-marketone-01` |
 | **Prérequis** | GO Lot 2.1 avec réserves (2026-05-18) ; Lots 1, 2, 3 livrés |
 | **Version cible module** | `19.0.4.0.0` (proposition) |
@@ -175,6 +176,8 @@ _tokens_* → _layout → _buttons → _header → _footer → _home → _shop �
 
 ## Recette visuelle (MOA)
 
+**Plan de recette** : [`docs/recette/RECETTE_MANUELLE_LOT4.md`](../recette/RECETTE_MANUELLE_LOT4.md) (fiche Lot 4) · plan complet [`RECETTE_MANUELLE.md`](../recette/RECETTE_MANUELLE.md)
+
 **Prérequis BO** : 2 à 3 produits publiés avec image, prix, description courte.
 
 | Zone | À vérifier |
@@ -245,34 +248,59 @@ dorevia_ckreyol_marketone/
 
 ---
 
-## Décision explicite
+## Résultats automatises (2026-05-18)
+
+| Commande | Résultat |
+|----------|----------|
+| `-u dorevia_ckreyol_marketone` | OK (v `19.0.4.0.0`) |
+| Tests smoke + lot2 + lot2_1 + lot3 + lot4 | **37/37** OK |
+| `marketone-product` sur fiche | Présent |
+| `/shop` sans `marketone-product` | OK |
+| Produit recette | Créé en setUp test si catalogue vide |
+
+---
+
+## Checklist validation humaine (ticket — 2026-05-18)
 
 ```text
-Aucun code avant validation humaine de ce ticket.
-GO / GO avec réserves / NO GO
+[x] Périmètre ancre CSS marketone-product accepté
+[x] Garde-fous ADR-018 / C7.4 compris (pas encyclopédique)
+[x] Niveau visuel ≥ Artisanal Terroir Lot 2.1 exigé
+[x] Hors périmètre (Contact, portes, panier, seed XML) compris
+[x] Recette 2-3 produits BO acceptée
+
+Décision ticket : [x] GO pour exécution
 ```
 
 ---
 
-## Checklist validation humaine
+## Recette visuelle MOA (post-livraison)
+
+**Plan** : [`docs/recette/RECETTE_MANUELLE_LOT4.md`](../recette/RECETTE_MANUELLE_LOT4.md)
 
 ```text
-[ ] Périmètre ancre CSS marketone-product accepté
-[ ] Garde-fous ADR-018 / C7.4 compris (pas encyclopédique)
-[ ] Niveau visuel ≥ Artisanal Terroir Lot 2.1 exigé
-[ ] Hors périmètre (Contact, portes, panier, seed XML) compris
-[ ] Recette 2-3 produits BO acceptée
+[x] Fiche lisible mobile + desktop (titre, prix, galerie, CTA)
+[x] Ajout panier fonctionnel
+[x] Cohérence Artisanal Terroir avec / et /shop
+[x] Pas de surcharge éditoriale
+[x] 37 tests auto verts (0 failed, 0 error)
+[x] `/` marketone-root · `/shop` marketone-shop · fiche marketone-product
+[x] 3 produits visibles, prix EUR FR
+[x] Mobile 375 px sans débordement horizontal
+[x] Fiche retail-first, non encyclopédique (ADR-018)
+[x] Pas de dérive 750g / marketplace / portes catalogue
 
-Décision : [ ] GO  [ ] GO avec réserves  [ ] NO GO
-
-Réserves :
-_________________________________________________
-
-Validé par : _______________  Date : __________
+Décision livraison : [ ] GO  [x] GO avec réserves  [ ] NO GO
 ```
+
+### Réserves mineures (2026-05-18)
+
+| Réserve | Impact |
+|---------|--------|
+| Compteur panier à `2` sur certaines captures | CTA cliqué deux fois pendant la recette — **pas** une anomalie fonctionnelle |
 
 ---
 
-## Prochaine étape après GO ticket Lot 4
+## Prochaine étape
 
-Exécution technique Lot 4, puis préparation **Lot 5** (panier / checkout smoke).
+**Lot 5** — panier / checkout smoke (ticket à préparer).

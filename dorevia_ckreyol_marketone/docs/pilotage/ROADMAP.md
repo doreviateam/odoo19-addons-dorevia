@@ -2,8 +2,8 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut global** | Lot 2.1 GO avec réserves — Lot 4 ticket en préparation |
-| **Dernière mise à jour** | 2026-05-18 (recette visuelle Lot 2.1) |
+| **Statut global** | Lot 4 **GO avec réserves mineures** ; Lot 5 suivant |
+| **Dernière mise à jour** | 2026-05-18 (recette MOA Lot 4) |
 | **Décision de départ** | Nouveau module, pas de copie mécanique de `dorevia_ckreyol_marketplace` |
 
 ---
@@ -16,7 +16,7 @@ Lot 1  Socle installable        ← GO (2026-05-18)
 Lot 2  Identité front minimale  ← GO (2026-05-18)
 Lot 3  Boutique /shop propre    ← LIVRÉ
 Lot 2.1 Design system minimal   ← GO avec réserves (`19.0.3.1.0`, 2026-05-18)
-Lot 4  Fiche produit            ← TICKET PRÊT (validation humaine avant exécution)
+Lot 4  Fiche produit            ← GO avec réserves mineures (`19.0.4.0.0`, 2026-05-18)
 Lot 5  Panier / checkout smoke
 Lot 6  Portes catalogue
 ```
@@ -169,27 +169,24 @@ mais devient plus lisible, mobile-first et crédible retail pour C-Kreyol.
 
 ## Lot 4 — Fiche produit
 
-**Statut** : ticket préparé — **aucune exécution** avant validation humaine du ticket.
+**Statut** : **GO avec réserves mineures** (`19.0.4.0.0`, recette MOA 2026-05-18).
 
 **Ticket** : `docs/tickets/TICKET_MARKETONE_LOT4_PRODUCT.md`
 
-**Prérequis** : GO Lot 2.1 (obtenu avec réserves).
+**Livrables** : `views/pages/product.xml`, `_product.scss`, tests `dorevia_marketone_lot4` (37/37 tests auto OK).
 
-**Objectif** : fiche produit crédible pour ouverture commerciale, **au moins au niveau visuel** du design system Artisanal Terroir (Lot 2.1).
+**Recette MOA** : [`docs/recette/RECETTE_MANUELLE_LOT4.md`](../recette/RECETTE_MANUELLE_LOT4.md)
 
-**Garde-fous ADR-018 / C7.4**
+**Réserves mineures**
 
-- Produit et CTA d'achat prioritaires
-- Récit / réassurance en appui, pas d'article encyclopédique
-- Pas de couche « savoir » lourde au Lot 4
+- Compteur panier à `2` sur captures : double clic CTA pendant recette — pas d’anomalie fonctionnelle.
 
-**Critère GO**
+**Critère GO** — validé
 
 ```text
 Une fiche produit peut être consultée, comprise et ajoutée au panier sans friction.
+Rendu visuel au moins au niveau Artisanal Terroir (Lot 2.1).
 ```
-
-**Condition** : données produit propres en BO — sinon **GO avec réserves** ou report.
 
 ---
 
@@ -291,6 +288,5 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. Validation humaine du ticket `TICKET_MARKETONE_LOT2_1_DESIGN_SYSTEM_MINIMAL`
-2. Exécution Lot 2.1 après GO
-3. Ticket Lot 4 après GO Lot 2.1
+1. Préparer le ticket **Lot 5** — panier / checkout smoke
+2. Exécution Lot 5 après GO ticket

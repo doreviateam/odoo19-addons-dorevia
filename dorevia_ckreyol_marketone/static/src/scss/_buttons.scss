@@ -33,7 +33,8 @@
 }
 
 .marketone-root,
-.marketone-shop {
+.marketone-shop,
+.marketone-product {
     .btn-primary {
         @include marketone-btn-primary;
     }

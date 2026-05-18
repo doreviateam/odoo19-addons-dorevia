@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_page_product"
+              inherit_id="website_sale.product"
+              name="Marketone: Fiche produit"
+              priority="16">
+        <xpath expr="//div[@id='wrap']" position="attributes">
+            <attribute name="class" add="marketone-product" separator=" "/>
+        </xpath>
+    </template>
+</odoo>

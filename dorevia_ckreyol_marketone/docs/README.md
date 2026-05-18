@@ -22,6 +22,8 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 | [`pilotage/ROADMAP.md`](pilotage/ROADMAP.md) | Roadmap par lots |
 | [`recette/ENV_REFERENCE.md`](recette/ENV_REFERENCE.md) | Base `ckr-marketone-01` et validation |
 | [`recette/ASSETS_REFERENCE.md`](recette/ASSETS_REFERENCE.md) | Banque PNG marketplace (`docs/assets`) — recette BO |
+| [`recette/RECETTE_MANUELLE.md`](recette/RECETTE_MANUELLE.md) | Plan de recette manuelle MOA (tous lots) |
+| [`recette/RECETTE_MANUELLE_LOT4.md`](recette/RECETTE_MANUELLE_LOT4.md) | **Recette manuelle Lot 4** (fiche produit) |
 
 ## Doctrine produit C-Kreyol
 
@@ -96,7 +98,7 @@ Sites de **référence d'intention** (pas de copie) :
 | 2 | [`tickets/TICKET_MARKETONE_LOT2_IDENTITE_FRONT.md`](tickets/TICKET_MARKETONE_LOT2_IDENTITE_FRONT.md) | GO validé |
 | 3 | [`tickets/TICKET_MARKETONE_LOT3_SHOP.md`](tickets/TICKET_MARKETONE_LOT3_SHOP.md) | Livré |
 | 2.1 | [`tickets/TICKET_MARKETONE_LOT2_1_DESIGN_SYSTEM_MINIMAL.md`](tickets/TICKET_MARKETONE_LOT2_1_DESIGN_SYSTEM_MINIMAL.md) | GO avec réserves (`19.0.3.1.0`) |
-| 4 | [`tickets/TICKET_MARKETONE_LOT4_PRODUCT.md`](tickets/TICKET_MARKETONE_LOT4_PRODUCT.md) | Ticket prêt — validation humaine avant exécution |
+| 4 | [`tickets/TICKET_MARKETONE_LOT4_PRODUCT.md`](tickets/TICKET_MARKETONE_LOT4_PRODUCT.md) | GO avec réserves mineures (`19.0.4.0.0`, 2026-05-18) |
 
 ## Règle de lecture rapide
 
