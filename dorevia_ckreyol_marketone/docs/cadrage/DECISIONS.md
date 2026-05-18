@@ -336,7 +336,7 @@
 | | |
 |---|---|
 | **Date** | 2026-05-18 |
-| **Statut** | **Acceptée — cadrage produit** (document uniquement, aucun code) |
+| **Statut** | **Acceptée — GO MOA** (2026-05-18 ; document uniquement, aucun code) |
 | **Contexte** | ADR-018 pose les trois dimensions (vendre, raconter, transmettre). Le MOA formalise le nommage **Boutique / Culture / Savoirs** pour structurer le site à terme, après stabilisation du socle e-commerce (Lots 1–5) et première porte catalogue (Lot 6.1). |
 | **Décision** | C-Kreyol est structuré en trois univers : **1. Boutique** — acheter ; **2. Culture** — découvrir ; **3. Savoirs** — transmettre. Les **portes catalogue** appartiennent d’abord à l’univers **Boutique** (orientation de la grille `/shop` sans moteur parallèle). Les contenus **Culture** et **Savoirs** seront introduits **progressivement** dans des **espaces dédiés**, pas en transformant `/shop` en portail éditorial. |
 | **Savoirs — contribution** | À terme, un **utilisateur identifié** pourra **proposer** une recette ; **publication** uniquement après **validation / modération** back-office. *Déposer une recette ≠ publier automatiquement.* |

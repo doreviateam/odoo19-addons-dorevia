@@ -231,7 +231,17 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 | Exécution | **GO avec réserves** — `19.0.6.0.0`, 60/60 tests — [`TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md) (clôturé) |
 | Recette MOA | [`RECETTE_MANUELLE_LOT6_1.md`](../recette/RECETTE_MANUELLE_LOT6_1.md) — GO avec réserves |
 
-**Réserves recette** : catégorie avec `website_id` site courant ; redémarrage daemon après `-u` pour alias `/incontournables`.
+**Lot 6.2 — Origines** (cadrage ouvert)
+
+| Étape | Statut |
+|-------|--------|
+| ADR-024 / Note univers | **GO MOA** (2026-05-18) |
+| Cadrage | Ticket ouvert — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) |
+| Exécution | **Interdite** avant GO cadrage + ticket exec |
+
+**Principe** : porte **Boutique** (`/shop`) ; récit territoire **Culture** — lots dédiés ultérieurs.
+
+**Réserves recette 6.1** : catégorie avec `website_id` site courant ; redémarrage daemon après `-u` pour alias `/incontournables`.
 
 **Portes envisagées** (ordre indicatif)
 
@@ -300,6 +310,6 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. **Cadrage séparé** de la prochaine porte catalogue (Lot 6.2) — **une porte à la fois**, pas de multi-portes simultanées
-2. Ticket MOA dédié avant toute exécution 6.2+
-3. Conserver la doctrine : portes orientent, `website_sale` filtre, pas de moteur parallèle
+1. **Validation MOA** du cadrage [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) (D1–D11)
+2. Ticket d’exécution 6.2 **après** GO cadrage uniquement
+3. Conserver ADR-024 : Boutique / Culture / Savoirs — une porte à la fois

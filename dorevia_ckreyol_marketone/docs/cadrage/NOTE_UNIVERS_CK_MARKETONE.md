@@ -2,7 +2,7 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut** | Cadrage produit — **document uniquement** (aucun code) |
+| **Statut** | **GO MOA** (2026-05-18) — référence de cadrage ; aucun code |
 | **Date** | 2026-05-18 |
 | **ADR** | [ADR-024](DECISIONS.md#adr-024--structuration-c-kreyol-en-trois-univers-boutique-culture-savoirs) |
 | **Complète** | [ADR-018](DECISIONS.md#adr-018--articulation-des-trois-dimensions-c-kreyol) (vendre / raconter / transmettre) |
@@ -277,10 +277,10 @@ Le savoir en prolongement.
 
 ## 9. Prochaines actions (hors ce document)
 
-1. **MOA** : valider ADR-024 et cette note.
-2. **Lot 6.2** : ticket de **cadrage** Origines uniquement — pas d’exécution multi-portes.
+1. ~~**MOA** : valider ADR-024 et cette note.~~ — **GO** (2026-05-18).
+2. **Lot 6.2** : ticket de **cadrage** Origines — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) ; pas d’exécution avant GO cadrage.
 3. **Culture / Savoirs** : tickets séparés quand le socle portes Boutique le permet.
-4. **Pas de code** sur les univers tant que le cadrage du lot concerné n’est pas **GO**.
+4. **Pas de code** sur les univers ni sur la porte Origines tant que le cadrage Lot 6.2 n’est pas **GO**.
 
 ---
 
