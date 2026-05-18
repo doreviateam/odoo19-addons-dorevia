@@ -69,7 +69,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
 
 | # | Réserve | Mitigation |
 |---|---------|------------|
-| R1 | Catégorie sans `website_id` → 500 sur featured | Toujours rattacher la catégorie **Incontournables** au site **My Website** |
+| R1 | Catégorie sans `website_id` → 500 sur featured | **Prérequis d’exploitation** (recette / pré-prod) : rattacher la catégorie **Incontournables** au site **My Website** — consolidé GO portes Boutique |
 | R2 | Alias `/incontournables` absent après `-u` sans redémarrage daemon | Redémarrer Odoo sandbox avant recette HTTP sur alias |
 
 ---

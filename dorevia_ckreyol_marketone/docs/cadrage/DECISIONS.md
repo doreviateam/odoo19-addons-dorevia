@@ -325,9 +325,9 @@
 | **Décision** | Première porte catalogue : `marketone_mode=featured` sur `/shop`, alias `/incontournables` → 301, filtre via `product.public.category` référencée par paramètre système, hook `_search_get_detail` / `_get_search_options` / `_get_shop_domain` (alignement fourchette prix). Présentation minimale (titre Incontournables, intro, lien retour). **Pas** de modèle collection custom, tag, champ produit, JS, ni dépendance marketplace. |
 | **Contrats** | C2, C3.A ; non-régression C1, C8, scopes Lots 2–5 |
 | **Réserves cadrage** | (1) catégorie publique = source simple, collection éditoriale plus tard ; (2) SEO canonical/noindex documenté sans implémentation Lot 6.1 ; (3) filtres natifs Odoo conservés |
-| **Réserves recette MOA** | (4) la catégorie publique **doit** avoir `website_id` = site courant (sinon 500 sur featured) ; (5) après `-u` module, daemon long-running : **redémarrer Odoo** pour exposer `/incontournables` (routing HTTP) |
+| **Réserves recette MOA** | (4) **`website_id` site courant** sur la catégorie = **prérequis d’exploitation** (recette / pré-prod), consolidé GO portes Boutique 2026-05-18 — sinon **500** sur featured ; (5) après `-u` : **redémarrer Odoo** pour `/incontournables` (routing HTTP) |
 | **Recette** | `docs/recette/RECETTE_MANUELLE_LOT6_1.md` — 60/60 tests auto |
-| **Tickets** | Cadrage : `TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES` · Exécution : `TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC` (**clôturé**) |
+| **Tickets** | Cadrage : `TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES` · Exécution : `TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC` (**clôturé**) · Consolidation : `TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE` (**GO**) |
 
 ---
 

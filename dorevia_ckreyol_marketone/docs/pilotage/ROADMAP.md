@@ -2,8 +2,8 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut global** | Lots 1–5 **GO** ; **Lot 6.1 GO avec réserves** ; **Lot 6.2 GO** (`19.0.7.0.0`) |
-| **Dernière mise à jour** | 2026-05-18 (recette MOA Lot 6.2) |
+| **Statut global** | Lots 1–5 **GO** ; **6.1 GO avec réserves** ; **6.2 GO** ; **consolidation portes Boutique GO** |
+| **Dernière mise à jour** | 2026-05-18 (GO consolidation portes Boutique) |
 | **Décision de départ** | Nouveau module, pas de copie mécanique de `dorevia_ckreyol_marketplace` |
 
 ---
@@ -243,9 +243,21 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 
 **Principe** : porte **Boutique** (`/shop`) ; récit territoire **Culture** — lots dédiés ultérieurs.
 
-**Réserves recette 6.1** : catégorie avec `website_id` site courant ; redémarrage daemon après `-u` pour alias `/incontournables`.
+**Consolidation portes Boutique** (2026-05-18)
 
-**Réserves recette 6.2** : redémarrage daemon après `-u` pour alias `/origines`.
+| Étape | Statut |
+|-------|--------|
+| Cadrage | **GO** — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) (clôturé, référence) |
+| Photographie | `/shop` · `/incontournables` → `featured` · `/origines` → `origin` |
+| Suite validée | **Culture / Territoires** — pas Lot 6.3 immédiat |
+
+**Prérequis exploitation (consolidés)**
+
+| Porte | Prérequis |
+|-------|-----------|
+| Incontournables | Catégorie publique avec **`website_id` = site courant** (obligatoire recette / pré-prod) ; paramètre `featured_public_category_id` |
+| Origines | Profils `marketone.shop.origin` publiés sur le site courant ; attribut **Origine** |
+| Alias | Redémarrage Odoo après `-u` pour `/incontournables` et `/origines` |
 
 **Portes envisagées** (ordre indicatif)
 
@@ -314,6 +326,6 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. **Consolidation portes Boutique** — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) (cadrage 6.1 + 6.2, pas de code)
-2. **Suite recommandée post-consolidation** : premier cadrage **Culture / Territoires**, puis Lot 6.3+ (Promotions, Kits, Collections…)
-3. Réserve exploitation : redémarrage Odoo après `-u` pour `/incontournables` et `/origines`
+1. **Premier cadrage Culture / Territoires** — récit Origines, espaces dédiés hors `/shop` (ticket à créer ; pas de code sans GO MOA)
+2. **Lot 6.3+** (Promotions, Kits, Collections…) — **après** Culture, sauf décision MOA contraire
+3. Référence portes Boutique : [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md)

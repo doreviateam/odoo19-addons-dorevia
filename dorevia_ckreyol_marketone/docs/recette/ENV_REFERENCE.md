@@ -174,12 +174,20 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
 | URL | `/shop?marketone_mode=origin` ; facette `marketone_origin=<slug>` ; alias `/origines` → 301 |
 | Recette | [`RECETTE_MANUELLE_LOT6_2.md`](RECETTE_MANUELLE_LOT6_2.md) |
 
+**Consolidation portes Boutique** (**GO** 2026-05-18) — référence [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) :
+
+| Entrée | Canonique |
+|--------|-----------|
+| Tous les produits | `/shop` |
+| Incontournables | `/shop?marketone_mode=featured` — alias `/incontournables` → 301 |
+| Origines | `/shop?marketone_mode=origin` — alias `/origines` → 301 ; facette `marketone_origin=<slug>` |
+
 **Lot 6.1 — porte Incontournables** (`19.0.6.0.0`, **GO avec réserves** 2026-05-18) :
 
 | Prérequis | Détail |
 |-----------|--------|
 | Paramètre système | `dorevia_ckreyol_marketone.featured_public_category_id` = id `product.public.category` « Incontournables » |
-| Catégorie BO | **Obligatoire** : `website_id` = site courant (**My Website** sur `ckr-marketone-01`) — sans rattachement site → **500** sur `/shop?marketone_mode=featured` |
+| Catégorie BO | **Prérequis d’exploitation (obligatoire)** : la catégorie publique **Incontournables** doit avoir `website_id` = site courant (**My Website** sur `ckr-marketone-01`, idem recette / pré-prod). Sans rattachement site → **500** sur `/shop?marketone_mode=featured` — consolidé GO portes Boutique, pas une simple réserve historique |
 | Produits | 2–3 produits publiés rattachés à la catégorie (manuel, pas de seed XML) |
 | Recette | [`RECETTE_MANUELLE_LOT6_1.md`](RECETTE_MANUELLE_LOT6_1.md) |
 

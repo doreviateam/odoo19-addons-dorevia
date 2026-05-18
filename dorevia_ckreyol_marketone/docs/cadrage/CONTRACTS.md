@@ -93,7 +93,7 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Collections éditoriales | Modèle ou mécanisme à définir (hors 6.1) |
 | Catégories merchandising | `product.public.category` (navigation générale) |
 
-**Statut** : C3.A **implémenté Lot 6.1** — GO avec réserves (recette MOA 2026-05-18). Prérequis BO : catégorie avec `website_id` site courant (cf. ADR-023).
+**Statut** : C3.A **implémenté Lot 6.1** — GO avec réserves (recette MOA 2026-05-18). **Prérequis exploitation** : catégorie publique **Incontournables** avec `website_id` = site courant — obligatoire recette / pré-prod (consolidation portes Boutique GO 2026-05-18 ; cf. ADR-023).
 
 ### C3.B — Porte Origines (Lot 6.2 — figé cadrage 2026-05-18)
 

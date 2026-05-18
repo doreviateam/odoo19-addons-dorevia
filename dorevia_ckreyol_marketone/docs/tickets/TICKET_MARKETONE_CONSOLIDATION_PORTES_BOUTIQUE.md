@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE` |
 | **Type** | **Cadrage uniquement** — aucun code |
-| **Statut** | **Ouvert** — en attente validation MOA |
+| **Statut** | **Clôturé — GO consolidation** (2026-05-18) — document de référence ; aucun code |
 | **Version module de référence** | `19.0.7.0.0` |
 | **Base** | `ckr-marketone-01` |
 | **Prérequis** | Lots 1–5 **GO** ; Lot 6.1 **GO avec réserves** ; Lot 6.2 **GO** ; **ADR-024** / **NOTE_UNIVERS_CK_MARKETONE** **GO** |
@@ -86,8 +86,9 @@ Savoirs   — transmettre
 | **Alias 301** | `GET /incontournables` → **301** → canonique |
 | **`marketone_mode`** | `featured` |
 | **Facettes associées** | — *(filtre implicite catégorie)* |
-| **Source de vérité BO** | `ir.config_parameter` `dorevia_ckreyol_marketone.featured_public_category_id` → `product.public.category` |
-| **Config manquante** | Catégorie absente / id invalide → domaine vide (`id = 0`) — **pas de 500** si paramètre vide ; **500** si catégorie sans `website_id` site courant (réserve recette) |
+| **Source de vérité BO** | `ir.config_parameter` `dorevia_ckreyol_marketone.featured_public_category_id` → `product.public.category` nommée **Incontournables** |
+| **Prérequis exploitation** | La catégorie publique **doit** avoir `website_id` = site courant (**My Website** en recette / pré-prod). **Obligatoire** — pas une simple réserve historique : sans rattachement site → **500** sur `/shop?marketone_mode=featured` |
+| **Config manquante** | Paramètre vide ou catégorie absente → domaine vide (`id = 0`) — **pas de 500** ; catégorie existante mais **sans** `website_id` site courant → **500** |
 | **Présentation** | Bandeau `marketone-shop-featured-intro` ; titre + intro + lien « Tous les produits » |
 | **Mobile** | Recette MOA Lot 6.1 — bandeau lisible |
 | **Panier / checkout** | Non-régression validée (tests + recette) |
@@ -145,7 +146,7 @@ Référence : [`ENV_REFERENCE.md`](../recette/ENV_REFERENCE.md).
 
 | # | Prérequis | Porte | Contrôle |
 |---|-----------|-------|----------|
-| B1 | Catégorie publique **Incontournables** | featured | Existe ; produits rattachés ; **`website_id` = site courant** (My Website) |
+| B1 | Catégorie publique **Incontournables** | featured | Existe ; produits rattachés ; **`website_id` = site courant obligatoire** (My Website) — prérequis exploitation recette / pré-prod |
 | B2 | Paramètre système `featured_public_category_id` | featured | Id catégorie valide |
 | B3 | Attribut catalogue **Origine** | origin | Multi-valeurs ; sans variante |
 | B4 | Profils `marketone.shop.origin` | origin | Slug unique par site ; **publiés** ; `website_id` site courant |
@@ -231,37 +232,36 @@ Référence visuelle legacy : shop riche (hero terroir, chips multi-portes, side
 
 | # | Livrable | Responsable |
 |---|----------|-------------|
-| L1 | Matrice §1 validée ou corrigée par MOA | MOA + Archi |
-| L2 | Checklist exploitation §2 intégrée à `ENV_REFERENCE` si écarts | Archi |
-| L3 | Fiche recette unique **« Portes Boutique »** (optionnel) ou renvoi 6.1 + 6.2 | Archi |
-| L4 | Note « pont Culture » — liens autorisés depuis portes / fiches | Archi |
-| L5 | Mise à jour `ROADMAP` — prochaine étape recommandée | Archi |
-| L6 | Décision sortie §8 | MOA |
+| L1 | Matrice §1 validée MOA | ✅ |
+| L2 | Checklist exploitation §2 — `ENV_REFERENCE` | ✅ |
+| L3 | Recettes 6.1 + 6.2 (pas de fiche unique) | ✅ |
+| L4 | Pont Culture §3 | ✅ |
+| L5 | `ROADMAP` / renvois | ✅ |
+| L6 | Décision sortie §8 | ✅ **GO consolidation** |
 
 ---
 
 ## 8. Décision de sortie (MOA)
 
 ```text
-[ ] GO consolidation
+[x] GO consolidation
 [ ] GO consolidation avec réserves
 [ ] NO GO
 ```
 
-**Orientation recommandée après GO** *(préférence MOA indiquée — à confirmer)* :
+**Date** : 2026-05-18 · **Validé par** : MOA
 
-| Priorité | Suite |
-|----------|--------|
-| **1** | **Premier cadrage Culture** — territoires / récit Origines (espaces dédiés, sans `/shop` éditorial) |
-| 2 | Porte Boutique suivante (Promotions, Kits ou Collections) — **après** Culture ou en parallèle si MOA tranche autrement |
-| 3 | Cadrage Savoirs contributif — plus tard |
+**Points validés** : matrice `/shop`, `/incontournables` → `featured`, `/origines` → `origin` ; alias 301 ; modes et facettes ; sources BO ; exploitation ; non-régression tunnel ; ADR-024 ; legacy lecture seule ; pas de code ; pas de Lot 6.3.
 
-**Si GO avec réserves** — documenter :
+**Précision MOA (Incontournables)** : `website_id` = site courant sur la catégorie publique = **prérequis d’exploitation** (recette / pré-prod), pas seulement une réserve Lot 6.1.
 
-| # | Réserve | Action |
-|---|---------|--------|
-| R1 | | |
-| R2 | | |
+**Orientation de sortie validée** :
+
+| Priorité | Suite | Statut |
+|----------|--------|--------|
+| **1** | **Premier cadrage Culture / Territoires** — récit Origines hors `/shop` | **À ouvrir** |
+| 2 | Porte Boutique 6.3+ (Promotions, Kits, Collections…) | **Après** Culture — pas d’exécution immédiate |
+| 3 | Cadrage Savoirs contributif | Plus tard |
 
 ---
 
@@ -280,13 +280,13 @@ Référence visuelle legacy : shop riche (hero terroir, chips multi-portes, side
 
 ## 10. Critères GO consolidation
 
-- [ ] Matrice §1 **complète** et validée MOA pour les 3 entrées (shop nu, featured, origin)
-- [ ] Règles transverses (un mode, priorité, repli origine, alias) **sans ambiguïté**
-- [ ] Checklist exploitation §2 **acceptée** pour sandbox et prod future
-- [ ] Agencement univers §3 **aligné** ADR-024
-- [ ] Backlog §4 **inventorié** sans détail Promotions / Kits / Collections
-- [ ] Garde-fous §6 **acceptés**
-- [ ] Orientation suite §8 **tranchée** (Culture vs porte 6.3)
+- [x] Matrice §1 **complète** et validée MOA pour les 3 entrées (shop nu, featured, origin)
+- [x] Règles transverses (un mode, priorité, repli origine, alias) **sans ambiguïté**
+- [x] Checklist exploitation §2 **acceptée** pour sandbox et prod future
+- [x] Agencement univers §3 **aligné** ADR-024
+- [x] Backlog §4 **inventorié** sans détail Promotions / Kits / Collections
+- [x] Garde-fous §6 **acceptés**
+- [x] Orientation suite §8 **tranchée** — **Culture / Territoires** avant porte 6.3
 
 ---
 
@@ -307,6 +307,6 @@ Référence visuelle legacy : shop riche (hero terroir, chips multi-portes, side
 
 ## Prochaine étape
 
-1. **MOA** : valider ce ticket de consolidation (§8).
-2. **Archi** : livrables L1–L5 si GO ; pas de commit code.
-3. **Suite recommandée** : cadrage **Culture / Territoires** — pas Lot 6.3 promo sans décision MOA contraire.
+1. **Ouvrir** le ticket de **cadrage Culture / Territoires** (premier lot univers Culture) — pas de code.
+2. **Ne pas** lancer Lot 6.3 (Promotions / Kits / Collections) en exécution sans décision MOA contraire.
+3. **Référence** : ce document reste la **photographie** des portes Boutique (`19.0.7.0.0`).
