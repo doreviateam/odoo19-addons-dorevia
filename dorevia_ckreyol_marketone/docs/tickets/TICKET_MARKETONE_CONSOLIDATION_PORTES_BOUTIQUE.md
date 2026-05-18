@@ -307,6 +307,6 @@ Référence visuelle legacy : shop riche (hero terroir, chips multi-portes, side
 
 ## Prochaine étape
 
-1. **Ouvrir** le ticket de **cadrage Culture / Territoires** (premier lot univers Culture) — pas de code.
+1. **Valider** le cadrage [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) — pas de code.
 2. **Ne pas** lancer Lot 6.3 (Promotions / Kits / Collections) en exécution sans décision MOA contraire.
 3. **Référence** : ce document reste la **photographie** des portes Boutique (`19.0.7.0.0`).

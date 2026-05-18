@@ -324,8 +324,18 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ---
 
+## Univers Culture — Territoires (cadrage ouvert)
+
+| Étape | Statut |
+|-------|--------|
+| Cadrage | **Ouvert** — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) |
+| Objectif | Récit territoire / origine **hors** `/shop` ; pas de hub massif v1 |
+| Lien Boutique | Porte Origines + fiche produit — liens à cadrer ; `marketone.shop.origin` reste minimal |
+
+---
+
 ## Prochaine action
 
-1. **Premier cadrage Culture / Territoires** — récit Origines, espaces dédiés hors `/shop` (ticket à créer ; pas de code sans GO MOA)
-2. **Lot 6.3+** (Promotions, Kits, Collections…) — **après** Culture, sauf décision MOA contraire
+1. **MOA** : valider le cadrage Culture / Territoires (D1–D8)
+2. **Lot 6.3+** Boutique — **après** GO cadrage Culture (sauf décision MOA contraire)
 3. Référence portes Boutique : [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md)

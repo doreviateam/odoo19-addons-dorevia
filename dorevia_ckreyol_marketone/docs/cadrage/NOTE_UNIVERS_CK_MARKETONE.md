@@ -284,7 +284,7 @@ Le savoir en prolongement.
 | 1 | Valider **ADR-024** et cette note (version consolidée) | **GO MOA** (2026-05-18) |
 | 2 | Lot 6.2 Origines — cadrage, exécution, recette | **GO** — `19.0.7.0.0`, commit `3c179ae` |
 | 3 | **Consolidation portes Boutique** (6.1 + 6.2) | **GO** (2026-05-18) — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) |
-| 4 | **Culture** — territoires / récit Origines | **Prochaine étape** — ticket cadrage à ouvrir |
+| 4 | **Culture** — territoires / récit Origines | Cadrage **ouvert** — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) |
 | 5 | **Lot 6.3+** (Promotions, Kits, Collections…) | Après Culture — une porte à la fois |
 | 6 | **Savoirs** — recettes contributives (identifié → modération BO → publication) | Cadrage **futur** ; pas de forum, pas de publication automatique |
 | 7 | **Pas de code univers** | Tant qu’aucun ticket MOA dédié Culture / Savoirs n’est **GO** |
