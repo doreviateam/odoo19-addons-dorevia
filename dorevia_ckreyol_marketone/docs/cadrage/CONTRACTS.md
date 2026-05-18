@@ -131,7 +131,21 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | SEO | Documenter seulement — pas de chantier SEO avancé v1 |
 | Savoirs | Hors scope — ticket séparé |
 
-**Statut** : C8 **GO MOA** (`19.0.8.0.0`, ADR-026, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/RECETTE_MANUELLE_CULTURE_V1.md) acceptée.
+**Statut** : C8 **GO MOA** v1 (`19.0.8.0.0`, ADR-026, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/RECETTE_MANUELLE_CULTURE_V1.md) acceptée.
+
+#### C8.v2 — Réplicabilité territoires (cadrage GO avec réserves 2026-05-18)
+
+| Élément | Règle |
+|---------|-------|
+| Territoires | **+2** slugs : `martinique`, `reunion` — **sous réserve** profils BO |
+| Delta technique | **Aucun** code fonctionnel nouveau si infra v1 suffit — BO + recette + tests |
+| Éditorial | Sections **génériques** ; varient `name_visitor`, `context_phrase`, slug, CTA |
+| Visuel | **Pas** d’image par territoire v2 |
+| Navigation | **Pas** de liens croisés ; **pas** de hub `/culture` ; menu header **reporté** |
+| Tests | Tag `dorevia_marketone_culture_v2` ; non-régression **85+** tests |
+| Exécution | Après GO [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) (ADR-027) |
+
+**Statut** : C8.v2 **GO technique** (`19.0.9.0.0`, ADR-027, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md).
 
 ---
 

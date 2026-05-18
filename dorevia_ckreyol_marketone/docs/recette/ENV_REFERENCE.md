@@ -161,9 +161,19 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   -d ckr-marketone-01 \
   -u dorevia_ckreyol_marketone \
   --test-enable --stop-after-init \
-  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4,dorevia_marketone_lot5,dorevia_marketone_lot6_1_featured,dorevia_marketone_lot6_2_origin,dorevia_marketone_culture_v1 \
+  --test-tags=dorevia_marketone_smoke,dorevia_marketone_lot2,dorevia_marketone_lot2_1,dorevia_marketone_lot3,dorevia_marketone_lot4,dorevia_marketone_lot5,dorevia_marketone_lot6_1_featured,dorevia_marketone_lot6_2_origin,dorevia_marketone_culture_v1,dorevia_marketone_culture_v2 \
   --http-port=8071
 ```
+
+**Culture v2 légère — territoires additionnels** (`19.0.9.0.0`, exécution 2026-05-18) :
+
+| Prérequis | Détail |
+|-----------|--------|
+| Profils BO | `guadeloupe`, `martinique`, `reunion` publiés sur **My Website** |
+| Delta code | **Aucun** code fonctionnel — grammaire v1 réutilisée |
+| URL | `/culture/martinique`, `/culture/reunion` |
+| Recette | [`RECETTE_MANUELLE_CULTURE_V2.md`](RECETTE_MANUELLE_CULTURE_V2.md) |
+| Tests | Tag `dorevia_marketone_culture_v2` |
 
 **Culture v1 — page territoire** (`19.0.8.0.0`, **GO MOA** 2026-05-18) :
 

@@ -191,6 +191,6 @@ Après `-u dorevia_ckreyol_marketone` sur un **daemon Odoo déjà lancé**, red�
 
 ## Prochaine étape
 
-1. **Culture v2** (hub, pages supplémentaires, menu header) — ticket dédié, **après** décision MOA.
+1. **Culture v2 légère** — exec [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) (cadrage GO).
 2. **Lot 6.3+ Boutique** — **après** décision MOA (pas en parallèle sans arbitrage).
 3. **Savoirs** — ticket séparé.

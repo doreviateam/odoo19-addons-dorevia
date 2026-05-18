@@ -339,8 +339,20 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ---
 
+## Culture v2 légère — Territoires additionnels
+
+| Étape | Statut |
+|-------|--------|
+| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md) |
+| Exécution | **Livré** `19.0.9.0.0` — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) — recette MOA |
+| Tests | **91** post-tests, **0** failed |
+| ADR-027 + C8.v2 | ✅ |
+| Lot 6.3 Boutique | **Gel MOA** |
+
+---
+
 ## Prochaine action
 
-1. **Lot 6.3+ Boutique** (Promotions, Kits, Collections) — décision MOA
-2. **Culture v2** (hub, territoires additionnels, menu header) — ticket dédié
+1. **MOA** : recette Culture v2 — `martinique`, `reunion`, `guadeloupe`
+2. **Lot 6.3+ Boutique** — **pas** d’ouverture immédiate
 3. **Savoirs** — ticket séparé
