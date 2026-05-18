@@ -97,6 +97,35 @@ Cela implique :
 - ne pas créer une navigation complexe avant que le socle boutique soit stable ;
 - préparer la possibilité éditoriale sans l'implémenter prématurément.
 
+### 2.5 Références d'inspiration produit / design (MOA)
+
+**Inspirations, pas modèles à copier** — voir ADR-019.
+
+| Référence | Dimension utile pour C-Kreyol | Ce qu'on n'importe pas dans Marketone (socle) |
+|----------|------------------------------|-----------------------------------------------|
+| **750g** | Éditorial, recettes, usages, ingrédients, « que faire avec ? », transmission de connaissance | Densité média / longueur éditoriale sur fiche ou `/shop` |
+| **Caribshopper** | E-commerce produits caribéens, logique territoire / pays, popularité, nouveautés, recettes, diaspora | Logique marketplace large, navigation et catalogue complexes |
+
+**Garde-fous confirmés** (Lots 1–5, dont Lot 4 en cours de cadrage) :
+
+- direction visuelle **Artisanal Terroir** (Lot 2.1) ;
+- parcours d'achat **simple** ;
+- fiche produit **non encyclopédique** (C7.4, ADR-018).
+
+**Impact planning** : ces références nourrissent les **lots éditoriaux et connaissance** après stabilisation du socle e-commerce — **sans modifier le périmètre technique du Lot 4** tel que défini.
+
+### 2.6 Banque visuelle legacy (`marketplace/docs/assets`)
+
+Le dépôt **`dorevia_ckreyol_marketplace/docs/assets/`** (21 PNG : packshots, moodboards MVP02, exports Stitch) peut être **exploité** par Marketone pour la recette et le cadrage — **sans** installer le module marketplace sur `ckr-marketone-01`.
+
+| Usage Marketone | Fichiers typiques |
+|-----------------|-------------------|
+| Recette BO (2–3 produits) | `homepage_maniocookies_sale_la_platine.png`, `homepage_manioc_crackers_sale_ste_anne.png`, `homepage_manioc_pates_mayotte_la_platine.png`, `exemple_produit_manioc_crackers_la_platine.png` |
+| Inspiration design (Stitch) | `stitch_*.png` — pas de copie HTML |
+| Éditorial futur | `mvp02_reference_*`, `hero_reference_*` |
+
+Détail opérationnel : `docs/recette/ASSETS_REFERENCE.md` — ADR-020.
+
 ---
 
 ## 3. Périmètre technique

@@ -254,6 +254,37 @@
 
 ---
 
+## ADR-019 — Références d'inspiration 750g et Caribshopper
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | Acceptée — références MOA (hors exécution immédiate) |
+| **Contexte** | C-Kreyol articule e-commerce, éditorial culturel et partage de connaissance (ADR-018). Deux sites servent de **références d'intention**, pas de modèles à porter dans Odoo. |
+| **750g** | Inspiration pour recettes, usages, ingrédients, « que faire avec ? », transmission de savoir. |
+| **Caribshopper** | Inspiration pour e-commerce territoires caribéens, logique pays/territoire, produits populaires, nouveautés, recettes, diaspora. |
+| **Décision** | Conserver ces références pour les **futurs lots** éditoriaux et connaissance, **après** Lots 1–5 (socle e-commerce) et Lot 6 (portes catalogue) selon roadmap. |
+| **Interdictions Marketone (socle)** | Ne pas copier la densité média de 750g ; ne pas copier la logique marketplace large de Caribshopper. |
+| **Invariants** | Direction **Artisanal Terroir** ; parcours d'achat simple ; fiche produit non encyclopédique ; doctrine « le produit d'abord, le récit ensuite, le savoir en prolongement ». |
+| **Impact Lot 4** | **Aucune modification** du ticket ou du périmètre technique Lot 4 à ce stade. |
+| **Références** | `cadrage/ARCHITECTURE.md` §2.5 |
+
+---
+
+## ADR-020 — Banque visuelle marketplace `docs/assets`
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | Acceptée |
+| **Contexte** | Le module legacy `dorevia_ckreyol_marketplace` versionne une banque PNG sous `docs/assets/` (packshots, moodboards MVP02, exports Stitch). Marketone ne cohabite pas avec marketplace sur une même base, mais peut **réutiliser** ces fichiers en recette et cadrage. |
+| **Décision** | Autoriser l'exploitation de cette banque pour : (1) **recette BO** — 2 à 3 produits avec images réelles (`homepage_*`, `exemple_produit_*`) ; (2) **cadrage** lots éditoriaux futurs ; (3) **inspiration** Stitch — sans copie HTML/CSS. |
+| **Interdictions** | Pas de seed XML produit dans Marketone ; pas de copie mécanique des blocs marketplace (Explorer, hero legacy) ; pas d'assets lourds sur fiche Lot 4 au-delà du retail sobre ; fichiers `stitch_*` = inspiration uniquement. |
+| **Référence opérationnelle** | `docs/recette/ASSETS_REFERENCE.md` ; inventaire complet : `dorevia_ckreyol_marketplace/README.md` § Références visuelles. |
+| **Impact Lot 4** | Recette visuelle : importer manuellement 2–3 packshots en BO — **aucun** changement de périmètre technique du ticket. |
+
+---
+
 ## Décisions en attente (à trancher avant Lot 6)
 
 | Sujet | Options | Décideur |

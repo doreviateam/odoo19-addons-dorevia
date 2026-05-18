@@ -25,6 +25,8 @@ Chaque lot se clôture par une décision **GO / GO avec réserves / NO GO** huma
 
 **Doctrine produit** (ADR-018) : C-Kreyol articule **vendre, raconter, transmettre** sans les confondre. Lots 1-5 = socle e-commerce ; Lot 6 = portes catalogue ; lots suivants = éditorial et connaissance. Voir `cadrage/ARCHITECTURE.md` §2.
 
+**Inspirations MOA** (ADR-019) : 750g (connaissance / recettes), Caribshopper (e-commerce territoires caribéens) — références pour lots futurs, **pas** copie au socle ni élargissement du Lot 4.
+
 ---
 
 ## Lot 0 — Cadrage et audit

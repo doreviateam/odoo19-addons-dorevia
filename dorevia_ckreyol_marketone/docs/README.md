@@ -21,6 +21,7 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 | [`cadrage/DECISIONS.md`](cadrage/DECISIONS.md) | ADR et arbitrages datés |
 | [`pilotage/ROADMAP.md`](pilotage/ROADMAP.md) | Roadmap par lots |
 | [`recette/ENV_REFERENCE.md`](recette/ENV_REFERENCE.md) | Base `ckr-marketone-01` et validation |
+| [`recette/ASSETS_REFERENCE.md`](recette/ASSETS_REFERENCE.md) | Banque PNG marketplace (`docs/assets`) — recette BO |
 
 ## Doctrine produit C-Kreyol
 
@@ -72,6 +73,19 @@ Lots suivants : premières couches éditoriales et connaissance
 ```
 
 Garde-fous jusqu'à stabilisation du socle : pas de contenus culturels lourds dans `/shop` ; fiche produit non encyclopédique ; CTA d'achat prioritaire ; navigation complexe reportée ; possibilité éditoriale préparée sans implémentation prématurée.
+
+### Références d'inspiration (MOA — ADR-019)
+
+Sites de **référence d'intention** (pas de copie) :
+
+| Site | Apport |
+|------|--------|
+| **750g** | Éditorial, recettes, usages, transmission de connaissance |
+| **Caribshopper** | E-commerce territoires caribéens, pays, diaspora, nouveautés |
+
+À ne pas reproduire au socle Marketone : densité média 750g, marketplace large Caribshopper. Détails : [`cadrage/ARCHITECTURE.md`](cadrage/ARCHITECTURE.md) §2.5, [`cadrage/DECISIONS.md`](cadrage/DECISIONS.md) ADR-019.
+
+**Banque visuelle legacy** : packshots et moodboards dans `dorevia_ckreyol_marketplace/docs/assets/` — voir [`recette/ASSETS_REFERENCE.md`](recette/ASSETS_REFERENCE.md) (ADR-020).
 
 ## Tickets disponibles
 

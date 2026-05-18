@@ -175,6 +175,8 @@ Pour valider `/shop` (cartes) et la future fiche produit Lot 4, créer **2 à 3 
 - catégorie e-commerce si besoin ;
 - **aucun** fichier seed XML dans le module Marketone.
 
+**Images de recette** : utiliser les packshots réels de la banque legacy — voir [`ASSETS_REFERENCE.md`](ASSETS_REFERENCE.md) (`dorevia_ckreyol_marketplace/docs/assets/`, fichiers `homepage_*` ou `exemple_produit_*`).
+
 Réserve acceptée au **GO Lot 2.1 avec réserves** (2026-05-18).
 
 ---

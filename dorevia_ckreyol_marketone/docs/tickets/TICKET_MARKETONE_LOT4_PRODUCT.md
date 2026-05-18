@@ -9,6 +9,7 @@
 | **Prérequis** | GO Lot 2.1 avec réserves (2026-05-18) ; Lots 1, 2, 3 livrés |
 | **Version cible module** | `19.0.4.0.0` (proposition) |
 | **Référence design** | Design system Artisanal Terroir (Lot 2.1) — **ne pas dégrader** |
+| **Inspirations externes** | 750g, Caribshopper (ADR-019) — **hors périmètre Lot 4** ; lots éditoriaux ultérieurs |
 
 ---
 
@@ -36,9 +37,11 @@ Le rendu visuel est au moins au niveau du design system Lot 2.1 (home, shop, chr
 
 **Rappel doctrine technique** : Marketone **présente** ; Odoo **vend**.
 
+**Références MOA 750g / Caribshopper (ADR-019)** : inspiration pour les dimensions « raconter » et « transmettre » sur le **long terme** — **sans** élargir le Lot 4 (pas de densité média, pas de logique marketplace, fiche non encyclopédique).
+
 **Réserves Lot 2.1 reportées au Lot 4 (recette)**
 
-- Créer **2 à 3 produits de recette en BO** pour valider cartes `/shop` et fiche produit — **pas de seed XML** dans le module.
+- Créer **2 à 3 produits de recette en BO** pour valider cartes `/shop` et fiche produit — **pas de seed XML** dans le module. Images : banque `dorevia_ckreyol_marketplace/docs/assets/` (`homepage_*`, `exemple_produit_*`) — voir `docs/recette/ASSETS_REFERENCE.md` (ADR-020).
 - Page Contact native : **hors périmètre** (ticket futur).
 
 ---
