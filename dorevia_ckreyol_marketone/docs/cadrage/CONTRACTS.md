@@ -114,7 +114,7 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | SEO | `canonical` / `noindex` : **documenter** ; hors implémentation Lot 6.2 |
 | Cumul modes | **Un seul** `marketone_mode` — pas `featured` + `origin` |
 
-**Statut** : C3.B **contractuel Lot 6.2** — implémentation après GO ticket exécution (ADR-025).
+**Statut** : C3.B **GO MOA** (`19.0.7.0.0`, ADR-025, 2026-05-18).
 
 ---
 

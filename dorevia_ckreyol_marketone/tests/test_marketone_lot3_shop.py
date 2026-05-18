@@ -69,12 +69,12 @@ class TestMarketoneLot3Shop(HttpCase):
     def test_shop_no_catalog_gates(self):
         response = self.url_open("/shop")
         text = response.text
+        # Alias portes uniquement (pas les slugs catégorie /shop/category/incontournables-*).
+        gate_href = r"""href=['"]/(?:promotions|kits|incontournables|origines)(?:['"?]|$)"""
         for forbidden in (
             r"marketone_mode=",
             r"ckr_mode=",
-            r"/promotions",
-            r"/kits",
-            r"/incontournables",
+            gate_href,
         ):
             self.assertIsNone(
                 re.search(forbidden, text),

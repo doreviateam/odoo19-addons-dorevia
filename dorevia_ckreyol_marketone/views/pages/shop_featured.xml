@@ -5,7 +5,7 @@
               name="Marketone: porte Incontournables"
               priority="18">
         <xpath expr="//h1[hasclass('o_wsale_shop_title')]" position="attributes">
-            <attribute name="t-if">not category and not search and not marketone_featured_mode</attribute>
+            <attribute name="t-if">not category and not search and not marketone_featured_mode and not marketone_origin_mode</attribute>
         </xpath>
         <xpath expr="//header[@id='o_wsale_products_header']" position="before">
             <section t-if="marketone_featured_mode"

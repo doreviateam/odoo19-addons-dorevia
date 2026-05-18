@@ -1,0 +1,25 @@
+// Lot 6.2 — origines sur fiche produit (sous .marketone-product).
+
+.marketone-product {
+    .marketone-product-origins {
+        font-size: $marketone-body;
+        color: $marketone-text-muted;
+
+        &__label {
+            font-weight: $marketone-weight-semibold;
+            color: $marketone-text;
+            margin-right: $marketone-space-xs;
+        }
+
+        &__link {
+            color: $marketone-primary;
+            text-decoration: none;
+
+            &:hover,
+            &:focus-visible {
+                text-decoration: underline;
+                text-underline-offset: 0.15em;
+            }
+        }
+    }
+}

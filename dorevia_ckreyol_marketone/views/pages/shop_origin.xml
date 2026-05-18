@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_shop_origin_intro"
+              inherit_id="website_sale.products"
+              name="Marketone: porte Origines"
+              priority="19">
+        <xpath expr="//h1[hasclass('o_wsale_shop_title')]" position="attributes">
+            <attribute name="t-if">not category and not search and not marketone_featured_mode and not marketone_origin_mode</attribute>
+        </xpath>
+        <xpath expr="//header[@id='o_wsale_products_header']" position="before">
+            <section t-if="marketone_origin_mode"
+                     class="marketone-shop-origin-intro"
+                     aria-labelledby="marketone-origin-title">
+                <h1 id="marketone-origin-title"
+                    class="marketone-shop-origin-title o_wsale_products_shop_title"
+                    t-out="marketone_origin_title"/>
+                <p class="marketone-shop-origin-lead">
+                    Parcourez les produits selon leur territoire d'origine
+                    et découvrez les saveurs des mondes créolophones.
+                </p>
+                <p t-if="marketone_origin_empty"
+                   class="marketone-shop-origin-empty"
+                   role="status">
+                    Aucun produit ne correspond à cette sélection d'origine.
+                </p>
+                <p class="marketone-shop-origin-back-wrap">
+                    <a href="/shop" class="marketone-shop-origin-back">
+                        Tous les produits
+                    </a>
+                </p>
+            </section>
+        </xpath>
+    </template>
+</odoo>

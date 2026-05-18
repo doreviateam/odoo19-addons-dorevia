@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_product_origins"
+              inherit_id="website_sale.product_title"
+              name="Marketone: origines fiche produit"
+              priority="18">
+        <xpath expr="//h1[@t-field='product.name']" position="after">
+            <t t-set="marketone_origin_lines"
+               t-value="product._marketone_get_origin_shop_lines()"/>
+            <div t-if="marketone_origin_lines"
+                 class="marketone-product-origins mb-2">
+                <span class="marketone-product-origins__label">Origines :</span>
+                <ul class="marketone-product-origins__list list-inline mb-0">
+                    <li t-foreach="marketone_origin_lines"
+                        t-as="line"
+                        class="marketone-product-origins__item list-inline-item">
+                        <a t-if="line.get('url')"
+                           t-att-href="line['url']"
+                           class="marketone-product-origins__link"
+                           t-out="line['label']"/>
+                        <span t-else=""
+                              class="marketone-product-origins__text"
+                              t-out="line['label']"/>
+                    </li>
+                </ul>
+            </div>
+        </xpath>
+    </template>
+</odoo>

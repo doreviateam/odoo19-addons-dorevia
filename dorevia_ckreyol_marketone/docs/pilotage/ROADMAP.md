@@ -2,8 +2,8 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut global** | Lots 1–5 **GO** ; **Lot 6.1 GO avec réserves** (`19.0.6.0.0`) |
-| **Dernière mise à jour** | 2026-05-18 (recette MOA Lot 6.1) |
+| **Statut global** | Lots 1–5 **GO** ; **Lot 6.1 GO avec réserves** ; **Lot 6.2 GO** (`19.0.7.0.0`) |
+| **Dernière mise à jour** | 2026-05-18 (recette MOA Lot 6.2) |
 | **Décision de départ** | Nouveau module, pas de copie mécanique de `dorevia_ckreyol_marketplace` |
 
 ---
@@ -18,7 +18,7 @@ Lot 3  Boutique /shop propre    ← LIVRÉ
 Lot 2.1 Design system minimal   ← GO avec réserves (`19.0.3.1.0`, 2026-05-18)
 Lot 4  Fiche produit            ← GO avec réserves mineures (`19.0.4.0.0`, 2026-05-18)
 Lot 5  Panier / checkout smoke   ← GO (`19.0.5.0.0`, 2026-05-18)
-Lot 6  Portes catalogue        ← 6.1 Incontournables GO avec réserves ; 6.2+ à cadrer séparément
+Lot 6  Portes catalogue        ← 6.1 GO avec réserves ; 6.2 Origines GO ; 6.3+ à cadrer
 ```
 
 Chaque lot se clôture par une décision **GO / GO avec réserves / NO GO** humaine avant le lot suivant.
@@ -231,18 +231,21 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 | Exécution | **GO avec réserves** — `19.0.6.0.0`, 60/60 tests — [`TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md) (clôturé) |
 | Recette MOA | [`RECETTE_MANUELLE_LOT6_1.md`](../recette/RECETTE_MANUELLE_LOT6_1.md) — GO avec réserves |
 
-**Lot 6.2 — Origines** (cadrage ouvert)
+**Lot 6.2 — Origines** (`19.0.7.0.0`)
 
 | Étape | Statut |
 |-------|--------|
 | ADR-024 / Note univers | **GO MOA** (2026-05-18) |
 | Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) |
 | ADR-025 + C3.B | ✅ |
-| Exécution | Ticket ouvert — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) |
+| Exécution | **GO** — `19.0.7.0.0`, 76/76 tests — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) (clôturé) |
+| Recette MOA | [`RECETTE_MANUELLE_LOT6_2.md`](../recette/RECETTE_MANUELLE_LOT6_2.md) — GO |
 
 **Principe** : porte **Boutique** (`/shop`) ; récit territoire **Culture** — lots dédiés ultérieurs.
 
 **Réserves recette 6.1** : catégorie avec `website_id` site courant ; redémarrage daemon après `-u` pour alias `/incontournables`.
+
+**Réserves recette 6.2** : redémarrage daemon après `-u` pour alias `/origines`.
 
 **Portes envisagées** (ordre indicatif)
 
@@ -311,6 +314,6 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ## Prochaine action
 
-1. **Validation MOA** du ticket d’exécution [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md)
-2. Implémentation `19.0.7.0.0` + recette `RECETTE_MANUELLE_LOT6_2.md`
-3. Conserver ADR-024 : Boutique (porte) / Culture (report) — une porte à la fois
+1. **Cadrage Lot 6.3+** (Promotions, Kits, Collections…) — une porte à la fois (ADR-024)
+2. **Culture** : espaces découverte / récit territoire — tickets séparés
+3. Conserver la réserve exploitation : redémarrage Odoo après `-u` pour les alias HTTP (`/incontournables`, `/origines`)

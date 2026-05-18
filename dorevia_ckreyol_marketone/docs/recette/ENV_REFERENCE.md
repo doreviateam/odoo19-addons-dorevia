@@ -165,7 +165,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   --http-port=8071
 ```
 
-**Lot 6.2 — porte Origines** (`19.0.7.0.0`, cadrage **GO avec réserves** 2026-05-18) :
+**Lot 6.2 — porte Origines** (`19.0.7.0.0`, **GO MOA** 2026-05-18) :
 
 | Prérequis | Détail |
 |-----------|--------|
@@ -183,7 +183,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
 | Produits | 2–3 produits publiés rattachés à la catégorie (manuel, pas de seed XML) |
 | Recette | [`RECETTE_MANUELLE_LOT6_1.md`](RECETTE_MANUELLE_LOT6_1.md) |
 
-**Exploitation sandbox** : après `-u dorevia_ckreyol_marketone`, un daemon Odoo déjà lancé (ex. port `18079`) peut nécessiter un **redémarrage du conteneur / service** pour que la route `GET /incontournables` réponde en **301** (rechargement routing). Les runs `--stop-after-init` n’ont pas ce problème.
+**Exploitation sandbox** : après `-u dorevia_ckreyol_marketone`, un daemon Odoo déjà lancé (ex. port `18079`) peut nécessiter un **redémarrage du conteneur / service** pour que les routes alias `GET /incontournables` et `GET /origines` répondent en **301** (rechargement routing). Les runs `--stop-after-init` n’ont pas ce problème.
 
 ```bash
 docker compose -f /Users/doreviateam/sandbox-odoo19/docker-compose.yml restart odoo

@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC` |
 | **Lot** | 6.2 — Porte Origines (implémentation) |
-| **Statut** | **Ouvert** — en attente validation MOA pour exécution |
+| **Statut** | **Clôturé — GO MOA** (2026-05-18) — `19.0.7.0.0` |
 | **Version cible module** | `19.0.7.0.0` |
 | **Base** | `ckr-marketone-01` |
 | **Prérequis** | Lots 1–5 **GO** ; Lot 6.1 **GO avec réserves** ; cadrage **GO avec réserves** — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) |
@@ -175,15 +175,15 @@ dorevia_ckreyol_marketone/
 
 ### GO
 
-- [ ] `/shop?marketone_mode=origin` 200, bandeau visible
-- [ ] Facette `marketone_origin` filtre correctement (OU)
-- [ ] Mode seul = catalogue complet + bandeau
-- [ ] `/origines` 301 ; slug invalide → `/shop` nu
-- [ ] Fiche : origine légère + lien optionnel
-- [ ] Lot 6.1 (featured) non régressé
-- [ ] Panier / checkout / home OK
-- [ ] 60 + tests lot6.2 verts
-- [ ] Pas de `ckr_*` ni dépendance marketplace
+- [x] `/shop?marketone_mode=origin` 200, bandeau visible
+- [x] Facette `marketone_origin` filtre correctement (OU)
+- [x] Mode seul = catalogue complet + bandeau
+- [x] `/origines` 301 ; slug invalide → `/shop` nu
+- [x] Fiche : origine légère + lien optionnel
+- [x] Lot 6.1 (featured) non régressé
+- [x] Panier / checkout / home OK
+- [x] 76 tests post-install verts (`dorevia_marketone_lot6_2_origin` inclus)
+- [x] Pas de `ckr_*` ni dépendance marketplace
 
 ### NO GO
 
@@ -202,13 +202,22 @@ dorevia_ckreyol_marketone/
 [x] Profil marketone.shop.origin minimal accepté
 [x] Tag tests dorevia_marketone_lot6_2_origin accepté
 
-Décision exécution : [ ] GO pour implémentation  [ ] En attente  [ ] NO GO
+Décision exécution : [x] GO pour implémentation  [ ] En attente  [ ] NO GO
+
+**Implémentation** : `19.0.7.0.0` — 2026-05-18 — tests auto OK (sandbox `ckr-marketone-01`).
 ```
 
 ---
 
+## Clôture MOA (2026-05-18)
+
+**Décision** : **GO Lot 6.2** — recette [`RECETTE_MANUELLE_LOT6_2.md`](../recette/RECETTE_MANUELLE_LOT6_2.md).
+
+**Résultats** : 76 tests post-install, 0 failed ; porte Origines, facette, alias `/origines`, fiche légère, non-régression featured / tunnel / mobile.
+
+**Réserve exploitation** : redémarrer Odoo après `-u` pour exposer `/origines` (identique Lot 6.1 / `/incontournables`).
+
 ## Prochaine étape
 
-1. **MOA** : valider ce ticket d’exécution.
-2. **Dev** : implémentation `19.0.7.0.0` + recette MOA.
-3. **Culture** : ticket séparé — pas dans le même lot.
+1. **Lot 6.3+** : cadrage porte suivante (Promotions, Kits, Collections…) — une porte à la fois.
+2. **Culture** : ticket séparé — pas dans le Lot 6.2.

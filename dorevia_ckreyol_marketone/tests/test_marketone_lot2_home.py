@@ -45,12 +45,11 @@ class TestMarketoneLot2Home(HttpCase):
     def test_home_no_catalog_gates_links(self):
         response = self.url_open("/")
         text = response.text
+        gate_href = r"""href=['"]/(?:promotions|kits|incontournables|origines)(?:['"?]|$)"""
         for forbidden in (
             r"ckr_mode=",
             r"marketone_mode=",
-            r"/promotions",
-            r"/kits",
-            r"/incontournables",
+            gate_href,
         ):
             self.assertIsNone(
                 re.search(forbidden, text),
