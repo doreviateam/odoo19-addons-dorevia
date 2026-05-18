@@ -345,7 +345,7 @@
 | **Garde-fous** | Produit prioritaire au parcours d’achat ; éditorial enrichit sans brouiller ; Savoirs sans forum ouvert ; une porte catalogue par lot ; pas de code univers sans ticket MOA GO ; pas de dépendance marketplace. |
 | **Hors scope immédiat** | Implémentation navigation multi-univers ; module recette ; portes multiples simultanées ; copie code legacy `ckr_*`. |
 | **Note détaillée** | `docs/cadrage/NOTE_UNIVERS_CK_MARKETONE.md` (audit legacy, impacts Lots 6.2+, Culture, Savoirs) |
-| **Prochaine étape** | Cadrage **séparé** Lot 6.2 Origines (Boutique) ; tickets Culture et Savoirs ultérieurs. |
+| **Prochaine étape** | Lot 6.2 Origines **GO** (ADR-025) ; cadrage Lots **6.3+** (Boutique) ; tickets **Culture** et **Savoirs** séparés — pas de code univers sans ticket MOA GO. |
 
 ---
 

@@ -2,11 +2,11 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut** | **GO MOA** (2026-05-18) — référence de cadrage ; aucun code |
-| **Date** | 2026-05-18 |
-| **ADR** | [ADR-024](DECISIONS.md#adr-024--structuration-c-kreyol-en-trois-univers-boutique-culture-savoirs) |
+| **Statut** | **GO MOA** (2026-05-18) — **référence de cadrage officielle** ; document uniquement |
+| **Date** | 2026-05-18 (version consolidée validée MOA) |
+| **ADR** | [ADR-024](DECISIONS.md#adr-024--structuration-c-kreyol-en-trois-univers-boutique-culture-savoirs) — **GO** |
 | **Complète** | [ADR-018](DECISIONS.md#adr-018--articulation-des-trois-dimensions-c-kreyol) (vendre / raconter / transmettre) |
-| **Contexte** | Socle e-commerce Lots 1–5 **GO** ; Lot 6.1 Incontournables **GO avec réserves** ; Lot 6.2 à cadrer **séparément** |
+| **Contexte projet** | Lots 1–5 **GO** ; Lot 6.1 **GO avec réserves** ; Lot 6.2 Origines **GO** (`19.0.7.0.0`) |
 
 ---
 
@@ -56,7 +56,7 @@ Nous vendons des produits issus de territoires créolophones à des clients — 
 | Catalogue `/shop` | Lot 3 — `marketone-shop` |
 | Fiche produit | Lot 4 — `marketone-product` |
 | Panier / checkout | Lot 5 — `marketone-cart` / `marketone-checkout` |
-| Portes catalogue | Lot 6+ — une porte à la fois |
+| Portes catalogue | Lot 6 — Incontournables (6.1), **Origines (6.2 GO)** ; une porte à la fois |
 
 **Souveraineté technique** : `website_sale` reste le moteur catalogue, panier, checkout et paiement. Marketone **présente** et **oriente** ; il ne remplace pas Odoo.
 
@@ -102,7 +102,7 @@ Les **portes catalogue** sont des entrées éditoriales **dans** l’univers Bou
 | Principe | Application |
 |----------|-------------|
 | Conteneur unique | `/shop` + paramètres de lecture (`marketone_mode`, facettes natives Odoo) |
-| Une porte à la fois | Lot 6.1 = Incontournables seule ; Lot 6.2+ = cadrage séparé par porte |
+| Une porte à la fois | Lots 6.1 et 6.2 livrés séparément ; Lot 6.3+ = cadrage MOA par porte |
 | Filtres natifs conservés | Sidebar, tri, attributs, prix — `website_sale` souverain |
 | Présentation minimale | Titre, intro courte, lien retour — pas de refonte Explorer legacy |
 
@@ -112,7 +112,7 @@ Les **portes catalogue** sont des entrées éditoriales **dans** l’univers Bou
 |-------------------|----------------------------|---------|
 | Tous les produits | `/shop` sans mode | Boutique |
 | Incontournables | `marketone_mode=featured` + catégorie publique BO | Boutique |
-| Origines | `marketone_mode=origin` (Lot 6.2 — à cadrer) | Boutique *(filtre produit)* ; **Culture** *(sens territoire)* |
+| Origines | `marketone_mode=origin` + `marketone_origin` — **GO** (ADR-025) | Boutique *(filtre produit)* ; **Culture** *(récit territoire — plus tard)* |
 | Promotions | pricelist / promo (Lot 6.x) | Boutique |
 | Kits / Packs | `pack_ok` + dépendance `product_pack` (décision MOA) | Boutique |
 | Collections | modèle ou catégories (décision MOA post-6.1) | Boutique |
@@ -126,7 +126,7 @@ Les filtres Odoo sélectionnent.
 Marketone ne crée pas un moteur parallèle.
 ```
 
-Une porte **Origines** (Lot 6.2) reste dans la Boutique au sens **URL et grille** ; le **récit** territoire relève de la Culture et pourra vivre dans des pages dédiées liées depuis la porte ou la fiche produit.
+Une porte **Origines** (Lot 6.2 **GO**) reste dans la Boutique au sens **URL et grille** (`/shop`, alias `/origines`) ; le **récit** territoire relève de la **Culture** et vivra dans des pages dédiées **ultérieurement**, liées depuis la porte ou la fiche produit — **sans** hub Culture sur `/shop` ni modèle `marketone.shop.origin` encyclopédique.
 
 ---
 
@@ -217,14 +217,15 @@ Audit **lecture seule** du module legacy `dorevia_ckreyol_marketplace` (Odoo 19)
 
 ## 7. Impacts futurs (planning indicatif)
 
-### 7.1 Lot 6.2 — porte Origines (Boutique — cadrage GO avec réserves)
+### 7.1 Lot 6.2 — porte Origines (Boutique — **GO MOA**, `19.0.7.0.0`)
 
-| Sujet | Orientation |
-|-------|-------------|
-| URL | `marketone_mode=origin` + `marketone_origin=<slug>` — ADR-025, C3.B |
-| Source | Attribut **Origine** + `marketone.shop.origin` minimal |
-| Culture | Pages territoire **hors** Lot 6.2 — lot Culture dédié |
-| Exécution | [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) après GO MOA |
+| Sujet | Statut |
+|-------|--------|
+| URL | `marketone_mode=origin` + `marketone_origin=<slug>` ; alias `/origines` → 301 — ADR-025, C3.B |
+| Source | Attribut **Origine** + `marketone.shop.origin` **minimal** (profil visiteur / slug / phrase / visibilité) |
+| Hybride Origines | **Boutique** : filtre achetable sur `/shop` · **Culture** : récit territoire **reporté** (tickets dédiés) |
+| Culture | Aucun hub territoire ni contenu long sur `/shop` au Lot 6.2 |
+| Clôture | [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) · [`RECETTE_MANUELLE_LOT6_2.md`](../recette/RECETTE_MANUELLE_LOT6_2.md) |
 
 ### 7.2 Lots Culture (post-socle, espaces dédiés)
 
@@ -276,10 +277,18 @@ Le savoir en prolongement.
 
 ## 9. Prochaines actions (hors ce document)
 
-1. ~~**MOA** : valider ADR-024 et cette note.~~ — **GO** (2026-05-18).
-2. **Lot 6.2** : ticket de **cadrage** Origines — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) ; pas d’exécution avant GO cadrage.
-3. **Culture / Savoirs** : tickets séparés quand le socle portes Boutique le permet.
-4. **Pas de code** sur les univers ni sur la porte Origines tant que le cadrage Lot 6.2 n’est pas **GO**.
+*Dernière mise à jour : 2026-05-18 — alignée sur l’état projet post-Lot 6.2.*
+
+| # | Action | Statut |
+|---|--------|--------|
+| 1 | Valider **ADR-024** et cette note (version consolidée) | **GO MOA** (2026-05-18) |
+| 2 | Lot 6.2 Origines — cadrage, exécution, recette | **GO** — `19.0.7.0.0`, commit `3c179ae` |
+| 3 | **Lot 6.3+** (Promotions, Kits, Collections…) | Cadrage MOA **à ouvrir** — une porte à la fois, univers **Boutique** |
+| 4 | **Culture** — espaces découvrir (territoires, producteurs, récits) | Tickets **séparés** ; pas de code sans ticket MOA **GO** |
+| 5 | **Savoirs** — recettes contributives (identifié → modération BO → publication) | Cadrage **futur** ; pas de forum, pas de publication automatique |
+| 6 | **Pas de code univers** | Tant qu’aucun ticket MOA dédié Culture / Savoirs n’est **GO** |
+
+**Rappel** : `dorevia_ckreyol_marketplace` = mémoire d’intuitions (§4), **pas** source technique à copier.
 
 ---
 
