@@ -324,18 +324,19 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 ---
 
-## Univers Culture — Territoires (cadrage ouvert)
+## Univers Culture — Territoires v1
 
 | Étape | Statut |
 |-------|--------|
-| Cadrage | **Ouvert** — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) |
-| Objectif | Récit territoire / origine **hors** `/shop` ; pas de hub massif v1 |
-| Lien Boutique | Porte Origines + fiche produit — liens à cadrer ; `marketone.shop.origin` reste minimal |
+| Cadrage | **GO avec réserves légères** (2026-05-18) — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) |
+| ADR-026 + C8 | ✅ |
+| Exécution | **Ouverte** — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) — 1 page `/culture/<slug>` |
+| Grammaire URL | `/culture/guadeloupe` — alias Boutique `/origines` inchangé |
 
 ---
 
 ## Prochaine action
 
-1. **MOA** : valider le cadrage Culture / Territoires (D1–D8)
-2. **Lot 6.3+** Boutique — **après** GO cadrage Culture (sauf décision MOA contraire)
-3. Référence portes Boutique : [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md)
+1. **MOA** : valider le ticket d’**exécution** Culture v1 (page pilote)
+2. **Implémentation** `19.0.8.0.0` — **après** GO exécution uniquement
+3. Lot 6.3+ Boutique — **après** Culture v1 (sauf décision MOA contraire)

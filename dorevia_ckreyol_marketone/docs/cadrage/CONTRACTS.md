@@ -116,6 +116,23 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 
 **Statut** : C3.B **GO MOA** (`19.0.7.0.0`, ADR-025, 2026-05-18).
 
+### C8 — Univers Culture — page territoire v1 (cadrage GO avec réserves 2026-05-18)
+
+| Élément | Règle |
+|---------|-------|
+| Univers | **Culture** — découvrir ; **hors** `/shop` |
+| URL | `GET /culture/<slug>` — ex. `/culture/guadeloupe` — **pas** de collision avec alias Boutique `/origines` |
+| Conteneur v1 | Pages `website` + templates / snippets Marketone sobres — **pas** de modèle ORM Culture dédié sauf besoin technique démontré |
+| Périmètre v1 | **Une** page territoire pilote — **pas** de hub « toutes les origines » |
+| Éditorial | Chapô + sections courtes + visuel léger + CTA → `/shop?marketone_mode=origin&marketone_origin=<slug>` |
+| `marketone.shop.origin` | Profil Boutique **inchangé** ; même slug possible — **pas** de fusion de modèles |
+| Liens Boutique | Fiche produit + bandeau Origines **facetté** → page Culture — **pas** de hub Culture sur `/shop` |
+| Navigation | Liens contextuels v1 ; entrée header Culture **reportée** |
+| SEO | Documenter seulement — pas de chantier SEO avancé v1 |
+| Savoirs | Hors scope — ticket séparé |
+
+**Statut** : C8 **contractuel** — exécution après GO ticket [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) (ADR-026).
+
 ---
 
 ## C4 — Présentation front

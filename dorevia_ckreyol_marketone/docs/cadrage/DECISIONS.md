@@ -345,7 +345,7 @@
 | **Garde-fous** | Produit prioritaire au parcours d’achat ; éditorial enrichit sans brouiller ; Savoirs sans forum ouvert ; une porte catalogue par lot ; pas de code univers sans ticket MOA GO ; pas de dépendance marketplace. |
 | **Hors scope immédiat** | Implémentation navigation multi-univers ; module recette ; portes multiples simultanées ; copie code legacy `ckr_*`. |
 | **Note détaillée** | `docs/cadrage/NOTE_UNIVERS_CK_MARKETONE.md` (audit legacy, impacts Lots 6.2+, Culture, Savoirs) |
-| **Prochaine étape** | Lot 6.2 Origines **GO** (ADR-025) ; cadrage Lots **6.3+** (Boutique) ; tickets **Culture** et **Savoirs** séparés — pas de code univers sans ticket MOA GO. |
+| **Prochaine étape** | Culture v1 (ADR-026) après GO exécution ; Lots **6.3+** Boutique ; Savoirs séparé. |
 
 ---
 
@@ -362,6 +362,22 @@
 | **Réserves** | Cadrage : (1)–(5) inchangées · **Exploitation** : redémarrage daemon après `-u` pour alias `/origines` (comme `/incontournables`) |
 | **Tickets** | Cadrage : `TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES` · Exécution : `TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC` |
 | **Hors scope** | Hub Culture, Savoirs, autres portes, JS, marketplace, cumul featured+origin |
+
+---
+
+## ADR-026 — Culture v1 — page territoire pilote (`/culture/<slug>`)
+
+| | |
+|---|---|
+| **Date** | 2026-05-18 |
+| **Statut** | **Acceptée — GO cadrage avec réserves légères** (exécution après GO ticket exec) |
+| **Version module cible** | `19.0.8.0.0` (proposition) |
+| **Contexte** | ADR-024 : récit territoire = univers **Culture**. Lot 6.2 a livré la porte Boutique Origines ; le récit est reporté hors `/shop`. Consolidation portes Boutique **GO**. |
+| **Décision** | Premier lot Culture : **une page** territoire pilote via **`/culture/<slug>`** (pages `website` + présentation Marketone), contenu **court et visuel**, CTA vers porte Origines filtrée. **Pas** de modèle Culture dédié v1 ; **pas** d’extension encyclopédique de `marketone.shop.origin` ; **pas** de hub « toutes les origines » ; **pas** de contenu Culture long sur `/shop`. Liens contextuels depuis fiche produit et bandeau Origines facetté. Entrée menu header Culture **reportée**. SEO : note doc uniquement. |
+| **Contrats** | C8 ; C7.4 ; ADR-024, ADR-025 |
+| **Réserves** | (R1) page courte, élégante, visuelle ; (R2) pas de blog Culture ; (R3) pas de Culture long dans `/shop` ; (R4) profil origine Boutique inchangé ; (R5) Savoirs hors lot |
+| **Tickets** | Cadrage : `TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE` (**clôturé**) · Exécution : `TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC` |
+| **Hors scope** | Hub Culture, modèle ORM territoire (par défaut), Savoirs, Lot 6.3 Boutique, SEO avancé, portage marketplace |
 
 ---
 

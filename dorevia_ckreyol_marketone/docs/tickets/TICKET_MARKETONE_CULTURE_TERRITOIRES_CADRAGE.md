@@ -5,7 +5,8 @@
 | **ID** | `TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE` |
 | **Univers** | **Culture** — découvrir |
 | **Type** | **Cadrage uniquement** — aucun code |
-| **Statut** | **Ouvert** — en attente validation MOA |
+| **Statut** | **Clôturé — GO cadrage avec réserves légères** (2026-05-18) |
+| **Exécution** | [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) — **ouvert**, en attente GO MOA |
 | **Version module de référence** | `19.0.7.0.0` |
 | **Base** | `ckr-marketone-01` |
 | **Prérequis** | Socle Lots 1–5 **GO** ; portes 6.1 / 6.2 **GO** ; consolidation portes Boutique **GO** ; **ADR-024** / **NOTE_UNIVERS_CK_MARKETONE** **GO** |
@@ -105,7 +106,7 @@ Le savoir en prolongement.
 
 **Recommandation cadrage** : **A** pour un **premier lot minimal** ; **B** seulement si MOA exige slug unique partagé avec profil origine — alors modèle Culture **séparé** avec clé étrangère optionnelle vers `marketone.shop.origin`, sans alourdir ce dernier.
 
-**Décision MOA** : ☐ A ☐ B ☐ Autre : ___________
+**Décision MOA** : ☑ **A** — pages `website` + snippets Marketone sobres. **Pas** de modèle Culture dédié au v1 sauf besoin technique démontré.
 
 ---
 
@@ -113,15 +114,13 @@ Le savoir en prolongement.
 
 | Option | Exemple | Note |
 |--------|---------|------|
-| **A — Préfixe Culture dédié** | `/culture/origines/guadeloupe` ou `/decouvrir/guadeloupe` | Séparation claire univers |
-| B — Alignement slug porte | `/origines/guadeloupe` (hors `/shop`) | Lisible ; risque confusion avec alias `/origines` → shop |
-| C — Sous-pages website | `/page/guadeloupe` (slug CMS) | Flexible ; moins de grammaire site |
+| **A — Préfixe Culture dédié** | `/culture/guadeloupe`, `/culture/martinique` | **Retenu MOA** |
+| B — Alignement slug porte | `/origines/guadeloupe` (hors `/shop`) | Rejeté — collision sémantique avec alias `/origines` |
+| C — Sous-pages website | `/page/guadeloupe` (slug CMS) | Rejeté v1 |
 
-**Recommandation cadrage** : **A** avec préfixe explicite **Culture** (pas `/shop`, pas collision alias Boutique `/origines`).
+**Décision MOA** : ☑ **`/culture/<slug>`** — ex. `/culture/guadeloupe`. Alias Boutique `/origines` → `/shop?marketone_mode=origin` **inchangé**.
 
-**Décision MOA** : ☐ …
-
-**Règle slug** : alignement avec `marketone.shop.origin.slug` **recommandé** (même identifiant territoire) — **sans** fusion des modèles.
+**Règle slug** : alignement avec `marketone.shop.origin.slug` **recommandé** — **sans** fusion des modèles.
 
 ---
 
@@ -135,7 +134,7 @@ Le savoir en prolongement.
 
 **Recommandation cadrage** : **A** — une page pilote + convention URL ; index Culture **reporté** lot suivant.
 
-**Décision MOA** : ☐ A ☐ B ☐ Autre : ___________
+**Décision MOA** : ☑ **A** — une seule page territoire pilote. **Pas** de hub « toutes les origines » au premier lot Culture.
 
 ---
 
@@ -154,7 +153,7 @@ Champs ou blocs **autorisés** (proposition — à valider) :
 | Producteur détaillé / B2B | | ☑ (lot ultérieur) |
 | Recettes | | ☑ — univers **Savoirs** |
 
-**Décision MOA** : valider la fourchette ☐
+**Décision MOA** : ☑ Chapô + sections courtes + CTA porte Origines. **Pas** de page encyclopédique. Page **courte, élégante, visuelle** (réserve R1).
 
 ---
 
@@ -169,7 +168,7 @@ Champs ou blocs **autorisés** (proposition — à valider) :
 
 **Recommandation cadrage** : v1 — lien Culture depuis **fiche produit** (facette connue) et **bandeau origine facetée** uniquement ; pas de refonte home.
 
-**Décision MOA** : ☐
+**Décision MOA** : ☑ Liens possibles depuis **fiche produit** et **bandeau Origines facetté** — **implémentation** au ticket exec. **Pas** de hub Culture dans `/shop`.
 
 ---
 
@@ -182,7 +181,7 @@ Champs ou blocs **autorisés** (proposition — à valider) :
 | Liaison | **Option** : même `slug` + `website_id` ; pas de FK obligatoire en v1 si pages CMS |
 | BO | Éviter un seul écran « origine encyclopédique » |
 
-**Décision MOA** : ☐
+**Décision MOA** : ☑ Même slug possible. **Pas** de fusion de modèles. `marketone.shop.origin` reste profil Boutique **minimal** (réserve R4).
 
 ---
 
@@ -196,7 +195,7 @@ Champs ou blocs **autorisés** (proposition — à valider) :
 
 **Recommandation cadrage** : **A** ou **B minimal** — pas de menu multi-mondes legacy.
 
-**Décision MOA** : ☐
+**Décision MOA** : ☑ **Liens contextuels** en v1. Entrée header Culture **reportée** tant que la page pilote n’est pas validée visuellement.
 
 ---
 
@@ -207,7 +206,7 @@ Champs ou blocs **autorisés** (proposition — à valider) :
 | Pages Culture | Indexables ou `noindex` jusqu’à maturité contenu ? |
 | Lien avec porte `/shop?marketone_mode=origin` | Canoniques distincts ; pas de duplicate shop |
 
-**Décision MOA** : documenter seulement ☐ — implémentation hors cadrage si non tranché
+**Décision MOA** : ☑ **Documentation seulement** — pas de chantier SEO avancé au premier lot Culture.
 
 ---
 
@@ -257,25 +256,25 @@ Références : `NOTE_UNIVERS_CK_MARKETONE.md` §4.2 ; `dorevia_ckreyol_marketpla
 
 | # | Livrable |
 |---|----------|
-| L1 | Décisions D1–D8 tranchées MOA |
-| L2 | Schéma URL Culture (1 page + convention slug) |
-| L3 | Maquette **contenu** (wireframe texte) — pas code |
-| L4 | Proposition contrat **C8** (Culture) ou extension `CONTRACTS.md` |
-| L5 | Proposition **ADR-026** (Culture territoires v1) dans `DECISIONS.md` |
-| L6 | Ticket d’**exécution** `TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md` (après GO cadrage) |
+| L1 | Décisions D1–D8 tranchées MOA | ✅ |
+| L2 | Schéma URL `/culture/<slug>` | ✅ |
+| L3 | Wireframe texte — ticket exec | ✅ |
+| L4 | Contrat **C8** dans `CONTRACTS.md` | ✅ |
+| L5 | **ADR-026** dans `DECISIONS.md` | ✅ |
+| L6 | Ticket exec | ✅ ouvert |
 
 ---
 
 ## Critères GO cadrage
 
-- [ ] Conteneur Culture (D1) tranché — pas d’extension encyclopédique de `marketone.shop.origin`
-- [ ] URLs Culture (D2) distinctes de `/shop` et sans collision `/origines` Boutique
-- [ ] Périmètre v1 (D3–D4) **petit** et validé — pas de hub massif
-- [ ] Liens Boutique → Culture (D5) explicités — pas de refonte shop
-- [ ] Navigation Culture (D7) tranchée
-- [ ] Garde-fous G1–G8 acceptés
-- [ ] Hors périmètre accepté
-- [ ] Ticket exécution peut être rédigé sans ambiguïté
+- [x] Conteneur Culture (D1) tranché — pas d’extension encyclopédique de `marketone.shop.origin`
+- [x] URLs Culture (D2) `/culture/<slug>` — sans collision `/origines` Boutique
+- [x] Périmètre v1 (D3–D4) **petit** et validé — pas de hub massif
+- [x] Liens Boutique → Culture (D5) explicités — implémentation au ticket exec
+- [x] Navigation Culture (D7) tranchée
+- [x] Garde-fous G1–G8 acceptés
+- [x] Hors périmètre accepté
+- [x] Ticket exécution rédigé
 
 ---
 
@@ -283,28 +282,29 @@ Références : `NOTE_UNIVERS_CK_MARKETONE.md` §4.2 ; `dorevia_ckreyol_marketpla
 
 ```text
 [ ] GO cadrage Culture / Territoires
-[ ] GO cadrage avec réserves
+[x] GO cadrage avec réserves légères
 [ ] NO GO — reporter ou reformuler
 ```
 
-**Si GO** : rédiger ticket **exécution** ; **ne pas** lancer en parallèle Lot 6.3 Boutique sans décision MOA.
+**Date** : 2026-05-18 · **Validé par** : MOA
 
-**Si GO avec réserves** :
+### Réserves légères
 
-| # | Réserve | Action |
-|---|---------|--------|
-| R1 | | |
-| R2 | | |
-
-**Date** : _______________ · **Validé par** : _______________
+| # | Réserve |
+|---|---------|
+| R1 | Première page Culture : **courte, élégante, visuelle** |
+| R2 | Ne pas transformer Culture en **blog** complet |
+| R3 | Ne pas injecter de contenu Culture **long** dans `/shop` |
+| R4 | Ne pas enrichir `marketone.shop.origin` de champs éditoriaux longs |
+| R5 | Ne pas ouvrir **Savoirs / recettes** dans le même lot |
 
 ---
 
 ## Prochaine étape
 
-1. **MOA** : trancher D1–D8 et valider ce ticket.
-2. **Archi** : L4–L5 (contrat + ADR proposition) ; ticket exec.
-3. **Pas de code** tant que le cadrage n’est pas **GO**.
+1. **MOA** : valider le ticket d’**exécution** [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md).
+2. **Pas de code** tant que l’exécution n’est pas **GO**.
+3. **Ne pas** lancer Lot 6.3 Boutique en parallèle sans décision MOA.
 
 ---
 
