@@ -65,7 +65,7 @@
               inherit_id="website_sale.products"
               name="Marketone: collections avant catégories (sidebar)"
               priority="31">
-        <xpath expr="//div[contains(@class, 'o_wsale_products_grid_before_rail')]/div[@t-if='opt_wsale_categories']" position="before">
+        <xpath expr="//div[hasclass('o_wsale_products_grid_before_rail')]/div[@t-if='opt_wsale_categories']" position="before">
             <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
         </xpath>
     </template>

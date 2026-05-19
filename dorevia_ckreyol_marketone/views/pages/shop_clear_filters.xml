@@ -5,7 +5,7 @@
               inherit_id="website_sale.products"
               name="Marketone: Effacer les filtres + catégories"
               priority="24">
-        <xpath expr="//aside[@id='products_grid_before']//div[contains(@class, 'py-3') and contains(@class, 'border-bottom')][.//i[contains(@class, 'oi-close')]]" position="replace">
+        <xpath expr="//aside[@id='products_grid_before']//div[hasclass('py-3')][hasclass('border-bottom')][.//i[hasclass('oi-close')]]" position="replace">
             <div t-if="attrib_values or tags or (show_price_filter and isFilteringByPrice) or marketone_has_category_filter or marketone_has_collection_filter"
                  class="py-3 border-bottom">
                 <a t-att-href="keep(attribute_values=0, tags=0, min_price=0, max_price=0, marketone_category=0, marketone_collection=0)"
@@ -21,7 +21,7 @@
               inherit_id="website_sale.o_wsale_offcanvas"
               name="Marketone: Effacer les filtres offcanvas + catégories"
               priority="24">
-        <xpath expr="//aside[@id='o_wsale_offcanvas']//div[contains(@class, 'border-top')]/a" position="attributes">
+        <xpath expr="//aside[@id='o_wsale_offcanvas']//div[hasclass('border-top')]/a" position="attributes">
             <attribute name="t-attf-class">btn btn-{{navClass}} d-flex py-1 mb-2 {{(not attrib_values and not isFilteringByPrice and not tags and not marketone_has_category_filter and not marketone_has_collection_filter) and 'disabled' }}</attribute>
             <attribute name="t-att-aria-disabled">(not attrib_values and not isFilteringByPrice and not tags and not marketone_has_category_filter and not marketone_has_collection_filter) and 'true' or 'false'</attribute>
             <attribute name="t-att-href">keep(attribute_values=0, tags=0, min_price=0, max_price=0, marketone_category=0, marketone_collection=0)</attribute>

@@ -90,18 +90,18 @@ class ProductPublicCategory(models.Model):
         """
         website = website or self.env["website"].get_current_website()
         allowlist = self._marketone_primary_public_categories(website=website)
+        allowlist_ids = set(allowlist.ids)
         active_ids = set(active_category_ids or [])
         if not search_product:
             return allowlist.filtered(lambda rec: rec.id in active_ids)
-        groups = self.env["product.template"].read_group(
-            [("id", "in", search_product.ids)],
-            ["public_categ_ids"],
-            ["public_categ_ids"],
+        grouped = self.env["product.template"]._read_group(
+            domain=[("id", "in", search_product.ids)],
+            groupby=["public_categ_ids"],
         )
         categ_ids_with_products = {
-            row["public_categ_ids"][0]
-            for row in groups
-            if row.get("public_categ_ids")
+            group[0].id
+            for group in grouped
+            if group[0] and group[0].id in allowlist_ids
         }
         return allowlist.filtered(
             lambda rec: rec.id in categ_ids_with_products or rec.id in active_ids
