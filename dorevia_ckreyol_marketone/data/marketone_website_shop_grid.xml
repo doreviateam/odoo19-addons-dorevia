@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grille boutique Marketone : 4 colonnes desktop large (TICKET_MARKETONE_BOUTIQUE_VISUAL_PARITY). -->
+    <function model="website" name="write">
+        <value eval="[ref('website.default_website')]"/>
+        <value eval="{'shop_ppr': 4}"/>
+    </function>
+</odoo>

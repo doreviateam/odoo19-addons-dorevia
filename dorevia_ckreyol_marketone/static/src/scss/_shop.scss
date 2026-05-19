@@ -129,6 +129,40 @@
         }
     }
 
+    // Grille catalogue — densité retail (TICKET_MARKETONE_BOUTIQUE_VISUAL_PARITY).
+    // S'appuie sur website.shop_ppr = 4 ; responsive sans modifier website_sale.
+    #products_grid:not(.o_wsale_layout_list) {
+        .o_wsale_products_grid_table_wrapper {
+            // Mobile étroit : 1 produit par ligne.
+            @media (max-width: 575.98px) {
+                td.oe_product {
+                    width: 100% !important;
+                }
+            }
+
+            // Desktop moyen : 3 produits par ligne (ppr site = 4 en table native).
+            @media (min-width: 992px) and (max-width: 1199.98px) {
+                table,
+                tbody,
+                tr {
+                    display: block;
+                    width: 100%;
+                }
+
+                tr {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+
+                td.oe_product {
+                    display: inline-block;
+                    width: 33.333333% !important;
+                    box-sizing: border-box;
+                }
+            }
+        }
+    }
+
     @media (max-width: 767.98px) {
         #o_wsale_container {
             padding-block: $marketone-space-md $marketone-space-lg;

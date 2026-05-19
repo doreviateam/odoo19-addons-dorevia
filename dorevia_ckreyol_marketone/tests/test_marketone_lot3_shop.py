@@ -46,6 +46,15 @@ class TestMarketoneLot3Shop(HttpCase):
         self.assertIn(b"o_wsale_products_page", response.content)
         self.assertIn(b"o_wsale_products", response.content)
 
+    def test_shop_grid_ppr_four(self):
+        """Grille dense desktop — shop_ppr = 4 (TICKET_MARKETONE_BOUTIQUE_VISUAL_PARITY)."""
+        response = self.url_open("/shop")
+        self.assertIn(
+            b'data-ppr="4"',
+            response.content,
+            "La grille boutique doit utiliser 4 colonnes sur desktop large.",
+        )
+
     def test_home_has_no_marketone_shop(self):
         response = self.url_open("/")
         self.assertIn(b"marketone-root", response.content)

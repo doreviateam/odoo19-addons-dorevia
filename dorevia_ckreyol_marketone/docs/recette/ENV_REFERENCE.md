@@ -165,6 +165,15 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
   --http-port=8071
 ```
 
+
+**Grille boutique — densité retail** (`19.0.10.1.0`, 2026-05-19) :
+
+| Prérequis | Détail |
+|-----------|--------|
+| Paramètre site | `website.shop_ppr = 4` |
+| Responsive | XL 4 col. · LG 3 · tablette 2 · mobile &lt; 576 px 1 |
+| Ticket | [`TICKET_MARKETONE_BOUTIQUE_VISUAL_PARITY.md`](../tickets/TICKET_MARKETONE_BOUTIQUE_VISUAL_PARITY.md) |
+
 **Culture v2 légère — territoires additionnels** (`19.0.9.0.0`, **GO MOA** 2026-05-18) :
 
 | Prérequis | Détail |
