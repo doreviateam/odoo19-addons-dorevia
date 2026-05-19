@@ -4,6 +4,13 @@
               inherit_id="website_sale.products"
               name="Marketone: Boutique /shop"
               priority="16">
+        <xpath expr="//t[@t-set='opt_wsale_categories']" position="replace">
+            <t t-set="opt_wsale_categories" t-value="True"/>
+        </xpath>
+        <!-- Filmstrip horizontal : masqué — catégories = sidebar uniquement (MOA). -->
+        <xpath expr="//t[@t-set='opt_wsale_categories_top']" position="replace">
+            <t t-set="opt_wsale_categories_top" t-value="False"/>
+        </xpath>
         <xpath expr="//div[@id='wrap']" position="attributes">
             <attribute name="class" add="marketone-shop" separator=" "/>
         </xpath>

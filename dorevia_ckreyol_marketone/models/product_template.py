@@ -82,5 +82,12 @@ class ProductTemplate(models.Model):
                     [("attribute_line_ids.value_ids", "in", list(value_ids))]
                 )
 
+        if options.get("marketone_category_invalid"):
+            base_domain.append(_MARKETONE_EMPTY_DOMAIN)
+        elif category_ids := options.get("marketone_public_category_ids"):
+            base_domain.append(
+                [("public_categ_ids", "in", list(category_ids))]
+            )
+
         detail["base_domain"] = base_domain
         return detail

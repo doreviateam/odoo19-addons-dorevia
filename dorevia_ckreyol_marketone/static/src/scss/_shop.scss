@@ -163,6 +163,55 @@
         }
     }
 
+    // Sidebar filtres : Origine → Catégories (principales) → Prix (TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES).
+    #products_grid_before .o_wsale_products_grid_before_rail {
+        display: flex;
+        flex-direction: column;
+
+        .products_attributes_filters {
+            order: 10;
+        }
+
+        .products_categories {
+            order: 20;
+        }
+
+        #o_wsale_price_range_option {
+            order: 30;
+        }
+    }
+
+    .products_categories .o_categories_collapse_title b,
+    .products_categories .accordion-button b {
+        font-family: $marketone-font-heading;
+        font-weight: $marketone-weight-semibold;
+    }
+
+    // Chevron plié/déplié — parent ``.accordion`` requis (aligné Origine).
+    .products_categories .marketone-shop-categories-accordion {
+        --bs-accordion-bg: transparent;
+        --bs-accordion-border-width: 0;
+
+        .accordion-button {
+            &::after {
+                flex-shrink: 0;
+                opacity: 0.55;
+            }
+        }
+    }
+
+    // Catégories principales : même lecture que facette Origine (form-check).
+    .products_categories .marketone-sidebar-catchecks {
+        .form-check-label {
+            cursor: pointer;
+        }
+
+        input.marketone-sidebar-cat-check:checked + span,
+        input.marketone-sidebar-cat-check:checked ~ span {
+            font-weight: $marketone-weight-semibold;
+        }
+    }
+
     @media (max-width: 767.98px) {
         #o_wsale_container {
             padding-block: $marketone-space-md $marketone-space-lg;

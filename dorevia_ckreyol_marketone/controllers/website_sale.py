@@ -13,6 +13,7 @@ MARKETONE_IMPLEMENTED_MODES = frozenset({MARKETONE_MODE_FEATURED, MARKETONE_MODE
 
 MARKETONE_FEATURED_PARAM = "dorevia_ckreyol_marketone.featured_public_category_id"
 MARKETONE_ORIGIN_PARAM = "marketone_origin"
+MARKETONE_CATEGORY_PARAM = "marketone_category"
 
 MARKETONE_FEATURED_CANONICAL_QUERY = "/shop?marketone_mode=featured"
 MARKETONE_ORIGIN_CANONICAL_QUERY = "/shop?marketone_mode=origin"
@@ -70,6 +71,69 @@ def _marketone_read_origin_slugs(mapping):
     return out
 
 
+def _marketone_read_category_slugs(mapping):
+    """Slugs facette catégories depuis la query (répétable)."""
+    values = []
+    if request and getattr(request, "httprequest", None):
+        values.extend(request.httprequest.args.getlist(MARKETONE_CATEGORY_PARAM))
+    raw = (mapping or {}).get(MARKETONE_CATEGORY_PARAM)
+    if raw:
+        if isinstance(raw, (list, tuple)):
+            values.extend(raw)
+        else:
+            values.append(raw)
+    out = []
+    seen = set()
+    for item in values:
+        if item and item not in seen:
+            seen.add(item)
+            out.append(item)
+    return out
+
+
+def _marketone_category_slugs_for_request(mapping, path_category=None):
+    """Slugs actifs : query d'abord, sinon catégorie chemin si principale."""
+    slugs = _marketone_read_category_slugs(mapping)
+    if slugs:
+        return slugs
+    if not path_category:
+        return []
+    ir_http = request.env["ir.http"].sudo()
+    return [ir_http._slug(path_category)]
+
+
+def _marketone_resolve_category_facet(mapping, path_category=None):
+    """(categories, facet_requested, facet_invalid)."""
+    website = request.website if request else None
+    slugs = _marketone_category_slugs_for_request(mapping, path_category=path_category)
+    if not slugs:
+        return (
+            request.env["product.public.category"].browse(),
+            False,
+            False,
+        )
+    categories = request.env["product.public.category"]._marketone_resolve_primary_categories_from_slugs(
+        slugs, website=website
+    )
+    ir_http = request.env["ir.http"].sudo()
+    want = set(slugs)
+    got = {ir_http._slug(rec) for rec in categories}
+    return (categories, True, want != got)
+
+
+def _marketone_apply_category_facet_options(options, mapping, path_category=None):
+    """Facette sidebar principales — OU via ``_search_get_detail``."""
+    categories, facet_requested, facet_invalid = _marketone_resolve_category_facet(
+        mapping, path_category=path_category
+    )
+    if not facet_requested:
+        return
+    if facet_invalid:
+        options["marketone_category_invalid"] = True
+        return
+    options["marketone_public_category_ids"] = list(categories.ids)
+
+
 def _marketone_resolve_featured_public_category(env):
     raw = env["ir.config_parameter"].sudo().get_param(MARKETONE_FEATURED_PARAM)
     if not raw or not str(raw).strip().isdigit():
@@ -124,6 +188,17 @@ def _marketone_apply_mode_options(options, mapping):
         options["marketone_origin_only"] = True
 
 
+def _marketone_canonical_category_slugs(mapping, path_category=None):
+    website = request.website if request else None
+    categories, requested, _invalid = _marketone_resolve_category_facet(
+        mapping, path_category=path_category
+    )
+    if not requested or not categories:
+        return []
+    ir_http = request.env["ir.http"].sudo()
+    return sorted({ir_http._slug(rec) for rec in categories})
+
+
 class WebsiteSaleMarketone(WebsiteSale):
     """Portes catalogue : Incontournables (6.1) et Origines (6.2)."""
 
@@ -161,6 +236,9 @@ class WebsiteSaleMarketone(WebsiteSale):
             conversion_rate=conversion_rate,
             **post,
         )
+        _marketone_apply_category_facet_options(
+            options, post, path_category=category
+        )
         _marketone_apply_mode_options(options, post)
         return options
 
@@ -171,13 +249,29 @@ class WebsiteSaleMarketone(WebsiteSale):
         attribute_value_dict,
         search_in_description=True,
     ):
+        mapping = request.httprequest.args
+        query_categories, facet_requested, facet_invalid = _marketone_resolve_category_facet(
+            mapping, path_category=category
+        )
+        path_category = None if facet_requested else category
+
         domain = super()._get_shop_domain(
             search,
-            category,
+            path_category,
             attribute_value_dict,
             search_in_description=search_in_description,
         )
-        mapping = request.httprequest.args
+
+        if facet_requested:
+            if facet_invalid:
+                return Domain.AND([domain, Domain([("id", "=", 0)])])
+            domain = Domain.AND(
+                [
+                    domain,
+                    Domain([("public_categ_ids", "in", query_categories.ids)]),
+                ]
+            )
+
         mode = _marketone_effective_mode(mapping)
         if mode == MARKETONE_MODE_FEATURED:
             category_rec = _marketone_resolve_featured_public_category(request.env)
@@ -191,10 +285,10 @@ class WebsiteSaleMarketone(WebsiteSale):
             )
         if mode != MARKETONE_MODE_ORIGIN:
             return domain
-        profiles, facet_requested, _invalid = _marketone_resolve_origin_profiles(
+        profiles, origin_facet_requested, _invalid = _marketone_resolve_origin_profiles(
             mapping
         )
-        if facet_requested and profiles:
+        if origin_facet_requested and profiles:
             value_ids = profiles.mapped("attribute_value_id").ids
             return Domain.AND(
                 [
@@ -206,6 +300,13 @@ class WebsiteSaleMarketone(WebsiteSale):
 
     def _get_additional_shop_values(self, values, **kwargs):
         result = super()._get_additional_shop_values(values, **kwargs)
+        path_category = (values or {}).get("category")
+        result["marketone_primary_public_categories"] = request.env[
+            "product.public.category"
+        ]._marketone_primary_public_categories(website=request.website)
+        result["marketone_shop_sidebar_active_category_slugs"] = (
+            _marketone_canonical_category_slugs(kwargs, path_category=path_category)
+        )
         mode = _marketone_effective_mode(kwargs)
         search_count = (values or {}).get("search_count") or 0
 

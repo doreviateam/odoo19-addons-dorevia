@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Sidebar /shop : le bloc Catégories gauche est désactivé par défaut en Odoo 19
+        (`website_sale.products_categories`, active=False). On désactive aussi l’accordéon
+        natif `products_categories_list_collapsible` pour garder un xpath stable sur la liste.
+    -->
+    <function model="ir.ui.view" name="write">
+        <value eval="[ref('website_sale.products_categories_list_collapsible')]"/>
+        <value eval="{'active': False}"/>
+    </function>
+</odoo>
