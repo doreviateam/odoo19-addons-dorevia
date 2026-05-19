@@ -4,12 +4,11 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_ORIGINE_REUNION_DEDUP` |
 | **Type** | **Données / BO** — qualité attribut Origines · zéro rustine QWeb |
-| **Statut** | **GO MOA exécution** — `19.0.13.1.0` |
-| **Version cible** | **`19.0.13.1.0`** (patch données, après merge UX-1 `19.0.13.0.7`) |
+| **Statut** | **Clôturé GO MOA données** — `19.0.13.1.0` · PR [#7](https://github.com/doreviateam/odoo19-addons-dorevia/pull/7) merge `632e035` |
+| **Version livrée** | **`19.0.13.1.0`** |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
-| **Prérequis** | UX-1 **mergé** sur `main` (`19.0.13.0.7`) · sidebar Origines opérationnelle |
-| **Branche suggérée** | `fix/marketone-origin-reunion-dedup` |
+| **Merge** | `fix/marketone-origin-reunion-dedup` → `main` (`632e035`) |
 
 ---
 
@@ -190,3 +189,4 @@ Test dédié recommandé (après implémentation) : tag `dorevia_marketone_origi
 |------|---------|-------------|
 | 2026-05-19 | **Brouillon — attente GO MOA ticket** | Ticket rédigé · **aucun code** avant validation |
 | 2026-05-19 | **GO MOA exécution** | Audit `ckr-marketone-01` · fusion 68→51 · hook + migration · recette dédiée |
+| 2026-05-19 | **Clôturé GO MOA données** | PR #7 mergée · post-merge R1–R3 OK · 7/7 produits sur `La Réunion` id 51 · profil `reunion` aligné · chip UX-1 OK · aucun `views/` modifié |

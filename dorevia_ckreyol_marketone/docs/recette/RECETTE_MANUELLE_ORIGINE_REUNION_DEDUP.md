@@ -70,3 +70,18 @@ odoo-bin -d ckr-marketone-01 --test-tags=dorevia_marketone_origin_reunion_dedup 
 odoo-bin -d ckr-marketone-01 --test-tags=dorevia_marketone_shop_regression,dorevia_marketone_shop_filter_state --stop-after-init
 odoo-bin -d ckr-marketone-01 --test-tags=dorevia_marketone_culture_v2 --stop-after-init
 ```
+
+---
+
+## Verdict MOA post-merge (2026-05-19 — PR #7 `632e035`)
+
+| Contrôle | Résultat |
+|----------|----------|
+| Valeur unique BO | **La Réunion** id `51` — plus de `Reunion` |
+| Produits Réunion | **7/7** rattachés (6 actifs + 1 inactif) |
+| Profil `reunion` | `attribute_value_id=51` · `name_visitor=La Réunion` · publié |
+| Chip UX-1 | Libellé **La Réunion** · retrait → `/shop` |
+| Porte Origines | `/shop?marketone_mode=origin&marketone_origin=reunion` **200** |
+| Rustine QWeb | **Aucune** — PR #7 sans modification `views/` |
+
+**GO technique / GO MOA données** — ticket clôturé.
