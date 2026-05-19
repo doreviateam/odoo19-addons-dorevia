@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_shop_collections_checks" name="Marketone: cases collections commerciales">
+        <t t-set="marketone_shop_collections"
+           t-value="marketone_shop_collections or request.env['marketone.shop.collection'].browse()"/>
+        <t t-set="marketone_active_col_slugs"
+           t-value="marketone_shop_sidebar_active_collection_slugs or []"/>
+        <div class="flex-column mb-3 marketone-sidebar-colchecks">
+            <t t-foreach="marketone_shop_collections" t-as="coll">
+                <t t-set="marketone_col_slug" t-value="coll.slug"/>
+                <t t-set="marketone_col_checked"
+                   t-value="marketone_col_slug in marketone_active_col_slugs"/>
+                <div class="">
+                    <div class="form-check mb-1">
+                        <label class="form-check-label d-flex align-items-center gap-2 w-100 mb-0 fw-normal">
+                            <input type="checkbox"
+                                   class="form-check-input flex-shrink-0 marketone-sidebar-col-check"
+                                   t-att-id="'marketone_col_%s' % coll.id"
+                                   t-att-data-collection-slug="marketone_col_slug"
+                                   t-att-checked="marketone_col_checked and 'checked' or None"/>
+                            <span t-field="coll.name"/>
+                        </label>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </template>
+
+    <template id="marketone_shop_collections_accordion" name="Marketone: accordéon Collections sidebar">
+        <t t-set="marketone_col_expand" t-value="True"/>
+        <t t-if="isOffcanvas">
+            <div name="wsale_products_collections_list" class="wsale_products_collections_list mb-3">
+                <p class="fw-bold mb-2">Collections</p>
+                <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_checks"/>
+            </div>
+        </t>
+        <t t-else="">
+            <div class="accordion accordion-flush marketone-shop-collections-accordion w-100 mb-1">
+                <div class="accordion-item nav-item mb-1 rounded-0 border-0">
+                    <div id="marketone_wsale_collections_header" class="accordion-header h6 mb-0">
+                        <button type="button"
+                                t-attf-class="accordion-button px-0 bg-transparent shadow-none #{'collapsed' if not marketone_col_expand else ''}"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#marketone_wsale_collections"
+                                aria-controls="marketone_wsale_collections"
+                                t-att-aria-expanded="'true' if marketone_col_expand else 'false'">
+                            <b>Collections</b>
+                        </button>
+                    </div>
+                    <div id="marketone_wsale_collections"
+                         t-attf-class="accordion-collapse collapse{{ ' show' if marketone_col_expand else '' }}"
+                         aria-labelledby="marketone_wsale_collections_header"
+                         data-bs-parent=".marketone-shop-collections-accordion">
+                        <div class="accordion-body pt-0 pb-0 px-0">
+                            <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_checks"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="marketone_shop_sidebar_collections_after_categories"
+              inherit_id="dorevia_ckreyol_marketone.marketone_products_categories_primary_list"
+              name="Marketone: collections après catégories"
+              priority="33">
+        <xpath expr="//div[contains(@class, 'marketone-shop-categories-accordion')]" position="after">
+            <t t-if="not isOffcanvas">
+                <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
+            </t>
+        </xpath>
+        <xpath expr="//div[@name='wsale_products_categories_list']" position="after">
+            <t t-if="isOffcanvas">
+                <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
+            </t>
+        </xpath>
+    </template>
+</odoo>

@@ -109,3 +109,63 @@ class MarketoneShopCollection(models.Model):
         return self.product_ids.filtered(
             lambda product: product.sale_ok and product.website_published
         )
+
+    @api.model
+    def _marketone_shop_collection_eligible_domain(self, website=None, today=None):
+        """Collections candidates sidebar / filtre (Lot B — D8)."""
+        website = website or self.env["website"].get_current_website()
+        today = today or fields.Date.context_today(self)
+        return [
+            ("active", "=", True),
+            ("website_published", "=", True),
+            "|",
+            ("website_id", "=", False),
+            ("website_id", "=", website.id),
+            "|",
+            ("date_start", "=", False),
+            ("date_start", "<=", today),
+            "|",
+            ("date_end", "=", False),
+            ("date_end", ">=", today),
+        ]
+
+    @api.model
+    def _marketone_resolve_published_slugs(self, slugs, website=None, today=None):
+        """Slugs éligibles résolus — ordre URL conservé ; inconnus ignorés (D9)."""
+        normalized = []
+        seen = set()
+        for raw in slugs or []:
+            value = (raw or "").strip().lower()
+            if not value or value in seen:
+                continue
+            seen.add(value)
+            normalized.append(value)
+        if not normalized:
+            return self.browse()
+        domain = list(self._marketone_shop_collection_eligible_domain(website, today))
+        domain.append(("slug", "in", normalized))
+        records = self.sudo().search(domain)
+        by_slug = {rec.slug: rec for rec in records}
+        return self.browse([by_slug[slug].id for slug in normalized if slug in by_slug])
+
+    @api.model
+    def _marketone_collections_for_shop(
+        self, search_product, active_collection_ids=None, website=None, today=None
+    ):
+        """Collections visibles sidebar (C4) — contexte sans facette collection."""
+        website = website or self.env["website"].get_current_website()
+        today = today or fields.Date.context_today(self)
+        eligible = self.sudo().search(
+            self._marketone_shop_collection_eligible_domain(website, today)
+        )
+        active_ids = set(active_collection_ids or [])
+        if not search_product:
+            return eligible.filtered(lambda rec: rec.id in active_ids)
+        product_ids = set(search_product.ids)
+
+        def _has_product_in_context(rec):
+            return bool(product_ids & set(rec.product_ids.ids))
+
+        return eligible.filtered(
+            lambda rec: _has_product_in_context(rec) or rec.id in active_ids
+        )

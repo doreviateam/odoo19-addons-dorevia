@@ -1,9 +1,10 @@
-/** Marketone — sidebar /shop : facettes catalogue (catégories, attributs, prix). */
+/** Marketone — sidebar /shop : facettes catalogue (catégories, collections, attributs, prix). */
 (function () {
     "use strict";
 
     const SHOP_FALLBACK = "/shop";
     const CATEGORY_PARAM = "marketone_category";
+    const COLLECTION_PARAM = "marketone_collection";
     const INIT_ATTR = "data-marketone-shop-sidebar-js";
 
     const PRESERVE_SINGLE = [
@@ -15,7 +16,11 @@
         "noFuzzy",
     ];
 
-    const PRESERVE_MULTI = ["marketone_category", "marketone_origin"];
+    const PRESERVE_MULTI = [
+        "marketone_category",
+        "marketone_collection",
+        "marketone_origin",
+    ];
 
     /** Racine Lot 3 : `marketone-shop` sur `#wrap`, pas sur `.oe_website_sale`. */
     function getMarketoneShopRoot() {
@@ -50,15 +55,25 @@
         );
     }
 
+    function collectionInputs() {
+        const root = getMarketoneShopRoot();
+        const scope = root || document;
+        return scope.querySelectorAll(
+            "input.marketone-sidebar-col-check[type='checkbox']"
+        );
+    }
+
     function normSlug(value) {
         return (value || "").trim().toLowerCase();
     }
 
-    function inputsForSlug(slug) {
+    function inputsForSlug(slug, selector, attrName) {
         const want = normSlug(slug);
-        return Array.from(categoryInputs()).filter(
-            (node) => normSlug(node.getAttribute("data-category-slug")) === want
-        );
+        const root = getMarketoneShopRoot();
+        const scope = root || document;
+        return Array.from(
+            scope.querySelectorAll(selector)
+        ).filter((node) => normSlug(node.getAttribute(attrName)) === want);
     }
 
     function getCheckedCategorySlugs() {
@@ -67,6 +82,17 @@
                 Array.from(categoryInputs())
                     .filter((node) => node.checked)
                     .map((node) => node.getAttribute("data-category-slug"))
+                    .filter(Boolean)
+            ),
+        ].sort();
+    }
+
+    function getCheckedCollectionSlugs() {
+        return [
+            ...new Set(
+                Array.from(collectionInputs())
+                    .filter((node) => node.checked)
+                    .map((node) => node.getAttribute("data-collection-slug"))
                     .filter(Boolean)
             ),
         ].sort();
@@ -95,6 +121,11 @@
     function appendCategorySlugs(params, slugs) {
         params.delete(CATEGORY_PARAM);
         slugs.forEach((slug) => params.append(CATEGORY_PARAM, slug));
+    }
+
+    function appendCollectionSlugs(params, slugs) {
+        params.delete(COLLECTION_PARAM);
+        slugs.forEach((slug) => params.append(COLLECTION_PARAM, slug));
     }
 
     function getShopAttributesForm() {
@@ -162,14 +193,15 @@
         window.location.href = base + (query ? "?" + query : "");
     }
 
-    function buildShopParamsFromCategories() {
+    function buildShopParamsFromSidebarFacets() {
         const params = new URLSearchParams();
         const current = new URLSearchParams(window.location.search);
         copyPreservedParams(current, params, {
-            skip: [CATEGORY_PARAM, "attribute_values", "tags"],
+            skip: [CATEGORY_PARAM, COLLECTION_PARAM, "attribute_values", "tags"],
         });
         mergeAttributeFacetParams(params, current);
         appendCategorySlugs(params, getCheckedCategorySlugs());
+        appendCollectionSlugs(params, getCheckedCollectionSlugs());
         return params;
     }
 
@@ -177,9 +209,10 @@
         const params = buildAttributeValuesParams(form);
         const current = new URLSearchParams(window.location.search);
         copyPreservedParams(current, params, {
-            skip: ["attribute_values", "tags", CATEGORY_PARAM],
+            skip: ["attribute_values", "tags", CATEGORY_PARAM, COLLECTION_PARAM],
         });
         appendCategorySlugs(params, getCheckedCategorySlugs());
+        appendCollectionSlugs(params, getCheckedCollectionSlugs());
         return params;
     }
 
@@ -187,7 +220,7 @@
         if (!isMarketoneShop()) {
             return;
         }
-        const params = buildShopParamsFromCategories();
+        const params = buildShopParamsFromSidebarFacets();
         const base = getShopBase();
         const query = params.toString();
         const href = base + (query ? "?" + query : "");
@@ -200,11 +233,11 @@
             });
     }
 
-    function categoryChange(ev) {
+    function sidebarFacetChange(ev, selector, attrName, buildParams) {
         if (!isMarketoneShop()) {
             return;
         }
-        if (!ev.target.matches("input.marketone-sidebar-cat-check[type='checkbox']")) {
+        if (!ev.target.matches(selector)) {
             return;
         }
         const root = getMarketoneShopRoot();
@@ -212,11 +245,29 @@
             return;
         }
         const target = ev.target;
-        const slug = target.getAttribute("data-category-slug") || "";
-        inputsForSlug(slug).forEach((node) => {
+        const slug = target.getAttribute(attrName) || "";
+        inputsForSlug(slug, selector, attrName).forEach((node) => {
             node.checked = target.checked;
         });
-        navigateShop(buildShopParamsFromCategories());
+        navigateShop(buildParams());
+    }
+
+    function categoryChange(ev) {
+        sidebarFacetChange(
+            ev,
+            "input.marketone-sidebar-cat-check[type='checkbox']",
+            "data-category-slug",
+            buildShopParamsFromSidebarFacets
+        );
+    }
+
+    function collectionChange(ev) {
+        sidebarFacetChange(
+            ev,
+            "input.marketone-sidebar-col-check[type='checkbox']",
+            "data-collection-slug",
+            buildShopParamsFromSidebarFacets
+        );
     }
 
     function attributeChange(ev) {
@@ -253,6 +304,7 @@
         }
         document.body.setAttribute(INIT_ATTR, "1");
         document.body.addEventListener("change", categoryChange);
+        document.body.addEventListener("change", collectionChange);
         document.body.addEventListener("change", attributeChange, true);
         syncPriceRangeDataUrl();
     }

@@ -8,6 +8,7 @@ from . import test_marketone_lot6_1_featured
 from . import test_marketone_lot6_2_origin
 from . import test_marketone_shop_sidebar_categories
 from . import test_marketone_collection_lot_a
+from . import test_marketone_shop_sidebar_collections
 from . import test_marketone_culture_v1
 from . import test_marketone_culture_v2
 from . import test_marketone_smoke

@@ -497,9 +497,9 @@
 | Étape | Statut |
 |-------|--------|
 | Relecture MOA ADR-030 | ✅ 2026-05-19 |
-| Ticket Lot A BO + rattachement produits | [`TICKET_MARKETONE_COLLECTION_LOT_A.md`](../tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md) — **ouvert**, sans code |
-| Mise à jour `CONTRACTS.md` (collections) | À l’exec Lot A ou avant GO ticket |
-| Lots B (sidebar) · C (homepage) | Tickets ultérieurs |
+| Ticket Lot A BO | [`TICKET_MARKETONE_COLLECTION_LOT_A.md`](../tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md) — **clôturé** `19.0.11.0.0` |
+| Ticket Lot B sidebar | [`TICKET_MARKETONE_COLLECTION_LOT_B_SIDEBAR.md`](../tickets/TICKET_MARKETONE_COLLECTION_LOT_B_SIDEBAR.md) — **clôturé** `19.0.12.0.0` |
+| Lot C (homepage) | Ticket ultérieur |
 
 ---
 

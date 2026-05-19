@@ -16,6 +16,7 @@ MARKETONE_IMPLEMENTED_MODES = frozenset({MARKETONE_MODE_FEATURED, MARKETONE_MODE
 MARKETONE_FEATURED_PARAM = "dorevia_ckreyol_marketone.featured_public_category_id"
 MARKETONE_ORIGIN_PARAM = "marketone_origin"
 MARKETONE_CATEGORY_PARAM = "marketone_category"
+MARKETONE_COLLECTION_PARAM = "marketone_collection"
 
 MARKETONE_FEATURED_CANONICAL_QUERY = "/shop?marketone_mode=featured"
 MARKETONE_ORIGIN_CANONICAL_QUERY = "/shop?marketone_mode=origin"
@@ -102,6 +103,51 @@ def _marketone_category_slugs_for_request(mapping, path_category=None):
         return []
     ir_http = request.env["ir.http"].sudo()
     return [ir_http._slug(path_category)]
+
+
+def _marketone_read_collection_slugs(mapping):
+    """Slugs facette collections depuis la query (répétable)."""
+    values = []
+    if request and getattr(request, "httprequest", None):
+        values.extend(request.httprequest.args.getlist(MARKETONE_COLLECTION_PARAM))
+    raw = (mapping or {}).get(MARKETONE_COLLECTION_PARAM)
+    if raw:
+        if isinstance(raw, (list, tuple)):
+            values.extend(raw)
+        else:
+            values.append(raw)
+    out = []
+    seen = set()
+    for item in values:
+        if item and item not in seen:
+            seen.add(item)
+            out.append(item)
+    return out
+
+
+def _marketone_resolve_collection_facet(mapping):
+    """(collections, facet_requested) — slugs invalides ignorés (Lot B B2)."""
+    slugs = _marketone_read_collection_slugs(mapping)
+    if not slugs:
+        return (
+            request.env["marketone.shop.collection"].browse(),
+            False,
+        )
+    website = request.website if request else None
+    collections = request.env[
+        "marketone.shop.collection"
+    ]._marketone_resolve_published_slugs(slugs, website=website)
+    return (collections, True)
+
+
+def _marketone_apply_collection_facet_options(options, mapping):
+    """Facette sidebar collections — OU via ``_search_get_detail``."""
+    if "collection" in _marketone_sidebar_facet_omit_get():
+        return
+    collections, facet_requested = _marketone_resolve_collection_facet(mapping)
+    if not facet_requested or not collections:
+        return
+    options["marketone_collection_ids"] = list(collections.ids)
 
 
 def _marketone_resolve_category_facet(mapping, path_category=None):
@@ -209,6 +255,13 @@ def _marketone_canonical_category_slugs(mapping, path_category=None):
     return sorted({ir_http._slug(rec) for rec in categories})
 
 
+def _marketone_canonical_collection_slugs(mapping):
+    collections, requested = _marketone_resolve_collection_facet(mapping)
+    if not requested or not collections:
+        return []
+    return list(collections.mapped("slug"))
+
+
 class WebsiteSaleMarketone(WebsiteSale):
     """Portes catalogue : Incontournables (6.1) et Origines (6.2)."""
 
@@ -249,6 +302,7 @@ class WebsiteSaleMarketone(WebsiteSale):
         _marketone_apply_category_facet_options(
             options, post, path_category=category
         )
+        _marketone_apply_collection_facet_options(options, post)
         _marketone_apply_mode_options(options, post)
         return options
 
@@ -287,6 +341,21 @@ class WebsiteSaleMarketone(WebsiteSale):
                 ]
             )
 
+        omit_collection = "collection" in _marketone_sidebar_facet_omit_get()
+        query_collections, collection_facet_requested = _marketone_resolve_collection_facet(
+            mapping
+        )
+        if omit_collection:
+            collection_facet_requested = False
+        if collection_facet_requested and query_collections:
+            product_ids = list(set(query_collections.mapped("product_ids").ids))
+            if product_ids:
+                domain = Domain.AND(
+                    [domain, Domain([("id", "in", product_ids)])]
+                )
+            else:
+                domain = Domain.AND([domain, Domain([("id", "=", 0)])])
+
         mode = _marketone_effective_mode(mapping)
         if mode == MARKETONE_MODE_FEATURED:
             category_rec = _marketone_resolve_featured_public_category(request.env)
@@ -323,10 +392,13 @@ class WebsiteSaleMarketone(WebsiteSale):
         slugs = _marketone_read_category_slugs(kwargs)
         if slugs:
             result[MARKETONE_CATEGORY_PARAM] = slugs
+        coll_slugs = _marketone_canonical_collection_slugs(kwargs)
+        if coll_slugs:
+            result[MARKETONE_COLLECTION_PARAM] = coll_slugs
         return result
 
-    def _marketone_shop_search_product_without_category_facet(self, values, kwargs):
-        """``search_product`` aligné grille, sans facette catégorie (sidebar C4)."""
+    def _marketone_shop_search_product_without_facets(self, values, kwargs, omit_facets):
+        """``search_product`` aligné grille, sans facettes listées (sidebar C4)."""
         website = request.website
         current = values or {}
         wk = dict(kwargs or {})
@@ -375,7 +447,7 @@ class WebsiteSaleMarketone(WebsiteSale):
         ):
             post.pop(key, None)
         try:
-            request._marketone_sidebar_facet_omit = frozenset({"category"})
+            request._marketone_sidebar_facet_omit = frozenset(omit_facets)
             options = self._get_search_options(
                 category=None,
                 attribute_value_dict=attribute_value_dict,
@@ -395,6 +467,16 @@ class WebsiteSaleMarketone(WebsiteSale):
         finally:
             if hasattr(request, "_marketone_sidebar_facet_omit"):
                 delattr(request, "_marketone_sidebar_facet_omit")
+
+    def _marketone_shop_search_product_without_category_facet(self, values, kwargs):
+        return self._marketone_shop_search_product_without_facets(
+            values, kwargs, {"category"}
+        )
+
+    def _marketone_shop_search_product_without_collection_facet(self, values, kwargs):
+        return self._marketone_shop_search_product_without_facets(
+            values, kwargs, {"collection"}
+        )
 
     def _get_additional_shop_values(self, values, **kwargs):
         result = super()._get_additional_shop_values(values, **kwargs)
@@ -417,6 +499,24 @@ class WebsiteSaleMarketone(WebsiteSale):
         )
         result["marketone_shop_sidebar_active_category_slugs"] = active_slugs
         result["marketone_has_category_filter"] = bool(active_slugs)
+        active_collections, _coll_requested = _marketone_resolve_collection_facet(
+            kwargs
+        )
+        search_for_collections = (
+            self._marketone_shop_search_product_without_collection_facet(
+                values, kwargs
+            )
+        )
+        result["marketone_shop_collections"] = request.env[
+            "marketone.shop.collection"
+        ]._marketone_collections_for_shop(
+            search_for_collections,
+            active_collection_ids=active_collections.ids,
+            website=request.website,
+        )
+        collection_slugs = _marketone_canonical_collection_slugs(kwargs)
+        result["marketone_shop_sidebar_active_collection_slugs"] = collection_slugs
+        result["marketone_has_collection_filter"] = bool(collection_slugs)
         mode = _marketone_effective_mode(kwargs)
         search_count = (values or {}).get("search_count") or 0
 
