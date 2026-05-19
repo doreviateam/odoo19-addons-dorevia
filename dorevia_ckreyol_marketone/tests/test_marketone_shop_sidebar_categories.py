@@ -123,7 +123,7 @@ class TestMarketoneShopSidebarCategories(HttpCase):
     """Sidebar : 13 principales ; facette ``marketone_category`` multi OR."""
 
     def _sidebar_block(self, html):
-        start = html.find('class="products_categories')
+        start = html.find("marketone-shop-categories-accordion")
         self.assertGreater(start, -1)
         end = html.find("products_attributes_filters", start)
         self.assertGreater(end, start)

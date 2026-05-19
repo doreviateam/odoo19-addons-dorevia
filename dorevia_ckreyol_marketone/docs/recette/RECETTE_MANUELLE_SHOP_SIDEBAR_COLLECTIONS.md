@@ -6,7 +6,7 @@
 | **ADR** | [ADR-030](../cadrage/DECISIONS.md#adr-030--collection-commerciale-marketone) |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
-| **Version module** | `19.0.12.0.0` |
+| **Version module** | `19.0.12.0.0` (ordre rubriques : **`19.0.12.1.0`** — voir [`RECETTE_MANUELLE_SHOP_SIDEBAR_ORDRE.md`](RECETTE_MANUELLE_SHOP_SIDEBAR_ORDRE.md)) |
 | **Statut recette** | **GO MOA** — S1–S11 validés (2026-05-19) |
 
 ---
@@ -72,7 +72,7 @@ Afficher une collection dans la sidebar si :
 
 | # | Scénario | Action | Attendu | MOA | Tech |
 |---|----------|--------|---------|-----|------|
-| **S1** | Rubrique | `/shop` | **Collections** entre **Catégories** et **Prix** | ☑ | ☑ |
+| **S1** | Rubrique | `/shop` | **Collections** → **Catégories** → **Origines** → **Prix** (ordre `19.0.12.1.0`) | ☑ | ☑ |
 | **S2** | Filtre simple | Cocher **Col-A** (publiée, produits vendables + publiés site) | Grille filtrée · `marketone_collection=` dans l’URL | ☑ | ☑ |
 | **S3** | Multi OR | Cocher **Col-A** + **Col-B** | 2× `marketone_collection` · union produits (OR) | ☑ | ☑ |
 | **S4** | AND Origine | **Col-A** + **Martinique** | Deux paramètres · grille = intersection | ☑ | ☑ |
