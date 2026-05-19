@@ -61,6 +61,49 @@ class TestMarketoneShopSidebarCategoriesModel(TransactionCase):
         self.assertIn(str(self.biscuits.id), flat)
         self.assertIn(str(self.epices.id), flat)
 
+    def test_primary_categories_for_shop_filters_by_search_product(self):
+        if not self.biscuits or not self.epices:
+            self.skipTest("Catégories recette Biscuits salés / Épices requises")
+        product_biscuits = self.env["product.template"].search(
+            [
+                ("sale_ok", "=", True),
+                ("website_published", "=", True),
+                ("public_categ_ids", "in", self.biscuits.ids),
+            ],
+            limit=1,
+        )
+        if not product_biscuits:
+            self.skipTest("Produit Biscuits salés publié requis")
+        search_product = product_biscuits
+        visible = self.Category._marketone_primary_public_categories_for_shop(
+            search_product,
+            active_category_ids=[],
+            website=self.website,
+        )
+        self.assertIn(self.biscuits, visible)
+        self.assertNotIn(self.epices, visible)
+
+    def test_primary_categories_for_shop_keeps_active_without_products(self):
+        if not self.biscuits or not self.epices:
+            self.skipTest("Catégories recette Biscuits salés / Épices requises")
+        product_biscuits = self.env["product.template"].search(
+            [
+                ("sale_ok", "=", True),
+                ("website_published", "=", True),
+                ("public_categ_ids", "in", self.biscuits.ids),
+            ],
+            limit=1,
+        )
+        if not product_biscuits:
+            self.skipTest("Produit Biscuits salés publié requis")
+        visible = self.Category._marketone_primary_public_categories_for_shop(
+            product_biscuits,
+            active_category_ids=[self.epices.id],
+            website=self.website,
+        )
+        self.assertIn(self.biscuits, visible)
+        self.assertIn(self.epices, visible)
+
     def test_resolve_primary_rejects_secondary_slug(self):
         incontournables = self.Category.search(
             [("name", "=", "Incontournables"), ("website_id", "=", self.website.id)],
@@ -254,6 +297,104 @@ class TestMarketoneShopSidebarCategories(HttpCase):
         response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
         self.assertEqual(response.status_code, 200)
         self.assertNotIn(b"Crackers manioc", response.content)
+
+    def _primary_category_without_origin_value(self, origin_value):
+        """Principale avec produits publiés mais sans ce libellé Origine."""
+        attr_origin = self.env.ref(
+            "dorevia_ckreyol_marketone.marketone_product_attribute_origin",
+            raise_if_not_found=False,
+        )
+        if not attr_origin:
+            return self.env["product.public.category"]
+        primaries = self.env["product.public.category"]._marketone_primary_public_categories()
+        for cat in primaries:
+            products = self.env["product.template"].search(
+                [
+                    ("sale_ok", "=", True),
+                    ("website_published", "=", True),
+                    ("public_categ_ids", "in", cat.ids),
+                ]
+            )
+            if not products:
+                continue
+            with_origin = products.filtered(
+                lambda p: origin_value
+                in p.attribute_line_ids.filtered(
+                    lambda line: line.attribute_id == attr_origin
+                ).value_ids
+            )
+            if products and not with_origin:
+                return cat
+        return self.env["product.public.category"]
+
+    def test_shop_sidebar_hides_categories_without_origin_products(self):
+        """C2 — principales sans produit compatible Origine absentes de la sidebar."""
+        attr_origin = self.env.ref(
+            "dorevia_ckreyol_marketone.marketone_product_attribute_origin",
+            raise_if_not_found=False,
+        )
+        if not attr_origin:
+            self.skipTest("Attribut Origine non installé")
+        martinique = self.env["product.attribute.value"].search(
+            [
+                ("attribute_id", "=", attr_origin.id),
+                ("name", "=", "Martinique"),
+            ],
+            limit=1,
+        )
+        if not martinique:
+            self.skipTest("Valeur Martinique absente")
+        hidden_cat = self._primary_category_without_origin_value(martinique)
+        if not hidden_cat:
+            self.skipTest("Aucune principale sans produit Martinique pour C2")
+        url = f"/shop?attribute_values={attr_origin.id}-{martinique.id}"
+        response = self.url_open(url)
+        self.assertEqual(response.status_code, 200)
+        block_html = self._sidebar_block(response.text)
+        self.assertNotIn(
+            hidden_cat.name,
+            block_html,
+            "Catégorie sans produit Martinique ne doit pas apparaître (C2)",
+        )
+
+    def test_shop_sidebar_keeps_active_category_when_combo_empty(self):
+        """C3 — catégorie cochée visible même si combinaison restrictive."""
+        attr_origin = self.env.ref(
+            "dorevia_ckreyol_marketone.marketone_product_attribute_origin",
+            raise_if_not_found=False,
+        )
+        if not attr_origin:
+            self.skipTest("Attribut Origine non installé")
+        martinique = self.env["product.attribute.value"].search(
+            [
+                ("attribute_id", "=", attr_origin.id),
+                ("name", "=", "Martinique"),
+            ],
+            limit=1,
+        )
+        if not martinique:
+            self.skipTest("Valeur Martinique absente")
+        cat = self._primary_category_without_origin_value(martinique)
+        if not cat:
+            self.skipTest("Aucune principale sans produit Martinique pour C3")
+        slug = self.env["ir.http"]._slug(cat)
+        url = (
+            f"/shop?attribute_values={attr_origin.id}-{martinique.id}"
+            f"&{MARKETONE_CATEGORY_PARAM}={slug}"
+        )
+        response = self.url_open(url)
+        self.assertEqual(response.status_code, 200)
+        block_html = self._sidebar_block(response.text)
+        self.assertIn(cat.name, block_html, "Catégorie active doit rester visible (C3)")
+        self.assertIn(
+            f'data-category-slug="{slug}"',
+            block_html,
+        )
+        self.assertRegex(
+            block_html,
+            rf'data-category-slug="{slug}"[^>]*checked|checked[^>]*data-category-slug="{slug}"',
+            "Catégorie active doit rester cochée (C3)",
+        )
 
     def test_incontournables_porte_non_regression(self):
         response = self.url_open("/incontournables", allow_redirects=False)

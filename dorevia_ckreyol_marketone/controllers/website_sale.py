@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Portes catalogue Marketone — extension native ``WebsiteSale`` (Odoo 19)."""
 
+from datetime import date
+
 from odoo.fields import Domain
 from odoo.http import request, route
 
@@ -121,8 +123,16 @@ def _marketone_resolve_category_facet(mapping, path_category=None):
     return (categories, True, want != got)
 
 
+def _marketone_sidebar_facet_omit_get():
+    """Facettes neutralisées (ex. comptage catégories sidebar — relaxation multi OR)."""
+    omit = getattr(request, "_marketone_sidebar_facet_omit", None) if request else None
+    return frozenset(omit) if omit else frozenset()
+
+
 def _marketone_apply_category_facet_options(options, mapping, path_category=None):
     """Facette sidebar principales — OU via ``_search_get_detail``."""
+    if "category" in _marketone_sidebar_facet_omit_get():
+        return
     categories, facet_requested, facet_invalid = _marketone_resolve_category_facet(
         mapping, path_category=path_category
     )
@@ -250,10 +260,15 @@ class WebsiteSaleMarketone(WebsiteSale):
         search_in_description=True,
     ):
         mapping = request.httprequest.args
+        omit_category = "category" in _marketone_sidebar_facet_omit_get()
         query_categories, facet_requested, facet_invalid = _marketone_resolve_category_facet(
             mapping, path_category=category
         )
-        path_category = None if facet_requested else category
+        if omit_category:
+            facet_requested = False
+            path_category = None
+        else:
+            path_category = None if facet_requested else category
 
         domain = super()._get_shop_domain(
             search,
@@ -310,12 +325,93 @@ class WebsiteSaleMarketone(WebsiteSale):
             result[MARKETONE_CATEGORY_PARAM] = slugs
         return result
 
+    def _marketone_shop_search_product_without_category_facet(self, values, kwargs):
+        """``search_product`` aligné grille, sans facette catégorie (sidebar C4)."""
+        website = request.website
+        current = values or {}
+        wk = dict(kwargs or {})
+        for key in ("search", "tags", "min_price", "max_price", "order"):
+            if current.get(key) is not None and wk.get(key) in (None, ""):
+                wk[key] = current.get(key)
+        search = (
+            wk.get("search")
+            or current.get("original_search")
+            or current.get("search")
+            or ""
+        )
+        min_price = wk.get("min_price")
+        if min_price in (None, ""):
+            min_price = current.get("min_price") or 0.0
+        max_price = wk.get("max_price")
+        if max_price in (None, ""):
+            max_price = current.get("max_price") or 0.0
+        attribute_value_dict = current.get("attrib_values") or {}
+        if not attribute_value_dict:
+            raw_attrib = wk.get("attribute_values")
+            if raw_attrib:
+                attribute_value_dict = self._get_attribute_value_dict(raw_attrib)
+        tags = wk.get("tags")
+        if tags is None:
+            tags = current.get("tags")
+        company_currency = website.company_id.sudo().currency_id
+        conversion_rate = request.env["res.currency"]._get_conversion_rate(
+            company_currency,
+            website.currency_id,
+            website.company_id,
+            date.today(),
+        )
+        post = dict(wk)
+        for key in (
+            "tags",
+            "min_price",
+            "max_price",
+            "search",
+            "category",
+            "attribute_values",
+            "attribute_value_dict",
+            "conversion_rate",
+            "display_currency",
+            "order",
+        ):
+            post.pop(key, None)
+        try:
+            request._marketone_sidebar_facet_omit = frozenset({"category"})
+            options = self._get_search_options(
+                category=None,
+                attribute_value_dict=attribute_value_dict,
+                tags=tags,
+                min_price=float(min_price or 0),
+                max_price=float(max_price or 0),
+                conversion_rate=conversion_rate,
+                display_currency=website.currency_id,
+                **post,
+            )
+            if search:
+                post["search"] = search
+            _fuzzy, _count, search_product = self._shop_lookup_products(
+                options, post, search, website
+            )
+            return search_product
+        finally:
+            if hasattr(request, "_marketone_sidebar_facet_omit"):
+                delattr(request, "_marketone_sidebar_facet_omit")
+
     def _get_additional_shop_values(self, values, **kwargs):
         result = super()._get_additional_shop_values(values, **kwargs)
         path_category = (values or {}).get("category")
+        active_categories, _facet_requested, _facet_invalid = (
+            _marketone_resolve_category_facet(kwargs, path_category=path_category)
+        )
+        search_for_categories = self._marketone_shop_search_product_without_category_facet(
+            values, kwargs
+        )
         result["marketone_primary_public_categories"] = request.env[
             "product.public.category"
-        ]._marketone_primary_public_categories(website=request.website)
+        ]._marketone_primary_public_categories_for_shop(
+            search_for_categories,
+            active_category_ids=active_categories.ids,
+            website=request.website,
+        )
         active_slugs = _marketone_canonical_category_slugs(
             kwargs, path_category=path_category
         )

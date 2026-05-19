@@ -80,6 +80,34 @@ class ProductPublicCategory(models.Model):
         return categories
 
     @api.model
+    def _marketone_primary_public_categories_for_shop(
+        self, search_product, active_category_ids=None, website=None
+    ):
+        """Principales visibles sidebar (C4) : allowlist ∩ produits du contexte ∪ actives.
+
+        ``search_product`` doit refléter le périmètre boutique **sans** la facette
+        ``marketone_category`` (multi OR) — voir le contrôleur.
+        """
+        website = website or self.env["website"].get_current_website()
+        allowlist = self._marketone_primary_public_categories(website=website)
+        active_ids = set(active_category_ids or [])
+        if not search_product:
+            return allowlist.filtered(lambda rec: rec.id in active_ids)
+        groups = self.env["product.template"].read_group(
+            [("id", "in", search_product.ids)],
+            ["public_categ_ids"],
+            ["public_categ_ids"],
+        )
+        categ_ids_with_products = {
+            row["public_categ_ids"][0]
+            for row in groups
+            if row.get("public_categ_ids")
+        }
+        return allowlist.filtered(
+            lambda rec: rec.id in categ_ids_with_products or rec.id in active_ids
+        )
+
+    @api.model
     def _marketone_resolve_primary_categories_from_slugs(self, slugs, website=None):
         """Résout les slugs vers des principales publiées (allowlist sidebar)."""
         website = website or self.env["website"].get_current_website()

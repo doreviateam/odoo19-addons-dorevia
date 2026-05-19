@@ -256,6 +256,7 @@ Le **domaine Odoo** supporte déjà le **OU** multi-catégories sur les rattache
 
 | Sujet | Ticket / chantier |
 |-------|-------------------|
+| **Facettes contextuelles (C4)** | [`TICKET_MARKETONE_SHOP_SIDEBAR_FACETTES_CONTEXTUELLES.md`](TICKET_MARKETONE_SHOP_SIDEBAR_FACETTES_CONTEXTUELLES.md) — **Clôturé GO MOA** `19.0.10.9.0` |
 | Secondaires dans l’UI (hors sidebar Catégories) | À cadrer |
 | Contrainte BO principale / max 4 | Ticket technique post-mapping |
 | Menu header Catégories | UX ultérieur |
