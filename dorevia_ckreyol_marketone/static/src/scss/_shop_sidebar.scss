@@ -1,0 +1,236 @@
+// UX-2 — Sidebar filtres /shop (confort, densité, zones cliquables).
+
+.marketone-shop {
+    #products_grid_before {
+        font-family: $marketone-font-body;
+        font-size: $marketone-label;
+        line-height: 1.5;
+        color: rgba($marketone-text, 0.92);
+        padding-right: clamp(0.75rem, 1.1vw, 1rem);
+        align-self: flex-start;
+        background: transparent !important;
+        box-shadow: none !important;
+
+        @media (min-width: 992px) {
+            max-width: 17.5rem;
+            padding-top: 0.35rem !important;
+            margin-top: 0.65rem;
+        }
+
+        &.bg-white,
+        .bg-white {
+            background-color: transparent !important;
+        }
+
+        .o_wsale_products_grid_before_rail.marketone-sidebar-rail {
+            padding: 0.15rem 0 0.35rem;
+            margin-left: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            max-height: none;
+            min-height: 0 !important;
+            height: auto !important;
+            overflow: visible;
+        }
+
+        @media (min-width: 992px) {
+            .o_wsale_products_grid_before_rail.marketone-sidebar-rail {
+                position: sticky;
+                top: clamp(1rem, 1.6vw, 1.35rem);
+            }
+        }
+    }
+
+    // Accordéons Collections / Catégories / Origines / Prix — grammaire commune.
+    .marketone-shop-collections-accordion,
+    .marketone-shop-categories-accordion,
+    .products_attributes_filters .accordion,
+    #o_wsale_price_range_option {
+        --bs-accordion-bg: transparent;
+        --bs-accordion-border-color: transparent;
+        --bs-accordion-btn-focus-box-shadow: 0 0 0 0.2rem rgba($marketone-primary-container, 0.14);
+    }
+
+    .marketone-shop-collections-accordion .accordion-item,
+    .marketone-shop-categories-accordion .accordion-item,
+    .products_attributes_filters .accordion-item,
+    #o_wsale_price_range_option.accordion-item,
+    #o_wsale_price_range_option .accordion-item {
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        border-bottom: 1px solid rgba($marketone-border, 0.34) !important;
+        margin-bottom: 0 !important;
+        box-shadow: none !important;
+        padding-bottom: 0.12rem;
+    }
+
+    #o_wsale_price_range_option {
+        border-bottom: none !important;
+        padding-bottom: 0;
+    }
+
+    .marketone-shop-collections-accordion .accordion-button,
+    .marketone-shop-categories-accordion .accordion-button,
+    .products_attributes_filters .accordion-button,
+    #o_wsale_price_range_option .accordion-button {
+        font-family: $marketone-font-body;
+        font-size: 0.9375rem !important;
+        font-weight: $marketone-weight-semibold !important;
+        letter-spacing: 0.01em;
+        color: rgba($marketone-text, 0.94) !important;
+        padding: 0.72rem 0.58rem !important;
+        margin: 0.38rem 0 0.18rem !important;
+        border-radius: clamp(7px, 0.5vw, 9px) !important;
+        border: 1px solid rgba($marketone-border, 0.22);
+        background-color: rgba($marketone-surface, 0.82) !important;
+        box-shadow: none;
+
+        &::after {
+            opacity: 0.52;
+            flex-shrink: 0;
+            background-size: 0.65rem;
+        }
+
+        &:not(.collapsed) {
+            background-color: rgba($marketone-surface-container, 0.95) !important;
+            border-color: rgba($marketone-border, 0.32);
+        }
+
+        &:hover {
+            color: $marketone-primary-container !important;
+            background-color: rgba($marketone-surface, 0.98) !important;
+            border-color: rgba($marketone-border, 0.38);
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 0.2rem rgba($marketone-primary-container, 0.16);
+        }
+
+        b {
+            color: inherit;
+            font-weight: inherit;
+        }
+    }
+
+    .marketone-shop-collections-accordion .accordion-body,
+    .marketone-shop-categories-accordion .accordion-body,
+    .products_attributes_filters .accordion-body,
+    #o_wsale_price_range_option .accordion-body,
+    #o_wsale_price_range_option_inner {
+        padding: 0.45rem 0.15rem 0.95rem 0.55rem;
+        font-size: $marketone-label;
+    }
+
+    // Cases à cocher — zone cliquable confortable.
+    .marketone-sidebar-colchecks,
+    .marketone-sidebar-catchecks,
+    .products_attributes_filters .accordion-body {
+        .form-check {
+            margin-bottom: 0.5rem;
+            min-height: 2.35rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-check-label {
+            cursor: pointer;
+            line-height: 1.45;
+            color: rgba($marketone-text, 0.94);
+            font-size: $marketone-label;
+            width: 100%;
+            padding: 0.28rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-check-input {
+            width: 1.05rem;
+            height: 1.05rem;
+            margin-top: 0;
+            border-color: rgba($marketone-border, 0.9);
+            accent-color: $marketone-primary-container;
+            cursor: pointer;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+            pointer-events: auto !important;
+
+            &:checked {
+                background-color: $marketone-primary-container;
+                border-color: $marketone-primary-container;
+            }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 0.15rem rgba($marketone-primary-container, 0.28);
+            }
+        }
+
+        input.marketone-sidebar-col-check:checked + span,
+        input.marketone-sidebar-col-check:checked ~ span,
+        input.marketone-sidebar-cat-check:checked + span,
+        input.marketone-sidebar-cat-check:checked ~ span {
+            font-weight: $marketone-weight-semibold;
+        }
+    }
+
+    .products_categories .marketone-shop-categories-accordion .accordion-button {
+        font-family: $marketone-font-heading;
+    }
+
+    // Offcanvas mobile — même grammaire.
+    #o_wsale_offcanvas {
+        .wsale_products_collections_list,
+        .wsale_products_categories_list {
+            margin-bottom: 0.85rem;
+
+            > p.fw-bold {
+                font-family: $marketone-font-heading;
+                font-size: 0.95rem;
+                font-weight: $marketone-weight-semibold;
+                margin-bottom: 0.55rem;
+                color: $marketone-text;
+            }
+        }
+
+        .accordion-button {
+            font-family: $marketone-font-body;
+            font-size: 0.9375rem !important;
+            font-weight: $marketone-weight-semibold !important;
+        }
+
+        .form-check {
+            min-height: 2.35rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-check-label {
+            cursor: pointer;
+            width: 100%;
+            padding: 0.28rem 0;
+        }
+    }
+
+    // Fourchette de prix.
+    #o_wsale_price_range_option {
+        padding-top: 0.2rem;
+
+        .form-range {
+            height: 0.42rem;
+            accent-color: $marketone-primary-container;
+            margin-top: 0.1rem;
+            margin-bottom: 0.55rem;
+        }
+
+        .d-flex,
+        .d-flex.justify-content-between {
+            margin-top: 0.12rem;
+            gap: 0.4rem;
+            font-size: $marketone-label-sm;
+            color: $marketone-text-muted;
+        }
+    }
+}

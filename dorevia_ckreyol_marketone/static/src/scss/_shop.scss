@@ -94,19 +94,6 @@
         }
     }
 
-    #products_grid_before {
-        font-size: $marketone-body;
-        color: $marketone-text;
-
-        .accordion-button,
-        .form-label,
-        h5,
-        h6 {
-            font-family: $marketone-font-body;
-            color: $marketone-text;
-        }
-    }
-
     .products_pager,
     .pagination {
         margin-top: $marketone-space-lg;
@@ -182,37 +169,6 @@
 
         #o_wsale_price_range_option {
             order: 40;
-        }
-    }
-
-    .products_categories .o_categories_collapse_title b,
-    .products_categories .accordion-button b {
-        font-family: $marketone-font-heading;
-        font-weight: $marketone-weight-semibold;
-    }
-
-    // Chevron plié/déplié — parent ``.accordion`` requis (aligné Origine).
-    .products_categories .marketone-shop-categories-accordion {
-        --bs-accordion-bg: transparent;
-        --bs-accordion-border-width: 0;
-
-        .accordion-button {
-            &::after {
-                flex-shrink: 0;
-                opacity: 0.55;
-            }
-        }
-    }
-
-    // Catégories principales : même lecture que facette Origine (form-check).
-    .products_categories .marketone-sidebar-catchecks {
-        .form-check-label {
-            cursor: pointer;
-        }
-
-        input.marketone-sidebar-cat-check:checked + span,
-        input.marketone-sidebar-cat-check:checked ~ span {
-            font-weight: $marketone-weight-semibold;
         }
     }
 

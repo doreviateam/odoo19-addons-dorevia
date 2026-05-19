@@ -107,8 +107,14 @@
         white-space: nowrap;
 
         &:hover {
+            color: $marketone-primary;
             text-decoration: underline;
-            opacity: 0.85;
+            opacity: 1;
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgba($marketone-primary-container, 0.35);
+            outline-offset: 2px;
         }
     }
 

@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX2_SHOP_SIDEBAR` |
 | **Type** | **UX** — présentation sidebar filtres · SCSS (+ QWeb classes minimales si besoin) |
-| **Statut** | **À valider MOA** (ticket seul — pas de code avant GO ticket) |
+| **Statut** | **GO MOA UX-2** — merge PR #8 proposable · `19.0.14.0.0` |
 | **Version cible** | **`19.0.14.0.0`** |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
@@ -119,7 +119,7 @@ Améliorer le **confort de lecture** et l’**ergonomie** de la sidebar filtres 
 | G1 | Sidebar desktop : **4 rubriques** lisibles, ordre inchangé | Recette S1–S4 |
 | G2 | Accordéons : ouverture/fermeture **fluide** · chevron et focus visibles | Recette S5 |
 | G3 | Zones cliquables : clic sur **libellé** = clic case (Collections, Catégories, Origines) | Recette S6 |
-| G4 | Densité perçue **premium** (ni compact ERP, ni vide) | Validation visuelle MOA |
+| G4 | Densité perçue **premium** (ni compact ERP, ni vide) | Recette **S10** (recommandé) |
 | G5 | Offcanvas mobile : **même grammaire** que desktop | Recette S7 |
 | G6 | **Non-régression** C4 (13 catégories visibles avec 1 filtre) | Recette S8 + tests |
 | G7 | **Non-régression** UX-1 (chips, reset, compteur) | Recette S9 + tests |
@@ -139,15 +139,28 @@ Tag dédié UX-2 (optionnel post-implémentation) : `dorevia_marketone_shop_side
 
 ---
 
-## Questions ouvertes MOA (avant GO implémentation)
+## Arbitrages MOA (clos — implémentation)
 
-| # | Question | Proposition par défaut |
-|---|----------|------------------------|
-| Q1 | Accordéons **ouverts** par défaut sur desktop ? | Oui pour les 4 rubriques (comme Collections aujourd’hui) |
-| Q2 | Rail sidebar **sticky** desktop ? | Oui, `top` ~`1.2rem` sous le header |
-| Q3 | Largeur max sidebar | `17.5rem` aligné maquette marketplace |
-| Q4 | Renfort visuel lien reset UX-1 | Oui, discret (semi-bold déjà · + contraste hover) |
-| Q5 | Kit graphique Carole dédié UX-2 | Non fourni — s’appuyer sur tokens Marketone + capture MOA |
+| # | Décision |
+|---|----------|
+| Q1 | **4 accordéons ouverts** par défaut desktop |
+| Q2 | Rail **sticky** raisonnable sous header |
+| Q3 | Largeur max sidebar **~17,5 rem** |
+| Q4 | Renfort discret lien reset **UX-1** uniquement |
+| Q5 | Pas de kit Carole — **tokens Marketone** |
+
+**Recette exécutée** : [`RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md`](../recette/RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md) — S1–S10 · **GO MOA UX-2** · merge PR #8 proposable.
+
+### Arbitrage MOA — sémantique filtres (2026-05-19)
+
+**Décision : affinage classique. Comportement conforme.**
+
+| Niveau | Logique |
+|--------|---------|
+| **Au sein d'une facette** | **OU** — plusieurs collections ou catégories → union |
+| **Entre facettes distinctes** | **ET** — collections ET catégories ET origines ET prix → intersection |
+
+Cas recette : collections Apéritif créole + Idées cadeaux (18 produits) + catégorie Biscuits sucrés → **1 produit**. Résultat cohérent, aligné recettes Lot B scénario S5. Pas de refonte contrôleur / domain / tests.
 
 ---
 
@@ -164,6 +177,7 @@ Tag dédié UX-2 (optionnel post-implémentation) : `dorevia_marketone_shop_side
 
 | Document | Lien |
 |----------|------|
+| **Recette UX-2 (post-push PR #8)** | [`RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md`](../recette/RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md) |
 | Recette ordre sidebar | [`RECETTE_MANUELLE_SHOP_SIDEBAR_ORDRE.md`](../recette/RECETTE_MANUELLE_SHOP_SIDEBAR_ORDRE.md) |
 | Recette collections | [`RECETTE_MANUELLE_SHOP_SIDEBAR_COLLECTIONS.md`](../recette/RECETTE_MANUELLE_SHOP_SIDEBAR_COLLECTIONS.md) |
 | Recette C4 | [`RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES_C4_MULTI.md`](../recette/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES_C4_MULTI.md) |
@@ -178,3 +192,5 @@ Tag dédié UX-2 (optionnel post-implémentation) : `dorevia_marketone_shop_side
 | Date | Verdict | Commentaire |
 |------|---------|-------------|
 | 2026-05-19 | **Brouillon — attente GO MOA ticket** | Ticket rédigé après clôture dédup Réunion · base catalogue assainie |
+| 2026-05-19 | **GO MOA exécution** | `_shop_sidebar.scss` · `shop_sidebar_ux2.xml` · Q1–Q4 · tests non-régression |
+| 2026-05-19 | **GO MOA UX-2** | Recette S1–S10 · tests 30+25 OK · arbitrage sémantique filtres Option A · merge PR #8 proposable |
