@@ -3,11 +3,11 @@
 | Champ | Valeur |
 |-------|--------|
 | **Ticket** | `TICKET_MARKETONE_UX3_PRODUCT_CARDS_PALIER_A` (à créer post-recette) |
-| **Version cible** | **`19.0.15.0.0`** |
+| **Version cible** | **`19.0.15.1.0`** (variante douce MOA) |
 | **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut** | **GO MOA UX-3 Palier A** — PR proposable (recette cycle 2 validée) |
+| **Statut** | **Recette cycle 3** — variante douce SCSS, avant PR finale |
 | **Kit source** | `docs/Carole/ux3_palier_a.scss` → traduit en tokens Marketone |
 
 ---
@@ -200,15 +200,57 @@ docker restart sandbox-odoo19-odoo-1
 
 ---
 
+---
+
+## Variante douce MOA (19.0.15.1.0)
+
+**Contexte** : GO technique cycle 2 maintenu, réserve visuelle — rendu trop « card e-commerce », grille verticale, coupure image/texte forte, perte de chaleur.
+
+**Ajustements appliqués** (`_shop_product_cards.scss`, réglages en tête de fichier) :
+
+| Paramètre | Avant (cycle 2) | Variante douce |
+|---|---|---|
+| Ombre repos | `0 2px 12px` @ 4% | `0 1px 6px` @ 2.5% |
+| Ombre hover | `0 16px 40px` @ 10% | `0 8px 24px` @ 6% |
+| Lift hover | `-6px` | **`-4px`** |
+| Zoom image hover | `1.06` | **`1.03`** |
+| Ratio desktop | `0.8` (4/5) | **`1.333` (4/3)** |
+| Bordure carte | `$marketone-border` plein | **`rgba(border, 0.45)`** |
+| Fond image | `$marketone-surface-container` | **`$marketone-bg-soft`** (coupure adoucie) |
+| `mix-blend-mode` | `multiply` | **`normal`** (désactivé) |
+| Transition hover | spring | **ease-out** |
+
+**Recette A/B ratio** — modifier `$_ux3-thumb-aspect-desktop` puis upgrade + restart :
+
+| Valeur | Ratio | Usage |
+|---|---|---|
+| `0.8` | 4/5 | Palier A initial (portrait) |
+| `1` | 1/1 | Carré, grille plus compacte |
+| `1.333` | 4/3 | **Défaut variante douce** |
+
+**Recette blend** — modifier `$_ux3-img-blend-mode` : `normal` (défaut) · `soft-light` · `multiply`.
+
+### Recette cycle 3 — grille validation
+
+| Scénario | Verdict | Notes |
+|---|---|---|
+| V1 — Desktop grille | ☐ OK · ☐ réserve · ☐ KO | Ratio 4/3, ombre légère, bordure discrète |
+| V2 — Hover | ☐ OK · ☐ réserve · ☐ KO | Lift -4px, zoom 1.03 |
+| V3 — Chaleur images | ☐ OK · ☐ réserve · ☐ KO | Sans multiply ; packshots blancs acceptables ? |
+| V4 — Mobile 768px | ☐ OK · ☐ réserve · ☐ KO | |
+| V5–V8 | ☐ OK | Non-régression filtres / UX-1 / UX-2 |
+
+---
+
 ## Verdict MOA UX-3 Palier A
 
-| Verdict | ☑ |
-|---------|---|
-| **GO — PR UX-3 proposable** | ☑ |
-| **GO avec ajustements SCSS mineurs avant PR** | |
-| **Rollback partiel** (image / card) | |
-| **NO GO** | |
-
-**Réserve humaine (non bloquante PR)** : valider à l'œil `mix-blend-mode: multiply` sur quelques images lifestyle à fond coloré après merge.
+| Verdict | Cycle 2 | Cycle 3 |
+|---------|---------|---------|
+| **GO technique** | ☑ | ☐ |
+| **GO visuel — PR finale** | réserve | ☐ |
+| **GO avec ajustements SCSS** | | en cours |
+| **NO GO** | | |
 
 **Cycle 1** : NO GO strict visuel (`object-fit: cover`, hover absent) — corrigé via CSS custom properties Odoo 19 (`ff865ed`).
+
+**Cycle 2** : GO technique, réserve visuelle e-commerce trop rigide.
