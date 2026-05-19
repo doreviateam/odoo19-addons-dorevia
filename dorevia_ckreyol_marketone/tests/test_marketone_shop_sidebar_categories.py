@@ -141,6 +141,31 @@ class TestMarketoneShopSidebarCategories(HttpCase):
         self.assertNotIn("Incontournables", block_html)
         self.assertNotIn("Apéritif créole", block_html)
 
+    def test_shop_clear_filters_visible_with_category_facet(self):
+        """Effacer les filtres visible si ``marketone_category`` actif."""
+        cat = self.env["product.public.category"].search(
+            [("name", "=", "Biscuits salés")], limit=1
+        )
+        self.assertTrue(cat)
+        slug = self.env["ir.http"]._slug(cat)
+        response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        self.assertTrue(
+            "Clear Filters" in html
+            or "Effacer les filtres" in html
+            or "Supprimer les filtres" in html,
+            "Bouton effacer les filtres attendu dans la sidebar",
+        )
+        sidebar_start = html.find('id="products_grid_before"')
+        self.assertGreater(sidebar_start, -1)
+        sidebar_html = html[sidebar_start : sidebar_start + 12000]
+        self.assertIn('href="/shop"', sidebar_html)
+        self.assertNotIn(
+            f"{MARKETONE_CATEGORY_PARAM}=",
+            sidebar_html.split("Clear Filters")[0].split("Effacer les filtres")[0][-800:],
+        )
+
     def test_shop_filter_single_category_query(self):
         cat = self.env["product.public.category"].search(
             [("name", "=", "Biscuits salés")], limit=1

@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES` |
 | **Type** | **UX / front** — héritage QWeb + SCSS sous `.marketone-shop` |
-| **Statut** | **Clôturé GO MOA** — facette multi OR + combinaison facettes · **`19.0.10.7.0`** (2026-05-19) |
+| **Statut** | **Clôturé GO MOA** — facette multi OR + combinaison facettes · réf. **`19.0.10.8.0`** (2026-05-19) |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
 | **Prérequis** | Lot 3 `/shop` livré · Lots 6.1 / 6.2 portes · **ticket BO catégories clôturé GO MOA** |
@@ -158,7 +158,7 @@ Ce ticket **ne remet pas en cause** :
 |---------|-----------|
 | **GO visuel V2** | Bloc **Catégories** harmonisé avec **Origine** (accordéon + `form-check`) ; **13** principales ; pas de « Tous les produits » |
 | **GO fonctionnel Option A** | Facette `marketone_category` multi **OU** ; combinaison **AND** avec Origine / Prix ; symétrie **4d** / **4e** |
-| **Version livrée** | **`19.0.10.7.0`** — recette [`RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md`](../recette/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md) signée MOA |
+| **Version livrée** | **`19.0.10.8.0`** — recette [`RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md`](../recette/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md) signée MOA (`19.0.10.7.0` + patch Effacer les filtres) |
 
 ### Comportement attendu MOA (multi — à arbitrer)
 

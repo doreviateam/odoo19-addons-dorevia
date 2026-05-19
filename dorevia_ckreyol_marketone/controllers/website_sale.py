@@ -298,15 +298,29 @@ class WebsiteSaleMarketone(WebsiteSale):
             )
         return domain
 
+    def _shop_get_query_url_kwargs(
+        self, search, min_price, max_price, order=None, tags=None, **kwargs
+    ):
+        """Inclure ``marketone_category`` dans ``keep()`` (Effacer les filtres, liens)."""
+        result = super()._shop_get_query_url_kwargs(
+            search, min_price, max_price, order=order, tags=tags, **kwargs
+        )
+        slugs = _marketone_read_category_slugs(kwargs)
+        if slugs:
+            result[MARKETONE_CATEGORY_PARAM] = slugs
+        return result
+
     def _get_additional_shop_values(self, values, **kwargs):
         result = super()._get_additional_shop_values(values, **kwargs)
         path_category = (values or {}).get("category")
         result["marketone_primary_public_categories"] = request.env[
             "product.public.category"
         ]._marketone_primary_public_categories(website=request.website)
-        result["marketone_shop_sidebar_active_category_slugs"] = (
-            _marketone_canonical_category_slugs(kwargs, path_category=path_category)
+        active_slugs = _marketone_canonical_category_slugs(
+            kwargs, path_category=path_category
         )
+        result["marketone_shop_sidebar_active_category_slugs"] = active_slugs
+        result["marketone_has_category_filter"] = bool(active_slugs)
         mode = _marketone_effective_mode(kwargs)
         search_count = (values or {}).get("search_count") or 0
 

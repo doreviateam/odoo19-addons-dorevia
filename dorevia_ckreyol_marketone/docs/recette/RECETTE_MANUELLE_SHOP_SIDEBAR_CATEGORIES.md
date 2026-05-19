@@ -5,8 +5,9 @@
 | **Ticket** | [`TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES`](../tickets/TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES.md) |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
-| **Version module** | `19.0.10.7.0` |
-| **Statut recette** | **GO MOA** — signée **`19.0.10.7.0`** (2026-05-19, repasse `_107`) |
+| **Version de référence** | **`19.0.10.8.0`** (sidebar + Effacer les filtres) |
+| **Version précédente** | `19.0.10.7.0` (commit `1ced35e` — GO MOA signé) |
+| **Statut recette** | **GO MOA** — `19.0.10.7.0` + repasse ciblée **`19.0.10.8.0`** signée (2026-05-19, `_108`) |
 
 ---
 
@@ -15,17 +16,28 @@
 | Élément | Détail |
 |---------|--------|
 | Ticket BO catégories | **Clôturé GO MOA** — [`RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) |
-| Module | `dorevia_ckreyol_marketone` **≥ `19.0.10.7.0`** (upgrade `-u` sur `ckr-marketone-01`) |
+| Module | `dorevia_ckreyol_marketone` **≥ version cible** (voir en-tête) |
 | Facette catégories | Query répétable `marketone_category=<slug>` (logique **OU**) |
 | JS | `marketone_shop_sidebar.js` — catégories, attributs Origine, `data-url` prix |
 | Données | 13 principales + 4 secondaires sur `ckr-marketone-01` |
-| Tests auto | Tag `dorevia_marketone_shop_sidebar` — **12** tests, **0** failed |
-| Navigateur | Vider le cache ou hard refresh après upgrade (assets frontend) |
+| Tests auto | Tag `dorevia_marketone_shop_sidebar` — **13** tests, **0** failed (dont scénario **10**) |
+| Navigateur | Hard refresh après upgrade (assets frontend) |
 
 ```bash
+# Upgrade (obligatoire avant recette 19.0.10.8.0)
 docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-01 -u dorevia_ckreyol_marketone --stop-after-init
+
+# Tests auto sidebar
 docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-01 --test-enable --stop-after-init --http-port=18084 --test-tags=dorevia_marketone_shop_sidebar
 ```
+
+### Smoke (30 s — avant grille MOA)
+
+| # | Contrôle | Attendu | OK |
+|---|----------|---------|-----|
+| S1 | `<body data-marketone-shop-sidebar-js="1">` | JS sidebar initialisé | ☑ |
+| S2 | Cocher **Biscuits salés** | URL `?marketone_category=biscuits-sales-70` (ou slug équivalent) | ☑ |
+| S3 | Avec catégorie active | Bouton **Effacer les filtres** visible (sidebar desktop) | ☑ |
 
 ---
 
@@ -34,107 +46,155 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | Facette | Logique |
 |---------|---------|
 | **Catégories** (cases) | **OU** entre catégories cochées |
-| **Origine** (attribut sidebar) | Logique existante Lot 6.2 (`attribute_values` dans l’URL) |
+| **Origine** (attribut sidebar) | Lot 6.2 — `attribute_values` dans l’URL |
 | **Combinaison** | Catégories **ET** Origine **ET** Prix = **AND** |
-| **Conservation URL** | Cocher / décocher une facette **ne doit pas** effacer les autres paramètres actifs |
+| **Conservation URL** | Changer une facette **ne supprime pas** les autres paramètres actifs |
+| **Effacer les filtres** | Visible si au moins un filtre actif : `marketone_category`, `attribute_values`, prix, tags (standard Odoo) ; clic → catalogue global `/shop` |
 
-**Exemple** : Biscuits salés + Épices + Martinique → produits dans (Biscuits salés **OU** Épices) **ET** origine Martinique.
-
----
-
-## Grille de recette
-
-Cocher **MOA** après validation visuelle et fonctionnelle. La colonne **Tech** reflète les tests automatiques (à ne pas confondre avec le GO MOA).
-
-| # | Critère | Scénario | Action / URL | Attendu | MOA | Tech |
-|---|---------|----------|--------------|---------|-----|------|
-| **1** | G1 | Ordre sidebar | `/shop` (desktop ≥ lg) | **Origine** → **Catégories** → **Fourchette de prix** | ☑ | ☑ |
-| **2** | G1–G3 | Bloc Catégories visible | Même | Titre **Catégories** (accordéon) ; chevron comme **Origine** ; **13 cases** ouvertes par défaut ; **pas** « Tous les produits » | ☑ | ☑ |
-| **2b** | G3 | Accordéon Catégories | Cliquer l’en-tête **Catégories** | Liste masquée / affichée ; chevron suit l’état | ☑ | ☑ |
-| **3** | G2, G8 | Allowlist 13 principales | Parcourir la liste | Biscuits salés … Miels ; **pas** Incontournables, Apéritif créole, Cuisine du manioc, Idées cadeaux | ☑ | ☑ |
-| **4** | G4, G5 | Filtre mono | Cocher **Biscuits salés** | URL `?marketone_category=…` ; grille cohérente (ex. Crackers manioc) ; case cochée | ☑ | ☑ |
-| **4b** | G11 | Multi OR | Cocher **Biscuits salés** + **Épices** | Union des deux familles ; URL avec **2** `marketone_category` ; les **2** cases cochées | ☑ | ☑ |
-| **4c** | G11 | Décocher / tout voir | Décocher toutes les cases catégories | Retour `/shop` **sans** `marketone_category` ; catalogue global | ☑ | ☑ |
-| **4d** | G6 | **AND Catégories + Origine** | Cocher **Biscuits salés** + **Épices**, puis **Martinique** (Origine) | Cases catégories **restent cochées** ; URL garde `marketone_category` (×2) **et** `attribute_values` ; grille = intersection attendue | ☑ | ☑ |
-| **4e** | G6 | Origine seule puis catégories | Cocher **Martinique**, puis **Biscuits salés** | URL : `marketone_category=…` **et** `attribute_values=3-20` ; case Martinique cochée | ☑ | ☑ |
-| **5** | G12 | Pas de bandeau horizontal | `/shop` — zone sous le titre, au-dessus de la grille | **Aucun** filmstrip / ruban catégories (`o_wsale_categories_filmstrip` absent) | ☑ | ☑ |
-| **6** | G10 | Porte Incontournables | `/incontournables` | **301** → `marketone_mode=featured` ; **pas** de `marketone_category` dans la cible | ☑ | ☑ |
-| **7** | G6 | Filtre Origine seul | Cocher une origine sans catégorie | Grille filtrée ; pas d’erreur ; pas de cases catégories cochées par effet de bord | ☑ | ☑ |
-| **8** | G7 | Filtre Prix seul | Ajuster la fourchette de prix | `min_price` / `max_price` dans l’URL ; grille cohérente | ☑ | ☑ |
-| **8b** | G7 | Prix après catégories + origine | **4d** puis ajuster le **slider prix** | URL conserve `marketone_category` + `attribute_values` + prix ; cases catégories et origine **inchangées** | ☑ | ☑ |
-| **9** | G9 | Non-régression BO | Fiche produit (ex. Crackers) | Rattachements catégories BO **inchangés** (hors périmètre sidebar) | ☐ | — |
+**Exemple** : Biscuits salés + Épices + Martinique → (Biscuits salés **OU** Épices) **ET** Martinique.
 
 ---
 
-## Détail scénarios sensibles
+## Grille de recette — par lot
 
-### 4d — Catégories + Origine (bloquant corrigé en `19.0.10.5.0`)
+Cocher **MOA** après validation. **Tech** = couverture tests auto (≠ GO MOA).
 
-1. Ouvrir `/shop` (sans filtre).
-2. Cocher **Biscuits salés** puis **Épices** — vérifier l’URL et la grille (OR).
-3. Cocher **Martinique** dans **Origine**.
-4. **Contrôles** :
-   - Les cases **Biscuits salés** et **Épices** restent cochées.
-   - Barre d’adresse : `marketone_category=…` (deux fois) **et** `attribute_values=…` (ex. `3-20` pour Martinique).
-   - La grille ne montre que des produits dans le périmètre **(catégories OR) ET origine**.
+### Lot A — Présentation sidebar (`19.0.10.7.0` — déjà signé)
 
-### 4e — Origine puis catégories (symétrie de 4d)
+| # | Scénario | Action | Attendu | MOA | Tech |
+|---|----------|--------|---------|-----|------|
+| **1** | Ordre sidebar | `/shop` desktop | **Origine** → **Catégories** → **Fourchette de prix** | ☑ | ☑ |
+| **2** | Bloc Catégories | Même | Accordéon ; **13 cases** ouvertes ; pas « Tous les produits » | ☑ | ☑ |
+| **2b** | Accordéon | Clic en-tête **Catégories** | Pli / dépli ; chevron cohérent | ☑ | ☑ |
+| **3** | Allowlist | Parcourir la liste | 13 principales ; **pas** les 4 secondaires | ☑ | ☑ |
+| **5** | Filmstrip | Zone au-dessus grille | **Aucun** bandeau horizontal catégories | ☑ | ☑ |
 
-1. Ouvrir `/shop` sans filtre.
-2. Cocher **Martinique** (Origine) — URL avec `attribute_values=…`.
-3. Cocher **Biscuits salés**.
-4. **Contrôles** : URL contient **à la fois** `attribute_values` et `marketone_category` ; les deux cases restent cochées.
+### Lot B — Filtres catégories (`19.0.10.7.0` — déjà signé)
 
-### 8b — Prix après facettes
+| # | Scénario | Action | Attendu | MOA | Tech |
+|---|----------|--------|---------|-----|------|
+| **4** | Mono | Cocher **Biscuits salés** | URL `marketone_category=…` ; grille cohérente ; case cochée | ☑ | ☑ |
+| **4b** | Multi OR | **Biscuits salés** + **Épices** | 2× `marketone_category` ; 2 cases cochées | ☑ | ☑ |
+| **4c** | Tout voir | Décocher toutes les catégories | `/shop` sans `marketone_category` | ☑ | ☑ |
+| **10** | **Effacer les filtres** | **Biscuits salés** + **Biscuits sucrés** + **Épices** (sans Origine) | Bouton **Effacer les filtres** visible **au-dessus** d’Origine ; clic → `/shop` sans `marketone_category` ; cases décochées | ☑ | ☑ |
 
-1. Reprendre l’état **4d** (ou au minimum une catégorie + une origine).
-2. Déplacer le slider **Fourchette de prix**.
-3. **Contrôles** : paramètres catégories et origine toujours présents dans l’URL ; cases sidebar cohérentes avec l’URL.
+### Lot C — Combinaisons facettes (`19.0.10.7.0` — déjà signé)
+
+| # | Scénario | Action | Attendu | MOA | Tech |
+|---|----------|--------|---------|-----|------|
+| **4d** | Catégories → Origine | **Biscuits salés** + **Épices** puis **Martinique** | Catégories restent cochées ; URL : 2× `marketone_category` + `attribute_values` | ☑ | ☑ |
+| **4e** | Origine → Catégories | **Martinique** puis **Biscuits salés** | URL : `marketone_category` + `attribute_values=3-20` | ☑ | ☑ |
+| **7** | Origine seule | **Martinique** sans catégorie | Grille filtrée ; pas de cases catégories parasites | ☑ | ☑ |
+| **8** | Prix seul | Slider prix seul | `min_price` / `max_price` dans l’URL | ☑ | ☑ |
+| **8b** | Prix après facettes | État **4d** puis slider prix | URL conserve catégories + origine + prix | ☑ | ☑ |
+| **10b** | Effacer avec combinaison | **Biscuits salés** + **Martinique** puis **Effacer les filtres** | Retour `/shop` sans `marketone_category` ni `attribute_values` | ☑ | — |
+
+### Lot D — Non-régression (`19.0.10.7.0`)
+
+| # | Scénario | Action | Attendu | MOA | Tech |
+|---|----------|--------|---------|-----|------|
+| **6** | Porte Incontournables | `/incontournables` | **301** → `marketone_mode=featured` ; pas de `marketone_category` | ☑ | ☑ |
+| **9** | BO produit | Fiche Crackers (optionnel) | Rattachements catégories BO inchangés | ☐ | — |
 
 ---
 
-## Verdict MOA
+## Détail scénarios — pas à pas
 
-| Date | Verdict | Commentaire |
-|------|---------|-------------|
-| 2026-05-19 | **GO visuel V2** | Accordéon + cases alignées sur Origine |
-| 2026-05-19 | **GO technique Option A** | Facette `marketone_category` multi OR |
-| 2026-05-19 | **Correctif 4d** | `19.0.10.5.0` — conservation facettes entre Catégories / Origine / Prix |
-| 2026-05-19 | **NO GO MOA** | `19.0.10.5.0` — cases Catégories sans `marketone_category` en URL (JS `isMarketoneShop` faux sélecteur) |
-| 2026-05-19 | **Correctif init JS** | `19.0.10.6.0` — détection `#wrap.marketone-shop` + `.oe_website_sale` descendant |
-| 2026-05-19 | **NO GO MOA** | `19.0.10.6.0` — **4e** KO : catégorie après origine perd `attribute_values` |
-| 2026-05-19 | **Correctif 4e** | `19.0.10.7.0` — `buildShopParamsFromCategories` fusionne cases Origine (`form.js_attributes`) |
-| 2026-05-19 | **GO MOA** | Repasse `_107` sur **`19.0.10.7.0`** — grille **1–6**, **4b–4e**, **8b** validée ; **8** (prix seul) et **9** (BO) non repassés explicitement |
+### 10 — Effacer les filtres (`19.0.10.8.0`)
 
-**Clôture ticket sidebar** : **GO MOA** proposable sur **`19.0.10.7.0`** ; captures `_107` jointes (voir ci-dessous).
+**Contexte** : réserve MOA — les catégories `marketone_category` n’étaient pas comptées comme filtres actifs.
+
+1. Ouvrir `/shop` sans filtre → **pas** de bouton Effacer les filtres.
+2. Cocher **Biscuits salés**, **Biscuits sucrés**, **Épices** (comme capture multi-catégories).
+3. **Contrôles** :
+   - Bouton **Effacer les filtres** (ou *Supprimer les filtres* offcanvas mobile) **visible** dans la sidebar, **au-dessus** du bloc Origine.
+   - URL contient plusieurs `marketone_category=…`.
+   - Grille filtrée (union OR).
+4. Cliquer **Effacer les filtres**.
+5. **Contrôles finaux** :
+   - URL = `/shop` (sans `marketone_category`).
+   - Aucune case catégorie cochée.
+   - Catalogue global affiché.
+
+### 10b — Effacer avec Origine (optionnel)
+
+1. Reprendre état **4d** (2 catégories + Martinique).
+2. Cliquer **Effacer les filtres**.
+3. **Attendu** : `/shop` sans `marketone_category` ni `attribute_values` ; toutes les cases décochées.
+
+### 4d / 4e / 8b
+
+Voir historique correctifs `19.0.10.5.0` → `19.0.10.7.0` (conservation croisée des facettes).
 
 ---
 
-## Notes techniques (référence)
+## Retour MOA structuré — repasse `19.0.10.8.0`
 
-| Sujet | Choix |
+| Champ | Valeur |
 |-------|--------|
-| Résolution catégories | Allowlist par **libellé** + ordre MOA ; paramètre optionnel `dorevia_ckreyol_marketone.primary_public_category_ids` |
-| Principales sans produit publié | Masquées visiteur (`has_published_products`) |
-| Filmstrip | `opt_wsale_categories_top` = **False** sur `/shop` |
-| Multi-catégories | `marketone_category` × n → `public_categ_ids in` (OU) |
-| Combinaison AND | Hooks `_get_shop_domain` / `_search_get_detail` + JS qui **fusionne** les query params (ne pas s’appuyer sur le `onChangeAttribute` Odoo seul pour les catégories) |
-| Init JS (`19.0.10.6.0`) | `isMarketoneShop()` = `#wrap.marketone-shop` contenant `.oe_website_sale` — **pas** `.oe_website_sale.marketone-shop` sur le même nœud |
-| Symétrie facettes (`19.0.10.7.0`) | Changement **catégorie** → lit aussi `attribute_values` / `tags` depuis `form.js_attributes` (cases Origine cochées) |
-| Recette navigateur | Après upgrade : `data-marketone-shop-sidebar-js="1"` sur `<body>` ; clic case → URL avec `marketone_category` |
+| **Date** | 2026-05-19 |
+| **Version module** | `19.0.10.8.0` |
+| **Upgrade `-u`** | ☑ OK |
+| **Tests auto 13/13** | ☑ OK |
+
+| Scénario | Verdict | Commentaire |
+|----------|---------|-------------|
+| **Smoke S1–S3** | ☑ GO | JS init ; `marketone_category` au clic ; bouton visible |
+| **10** | ☑ GO | 3 catégories → Effacer → `/shop` global, cases décochées |
+| **10b** | ☑ GO | Catégorie + Martinique → Effacer → plus de `marketone_category` ni `attribute_values` |
+
+**Verdict global `19.0.10.8.0`** : ☑ **GO MOA**
+
+### Référence — GO MOA `19.0.10.7.0` (ne pas repasser sauf régression)
+
+| Lot | Scénarios | Statut |
+|-----|-----------|--------|
+| A Présentation | 1, 2, 2b, 3, 5 | **GO** (repasse `_107`) |
+| B Catégories | 4, 4b, 4c | **GO** |
+| C Combinaisons | 4d, 4e, 7, 8, 8b | **GO** |
+| D Non-régression | 6 | **GO** |
 
 ---
 
-## Captures (hors git — repasse `_107`)
+## Historique verdicts
 
-| Fichier | Scénario |
-|---------|----------|
-| `marketone_sidebar_107_shop.png` | **1**, **2**, **3**, **5** |
-| `marketone_sidebar_107_biscuits.png` | **4** |
-| `marketone_sidebar_107_multi_or.png` | **4b** |
-| `marketone_sidebar_107_4d_categories_origin.png` | **4d** |
-| `marketone_sidebar_107_4e_origin_then_category.png` | **4e** |
-| `marketone_sidebar_107_uncheck_all.png` | **4c** |
-| `marketone_sidebar_107_8b_price_after_facets.png` | **8b** |
+| Date | Version | Verdict | Détail |
+|------|---------|---------|--------|
+| 2026-05-19 | `19.0.10.7.0` | **GO MOA** | Sidebar multi OR ; commit `1ced35e` ; repasse `_107` |
+| 2026-05-19 | `19.0.10.8.0` | **En attente** | Correctif bouton **Effacer les filtres** + scénario **10** |
 
-Emplacement local : `/private/tmp/` (hors dépôt git).
+| Version | Correctif |
+|---------|-----------|
+| `19.0.10.5.0` | Conservation facettes 4d (Origine après catégories) |
+| `19.0.10.6.0` | Init JS `#wrap.marketone-shop` |
+| `19.0.10.7.0` | Symétrie 4e (catégorie après Origine) |
+| `19.0.10.8.0` | `marketone_has_category_filter` + `keep(marketone_category=0)` |
+
+---
+
+## Notes techniques
+
+| Sujet | Détail |
+|-------|--------|
+| Effacer les filtres (`19.0.10.8.0`) | QWeb `shop_clear_filters.xml` — condition Odoo étendue avec `marketone_has_category_filter` |
+| Query `keep()` | `_shop_get_query_url_kwargs` inclut `marketone_category` pour purge correcte au clic |
+| Init JS | `#wrap.marketone-shop` + descendant `.oe_website_sale` |
+| Symétrie URL | JS fusionne `form.js_attributes` + cases catégories |
+
+---
+
+## Captures (hors git)
+
+| Fichier | Scénario | Repasse |
+|---------|----------|---------|
+| `marketone_sidebar_107_shop.png` | 1, 2, 3, 5 | `_107` |
+| `marketone_sidebar_107_biscuits.png` | 4 | `_107` |
+| `marketone_sidebar_107_multi_or.png` | 4b | `_107` |
+| `marketone_sidebar_107_4d_categories_origin.png` | 4d | `_107` |
+| `marketone_sidebar_107_4e_origin_then_category.png` | 4e | `_107` |
+| `marketone_sidebar_107_uncheck_all.png` | 4c | `_107` |
+| `marketone_sidebar_107_8b_price_after_facets.png` | 8b | `_107` |
+| `marketone_sidebar_108_clear_filters.png` | **10** | `_108` |
+| `marketone_sidebar_108_clear_filters_combo.png` | **10b** | `_108` |
+
+Emplacement : `/private/tmp/` (hors dépôt git).

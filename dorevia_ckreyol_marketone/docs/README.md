@@ -120,7 +120,7 @@ Sites de **référence d'intention** (pas de copie) :
 | Savoirs v1 exec | [`tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) | **Ouvert** — en attente GO MOA (sans code) |
 | Catalogue catégories BO | [`tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) | **Clôturé GO MOA** (2026-05-19) |
 | — | [`recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) | Recette catégories catalogue — **GO MOA** |
-| Sidebar filtres `/shop` | [`tickets/TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES.md`](tickets/TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES.md) | **Clôturé GO MOA** — `19.0.10.7.0` (2026-05-19) |
+| Sidebar filtres `/shop` | [`tickets/TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES.md`](tickets/TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES.md) | **Clôturé GO MOA** — `19.0.10.8.0` (2026-05-19) |
 | — | [`recette/RECETTE_MANUELLE_LOT6_2.md`](recette/RECETTE_MANUELLE_LOT6_2.md) | Recette manuelle Lot 6.2 — GO |
 | — | [`cadrage/NOTE_UNIVERS_CK_MARKETONE.md`](cadrage/NOTE_UNIVERS_CK_MARKETONE.md) | Trois univers — **GO MOA** (ADR-024) |
 | — | [`recette/RECETTE_MANUELLE_LOT6_1.md`](recette/RECETTE_MANUELLE_LOT6_1.md) | Recette manuelle Lot 6.1 — GO avec réserves |
