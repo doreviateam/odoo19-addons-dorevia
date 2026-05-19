@@ -111,11 +111,11 @@ Les **portes catalogue** sont des entrées éditoriales **dans** l’univers Bou
 | Porte (indicatif) | Mécanisme Marketone (cible) | Univers |
 |-------------------|----------------------------|---------|
 | Tous les produits | `/shop` sans mode | Boutique |
-| Incontournables | `marketone_mode=featured` + catégorie publique BO | Boutique |
+| Incontournables | `marketone_mode=featured` + catégorie e-commerce **Incontournables** (secondaire — Lot 6.1) | Boutique |
 | Origines | `marketone_mode=origin` + `marketone_origin` — **GO** (ADR-025) | Boutique *(filtre produit)* ; **Culture** *(récit territoire — plus tard)* |
 | Promotions | pricelist / promo (Lot 6.x) | Boutique |
 | Kits / Packs | `pack_ok` + dépendance `product_pack` (décision MOA) | Boutique |
-| Collections | modèle ou catégories (décision MOA post-6.1) | Boutique |
+| Sélections transversales | Catégories e-commerce **secondaires** (ADR-029 — ex. futur porte « Collections ») | Boutique |
 | Panier / checkout | tunnel `website_sale` | Boutique |
 
 **Doctrine portes** (héritée du legacy, validée Marketone) :
@@ -125,6 +125,28 @@ Les portes orientent.
 Les filtres Odoo sélectionnent.
 Marketone ne crée pas un moteur parallèle.
 ```
+
+## 3 bis. Taxonomie catalogue (MOA 2026-05-19 — standard Odoo)
+
+Support : **`product.public.category`** (Odoo permet plusieurs catégories par produit).
+
+Convention Marketone :
+
+| Rôle | Question | Cardinalité |
+|------|----------|-------------|
+| **Catégorie principale** | Qu’est-ce que c’est ? | **1** / produit |
+| **Catégories secondaires** | Où le mettre en avant ? | **0..n** / produit |
+| **Origine** | D’où ça vient ? | Territoire(s) |
+| **Porte** | Par quelle entrée `/shop` ? | Navigation |
+
+```text
+Pas de marketone.shop.collection pour l’instant.
+Principale = nature · Secondaires = sélections / mises en avant.
+```
+
+Document détaillé : [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) · ADR-029.
+
+---
 
 Une porte **Origines** (Lot 6.2 **GO**) reste dans la Boutique au sens **URL et grille** (`/shop`, alias `/origines`) ; le **récit** territoire relève de la **Culture** et vivra dans des pages dédiées **ultérieurement**, liées depuis la porte ou la fiche produit — **sans** hub Culture sur `/shop` ni modèle `marketone.shop.origin` encyclopédique.
 

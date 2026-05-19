@@ -415,11 +415,28 @@
 
 ---
 
+## ADR-029 — Taxonomie catalogue : convention Odoo catégories e-commerce
+
+| | |
+|---|---|
+| **Date** | 2026-05-19 — **amendement** même jour (standard Odoo) |
+| **Statut** | **Acceptée — GO MOA** (documentation ; **pas de code** sans ticket dédié) |
+| **Contexte** | Enrichissement catalogue recette, portes Boutique 6.1/6.2. Première rédaction : distinguer catégorie vs **collection dédiée** (`marketone.shop.collection`). Clarification MOA : s’aligner sur **`product.public.category`** (Odoo autorise plusieurs catégories par produit). |
+| **Décision** | **Support unique (provisoire)** : `product.public.category`. **Convention MOA** : **une catégorie principale** (nature du produit — stable, descriptive) + **0..n catégories secondaires** (sélections, usages, mises en avant, rayons complémentaires). **Origine** = territoire. **Porte** = entrée navigation `/shop`. **Ne pas** implémenter `marketone.shop.collection` pour l’instant. |
+| **Exemple** | Crackers manioc Sainte-Anne → principale *Biscuits salés* ; secondaires *Incontournables*, *Apéritif*, *Cuisine du manioc* ; origine *Guadeloupe*. |
+| **Évolution** | Modèle collection **réévaluable** plus tard si catégories secondaires insuffisantes. |
+| **Lot 6.1** | Porte Incontournables via catégorie publique « Incontournables » = **aligné** (catégorie **secondaire** + filtre porte). |
+| **Contrat** | C3.C |
+| **Document** | [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) |
+
+---
+
 ## Décisions en attente (à trancher avant Lots 6.3+)
 
 | Sujet | Options | Décideur |
 |-------|---------|----------|
-| Collections éditoriales avancées | Modèle `marketone.shop.collection` vs autre | MOA (post 6.1) |
+| Marquage catégorie principale vs secondaire | Convention BO seule vs champ produit / ordre — **hors scope sans ticket** | MOA (ticket dédié) |
+| Modèle `marketone.shop.collection` | **Reporté** — réouverture si catégories secondaires insuffisantes | MOA (ultérieur) |
 | Alias HTTP legacy | `/kits`, `/promotions`, etc. en 301 | MOA SEO — Lot 6.2+ |
 | `product_pack` | Dépendance optionnelle pour porte Kits | MOA |
 | SEO `canonical` / `noindex` | Politique indexation URLs portes | MOA SEO |

@@ -78,8 +78,8 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Libellé MOA | **Incontournables** (pas le mot « featured » côté visiteur) |
 | Entrée alias | `GET /incontournables` → **301** → `/shop?marketone_mode=featured` |
 | Source produits | `ir.config_parameter` `dorevia_ckreyol_marketone.featured_public_category_id` → `product.public.category` nommée **Incontournables** |
-| Multi-catégories | Un produit peut avoir plusieurs catégories publiques ; le filtre porte = appartenance à cette catégorie |
-| Modèle custom | **Non** au Lot 6.1 (`marketone.shop.collection` reporté) |
+| Multi-catégories | Filtre porte = appartenance à la catégorie publique **Incontournables** (catégorie **secondaire** MOA — ADR-029). Odoo autorise plusieurs catégories ; convention : une **principale** + secondaires. |
+| Modèle custom | **Non** — pas de `marketone.shop.collection` (ADR-029) |
 | Présentation | Titre + intro courte + lien « Tous les produits » sous `.marketone-shop` — pas de hero, pas de chips multi-portes |
 | SEO | `canonical` / `noindex` : **documenter** ; hors scope élargi exécution Lot 6.1 |
 
@@ -90,8 +90,8 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Promotions | `product.pricelist.item` réducteur |
 | Kits/Packs | `product.template.pack_ok` (si `product_pack` activé) |
 | Origines | Attribut produit « Origine » + `marketone.shop.origin` (C3.B) |
-| Collections éditoriales | Modèle ou mécanisme à définir (hors 6.1) |
-| Catégories merchandising | `product.public.category` (navigation générale) |
+| Sélections éditoriales / commerciales | Catégories e-commerce **secondaires** (`product.public.category`) — ADR-029 |
+| Catégories merchandising | `product.public.category` — **principale** + **secondaires** (convention MOA) |
 
 **Statut** : C3.A **implémenté Lot 6.1** — GO avec réserves (recette MOA 2026-05-18). **Prérequis exploitation** : catégorie publique **Incontournables** avec `website_id` = site courant — obligatoire recette / pré-prod (consolidation portes Boutique GO 2026-05-18 ; cf. ADR-023).
 
@@ -115,6 +115,23 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Cumul modes | **Un seul** `marketone_mode` — pas `featured` + `origin` |
 
 **Statut** : C3.B **GO MOA** (`19.0.7.0.0`, ADR-025, 2026-05-18).
+
+### C3.C — Taxonomie catalogue (MOA 2026-05-19, amendement standard Odoo)
+
+| ID | Règle |
+|----|-------|
+| C3.C.1 | Support : **`product.public.category`** (standard `website_sale`) — Odoo autorise plusieurs catégories par produit. |
+| C3.C.2 | Convention MOA : **une catégorie e-commerce principale** par produit (nature descriptive, stable). |
+| C3.C.3 | Convention MOA : **zéro ou plusieurs catégories secondaires** (sélections, usages, mises en avant, rayons complémentaires) sur le même support. |
+| C3.C.4 | **Origine** = territoire (attribut + `marketone.shop.origin`) — distinct des catégories e-commerce. |
+| C3.C.5 | **Porte** = entrée navigation `/shop` — consomme une source Odoo (souvent catégorie secondaire, attribut, pricelist…). |
+| C3.C.6 | **Pas** de modèle `marketone.shop.collection` sans ticket dédié ; réévaluation possible si secondaires insuffisantes. |
+| C3.C.7 | **Pas de code** pour matérialiser principale vs secondaire sans ticket MOA (champ, UI ou procédure BO). |
+| C3.C.8 | Porte Incontournables (Lot 6.1) : filtre sur catégorie publique « Incontournables » = catégorie **secondaire** attendue sur les produits concernés. |
+
+**Référence** : [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) — exemple Crackers manioc Sainte-Anne.
+
+**Statut** : **GO MOA** — doctrine ; **pas d’implémentation** hors ticket.
 
 ### C8 — Univers Culture — page territoire v1 (cadrage GO avec réserves 2026-05-18)
 

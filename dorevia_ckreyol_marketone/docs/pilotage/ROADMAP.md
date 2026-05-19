@@ -255,7 +255,7 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 
 | Porte | Prérequis |
 |-------|-----------|
-| Incontournables | Catégorie publique avec **`website_id` = site courant** (obligatoire recette / pré-prod) ; paramètre `featured_public_category_id` |
+| Incontournables | Catégorie e-commerce **Incontournables** (secondaire ADR-029) + `featured_public_category_id` ; `website_id` site courant obligatoire |
 | Origines | Profils `marketone.shop.origin` publiés sur le site courant ; attribut **Origine** |
 | Alias | Redémarrage Odoo après `-u` pour `/incontournables` et `/origines` |
 
@@ -267,8 +267,8 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 | 2 | Kits/Packs | `pack_ok` (nécessite `product_pack` — décision dépendance) |
 | 3 | Incontournables | Collection featured (param système) |
 | 4 | Origines | Attribut Origine |
-| 5 | Collections | M2M collection (modèle à redéfinir ou réutiliser) |
-| 6 | Catégories | `product.public.category` |
+| 5 | Sélections transversales | Catégories e-commerce **secondaires** (ADR-029) — pas de modèle collection dédié |
+| 6 | Catégories | `product.public.category` — **principale** + **secondaires** (ADR-029) |
 
 **Doctrine**
 
