@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- UX-2 — Sidebar : classes rail + facettes ouvertes par défaut (desktop). -->
+  <template id="marketone_shop_sidebar_ux2_rail_class"
+            inherit_id="website_sale.products"
+            name="Marketone UX-2: classe rail sidebar"
+            priority="34">
+    <xpath expr="//aside[@id='products_grid_before']//div[hasclass('o_wsale_products_grid_before_rail')]" position="attributes">
+      <attribute name="class" add="marketone-sidebar-rail" separator=" "/>
+    </xpath>
+  </template>
+
+  <template id="marketone_shop_sidebar_ux2_expand_attributes"
+            inherit_id="website_sale.product_attribute_filters_form"
+            name="Marketone UX-2: facettes attributs ouvertes par défaut"
+            priority="34">
+    <xpath expr="//t[@t-set='_expand_attributes']" position="attributes">
+      <attribute name="t-value">True</attribute>
+    </xpath>
+  </template>
+</odoo>

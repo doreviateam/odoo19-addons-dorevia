@@ -345,4 +345,4 @@ Document cible : `docs/recette/RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md` (à cr
 | 2026-05-19 | **GO MOA clôture** | F1–F4 navigateur OK · `dorevia_marketone_shop_regression` 3/3 · captures `/private/tmp/marketone_ux1_cloture_*` |
 | 2026-05-19 | **GO MOA final — merge** | `19.0.13.0.7` · reset à gauche · pastels par rang · placement colonne catalogue · capture `marketone_ux1_13_0_7_desktop.png` · réserve non bloquante : renforcer visuellement le lien reset (UX-2+) |
 | | Recette | [`RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md`](../recette/RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md) |
-| | Suite | **UX-2** : densité sidebar · accordéons · espacements · zones cliquables · doublon La Réunion/Reunion (BO) |
+| | Suite | **UX-2** : [`TICKET_MARKETONE_UX2_SHOP_SIDEBAR.md`](TICKET_MARKETONE_UX2_SHOP_SIDEBAR.md) · **UX-3** images produits |

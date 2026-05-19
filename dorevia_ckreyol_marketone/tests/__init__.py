@@ -14,4 +14,5 @@ from . import test_marketone_shop_regression
 from . import test_marketone_culture_v1
 from . import test_marketone_culture_v2
 from . import test_marketone_origin_reunion_dedup
+from . import test_marketone_shop_sidebar_ux2
 from . import test_marketone_smoke
