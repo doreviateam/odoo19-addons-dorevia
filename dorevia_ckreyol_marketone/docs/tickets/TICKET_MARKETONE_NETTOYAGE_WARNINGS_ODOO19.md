@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_NETTOYAGE_WARNINGS_ODOO19` |
 | **Type** | **Tech debt** — conformité Odoo 19 · zéro régression fonctionnelle |
-| **Statut** | **Implémenté** — validation tech 2026-05-19 (recette MOA non requise) |
+| **Statut** | **Clôturé GO MOA** — `91ee35b` · `19.0.12.2.0` (2026-05-19) |
 | **Version cible** | **`19.0.12.2.0`** (patch) |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
