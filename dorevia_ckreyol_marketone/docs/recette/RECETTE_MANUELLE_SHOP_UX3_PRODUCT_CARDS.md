@@ -7,7 +7,7 @@
 | **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut** | **Recette visuelle en cours** — avant décision PR |
+| **Statut** | **GO MOA UX-3 Palier A** — PR proposable (recette cycle 2 validée) |
 | **Kit source** | `docs/Carole/ux3_palier_a.scss` → traduit en tokens Marketone |
 
 ---
@@ -177,26 +177,38 @@ docker restart sandbox-odoo19-odoo-1
 
 ## Recette cycle 2 — grille validation
 
+**Exécution** : `ckr-marketone-01`, branche `feat/marketone-ux3-product-cards-palier-a`, module `19.0.15.0.0`, post-correction `ff865ed`.
+
 | Scénario | Verdict | Notes |
 |---|---|---|
-| V1 — Desktop grille | ☐ OK · ☐ réserve · ☐ KO | |
-| V2 — Hover | ☐ OK · ☐ réserve · ☐ KO | |
-| V3 — mix-blend-mode | ☐ OK · ☐ à retirer · ☐ KO | |
-| V4 — Mobile 768px | ☐ OK · ☐ réserve · ☐ KO | |
-| V5 — Filtre actif | ☐ OK · ☐ réserve · ☐ KO | |
-| V6 — Promo | ☐ OK · ☐ N/A | |
-| V7 — UX-2 non-régression | ☐ OK · ☐ KO | |
-| V8 — UX-1 non-régression | ☐ OK · ☐ KO | |
+| V1 — Desktop grille | ☑ OK | `object-fit: contain`, ratio `0.8`, fond `rgb(245,236,231)`, radius `14px`, ombre légère |
+| V2 — Hover | ☑ OK | `--o-wsale-card-transform-hover: translateY(-6px)`, image `scale(1.06)` |
+| V3 — mix-blend-mode | ☑ OK (réserve humaine) | `multiply` actif — valider à l'œil sur images lifestyle/colorées |
+| V4 — Mobile 768px | ☐ non exécuté | CSS source présent (ratio 1/1, hover désactivé) ; capture 768 non produite |
+| V5 — Filtre actif | ☑ OK | 8 produits, chip `Apéritif créole`, reset `/shop`, compteur OK |
+| V6 — Promo | ☑ N/A | Pas de prix barré/badge produit détecté |
+| V7 — UX-2 non-régression | ☑ OK | `marketone-sidebar-rail` présent |
+| V8 — UX-1 non-régression | ☑ OK | Chips + reset confirmés via filtre actif |
+
+**Tests auto** : `dorevia_marketone_shop_regression` · `dorevia_marketone_shop_filter_state` · `dorevia_marketone_shop_sidebar_ux2` → **21/21 OK**.
+
+**Smokes HTTP** : `/shop` 200 · `/shop?marketone_collection=aperitif-creole` 200.
+
+**Captures** :
+- `/private/tmp/marketone_ux3_desktop_after_retest.png`
+- `/private/tmp/marketone_ux3_filtre_actif_retest.png`
 
 ---
 
 ## Verdict MOA UX-3 Palier A
 
-| Verdict | ☐ |
+| Verdict | ☑ |
 |---------|---|
-| **GO — PR UX-3 proposable** | |
+| **GO — PR UX-3 proposable** | ☑ |
 | **GO avec ajustements SCSS mineurs avant PR** | |
 | **Rollback partiel** (image / card) | |
 | **NO GO** | |
 
-**Ajustements identifiés (si GO avec réserves)** :
+**Réserve humaine (non bloquante PR)** : valider à l'œil `mix-blend-mode: multiply` sur quelques images lifestyle à fond coloré après merge.
+
+**Cycle 1** : NO GO strict visuel (`object-fit: cover`, hover absent) — corrigé via CSS custom properties Odoo 19 (`ff865ed`).
