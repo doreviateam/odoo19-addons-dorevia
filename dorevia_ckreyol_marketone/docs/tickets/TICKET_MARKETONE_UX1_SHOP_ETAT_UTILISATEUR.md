@@ -4,8 +4,8 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX1_SHOP_ETAT_UTILISATEUR` |
 | **Type** | **UX** — extension `website_sale` · présentation uniquement |
-| **Statut** | **Clôturé GO MOA** — `19.0.13.0.4` (recette F1–F4 + régression 3/3) |
-| **Version cible** | **`19.0.13.0.2`** (patch UX — R1 prix implicite · R2 libellé compteur) |
+| **Statut** | **Clôturé GO MOA final** — `19.0.13.0.7` (visuel + F1–F4 + régression 19/19) |
+| **Version livrée** | **`19.0.13.0.7`** (reset à gauche · pastels par rang · placement colonne catalogue) |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
 | **Référence graphique** | [`docs/Carole/ux1_qweb.xml`](../Carole/ux1_qweb.xml) · [`docs/Carole/ux1_scss.scss`](../Carole/ux1_scss.scss) |
@@ -343,4 +343,6 @@ Document cible : `docs/recette/RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md` (à cr
 | 2026-05-19 | **GO MOA visuel** | Sans / avec filtres — hors UX-2/UX-3/BO Réunion |
 | 2026-05-19 | **Clôture fonctionnelle** | R1 retrait chip + C4 sidebar → `19.0.13.0.4` · recette F1–F4 + tag `dorevia_marketone_shop_regression` |
 | 2026-05-19 | **GO MOA clôture** | F1–F4 navigateur OK · `dorevia_marketone_shop_regression` 3/3 · captures `/private/tmp/marketone_ux1_cloture_*` |
+| 2026-05-19 | **GO MOA final — merge** | `19.0.13.0.7` · reset à gauche · pastels par rang · placement colonne catalogue · capture `marketone_ux1_13_0_7_desktop.png` · réserve non bloquante : renforcer visuellement le lien reset (UX-2+) |
 | | Recette | [`RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md`](../recette/RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md) |
+| | Suite | **UX-2** : densité sidebar · accordéons · espacements · zones cliquables · doublon La Réunion/Reunion (BO) |

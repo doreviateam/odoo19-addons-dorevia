@@ -1,20 +1,44 @@
 // UX-1 — État utilisateur /shop (chips filtres actifs, compteur).
 
+// Palette pastel stable : rotation déterministe par rang dans la barre.
+@mixin marketone-filter-chip-tone($bg, $border, $text, $hover-bg, $hover-border) {
+    background-color: $bg;
+    border-color: $border;
+    color: $text;
+
+    .marketone-filter-chips__remove {
+        color: $text;
+    }
+
+    &:hover {
+        background-color: $hover-bg;
+        border-color: $hover-border;
+        color: $text;
+        box-shadow: 0 2px 8px rgba($text, 0.08);
+        transform: translateY(-1px);
+    }
+
+    &:hover .marketone-filter-chips__remove {
+        opacity: 0.85;
+    }
+}
+
 .marketone-shop {
     .marketone-filter-state {
-        display: flex;
-        flex-direction: column;
-        gap: $marketone-space-sm;
-        margin-bottom: $marketone-space-md;
-        padding-bottom: $marketone-space-md;
-        border-bottom: 1px solid $marketone-border;
+        margin-top: $marketone-space-sm;
+        margin-bottom: $marketone-space-sm;
     }
 
     .marketone-filter-chips {
-        display: flex;
+        display: block;
+    }
+
+    .marketone-filter-chips__group {
+        display: inline-flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 10px;
+        max-width: 100%;
     }
 
     .marketone-filter-chips__chip {
@@ -22,43 +46,59 @@
         align-items: center;
         gap: $marketone-space-xs;
         padding: 8px 16px;
-        background: $marketone-surface;
-        border: 1.5px solid $marketone-border;
+        border: 1.5px solid transparent;
         border-radius: 100px;
         font-family: $marketone-font-body;
         font-size: 13px;
         font-weight: $marketone-weight-medium;
-        color: $marketone-text;
         line-height: 1;
         text-decoration: none;
         transition:
             border-color 0.2s ease,
-            color 0.2s ease,
+            background-color 0.2s ease,
             box-shadow 0.2s ease,
             transform 0.2s ease;
 
-        &:hover {
-            border-color: $marketone-primary-container;
-            color: $marketone-primary-container;
-            box-shadow: 0 2px 8px rgba($marketone-primary-container, 0.12);
-            transform: translateY(-1px);
-        }
-
         .marketone-filter-chips__remove {
             font-size: 12px;
-            opacity: 0.55;
+            opacity: 0.5;
         }
 
-        &:hover .marketone-filter-chips__remove {
-            opacity: 1;
+    }
+
+    // Pastels : rotation stable par rang dans la barre (reset = 1er enfant).
+    $marketone-chip-tone-sand: (#f7efe6, #e8d9c8, #3f342c, #f0e4d6, #ddc9b4);
+    $marketone-chip-tone-peach: (#fce9dc, #f2d4c4, #523528, #f8decc, #e8c4b0);
+    $marketone-chip-tone-sage: (#e8f0e6, #d2e2ce, #2f4030, #dce8d9, #c5d8c0);
+    $marketone-chip-tone-rose: (#f8e8ee, #edd6df, #4a3238, #f4dce5, #e2c4cf);
+    $marketone-chip-tone-lilac: (#eee8f4, #dcd2ea, #38304a, #e4dcf0, #cfc2e4);
+    $marketone-chip-tones: (
+        $marketone-chip-tone-sand,
+        $marketone-chip-tone-peach,
+        $marketone-chip-tone-sage,
+        $marketone-chip-tone-rose,
+        $marketone-chip-tone-lilac,
+    );
+
+    @for $tone-index from 1 through 5 {
+        $tone: nth($marketone-chip-tones, $tone-index);
+
+        .marketone-filter-chips__group > .marketone-filter-chips__chip:nth-child(5n + #{$tone-index + 1}) {
+            @include marketone-filter-chip-tone(
+                nth($tone, 1),
+                nth($tone, 2),
+                nth($tone, 3),
+                nth($tone, 4),
+                nth($tone, 5),
+            );
         }
     }
 
     .marketone-filter-chips__reset {
         flex-shrink: 0;
-        margin-left: 4px;
-        padding: 8px 0 8px 14px;
-        border-left: 1px solid $marketone-border;
+        padding: 8px 14px 8px 0;
+        margin-right: 2px;
+        border-right: 1px solid $marketone-border;
         font-family: $marketone-font-body;
         font-size: 13px;
         font-weight: $marketone-weight-semibold;
@@ -85,7 +125,7 @@
     }
 
     @media (max-width: 768px) {
-        .marketone-filter-chips {
+        .marketone-filter-chips__group {
             gap: 8px;
         }
 
@@ -95,8 +135,7 @@
         }
 
         .marketone-filter-chips__reset {
-            margin-left: 0;
-            padding-left: 12px;
+            padding-right: 10px;
             font-size: 12px;
         }
     }

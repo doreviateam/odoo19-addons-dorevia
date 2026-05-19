@@ -7,18 +7,20 @@
              class="marketone-filter-state"
              aria-label="Filtres actifs">
       <div class="marketone-filter-chips">
-        <t t-foreach="marketone_active_filter_chips" t-as="chip">
-          <a t-att-href="chip['remove_url']"
-             t-attf-class="marketone-filter-chips__chip marketone-filter-chips__chip--#{chip['type']}"
-             t-att-title="'Retirer ' + chip['label']">
-            <span class="marketone-filter-chips__label" t-out="chip['label']"/>
-            <span class="marketone-filter-chips__remove oi oi-close" role="img" aria-hidden="true"/>
+        <div class="marketone-filter-chips__group" role="group" aria-label="Filtres sélectionnés">
+          <a t-att-href="marketone_reset_filters_url"
+             class="marketone-filter-chips__reset">
+            Effacer les filtres
           </a>
-        </t>
-        <a t-att-href="marketone_reset_filters_url"
-           class="marketone-filter-chips__reset">
-          Effacer les filtres
-        </a>
+          <t t-foreach="marketone_active_filter_chips" t-as="chip">
+            <a t-att-href="chip['remove_url']"
+               t-attf-class="marketone-filter-chips__chip marketone-filter-chips__chip--#{chip['type']}"
+               t-att-title="'Retirer ' + chip['label']">
+              <span class="marketone-filter-chips__label" t-out="chip['label']"/>
+              <span class="marketone-filter-chips__remove oi oi-close" role="img" aria-hidden="true"/>
+            </a>
+          </t>
+        </div>
       </div>
     </section>
   </template>
@@ -27,7 +29,8 @@
             inherit_id="website_sale.products"
             name="Marketone: UX-1 état filtres /shop"
             priority="35">
-    <xpath expr="//div[hasclass('o_wsale_products_main_row')]" position="before">
+    <!-- Colonne catalogue : chips + reset juste au-dessus de la toolbar (sous le titre). -->
+    <xpath expr="//div[@id='products_grid']//header[@id='o_wsale_products_header']//div[hasclass('products_header')]" position="before">
       <t t-call="dorevia_ckreyol_marketone.marketone_shop_filter_state_bar"/>
     </xpath>
     <xpath expr="//div[hasclass('products_header')]" position="inside">

@@ -32,8 +32,40 @@ class TestMarketoneShopRegression(HttpCase):
         start = html.find("marketone-filter-chips")
         if start < 0:
             return ""
-        end = html.find("o_wsale_products_main_row", start)
+        end = html.find("products_header btn-toolbar", start)
+        if end < 0:
+            end = html.find("o_wsale_products_grid_table_wrapper", start)
         return html[start : end if end > start else start + 4000]
+
+    def test_ux1_chip_bar_before_toolbar_above_grid(self):
+        """Barre chips + reset juste au-dessus de la toolbar catalogue."""
+        cat = self.env["product.public.category"].search(
+            [("name", "=", "Condiments")], limit=1
+        )
+        self.assertTrue(cat, "Catégorie Condiments requise")
+        slug = self.env["ir.http"]._slug(cat)
+        response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        grid_start = html.find('id="products_grid"')
+        self.assertGreater(grid_start, -1)
+        header_start = html.find('id="o_wsale_products_header"', grid_start)
+        self.assertGreater(header_start, -1)
+        header_end = html.find("</header>", header_start)
+        header_html = html[header_start:header_end]
+        bar_pos = header_html.find('aria-label="Filtres actifs"')
+        toolbar_pos = header_html.find("products_header btn-toolbar")
+        self.assertGreater(bar_pos, -1)
+        self.assertGreater(toolbar_pos, bar_pos)
+        grid_pos = html.find("o_wsale_products_grid_table_wrapper", header_end)
+        self.assertGreater(grid_pos, header_end)
+        bar = self._chip_bar(html)
+        self.assertIn("marketone-filter-chips__group", bar)
+        reset_pos = bar.find("marketone-filter-chips__reset")
+        first_chip_pos = bar.find("marketone-filter-chips__chip")
+        self.assertGreater(reset_pos, -1)
+        self.assertGreater(first_chip_pos, reset_pos)
+        self.assertIn("marketone-filter-chips__chip--", bar)
 
     def test_r1_chip_remove_category_no_implicit_price(self):
         """R1 — retrait chip catégorie sans min_price/max_price dans l’URL."""

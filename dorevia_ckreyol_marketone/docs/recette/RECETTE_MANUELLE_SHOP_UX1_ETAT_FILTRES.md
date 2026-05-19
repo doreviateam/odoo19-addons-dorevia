@@ -3,7 +3,7 @@
 | Champ | Valeur |
 |-------|--------|
 | **Ticket** | `TICKET_MARKETONE_UX1_SHOP_ETAT_UTILISATEUR` |
-| **Version** | `19.0.13.0.5` |
+| **Version** | `19.0.13.0.7` |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
 
@@ -76,13 +76,15 @@
 
 ---
 
-## U6 — Reset global (MOA Q4 + reset unique `19.0.13.0.5`)
+## U6 — Reset global + pastels chips (`19.0.13.0.7`)
 
 | Étape | Action | Attendu |
 |-------|--------|---------|
-| 1 | Plusieurs filtres actifs | « Effacer les filtres » dans la **barre chips** (même ligne, après les chips) |
-| 2 | Sidebar | **Pas** de bouton « Clear Filters » (desktop ni offcanvas) |
-| 3 | Clic « Effacer les filtres » | `/shop` propre · plus de chips |
+| 1 | Plusieurs filtres actifs | Barre **dans la colonne catalogue**, sous le titre, **au-dessus** de la toolbar |
+| 2 | Ordre barre | **Effacer les filtres** à **gauche**, puis les chips (`reset \| chip × chip × …`) |
+| 3 | Couleurs chips | Fonds pastel **différenciés** · rotation déterministe par rang (sable, pêche, sauge, rosé, lilac) |
+| 4 | Sidebar | **Pas** de « Clear Filters » (desktop ni offcanvas) |
+| 5 | Clic « Effacer les filtres » | `/shop` propre · plus de chips |
 
 ---
 
@@ -121,6 +123,7 @@ odoo-bin -d ckr-marketone-01 \
 | `test_r1_chip_remove_category_no_implicit_price` | Prix implicite dans `remove_url` chip |
 | `test_c4_sidebar_keeps_primaries_when_category_active` | Catégories sidebar qui disparaissent au clic |
 | `test_r2_counter_wording_trouves` | Compteur sans libellé « trouvé(s) » |
+| `test_ux1_chip_bar_before_toolbar_above_grid` | Reset éloigné / barre hors colonne catalogue |
 
 Suite complète UX-1 + sidebar :
 
@@ -141,8 +144,9 @@ odoo-bin -d ckr-marketone-01 --test-tags=dorevia_marketone_shop_sidebar,dorevia_
 | Volet | Verdict |
 |-------|---------|
 | **Visuel sans filtre** | GO — compteur « trouvés », pas de chips, sidebar / grille OK |
-| **Visuel avec filtres** | GO proposable — chips, reset, compteur, cohérence sidebar |
-| **Hors UX-1** | Réunion/Reunion (BO) · densité sidebar / espacement chips (UX-2) · images (UX-3) |
+| **Visuel avec filtres** | **GO final** — `19.0.13.0.7` · reset à gauche · pastels par rang · barre sous titre |
+| **Hors UX-1** | Réunion/Reunion (BO) · densité sidebar / accordéons (UX-2) · images (UX-3) |
+| **Réserve non bloquante** | Lien « Effacer les filtres » : renforcement visuel possible en UX-2+ |
 
 ### Clôture fonctionnelle — **GO MOA** (2026-05-19)
 
@@ -153,9 +157,9 @@ odoo-bin -d ckr-marketone-01 --test-tags=dorevia_marketone_shop_sidebar,dorevia_
 | **F3** | **Condiments + Martinique** → retirer catégorie | `/shop?attribute_values=3-20`, origine conservée | ☑ |
 | **F4** | Reset barre = sidebar | les deux `href` = `/shop` | ☑ |
 
-Tests : `dorevia_marketone_shop_regression` **3/3 OK**.
+Tests : `dorevia_marketone_shop_regression` + `dorevia_marketone_shop_filter_state` **19/19 OK** (`19.0.13.0.7`).
 
-Captures : `marketone_ux1_cloture_f1_collection.png` … `f4_after_reset.png` (`/private/tmp/`).
+Captures : `marketone_ux1_cloture_f1_collection.png` … `f4_after_reset.png` · clôture visuelle `marketone_ux1_13_0_7_desktop.png` (`/private/tmp/`).
 
 ```bash
 odoo-bin -d ckr-marketone-01 --test-tags=dorevia_marketone_shop_regression --stop-after-init

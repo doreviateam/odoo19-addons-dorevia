@@ -70,10 +70,12 @@ class TestMarketoneShopFilterState(HttpCase):
     """Barre chips + compteur global (TICKET_MARKETONE_UX1_SHOP_ETAT_UTILISATEUR)."""
 
     def _chip_bar_html(self, html):
-        start = html.find('class="marketone-filter-state"')
+        start = html.find('aria-label="Filtres actifs"')
         if start < 0:
             return ""
-        end = html.find("o_wsale_products_main_row", start)
+        end = html.find("products_header btn-toolbar", start)
+        if end < 0:
+            end = html.find("o_wsale_products_grid_table_wrapper", start)
         if end < 0:
             end = start + 8000
         return html[start:end]
