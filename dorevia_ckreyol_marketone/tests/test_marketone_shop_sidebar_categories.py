@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Tests sidebar /shop — facette multi-catégories principales."""
 
+import re
 from urllib.parse import parse_qs, urlparse
 
 from odoo.tests import tagged
@@ -220,6 +221,25 @@ class TestMarketoneShopSidebarCategories(HttpCase):
         self.assertIn(b"Crackers manioc", response.content)
         block_html = self._sidebar_block(response.text)
         self.assertIn("checked", block_html)
+
+    def test_shop_sidebar_lists_primaries_when_one_category_active(self):
+        """C4 : filtre catégorie seul ne réduit pas la liste aux seules catégories du prix implicite."""
+        condiments = self.env["product.public.category"].search(
+            [("name", "=", "Condiments")], limit=1
+        )
+        if not condiments:
+            self.skipTest("Catégorie Condiments absente")
+        slug = self.env["ir.http"]._slug(condiments)
+        response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
+        self.assertEqual(response.status_code, 200)
+        block_html = self._sidebar_block(response.text)
+        slugs = set(re.findall(r'data-category-slug="([^"]+)"', block_html))
+        self.assertIn(slug, slugs)
+        self.assertGreaterEqual(
+            len(slugs),
+            10,
+            f"Les autres principales doivent rester visibles, reçu : {sorted(slugs)}",
+        )
 
     def test_shop_category_and_origin_attribute_combined(self):
         """Catégories + attribut Origine : AND — paramètres conservés."""

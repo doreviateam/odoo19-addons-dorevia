@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- UX-1 — État utilisateur : chips filtres actifs + compteur (TICKET_MARKETONE_UX1_SHOP_ETAT_UTILISATEUR). -->
+  <template id="marketone_shop_filter_state_bar"
+            name="Marketone: barre état filtres /shop">
+    <section t-if="marketone_show_filter_state_bar"
+             class="marketone-filter-state"
+             aria-label="Filtres actifs">
+      <div class="marketone-filter-chips">
+        <t t-foreach="marketone_active_filter_chips" t-as="chip">
+          <a t-att-href="chip['remove_url']"
+             t-attf-class="marketone-filter-chips__chip marketone-filter-chips__chip--#{chip['type']}"
+             t-att-title="'Retirer ' + chip['label']">
+            <span class="marketone-filter-chips__label" t-out="chip['label']"/>
+            <span class="marketone-filter-chips__remove oi oi-close" role="img" aria-hidden="true"/>
+          </a>
+        </t>
+        <a t-att-href="marketone_reset_filters_url"
+           class="marketone-filter-chips__reset">
+          Effacer les filtres
+        </a>
+      </div>
+    </section>
+  </template>
+
+  <template id="marketone_shop_filter_state_products"
+            inherit_id="website_sale.products"
+            name="Marketone: UX-1 état filtres /shop"
+            priority="35">
+    <xpath expr="//div[hasclass('o_wsale_products_main_row')]" position="before">
+      <t t-call="dorevia_ckreyol_marketone.marketone_shop_filter_state_bar"/>
+    </xpath>
+    <xpath expr="//div[hasclass('products_header')]" position="inside">
+      <p class="marketone-filter-state__count mb-0"
+         title="Nombre total de produits correspondant aux filtres actifs (toutes pages)">
+        <strong t-out="marketone_search_count"/>
+        produit<t t-if="marketone_search_count != 1">s</t> trouvé<t t-if="marketone_search_count != 1">s</t>
+      </p>
+    </xpath>
+  </template>
+</odoo>

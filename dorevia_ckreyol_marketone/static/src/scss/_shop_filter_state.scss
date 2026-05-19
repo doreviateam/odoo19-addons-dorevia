@@ -1,0 +1,102 @@
+// UX-1 — État utilisateur /shop (chips filtres actifs, compteur).
+
+.marketone-shop {
+    .marketone-filter-state {
+        display: flex;
+        flex-direction: column;
+        gap: $marketone-space-sm;
+        margin-bottom: $marketone-space-md;
+        padding-bottom: $marketone-space-md;
+        border-bottom: 1px solid $marketone-border;
+    }
+
+    .marketone-filter-chips {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .marketone-filter-chips__chip {
+        display: inline-flex;
+        align-items: center;
+        gap: $marketone-space-xs;
+        padding: 8px 16px;
+        background: $marketone-surface;
+        border: 1.5px solid $marketone-border;
+        border-radius: 100px;
+        font-family: $marketone-font-body;
+        font-size: 13px;
+        font-weight: $marketone-weight-medium;
+        color: $marketone-text;
+        line-height: 1;
+        text-decoration: none;
+        transition:
+            border-color 0.2s ease,
+            color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            border-color: $marketone-primary-container;
+            color: $marketone-primary-container;
+            box-shadow: 0 2px 8px rgba($marketone-primary-container, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .marketone-filter-chips__remove {
+            font-size: 12px;
+            opacity: 0.55;
+        }
+
+        &:hover .marketone-filter-chips__remove {
+            opacity: 1;
+        }
+    }
+
+    .marketone-filter-chips__reset {
+        margin-left: auto;
+        padding: 8px 0;
+        font-family: $marketone-font-body;
+        font-size: 13px;
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-primary-container;
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover {
+            text-decoration: underline;
+            opacity: 0.85;
+        }
+    }
+
+    .marketone-filter-state__count {
+        font-family: $marketone-font-body;
+        font-size: 15px;
+        font-weight: $marketone-weight-medium;
+        color: $marketone-text-muted;
+
+        strong {
+            color: $marketone-text;
+            font-weight: $marketone-weight-semibold;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .marketone-filter-chips {
+            gap: 8px;
+        }
+
+        .marketone-filter-chips__chip {
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+
+        .marketone-filter-chips__reset {
+            margin-left: 0;
+            width: 100%;
+            text-align: right;
+            font-size: 12px;
+        }
+    }
+}
