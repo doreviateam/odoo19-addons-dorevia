@@ -1,9 +1,12 @@
-// UX-3 Palier A — Grille produit : homogénéisation retail premium.
+// UX-3 Palier A — Grille produit retail premium.
 //
 // Origine : kit Carole `docs/Carole/ux3_palier_a.scss`
 // Traduit en tokens Marketone — pas de palette parallèle.
 // Scope strict : `.marketone-shop` uniquement.
 // Aucun JS · aucune modification contrôleur / logique filtre / UX-1 / UX-2.
+//
+// Approche Odoo 19 : override des CSS custom properties du système de cartes.
+// Les règles directes (hors variables) sont réservées aux cas sans variable Odoo.
 //
 // Correspondance variables Carole → tokens Marketone :
 //   $bg-image    #F5F0E8  → $marketone-surface-container    #f5ece7
@@ -16,14 +19,25 @@
 //   $radius-card 14px     → 0.875rem (pas de token exact)
 //   $radius-image 10px    → $marketone-radius-lg             0.75rem
 //
+// Diagnostic recette NO GO visuel (avant correction) :
+//   - object-fit: cover mesuré  → causé par o_wsale_products_opt_thumb_cover
+//     activé sur #o_wsale_products_grid ; fix : surcharger la variable
+//     --o-wsale-card-thumb-fill-mode sur .oe_product_cart (DOM plus proche).
+//   - transform: none au hover  → --o-wsale-card-transform-hover n'était jamais
+//     défini (pas de fallback Odoo) ; fix : définir la variable.
+//   - double lift               → _shop.scss avait .oe_product:hover { -2px } ;
+//     fix : neutraliser ce rule dans .marketone-shop via override.
+//   - .oe_product_info          → classe inexistante ; fix : .o_wsale_product_information.
+//
 // Points de vigilance :
-//   - mix-blend-mode: multiply : adoucit les fonds blancs fournisseurs.
-//     À vérifier sur images lifestyle (fond coloré) et produits bruts.
-//   - aspect-ratio 4/5 desktop : à valider en grille pour éviter des
-//     cartes trop hautes — recette capture avant/après requise.
-//   - hover translateY(-6px) : vérifier absence de saut de layout.
+//   - mix-blend-mode: multiply : adoucit les halos fournisseurs.
+//     Pas de variable Odoo → règle directe sur .oe_product_image_img.
+//   - aspect-ratio 4/5 desktop : ratio portrait via --o-wsale-card-thumb-aspect-ratio.
+//   - hover translateY(-6px) : via --o-wsale-card-transform-hover.
 
+// ---------------------------------------------------------------------------
 // Easings locaux (pas de token timing en Marketone).
+// ---------------------------------------------------------------------------
 $_ux3-ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
 $_ux3-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
@@ -31,85 +45,106 @@ $_ux3-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 $_ux3-shadow-rest:  0 2px 12px rgba($marketone-text, 0.04);
 $_ux3-shadow-hover: 0 16px 40px rgba($marketone-text, 0.10);
 
+// ---------------------------------------------------------------------------
+
 .marketone-shop {
 
     // =========================================================
-    // 1. CONTENEUR IMAGE — ratio fixe, fond homogène
+    // NEUTRALISATION du hover legacy _shop.scss (.oe_product)
+    //
+    // _shop.scss ajoute transform: translateY(-2px) sur .oe_product (div
+    // parent du form .oe_product_cart). Comme UX-3 gère le lift via la
+    // variable --o-wsale-card-transform-hover sur .oe_product_cart, conserver
+    // ce double lift produirait un déplacement chaotique (-8px total).
     // =========================================================
 
-    .oe_product_image,
-    .o_wsale_product_grid_wrapper .oe_product_image {
-        position: relative;
-        width: 100%;
-        // Ratio 4:5 desktop : cartes légèrement portrait pour mise en valeur produit.
-        // Vérifier en recette qu'il ne crée pas de grille trop haute.
-        aspect-ratio: 4 / 5;
-        background: $marketone-surface-container;
-        overflow: hidden;
-        border-radius: $marketone-radius-lg;
-        margin-bottom: 0;
-        padding: 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .oe_product {
+        transition: none;
 
-        img,
-        .img,
-        .img-fluid {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-            transition: transform 0.6s $_ux3-ease-out;
-            // Adoucit les halos blancs des photos fournisseurs.
-            // À surveiller en recette sur images lifestyle (fond coloré).
-            mix-blend-mode: multiply;
-        }
-    }
-
-    // =========================================================
-    // 2. CARTE PRODUIT — bordure, radius, ombre, hover lift
-    // =========================================================
-
-    .oe_product_cart,
-    .o_wsale_product_grid_wrapper .oe_product_cart {
-        background: $marketone-surface;
-        border: 1px solid $marketone-border;
-        border-radius: 0.875rem;
-        overflow: hidden;
-        box-shadow: $_ux3-shadow-rest;
-        transition: transform 0.45s $_ux3-ease-spring, box-shadow 0.45s $_ux3-ease-spring, border-color 0.45s $_ux3-ease-spring;
-        position: relative;
-
+        // Neutralise le hover legacy de _shop.scss (transform -2px + box-shadow).
+        // Le lift et l'ombre sont désormais portés par .oe_product_cart via variables.
         &:hover {
-            // Lift plus prononcé qu'en UX-base (était -2px).
-            // Vérifier absence de saut de layout (recette S3).
-            transform: translateY(-6px);
-            box-shadow: $_ux3-shadow-hover;
-            border-color: rgba($marketone-border, 0.75);
-        }
-
-        &:hover .oe_product_image img,
-        &:hover .oe_product_image .img,
-        &:hover .oe_product_image .img-fluid {
-            transform: scale(1.06);
+            transform: none;
+            box-shadow: none;
         }
     }
 
     // =========================================================
-    // 3. ZONE INFO — hiérarchie titre / description / prix
+    // CSS CUSTOM PROPERTIES — Système carte Odoo 19
+    //
+    // Toutes les surcharges visuelles passent par des variables CSS
+    // définies sur .oe_product_cart et héritées par les enfants.
+    // Le système natif lit ces variables avec !important où nécessaire.
     // =========================================================
 
-    .oe_product_cart .oe_product_info,
-    .o_wsale_product_grid_wrapper .oe_product_info {
-        padding: 1.25rem 1.25rem 1.375rem;
-        background: $marketone-surface;
+    .oe_product_cart {
 
-        // Titre produit — corps (Hanken Grotesk) plutôt qu'EB Garamond
-        // pour une lecture scanning plus rapide en grille dense.
+        // --- Carte : fond, bordure, radius, ombre ---
+        --o-wsale-card-bg:                   #{$marketone-surface};
+        --o-wsale-card-border-width:         1px;
+        --o-wsale-card-border-color:         #{$marketone-border};
+        --o-wsale-card-border-color-hover:   #{rgba($marketone-border, 0.75)};
+        --o-wsale-card-border-radius:        0.875rem;
+        --o-wsale-card-shadow:               #{$_ux3-shadow-rest};
+        --o-wsale-card-shadow-hover:         #{$_ux3-shadow-hover};
+
+        // --- Lift carte au hover ---
+        // Par défaut, --o-wsale-card-transform-hover n'a aucun fallback
+        // dans Odoo → transform: none. On définit ici le -6px attendu.
+        --o-wsale-card-transform-hover:      translateY(-6px);
+        --o-wsale-card-transition:
+            transform    0.45s #{$_ux3-ease-spring},
+            box-shadow   0.45s #{$_ux3-ease-spring},
+            border-color 0.45s #{$_ux3-ease-spring};
+
+        // --- Image : fond, ratio, fill-mode, radius ---
+        // --o-wsale-card-thumb-fill-mode: contain surcharge la valeur 'cover'
+        // injectée par la classe .o_wsale_products_opt_thumb_cover active sur
+        // #o_wsale_products_grid. .oe_product_cart étant plus proche dans le
+        // DOM que le grid, sa valeur de variable est héritée par l'image.
+        --o-wsale-card-thumb-background:     #{$marketone-surface-container};
+        --o-wsale-card-thumb-aspect-ratio:   0.8; // 4/5 portrait desktop
+        --o-wsale-card-thumb-fill-mode:      contain;
+        // Top arrondi = card radius - 1px border ; bottom flush (info en-dessous).
+        --o-wsale-card-thumb-border-radius:
+            calc(0.875rem - 1px) calc(0.875rem - 1px) 0 0;
+
+        // --- Zoom image au hover (desktop ≥ 992px, media query Odoo native) ---
+        --o-wsale-card-img-transform:        scale(1);
+        --o-wsale-card-img-transform-hover:  scale(1.06);
+        --o-wsale-card-img-transition:       transform 0.6s #{$_ux3-ease-out};
+        --o-wsale-card-img-transition-hover: transform 0.6s #{$_ux3-ease-out};
+
+        // --- Zone info : padding ---
+        --o-wsale-card-info-padding:         1.25rem 1.25rem 1.375rem;
+    }
+
+    // =========================================================
+    // MIX-BLEND-MODE
+    //
+    // Pas de variable Odoo pour blend-mode → règle directe.
+    // Cible la classe native .oe_product_image_img (présente sur le <img>
+    // Odoo 19 dans .oe_product_image_link .oe_product_image_img_wrapper).
+    // =========================================================
+
+    .oe_product_cart .oe_product_image_link .oe_product_image_img {
+        mix-blend-mode: multiply;
+    }
+
+    // =========================================================
+    // ZONE INFO — typographie
+    //
+    // Les variables Odoo couvrent padding et font-size de base.
+    // Les règles ci-dessous affinent titre, description clampée, prix.
+    // Classe réelle : .o_wsale_product_information (pas .oe_product_info).
+    // =========================================================
+
+    .oe_product_cart .o_wsale_product_information {
+
+        // Titre produit.
         .o_wsale_products_item_title,
         .o_wsale_product_name,
-        h6,
+        h2, h6,
         .product_name {
             font-family: $marketone-font-body;
             font-size: 1rem;
@@ -168,23 +203,10 @@ $_ux3-shadow-hover: 0 16px 40px rgba($marketone-text, 0.10);
     }
 
     // =========================================================
-    // 4. ESPACEMENT GRILLE
+    // BADGES
     // =========================================================
 
-    .o_wsale_product_grid_wrapper {
-        gap: 1.75rem;
-
-        .o_wsale_product_grid_item {
-            padding: 0;
-        }
-    }
-
-    // =========================================================
-    // 5. BADGES — position absolue dans la carte
-    // =========================================================
-
-    .oe_product_cart .badge,
-    .o_wsale_product_grid_wrapper .badge {
+    .oe_product_cart .badge {
         position: absolute;
         top: 0.875rem;
         left: 0.875rem;
@@ -200,62 +222,42 @@ $_ux3-shadow-hover: 0 16px 40px rgba($marketone-text, 0.10);
         box-shadow: 0 2px 8px rgba($marketone-text, 0.12);
         border: none;
 
-        // Variantes sémantiques Bootstrap conservées, nuancées Marketone.
         &.bg-success { background: $marketone-secondary; }
         &.bg-warning { background: #c9a84c; }
     }
 
     // =========================================================
-    // 6. RESPONSIVE TABLETTE (≤ 1024px)
+    // RESPONSIVE — tablette (≤ 1024px) / mobile (≤ 768px)
+    //
+    // Passage en ratio carré 1/1 hors desktop pour densité et lisibilité.
+    // Hover lift et zoom supprimés en mobile (pas de cursor: hover physique).
     // =========================================================
 
     @media (max-width: 1024px) {
-        .oe_product_image,
-        .o_wsale_product_grid_wrapper .oe_product_image {
-            padding: 1rem;
-            // Passage en carré sur tablette pour plus de densité.
-            aspect-ratio: 1 / 1;
-        }
-
-        .oe_product_cart .oe_product_info,
-        .o_wsale_product_grid_wrapper .oe_product_info {
-            padding: 1rem 1rem 1.125rem;
+        .oe_product_cart {
+            --o-wsale-card-thumb-aspect-ratio: 1;
+            --o-wsale-card-info-padding:       1rem 1rem 1.125rem;
         }
     }
 
-    // =========================================================
-    // 7. RESPONSIVE MOBILE (≤ 768px)
-    // =========================================================
-
     @media (max-width: 768px) {
-        .oe_product_image,
-        .o_wsale_product_grid_wrapper .oe_product_image {
-            padding: 0.75rem;
-            // Carré en mobile : 1/1 (pas de ratio portrait sur petit écran).
-            // À vérifier en recette capture 768px.
-            aspect-ratio: 1 / 1;
+        .oe_product_cart {
+            --o-wsale-card-thumb-aspect-ratio:  1;
+            --o-wsale-card-info-padding:        0.875rem 0.875rem 1rem;
+            --o-wsale-card-transform-hover:     none;
+            --o-wsale-card-img-transform-hover: scale(1);
         }
 
-        .oe_product_cart .oe_product_info,
-        .o_wsale_product_grid_wrapper .oe_product_info {
-            padding: 0.875rem 0.875rem 1rem;
-
+        .oe_product_cart .o_wsale_product_information {
             .o_wsale_products_item_title,
-            .o_wsale_product_name,
-            h6,
-            .product_name {
+            h2, h6 {
                 font-size: $marketone-label;
             }
 
             .oe_price,
-            .product_price,
-            .o_wsale_product_price {
+            .product_price {
                 font-size: 1rem;
             }
-        }
-
-        .o_wsale_product_grid_wrapper {
-            gap: 1rem;
         }
     }
 }
