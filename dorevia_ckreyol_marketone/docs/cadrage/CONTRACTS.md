@@ -116,13 +116,16 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 
 **Statut** : C3.B **GO MOA** (`19.0.7.0.0`, ADR-025, 2026-05-18).
 
-### C3.C — Taxonomie catalogue (MOA 2026-05-19, amendement standard Odoo)
+### C3.C — Taxonomie catalogue (MOA 2026-05-19, amendements standard Odoo + navigation)
+
+> La notion de catégorie principale est introduite afin d’offrir au visiteur une navigation transversale stable par nature de produit. Même si Odoo permet plusieurs catégories e-commerce publiques par produit, Marketone distingue une catégorie principale de référence, utilisée pour structurer le menu de navigation par catégories, et des catégories secondaires utilisées pour les sélections, usages ou mises en avant.
 
 | ID | Règle |
 |----|-------|
+| C3.C.0 | **Synthèse** : la catégorie principale **structure le menu** ; les catégories secondaires **enrichissent les parcours** ; les origines **situent** le produit ; les portes **orientent l’entrée**. |
 | C3.C.1 | Support : **`product.public.category`** (standard `website_sale`) — Odoo autorise plusieurs catégories par produit. |
-| C3.C.2 | Convention MOA : **une catégorie e-commerce principale** par produit (nature descriptive, stable). |
-| C3.C.3 | Convention MOA : **zéro ou plusieurs catégories secondaires** (sélections, usages, mises en avant, rayons complémentaires) sur le même support. |
+| C3.C.2 | Convention MOA : **une catégorie e-commerce principale** par produit — rayon / nature descriptive stable ; répond à *« Quel type de produit est-ce que je cherche ? »* ; référence pour le menu transversal **Catégories** (cible UX). |
+| C3.C.3 | Convention MOA : **zéro ou plusieurs catégories secondaires** (sélections, usages, mises en avant, parcours complémentaires) sur le même support. |
 | C3.C.4 | **Origine** = territoire (attribut + `marketone.shop.origin`) — distinct des catégories e-commerce. |
 | C3.C.5 | **Porte** = entrée navigation `/shop` — consomme une source Odoo (souvent catégorie secondaire, attribut, pricelist…). |
 | C3.C.6 | **Pas** de modèle `marketone.shop.collection` sans ticket dédié ; réévaluation possible si secondaires insuffisantes. |

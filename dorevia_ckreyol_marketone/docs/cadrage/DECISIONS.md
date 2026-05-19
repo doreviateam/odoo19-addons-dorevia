@@ -419,11 +419,13 @@
 
 | | |
 |---|---|
-| **Date** | 2026-05-19 — **amendement** même jour (standard Odoo) |
+| **Date** | 2026-05-19 — amendements même jour (standard Odoo ; navigation transversale) |
 | **Statut** | **Acceptée — GO MOA** (documentation ; **pas de code** sans ticket dédié) |
 | **Contexte** | Enrichissement catalogue recette, portes Boutique 6.1/6.2. Première rédaction : distinguer catégorie vs **collection dédiée** (`marketone.shop.collection`). Clarification MOA : s’aligner sur **`product.public.category`** (Odoo autorise plusieurs catégories par produit). |
-| **Décision** | **Support unique (provisoire)** : `product.public.category`. **Convention MOA** : **une catégorie principale** (nature du produit — stable, descriptive) + **0..n catégories secondaires** (sélections, usages, mises en avant, rayons complémentaires). **Origine** = territoire. **Porte** = entrée navigation `/shop`. **Ne pas** implémenter `marketone.shop.collection` pour l’instant. |
-| **Exemple** | Crackers manioc Sainte-Anne → principale *Biscuits salés* ; secondaires *Incontournables*, *Apéritif*, *Cuisine du manioc* ; origine *Guadeloupe*. |
+| **Décision** | **Support unique (provisoire)** : `product.public.category`. **Convention MOA** : **une catégorie principale** (rayon / nature du produit — stable, descriptive) + **0..n catégories secondaires** (sélections, usages, mises en avant, parcours complémentaires). **Origine** = territoire. **Porte** = entrée navigation `/shop`. **Ne pas** implémenter `marketone.shop.collection` pour l’instant. |
+| **Pourquoi principale** | La notion de catégorie principale est introduite afin d’offrir au visiteur une **navigation transversale stable par nature de produit**. Même si Odoo permet plusieurs catégories e-commerce publiques par produit, Marketone distingue une **catégorie principale de référence**, utilisée pour structurer le menu de navigation par catégories, et des **catégories secondaires** utilisées pour les sélections, usages ou mises en avant. Question visiteur cible : *« Quel type de produit est-ce que je cherche ? »* (grands rayons : Biscuits salés, Épices, Confitures, Boissons, etc.). |
+| **Règle synthétique** | La catégorie principale **structure le menu**. Les catégories secondaires **enrichissent les parcours**. Les origines **situent** le produit. Les portes **orientent l’entrée**. |
+| **Exemple** | Crackers manioc Sainte-Anne → principale *Biscuits salés* (menu Catégories) ; secondaires *Incontournables*, *Apéritif créole*, *Cuisine du manioc* ; origine *Guadeloupe* ; retrouvable aussi via porte Origines > Guadeloupe. |
 | **Évolution** | Modèle collection **réévaluable** plus tard si catégories secondaires insuffisantes. |
 | **Lot 6.1** | Porte Incontournables via catégorie publique « Incontournables » = **aligné** (catégorie **secondaire** + filtre porte). |
 | **Contrat** | C3.C |

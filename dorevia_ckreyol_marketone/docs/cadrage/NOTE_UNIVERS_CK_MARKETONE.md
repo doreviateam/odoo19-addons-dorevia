@@ -130,18 +130,21 @@ Marketone ne crée pas un moteur parallèle.
 
 Support : **`product.public.category`** (Odoo permet plusieurs catégories par produit).
 
+**Pourquoi une catégorie principale ?** Navigation transversale stable par **nature de produit** (*« Quel type de produit est-ce que je cherche ? »*) — grands rayons (Biscuits salés, Épices, Confitures, Boissons…). La principale **structure le menu Catégories** ; les secondaires **enrichissent les parcours**.
+
 Convention Marketone :
 
 | Rôle | Question | Cardinalité |
 |------|----------|-------------|
-| **Catégorie principale** | Qu’est-ce que c’est ? | **1** / produit |
+| **Catégorie principale** | Quel type de produit ? | **1** / produit — rayon de référence |
 | **Catégories secondaires** | Où le mettre en avant ? | **0..n** / produit |
 | **Origine** | D’où ça vient ? | Territoire(s) |
 | **Porte** | Par quelle entrée `/shop` ? | Navigation |
 
 ```text
 Pas de marketone.shop.collection pour l’instant.
-Principale = nature · Secondaires = sélections / mises en avant.
+Principale → structure le menu · Secondaires → enrichissent les parcours.
+Origine → situe le produit · Porte → oriente l’entrée.
 ```
 
 Document détaillé : [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) · ADR-029.

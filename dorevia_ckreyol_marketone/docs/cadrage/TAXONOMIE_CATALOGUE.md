@@ -2,7 +2,7 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut** | **GO MOA** — doctrine catalogue (2026-05-19, amendement standard Odoo) |
+| **Statut** | **GO MOA** — doctrine catalogue (2026-05-19, amendements standard Odoo + navigation transversale) |
 | **ADR** | [ADR-029](DECISIONS.md#adr-029--taxonomie-catalogue-convention-odoo-catégories-e-commerce) |
 | **Contrat** | [C3.C](CONTRACTS.md#c3c--taxonomie-catalogue-moa-2026-05-19) |
 
@@ -29,16 +29,45 @@ Pas de modèle marketone.shop.collection pour l’instant.
 
 > **Hors scope immédiat** : modèle dédié `marketone.shop.collection` — **reporté** ; réévaluation possible si les catégories secondaires deviennent insuffisantes (volume, SEO, gouvernance BO).
 
+### Règle synthétique (MOA)
+
+```text
+La catégorie principale structure le menu.
+Les catégories secondaires enrichissent les parcours.
+Les origines situent le produit.
+Les portes orientent l’entrée.
+```
+
+---
+
+## Pourquoi la catégorie principale ?
+
+La notion de **catégorie principale** est introduite afin d’offrir au visiteur une **navigation transversale stable par nature de produit**.
+
+Même si Odoo permet plusieurs catégories e-commerce publiques par produit, Marketone distingue une **catégorie principale de référence**, utilisée pour structurer le menu de navigation par catégories, et des **catégories secondaires** utilisées pour les sélections, usages ou mises en avant.
+
+### Objectif utilisateur
+
+Permettre au visiteur de parcourir la boutique par **grands rayons lisibles**, qui répondent à :
+
+> **« Quel type de produit est-ce que je cherche ? »**
+
+Exemples de rayons (liste non exhaustive) : Biscuits salés · Biscuits sucrés · Épices · Assaisonnements · Confitures · Sirops · Boissons · Farines / fécules · Sauces · Condiments · etc.
+
+Ces rayons alimentent un menu transversal **Catégories** (cible UX — hors scope code immédiat).
+
 ---
 
 ## Définitions
 
 ### Catégorie principale (convention MOA)
 
-**Question** : « Qu’est-ce que c’est ? »
+**Question** : « Qu’est-ce que c’est ? » / « Quel type de produit je cherche ? »
 
-- nature **stable** et **descriptive** du produit ;
+- **rayon principal** / nature du produit ;
+- nature **stable** et **descriptive** ;
 - une seule catégorie **désignée principale** par produit (convention métier — marquage technique = ticket futur si besoin) ;
+- **référence** pour structurer le menu de navigation par catégories ;
 - exemples : Biscuits salés · Confitures · Épices · Boissons.
 
 ### Catégories secondaires (convention MOA)
@@ -48,7 +77,7 @@ Pas de modèle marketone.shop.collection pour l’instant.
 - rattachements **additionnels** à d’autres `product.public.category` ;
 - transversales à la nature du produit ;
 - intention d’achat, mise en avant, usage, rayon complémentaire ;
-- exemples : Incontournables · Apéritif · Cuisine du manioc · Idées cadeaux.
+- exemples : Incontournables · Apéritif créole · Cuisine du manioc · Idées cadeaux.
 
 **Alignement Lot 6.1** : la porte **Incontournables** filtre sur la catégorie publique « Incontournables » — elle est une **catégorie secondaire** (sélection), pas la catégorie principale du produit.
 
@@ -69,15 +98,28 @@ Entrée de navigation vers une sélection sur `/shop`. Consomme une source Odoo 
 | Rôle | Valeur(s) |
 |------|-----------|
 | **Catégorie principale** | Biscuits salés |
-| **Catégories secondaires** | Incontournables · Apéritif · Cuisine du manioc |
+| **Catégories secondaires** | Incontournables · Apéritif créole · Cuisine du manioc |
 | **Origine** | Guadeloupe |
 
 ```text
-Catégorie principale   → nature du produit
-Catégories secondaires → sélections / mises en avant / rayons complémentaires
+Catégorie principale   → rayon / nature du produit (menu Catégories)
+Catégories secondaires → sélections / usages / mises en avant
 Origine                → territoire
 Porte                  → entrée /shop (ex. Incontournables → filtre catégorie secondaire)
 ```
+
+### Conséquence UX (exemple Crackers)
+
+Dans un menu transversal **Catégories**, le produit apparaît **d’abord** sous :
+
+- **Biscuits salés**
+
+Il peut aussi être trouvé via :
+
+- **Incontournables** (porte / catégorie secondaire) ;
+- **Origines** → Guadeloupe ;
+- **Apéritif créole** ;
+- **Cuisine du manioc**.
 
 ---
 
@@ -90,7 +132,8 @@ Porte                  → entrée /shop (ex. Incontournables → filtre catégo
 | 3 | **Ne pas** confondre catégorie principale et secondaire dans les libellés BO (ex. « Incontournables » = secondaire, pas nature du produit). |
 | 4 | Les portes Boutique s’appuient sur le **standard Odoo** (catégorie, attribut, pricelist…) — pas sur un moteur parallèle. |
 | 5 | **Culture** et **Savoirs** hors grille `/shop` ; pas de recette comme `product.template` vendable. |
-| 6 | **Pas de code** pour matérialiser « principale vs secondaire » sans ticket MOA (champ, convention BO documentée, ou UI). |
+| 6 | **Pas de code** pour matérialiser « principale vs secondaire » ni le menu transversal Catégories sans ticket MOA. |
+| 7 | Menu **Catégories** (cible UX) : structuré par catégories **principales** ; les secondaires, origines et portes **enrichissent** les parcours sans remplacer le rayon de référence. |
 
 ---
 
@@ -100,6 +143,7 @@ Porte                  → entrée /shop (ex. Incontournables → filtre catégo
 |------|----------|
 | 2026-05-19 (v1) | Distinction catégorie / **collection dédiée** — cible `marketone.shop.collection`. |
 | 2026-05-19 (v2) | **Amendement MOA** : adapter au standard Odoo — principale + secondaires sur `product.public.category` ; collection dédiée **mise de côté**. |
+| 2026-05-19 (v3) | **Clarification MOA** : motivation catégorie principale = navigation transversale stable par nature ; règle synthétique menu / parcours / origine / porte. |
 
 ---
 
