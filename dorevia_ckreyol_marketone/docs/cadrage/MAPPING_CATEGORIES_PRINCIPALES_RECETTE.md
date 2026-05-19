@@ -2,10 +2,10 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut** | **GO MOA** — mapping validé en principe (2026-05-19) |
+| **Statut** | **GO MOA** — mapping appliqué et recette validée (2026-05-19) |
 | **Base** | `ckr-marketone-01` — lecture seule au moment de l’analyse |
 | **Doctrine** | [TAXONOMIE_CATALOGUE.md](TAXONOMIE_CATALOGUE.md) · [ADR-029](DECISIONS.md#adr-029--taxonomie-catalogue-convention-odoo-catégories-e-commerce) · [C3.C](CONTRACTS.md#c3c--taxonomie-catalogue-moa-2026-05-19) |
-| **Modifications BO** | **Aucune** automatique — application après validation finale MOA |
+| **Modifications BO** | **Appliquées** sur `ckr-marketone-01` (2026-05-19) — ticket BO clôturé |
 
 ---
 
@@ -17,7 +17,7 @@
 |---------|----------|
 | Produits retenus | **27** |
 | Recettes produit / Culture / Savoirs | **Exclus** (0 recette produit en base ; 0 `marketone.savoir.recipe`) |
-| Catégorie e-commerce BO actuelle | **Incontournables** seule (secondaire implicite sur tous les produits) |
+| Catégorie e-commerce BO (post-application) | **17** catégories · 27 produits conformes mapping (min 1 / max 4) |
 
 ---
 
@@ -150,8 +150,8 @@ Même si l’origine BO est à harmoniser avec les contenus Culture, cela **ne m
 
 | Aspect | BO actuel (`ckr-marketone-01`) | Cible MOA |
 |--------|--------------------------------|-----------|
-| Catégories `product.public.category` | 1 : **Incontournables** | 13 principales + secondaires (Apéritif créole, Cuisine du manioc, Idées cadeaux, …) |
-| Rattachement produits | Tous → **Incontournables** uniquement | 1 principale + 0–3 secondaires (max 4) |
+| Catégories `product.public.category` | **17** (13 principales + 4 secondaires) | Aligné MOA |
+| Rattachement produits | **27/27** selon mapping | 1 principale + 0–3 secondaires (max 4) · **0** produit avec Incontournables seul |
 | Distinction principale / secondaire | Non matérialisée | Convention + futur ticket technique |
 | Origine attribut | Martinique · Guadeloupe · Reunion | Chantier **Origines / Culture** (indépendant des catégories e-commerce) |
 
@@ -159,12 +159,13 @@ Même si l’origine BO est à harmoniser avec les contenus Culture, cela **ne m
 
 ---
 
-## Prochaines étapes (hors ce document)
+## Prochaines étapes
 
-1. **Validation finale MOA** ligne à ligne (condition Kits pour Assortiment / Trio ; origines = chantier séparé).  
-2. **Création BO** des 13 catégories principales + secondaires validées.  
-3. **Rattachement manuel** produit par produit selon le tableau ci-dessus.  
-4. **Ticket technique** (futur) : principale obligatoire · max 4 catégories publiques · distinction principale/secondaire · contrainte BO ou extension Marketone.
+| Étape | Document |
+|-------|----------|
+| Application BO + recette `ckr-marketone-01` | [`TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](../tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) |
+| Grille de validation MOA | [`RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](../recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) |
+| Contrainte technique (ultérieur) | Ticket dédié — principale obligatoire · max 4 · marquage principale/secondaire |
 
 ---
 

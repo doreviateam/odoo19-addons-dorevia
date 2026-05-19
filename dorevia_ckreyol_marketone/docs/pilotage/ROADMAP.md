@@ -250,6 +250,7 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 | Cadrage | **GO** — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) (clôturé, référence) |
 | Photographie | `/shop` · `/incontournables` → `featured` · `/origines` → `origin` |
 | Suite validée | **Culture v1 GO** — Lot 6.3+ sur décision MOA |
+| Taxonomie catégories BO | **GO MOA** (2026-05-19) — BO + recette — [`TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](../tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) |
 
 **Prérequis exploitation (consolidés)**
 

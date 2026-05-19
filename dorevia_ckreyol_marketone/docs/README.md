@@ -21,6 +21,8 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 | [`cadrage/DECISIONS.md`](cadrage/DECISIONS.md) | ADR et arbitrages datés |
 | [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) | Catégories e-commerce Odoo : principale + secondaires (ADR-029) |
 | [`cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) | Mapping 27 produits recette → catégories principales / secondaires |
+| [`tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) | Application BO catégories e-commerce (sans code) |
+| [`recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) | Recette manuelle catégories catalogue |
 | [`pilotage/ROADMAP.md`](pilotage/ROADMAP.md) | Roadmap par lots |
 | [`recette/ENV_REFERENCE.md`](recette/ENV_REFERENCE.md) | Base `ckr-marketone-01` et validation |
 | [`recette/ASSETS_REFERENCE.md`](recette/ASSETS_REFERENCE.md) | Banque PNG marketplace (`docs/assets`) — recette BO |
@@ -116,6 +118,8 @@ Sites de **référence d'intention** (pas de copie) :
 | Arbitrage suite | [`tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) | **Clôturé GO** — Option 2 Savoirs v1 |
 | Savoirs v1 cadrage | [`tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) | **GO cadrage avec réserves** (2026-05-18) |
 | Savoirs v1 exec | [`tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) | **Ouvert** — en attente GO MOA (sans code) |
+| Catalogue catégories BO | [`tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) | **Clôturé GO MOA** (2026-05-19) |
+| — | [`recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) | Recette catégories catalogue — **GO MOA** |
 | — | [`recette/RECETTE_MANUELLE_LOT6_2.md`](recette/RECETTE_MANUELLE_LOT6_2.md) | Recette manuelle Lot 6.2 — GO |
 | — | [`cadrage/NOTE_UNIVERS_CK_MARKETONE.md`](cadrage/NOTE_UNIVERS_CK_MARKETONE.md) | Trois univers — **GO MOA** (ADR-024) |
 | — | [`recette/RECETTE_MANUELLE_LOT6_1.md`](recette/RECETTE_MANUELLE_LOT6_1.md) | Recette manuelle Lot 6.1 — GO avec réserves |
