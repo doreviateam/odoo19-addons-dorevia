@@ -3,7 +3,7 @@
 | Champ | Valeur |
 |-------|--------|
 | **Ticket** | `TICKET_MARKETONE_UX1_SHOP_ETAT_UTILISATEUR` |
-| **Version** | `19.0.13.0.4` |
+| **Version** | `19.0.13.0.5` |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
 
@@ -76,13 +76,13 @@
 
 ---
 
-## U6 — Reset global (MOA Q4)
+## U6 — Reset global (MOA Q4 + reset unique `19.0.13.0.5`)
 
 | Étape | Action | Attendu |
 |-------|--------|---------|
-| 1 | Plusieurs filtres actifs | « Effacer les filtres » dans la barre chips |
-| 2 | Comparer avec sidebar « Clear Filters » | Même URL fonctionnelle (`/shop` propre) |
-| 3 | Sidebar reset | Même résultat que barre chips |
+| 1 | Plusieurs filtres actifs | « Effacer les filtres » dans la **barre chips** (même ligne, après les chips) |
+| 2 | Sidebar | **Pas** de bouton « Clear Filters » (desktop ni offcanvas) |
+| 3 | Clic « Effacer les filtres » | `/shop` propre · plus de chips |
 
 ---
 

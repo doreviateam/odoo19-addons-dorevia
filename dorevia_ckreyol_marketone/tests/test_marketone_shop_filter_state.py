@@ -216,7 +216,8 @@ class TestMarketoneShopFilterState(HttpCase):
             bar.split(coll.name)[0][-200:],
         )
 
-    def test_shop_reset_filters_url_matches_sidebar_clear(self):
+    def test_shop_reset_bar_returns_clean_shop_url(self):
+        """F4 — reset global uniquement dans la barre UX-1."""
         cat = self.env["product.public.category"].search(
             [("name", "=", "Biscuits salés")], limit=1
         )
@@ -225,38 +226,18 @@ class TestMarketoneShopFilterState(HttpCase):
         response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
         self.assertEqual(response.status_code, 200)
         html = response.text
-        bar = self._chip_bar_html(html)
+        bar = self._chip_bar_html(response.text)
         chip_reset = re.search(
             r'marketone-filter-chips__reset[^>]*href="([^"]+)"', bar
         )
-        self.assertTrue(chip_reset)
+        self.assertTrue(chip_reset, "Effacer les filtres attendu dans la barre chips")
+        chip_path = urlparse(chip_reset.group(1).replace("&amp;", "&"))
+        self.assertEqual(chip_path.path, "/shop")
+        self.assertEqual(parse_qs(chip_path.query), {})
         sidebar_start = html.find('id="products_grid_before"')
-        self.assertGreater(sidebar_start, -1)
         sidebar = html[sidebar_start : sidebar_start + 12000]
-        sidebar_reset = re.search(
-            r'href="(/shop[^"]*)"[^>]*>[\s\S]*?Clear Filters', sidebar
-        )
-        if not sidebar_reset:
-            sidebar_reset = re.search(
-                r'href="(/shop[^"]*)"[^>]*>[\s\S]*?Effacer', sidebar
-            )
-        self.assertTrue(sidebar_reset, "Reset sidebar attendu")
-        chip_path = urlparse(chip_reset.group(1))
-        side_path = urlparse(sidebar_reset.group(1))
-        self.assertEqual(chip_path.path, side_path.path)
-        for key in (
-            "attribute_values",
-            "tags",
-            "min_price",
-            "max_price",
-            MARKETONE_CATEGORY_PARAM,
-            MARKETONE_COLLECTION_PARAM,
-        ):
-            self.assertEqual(
-                parse_qs(chip_path.query).get(key, []),
-                parse_qs(side_path.query).get(key, []),
-                key,
-            )
+        self.assertNotIn("Clear Filters", sidebar)
+        self.assertNotIn("Supprimer les filtres", sidebar)
 
     def test_shop_filter_chips_remove_collection_no_implicit_price(self):
         coll = self.env["marketone.shop.collection"].search(

@@ -55,8 +55,10 @@
     }
 
     .marketone-filter-chips__reset {
-        margin-left: auto;
-        padding: 8px 0;
+        flex-shrink: 0;
+        margin-left: 4px;
+        padding: 8px 0 8px 14px;
+        border-left: 1px solid $marketone-border;
         font-family: $marketone-font-body;
         font-size: 13px;
         font-weight: $marketone-weight-semibold;
@@ -94,8 +96,7 @@
 
         .marketone-filter-chips__reset {
             margin-left: 0;
-            width: 100%;
-            text-align: right;
+            padding-left: 12px;
             font-size: 12px;
         }
     }

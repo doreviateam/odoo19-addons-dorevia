@@ -94,6 +94,22 @@ class TestMarketoneShopRegression(HttpCase):
             f"Sidebar réduite après filtre catégorie : {sorted(filt_slugs)}",
         )
 
+    def test_no_sidebar_clear_filters_when_chips_visible(self):
+        """Reset unique — pas de Clear Filters dans la sidebar."""
+        cat = self.env["product.public.category"].search(
+            [("name", "=", "Condiments")], limit=1
+        )
+        if not cat:
+            self.skipTest("Condiments absent")
+        slug = self.env["ir.http"]._slug(cat)
+        response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        self.assertIn("marketone-filter-chips__reset", html)
+        sidebar_start = html.find('id="products_grid_before"')
+        sidebar = html[sidebar_start : sidebar_start + 12000]
+        self.assertNotIn("Clear Filters", sidebar)
+
     def test_r2_counter_wording_trouves(self):
         """R2 — libellé compteur non ambigu."""
         response = self.url_open("/shop")

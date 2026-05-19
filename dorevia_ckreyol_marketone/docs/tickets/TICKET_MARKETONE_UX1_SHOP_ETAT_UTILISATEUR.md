@@ -37,7 +37,7 @@
 | SCSS variables `$coffee`, `$terracotta` en dur | Diverge de `_tokens_colors.scss` | Mapper sur `$marketone-primary-container`, `$marketone-text`, `$marketone-border`, etc. |
 | `t-call="website_sale.products_sort"` dans un header remplacé | Fragile si options tri désactivées | **Ne pas remplacer** le header ; conserver `t-call` natif |
 | Chips hors périmètre (tags, `search`, `marketone_mode`) | Kit ne les traite pas | UX-1 : **4 types MOA** uniquement ; tags/recherche/portes **hors chips** (comportement Odoo inchangé) |
-| Sidebar « Effacer les filtres » | Doublon fonctionnel | **Conserver** le bouton sidebar (recette ordre GO) ; zone chips = **complément** au-dessus de la grille |
+| Sidebar « Clear Filters » | Doublon avec barre UX-1 | **`19.0.13.0.5`** : masqué sidebar + offcanvas · reset **uniquement** barre chips |
 
 ### 1.3 Ancrage QWeb recommandé (Odoo 19 CE)
 

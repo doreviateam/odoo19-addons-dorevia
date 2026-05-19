@@ -1,30 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Effacer les filtres : facettes ``marketone_category`` = filtres actifs (TICKET sidebar). -->
+    <!-- UX-1 : reset global uniquement dans la barre chips (shop_filter_state.xml). -->
     <template id="marketone_shop_clear_filters"
               inherit_id="website_sale.products"
-              name="Marketone: Effacer les filtres + catégories"
+              name="Marketone: masquer Clear Filters sidebar (UX-1)"
               priority="24">
-        <xpath expr="//aside[@id='products_grid_before']//div[hasclass('py-3')][hasclass('border-bottom')][.//i[hasclass('oi-close')]]" position="replace">
-            <div t-if="attrib_values or tags or (show_price_filter and isFilteringByPrice) or marketone_has_category_filter or marketone_has_collection_filter"
-                 class="py-3 border-bottom">
-                <a t-att-href="keep(attribute_values=0, tags=0, min_price=0, max_price=0, marketone_category=0, marketone_collection=0)"
-                   t-attf-class="btn btn-{{navClass}} d-flex align-items-center py-1">
-                    <small class="mx-auto"><b>Clear Filters</b></small>
-                    <i class="oi oi-close" role="presentation"/>
-                </a>
-            </div>
-        </xpath>
+        <xpath expr="//aside[@id='products_grid_before']//div[hasclass('py-3')][hasclass('border-bottom')][.//i[hasclass('oi-close')]]" position="replace"/>
     </template>
 
     <template id="marketone_shop_clear_filters_offcanvas"
               inherit_id="website_sale.o_wsale_offcanvas"
-              name="Marketone: Effacer les filtres offcanvas + catégories"
+              name="Marketone: masquer Clear Filters offcanvas (UX-1)"
               priority="24">
-        <xpath expr="//aside[@id='o_wsale_offcanvas']//div[hasclass('border-top')]/a" position="attributes">
-            <attribute name="t-attf-class">btn btn-{{navClass}} d-flex py-1 mb-2 {{(not attrib_values and not isFilteringByPrice and not tags and not marketone_has_category_filter and not marketone_has_collection_filter) and 'disabled' }}</attribute>
-            <attribute name="t-att-aria-disabled">(not attrib_values and not isFilteringByPrice and not tags and not marketone_has_category_filter and not marketone_has_collection_filter) and 'true' or 'false'</attribute>
-            <attribute name="t-att-href">keep(attribute_values=0, tags=0, min_price=0, max_price=0, marketone_category=0, marketone_collection=0)</attribute>
-        </xpath>
+        <xpath expr="//aside[@id='o_wsale_offcanvas']//div[hasclass('border-top')]/a" position="replace"/>
     </template>
 </odoo>
