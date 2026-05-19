@@ -16,14 +16,15 @@ Odoo autorise **plusieurs** catégories e-commerce par produit. Marketone introd
 
 ```text
 Un produit = une catégorie e-commerce principale (convention MOA).
-Un produit = zéro, une ou plusieurs catégories e-commerce secondaires.
+Un produit = 0 à 3 catégories e-commerce secondaires (max 4 catégories au total).
 Pas de modèle marketone.shop.collection pour l’instant.
 ```
 
 | Rôle MOA | Support Odoo | Cardinalité convention |
 |----------|--------------|------------------------|
-| **Catégorie principale** | `product.public.category` | **1** par produit — nature du produit |
-| **Catégories secondaires** | `product.public.category` (autres rattachements) | **0..n** — sélections, usages, mises en avant, rayons complémentaires |
+| **Catégorie principale** | `product.public.category` | **1** par produit — nature du produit (obligatoire) |
+| **Catégories secondaires** | `product.public.category` (autres rattachements) | **0..3** — sélections, usages, mises en avant, parcours complémentaires |
+| **Total catégories e-commerce** | — | **min 1 · max 4** par produit vendable |
 | **Origine** | Attribut **Origine** + `marketone.shop.origin` | Territoire(s) |
 | **Porte** | `/shop?marketone_mode=…` | Entrée navigation — **pas** une catégorie |
 
@@ -52,9 +53,17 @@ Permettre au visiteur de parcourir la boutique par **grands rayons lisibles**, q
 
 > **« Quel type de produit est-ce que je cherche ? »**
 
-Exemples de rayons (liste non exhaustive) : Biscuits salés · Biscuits sucrés · Épices · Assaisonnements · Confitures · Sirops · Boissons · Farines / fécules · Sauces · Condiments · etc.
+**Liste cible des catégories principales** (MOA 2026-05-19) : Biscuits salés · Biscuits sucrés · Épices · Assaisonnements · Sauces · Condiments · Confitures · Sirops · Boissons · Farines · Fécules · Kits & Coffrets · **Miels**.
+
+> **Kits & Coffrets** : principale **uniquement** si le produit est un kit ou coffret packagé réel.
 
 Ces rayons alimentent un menu transversal **Catégories** (cible UX — hors scope code immédiat).
+
+### Rattachement catégories e-commerce (MOA)
+
+Chaque produit vendable doit être rattaché à **au moins une** catégorie e-commerce, correspondant à sa **catégorie principale**. Les catégories secondaires sont autorisées pour les sélections, usages et mises en avant, **dans la limite de trois rattachements supplémentaires**. Un produit **ne doit pas dépasser quatre** catégories e-commerce au total.
+
+**Mapping catalogue recette** : [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) (27 produits `ckr-marketone-01`, validation MOA 2026-05-19).
 
 ---
 
@@ -83,7 +92,7 @@ Ces rayons alimentent un menu transversal **Catégories** (cible UX — hors sco
 
 ### Origine
 
-Territoire créolophone (attribut catalogue + profil Culture/Boutique). Distinct des catégories e-commerce.
+Territoire créolophone (attribut catalogue + profil Culture/Boutique). **Distinct et indépendant** des catégories e-commerce : la catégorisation d’un produit **ne dépend pas** de son origine. L’harmonisation origine BO / contenus Culture relève du chantier **Origines / Culture**, pas du chantier **Catégories**.
 
 ### Porte
 
@@ -99,7 +108,7 @@ Entrée de navigation vers une sélection sur `/shop`. Consomme une source Odoo 
 |------|-----------|
 | **Catégorie principale** | Biscuits salés |
 | **Catégories secondaires** | Incontournables · Apéritif créole · Cuisine du manioc |
-| **Origine** | Guadeloupe |
+| **Origine** | Martinique ou Guadeloupe — chantier Origines / Culture (hors catégories) |
 
 ```text
 Catégorie principale   → rayon / nature du produit (menu Catégories)
@@ -117,7 +126,7 @@ Dans un menu transversal **Catégories**, le produit apparaît **d’abord** sou
 Il peut aussi être trouvé via :
 
 - **Incontournables** (porte / catégorie secondaire) ;
-- **Origines** → Guadeloupe ;
+- **Origines** → territoire attribut (parcours complémentaire ; harmonisation BO hors chantier Catégories) ;
 - **Apéritif créole** ;
 - **Cuisine du manioc**.
 
@@ -128,7 +137,7 @@ Il peut aussi être trouvé via :
 | # | Conséquence |
 |---|-------------|
 | 1 | **Ne pas** implémenter `marketone.shop.collection` sans ticket dédié. |
-| 2 | En BO : chaque produit a une catégorie **principale** descriptive + des catégories **secondaires** optionnelles (dont Incontournables si pertinent). |
+| 2 | En BO : chaque produit a une catégorie **principale** obligatoire + **0 à 3** secondaires (max **4** catégories e-commerce ; dont Incontournables si pertinent). |
 | 3 | **Ne pas** confondre catégorie principale et secondaire dans les libellés BO (ex. « Incontournables » = secondaire, pas nature du produit). |
 | 4 | Les portes Boutique s’appuient sur le **standard Odoo** (catégorie, attribut, pricelist…) — pas sur un moteur parallèle. |
 | 5 | **Culture** et **Savoirs** hors grille `/shop` ; pas de recette comme `product.template` vendable. |
@@ -144,11 +153,14 @@ Il peut aussi être trouvé via :
 | 2026-05-19 (v1) | Distinction catégorie / **collection dédiée** — cible `marketone.shop.collection`. |
 | 2026-05-19 (v2) | **Amendement MOA** : adapter au standard Odoo — principale + secondaires sur `product.public.category` ; collection dédiée **mise de côté**. |
 | 2026-05-19 (v3) | **Clarification MOA** : motivation catégorie principale = navigation transversale stable par nature ; règle synthétique menu / parcours / origine / porte. |
+| 2026-05-19 (v4) | **13e principale Miels** ; règle min 1 / max 4 catégories e-commerce ; mapping recette 27 produits validé en principe. |
+| 2026-05-19 (v5) | **Indépendance catégorisation / origine** ; Crackers validé en catégories (Biscuits salés + 3 secondaires). |
 
 ---
 
 ## Références
 
+- [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) — tableau produit → catégories (`ckr-marketone-01`)
 - [`CONTRACTS.md`](CONTRACTS.md) — C3, C3.A, C3.C
 - [`DECISIONS.md`](DECISIONS.md) — ADR-023, ADR-029
 - [`NOTE_UNIVERS_CK_MARKETONE.md`](NOTE_UNIVERS_CK_MARKETONE.md) — § Taxonomie catalogue

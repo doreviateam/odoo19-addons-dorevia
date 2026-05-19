@@ -125,14 +125,17 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | C3.C.0 | **Synthèse** : la catégorie principale **structure le menu** ; les catégories secondaires **enrichissent les parcours** ; les origines **situent** le produit ; les portes **orientent l’entrée**. |
 | C3.C.1 | Support : **`product.public.category`** (standard `website_sale`) — Odoo autorise plusieurs catégories par produit. |
 | C3.C.2 | Convention MOA : **une catégorie e-commerce principale** par produit — rayon / nature descriptive stable ; répond à *« Quel type de produit est-ce que je cherche ? »* ; référence pour le menu transversal **Catégories** (cible UX). |
-| C3.C.3 | Convention MOA : **zéro ou plusieurs catégories secondaires** (sélections, usages, mises en avant, parcours complémentaires) sur le même support. |
-| C3.C.4 | **Origine** = territoire (attribut + `marketone.shop.origin`) — distinct des catégories e-commerce. |
+| C3.C.3 | Convention MOA : **zéro à trois catégories secondaires** (sélections, usages, mises en avant, parcours complémentaires) sur le même support. |
+| C3.C.4 | **Origine** = territoire (attribut + `marketone.shop.origin`) — **axe indépendant** : la catégorisation (principale / secondaires) **ne dépend pas** de l’origine ; harmonisation origine = chantier Origines / Culture, pas Catégories. |
 | C3.C.5 | **Porte** = entrée navigation `/shop` — consomme une source Odoo (souvent catégorie secondaire, attribut, pricelist…). |
 | C3.C.6 | **Pas** de modèle `marketone.shop.collection` sans ticket dédié ; réévaluation possible si secondaires insuffisantes. |
 | C3.C.7 | **Pas de code** pour matérialiser principale vs secondaire sans ticket MOA (champ, UI ou procédure BO). |
 | C3.C.8 | Porte Incontournables (Lot 6.1) : filtre sur catégorie publique « Incontournables » = catégorie **secondaire** attendue sur les produits concernés. |
+| C3.C.9 | Chaque produit vendable doit être rattaché à **au moins une** catégorie e-commerce, correspondant à sa **catégorie principale**. |
+| C3.C.10 | Les catégories secondaires sont autorisées **dans la limite de trois** rattachements supplémentaires. Un produit **ne doit pas dépasser quatre** catégories e-commerce au total. |
+| C3.C.11 | Liste cible des catégories principales (13) : Biscuits salés · Biscuits sucrés · Épices · Assaisonnements · Sauces · Condiments · Confitures · Sirops · Boissons · Farines · Fécules · Kits & Coffrets · **Miels** — détail produit : [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md). |
 
-**Référence** : [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) — exemple Crackers manioc Sainte-Anne.
+**Référence** : [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) · [`cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md).
 
 **Statut** : **GO MOA** — doctrine ; **pas d’implémentation** hors ticket.
 

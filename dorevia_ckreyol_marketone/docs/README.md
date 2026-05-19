@@ -20,6 +20,7 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 | [`cadrage/CONTRACTS.md`](cadrage/CONTRACTS.md) | Contrats fonctionnels |
 | [`cadrage/DECISIONS.md`](cadrage/DECISIONS.md) | ADR et arbitrages datés |
 | [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) | Catégories e-commerce Odoo : principale + secondaires (ADR-029) |
+| [`cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) | Mapping 27 produits recette → catégories principales / secondaires |
 | [`pilotage/ROADMAP.md`](pilotage/ROADMAP.md) | Roadmap par lots |
 | [`recette/ENV_REFERENCE.md`](recette/ENV_REFERENCE.md) | Base `ckr-marketone-01` et validation |
 | [`recette/ASSETS_REFERENCE.md`](recette/ASSETS_REFERENCE.md) | Banque PNG marketplace (`docs/assets`) — recette BO |
