@@ -128,7 +128,7 @@ Cocher **MOA** après validation. **Tech** = test auto ou inspection code.
 | O5 | Clear au-dessus des rubriques · retour `/shop` nu |
 | Non-régression | C4 catégories · Collections Lot B OK |
 
-**Réserves non bloquantes** : warnings QWeb `@class` · `read_group` déprécié Odoo 19.
+**Réserves non bloquantes** : ~~warnings QWeb `@class`~~ · ~~`read_group` déprécié~~ — corrigées `19.0.12.2.0` ([`TICKET_MARKETONE_NETTOYAGE_WARNINGS_ODOO19`](../tickets/TICKET_MARKETONE_NETTOYAGE_WARNINGS_ODOO19.md)).
 
 ---
 
