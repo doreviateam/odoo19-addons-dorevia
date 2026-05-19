@@ -165,6 +165,25 @@ class TestMarketoneShopSidebarCollectionsHttp(HttpCase):
         self.assertIn("marketone-sidebar-col-check", block)
         self.assertIn("Col HTTP Lot B", block)
 
+    def test_shop_sidebar_rubrique_order(self):
+        """Ordre MOA : Collections → Catégories → Origines → Prix."""
+        response = self.url_open("/shop")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        col = html.find("marketone-shop-collections-accordion")
+        cat = html.find("marketone-shop-categories-accordion")
+        attr = html.find("products_attributes_filters")
+        price = html.find("o_wsale_price_range_option")
+        self.assertGreater(col, -1)
+        self.assertGreater(cat, -1)
+        self.assertGreater(attr, -1)
+        self.assertGreater(price, -1)
+        self.assertLess(col, cat)
+        self.assertLess(cat, attr)
+        self.assertLess(attr, price)
+        sidebar = html[html.find('id="products_grid_before"'): price + 3000]
+        self.assertRegex(sidebar, r">\s*Origines\s*<")
+
     def test_shop_filter_single_collection(self):
         url = f"/shop?{MARKETONE_COLLECTION_PARAM}={self.collection.slug}"
         response = self.url_open(url)

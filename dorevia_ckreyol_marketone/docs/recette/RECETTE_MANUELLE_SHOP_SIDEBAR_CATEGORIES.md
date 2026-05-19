@@ -63,7 +63,7 @@ Cocher **MOA** après validation. **Tech** = couverture tests auto (≠ GO MOA).
 
 | # | Scénario | Action | Attendu | MOA | Tech |
 |---|----------|--------|---------|-----|------|
-| **1** | Ordre sidebar | `/shop` desktop | **Origine** → **Catégories** → **Fourchette de prix** | ☑ | ☑ |
+| **1** | Ordre sidebar | `/shop` desktop | **Collections** → **Catégories** → **Origines** → **Prix** (`19.0.12.1.0` — voir [`RECETTE_MANUELLE_SHOP_SIDEBAR_ORDRE.md`](RECETTE_MANUELLE_SHOP_SIDEBAR_ORDRE.md)) | ☑ | ☑ |
 | **2** | Bloc Catégories | Même | Accordéon ; **13 cases** ouvertes ; pas « Tous les produits » | ☑ | ☑ |
 | **2b** | Accordéon | Clic en-tête **Catégories** | Pli / dépli ; chevron cohérent | ☑ | ☑ |
 | **3** | Allowlist | Parcourir la liste | 13 principales ; **pas** les 4 secondaires | ☑ | ☑ |
@@ -75,6 +75,7 @@ Cocher **MOA** après validation. **Tech** = couverture tests auto (≠ GO MOA).
 |---|----------|--------|---------|-----|------|
 | **4** | Mono | Cocher **Biscuits salés** | URL `marketone_category=…` ; grille cohérente ; case cochée | ☑ | ☑ |
 | **4b** | Multi OR | **Biscuits salés** + **Épices** | 2× `marketone_category` ; 2 cases cochées | ☑ | ☑ |
+| **4b-R** | Liste au 1er clic | Cocher **Épices** seule | Autres principales **restent visibles** (correctif C4 — [`RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES_C4_MULTI.md`](RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES_C4_MULTI.md)) | ☑ | ☑ |
 | **4c** | Tout voir | Décocher toutes les catégories | `/shop` sans `marketone_category` | ☑ | ☑ |
 | **10** | **Effacer les filtres** | **Biscuits salés** + **Biscuits sucrés** + **Épices** (sans Origine) | Bouton **Effacer les filtres** visible **au-dessus** d’Origine ; clic → `/shop` sans `marketone_category` ; cases décochées | ☑ | ☑ |
 

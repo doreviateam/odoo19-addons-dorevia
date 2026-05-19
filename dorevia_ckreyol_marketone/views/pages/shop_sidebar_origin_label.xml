@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Rubrique sidebar : Origines (libellé MOA ; attribut catalogue mis à jour en data upgrade). -->
+    <template id="marketone_shop_sidebar_origin_label_desktop"
+              inherit_id="website_sale.products_attributes_collapsible"
+              name="Marketone: libellé Origines sidebar desktop"
+              priority="40">
+        <xpath expr="//div[contains(@t-attf-class, 'accordion-item')]//button[contains(@t-attf-class, 'accordion-button')]//b[@t-field='a.name']" position="replace">
+            <b t-if="marketone_origin_attribute_id and a.id == marketone_origin_attribute_id">Origines</b>
+            <b t-else="" t-field="a.name"/>
+        </xpath>
+    </template>
+
+    <template id="marketone_shop_sidebar_origin_label_mobile"
+              inherit_id="website_sale.product_attribute_filters_form"
+              name="Marketone: libellé Origines offcanvas"
+              priority="40">
+        <xpath expr="//button[contains(@t-attf-class, 'o_wsale_offcanvas_title')]//b[@t-out='a.name']" position="replace">
+            <b t-if="marketone_origin_attribute_id and a.id == marketone_origin_attribute_id">Origines</b>
+            <b t-else="" t-out="a.name"/>
+        </xpath>
+    </template>
+</odoo>

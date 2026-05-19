@@ -60,18 +60,23 @@
         </t>
     </template>
 
-    <template id="marketone_shop_sidebar_collections_after_categories"
-              inherit_id="dorevia_ckreyol_marketone.marketone_products_categories_primary_list"
-              name="Marketone: collections après catégories"
-              priority="33">
-        <xpath expr="//div[contains(@class, 'marketone-shop-categories-accordion')]" position="after">
-            <t t-if="not isOffcanvas">
-                <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
-            </t>
+    <!-- Ordre MOA : Collections avant Catégories (desktop rail + offcanvas). -->
+    <template id="marketone_shop_sidebar_collections_before_categories"
+              inherit_id="website_sale.products"
+              name="Marketone: collections avant catégories (sidebar)"
+              priority="31">
+        <xpath expr="//div[contains(@class, 'o_wsale_products_grid_before_rail')]/div[@t-if='opt_wsale_categories']" position="before">
+            <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
         </xpath>
-        <xpath expr="//div[@name='wsale_products_categories_list']" position="after">
-            <t t-if="isOffcanvas">
-                <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
+    </template>
+
+    <template id="marketone_shop_sidebar_collections_offcanvas"
+              inherit_id="website_sale.o_wsale_offcanvas"
+              name="Marketone: collections avant catégories (offcanvas)"
+              priority="33">
+        <xpath expr="//div[@id='o_wsale_offcanvas_content']/div[@t-if='opt_wsale_categories']" position="before">
+            <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion">
+                <t t-set="isOffcanvas" t-value="True"/>
             </t>
         </xpath>
     </template>

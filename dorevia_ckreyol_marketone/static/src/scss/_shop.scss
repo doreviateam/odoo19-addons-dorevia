@@ -163,12 +163,12 @@
         }
     }
 
-    // Sidebar filtres : Origine → Catégories (principales) → Prix (TICKET_MARKETONE_SHOP_SIDEBAR_FILTRES_CATEGORIES).
+    // Sidebar filtres : Collections → Catégories → Origines → Prix (ordre MOA fixe, flex order).
     #products_grid_before .o_wsale_products_grid_before_rail {
         display: flex;
         flex-direction: column;
 
-        .products_attributes_filters {
+        .marketone-shop-collections-accordion {
             order: 10;
         }
 
@@ -176,8 +176,12 @@
             order: 20;
         }
 
-        #o_wsale_price_range_option {
+        .products_attributes_filters {
             order: 30;
+        }
+
+        #o_wsale_price_range_option {
+            order: 40;
         }
     }
 

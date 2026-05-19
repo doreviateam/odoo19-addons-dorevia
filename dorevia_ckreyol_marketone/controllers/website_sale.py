@@ -517,6 +517,11 @@ class WebsiteSaleMarketone(WebsiteSale):
         collection_slugs = _marketone_canonical_collection_slugs(kwargs)
         result["marketone_shop_sidebar_active_collection_slugs"] = collection_slugs
         result["marketone_has_collection_filter"] = bool(collection_slugs)
+        origin_attr = request.env.ref(
+            "dorevia_ckreyol_marketone.marketone_product_attribute_origin",
+            raise_if_not_found=False,
+        )
+        result["marketone_origin_attribute_id"] = origin_attr.id if origin_attr else False
         mode = _marketone_effective_mode(kwargs)
         search_count = (values or {}).get("search_count") or 0
 
