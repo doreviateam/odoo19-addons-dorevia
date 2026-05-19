@@ -180,25 +180,28 @@ docker exec sandbox-odoo19-odoo-1 odoo -d ckr-marketone-01 --http-port=8099 \
 
 ---
 
-## Arbitrage MOA — sémantique filtres (2026-05-19)
+## Arbitrage MOA — sémantique filtres (2026-05-19 · doctrine définitive)
 
 **Cas observé en recette** :
 
-| Étape | Filtres | Résultat |
-|-------|---------|----------|
+| Étape | Filtres actifs | Résultat |
+|-------|----------------|----------|
 | 1 | Collections **Apéritif créole** + **Idées cadeaux** | **18** produits |
-| 2 | + catégorie **Biscuits sucrés** | **1** produit |
+| 2 | + catégorie **Assaisonnements** | **1** produit |
 
-**Décision MOA : affinage classique (Option A). Comportement conforme.**
+**Doctrine MOA confirmée (filtre cumulatif) :**
 
-| Niveau | Logique | Exemple |
-|--------|---------|---------|
-| **Au sein d'une facette** | **OU** | Apéritif créole OU Idées cadeaux → 18 produits |
-| **Entre facettes distinctes** | **ET** | collections cochées ET catégorie → intersection → 1 produit |
+> Chaque case cochée **ajoute une contrainte** et **affine** le résultat. Le résultat ne peut qu'égaler ou diminuer à chaque sélection supplémentaire.
 
-Le résultat à 1 produit est cohérent : seul un produit appartient à l'une des collections cochées **et** à la catégorie Biscuits sucrés. Ce comportement est aligné avec les recettes Lot B (scénario S5 collections + catégorie) et catégories (OU intra · ET inter).
+| Niveau | Logique | Note |
+|--------|---------|------|
+| **Plusieurs collections cochées** | **ET** — produits répondant à toutes les collections sélectionnées | 18 produits appartiennent aux deux collections |
+| **Collection(s) + catégorie** | **ET** — intersection supplémentaire | → 1 produit dans ces collections ET cette catégorie |
+| **Principe général** | Chaque facette cochée = contrainte cumulative | Résultat 18 → 1 : **conforme et attendu** |
 
-Pas de refonte contrôleur / domain / tests. Pas de ticket fonctionnel dédié.
+Le comportement observé sur la capture est **correct** : un seul produit (*Marinade jerk authentique*) appartient simultanément aux collections Apéritif créole + Idées cadeaux **et** à la catégorie Assaisonnements.
+
+Pas de modification SCSS/QWeb. Pas de refonte contrôleur. Pas de ticket fonctionnel dédié.
 
 ---
 

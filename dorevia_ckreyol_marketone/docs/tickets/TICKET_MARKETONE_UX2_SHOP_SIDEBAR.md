@@ -151,16 +151,17 @@ Tag dédié UX-2 (optionnel post-implémentation) : `dorevia_marketone_shop_side
 
 **Recette exécutée** : [`RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md`](../recette/RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md) — S1–S10 · **GO MOA UX-2** · merge PR #8 proposable.
 
-### Arbitrage MOA — sémantique filtres (2026-05-19)
+### Arbitrage MOA — sémantique filtres (2026-05-19 · doctrine définitive)
 
-**Décision : affinage classique. Comportement conforme.**
+**Doctrine : filtre cumulatif. Chaque case cochée ajoute une contrainte.**
 
 | Niveau | Logique |
 |--------|---------|
-| **Au sein d'une facette** | **OU** — plusieurs collections ou catégories → union |
-| **Entre facettes distinctes** | **ET** — collections ET catégories ET origines ET prix → intersection |
+| **Plusieurs collections cochées** | **ET** — produits répondant à toutes les collections sélectionnées |
+| **Collection(s) + catégorie(s)** | **ET** — intersection supplémentaire |
+| **Principe général** | Chaque facette cochée réduit ou maintient le résultat |
 
-Cas recette : collections Apéritif créole + Idées cadeaux (18 produits) + catégorie Biscuits sucrés → **1 produit**. Résultat cohérent, aligné recettes Lot B scénario S5. Pas de refonte contrôleur / domain / tests.
+Cas recette validé : Apéritif créole + Idées cadeaux (18 produits) + Assaisonnements → **1 produit** (*Marinade jerk authentique*). Conforme et attendu. Aligné avec les recettes Lot B (scénario S5) et catégories. Pas de refonte contrôleur / domain / tests.
 
 ---
 
@@ -193,4 +194,4 @@ Cas recette : collections Apéritif créole + Idées cadeaux (18 produits) + cat
 |------|---------|-------------|
 | 2026-05-19 | **Brouillon — attente GO MOA ticket** | Ticket rédigé après clôture dédup Réunion · base catalogue assainie |
 | 2026-05-19 | **GO MOA exécution** | `_shop_sidebar.scss` · `shop_sidebar_ux2.xml` · Q1–Q4 · tests non-régression |
-| 2026-05-19 | **GO MOA UX-2** | Recette S1–S10 · tests 30+25 OK · arbitrage sémantique filtres Option A · merge PR #8 proposable |
+| 2026-05-19 | **GO MOA UX-2** | Recette S1–S10 · tests 30+25 OK · doctrine filtre cumulatif confirmée · merge PR #8 proposable |
