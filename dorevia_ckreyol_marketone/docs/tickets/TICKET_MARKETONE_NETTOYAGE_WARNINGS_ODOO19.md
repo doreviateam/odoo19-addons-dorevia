@@ -9,6 +9,7 @@
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
 | **Prérequis** | Sidebar **GO MOA** — ordre rubriques `19.0.12.1.0` · Collections Lot B · Catégories C4 |
+| **Merge** | 1. `feat/marketone-sidebar-ordre-12-1-0` → `main` · 2. `chore/marketone-warnings-odoo19-12-2-0` → après (1) |
 
 ---
 
