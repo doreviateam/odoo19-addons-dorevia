@@ -408,6 +408,7 @@
 | **Version module cible** | `19.0.10.0.0` (proposition) |
 | **Contexte** | Arbitrage MOA : Option 2 Savoirs après Boutique stable et Culture v1+v2 GO. Troisième univers à cadrer avant Culture v3 ou Lot 6.3. |
 | **Décision** | Premier lot Savoirs : modèle minimal **`marketone.savoir.recipe`** avec états `draft` / `pending` / `published` / `rejected` / `archived` ; contributeur **portal** ; modération BO obligatoire ; URLs `/savoirs/<slug>`, `/savoirs/proposer` ; **pas** de hub `/savoirs` v1 ; produit lié **obligatoire** si publié ; bloc fiche « Idées & recettes » (0–3) **sous** CTA achat. **Pas** de `website_blog`, forum, commentaires, publication auto. |
+| **Doctrine boutique** | **2026-05-19** — Les recettes / usages **ne sont pas** des produits vendables : **Boutique** = produits vendables uniquement ; **Savoirs** = `marketone.savoir.recipe` (liées à un produit, jamais listées dans `/shop`). Interdit de créer des `product.template` nommés « Recette … » pour tester Culture ou Savoirs. |
 | **Contrats** | C9 ; C7.4 ; ADR-018, ADR-024 |
 | **Réserves** | (R1) modèle minimal ; (R2) pas de hub ; (R3) pas commentaires ; (R4) pas auto-publication ; (R5) recettes sous CTA ; (R6) pas 6.3/Culture v3 en parallèle |
 | **Tickets** | Cadrage : `TICKET_MARKETONE_SAVOIRS_V1_CADRAGE` (**clôturé**) · Exécution : `TICKET_MARKETONE_SAVOIRS_V1_EXEC` |
@@ -429,10 +430,76 @@
 | **Règle synthétique** | La catégorie principale **structure le menu**. Les catégories secondaires **enrichissent les parcours**. Les origines **situent** le produit. Les portes **orientent l’entrée**. |
 | **Indépendance origine** | La catégorisation **ne dépend pas** de l’origine. Harmonisation Martinique / Guadeloupe = chantier **Origines / Culture**, sans impact sur principale / secondaires. |
 | **Exemple** | Crackers manioc Sainte-Anne → principale *Biscuits salés* ; secondaires *Incontournables*, *Apéritif créole*, *Cuisine du manioc* — **validé** (catégories) ; origine = axe séparé. |
-| **Évolution** | Modèle collection **réévaluable** plus tard si catégories secondaires insuffisantes. |
-| **Lot 6.1** | Porte Incontournables via catégorie publique « Incontournables » = **aligné** (catégorie **secondaire** + filtre porte). |
+| **Évolution** | Modèle collection commercial — voir **ADR-030** (objet métier cible distinct ; secondaires = transitoire). |
+| **Lot 6.1** | Porte Incontournables via catégorie publique « Incontournables » = **aligné** (catégorie **secondaire** + filtre porte) — **statut transitoire** (ADR-030). |
 | **Contrat** | C3.C |
 | **Document** | [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) |
+
+---
+
+## ADR-030 — Collection commerciale Marketone
+
+| | |
+|---|---|
+| **Date** | 2026-05-19 |
+| **Statut** | **Brouillon validé MOA** (2026-05-19) — pas de code sans ticket exec Lot A |
+| **Contexte** | ADR-029 a provisionné les catégories secondaires comme enrichissement BO (`product.public.category`) et reporté `marketone.shop.collection`. Doctrine MOA (2026-05-19) : une **collection commerciale** répond à une intention d’achat transversale, distincte de la nature produit (principale), du territoire (origine) et de l’offre packagée (pack). Sidebar `/shop` cible : rubrique **Collections** en complément d’Origine, Catégories et Prix. Référence technique sidebar catégories : `19.0.10.9.0` (facettes contextuelles C4). |
+| **Décision** | La **collection commerciale** est un **objet métier cible distinct** — pas une simple catégorie e-commerce secondaire. Elle constitue une **proposition d’achat transversale**, permanente ou temporaire, construite par regroupement de produits **indépendamment** de leur catégorie principale et de leur origine. Elle agit comme **filtre transversal** du catalogue (`/shop`) et comme **entrée commerciale** dans la boutique (porte, mise en avant). **Pas d’implémentation** tant qu’un ticket exec n’est pas validé après relecture de cet ADR. |
+| **Définition** | Proposition d’achat transversale : regroupement éditorial / commercial de `product.template` publiés, sans imposer une lecture par nature (principale) ni par territoire (origine). |
+| **Peut contenir** | Produits **unitaires** et **packs** ; produits de **plusieurs** catégories principales ; produits de **plusieurs** origines. |
+| **Attributs cibles** (à terme) | Nom · slug · description courte · image · produits associés (M2M) · date début / fin · actif / publié · ordre d’affichage · mise en avant homepage / boutique (optionnel). Modèle indicatif : `marketone.shop.collection` (nom à confirmer au ticket). |
+| **Phrase de synthèse** | La **catégorie** classe · l’**origine** situe · le **pack** compose une offre vendable · la **collection commerciale** propose. |
+| **Distinctions** | Voir tableau ci-dessous. |
+| **Sidebar cible `/shop`** | Ordre MOA : **Origine** · **Catégories** · **Collections** · **Fourchette de prix**. La rubrique Collections **n’remplace pas** catégories ni origines ; elle ajoute une lecture commerciale transversale. Facette attendue (indicatif) : `marketone_collection` — philosophie alignée C4 (valeur visible si produit dans `search_product` **ou** déjà sélectionnée). **État actuel** : Collections **non implémentées** ; sidebar livrée = Origine + Catégories (C4) + Prix. |
+| **Secondaires BO — statut transitoire** | Les 4 secondaires ADR-029 (*Incontournables*, *Apéritif créole*, *Cuisine du manioc*, *Idées cadeaux*) **peuvent préfigurer** des collections mais **ne sont pas** le modèle cible. **Lot 6.1** (*Incontournables* + `marketone_mode=featured` + `/incontournables` → 301) = **pattern transitoire** (filtre via `product.public.category` + porte), pas définition de la collection commerciale à terme. |
+| **Relation ADR-029** | Catégories principales / secondaires = taxonomie **nature** et enrichissement BO. Collections = axe **intention d’achat** — orthogonal. Un produit garde sa principale et son origine **en plus** d’appartenir à 0..n collections (cardinalité à trancher au ticket). |
+| **Contrats** | C3.4 (priorité modes) · C3.C (taxonomie) — extensions collections à rédiger au ticket |
+| **Références** | ADR-029 · [`TAXONOMIE_CATALOGUE.md`](TAXONOMIE_CATALOGUE.md) · [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) · Lot 6.1 featured · sidebar C4 `19.0.10.9.0` |
+
+### Distinctions — questions visiteur
+
+| Notion | Question visiteur | Rôle Marketone | Support actuel |
+|--------|-------------------|----------------|----------------|
+| **Catégorie principale** | « Ce produit est quoi ? » | Structure le menu / sidebar **Catégories** | `product.public.category` (13 principales) · facette `marketone_category` |
+| **Origine** | « D’où vient ce produit ? » | Situe le produit · sidebar **Origine** | Attribut Origine · porte `marketone_mode=origin` |
+| **Pack** | « J’achète un ensemble ? » | Offre vendable composée | `marketone_mode=pack` (contrat · **non livré**) |
+| **Catégorie secondaire** | Enrichissement parcours / sélection | **Transitoire** — usages, mises en avant BO | `product.public.category` (4 secondaires) — **≠** collection cible |
+| **Collection commerciale** | « Quelle proposition / intention d’achat ? » | Filtre transversal · entrée boutique | **À créer** — objet métier dédié |
+
+### Décisions ouvertes (avant ticket implémentation)
+
+| # | Sujet | Options / question | Décideur |
+|---|--------|------------------|----------|
+| **D1** | Devenir des **4 secondaires** actuelles | (a) Maintien BO seul · (b) Migration progressive vers collections · (c) Double rattachement transitoire (secondaire + collection) | MOA + tech |
+| **D2** | Coexistence **`marketone_mode=featured`** (Lot 6.1) et future facette **`marketone_collection`** | Porte unique vs facette sidebar vs les deux · impact priorité modes `pack > promo > featured > origin > collection` | MOA |
+| **D3** | **Packs** dans une collection | Inclusion du template pack (`pack_ok`) · résolution composants · affichage grille | MOA + tech |
+| **D4** | Cardinalité produit ↔ collection | 0..n collections par produit · règles publication | MOA |
+| **D5** | Collections **temporaires** | Champs date début/fin · comportement hors fenêtre (404 / masqué sidebar / archive) | MOA |
+| **D6** | SEO / URLs | Porte `/collections/<slug>` vs query `marketone_collection` vs les deux (alias 301) | MOA SEO |
+
+### Découpage implémentation proposé (indicatif)
+
+| Lot | Périmètre | Livrable attendu |
+|-----|-----------|------------------|
+| **Lot A** | Modèle BO + rattachement produits | `marketone.shop.collection` (ou nom retenu) · admin · M2M templates · publication / dates |
+| **Lot B** | Facette sidebar **Collections** | Rubrique sidebar · filtre transversal `/shop` · C4-like · combinaison AND avec Origine / Catégories / Prix |
+| **Lot C** | Homepage / mise en avant | Blocs éditoriaux · liens portes · hors scope Lot A/B |
+
+### Hors scope (cet ADR)
+
+- Implémentation code · migrations · QWeb sidebar Collections.
+- Refonte Lot 6.1 *Incontournables* (sauf arbitrage D2).
+- Lot 2 sidebar Origines contextuelles (ticket séparé).
+- Savoirs · `shop_ppg`.
+
+### Prochaine étape
+
+| Étape | Statut |
+|-------|--------|
+| Relecture MOA ADR-030 | ✅ 2026-05-19 |
+| Ticket Lot A BO + rattachement produits | [`TICKET_MARKETONE_COLLECTION_LOT_A.md`](../tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md) — **ouvert**, sans code |
+| Mise à jour `CONTRACTS.md` (collections) | À l’exec Lot A ou avant GO ticket |
+| Lots B (sidebar) · C (homepage) | Tickets ultérieurs |
 
 ---
 
@@ -442,7 +509,7 @@
 |-------|---------|----------|
 | Contrainte catégories e-commerce | Principale obligatoire · max 4 publiques · distinction principale/secondaire — **ticket dédié** | MOA (post mapping BO) |
 | Marquage catégorie principale vs secondaire | Convention BO seule vs champ produit / ordre — **hors scope sans ticket** | MOA (ticket dédié) |
-| Modèle `marketone.shop.collection` | **Reporté** — réouverture si catégories secondaires insuffisantes | MOA (ultérieur) |
+| Modèle `marketone.shop.collection` | **ADR-030 validé** — ticket Lot A ; D1–D3 · D6 hors Lot A | MOA — [`TICKET_MARKETONE_COLLECTION_LOT_A`](../tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md) |
 | Alias HTTP legacy | `/kits`, `/promotions`, etc. en 301 | MOA SEO — Lot 6.2+ |
 | `product_pack` | Dépendance optionnelle pour porte Kits | MOA |
 | SEO `canonical` / `noindex` | Politique indexation URLs portes | MOA SEO |

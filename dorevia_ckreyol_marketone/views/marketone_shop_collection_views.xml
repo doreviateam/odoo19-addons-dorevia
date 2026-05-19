@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="marketone_shop_collection_view_tree" model="ir.ui.view">
+        <field name="name">marketone.shop.collection.tree</field>
+        <field name="model">marketone.shop.collection</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="slug"/>
+                <field name="product_count"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="website_id" groups="website.group_multi_website"/>
+                <field name="website_published"/>
+                <field name="homepage_featured" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="marketone_shop_collection_view_search" model="ir.ui.view">
+        <field name="name">marketone.shop.collection.search</field>
+        <field name="model">marketone.shop.collection</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="slug"/>
+                <field name="product_ids"/>
+                <filter string="Publiées" name="filter_published" domain="[('website_published', '=', True)]"/>
+                <filter string="Brouillons" name="filter_draft" domain="[('website_published', '=', False)]"/>
+                <separator/>
+                <filter string="Archivées" name="filter_inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="marketone_shop_collection_view_form" model="ir.ui.view">
+        <field name="name">marketone.shop.collection.form</field>
+        <field name="model">marketone.shop.collection</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar" options="{'preview_image': 'image'}"/>
+                    <group>
+                        <field name="name" placeholder="Apéritif créole"/>
+                        <field name="slug"/>
+                        <field name="teaser"/>
+                        <field name="sequence"/>
+                        <field name="website_id" groups="website.group_multi_website"/>
+                        <field name="website_published"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="homepage_featured"/>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Produits" name="products">
+                            <field name="product_ids" widget="many2many" nolabel="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="sale_ok"/>
+                                    <field name="website_published"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_marketone_shop_collection" model="ir.actions.act_window">
+        <field name="name">Collections commerciales</field>
+        <field name="res_model">marketone.shop.collection</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="marketone_shop_collection_view_search"/>
+    </record>
+
+    <menuitem id="menu_marketone_shop_collection"
+              name="Collections commerciales"
+              parent="website.menu_website_configuration"
+              action="action_marketone_shop_collection"
+              sequence="96"
+              groups="website.group_website_designer"/>
+
+    <record id="product_template_form_marketone_collections" model="ir.ui.view">
+        <field name="name">product.template.form.marketone.collections</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='public_categ_ids']" position="after">
+                <field name="marketone_collection_ids"
+                       widget="many2many_tags"
+                       string="Collections commerciales"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

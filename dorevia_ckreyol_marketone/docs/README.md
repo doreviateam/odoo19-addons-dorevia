@@ -20,6 +20,9 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 | [`cadrage/CONTRACTS.md`](cadrage/CONTRACTS.md) | Contrats fonctionnels |
 | [`cadrage/DECISIONS.md`](cadrage/DECISIONS.md) | ADR et arbitrages datés |
 | [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) | Catégories e-commerce Odoo : principale + secondaires (ADR-029) |
+| [`cadrage/DECISIONS.md#adr-030--collection-commerciale-marketone`](cadrage/DECISIONS.md#adr-030--collection-commerciale-marketone) | Collection commerciale — **ADR-030 validé MOA** |
+| Collections Lot A (BO) | [`tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md`](tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md) | **Clôturé GO MOA** — `19.0.11.0.0` (2026-05-19) |
+| — | [`recette/RECETTE_MANUELLE_COLLECTION_LOT_A.md`](recette/RECETTE_MANUELLE_COLLECTION_LOT_A.md) | Recette BO collections Lot A — **GO MOA** |
 | [`cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) | Mapping 27 produits recette → catégories principales / secondaires |
 | [`tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) | Application BO catégories e-commerce (sans code) |
 | [`recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) | Recette manuelle catégories catalogue |
