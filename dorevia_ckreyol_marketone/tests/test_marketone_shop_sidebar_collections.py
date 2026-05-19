@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Tests sidebar /shop — facettes collections commerciales (Lot B)."""
 
+import re
 from urllib.parse import parse_qs, urlparse
 
 from odoo.tests import tagged
@@ -233,22 +234,14 @@ class TestMarketoneShopSidebarCollectionsHttp(HttpCase):
         url = f"/shop?{MARKETONE_COLLECTION_PARAM}={self.collection.slug}"
         response = self.url_open(url)
         self.assertEqual(response.status_code, 200)
-        block = self._sidebar_block(response.text)
-        self.assertTrue(
-            "Clear Filters" in block
-            or "Effacer les filtres" in block
-            or "Supprimer les filtres" in block
+        html = response.text
+        self.assertNotIn("Clear Filters", self._sidebar_block(html))
+        reset = re.search(
+            r'marketone-filter-chips__reset[^>]*href="([^"]+)"',
+            html[html.find("marketone-filter-chips") :],
         )
-        clear_href = None
-        for marker in ("Clear Filters", "Effacer les filtres", "Supprimer les filtres"):
-            idx = block.find(marker)
-            if idx > 0:
-                href_start = block.rfind('href="', 0, idx)
-                if href_start > 0:
-                    href_end = block.find('"', href_start + 6)
-                    clear_href = block[href_start + 6 : href_end]
-                    break
-        self.assertTrue(clear_href)
+        self.assertTrue(reset, "Effacer les filtres attendu dans la barre UX-1")
+        clear_href = reset.group(1).replace("&amp;", "&")
         self.assertIn("/shop", clear_href)
         self.assertNotIn(f"{MARKETONE_COLLECTION_PARAM}=", clear_href)
 

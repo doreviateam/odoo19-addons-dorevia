@@ -5,7 +5,9 @@ from datetime import date
 
 from odoo.fields import Domain
 from odoo.http import request, route
+from odoo.tools import float_round, formatLang
 
+from odoo.addons.website.controllers.main import QueryURL
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 MARKETONE_MODE_FEATURED = "featured"
@@ -262,6 +264,67 @@ def _marketone_canonical_collection_slugs(mapping):
     return list(collections.mapped("slug"))
 
 
+def _marketone_attrib_values_to_query_list(attrib_values):
+    """Dict ``attrib_values`` Odoo → liste ``attribute_values`` pour ``keep()``."""
+    items = []
+    for attr_id, value_ids in (attrib_values or {}).items():
+        for value_id in value_ids:
+            items.append(f"{attr_id}-{value_id}")
+    return items
+
+
+def _marketone_is_filtering_by_price(values):
+    """Aligné ``website_sale.products`` — ``isFilteringByPrice``.
+
+    Sans ``available_min_price`` / ``available_max_price``, les bornes catalogue
+    ne doivent pas être traitées comme un filtre prix actif (R1 UX-1).
+    """
+    if not values or "min_price" not in values:
+        return False
+    if "available_min_price" not in values or "available_max_price" not in values:
+        return False
+    min_price = float_round(values.get("min_price") or 0.0, 2)
+    max_price = float_round(values.get("max_price") or 0.0, 2)
+    available_min = float_round(values["available_min_price"] or 0.0, 2)
+    available_max = float_round(values["available_max_price"] or 0.0, 2)
+    return min_price != available_min or max_price != available_max
+
+
+def _marketone_should_preserve_price_in_urls(values, kwargs):
+    """True seulement si le prix est un filtre **explicite** (chip Prix / query / slider actif).
+
+    Odoo remplit souvent ``values['min_price']`` avec les bornes du jeu filtré
+    (ex. un seul produit à 6,80 €) sans filtre prix utilisateur — ne pas propager
+    ces valeurs dans les ``remove_url`` des autres facettes (R1).
+    """
+    if _marketone_is_filtering_by_price(values):
+        return True
+    if request and getattr(request, "httprequest", None):
+        args = request.httprequest.args
+        for key in ("min_price", "max_price"):
+            raw = args.get(key)
+            if raw is None or raw == "":
+                continue
+            try:
+                if float(raw):
+                    return True
+            except (TypeError, ValueError):
+                return True
+    return False
+
+
+def _marketone_price_chip_label(env, values):
+    """Libellé chip prix — préfixe « Prix » (MOA UX-1)."""
+    currency = request.website.currency_id
+    min_p = values.get("min_price") or 0.0
+    max_p = values.get("max_price") or 0.0
+    min_label = formatLang(env, min_p, currency_obj=currency, digits=0)
+    max_label = formatLang(env, max_p, currency_obj=currency, digits=0)
+    if min_label == max_label:
+        return f"Prix : {min_label}"
+    return f"Prix : {min_label} — {max_label}"
+
+
 class WebsiteSaleMarketone(WebsiteSale):
     """Portes catalogue : Incontournables (6.1) et Origines (6.2)."""
 
@@ -385,10 +448,20 @@ class WebsiteSaleMarketone(WebsiteSale):
     def _shop_get_query_url_kwargs(
         self, search, min_price, max_price, order=None, tags=None, **kwargs
     ):
-        """Inclure ``marketone_category`` dans ``keep()`` (Effacer les filtres, liens)."""
+        """Inclure facettes Marketone + ``attribute_values`` courants dans ``keep()``."""
         result = super()._shop_get_query_url_kwargs(
             search, min_price, max_price, order=order, tags=tags, **kwargs
         )
+        raw_attrib = kwargs.get("attribute_values")
+        if raw_attrib:
+            if isinstance(raw_attrib, (list, tuple)):
+                result["attribute_values"] = list(raw_attrib)
+            else:
+                result["attribute_values"] = raw_attrib
+        elif request and getattr(request, "httprequest", None):
+            args_vals = request.httprequest.args.getlist("attribute_values")
+            if args_vals:
+                result["attribute_values"] = args_vals
         slugs = _marketone_read_category_slugs(kwargs)
         if slugs:
             result[MARKETONE_CATEGORY_PARAM] = slugs
@@ -417,6 +490,9 @@ class WebsiteSaleMarketone(WebsiteSale):
         max_price = wk.get("max_price")
         if max_price in (None, ""):
             max_price = current.get("max_price") or 0.0
+        if not _marketone_should_preserve_price_in_urls(current, wk):
+            min_price = 0.0
+            max_price = 0.0
         attribute_value_dict = current.get("attrib_values") or {}
         if not attribute_value_dict:
             raw_attrib = wk.get("attribute_values")
@@ -477,6 +553,168 @@ class WebsiteSaleMarketone(WebsiteSale):
         return self._marketone_shop_search_product_without_facets(
             values, kwargs, {"collection"}
         )
+
+    def _marketone_shop_keep_url(self, values, kwargs, path_category=None, **overrides):
+        """URL catalogue via ``QueryURL`` + ``_shop_get_query_url_kwargs`` (UX-1 chips)."""
+        vals = values or {}
+        mapping = dict(kwargs or {})
+        search = (
+            mapping.pop("search", None)
+            or vals.get("search")
+            or vals.get("original_search")
+            or ""
+        )
+        preserve_price = _marketone_should_preserve_price_in_urls(vals, mapping)
+        min_price = mapping.pop("min_price", None)
+        if min_price is None:
+            min_price = (vals.get("min_price") or 0.0) if preserve_price else 0.0
+        max_price = mapping.pop("max_price", None)
+        if max_price is None:
+            max_price = (vals.get("max_price") or 0.0) if preserve_price else 0.0
+        tags = mapping.pop("tags", None)
+        if tags is None:
+            tags = vals.get("tags") or ""
+        if "attribute_values" not in overrides:
+            attr_list = _marketone_attrib_values_to_query_list(
+                vals.get("attrib_values")
+            )
+            if attr_list and not mapping.get("attribute_values"):
+                mapping["attribute_values"] = attr_list
+        url = self._get_shop_path(path_category)
+        url_kwargs = self._shop_get_query_url_kwargs(
+            search, min_price, max_price, tags=tags, **mapping
+        )
+        price_override = "min_price" in overrides or "max_price" in overrides
+        if not preserve_price and not price_override:
+            url_kwargs.pop("min_price", None)
+            url_kwargs.pop("max_price", None)
+        for key, value in overrides.items():
+            if value in (0, None, "", False) or value == []:
+                url_kwargs.pop(key, None)
+            else:
+                url_kwargs[key] = value
+        return QueryURL(url, **url_kwargs)()
+
+    def _marketone_build_active_filter_chips(self, values, kwargs):
+        """Chips filtres actifs — Collections → Catégories → Origines → Prix."""
+        vals = values or {}
+        mapping = kwargs or {}
+        env = request.env
+        ir_http = env["ir.http"].sudo()
+        path_category = vals.get("category")
+        chips = []
+        attrib_values = {
+            int(attr_id): list(value_ids)
+            for attr_id, value_ids in (vals.get("attrib_values") or {}).items()
+        }
+        active_attrib_query = _marketone_attrib_values_to_query_list(attrib_values)
+
+        collections, coll_requested = _marketone_resolve_collection_facet(mapping)
+        if coll_requested and collections:
+            for coll in collections.sorted("name"):
+                coll_slug = coll.slug
+                remaining = [
+                    other.slug
+                    for other in collections
+                    if other.id != coll.id
+                ]
+                chips.append(
+                    {
+                        "type": "collection",
+                        "label": coll.name,
+                        "remove_url": self._marketone_shop_keep_url(
+                            vals,
+                            mapping,
+                            path_category,
+                            marketone_collection=remaining or 0,
+                            attribute_values=active_attrib_query or None,
+                        ),
+                        "key": coll_slug,
+                    }
+                )
+
+        categories, cat_requested, _cat_invalid = _marketone_resolve_category_facet(
+            mapping, path_category=path_category
+        )
+        if cat_requested and categories:
+            for cat in categories.sorted("name"):
+                slug = ir_http._slug(cat)
+                remaining = [
+                    ir_http._slug(other)
+                    for other in categories
+                    if other.id != cat.id
+                ]
+                path_for_url = path_category
+                if (
+                    path_for_url
+                    and ir_http._slug(path_for_url) == slug
+                    and slug not in remaining
+                ):
+                    path_for_url = None
+                chips.append(
+                    {
+                        "type": "category",
+                        "label": cat.name,
+                        "remove_url": self._marketone_shop_keep_url(
+                            vals,
+                            mapping,
+                            path_for_url,
+                            marketone_category=remaining or 0,
+                            attribute_values=active_attrib_query or None,
+                        ),
+                        "key": slug,
+                    }
+                )
+
+        origin_attr = env.ref(
+            "dorevia_ckreyol_marketone.marketone_product_attribute_origin",
+            raise_if_not_found=False,
+        )
+        if origin_attr and origin_attr.id in attrib_values:
+            for value_id in list(attrib_values[origin_attr.id]):
+                val = env["product.attribute.value"].browse(value_id)
+                if not val.exists():
+                    continue
+                new_attrib = {
+                    attr_id: list(vids) for attr_id, vids in attrib_values.items()
+                }
+                new_attrib[origin_attr.id] = [
+                    vid for vid in new_attrib[origin_attr.id] if vid != value_id
+                ]
+                if not new_attrib[origin_attr.id]:
+                    new_attrib.pop(origin_attr.id, None)
+                attr_list = _marketone_attrib_values_to_query_list(new_attrib)
+                chips.append(
+                    {
+                        "type": "origin",
+                        "label": val.name,
+                        "remove_url": self._marketone_shop_keep_url(
+                            vals,
+                            mapping,
+                            path_category,
+                            attribute_values=attr_list or 0,
+                        ),
+                        "key": f"{origin_attr.id}-{value_id}",
+                    }
+                )
+
+        if _marketone_should_preserve_price_in_urls(vals, mapping):
+            chips.append(
+                {
+                    "type": "price",
+                    "label": _marketone_price_chip_label(env, vals),
+                    "remove_url": self._marketone_shop_keep_url(
+                        vals,
+                        mapping,
+                        path_category,
+                        min_price=0,
+                        max_price=0,
+                        attribute_values=active_attrib_query or None,
+                    ),
+                    "key": "price",
+                }
+            )
+        return chips
 
     def _get_additional_shop_values(self, values, **kwargs):
         result = super()._get_additional_shop_values(values, **kwargs)
@@ -558,6 +796,23 @@ class WebsiteSaleMarketone(WebsiteSale):
                 result["marketone_culture_url"] = profiles[
                     0
                 ]._marketone_culture_url()
+
+        chips = self._marketone_build_active_filter_chips(values, kwargs)
+        result["marketone_active_filter_chips"] = chips
+        result["marketone_show_filter_state_bar"] = bool(chips)
+        result["marketone_search_count"] = search_count
+        result["marketone_reset_filters_url"] = self._marketone_shop_keep_url(
+            values,
+            kwargs,
+            values.get("category") if values else None,
+            attribute_values=0,
+            tags=0,
+            min_price=0,
+            max_price=0,
+            marketone_category=0,
+            marketone_collection=0,
+        )
+        result["marketone_has_active_filters"] = bool(chips)
         return result
 
     @route(
