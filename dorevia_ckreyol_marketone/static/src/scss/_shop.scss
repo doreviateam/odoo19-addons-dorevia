@@ -14,8 +14,7 @@ body:has(.marketone-shop) {
         margin-inline: auto;
         padding-block: $marketone-space-lg $marketone-space-xl;
         padding-inline: $marketone-gutter;
-        background-color: $ck-bg-page;
-        border-radius: $marketone-radius-md;
+        background-color: transparent;
     }
 
     .o_wsale_products_shop_title,

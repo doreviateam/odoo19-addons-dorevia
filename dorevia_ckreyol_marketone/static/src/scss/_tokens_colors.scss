@@ -31,7 +31,7 @@ $marketone-accent: $marketone-primary-container;
 // Chaîne chromatique CK — B1.4 « premium first » · aplats uniquement.
 //   body #FFF → page (ocre dilué) → sidebar (lin) → cartes → image → chips → terracotta
 $ck-bg-body:        #FFFFFF;
-$ck-bg-page:        #F2E3D2; // crème chaud MOA — zone contenu /shop (ne pas confondre avec body #FFF)
+$ck-bg-page:        #F2E3D2; // crème chaud — réservé accents (chips hover), pas aplat conteneur
 $ck-bg-cream:       #FAF6F0;
 $ck-bg-sidebar:     #F3EDE5; // végétal-lin, pas bloc vert
 $ck-bg-card:        #FFFDF8;

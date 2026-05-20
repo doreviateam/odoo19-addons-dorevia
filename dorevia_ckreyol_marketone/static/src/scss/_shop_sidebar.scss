@@ -25,9 +25,8 @@
         .o_wsale_products_grid_before_rail.marketone-sidebar-rail {
             padding: 0.85rem 0.75rem 1rem;
             margin-left: 0 !important;
-            background-color: $ck-bg-sidebar !important;
+            background-color: $ck-bg-card !important;
             border: 1px solid $ck-border-soft !important;
-            border-left: 2px solid $ck-sauge-border !important;
             border-radius: 0.75rem !important;
             box-shadow: 0 2px 12px rgba($ck-shadow, 0.045) !important;
             max-height: none;
@@ -96,8 +95,8 @@
         }
 
         &:not(.collapsed) {
-            background-color: $ck-bg-green-mist !important;
-            border-color: $ck-bg-green-soft;
+            background-color: $ck-bg-cream !important;
+            border-color: $ck-border-soft;
         }
 
         &:hover {
