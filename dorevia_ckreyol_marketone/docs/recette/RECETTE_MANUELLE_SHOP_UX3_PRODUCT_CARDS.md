@@ -7,7 +7,7 @@
 | **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut** | **GO visuel proposable** — recette cycle 4 exécutée ; merge PR #9 après validation humaine MOA finale |
+| **Statut** | **GO MOA UX-3 Palier A** — variante B « Tenue » · `19.0.15.2.0` |
 | **Proposition DA** | `docs/tickets/TICKET_MARKETONE_UX3_PALIER_A_PROPOSITION_DA.md` |
 
 ---
@@ -334,8 +334,19 @@ docker restart sandbox-odoo19-odoo-1
 | Verdict | ☑ |
 |---|---|
 | **GO technique** | ☑ |
-| **GO visuel proposable** | ☑ |
-| **GO merge PR #9** | ☐ — validation humaine MOA finale sur captures avant merge |
-| **Réserve** | Capture mobile 768px non produite |
+| **GO visuel MOA UX-3 Palier A** | ☑ |
+| **GO merge PR #9** | ☑ (MOA 2026-05-20) |
 
-**Process** : merge PR #9 uniquement après **GO explicite MOA** post-revue des captures.
+### Verdict MOA final — variante B « Tenue »
+
+**Décision MOA** : GO visuel UX-3 Palier A avec réserves **non bloquantes**.
+
+**Points validés** : fond lin chaleureux · sidebar panneau doux · îlots carte blancs · fond image pastel · ratio 1:1 · prix terracotta · hover discret · UX-1/UX-2 intacts.
+
+**Réserve 1 — séparation image / texte** (non bloquante Palier A)  
+Sur certaines cartes, le bandeau horizontal du fond image (`#F0E8DC`) accentue encore la coupure avec la zone texte. Reprise possible en ajustement SCSS ultérieur ou via le futur moteur de normalisation des images.
+
+**Réserve 2 — mobile 768px** (non bloquante)  
+Aucune capture mobile produite en recette cycle 4 (viewport non contrôlable). CSS responsive documenté : ratio 1:1, hover désactivé ≤768px.
+
+**Merge** : PR [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) — commit merge : _à compléter post-merge_.

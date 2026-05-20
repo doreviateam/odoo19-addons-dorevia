@@ -2,11 +2,11 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut** | **GO visuel proposable** — recette cycle 4 OK ; merge PR #9 après validation humaine MOA finale |
+| **Statut** | **GO MOA UX-3 Palier A** — variante B « Tenue » mergée (`19.0.15.2.0`) |
 | **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
 | **Version précédente** | `19.0.15.1.0` — variante douce |
 | **Version actuelle** | `19.0.15.2.0` — variante B « Tenue » implémentée |
-| **PR** | [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) — merge en pause |
+| **PR** | [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) — mergée |
 | **Recette liée** | `docs/recette/RECETTE_MANUELLE_SHOP_UX3_PRODUCT_CARDS.md` |
 | **Date** | 2026-05-19 |
 
@@ -277,4 +277,10 @@ Le travail restant est **directionnel** :
 
 **Implémentation** : commit post-arbitrage sur `feat/marketone-ux3-product-cards-palier-a`, version `19.0.15.2.0`.
 
-**Recette cycle 4** (2026-05-20) : GO technique + GO visuel proposable — 21/21 tests, mesures doctrine CK OK, captures `marketone_ux3_b_*.png`. Réserve : mobile 768px non capturé. Merge PR #9 : en attente GO explicite MOA post-revue captures.
+**Recette cycle 4** (2026-05-20) : GO technique + **GO visuel MOA** — 21/21 tests, doctrine CK validée.
+
+**Réserve non bloquante** : séparation image/texte perceptible sur certaines cartes (bandeau fond image) — Palier A clos ; reprise SCSS ou moteur image ultérieur.
+
+**Réserve mobile** : capture 768px non produite ; CSS responsive documenté en recette.
+
+**Merge PR #9** : commit _à compléter post-merge_.
