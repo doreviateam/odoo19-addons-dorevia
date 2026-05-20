@@ -242,7 +242,7 @@ Puis les utiliser dans `_shop_product_cards.scss` (et éventuellement `_shop.scs
 |---|---|
 | GO technique | ✅ Maintenu |
 | PR documentée | ✅ PR #9 peut rester ouverte avec bannière « en attente arbitrage DA » |
-| GO merge | ❌ Pause jusqu'à variante visuelle validée |
+| GO merge PR #9 | ☑ MOA 2026-05-20 |
 | Prochaine livraison | **Cette proposition** → puis **1 variante codée** post-arbitrage |
 
 ---
@@ -283,4 +283,4 @@ Le travail restant est **directionnel** :
 
 **Réserve mobile** : capture 768px non produite ; CSS responsive documenté en recette.
 
-**Merge PR #9** : commit _à compléter post-merge_.
+**Merge PR #9** : commit `9b6354d8e377378394fb101c66846c0cbf02b8f9` (2026-05-20).
