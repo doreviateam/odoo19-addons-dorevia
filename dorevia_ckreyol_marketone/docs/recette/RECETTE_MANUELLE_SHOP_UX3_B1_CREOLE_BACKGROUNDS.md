@@ -1,14 +1,14 @@
-# Recette manuelle — UX-3 Palier B1 — Fonds créoles premium `/shop`
+# Recette manuelle — UX-3 Palier B1 — Chaîne chromatique CK `/shop`
 
 | Champ | Valeur |
 |-------|--------|
 | **Ticket** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
-| **Version** | **`19.0.15.5.0`** (B1.2 — palette harmonie MOA) |
+| **Version** | **`19.0.15.6.0`** (B1.3 — aplats, chaîne chromatique) |
 | **Branche** | `feat/marketone-ux3-b1-creole-backgrounds` |
-| **Jalon** | ADR-031 · Palier A « Tenue » `19.0.15.2.0` |
-| **URL** | http://localhost:18079/shop |
+| **Doctrine** | **Aucun dégradé** · aplats + bordures chaudes + rappels localisés |
+| **URL** | http://localhost:18079/shop?db=ckr-marketone-01 |
 | **Base** | `ckr-marketone-01` |
-| **Statut** | **Recette B1.2 à exécuter** |
+| **Statut** | Recette MOA à exécuter |
 
 ---
 
@@ -19,56 +19,38 @@ docker exec sandbox-odoo19-odoo-1 odoo -d ckr-marketone-01 -u dorevia_ckreyol_ma
 docker restart sandbox-odoo19-odoo-1
 ```
 
-Hard refresh navigateur.
+Hard refresh. **Safari** : désactiver « HTTPS uniquement » ou utiliser Chrome/Firefox pour `http://localhost:18079`.
 
 ---
 
-## Historique verdicts MOA
+## Chaîne chromatique (MOA)
 
-| Version | Verdict |
-|---|---|
-| `19.0.15.3.0` | **NO GO** — juxtaposition crème / bloc vert / cartes blanches |
-| `19.0.15.4.0` | **NO GO** (même diagnostic — harmonie insuffisante) |
-| `19.0.15.5.0` | Recette en attente |
+```text
+body quasi neutre (hors scope)
+→ fond page #F5EBDE
+→ sidebar #E8F1E4
+→ cartes #FFFDF8
+→ image #F9F0D8
+→ chips jaune / vert / rouge pastel
+→ prix #C4715A
+```
 
-**Critère GO** : on ne voit plus « beige + vert + blanc » en trois blocs, mais une harmonie crème / vanille / végétal doux / terracotta au service des produits.
-
----
-
-## Palette B1.2 (MOA)
-
-| Token | Hex | Usage |
-|---|---|---|
-| `$ck-bg-page` | `#F8EFE3` | Ambiance globale |
-| `$ck-bg-card` | `#FFFDF8` | Cartes écrin |
-| `$ck-bg-image` | `#FAF1D6` | Zone image vanille |
-| `$ck-bg-green-mist` | `#EEF5E9` | Sidebar diluée (fin → page) |
-| `$ck-bg-green-soft` | `#D9E8D2` | **Détails / actifs uniquement** |
-| `$ck-bg-yellow-soft` | `#F8EAC0` | Liant chaleur |
-| `$ck-bg-yellow-halo` | `#FFF4D8` | Halo subtil |
-| `$ck-bg-red-soft` | `#F1CFC4` | Chip prix |
-| `$ck-border-soft` | `#E6D4C3` | Bordures |
-| `$ck-terracotta` | `#C4715A` | Prix |
-
-Sidebar : dégradé `#EEF5E9` → `#F8EFE3` — **pas** d’aplat `#D9E8D2` plein.
-
-Cartes : ombre `0 10px 24px rgba(42,31,24,0.07)`.
+**Interdit** : `linear-gradient`, sidebar verte massive `#D9E8D2`, patchwork, rendu lavé type landing page.
 
 ---
 
-## Grille validation B1.2
+## Grille validation B1.3
 
 | Scénario | Verdict | Notes |
 |---|---|---|
-| H1 — Composition globale (pas 3 blocs) | ☐ OK · ☐ réserve · ☐ KO | |
-| H2 — Sidebar accompagne, ne domine pas | ☐ OK · ☐ réserve · ☐ KO | fondue vers page |
-| H3 — Jaune/vanille liant (image, filets, bandeaux) | ☐ OK · ☐ réserve · ☐ KO | |
-| H4 — Cartes écrin premium vs fond page | ☐ OK · ☐ réserve · ☐ KO | |
-| H5 — Rappels vert/rouge discrets (chips, hover) | ☐ OK · ☐ réserve · ☐ KO | |
-| H6 — Pas bio-discount / patchwork | ☐ OK · ☐ réserve · ☐ KO | |
-| V4 — Produits prioritaires | ☐ OK · ☐ réserve · ☐ KO | |
-| V8 — Mobile ≤768px | ☐ OK · ☐ réserve · ☐ KO | |
-| V9 — Hors scope | ☐ OK · ☐ KO | |
+| C1 — Progression page → sidebar → cartes lisible | ☐ OK · ☐ réserve · ☐ KO | |
+| C2 — Aucun dégradé visible | ☐ OK · ☐ KO | inspecteur CSS |
+| C3 — Ligne CK portée (pas trop pâle) | ☐ OK · ☐ réserve · ☐ KO | |
+| C4 — Sidebar végétal pâle, pas bloc vert | ☐ OK · ☐ réserve · ☐ KO | |
+| C5 — Cartes écrin vs fond page | ☐ OK · ☐ réserve · ☐ KO | |
+| C6 — Chips pastel secondaires | ☐ OK · ☐ réserve · ☐ KO | |
+| C7 — Premium / pas bio-discount | ☐ OK · ☐ réserve · ☐ KO | |
+| V9 — Hors scope home | ☐ OK · ☐ KO | |
 | V10 — Tests auto 21/21 | ☐ OK · ☐ KO | |
 
 ---
@@ -87,8 +69,15 @@ docker exec sandbox-odoo19-odoo-1 odoo -d ckr-marketone-01 --http-port 8071 \
 
 | Verdict | ☐ |
 |---|---|
-| **GO visuel B1 — merge autorisé** | |
+| **GO visuel B1 — merge** | |
 | **GO avec réserves** | |
 | **NO GO** | |
 
-**Merge** : uniquement sur GO visuel explicite MOA.
+---
+
+## Historique
+
+| Version | Verdict |
+|---|---|
+| `19.0.15.3.0`–`19.0.15.5.0` | NO GO — juxtaposition / trop lavé / dégradés |
+| `19.0.15.6.0` | Recette en attente |

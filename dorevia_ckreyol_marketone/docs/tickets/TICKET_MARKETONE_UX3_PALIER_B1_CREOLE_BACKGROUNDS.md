@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
 | **Type** | **UX / DA** — réchauffement visuel SCSS uniquement |
-| **Statut** | **NO GO** `19.0.15.3.0`/`19.0.15.4.0` — **B1.2 harmonie** livrée (`19.0.15.5.0`, recette MOA) |
+| **Statut** | **NO GO** `19.0.15.3.0`–`19.0.15.5.0` — **B1.3 chaîne chromatique** (`19.0.15.6.0`, aplats sans dégradé) |
 | **Jalon de référence** | ADR-031 · UX-3 Palier A « Tenue » mergé (`19.0.15.2.0`, PR #9) |
 | **Version cible proposée** | `19.0.15.3.0` |
 | **Branche suggérée** | `feat/marketone-ux3-b1-creole-backgrounds` |
@@ -231,4 +231,16 @@ Palette MOA : voir recette `19.0.15.5.0`.
 - Liant jaune : barre chips, titres, bandeaux featured/origin.
 - Chips : collection vanille, origin vert doux, price corail pastel.
 
-**Merge** : après GO visuel MOA sur recette B1.2.
+---
+
+## 14. Recentrage MOA — chaîne chromatique (`19.0.15.6.0`)
+
+**Verdict** : NO GO `19.0.15.5.0` — trop pâle / lavé, background global ne porte pas la ligne CK.
+
+**Doctrine** : pas de dégradé · pas de body trop coloré · pas de sidebar verte massive · pas de patchwork · premium créole éditorial sobre.
+
+**Chaîne** : body neutre → page `#F5EBDE` → sidebar `#E8F1E4` → cartes `#FFFDF8` → image `#F9F0D8` → chips pastel → terracotta.
+
+**Implémentation B1.3** : suppression de tous les `linear-gradient` ; aplats + bordures chaudes uniquement.
+
+**Merge** : après GO visuel MOA sur recette B1.3.

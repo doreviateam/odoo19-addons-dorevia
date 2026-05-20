@@ -25,30 +25,28 @@ $marketone-primary-dark: $marketone-primary-container;
 $marketone-on-primary: #ffffff;
 $marketone-accent: $marketone-primary-container;
 
-// Alias palette CK — scope /shop (UX-3 B1 harmonie chromatique MOA).
-// N'écrase pas les tokens Marketone globaux (home, fiche produit, panier).
-$ck-bg-page:        #F8EFE3; // ambiance crème chaude globale
-$ck-bg-card:        #FFFDF8; // écrin produit
+// Chaîne chromatique CK — scope /shop · UX-3 B1.3 (aplats uniquement, pas de dégradé).
+// body quasi neutre (hors .marketone-shop)
+//   → fond page chaud léger → sidebar végétal pâle → cartes blanc chaud
+//   → image vanille → chips pastel → prix terracotta
+$ck-bg-page:        #F5EBDE;
+$ck-bg-sidebar:     #E8F1E4;
+$ck-bg-card:        #FFFDF8;
 $ck-bg-white:       $ck-bg-card;
-$ck-bg-cream:       #F7EFE4;
-$ck-bg-image:       #FAF1D6; // vanille zone image
-$ck-bg-yellow-soft: #F8EAC0; // liant chaleur — chips, filets
-$ck-bg-yellow-halo: #FFF4D8; // halo très subtil blocs
-$ck-bg-green-mist:  #EEF5E9; // sidebar · fonds dilués
-$ck-bg-green-soft:  #D9E8D2; // détails / états actifs — jamais aplat sidebar
+$ck-bg-image:       #F9F0D8;
+$ck-bg-yellow-soft: #F8EAC0;
+$ck-bg-green-mist:  #EEF5E9;
+$ck-bg-green-soft:  #D9E8D2; // états actifs / filets — jamais aplat sidebar plein
 $ck-bg-red-soft:    #F1CFC4;
-$ck-bg-green-deep:  #6F9A78; // réservé — pas de grand aplat
+$ck-bg-green-deep:  #6F9A78;
 
 $ck-border-soft:    #E6D4C3;
 $ck-border-card:    $ck-border-soft;
 
-$ck-bg-sidebar-start: $ck-bg-green-mist;
-$ck-bg-sidebar-end:   $ck-bg-page;
-
 $ck-text:           #2A1F18;
 $ck-terracotta:     #C4715A;
 $ck-sauge:          #5A8A6E;
-$ck-sauge-border:   rgba(90, 138, 110, 0.32);
+$ck-sauge-border:   rgba(90, 138, 110, 0.38);
 $ck-or:             #D4B896;
 $ck-rose:           #C9A0A0;
 $ck-border:         $ck-border-soft;

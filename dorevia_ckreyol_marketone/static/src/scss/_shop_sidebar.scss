@@ -25,16 +25,10 @@
         .o_wsale_products_grid_before_rail.marketone-sidebar-rail {
             padding: 0.85rem 0.75rem 1rem;
             margin-left: 0 !important;
-            background: linear-gradient(
-                180deg,
-                $ck-bg-sidebar-start 0%,
-                $ck-bg-sidebar-end 100%
-            ) !important;
-            border: 1px solid rgba($ck-border-soft, 0.55) !important;
+            background-color: $ck-bg-sidebar !important;
+            border: 1px solid $ck-border-soft !important;
             border-radius: 0.75rem !important;
-            box-shadow:
-                0 1px 8px rgba($ck-shadow, 0.04),
-                inset 0 1px 0 rgba($ck-bg-yellow-halo, 0.55) !important;
+            box-shadow: 0 2px 10px rgba($ck-shadow, 0.05) !important;
             max-height: none;
             min-height: 0 !important;
             height: auto !important;
@@ -90,8 +84,8 @@
         padding: 0.72rem 0.58rem !important;
         margin: 0.38rem 0 0.18rem !important;
         border-radius: clamp(7px, 0.5vw, 9px) !important;
-        border: 1px solid rgba($ck-border-soft, 0.5);
-        background-color: rgba($ck-bg-white, 0.72) !important;
+        border: 1px solid $ck-border-soft;
+        background-color: $ck-bg-card !important;
         box-shadow: none;
 
         &::after {
@@ -101,18 +95,14 @@
         }
 
         &:not(.collapsed) {
-            background: linear-gradient(
-                90deg,
-                rgba($ck-bg-green-soft, 0.22) 0%,
-                rgba($ck-bg-card, 0.92) 100%
-            ) !important;
-            border-color: rgba($ck-bg-green-soft, 0.45);
+            background-color: $ck-bg-green-mist !important;
+            border-color: $ck-bg-green-soft;
         }
 
         &:hover {
             color: $ck-terracotta !important;
-            background-color: rgba($ck-bg-image, 0.55) !important;
-            border-color: rgba($ck-border-soft, 0.85);
+            background-color: $ck-bg-image !important;
+            border-color: $ck-border-soft;
         }
 
         &:focus-visible {

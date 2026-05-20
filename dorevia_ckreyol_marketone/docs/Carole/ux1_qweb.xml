@@ -1,0 +1,85 @@
+<!-- ============================================ -->
+<!-- C-Kreyol — Lot UX-1 : État utilisateur       -->
+<!-- Override de website_sale.products              -->
+<!-- ============================================ -->
+
+<template id="c_kreyol_products" inherit_id="website_sale.products">
+  <!-- Injection au-dessus de la grille produits -->
+  <xpath expr="//div[hasclass('o_wsale_products_main_row')]" position="before">
+
+    <!-- Zone État Utilisateur -->
+    <div class="c-kreyol-state-bar">
+
+      <!-- Ligne Chips + Reset -->
+      <div class="c-kreyol-chips-row">
+
+        <!-- Chips Collections actives -->
+        <t t-foreach="active_collections" t-as="collection">
+          <a t-att-href="collection.unlink_url" class="c-chip">
+            <t t-esc="collection.name"/>
+            <span class="c-chip-remove">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+          </a>
+        </t>
+
+        <!-- Chips Catégories actives -->
+        <t t-foreach="active_categories" t-as="category">
+          <a t-att-href="category.unlink_url" class="c-chip">
+            <t t-esc="category.name"/>
+            <span class="c-chip-remove">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+          </a>
+        </t>
+
+        <!-- Chips Origines actives -->
+        <t t-foreach="active_origins" t-as="origin">
+          <a t-att-href="origin.unlink_url" class="c-chip">
+            <t t-esc="origin.name"/>
+            <span class="c-chip-remove">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+          </a>
+        </t>
+
+        <!-- Chip Prix actif (si min ou max défini) -->
+        <t t-if="price_min or price_max">
+          <a t-att-href="price_reset_url" class="c-chip">
+            <t t-if="price_min and price_max">
+              Prix : <t t-esc="price_min"/> € — <t t-esc="price_max"/> €
+            </t>
+            <t t-elif="price_min">
+              Prix > <t t-esc="price_min"/> €
+            </t>
+            <t t-else="">
+              Prix < <t t-esc="price_max"/> €
+            </t>
+            <span class="c-chip-remove">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+          </a>
+        </t>
+
+        <!-- Reset global (visible si au moins un filtre actif) -->
+        <t t-if="active_collections or active_categories or active_origins or price_min or price_max">
+          <a t-att-href="reset_all_url" class="c-reset">Effacer les filtres</a>
+        </t>
+      </div>
+
+    </div>
+
+  </xpath>
+
+  <!-- Modification de la toolbar existante : ajout compteur global -->
+  <xpath expr="//div[hasclass('o_wsale_products_header')]" position="replace">
+    <div class="c-toolbar">
+      <span class="c-result-count">
+        <strong><t t-esc="search_count"/></strong> produit<t t-if="search_count > 1">s</t>
+      </span>
+      <!-- Le tri existant reste ici, conservé tel quel -->
+      <t t-call="website_sale.products_sort"/>
+    </div>
+  </xpath>
+
+</template>

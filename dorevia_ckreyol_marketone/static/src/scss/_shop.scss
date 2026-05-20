@@ -17,14 +17,10 @@
         margin-bottom: $marketone-space-md;
         padding: 0.85rem 1.15rem;
         border-radius: $marketone-radius-md;
-        border: 1px solid rgba($ck-border-soft, 0.58);
-        border-bottom: 2px solid rgba($ck-bg-yellow-soft, 0.42);
-        background: linear-gradient(
-            180deg,
-            rgba($ck-bg-image, 0.5) 0%,
-            rgba($ck-bg-card, 0.94) 100%
-        );
-        box-shadow: 0 2px 12px rgba($ck-shadow, 0.04);
+        border: 1px solid $ck-border-soft;
+        border-bottom: 2px solid $ck-bg-yellow-soft;
+        background-color: $ck-bg-card;
+        box-shadow: 0 2px 10px rgba($ck-shadow, 0.05);
         font-family: $marketone-font-heading;
         font-size: $marketone-h2-mobile;
         font-weight: $marketone-weight-semibold;

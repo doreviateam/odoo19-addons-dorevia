@@ -29,12 +29,8 @@
         margin-top: $marketone-space-sm;
         margin-bottom: $marketone-space-sm;
         padding: $marketone-space-xs 0.35rem $marketone-space-sm;
-        border-bottom: 1px solid rgba($ck-bg-yellow-soft, 0.42);
-        background: linear-gradient(
-            180deg,
-            rgba($ck-bg-yellow-halo, 0.35) 0%,
-            transparent 100%
-        );
+        border-bottom: 1px solid $ck-bg-yellow-soft;
+        background-color: $ck-bg-image;
         border-radius: 0.5rem 0.5rem 0 0;
     }
 
@@ -89,10 +85,10 @@
     .marketone-filter-chips__chip--origin {
         @include marketone-filter-chip-tone(
             $ck-bg-green-mist,
-            rgba($ck-sauge, 0.28),
+            $ck-bg-green-soft,
             $ck-text,
             #e4efe0,
-            rgba($ck-sauge, 0.38),
+            #c8dcc4,
         );
     }
 
@@ -108,11 +104,11 @@
 
     .marketone-filter-chips__chip--price {
         @include marketone-filter-chip-tone(
-            rgba($ck-bg-red-soft, 0.75),
-            rgba($ck-bg-red-soft, 0.95),
-            $ck-text,
             $ck-bg-red-soft,
             #e5c4ba,
+            $ck-text,
+            #f0d6ce,
+            #dbb8ac,
         );
     }
 
