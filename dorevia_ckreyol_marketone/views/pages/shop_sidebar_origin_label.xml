@@ -10,10 +10,18 @@
             <b t-if="marketone_origin_attribute_id and a.id == marketone_origin_attribute_id">Origines</b>
             <b t-else="" t-field="a.name"/>
         </xpath>
-        <!-- Origines plié par défaut ; autres attributs dépliés (priority > 34 de ux2_expand). -->
+    </template>
+
+    <!-- Origines plié par défaut (sauf si filtre actif).
+         Hérite directement de product_attribute_filters_form, priority 50 > 34,
+         pour remplacer _expand_attributes là où il est défini nativement. -->
+    <template id="marketone_shop_sidebar_origin_collapsed"
+              inherit_id="website_sale.product_attribute_filters_form"
+              name="Marketone: Origines plié par défaut"
+              priority="50">
         <xpath expr="//t[@t-set='_expand_attributes']" position="replace">
             <t t-set="_expand_attributes"
-               t-value="not (marketone_origin_attribute_id and a.id == marketone_origin_attribute_id)"/>
+               t-value="_status == 'active' or not (marketone_origin_attribute_id and a.id == marketone_origin_attribute_id)"/>
         </xpath>
     </template>
 
