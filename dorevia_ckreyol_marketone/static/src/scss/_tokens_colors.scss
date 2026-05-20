@@ -29,9 +29,9 @@ $marketone-accent: $marketone-primary-container;
 //   #43350F brun · #A41756 baie · #2ABD2A vert · #A86F08 ocre · #7286AE ardoise
 //
 // Chaîne chromatique CK — B1.4 « premium first » · aplats uniquement.
-//   page (ocre dilué) → sidebar (lin proche page) → cartes blanc chaud
-//   → image vanille → chips pastel → terracotta
-$ck-bg-page:        #F5E4D0; // ocre #A86F08 dilué — porte la ligne CK
+//   body #FFF → page (ocre dilué) → sidebar (lin) → cartes → image → chips → terracotta
+$ck-bg-body:        #FFFFFF;
+$ck-bg-page:        #F5E4D0; // ocre #A86F08 dilué — zone contenu /shop
 $ck-bg-cream:       #FAF6F0;
 $ck-bg-sidebar:     #F3EDE5; // végétal-lin, pas bloc vert
 $ck-bg-card:        #FFFDF8;
