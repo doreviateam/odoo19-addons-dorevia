@@ -28,6 +28,8 @@
     .marketone-filter-state {
         margin-top: $marketone-space-sm;
         margin-bottom: $marketone-space-sm;
+        padding-bottom: $marketone-space-xs;
+        border-bottom: 1px solid rgba($ck-bg-yellow-soft, 0.48);
     }
 
     .marketone-filter-chips {
@@ -80,11 +82,11 @@
 
     .marketone-filter-chips__chip--origin {
         @include marketone-filter-chip-tone(
-            $ck-bg-green-soft,
-            #c5d8c0,
+            $ck-bg-green-mist,
+            rgba($ck-sauge, 0.28),
             $ck-text,
-            #d0e4cc,
-            #b8cfae,
+            #e4efe0,
+            rgba($ck-sauge, 0.38),
         );
     }
 

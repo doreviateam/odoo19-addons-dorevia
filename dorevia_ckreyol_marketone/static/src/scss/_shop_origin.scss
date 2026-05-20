@@ -5,8 +5,13 @@
         margin-bottom: $marketone-space-md;
         padding: 0.85rem 1.15rem $marketone-space-sm;
         border-radius: $marketone-radius-md;
-        border: 1px solid rgba($ck-border-soft, 0.5);
-        background-color: rgba($ck-bg-yellow-soft, 0.45);
+        border: 1px solid rgba($ck-border-soft, 0.52);
+        border-bottom: 2px solid rgba($ck-bg-yellow-soft, 0.55);
+        background: linear-gradient(
+            180deg,
+            rgba($ck-bg-yellow-vanille, 0.85) 0%,
+            rgba($ck-bg-cream, 0.55) 100%
+        );
     }
 
     .marketone-shop-origin-title {

@@ -13,8 +13,8 @@
 $_ux3-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
 // Ombres chaudes doctrine : rgba(42,31,24,…)
-$_ux3-shadow-rest:  0 1px 4px rgba($ck-shadow, 0.06);
-$_ux3-shadow-hover: 0 4px 16px rgba($ck-shadow, 0.08);
+$_ux3-shadow-rest:  0 2px 10px rgba($ck-shadow, 0.07);
+$_ux3-shadow-hover: 0 6px 22px rgba($ck-shadow, 0.1);
 
 .marketone-shop {
 
@@ -30,8 +30,8 @@ $_ux3-shadow-hover: 0 4px 16px rgba($ck-shadow, 0.08);
     .oe_product_cart {
         --o-wsale-card-bg:                   #{$ck-bg-white};
         --o-wsale-card-border-width:         1px;
-        --o-wsale-card-border-color:         #{$ck-border};
-        --o-wsale-card-border-color-hover:   #{rgba($ck-border, 0.85)};
+        --o-wsale-card-border-color:         #{$ck-border-card};
+        --o-wsale-card-border-color-hover: #{$ck-sauge-border};
         --o-wsale-card-border-radius:        0.875rem; // 14px — doctrine 12–16px
         --o-wsale-card-shadow:               #{$_ux3-shadow-rest};
         --o-wsale-card-shadow-hover:         #{$_ux3-shadow-hover};

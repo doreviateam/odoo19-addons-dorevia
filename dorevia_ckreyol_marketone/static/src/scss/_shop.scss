@@ -17,8 +17,13 @@
         margin-bottom: $marketone-space-md;
         padding: 0.85rem 1.15rem;
         border-radius: $marketone-radius-md;
-        border: 1px solid rgba($ck-border-soft, 0.55);
-        background-color: rgba($ck-bg-white, 0.88);
+        border: 1px solid rgba($ck-border-soft, 0.58);
+        border-bottom: 2px solid rgba($ck-bg-yellow-soft, 0.42);
+        background: linear-gradient(
+            180deg,
+            rgba($ck-bg-yellow-vanille, 0.55) 0%,
+            rgba($ck-bg-white, 0.92) 100%
+        );
         font-family: $marketone-font-heading;
         font-size: $marketone-h2-mobile;
         font-weight: $marketone-weight-semibold;

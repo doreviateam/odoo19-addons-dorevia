@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
 | **Type** | **UX / DA** — réchauffement visuel SCSS uniquement |
-| **Statut** | **GO visuel proposable** — recette OK ; merge après GO MOA explicite (`19.0.15.3.0`) |
+| **Statut** | **NO GO visuel** `19.0.15.3.0` — variante **B1.1 harmonie** en cours (`19.0.15.4.0`) |
 | **Jalon de référence** | ADR-031 · UX-3 Palier A « Tenue » mergé (`19.0.15.2.0`, PR #9) |
 | **Version cible proposée** | `19.0.15.3.0` |
 | **Branche suggérée** | `feat/marketone-ux3-b1-creole-backgrounds` |
@@ -190,8 +190,29 @@ Recette : `docs/recette/RECETTE_MANUELLE_SHOP_UX3_B1_CREOLE_BACKGROUNDS.md`
 
 ---
 
-## 11. Synthèse
+## 11. Retour MOA — NO GO visuel (`19.0.15.3.0`, 2026-05-20)
 
-**Recette** (2026-05-20) : GO technique + GO visuel proposable — 21/21, palette B1 confirmée, captures `marketone_b1_*`. Réserve : mobile 768px non capturé · pas de capture avant 19.0.15.2.0.
+**Verdict** : NO GO visuel en l’état — ajustement harmonie globale demandé (pas plus de couleurs).
 
-**Merge** : après GO MOA explicite uniquement.
+**Diagnostic MOA** : juxtaposition « fond crème + bloc sidebar vert + cartes blanches » — couleurs qui ne dialoguent pas ; sidebar verte trop isolée ; fond page et cartes trop proches en luminosité.
+
+**Conservé** : ligne premium, lisibilité cartes, images prioritaires, scope `/shop`, intention vert pastel.
+
+**Ajustements demandés** (→ B1.1 `19.0.15.4.0`) :
+
+1. Sidebar : dégradé crème/vert dilué (`#EEF5E9` → `#F7EFE4`), filet sauge, accordéons chaleureux — pas de panneau vert plein.
+2. Rappels grille : hover bordure sauge, zone image vanille, filet jaune sous barre chips, bandeaux zone haute en dégradé léger.
+3. Hiérarchie page/cartes : fond page `#F0E6D8`, cartes `#FFFDF8`, bordure `#D4C4B4`, ombre chaude renforcée.
+4. Jaune comme liant : vanille image, chips collection, filets séparation, bandeaux crème/vanille.
+
+**Interdits** : sidebar verte massive, patchwork, saturation, rendu bio discount / enfantin.
+
+---
+
+## 12. Implémentation B1.1 (`19.0.15.4.0`)
+
+Tokens : `$ck-bg-page`, `$ck-bg-green-mist`, `$ck-bg-yellow-vanille`, `$ck-border-card`, dégradés sidebar.
+
+Fichiers : `_tokens_colors.scss` · `_shop.scss` · `_shop_sidebar.scss` · `_shop_filter_state.scss` · `_shop_product_cards.scss` · `_shop_featured.scss` · `_shop_origin.scss`.
+
+**Merge** : après nouvelle recette visuelle MOA uniquement.
