@@ -3,7 +3,7 @@
 | Champ | Valeur |
 |-------|--------|
 | **Ticket** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
-| **Version** | **`19.0.15.6.1`** (B1.3 — aplats, chaîne chromatique) |
+| **Version** | **`19.0.15.7.0`** (B1.4 — premium first, ocre dilué) |
 | **Branche** | `feat/marketone-ux3-b1-creole-backgrounds` |
 | **Doctrine** | **Aucun dégradé** · aplats + bordures chaudes + rappels localisés |
 | **URL** | http://localhost:18079/shop?db=ckr-marketone-01 |
@@ -41,10 +41,10 @@ Voir ticket §15 pour la table de traduction complète.
 
 ```text
 body quasi neutre (hors scope)
-→ fond page #F5EBDE
-→ sidebar #E8F1E4
+→ fond page #F5E4D0 (ocre dilué)
+→ sidebar #F3EDE5 (lin, filet sauge)
 → cartes #FFFDF8
-→ image #F9F0D8
+→ image #F8EDD4
 → chips jaune / vert / rouge pastel
 → prix #C4715A
 ```
@@ -52,6 +52,14 @@ body quasi neutre (hors scope)
 **Interdit** : `linear-gradient`, sidebar verte massive `#D9E8D2`, patchwork, rendu lavé type landing page.
 
 ---
+
+## Grille validation B1.4 (premium first)
+
+| Scénario | Verdict | Notes |
+|---|---|---|
+| P1 — Épicerie fine, pas bio-discount | ☐ OK · ☐ réserve · ☐ KO | |
+| P2 — Chaleur ocre sans saturation | ☐ OK · ☐ réserve · ☐ KO | |
+| P3 — Sidebar discrète (lin, pas bloc vert) | ☐ OK · ☐ réserve · ☐ KO | |
 
 ## Grille validation B1.3
 
@@ -94,4 +102,5 @@ docker exec sandbox-odoo19-odoo-1 odoo -d ckr-marketone-01 --http-port 8071 \
 | Version | Verdict |
 |---|---|
 | `19.0.15.3.0`–`19.0.15.5.0` | NO GO — juxtaposition / trop lavé / dégradés |
-| `19.0.15.6.0`–`19.0.15.6.1` | Recette en attente · fix `$ck-bg-cream` |
+| `19.0.15.6.x` | NO GO / fix SCSS |
+| `19.0.15.7.0` | Recette B1.4 premium first |

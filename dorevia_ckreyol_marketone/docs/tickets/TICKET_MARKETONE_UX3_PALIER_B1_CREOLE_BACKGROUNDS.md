@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
 | **Type** | **UX / DA** — réchauffement visuel SCSS uniquement |
-| **Statut** | **NO GO** `19.0.15.3.0`–`19.0.15.5.0` — **B1.3 chaîne chromatique** (`19.0.15.6.0`, aplats sans dégradé) |
+| **Statut** | **B1.4 premium first** (`19.0.15.7.0`) — recette MOA |
 | **Jalon de référence** | ADR-031 · UX-3 Palier A « Tenue » mergé (`19.0.15.2.0`, PR #9) |
 | **Version cible proposée** | `19.0.15.3.0` |
 | **Branche suggérée** | `feat/marketone-ux3-b1-creole-backgrounds` |
@@ -243,7 +243,18 @@ Palette MOA : voir recette `19.0.15.5.0`.
 
 **Implémentation B1.3** : suppression de tous les `linear-gradient` ; aplats + bordures chaudes uniquement.
 
-**Merge** : après GO visuel MOA sur recette B1.3 (`19.0.15.6.1`).
+---
+
+## 16. B1.4 — premium first (`19.0.15.7.0`)
+
+**Ligne directrice** : premium épicerie fine avant saturation créole.
+
+- Page `#F5E4D0` — ocre source `#A86F08` dilué (plus de chaleur CK que B1.3).
+- Sidebar `#F3EDE5` — lin proche page, filet sauge (plus de bloc vert mint).
+- Cartes / ombres / bordures `#E0CFC0` inchangés en intention écrin.
+- Bandeaux / barre chips : crème `#FAF6F0`, pas bandeau jaune fort.
+
+**Merge** : après GO visuel MOA recette B1.4.
 
 ---
 
@@ -253,10 +264,10 @@ Couleurs **saturées** de la charte d’origine — inspiration créole, **pas**
 
 | # | Hex | Rôle source | Traduction B1.3 (fonds pastel /shop) |
 |---|---|---|---|
-| 1 | `#43350F` | Brun profond · terre / cacao | Texte `$ck-text` `#2A1F18` · chaleur page `$ck-bg-page` `#F5EBDE` |
+| 1 | `#43350F` | Brun profond · terre / cacao | Texte `$ck-text` `#2A1F18` · page B1.4 `$ck-bg-page` `#F5E4D0` |
 | 2 | `#A41756` | Baie / rouge créole | Chip prix `$ck-bg-red-soft` `#F1CFC4` — **pas** en aplat zone |
-| 3 | `#2ABD2A` | Vert vif (drapeau) | **Interdit** en sidebar pleine — mist `#EEF5E9` · sidebar `#E8F1E4` · actif `#D9E8D2` |
-| 4 | `#A86F08` | Ocre / soleil | Liant vanille `$ck-bg-image` `#F9F0D8` · chip collection `#F8EAC0` |
+| 3 | `#2ABD2A` | Vert vif (drapeau) | **Interdit** saturé — sidebar lin `#F3EDE5` · filet sauge · actif `#D9E8D2` |
+| 4 | `#A86F08` | Ocre / soleil | Page `#F5E4D0` · image `#F8EDD4` · chip `#F5E2B8` |
 | 5 | `#7286AE` | Ardoise | Hors triptyque rouge/jaune/vert B1 — réservé (pas de fond /shop sans arbitrage) |
 
 **Règle** : la palette source donne l’**énergie** ; la chaîne `$ck-bg-*` la **dilue** pour rester premium épicerie fine. Pas de mapping 1:1 drapeau → zone UX.

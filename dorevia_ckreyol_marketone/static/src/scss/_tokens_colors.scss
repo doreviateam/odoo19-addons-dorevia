@@ -28,29 +28,28 @@ $marketone-accent: $marketone-primary-container;
 // Palette source CK (référence MOA — jamais en aplat saturé sur /shop) :
 //   #43350F brun · #A41756 baie · #2ABD2A vert · #A86F08 ocre · #7286AE ardoise
 //
-// Chaîne chromatique CK — scope /shop · UX-3 B1.3 (aplats uniquement, pas de dégradé).
-// body quasi neutre (hors .marketone-shop)
-//   → fond page chaud léger → sidebar végétal pâle → cartes blanc chaud
-//   → image vanille → chips pastel → prix terracotta
-$ck-bg-page:        #F5EBDE;
-$ck-bg-cream:       #F7EFE4; // crème liaison (chips category · hover)
-$ck-bg-sidebar:     #E8F1E4;
+// Chaîne chromatique CK — B1.4 « premium first » · aplats uniquement.
+//   page (ocre dilué) → sidebar (lin proche page) → cartes blanc chaud
+//   → image vanille → chips pastel → terracotta
+$ck-bg-page:        #F5E4D0; // ocre #A86F08 dilué — porte la ligne CK
+$ck-bg-cream:       #FAF6F0;
+$ck-bg-sidebar:     #F3EDE5; // végétal-lin, pas bloc vert
 $ck-bg-card:        #FFFDF8;
 $ck-bg-white:       $ck-bg-card;
-$ck-bg-image:       #F9F0D8;
-$ck-bg-yellow-soft: #F8EAC0;
+$ck-bg-image:       #F8EDD4;
+$ck-bg-yellow-soft: #F5E2B8;
 $ck-bg-green-mist:  #EEF5E9;
-$ck-bg-green-soft:  #D9E8D2; // états actifs / filets — jamais aplat sidebar plein
+$ck-bg-green-soft:  #D9E8D2; // filets / accordéon ouvert — pas sidebar pleine
 $ck-bg-red-soft:    #F1CFC4;
 $ck-bg-green-deep:  #6F9A78;
 
-$ck-border-soft:    #E6D4C3;
+$ck-border-soft:    #E0CFC0;
 $ck-border-card:    $ck-border-soft;
 
 $ck-text:           #2A1F18;
 $ck-terracotta:     #C4715A;
 $ck-sauge:          #5A8A6E;
-$ck-sauge-border:   rgba(90, 138, 110, 0.38);
+$ck-sauge-border:   rgba(90, 138, 110, 0.28);
 $ck-or:             #D4B896;
 $ck-rose:           #C9A0A0;
 $ck-border:         $ck-border-soft;
