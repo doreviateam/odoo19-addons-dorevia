@@ -282,6 +282,10 @@ Couleurs **saturées** de la charte d’origine — inspiration créole, **pas**
 
 **À ne pas rouvrir** : body coloré · sidebar verte · dégradés · aplats saturés · cartes multicolores · drapeau explicite.
 
-**Ajustement 3.1** (`19.0.15.7.4`) : `$ck-bg-image: #F8EEDB` — chaleur produit zone image uniquement.
+**Ajustement 3.1** (`19.0.15.7.4`) : `$ck-bg-image: #F8EEDB` — validé MOA.
+
+**Ajustement 3.2** (`19.0.15.7.5`) : `$ck-border-soft: #E2D4BC` — famille bordures chaudes (cartes, sidebar, bandeaux).
+
+**Ajustement 3.3** : en attente retour MOA.
 
 **Merge** : GO visuel MOA explicite post-recette finale.
