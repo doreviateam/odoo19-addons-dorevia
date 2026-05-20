@@ -133,9 +133,9 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | C3.C.8 | Porte Incontournables (Lot 6.1) : filtre sur catégorie publique « Incontournables » = catégorie **secondaire** attendue sur les produits concernés. |
 | C3.C.9 | Chaque produit vendable doit être rattaché à **au moins une** catégorie e-commerce, correspondant à sa **catégorie principale**. |
 | C3.C.10 | Les catégories secondaires sont autorisées **dans la limite de trois** rattachements supplémentaires. Un produit **ne doit pas dépasser quatre** catégories e-commerce au total. |
-| C3.C.11 | Liste cible des catégories principales (13) : Biscuits salés · Biscuits sucrés · Épices · Assaisonnements · Sauces · Condiments · Confitures · Sirops · Boissons · Farines · Fécules · Kits & Coffrets · **Miels** — détail produit : [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md). |
+| C3.C.11 | Liste cible des catégories principales (13) : Biscuits salés · Biscuits sucrés · Épices · Assaisonnements · Sauces · Condiments · Confitures · Sirops · Boissons · Farines · Fécules · Kits & Coffrets · **Miels** — détail produit : [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](./MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md). |
 
-**Référence** : [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) · [`cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md).
+**Référence** : [`cadrage/TAXONOMIE_CATALOGUE.md`](./TAXONOMIE_CATALOGUE.md) · [`cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](./MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md).
 
 **Statut** : **GO MOA** — doctrine ; **pas d’implémentation** hors ticket.
 
@@ -154,7 +154,7 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | SEO | Documenter seulement — pas de chantier SEO avancé v1 |
 | Savoirs | Hors scope — ticket séparé |
 
-**Statut** : C8 **GO MOA** v1 (`19.0.8.0.0`, ADR-026, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/RECETTE_MANUELLE_CULTURE_V1.md) acceptée.
+**Statut** : C8 **GO MOA** v1 (`19.0.8.0.0`, ADR-026, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/culture/RECETTE_MANUELLE_CULTURE_V1.md) acceptée.
 
 #### C8.v2 — Réplicabilité territoires (cadrage GO avec réserves 2026-05-18)
 
@@ -166,9 +166,9 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Visuel | **Pas** d’image par territoire v2 |
 | Navigation | **Pas** de liens croisés ; **pas** de hub `/culture` ; menu header **reporté** |
 | Tests | Tag `dorevia_marketone_culture_v2` ; non-régression **85+** tests |
-| Exécution | Après GO [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) (ADR-027) |
+| Exécution | Après GO [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/culture/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) (ADR-027) |
 
-**Statut** : C8.v2 **GO MOA** (`19.0.9.0.0`, ADR-027, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md) acceptée.
+**Statut** : C8.v2 **GO MOA** (`19.0.9.0.0`, ADR-027, 2026-05-18) — recette [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/culture/RECETTE_MANUELLE_CULTURE_V2.md) acceptée.
 
 ### C9 — Univers Savoirs — recettes contributives v1 (cadrage GO avec réserves 2026-05-18)
 
@@ -183,7 +183,7 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | Rôles | Contributeur, modérateur, éditeur, public |
 | Interdit v1 | Forum, commentaires, likes, hub index, contenu long sur `/shop` |
 | SEO | Documenter seulement |
-| Exécution | Après GO [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) (ADR-028) |
+| Exécution | Après GO [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/savoirs/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) (ADR-028) |
 
 **Statut** : C9 **contractuel** — exécution en attente GO MOA.
 

@@ -156,7 +156,7 @@
 | **Statut** | Acceptée — base créée sur sandbox |
 | **Décision** | L’environnement de référence Marketone est la base PostgreSQL **`ckr-marketone-01`** sur Docker `sandbox-odoo19-odoo-1` (Odoo `19.0-20260324`, URL http://localhost:18079). |
 | **Règles** | Pas de `dorevia_ckreyol_marketplace`, pas de thème tiers, pas d’optionnel Marketone sans ticket ; socle `website` + `website_sale` + `portal`. |
-| **Conséquences** | Lot 1 (install / update / smoke) s’exécute uniquement sur cette base ; procédure dans `docs/recette/ENV_REFERENCE.md`. |
+| **Conséquences** | Lot 1 (install / update / smoke) s’exécute uniquement sur cette base ; procédure dans `docs/recette/reference/ENV_REFERENCE.md`. |
 | **Note** | `website_sale_wishlist` et `website_sale_comparison` auto-installés par Odoo 19 ont été désinstallés après init pour garder un périmètre minimal. |
 
 ---
@@ -280,7 +280,7 @@
 | **Contexte** | Le module legacy `dorevia_ckreyol_marketplace` versionne une banque PNG sous `docs/assets/` (packshots, moodboards MVP02, exports Stitch). Marketone ne cohabite pas avec marketplace sur une même base, mais peut **réutiliser** ces fichiers en recette et cadrage. |
 | **Décision** | Autoriser l'exploitation de cette banque pour : (1) **recette BO** — 2 à 3 produits avec images réelles (`homepage_*`, `exemple_produit_*`) ; (2) **cadrage** lots éditoriaux futurs ; (3) **inspiration** Stitch — sans copie HTML/CSS. |
 | **Interdictions** | Pas de seed XML produit dans Marketone ; pas de copie mécanique des blocs marketplace (Explorer, hero legacy) ; pas d'assets lourds sur fiche Lot 4 au-delà du retail sobre ; fichiers `stitch_*` = inspiration uniquement. |
-| **Référence opérationnelle** | `docs/recette/ASSETS_REFERENCE.md` ; inventaire complet : `dorevia_ckreyol_marketplace/README.md` § Références visuelles. |
+| **Référence opérationnelle** | `docs/recette/reference/ASSETS_REFERENCE.md` ; inventaire complet : `dorevia_ckreyol_marketplace/README.md` § Références visuelles. |
 | **Impact Lot 4** | Recette visuelle : importer manuellement 2–3 packshots en BO — **aucun** changement de périmètre technique du ticket. |
 
 ---
@@ -425,7 +425,7 @@
 | **Contexte** | Enrichissement catalogue recette, portes Boutique 6.1/6.2. Première rédaction : distinguer catégorie vs **collection dédiée** (`marketone.shop.collection`). Clarification MOA : s’aligner sur **`product.public.category`** (Odoo autorise plusieurs catégories par produit). |
 | **Décision** | **Support unique (provisoire)** : `product.public.category`. **Convention MOA** : **une catégorie principale** obligatoire (rayon / nature — stable, descriptive) + **0 à 3 catégories secondaires** ; **max 4** catégories e-commerce par produit vendable. **Origine** = territoire. **Porte** = entrée navigation `/shop`. **Ne pas** implémenter `marketone.shop.collection` pour l’instant. |
 | **Rattachement** | Chaque produit vendable : **min 1** catégorie e-commerce (principale). Secondaires : max **3**. Formulation : voir C3.C.9–C3.C.10. |
-| **Principales (13)** | Biscuits salés · Biscuits sucrés · Épices · Assaisonnements · Sauces · Condiments · Confitures · Sirops · Boissons · Farines · Fécules · Kits & Coffrets · **Miels** — mapping recette : [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md). |
+| **Principales (13)** | Biscuits salés · Biscuits sucrés · Épices · Assaisonnements · Sauces · Condiments · Confitures · Sirops · Boissons · Farines · Fécules · Kits & Coffrets · **Miels** — mapping recette : [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](./MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md). |
 | **Pourquoi principale** | La notion de catégorie principale est introduite afin d’offrir au visiteur une **navigation transversale stable par nature de produit**. Même si Odoo permet plusieurs catégories e-commerce publiques par produit, Marketone distingue une **catégorie principale de référence**, utilisée pour structurer le menu de navigation par catégories, et des **catégories secondaires** utilisées pour les sélections, usages ou mises en avant. Question visiteur cible : *« Quel type de produit est-ce que je cherche ? »* (grands rayons : Biscuits salés, Épices, Confitures, Boissons, etc.). |
 | **Règle synthétique** | La catégorie principale **structure le menu**. Les catégories secondaires **enrichissent les parcours**. Les origines **situent** le produit. Les portes **orientent l’entrée**. |
 | **Indépendance origine** | La catégorisation **ne dépend pas** de l’origine. Harmonisation Martinique / Guadeloupe = chantier **Origines / Culture**, sans impact sur principale / secondaires. |
@@ -433,7 +433,7 @@
 | **Évolution** | Modèle collection commercial — voir **ADR-030** (objet métier cible distinct ; secondaires = transitoire). |
 | **Lot 6.1** | Porte Incontournables via catégorie publique « Incontournables » = **aligné** (catégorie **secondaire** + filtre porte) — **statut transitoire** (ADR-030). |
 | **Contrat** | C3.C |
-| **Document** | [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) |
+| **Document** | [`cadrage/TAXONOMIE_CATALOGUE.md`](./TAXONOMIE_CATALOGUE.md) |
 
 ---
 
@@ -454,7 +454,7 @@
 | **Secondaires BO — statut transitoire** | Les 4 secondaires ADR-029 (*Incontournables*, *Apéritif créole*, *Cuisine du manioc*, *Idées cadeaux*) **peuvent préfigurer** des collections mais **ne sont pas** le modèle cible. **Lot 6.1** (*Incontournables* + `marketone_mode=featured` + `/incontournables` → 301) = **pattern transitoire** (filtre via `product.public.category` + porte), pas définition de la collection commerciale à terme. |
 | **Relation ADR-029** | Catégories principales / secondaires = taxonomie **nature** et enrichissement BO. Collections = axe **intention d’achat** — orthogonal. Un produit garde sa principale et son origine **en plus** d’appartenir à 0..n collections (cardinalité à trancher au ticket). |
 | **Contrats** | C3.4 (priorité modes) · C3.C (taxonomie) — extensions collections à rédiger au ticket |
-| **Références** | ADR-029 · [`TAXONOMIE_CATALOGUE.md`](TAXONOMIE_CATALOGUE.md) · [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) · Lot 6.1 featured · sidebar C4 `19.0.10.9.0` |
+| **Références** | ADR-029 · [`TAXONOMIE_CATALOGUE.md`](./TAXONOMIE_CATALOGUE.md) · [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](./MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) · Lot 6.1 featured · sidebar C4 `19.0.10.9.0` |
 
 ### Distinctions — questions visiteur
 
@@ -497,8 +497,8 @@
 | Étape | Statut |
 |-------|--------|
 | Relecture MOA ADR-030 | ✅ 2026-05-19 |
-| Ticket Lot A BO | [`TICKET_MARKETONE_COLLECTION_LOT_A.md`](../tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md) — **clôturé** `19.0.11.0.0` |
-| Ticket Lot B sidebar | [`TICKET_MARKETONE_COLLECTION_LOT_B_SIDEBAR.md`](../tickets/TICKET_MARKETONE_COLLECTION_LOT_B_SIDEBAR.md) — **clôturé** `19.0.12.0.0` |
+| Ticket Lot A BO | [`TICKET_MARKETONE_COLLECTION_LOT_A.md`](../tickets/boutique/TICKET_MARKETONE_COLLECTION_LOT_A.md) — **clôturé** `19.0.11.0.0` |
+| Ticket Lot B sidebar | [`TICKET_MARKETONE_COLLECTION_LOT_B_SIDEBAR.md`](../tickets/boutique/TICKET_MARKETONE_COLLECTION_LOT_B_SIDEBAR.md) — **clôturé** `19.0.12.0.0` |
 | Lot C (homepage) | Ticket ultérieur |
 
 ---
@@ -522,13 +522,31 @@
 
 ---
 
+## ADR-032 — UX-3 Palier B1 — Chaîne chromatique CK `/shop`
+
+| | |
+|---|---|
+| **Date** | 2026-05-20 |
+| **Statut** | **Acceptée — GO MOA clôturé** |
+| **Version module** | **`19.0.15.7.6`** (minimum `main` post-merge PR #10) |
+| **Merge** | PR [#10](https://github.com/doreviateam/odoo19-addons-dorevia/pull/10) |
+| **Contexte** | Réchauffement fonds créoles pastel sur `/shop` après jalon ADR-031 (Palier A « Tenue »). Itérations MOA : harmonie chromatique, aplats sans dégradé, base sobre premium. |
+| **Décision** | Palier B1 = fonds `$ck-*` scope `.marketone-shop` : body `#FFF`, sidebar blanc chaud, cartes corps `#FDF9F0`, image `#F8EEDB`, bordures `#E2D4BC`, chips pastel par type UX-1, prix terracotta inchangé. |
+| **Interdit** | Dégradés · sidebar verte massive · bloc beige page · patchwork drapeau · saturation type `#2ABD2A` |
+| **Recette** | [`RECETTE_MANUELLE_SHOP_UX3_B1_CREOLE_BACKGROUNDS.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX3_B1_CREOLE_BACKGROUNDS.md) |
+| **Ticket** | [`TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS.md`](../tickets/ux/TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS.md) |
+| **Tests référence** | `dorevia_marketone_shop_regression` · `dorevia_marketone_shop_filter_state` · `dorevia_marketone_shop_sidebar_ux2` — **21/21** |
+| **Suite** | Palier B2 (chips fixes Tout/Promo/…) — ticket ultérieur, hors B1 |
+
+---
+
 ## Décisions en attente (à trancher avant Lots 6.3+)
 
 | Sujet | Options | Décideur |
 |-------|---------|----------|
 | Contrainte catégories e-commerce | Principale obligatoire · max 4 publiques · distinction principale/secondaire — **ticket dédié** | MOA (post mapping BO) |
 | Marquage catégorie principale vs secondaire | Convention BO seule vs champ produit / ordre — **hors scope sans ticket** | MOA (ticket dédié) |
-| Modèle `marketone.shop.collection` | **ADR-030 validé** — ticket Lot A ; D1–D3 · D6 hors Lot A | MOA — [`TICKET_MARKETONE_COLLECTION_LOT_A`](../tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md) |
+| Modèle `marketone.shop.collection` | **ADR-030 validé** — ticket Lot A ; D1–D3 · D6 hors Lot A | MOA — [`TICKET_MARKETONE_COLLECTION_LOT_A`](../tickets/boutique/TICKET_MARKETONE_COLLECTION_LOT_A.md) |
 | Alias HTTP legacy | `/kits`, `/promotions`, etc. en 301 | MOA SEO — Lot 6.2+ |
 | `product_pack` | Dépendance optionnelle pour porte Kits | MOA |
 | SEO `canonical` / `noindex` | Politique indexation URLs portes | MOA SEO |

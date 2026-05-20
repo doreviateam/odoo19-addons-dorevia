@@ -4,8 +4,8 @@
 |-------|--------|
 | **Statut** | **GO MOA** (2026-05-18) — **référence de cadrage officielle** ; document uniquement |
 | **Date** | 2026-05-18 (version consolidée validée MOA) |
-| **ADR** | [ADR-024](DECISIONS.md#adr-024--structuration-c-kreyol-en-trois-univers-boutique-culture-savoirs) — **GO** |
-| **Complète** | [ADR-018](DECISIONS.md#adr-018--articulation-des-trois-dimensions-c-kreyol) (vendre / raconter / transmettre) |
+| **ADR** | [ADR-024](./DECISIONS.md#adr-024--structuration-c-kreyol-en-trois-univers-boutique-culture-savoirs) — **GO** |
+| **Complète** | [ADR-018](./DECISIONS.md#adr-018--articulation-des-trois-dimensions-c-kreyol) (vendre / raconter / transmettre) |
 | **Contexte projet** | Lots 1–5 **GO** ; Lot 6.1 **GO avec réserves** ; Lot 6.2 Origines **GO** (`19.0.7.0.0`) |
 
 ---
@@ -147,7 +147,7 @@ Principale → structure le menu · Secondaires → enrichissent les parcours.
 Origine → situe le produit · Porte → oriente l’entrée.
 ```
 
-Document détaillé : [`cadrage/TAXONOMIE_CATALOGUE.md`](cadrage/TAXONOMIE_CATALOGUE.md) · ADR-029.
+Document détaillé : [`cadrage/TAXONOMIE_CATALOGUE.md`](./TAXONOMIE_CATALOGUE.md) · ADR-029.
 
 ---
 
@@ -250,7 +250,7 @@ Audit **lecture seule** du module legacy `dorevia_ckreyol_marketplace` (Odoo 19)
 | Source | Attribut **Origine** + `marketone.shop.origin` **minimal** (profil visiteur / slug / phrase / visibilité) |
 | Hybride Origines | **Boutique** : filtre achetable sur `/shop` · **Culture** : récit territoire **reporté** (tickets dédiés) |
 | Culture | Aucun hub territoire ni contenu long sur `/shop` au Lot 6.2 |
-| Clôture | [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) · [`RECETTE_MANUELLE_LOT6_2.md`](../recette/RECETTE_MANUELLE_LOT6_2.md) |
+| Clôture | [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/lots/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) · [`RECETTE_MANUELLE_LOT6_2.md`](../recette/lots/RECETTE_MANUELLE_LOT6_2.md) |
 
 ### 7.2 Lots Culture (post-socle, espaces dédiés)
 
@@ -308,12 +308,12 @@ Le savoir en prolongement.
 |---|--------|--------|
 | 1 | Valider **ADR-024** et cette note (version consolidée) | **GO MOA** (2026-05-18) |
 | 2 | Lot 6.2 Origines — cadrage, exécution, recette | **GO** — `19.0.7.0.0`, commit `3c179ae` |
-| 3 | **Consolidation portes Boutique** (6.1 + 6.2) | **GO** (2026-05-18) — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) |
+| 3 | **Consolidation portes Boutique** (6.1 + 6.2) | **GO** (2026-05-18) — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/boutique/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) |
 | 4 | **Culture** — territoires v1 | **GO MOA** `19.0.8.0.0` — `/culture/<slug>` (pilote `guadeloupe`) |
 | 5 | **Culture v2 légère** (`martinique`, `reunion`) | **GO MOA** `19.0.9.0.0` — 3 territoires Culture |
-| 6 | **Arbitrage prochaine étape** | **GO MOA** — Option 2 Savoirs v1 — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
-| 7 | **Savoirs v1 cadrage** | **GO avec réserves** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
-| 7b | **Savoirs v1 exec** | **Ouvert** — [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) |
+| 6 | **Arbitrage prochaine étape** | **GO MOA** — Option 2 Savoirs v1 — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/pilotage/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
+| 7 | **Savoirs v1 cadrage** | **GO avec réserves** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/savoirs/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
+| 7b | **Savoirs v1 exec** | **Ouvert** — [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/savoirs/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) |
 | 8 | **Lot 6.3+** | **Reporté** (gel MOA) |
 | 9 | **Culture v3** (hub léger) | **Reporté** |
 | 10 | **Pas de code Savoirs** | Tant que cadrage / exec Savoirs n’est pas **GO** |

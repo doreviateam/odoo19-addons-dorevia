@@ -4,7 +4,7 @@
 |-------|--------|
 | **Statut** | **GO MOA** — mapping appliqué et recette validée (2026-05-19) |
 | **Base** | `ckr-marketone-01` — lecture seule au moment de l’analyse |
-| **Doctrine** | [TAXONOMIE_CATALOGUE.md](TAXONOMIE_CATALOGUE.md) · [ADR-029](DECISIONS.md#adr-029--taxonomie-catalogue-convention-odoo-catégories-e-commerce) · [C3.C](CONTRACTS.md#c3c--taxonomie-catalogue-moa-2026-05-19) |
+| **Doctrine** | [TAXONOMIE_CATALOGUE.md](./TAXONOMIE_CATALOGUE.md) · [ADR-029](./DECISIONS.md#adr-029--taxonomie-catalogue-convention-odoo-catégories-e-commerce) · [C3.C](./CONTRACTS.md#c3c--taxonomie-catalogue-moa-2026-05-19) |
 | **Modifications BO** | **Appliquées** sur `ckr-marketone-01` (2026-05-19) — ticket BO clôturé |
 
 ---
@@ -23,18 +23,18 @@
 
 ## Liste cible des catégories principales (13)
 
-1. Biscuits salés  
-2. Biscuits sucrés  
-3. Épices  
-4. Assaisonnements  
-5. Sauces  
-6. Condiments  
-7. Confitures  
-8. Sirops  
-9. Boissons  
-10. Farines  
-11. Fécules  
-12. Kits & Coffrets  
+1. Biscuits salés
+2. Biscuits sucrés
+3. Épices
+4. Assaisonnements
+5. Sauces
+6. Condiments
+7. Confitures
+8. Sirops
+9. Boissons
+10. Farines
+11. Fécules
+12. Kits & Coffrets
 13. **Miels** *(13e principale — arbitrage MOA 2026-05-19)*
 
 **Règle Kits & Coffrets** : catégorie principale **uniquement** lorsque le produit vendu est réellement un kit ou un coffret packagé.
@@ -163,15 +163,15 @@ Même si l’origine BO est à harmoniser avec les contenus Culture, cela **ne m
 
 | Étape | Document |
 |-------|----------|
-| Application BO + recette `ckr-marketone-01` | [`TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](../tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) |
-| Grille de validation MOA | [`RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](../recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) |
+| Application BO + recette `ckr-marketone-01` | [`TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](../tickets/boutique/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) |
+| Grille de validation MOA | [`RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](../recette/boutique/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) |
 | Contrainte technique (ultérieur) | Ticket dédié — principale obligatoire · max 4 · marquage principale/secondaire |
 
 ---
 
 ## Références
 
-- Analyse initiale : conversation MOA 2026-05-19 (27 produits, lecture `ckr-marketone-01`)  
-- [`TAXONOMIE_CATALOGUE.md`](TAXONOMIE_CATALOGUE.md)  
-- [`DECISIONS.md`](DECISIONS.md) — ADR-029  
-- [`CONTRACTS.md`](CONTRACTS.md) — C3.C
+- Analyse initiale : conversation MOA 2026-05-19 (27 produits, lecture `ckr-marketone-01`)
+- [`TAXONOMIE_CATALOGUE.md`](./TAXONOMIE_CATALOGUE.md)
+- [`DECISIONS.md`](./DECISIONS.md) — ADR-029
+- [`CONTRACTS.md`](./CONTRACTS.md) — C3.C
