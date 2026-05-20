@@ -9,7 +9,26 @@
               name="Marketone: header chrome C-Kreyol"
               priority="90">
         <xpath expr="//header" position="attributes">
-            <attribute name="t-attf-class" add="marketone-chrome" separator=" "/>
+            <attribute name="t-attf-class" add="marketone-chrome marketone-header-sticky" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="marketone_header_sticky_critical_css"
+              inherit_id="website.layout"
+              name="Marketone: navbar sticky toujours visible"
+              priority="91">
+        <xpath expr="//head" position="inside">
+            <style>
+                /* Navbar toujours visible au scroll — sans JS Odoo header_* */
+                header#top.marketone-chrome {
+                    position: sticky !important;
+                    top: 0 !important;
+                    z-index: 1030;
+                    transform: none !important;
+                    opacity: 1 !important;
+                    visibility: visible !important;
+                }
+            </style>
         </xpath>
     </template>
 

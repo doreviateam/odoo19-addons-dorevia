@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Désactive tous les effets Odoo de header au scroll (standard / fixed / hide). -->
+    <record id="website.header_visibility_standard" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="website.header_visibility_fixed" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="website.header_visibility_disappears" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="website.header_visibility_fade_out" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+</odoo>

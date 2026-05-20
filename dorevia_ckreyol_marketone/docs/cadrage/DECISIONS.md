@@ -540,6 +540,35 @@
 
 ---
 
+## ADR-033 — CK Image Normalizer V1 — POC tuiles commerce `/shop`
+
+| | |
+|---|---|
+| **Date** | 2026-05-20 |
+| **Statut** | **Acceptée — GO POC avec réserves MOA** (2026-05-20) |
+| **Contexte** | UX-3 B1 stabilise la grille `/shop` (ADR-031, ADR-032) ; réserve non bloquante n°3 : homogénéisation durable visuels = futur moteur normalisation images. Avis technique Dev : [`NOTE_CK_IMAGE_NORMALIZER_SHOP_V1.md`](./NOTE_CK_IMAGE_NORMALIZER_SHOP_V1.md). |
+| **Décision** | Lancer un **POC CLI externe** (hors Odoo) pour normaliser les **tuiles commerce `/shop`** selon recette versionnée `ck_shop_tile_v1` — **pas** d’intégration Odoo en V1. |
+| **Vision produit MOA** | [`NOTE_CK_IMAGE_NORMALIZER_VISION_MOA.md`](./NOTE_CK_IMAGE_NORMALIZER_VISION_MOA.md) — sas qualité média entre photo vendeur et tuile commerce · gouvernance source indispensable |
+| **Périmètre V1** | Carré 1024×1024 · fond `#F8EEDB` **baked-in validé MOA** · WebP + JPEG · original conservé · rapport batch · profils `packshot` / `lifestyle` |
+| **Interdit V1** | Remplacer `image_1920` · BO Odoo complet · détourage complexe · IA générative · hero / fiche / culture / autres usages image |
+| **Séquence** | (1) POC CLI → (2) recette MOA **21 refs** → (3) validation grille → (4) pilote média 50 SKU · toute suite Odoo nécessite un ticket séparé |
+| **Échantillon POC** | **21 références** — banque catalogue disponible (`marketplace/docs/assets`) |
+| **Critères GO recette** | `OK` ≥ 60 % (**≥ 13/21**) · `REJECTED` ≤ 10 % (**≤ 2/21**) · gain visuel MOA desktop + mobile |
+| **Ticket** | [`TICKET_MARKETONE_CK_IMAGE_NORMALIZER_POC.md`](../tickets/boutique/TICKET_MARKETONE_CK_IMAGE_NORMALIZER_POC.md) |
+| **Suite** | **P6 validé** · **P7 ouvert** — [`TICKET_V1_5_IMPLEMENTATION`](../tickets/boutique/TICKET_MARKETONE_CK_IMAGE_NORMALIZER_V1_5_IMPLEMENTATION.md) |
+| **P6 cadrage V1.5** | **Validé MOA** (2026-05-20) — [`TICKET_V1_5_CADRAGE`](../tickets/boutique/TICKET_MARKETONE_CK_IMAGE_NORMALIZER_V1_5_CADRAGE.md) |
+| **P1 POC** | **Clôturé MOA** (2026-05-20) — **GO POC avec réserves** · recette **`ck_shop_tile_v1.1`** · doc clôture livrée |
+| **Pilote média 50 SKU** | **Clôturé MOA** (2026-05-20) — **GO pilote avec réserves confirmé** · **43/50 exploitables (86 %)** · lot X exclusion temporaire · sas `NEEDS_REVIEW` indispensable |
+| **Décision pilote** | [`REPONSE_MOA_CLOTURE_PILOTE_MEDIA_CATALOGUE.md`](../recette/boutique/REPONSE_MOA_CLOTURE_PILOTE_MEDIA_CATALOGUE.md) · [`RECETTE_MANUELLE_CK_IMAGE_NORMALIZER_PILOTE_MEDIA.md`](../recette/boutique/RECETTE_MANUELLE_CK_IMAGE_NORMALIZER_PILOTE_MEDIA.md) |
+| **Révision 2026-05-20** | Échantillon **21 refs** · lot officiel validé · réserves : reprises manuelles 2 fichiers · lifestyle moins homogènes |
+| **Décision MOA** | [`REPONSE_MOA_GO_POC_IMAGE_NORMALIZER_V1_1.md`](../recette/boutique/REPONSE_MOA_GO_POC_IMAGE_NORMALIZER_V1_1.md) · [`RECETTE_MANUELLE_CK_IMAGE_NORMALIZER_POC.md`](../recette/boutique/RECETTE_MANUELLE_CK_IMAGE_NORMALIZER_POC.md) |
+| **Verdict final P8-5 (V1.5 hybride)** | **Clôturé MOA** (2026-05-20) — **GO avec réserves gouvernées** · modèle hybride `v1.1 + v1.2-alpha` validé · `Lot B` maintenu en `NEEDS_REVIEW_SOURCE` sous gouvernance source |
+| **Amendement STOP alpha (2026-05-20)** | **Retrait v1.2-alpha exécuté** — doctrine **image pleine sans transparence** · **`ck_shop_tile_v1.1` seule recette active** · 9 produits rebasculés v1.1 · import PNG alpha bloqué · voir [`RAPPORT_RETRAIT_V12_ALPHA_EXECUTION.md`](../recette/boutique/RAPPORT_RETRAIT_V12_ALPHA_EXECUTION.md) |
+| **Doctrine image v2 (2026-05-20)** | **Validée MOA** — deux images, trois décisions · [`DOCTRINE_IMAGE_V2.md`](./DOCTRINE_IMAGE_V2.md) · [`PLAN_ALIGNEMENT_DOCTRINE_IMAGE_V2.md`](../recette/boutique/PLAN_ALIGNEMENT_DOCTRINE_IMAGE_V2.md) |
+| **Références clôture P8-5** | [`TICKET_MARKETONE_CK_IMAGE_NORMALIZER_V1_2_ALPHA_P8.md`](../tickets/boutique/TICKET_MARKETONE_CK_IMAGE_NORMALIZER_V1_2_ALPHA_P8.md) · [`RAPPORT_P8_5_LOTA_LOTB_EXECUTION.md`](../recette/boutique/RAPPORT_P8_5_LOTA_LOTB_EXECUTION.md) |
+
+---
+
 ## Décisions en attente (à trancher avant Lots 6.3+)
 
 | Sujet | Options | Décideur |

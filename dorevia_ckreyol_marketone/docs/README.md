@@ -42,6 +42,9 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 | Collections Lot A (BO) | [`tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md`](./tickets/boutique/TICKET_MARKETONE_COLLECTION_LOT_A.md) | **Clôturé GO MOA** — `19.0.11.0.0` (2026-05-19) |
 | — | [`recette/RECETTE_MANUELLE_COLLECTION_LOT_A.md`](./recette/boutique/RECETTE_MANUELLE_COLLECTION_LOT_A.md) | Recette BO collections Lot A — **GO MOA** |
 | [`cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](./cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) | Mapping 27 produits recette → catégories principales / secondaires |
+| [`cadrage/NOTE_CK_IMAGE_NORMALIZER_SHOP_V1.md`](./cadrage/NOTE_CK_IMAGE_NORMALIZER_SHOP_V1.md) | Moteur normalisation images tuiles `/shop` V1 — **GO POC avec réserves MOA** (ADR-033) |
+| CK Image Normalizer POC | [`tickets/boutique/TICKET_MARKETONE_CK_IMAGE_NORMALIZER_POC.md`](./tickets/boutique/TICKET_MARKETONE_CK_IMAGE_NORMALIZER_POC.md) | **Clôturé GO avec réserves** |
+| CK Image Normalizer pilote | [`tickets/boutique/TICKET_MARKETONE_CK_IMAGE_NORMALIZER_PILOTE_MEDIA.md`](./tickets/boutique/TICKET_MARKETONE_CK_IMAGE_NORMALIZER_PILOTE_MEDIA.md) | **GO avec réserves** — P4 clôturé · 72 % exploitable |
 | [`tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](./tickets/boutique/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) | Application BO catégories e-commerce (sans code) |
 | [`recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](./recette/boutique/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) | Recette manuelle catégories catalogue |
 | [`pilotage/ROADMAP.md`](./pilotage/ROADMAP.md) | Roadmap par lots |

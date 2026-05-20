@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- V1.5 lite : vignette grille /shop — image_shop_tile ou comportement Odoo 19 standard -->
+    <template id="marketone_products_item_shop_tile_image"
+              inherit_id="website_sale.products_item"
+              name="Marketone: tuile /shop — image_shop_tile si activée"
+              priority="50">
+        <xpath expr="//span[hasclass('oe_product_image_img_wrapper_primary')]" position="replace">
+            <span t-if="product.marketone_use_shop_tile_on_grid()"
+                  t-field="product.image_shop_tile"
+                  t-options="{'widget': 'image', 'class': 'oe_product_image_img h-100 w-100'}"
+                  class="oe_product_image_img_wrapper oe_product_image_img_wrapper_primary marketone-shop-card-photo marketone-shop-tile-photo"/>
+            <span t-else=""
+                  t-field="primary_image_holder.image_1920"
+                  t-options="{'widget': 'image', 'preview_image': 'image_1024', 'class': 'oe_product_image_img h-100 w-100'}"
+                  class="oe_product_image_img_wrapper oe_product_image_img_wrapper_primary marketone-shop-card-photo"/>
+        </xpath>
+    </template>
+</odoo>

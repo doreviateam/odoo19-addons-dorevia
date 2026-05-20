@@ -1,0 +1,51 @@
+ordre,product_id,default_code,reference,origin,lot_catalogue,profile,source_type,lot_pilote,notes,website_url
+1,7,,Maniocookies salés La Platine,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/maniocookies-sales-la-platine-7
+2,8,,Crackers manioc Sainte-Anne,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/crackers-manioc-sainte-anne-8
+3,9,,Pâtes de manioc Mayotte,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/pates-de-manioc-mayotte-9
+4,153,,Confiture banane flambée,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/confiture-banane-flambee-153
+5,154,,Colombo des Antilles (épices),Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/colombo-des-antilles-epices-154
+6,155,,Shrub agrumes créole,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/shrub-agrumes-creole-155
+7,156,,Biscuits coco vanille,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/biscuits-coco-vanille-156
+8,157,,Sirop de canne vanille,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/sirop-de-canne-vanille-157
+9,158,,Sauce piment cadji,La Réunion,noyau_27,packshot,export_bo,pilote_50,,/shop/sauce-piment-cadji-158
+10,159,,Rougail épices Réunion,La Réunion,noyau_27,packshot,export_bo,pilote_50,,/shop/rougail-epices-reunion-159
+11,160,,Chutney mangue verte,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/chutney-mangue-verte-160
+12,161,,Café arabica Antilles,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/cafe-arabica-antilles-161
+13,162,,Infusion vétiver citronnelle,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/infusion-vetiver-citronnelle-162
+14,163,,Mix beignets manioc,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/mix-beignets-manioc-163
+15,164,,Miel créole baie rose,La Réunion,noyau_27,packshot,export_bo,pilote_50,,/shop/miel-creole-baie-rose-164
+16,177,,Coffret gourmand îles créoles,La Réunion,noyau_27,packshot,export_bo,pilote_50,,/shop/coffret-gourmand-iles-creoles-177
+17,178,,Palets manioc croustillants La Platine,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/palets-manioc-croustillants-la-platine-178
+18,179,,Mélange épices caraïbes,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/melange-epices-caraibes-179
+19,180,,Tartinade coco citron vert,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/tartinade-coco-citron-vert-180
+20,181,,Assortiment apéritif créole,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/assortiment-aperitif-creole-181
+21,182,,Confiture ananas vanille,La Réunion,noyau_27,packshot,export_bo,pilote_50,,/shop/confiture-ananas-vanille-182
+22,183,,Chips banane plantain salées,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/chips-banane-plantain-salees-183
+23,184,,Semoule manioc fine Mayotte,La Réunion,noyau_27,packshot,export_bo,pilote_50,,/shop/semoule-manioc-fine-mayotte-184
+24,185,,Confiture fruits de la passion,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/confiture-fruits-de-la-passion-185
+25,186,,Trio sirops des Antilles,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/trio-sirops-des-antilles-186
+26,187,,Marinade jerk authentique,Martinique,noyau_27,packshot,export_bo,pilote_50,,/shop/marinade-jerk-authentique-187
+27,188,,Coffret biscuits et douceurs,Guadeloupe,noyau_27,packshot,export_bo,pilote_50,,/shop/coffret-biscuits-et-douceurs-188
+28,467,CK-MO-028,Sauce scotch bonnet créole,Martinique,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-028-sauce-scotch-bonnet-creole-467
+29,468,CK-MO-029,Confiture goyave rose,Guadeloupe,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-029-confiture-goyave-rose-468
+30,469,CK-MO-030,Pochette curry des Antilles,Martinique,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-030-pochette-curry-des-antilles-469
+31,470,CK-MO-031,Marinade jerk citron vert,Martinique,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-031-marinade-jerk-citron-vert-470
+32,471,CK-MO-032,Biscuits banane confiture,Guadeloupe,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-032-biscuits-banane-confiture-471
+33,472,CK-MO-033,Palettes coco vanille,Martinique,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-033-palettes-coco-vanille-472
+34,473,CK-MO-034,Chips patate douce créole,Guadeloupe,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-034-chips-patate-douce-creole-473
+35,474,CK-MO-035,Crackers sarrasin Réunion,La Réunion,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-035-crackers-sarrasin-reunion-474
+36,475,CK-MO-036,Sauce chien antillaise,Guadeloupe,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-036-sauce-chien-antillaise-475
+37,476,CK-MO-037,Tapenade agrumes confits,Martinique,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-037-tapenade-agrumes-confits-476
+38,477,CK-MO-038,Confiture christophine gingembre,Guadeloupe,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-038-confiture-christophine-gingembre-477
+39,478,CK-MO-039,Confiture papaye muscovado,La Réunion,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-039-confiture-papaye-muscovado-478
+40,479,CK-MO-040,Quatre épices créoles,Guadeloupe,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-040-quatre-epices-creoles-479
+41,480,CK-MO-041,Poudre colombo créole,Martinique,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-041-poudre-colombo-creole-480
+42,481,CK-MO-042,Bouillon légumes des îles,Guadeloupe,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-042-bouillon-legumes-des-iles-481
+43,482,CK-MO-043,Rougail tomate créole,La Réunion,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-043-rougail-tomate-creole-482
+44,483,CK-MO-044,Sirop jambosier,Martinique,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-044-sirop-jambosier-483
+45,484,CK-MO-045,Sirop banane flambée,Guadeloupe,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-045-sirop-banane-flambee-484
+46,485,CK-MO-046,Jus goyave passion,Guadeloupe,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-046-jus-goyave-passion-485
+47,486,CK-MO-047,Infusion bois bandé,Martinique,extension_23,lifestyle,export_bo,pilote_50,Image recette assets,/shop/ck-mo-047-infusion-bois-bande-486
+48,487,CK-MO-048,Farine banane plantain,Guadeloupe,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-048-farine-banane-plantain-487
+49,488,CK-MO-049,Flocons manioc instantanés,La Réunion,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-049-flocons-manioc-instantanes-488
+50,489,CK-MO-050,Miel polyfloral créole,Martinique,extension_23,packshot,export_bo,pilote_50,Image recette assets,/shop/ck-mo-050-miel-polyfloral-creole-489

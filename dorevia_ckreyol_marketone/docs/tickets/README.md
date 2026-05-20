@@ -5,7 +5,7 @@ Les tickets sont rangés par domaine fonctionnel ou phase de pilotage.
 | Dossier | Contenu |
 |---------|---------|
 | [`lots/`](lots/) | Lots chronologiques du socle Marketone |
-| [`boutique/`](boutique/) | Boutique, catalogue, collections, sidebar et portes |
+| [`boutique/`](boutique/) | Boutique, catalogue, collections, sidebar, portes, **média POC / pilote / V1.5** |
 | [`culture/`](culture/) | Culture v1/v2 |
 | [`savoirs/`](savoirs/) | Savoirs v1 |
 | [`ux/`](ux/) | UX-1, UX-2, UX-3 |

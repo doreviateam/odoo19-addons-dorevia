@@ -97,3 +97,30 @@ class TestMarketoneLot3Shop(HttpCase):
             re.search(r"o_wsale_products|oe_product|products_grid", text),
             "Structure liste website_sale attendue sur /shop.",
         )
+
+    def test_shop_conversion_tile_structure(self):
+        """Tuile conversion MOA — titre 2 lignes, CTA Voir fiche, prix droite, panier survol."""
+        response = self.url_open("/shop")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        self.assertIn("marketone-shop-card-title", html)
+        self.assertIn("marketone-shop-card-footer", html)
+        self.assertIn("marketone-shop-card-cta", html)
+        cta_match = re.search(r"<a\b[^>]*marketone-shop-card-cta[^>]*>", html)
+        self.assertIsNotNone(cta_match, "Ancre CTA conversion attendue dans /shop.")
+        self.assertRegex(
+            cta_match.group(0),
+            r'href="/shop/[^"]+"',
+            "CTA Voir doit pointer vers la fiche produit.",
+        )
+        self.assertIn("marketone-shop-card-wishlist", html)
+        self.assertNotIn("oe_subdescription", html)
+        self.assertIn("o_wsale_product_btn", html)
+
+    def test_shop_tile_photo_full_bleed_markup(self):
+        """Grille — cover natif + classe dérivé pour rognage aplat v1.1 bake-in."""
+        response = self.url_open("/shop")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        self.assertIn("o_wsale_products_opt_thumb_cover", html)
+        self.assertIn("marketone-shop-tile-photo", html)

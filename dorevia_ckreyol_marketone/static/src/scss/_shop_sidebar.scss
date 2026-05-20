@@ -1,7 +1,7 @@
 // UX-2 — Sidebar filtres /shop (confort, densité, zones cliquables).
 // Desktop + tablette (≥768px) : colonne fixe (sticky) + défilement dans le rail.
 
-$marketone-sidebar-sticky-top: clamp(1rem, 1.6vw, 1.35rem);
+$marketone-sidebar-sticky-top: calc(var(--marketone-header-offset, 5.75rem) + 0.65rem);
 $marketone-sidebar-scroll-gutter: 1.75rem;
 $marketone-sidebar-scroll-fade-h: 1.35rem;
 $marketone-sidebar-scroll-ease: cubic-bezier(0.16, 1, 0.3, 1);

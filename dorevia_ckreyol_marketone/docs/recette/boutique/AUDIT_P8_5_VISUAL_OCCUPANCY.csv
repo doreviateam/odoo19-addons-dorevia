@@ -1,0 +1,44 @@
+product_id,default_code,name,recipe_version,mode,width,height,bbox_area_ratio,bbox_h_over_w,opaque_ratio,corner_entropy,flag_too_small,flag_vertical,flag_rectangle_effect_risk,recommendation
+471,CK-MO-032,Biscuits banane confiture,ck_shop_tile_v1.1,RGB,1024,1024,0.2921,0.5623,,0.0,1,0,1,NEEDS_REVIEW_V11
+156,,Biscuits coco vanille,ck_shop_tile_v1.1,RGB,1024,1024,0.3326,0.5476,,0.0,1,0,1,NEEDS_REVIEW_V11
+9,,Pâtes de manioc Mayotte,ck_shop_tile_v1.1,RGB,1024,1024,0.3371,1.8014,,0.0,1,1,1,NEEDS_REVIEW_V11
+188,,Coffret biscuits et douceurs,ck_shop_tile_v1.1,RGB,1024,1024,0.3498,0.5745,,0.0,1,0,1,NEEDS_REVIEW_V11
+184,,Semoule manioc fine Mayotte,ck_shop_tile_v1.1,RGB,1024,1024,0.4193,1.4483,,0.0,1,1,1,NEEDS_REVIEW_V11
+7,,Maniocookies salés La Platine,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.3212,1.8910,0.1705,alpha,1,1,0,ADJUST_ALPHA_FILL
+163,,Mix beignets manioc,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.3212,1.8910,0.1705,alpha,1,1,0,ADJUST_ALPHA_FILL
+472,CK-MO-033,Palettes coco vanille,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.3212,1.8910,0.1705,alpha,1,1,0,ADJUST_ALPHA_FILL
+479,CK-MO-040,Quatre épices créoles,ck_shop_tile_v1.1,RGB,1024,1024,0.5180,1.0000,,0.0,0,0,0,OK
+483,CK-MO-044,Sirop jambosier,ck_shop_tile_v1.1,RGB,1024,1024,0.5180,1.0000,,0.0,0,0,0,OK
+477,CK-MO-038,Confiture christophine gingembre,ck_shop_tile_v1.1,RGB,1024,1024,0.5187,0.9986,,0.0,0,0,0,OK
+482,CK-MO-043,Rougail tomate créole,ck_shop_tile_v1.1,RGB,1024,1024,0.5194,0.9973,,0.0,0,0,0,OK
+481,CK-MO-042,Bouillon légumes des îles,ck_shop_tile_v1.1,RGB,1024,1024,0.5201,0.9959,,0.0,0,0,0,OK
+486,CK-MO-047,Infusion bois bandé,ck_shop_tile_v1.1,RGB,1024,1024,0.5201,0.9959,,0.0,0,0,0,OK
+480,CK-MO-041,Poudre colombo créole,ck_shop_tile_v1.1,RGB,1024,1024,0.5201,1.0014,,0.0,0,0,0,OK
+476,CK-MO-037,Tapenade agrumes confits,ck_shop_tile_v1.1,RGB,1024,1024,0.5201,0.9986,,0.0,0,0,0,OK
+485,CK-MO-046,Jus goyave passion,ck_shop_tile_v1.1,RGB,1024,1024,0.5215,0.9986,,0.0,0,0,0,OK
+475,CK-MO-036,Sauce chien antillaise,ck_shop_tile_v1.1,RGB,1024,1024,0.5215,0.9986,,0.0,0,0,0,OK
+478,CK-MO-039,Confiture papaye muscovado,ck_shop_tile_v1.1,RGB,1024,1024,0.5222,1.0000,,0.0,0,0,0,OK
+160,,Chutney mangue verte,ck_shop_tile_v1.1,RGB,1024,1024,0.5547,0.9087,,0.0,0,0,0,OK
+474,CK-MO-035,Crackers sarrasin Réunion,ck_shop_tile_v1.1,RGB,1024,1024,0.5936,1.0231,,0.0,0,0,0,OK
+178,,Palets manioc croustillants La Platine,ck_shop_tile_v1.1,RGB,1024,1024,0.5936,1.0231,,0.0,0,0,0,OK
+180,,Tartinade coco citron vert,ck_shop_tile_v1.1,RGB,1024,1024,0.5951,0.9775,,0.0,0,0,0,OK
+177,,Coffret gourmand îles créoles,ck_shop_tile_v1.1,RGB,1024,1024,0.6043,0.9950,,0.0,0,0,0,OK
+181,,Assortiment apéritif créole,ck_shop_tile_v1.1,RGB,1024,1024,0.6081,0.9987,,0.0,0,0,0,OK
+164,,Miel créole baie rose,ck_shop_tile_v1.1,RGB,1024,1024,0.6088,0.9975,,0.0,0,0,0,OK
+489,CK-MO-050,Miel polyfloral créole,ck_shop_tile_v1.1,RGB,1024,1024,0.6088,0.9975,,0.0,0,0,0,OK
+154,,Colombo des Antilles (épices),ck_shop_tile_v1.1,RGB,1024,1024,0.6096,0.9963,,0.0,0,0,0,OK
+153,,Confiture banane flambée,ck_shop_tile_v1.1,RGB,1024,1024,0.6096,0.9988,,0.0,0,0,0,OK
+185,,Confiture fruits de la passion,ck_shop_tile_v1.1,RGB,1024,1024,0.6096,0.9988,,0.0,0,0,0,OK
+468,CK-MO-029,Confiture goyave rose,ck_shop_tile_v1.1,RGB,1024,1024,0.6096,0.9988,,0.0,0,0,0,OK
+469,CK-MO-030,Pochette curry des Antilles,ck_shop_tile_v1.1,RGB,1024,1024,0.6096,0.9963,,0.0,0,0,0,OK
+159,,Rougail épices Réunion,ck_shop_tile_v1.1,RGB,1024,1024,0.6096,0.9988,,0.0,0,0,0,OK
+186,,Trio sirops des Antilles,ck_shop_tile_v1.1,RGB,1024,1024,0.6096,0.9988,,0.0,0,0,0,OK
+179,,Mélange épices caraïbes,ck_shop_tile_v1.1,RGB,1024,1024,0.6104,0.9975,,0.0,0,0,0,OK
+158,,Sauce piment cadji,ck_shop_tile_v1.1,RGB,1024,1024,0.6104,1.0000,,0.0,0,0,0,OK
+467,CK-MO-028,Sauce scotch bonnet créole,ck_shop_tile_v1.1,RGB,1024,1024,0.6104,1.0000,,0.0,0,0,0,OK
+183,,Chips banane plantain salées,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.5320,0.8759,0.3754,alpha,0,0,0,OK
+473,CK-MO-034,Chips patate douce créole,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.5320,0.8759,0.3754,alpha,0,0,0,OK
+8,,Crackers manioc Sainte-Anne,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.5320,0.8759,0.3754,alpha,0,0,0,OK
+187,,Marinade jerk authentique,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.5822,0.9586,0.2008,alpha,0,0,0,OK
+470,CK-MO-031,Marinade jerk citron vert,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.5822,0.9586,0.2008,alpha,0,0,0,OK
+155,,Shrub agrumes créole,ck_shop_tile_v1.2-alpha,RGBA,1024,1024,0.5822,0.9586,0.2008,alpha,0,0,0,OK

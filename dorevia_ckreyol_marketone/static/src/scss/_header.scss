@@ -1,6 +1,23 @@
 // Header site — scope marketone-chrome.
+// Intention : navbar toujours visible au scroll (pas d'effet hide Odoo).
 
-header.marketone-chrome {
+:root {
+    --marketone-header-offset: 5.75rem;
+}
+
+@media (max-width: 991.98px) {
+    :root {
+        --marketone-header-offset: 4.75rem;
+    }
+}
+
+header#top.marketone-chrome {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
     font-family: $marketone-font-body;
     background-color: $marketone-surface;
     border-bottom: 1px solid rgba($marketone-border, 0.85);

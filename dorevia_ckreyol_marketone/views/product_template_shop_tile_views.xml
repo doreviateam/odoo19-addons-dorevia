@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_view_shop_tile" model="ir.ui.view">
+        <field name="name">product.template.form.shop.tile</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='image_1920']" position="after">
+                <group string="Tuile commerce /shop" name="marketone_shop_tile_group">
+                    <group>
+                        <field name="image_shop_tile" widget="image" class="oe_avatar"/>
+                        <field name="shop_tile_status"/>
+                        <field name="shop_tile_recipe_version"/>
+                    </group>
+                    <group>
+                        <field name="shop_tile_processed_at"/>
+                        <field name="shop_tile_source_run"/>
+                        <field name="shop_tile_moa_note"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
