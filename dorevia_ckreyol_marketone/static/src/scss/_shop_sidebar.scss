@@ -1,4 +1,10 @@
 // UX-2 — Sidebar filtres /shop (confort, densité, zones cliquables).
+// Desktop + tablette (≥768px) : colonne fixe (sticky) + défilement dans le rail.
+
+$marketone-sidebar-sticky-top: clamp(1rem, 1.6vw, 1.35rem);
+$marketone-sidebar-scroll-gutter: 1.75rem;
+$marketone-sidebar-scroll-fade-h: 1.35rem;
+$marketone-sidebar-scroll-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
 .marketone-shop {
     #products_grid_before {
@@ -10,6 +16,12 @@
         align-self: flex-start;
         background: transparent !important;
         box-shadow: none !important;
+
+        @media (min-width: 768px) {
+            position: sticky;
+            top: $marketone-sidebar-sticky-top;
+            z-index: 2;
+        }
 
         @media (min-width: 992px) {
             max-width: 17.5rem;
@@ -29,16 +41,156 @@
             border: 1px solid $ck-border-soft !important;
             border-radius: 0.75rem !important;
             box-shadow: 0 2px 12px rgba($ck-shadow, 0.045) !important;
-            max-height: none;
             min-height: 0 !important;
-            height: auto !important;
-            overflow: visible;
         }
 
-        @media (min-width: 992px) {
+        @media (min-width: 768px) {
             .o_wsale_products_grid_before_rail.marketone-sidebar-rail {
-                position: sticky;
-                top: clamp(1rem, 1.6vw, 1.35rem);
+                position: relative;
+                // Annule `vh-100` Odoo : hauteur au contenu, plafond viewport, scroll interne.
+                height: auto !important;
+                max-height: calc(
+                    100vh - #{$marketone-sidebar-sticky-top} - #{$marketone-sidebar-scroll-gutter}
+                );
+                overflow-x: hidden;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                -webkit-overflow-scrolling: touch;
+                padding-right: 0.75rem;
+
+                // Cacher la scrollbar native — remplacée par le thumb overlay JS.
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                // Dégradés « contenu continue » (CSS scroll shadows + renfort JS).
+                background-image:
+                    linear-gradient(
+                        $ck-bg-card 28%,
+                        rgba($ck-bg-card, 0)
+                    ),
+                    linear-gradient(
+                        rgba($ck-bg-card, 0),
+                        $ck-bg-card 72%
+                    ),
+                    radial-gradient(
+                        farthest-side at 50% 0,
+                        rgba($ck-shadow, 0.14),
+                        transparent
+                    ),
+                    radial-gradient(
+                        farthest-side at 50% 100%,
+                        rgba($ck-shadow, 0.14),
+                        transparent
+                    );
+                background-size:
+                    100% $marketone-sidebar-scroll-fade-h,
+                    100% $marketone-sidebar-scroll-fade-h,
+                    100% 0.85rem,
+                    100% 0.85rem;
+                background-repeat: no-repeat;
+                background-attachment: local, local, scroll, scroll;
+                background-position: 0 0, 0 100%, 0 0, 0 100%;
+                transition: box-shadow 0.2s ease;
+
+                &.marketone-sidebar-rail--overflow:not(.marketone-sidebar-rail--at-top):not(
+                        .marketone-sidebar-rail--at-bottom
+                    ) {
+                    box-shadow:
+                        0 2px 12px rgba($ck-shadow, 0.045),
+                        inset 0 14px 12px -12px rgba($ck-shadow, 0.1),
+                        inset 0 -14px 12px -12px rgba($ck-shadow, 0.1) !important;
+                }
+
+                &.marketone-sidebar-rail--overflow:not(.marketone-sidebar-rail--at-top).marketone-sidebar-rail--at-bottom {
+                    box-shadow:
+                        0 2px 12px rgba($ck-shadow, 0.045),
+                        inset 0 14px 12px -12px rgba($ck-shadow, 0.1) !important;
+                }
+
+                &.marketone-sidebar-rail--overflow.marketone-sidebar-rail--at-top:not(
+                        .marketone-sidebar-rail--at-bottom
+                    ) {
+                    box-shadow:
+                        0 2px 12px rgba($ck-shadow, 0.045),
+                        inset 0 -14px 12px -12px rgba($ck-shadow, 0.1) !important;
+                }
+
+                &.marketone-sidebar-rail--overflow:not(.marketone-sidebar-rail--at-bottom) {
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        right: 0.35rem;
+                        bottom: 0.45rem;
+                        left: 0.35rem;
+                        height: 1.65rem;
+                        pointer-events: none;
+                        border-radius: 0 0 0.65rem 0.65rem;
+                        background: linear-gradient(
+                            rgba($ck-bg-card, 0),
+                            rgba($ck-bg-card, 0.92) 55%,
+                            $ck-bg-card
+                        );
+                    }
+                }
+
+                &.marketone-sidebar-rail--overflow:not(.marketone-sidebar-rail--at-top)::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 0.35rem;
+                    left: 0.35rem;
+                    height: 1.15rem;
+                    pointer-events: none;
+                    border-radius: 0.65rem 0.65rem 0 0;
+                    background: linear-gradient(
+                        $ck-bg-card,
+                        rgba($ck-bg-card, 0.88) 45%,
+                        rgba($ck-bg-card, 0)
+                    );
+                    z-index: 1;
+                }
+
+                &.marketone-sidebar-rail--overflow.marketone-sidebar-rail--at-top:not(
+                        .marketone-sidebar-rail--at-bottom
+                    )::before {
+                    opacity: 0.35;
+                }
+            }
+
+            // Scrollbar overlay — injectée dans l'aside (pas dans le rail scrollant).
+            // top / right / height calculés par JS selon la géométrie réelle du rail.
+            .marketone-sidebar-scrollbar {
+                position: absolute;
+                width: 4px;
+                border-radius: 999px;
+                pointer-events: none;
+                z-index: 10;
+                background: rgba($ck-bg-image, 0.6);
+                opacity: 0;
+                transition: opacity 0.25s $marketone-sidebar-scroll-ease;
+            }
+
+            .marketone-sidebar-scrollbar__thumb {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border-radius: 999px;
+                background: rgba($marketone-primary-container, 0.26);
+                transition: background 0.25s $marketone-sidebar-scroll-ease;
+                will-change: transform, height;
+            }
+
+            // Survol de toute la colonne → scrollbar pastel visible.
+            &:hover .marketone-sidebar-scrollbar {
+                opacity: 1;
+            }
+
+            &:hover .marketone-sidebar-scrollbar__thumb {
+                background: rgba($marketone-primary-container, 0.44);
             }
         }
     }

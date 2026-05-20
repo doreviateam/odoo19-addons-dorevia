@@ -294,12 +294,119 @@
         navigateShop(buildShopParamsFromAttributeForm(form));
     }
 
+    function getSidebarScrollRail() {
+        const root = getMarketoneShopRoot();
+        if (!root) {
+            return null;
+        }
+        return root.querySelector(
+            "#products_grid_before .marketone-sidebar-rail"
+        );
+    }
+
+    /**
+     * Scrollbar overlay custom + ombres haut/bas.
+     *
+     * Les pseudo-éléments ::-webkit-scrollbar ne supportent pas les CSS
+     * custom properties, rendant impossible tout effet de survol fiable via CSS.
+     * On cache la scrollbar native et on la remplace par deux div positionnés
+     * en absolu dans l'aside — la visibilité est pilotée par CSS pur (:hover sur
+     * #products_grid_before), la position/hauteur du thumb par JS.
+     */
+    function initSidebarScrollAffordance() {
+        const rail = getSidebarScrollRail();
+        if (!rail || rail.getAttribute("data-marketone-scroll-hints") === "1") {
+            return;
+        }
+        if (!window.matchMedia("(min-width: 768px)").matches) {
+            return;
+        }
+        rail.setAttribute("data-marketone-scroll-hints", "1");
+
+        // La track est placée dans l'aside (pas dans le rail scrollant) pour rester fixe.
+        const aside = rail.closest("#products_grid_before");
+        if (!aside) {
+            return;
+        }
+
+        const track = document.createElement("div");
+        track.className = "marketone-sidebar-scrollbar";
+        const thumb = document.createElement("div");
+        thumb.className = "marketone-sidebar-scrollbar__thumb";
+        track.appendChild(thumb);
+        aside.appendChild(track);
+
+        // Pixels correspondant au border-radius et au padding-bottom du rail CSS.
+        const RAIL_RADIUS_PX = 12;
+        const RAIL_PAD_BOTTOM_PX = 16;
+        const TRACK_INSET_PX = 4; // depuis le bord droit intérieur du rail
+
+        const updateTrackGeometry = () => {
+            const rightFromAside =
+                aside.offsetWidth - rail.offsetLeft - rail.offsetWidth + TRACK_INSET_PX;
+            track.style.right = Math.max(rightFromAside, TRACK_INSET_PX) + "px";
+            track.style.top = (rail.offsetTop + RAIL_RADIUS_PX) + "px";
+            track.style.height =
+                Math.max(rail.clientHeight - RAIL_RADIUS_PX - RAIL_PAD_BOTTOM_PX, 20) + "px";
+        };
+
+        const updateThumb = () => {
+            const { scrollTop, scrollHeight, clientHeight } = rail;
+            const overflow = scrollHeight > clientHeight + 2;
+
+            rail.classList.toggle("marketone-sidebar-rail--overflow", overflow);
+            rail.classList.toggle(
+                "marketone-sidebar-rail--at-top",
+                !overflow || scrollTop <= 4
+            );
+            rail.classList.toggle(
+                "marketone-sidebar-rail--at-bottom",
+                !overflow || scrollTop + clientHeight >= scrollHeight - 4
+            );
+
+            if (!overflow) {
+                track.style.visibility = "hidden";
+                return;
+            }
+            track.style.visibility = "";
+
+            updateTrackGeometry();
+
+            const trackH = parseFloat(track.style.height) || clientHeight;
+            const ratio = clientHeight / scrollHeight;
+            const thumbH = Math.max(ratio * trackH, 40);
+            const maxOffset = trackH - thumbH;
+            const offset =
+                scrollHeight > clientHeight
+                    ? (scrollTop / (scrollHeight - clientHeight)) * maxOffset
+                    : 0;
+
+            thumb.style.height = thumbH + "px";
+            thumb.style.transform = "translateY(" + offset + "px)";
+        };
+
+        rail.addEventListener("scroll", updateThumb, { passive: true });
+
+        if (typeof ResizeObserver !== "undefined") {
+            const ro = new ResizeObserver(updateThumb);
+            ro.observe(rail);
+            Array.from(rail.querySelectorAll(".accordion-collapse")).forEach(
+                (node) => ro.observe(node)
+            );
+        }
+        window.addEventListener("resize", updateThumb, { passive: true });
+        rail.addEventListener("shown.bs.collapse", updateThumb);
+        rail.addEventListener("hidden.bs.collapse", updateThumb);
+        updateThumb();
+    }
+
     function init() {
         if (!isMarketoneShop()) {
             return;
         }
         if (document.body.getAttribute(INIT_ATTR) === "1") {
             syncPriceRangeDataUrl();
+            initSidebarScrollAffordance();
             return;
         }
         document.body.setAttribute(INIT_ATTR, "1");
@@ -307,6 +414,7 @@
         document.body.addEventListener("change", collectionChange);
         document.body.addEventListener("change", attributeChange, true);
         syncPriceRangeDataUrl();
+        initSidebarScrollAffordance();
     }
 
     if (document.readyState === "loading") {

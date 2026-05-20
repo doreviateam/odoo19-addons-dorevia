@@ -18,4 +18,15 @@
       <attribute name="t-value">True</attribute>
     </xpath>
   </template>
+
+  <!-- Tablette (≥768px) : sidebar en colonne (pas seulement offcanvas). -->
+  <template id="marketone_shop_sidebar_visible_from_tablet"
+            inherit_id="website_sale.products"
+            name="Marketone UX-2: sidebar visible dès md"
+            priority="35">
+    <xpath expr="//aside[@id='products_grid_before']" position="attributes">
+      <attribute name="class" remove="d-lg-block" separator=" "/>
+      <attribute name="class" add="d-md-block" separator=" "/>
+    </xpath>
+  </template>
 </odoo>

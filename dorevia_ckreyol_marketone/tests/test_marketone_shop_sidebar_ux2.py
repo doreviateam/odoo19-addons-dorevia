@@ -24,3 +24,13 @@ class TestMarketoneShopSidebarUx2(HttpCase):
         self.assertGreater(grid, -1)
         section = html[grid : grid + 12000]
         self.assertIn("accordion-collapse collapse show", section)
+
+    def test_shop_sidebar_visible_from_tablet_breakpoint(self):
+        """Colonne filtres visible dès md (768px), pas seulement lg."""
+        response = self.url_open("/shop")
+        self.assertEqual(response.status_code, 200)
+        idx = response.text.find('id="products_grid_before"')
+        self.assertGreater(idx, -1)
+        aside = response.text[idx : idx + 500]
+        self.assertIn("d-md-block", aside)
+        self.assertNotIn("d-lg-block", aside)
