@@ -3,8 +3,10 @@
 .marketone-shop {
     .marketone-shop-featured-intro {
         margin-bottom: $marketone-space-md;
-        padding-bottom: $marketone-space-sm;
-        border-bottom: 1px solid rgba($marketone-border, 0.85);
+        padding: 0.85rem 1.15rem $marketone-space-sm;
+        border-radius: $marketone-radius-md;
+        border: 1px solid rgba($ck-border-soft, 0.5);
+        background-color: rgba($ck-bg-green-soft, 0.55);
     }
 
     .marketone-shop-featured-title {
@@ -16,13 +18,13 @@
         margin-bottom: $marketone-space-sm;
         font-size: $marketone-body;
         line-height: 1.55;
-        color: $marketone-text-muted;
+        color: rgba($ck-text, 0.78);
     }
 
     .marketone-shop-featured-empty {
         margin-bottom: $marketone-space-sm;
         font-size: $marketone-body;
-        color: $marketone-text-muted;
+        color: rgba($ck-text, 0.72);
     }
 
     .marketone-shop-featured-back {

@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
 | **Type** | **UX / DA** — réchauffement visuel SCSS uniquement |
-| **Statut** | **Proposition technique** — en attente arbitrage MOA avant implémentation |
+| **Statut** | **Implémenté** — recette visuelle MOA avant merge (`19.0.15.3.0`) |
 | **Jalon de référence** | ADR-031 · UX-3 Palier A « Tenue » mergé (`19.0.15.2.0`, PR #9) |
 | **Version cible proposée** | `19.0.15.3.0` |
 | **Branche suggérée** | `feat/marketone-ux3-b1-creole-backgrounds` |
@@ -169,35 +169,27 @@ Il n’existe **pas** de barre de navigation rapide fixe « Tout · Promotions �
 
 ---
 
-## 9. Questions d’arbitrage MOA (avant commit)
+## 9. Arbitrages MOA (validés — 2026-05-20)
 
-| # | Question | Proposition Dev |
+| # | Sujet | Décision MOA |
 |---|---|---|
-| 1 | Chips : rotation (A) ou par type UX-1 (B) ? | **B** |
-| 2 | Chips « Tout/Promo/Incontournables/Kits » : B1 ou B2 ? | **B2** si libellés fixes requis |
-| 3 | `$ck-bg-green-deep` : où l’autoriser ? | Détail hover accordéon ou **aucun** en B1 |
-| 4 | Zone haute : bandeau SCSS léger OK en B1 ? | Oui, sans QWeb hero |
-| 5 | Remplacer entièrement couleurs Palier A ou variante parallèle ? | **Évolution** des alias `$ck-*` (B1 remplace A sur `/shop`) |
-| 6 | Prix terracotta `#C4715A` : inchangé ? | Oui |
+| 1 | Chips | **Option B** — mapping par type UX-1 |
+| 2 | Chips fixes | **Report B2** |
+| 3 | `$ck-bg-green-deep` | Pas de grand aplat |
+| 4 | Fonds Palier A | Remplacés sur `/shop` |
+| 5 | Zone haute | Bandeau SCSS léger |
+| 6 | Prix terracotta | Inchangé |
 
 ---
 
-## 10. Plan d’exécution (après GO MOA proposition)
+## 10. Implémentation (`19.0.15.3.0`)
 
-| Étape | Action |
-|---|---|
-| 1 | MOA tranche questions §9 (chips surtout) |
-| 2 | Branche `feat/marketone-ux3-b1-creole-backgrounds` · implémentation SCSS |
-| 3 | Upgrade `ckr-marketone-01` · tests 21/21 · captures avant/après |
-| 4 | Recette MOA → GO visuel ou ajustements |
-| 5 | PR documentée · merge **uniquement** sur GO MOA explicite |
+Fichiers : `_tokens_colors.scss` · `_shop.scss` · `_shop_sidebar.scss` · `_shop_filter_state.scss` · `_shop_product_cards.scss` · `_shop_featured.scss` · `_shop_origin.scss`.
+
+Recette : `docs/recette/RECETTE_MANUELLE_SHOP_UX3_B1_CREOLE_BACKGROUNDS.md`
 
 ---
 
 ## 11. Synthèse
 
-**B1 = réchauffement des backgrounds `/shop`** pour une boutique plus créole, chaleureuse et vivante, sans quitter la ligne premium Tenue.
-
-**Pas d’implémentation** tant que la MOA n’a pas validé cette proposition (notamment le mapping chips §3).
-
-**Objectif** : premium vivant par les **surfaces**, pas le carnaval des détails.
+**B1 livré** — fonds créoles sur `/shop`. Merge après GO visuel MOA uniquement.

@@ -1,4 +1,5 @@
 // UX-1 — État utilisateur /shop (chips filtres actifs, compteur).
+// UX-3 B1 — tons créoles par type de chip (MOA option B).
 
 // Palette pastel stable : rotation déterministe par rang dans la barre.
 @mixin marketone-filter-chip-tone($bg, $border, $text, $hover-bg, $hover-border) {
@@ -66,39 +67,52 @@
 
     }
 
-    // Pastels : rotation stable par rang dans la barre (reset = 1er enfant).
-    $marketone-chip-tone-sand: (#f7efe6, #e8d9c8, #3f342c, #f0e4d6, #ddc9b4);
-    $marketone-chip-tone-peach: (#fce9dc, #f2d4c4, #523528, #f8decc, #e8c4b0);
-    $marketone-chip-tone-sage: (#e8f0e6, #d2e2ce, #2f4030, #dce8d9, #c5d8c0);
-    $marketone-chip-tone-rose: (#f8e8ee, #edd6df, #4a3238, #f4dce5, #e2c4cf);
-    $marketone-chip-tone-lilac: (#eee8f4, #dcd2ea, #38304a, #e4dcf0, #cfc2e4);
-    $marketone-chip-tones: (
-        $marketone-chip-tone-sand,
-        $marketone-chip-tone-peach,
-        $marketone-chip-tone-sage,
-        $marketone-chip-tone-rose,
-        $marketone-chip-tone-lilac,
-    );
+    // B1 — fonds créoles par type UX-1 (texte brun $ck-text sur tous les chips).
+    .marketone-filter-chips__chip--collection {
+        @include marketone-filter-chip-tone(
+            $ck-bg-yellow-soft,
+            #e8d9a8,
+            $ck-text,
+            #f2dea0,
+            #ddc992,
+        );
+    }
 
-    @for $tone-index from 1 through 5 {
-        $tone: nth($marketone-chip-tones, $tone-index);
+    .marketone-filter-chips__chip--origin {
+        @include marketone-filter-chip-tone(
+            $ck-bg-green-soft,
+            #c5d8c0,
+            $ck-text,
+            #d0e4cc,
+            #b8cfae,
+        );
+    }
 
-        .marketone-filter-chips__group > .marketone-filter-chips__chip:nth-child(5n + #{$tone-index + 1}) {
-            @include marketone-filter-chip-tone(
-                nth($tone, 1),
-                nth($tone, 2),
-                nth($tone, 3),
-                nth($tone, 4),
-                nth($tone, 5),
-            );
-        }
+    .marketone-filter-chips__chip--category {
+        @include marketone-filter-chip-tone(
+            $ck-bg-white,
+            $ck-border-soft,
+            $ck-text,
+            $ck-bg-cream,
+            #d8c8b8,
+        );
+    }
+
+    .marketone-filter-chips__chip--price {
+        @include marketone-filter-chip-tone(
+            $ck-bg-red-soft,
+            #e5c4ba,
+            $ck-text,
+            #ecd4ca,
+            #dbb8ac,
+        );
     }
 
     .marketone-filter-chips__reset {
         flex-shrink: 0;
         padding: 8px 14px 8px 0;
         margin-right: 2px;
-        border-right: 1px solid $marketone-border;
+        border-right: 1px solid rgba($ck-border-soft, 0.75);
         font-family: $marketone-font-body;
         font-size: 13px;
         font-weight: $marketone-weight-semibold;
@@ -122,10 +136,10 @@
         font-family: $marketone-font-body;
         font-size: 15px;
         font-weight: $marketone-weight-medium;
-        color: $marketone-text-muted;
+        color: rgba($ck-text, 0.72);
 
         strong {
-            color: $marketone-text;
+            color: $ck-text;
             font-weight: $marketone-weight-semibold;
         }
     }

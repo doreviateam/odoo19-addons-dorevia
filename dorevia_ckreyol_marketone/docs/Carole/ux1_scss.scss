@@ -1,0 +1,135 @@
+// ============================================
+// C-Kreyol — Lot UX-1 : État utilisateur
+// Variables & Styles des chips, compteur, reset
+// ============================================
+
+// --- Variables UX-1 ---
+$coffee: #1E120C;
+$terracotta: #C75B39;
+$terracotta-light: rgba(199, 91, 57, 0.08);
+$text-muted: #7A7068;
+$border-warm: #DDD3C4;
+$bg-white: #FFFFFF;
+$bg-page: #FAF8F5;
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+// --- Zone UX-1 : État utilisateur ---
+.c-kreyol-state-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $border-warm;
+}
+
+// Ligne chips + reset
+.c-kreyol-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+// Chip individuelle
+.c-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: $bg-white;
+  border: 1.5px solid $border-warm;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: $coffee;
+  cursor: pointer;
+  transition: all 0.25s $ease-out;
+  text-decoration: none;
+  line-height: 1;
+
+  &:hover {
+    border-color: $terracotta;
+    color: $terracotta;
+    box-shadow: 0 2px 8px rgba(199, 91, 57, 0.12);
+    transform: translateY(-1px);
+  }
+
+  // Icône croix
+  .c-chip-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: $text-muted;
+    transition: color 0.2s;
+
+    svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 2.5;
+    }
+  }
+
+  &:hover .c-chip-remove {
+    color: $terracotta;
+  }
+}
+
+// Reset
+.c-reset {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: $terracotta;
+  text-decoration: none;
+  margin-left: auto;
+  padding: 8px 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+  }
+}
+
+// Toolbar : compteur + tri
+.c-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.c-result-count {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: $text-muted;
+
+  strong {
+    color: $coffee;
+    font-weight: 700;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .c-kreyol-chips-row {
+    gap: 8px;
+  }
+  .c-chip {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  .c-reset {
+    font-size: 12px;
+    margin-left: 0;
+    width: 100%;
+    text-align: right;
+    padding-top: 4px;
+  }
+}

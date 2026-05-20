@@ -15,6 +15,10 @@
     .o_wsale_products_shop_title,
     #products_grid_content_title {
         margin-bottom: $marketone-space-md;
+        padding: 0.85rem 1.15rem;
+        border-radius: $marketone-radius-md;
+        border: 1px solid rgba($ck-border-soft, 0.55);
+        background-color: rgba($ck-bg-white, 0.88);
         font-family: $marketone-font-heading;
         font-size: $marketone-h2-mobile;
         font-weight: $marketone-weight-semibold;

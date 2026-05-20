@@ -1,4 +1,4 @@
-// UX-3 Palier A — Variante B « Tenue » (arbitrage MOA doctrine CK).
+// UX-3 Palier A — Variante B « Tenue » + Palier B1 fonds créoles (alias $ck-*).
 //
 // Scope : `.marketone-shop` · Odoo 19 via `--o-wsale-card-*`.
 // Doc : docs/tickets/TICKET_MARKETONE_UX3_PALIER_A_PROPOSITION_DA.md
@@ -28,7 +28,7 @@ $_ux3-shadow-hover: 0 4px 16px rgba($ck-shadow, 0.08);
     }
 
     .oe_product_cart {
-        --o-wsale-card-bg:                   #ffffff;
+        --o-wsale-card-bg:                   #{$ck-bg-white};
         --o-wsale-card-border-width:         1px;
         --o-wsale-card-border-color:         #{$ck-border};
         --o-wsale-card-border-color-hover:   #{rgba($ck-border, 0.85)};
