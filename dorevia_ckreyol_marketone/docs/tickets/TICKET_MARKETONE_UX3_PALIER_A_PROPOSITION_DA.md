@@ -4,7 +4,8 @@
 |-------|--------|
 | **Statut** | **Arbitrage MOA validé** — variante B « Tenue » implémentée (`19.0.15.2.0`) |
 | **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
-| **Version actuelle** | `19.0.15.1.0` (variante douce) |
+| **Version précédente** | `19.0.15.1.0` — variante douce |
+| **Version actuelle** | `19.0.15.2.0` — variante B « Tenue » implémentée |
 | **PR** | [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) — merge en pause |
 | **Recette liée** | `docs/recette/RECETTE_MANUELLE_SHOP_UX3_PRODUCT_CARDS.md` |
 | **Date** | 2026-05-19 |
@@ -206,7 +207,9 @@ Puis les utiliser dans `_shop_product_cards.scss` (et éventuellement `_shop.scs
 
 ---
 
-## 9. Questions d'arbitrage MOA (avant tout commit)
+## 9. Questions d'arbitrage MOA — historique avant décision
+
+> **Source de vérité** : section **Arbitrages MOA (validés)** ci-dessous.
 
 1. **Palette** : application **UX-3 + `/shop` seulement**, ou mise à jour des tokens globaux dès maintenant ?
 2. **Sidebar** : conserver transparent (UX-2 actuel) ou panneau **`#EDE3D4`** ?
@@ -258,7 +261,7 @@ Le travail restant est **directionnel** :
 
 ---
 
-## Arbitrages MOA (validés)
+## Arbitrages MOA (validés) {#arbitrages-moa-validés}
 
 | # | Question | Décision |
 |---|---|---|
