@@ -3,7 +3,7 @@
 | Champ | Valeur |
 |-------|--------|
 | **Ticket** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
-| **Version** | **`19.0.15.6.0`** (B1.3 — aplats, chaîne chromatique) |
+| **Version** | **`19.0.15.6.1`** (B1.3 — aplats, chaîne chromatique) |
 | **Branche** | `feat/marketone-ux3-b1-creole-backgrounds` |
 | **Doctrine** | **Aucun dégradé** · aplats + bordures chaudes + rappels localisés |
 | **URL** | http://localhost:18079/shop?db=ckr-marketone-01 |
@@ -20,6 +20,20 @@ docker restart sandbox-odoo19-odoo-1
 ```
 
 Hard refresh. **Safari** : désactiver « HTTPS uniquement » ou utiliser Chrome/Firefox pour `http://localhost:18079`.
+
+---
+
+## Palette source CK (référence — non saturée à l’écran)
+
+| Hex | Nom | Usage B1 |
+|---|---|---|
+| `#43350F` | Brun | Chaleur texte / page |
+| `#A41756` | Baie | → rouge pastel chips |
+| `#2ABD2A` | Vert vif | → **dilué** mist / sidebar / actifs |
+| `#A86F08` | Ocre | → vanille / jaune doux |
+| `#7286AE` | Ardoise | Hors scope B1 fonds |
+
+Voir ticket §15 pour la table de traduction complète.
 
 ---
 
@@ -80,4 +94,4 @@ docker exec sandbox-odoo19-odoo-1 odoo -d ckr-marketone-01 --http-port 8071 \
 | Version | Verdict |
 |---|---|
 | `19.0.15.3.0`–`19.0.15.5.0` | NO GO — juxtaposition / trop lavé / dégradés |
-| `19.0.15.6.0` | Recette en attente |
+| `19.0.15.6.0`–`19.0.15.6.1` | Recette en attente · fix `$ck-bg-cream` |

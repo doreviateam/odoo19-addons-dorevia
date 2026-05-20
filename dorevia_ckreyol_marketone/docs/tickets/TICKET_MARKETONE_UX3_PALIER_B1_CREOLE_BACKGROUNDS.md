@@ -243,4 +243,20 @@ Palette MOA : voir recette `19.0.15.5.0`.
 
 **Implémentation B1.3** : suppression de tous les `linear-gradient` ; aplats + bordures chaudes uniquement.
 
-**Merge** : après GO visuel MOA sur recette B1.3.
+**Merge** : après GO visuel MOA sur recette B1.3 (`19.0.15.6.1`).
+
+---
+
+## 15. Palette source CK initiale (référence MOA)
+
+Couleurs **saturées** de la charte d’origine — inspiration créole, **pas** valeurs à poser telles quelles sur `/shop`.
+
+| # | Hex | Rôle source | Traduction B1.3 (fonds pastel /shop) |
+|---|---|---|---|
+| 1 | `#43350F` | Brun profond · terre / cacao | Texte `$ck-text` `#2A1F18` · chaleur page `$ck-bg-page` `#F5EBDE` |
+| 2 | `#A41756` | Baie / rouge créole | Chip prix `$ck-bg-red-soft` `#F1CFC4` — **pas** en aplat zone |
+| 3 | `#2ABD2A` | Vert vif (drapeau) | **Interdit** en sidebar pleine — mist `#EEF5E9` · sidebar `#E8F1E4` · actif `#D9E8D2` |
+| 4 | `#A86F08` | Ocre / soleil | Liant vanille `$ck-bg-image` `#F9F0D8` · chip collection `#F8EAC0` |
+| 5 | `#7286AE` | Ardoise | Hors triptyque rouge/jaune/vert B1 — réservé (pas de fond /shop sans arbitrage) |
+
+**Règle** : la palette source donne l’**énergie** ; la chaîne `$ck-bg-*` la **dilue** pour rester premium épicerie fine. Pas de mapping 1:1 drapeau → zone UX.
