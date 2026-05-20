@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
 | **Type** | **UX / DA** — réchauffement visuel SCSS uniquement |
-| **Statut** | **Implémenté** — recette visuelle MOA avant merge (`19.0.15.3.0`) |
+| **Statut** | **GO visuel proposable** — recette OK ; merge après GO MOA explicite (`19.0.15.3.0`) |
 | **Jalon de référence** | ADR-031 · UX-3 Palier A « Tenue » mergé (`19.0.15.2.0`, PR #9) |
 | **Version cible proposée** | `19.0.15.3.0` |
 | **Branche suggérée** | `feat/marketone-ux3-b1-creole-backgrounds` |
@@ -192,4 +192,6 @@ Recette : `docs/recette/RECETTE_MANUELLE_SHOP_UX3_B1_CREOLE_BACKGROUNDS.md`
 
 ## 11. Synthèse
 
-**B1 livré** — fonds créoles sur `/shop`. Merge après GO visuel MOA uniquement.
+**Recette** (2026-05-20) : GO technique + GO visuel proposable — 21/21, palette B1 confirmée, captures `marketone_b1_*`. Réserve : mobile 768px non capturé · pas de capture avant 19.0.15.2.0.
+
+**Merge** : après GO MOA explicite uniquement.
