@@ -21,9 +21,10 @@
         border-bottom: 2px solid rgba($ck-bg-yellow-soft, 0.42);
         background: linear-gradient(
             180deg,
-            rgba($ck-bg-yellow-vanille, 0.55) 0%,
-            rgba($ck-bg-white, 0.92) 100%
+            rgba($ck-bg-image, 0.5) 0%,
+            rgba($ck-bg-card, 0.94) 100%
         );
+        box-shadow: 0 2px 12px rgba($ck-shadow, 0.04);
         font-family: $marketone-font-heading;
         font-size: $marketone-h2-mobile;
         font-weight: $marketone-weight-semibold;

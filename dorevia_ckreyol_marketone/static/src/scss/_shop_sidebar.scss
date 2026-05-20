@@ -30,10 +30,11 @@
                 $ck-bg-sidebar-start 0%,
                 $ck-bg-sidebar-end 100%
             ) !important;
-            border: 1px solid rgba($ck-border-soft, 0.62) !important;
-            border-left: 3px solid $ck-sauge-border !important;
+            border: 1px solid rgba($ck-border-soft, 0.55) !important;
             border-radius: 0.75rem !important;
-            box-shadow: 0 1px 6px rgba($ck-shadow, 0.04) !important;
+            box-shadow:
+                0 1px 8px rgba($ck-shadow, 0.04),
+                inset 0 1px 0 rgba($ck-bg-yellow-halo, 0.55) !important;
             max-height: none;
             min-height: 0 !important;
             height: auto !important;
@@ -66,7 +67,7 @@
         background: transparent !important;
         border: none !important;
         border-radius: 0 !important;
-        border-bottom: 1px solid rgba($ck-border, 0.4) !important;
+        border-bottom: 1px solid rgba($ck-bg-green-soft, 0.28) !important;
         margin-bottom: 0 !important;
         box-shadow: none !important;
         padding-bottom: 0.12rem;
@@ -102,16 +103,16 @@
         &:not(.collapsed) {
             background: linear-gradient(
                 90deg,
-                rgba($ck-bg-green-mist, 0.55) 0%,
-                rgba($ck-bg-white, 0.88) 100%
+                rgba($ck-bg-green-soft, 0.22) 0%,
+                rgba($ck-bg-card, 0.92) 100%
             ) !important;
-            border-color: rgba($ck-sauge, 0.22);
+            border-color: rgba($ck-bg-green-soft, 0.45);
         }
 
         &:hover {
             color: $ck-terracotta !important;
-            background-color: rgba($ck-bg-yellow-vanille, 0.65) !important;
-            border-color: rgba($ck-border-card, 0.7);
+            background-color: rgba($ck-bg-image, 0.55) !important;
+            border-color: rgba($ck-border-soft, 0.85);
         }
 
         &:focus-visible {

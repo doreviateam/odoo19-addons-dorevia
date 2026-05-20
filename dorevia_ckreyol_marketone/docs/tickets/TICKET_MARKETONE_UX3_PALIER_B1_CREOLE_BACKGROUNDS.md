@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
 | **Type** | **UX / DA** — réchauffement visuel SCSS uniquement |
-| **Statut** | **NO GO visuel** `19.0.15.3.0` — variante **B1.1 harmonie** en cours (`19.0.15.4.0`) |
+| **Statut** | **NO GO** `19.0.15.3.0`/`19.0.15.4.0` — **B1.2 harmonie** livrée (`19.0.15.5.0`, recette MOA) |
 | **Jalon de référence** | ADR-031 · UX-3 Palier A « Tenue » mergé (`19.0.15.2.0`, PR #9) |
 | **Version cible proposée** | `19.0.15.3.0` |
 | **Branche suggérée** | `feat/marketone-ux3-b1-creole-backgrounds` |
@@ -209,10 +209,26 @@ Recette : `docs/recette/RECETTE_MANUELLE_SHOP_UX3_B1_CREOLE_BACKGROUNDS.md`
 
 ---
 
-## 12. Implémentation B1.1 (`19.0.15.4.0`)
+## 12. Retour MOA formalisé — harmonie chromatique (2026-05-20)
 
-Tokens : `$ck-bg-page`, `$ck-bg-green-mist`, `$ck-bg-yellow-vanille`, `$ck-border-card`, dégradés sidebar.
+**Verdict** : NO GO visuel — problème = **harmonie chromatique**, pas quantité de couleur.
 
-Fichiers : `_tokens_colors.scss` · `_shop.scss` · `_shop_sidebar.scss` · `_shop_filter_state.scss` · `_shop_product_cards.scss` · `_shop_featured.scss` · `_shop_origin.scss`.
+**Diagnostic** : juxtaposition fond crème + sidebar verte + cartes blanches ; vert isolé ; jaune/rouge pas liants ; hiérarchie page/cartes insuffisante.
 
-**Merge** : après nouvelle recette visuelle MOA uniquement.
+**Hiérarchie cible** : (1) fond page crème `#F8EFE3` → (2) sidebar vert dilué → (3) cartes blanc chaud → (4) image vanille `#FAF1D6` → (5) chips/états rouge·vert·jaune secondaires.
+
+**Interdit** : `#D9E8D2` en aplat sidebar massif ; patchwork ; saturation ; bio-discount.
+
+Palette MOA : voir recette `19.0.15.5.0`.
+
+---
+
+## 13. Implémentation B1.2 (`19.0.15.5.0`)
+
+- Tokens alignés MOA (`$ck-bg-page`, `$ck-bg-image`, `$ck-bg-yellow-soft`, `$ck-border-soft`…).
+- Sidebar : dégradé mist → page, halo vanille, vert sur séparateurs/accordéons actifs.
+- Cartes : ombre `0 10px 24px`, bordure `#E6D4C3`, filet image vanille.
+- Liant jaune : barre chips, titres, bandeaux featured/origin.
+- Chips : collection vanille, origin vert doux, price corail pastel.
+
+**Merge** : après GO visuel MOA sur recette B1.2.

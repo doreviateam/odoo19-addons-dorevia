@@ -25,28 +25,31 @@ $marketone-primary-dark: $marketone-primary-container;
 $marketone-on-primary: #ffffff;
 $marketone-accent: $marketone-primary-container;
 
-// Alias palette CK — scope /shop (UX-3 Palier A + B1 fonds créoles).
+// Alias palette CK — scope /shop (UX-3 B1 harmonie chromatique MOA).
 // N'écrase pas les tokens Marketone globaux (home, fiche produit, panier).
-$ck-bg-white:         #FFFDF8;
-$ck-bg-cream:         #F7EFE4;
-$ck-bg-page:          #F0E6D8; // B1.1 — plus chaud/mat que les cartes
-$ck-bg-red-soft:      #F1CFC4;
-$ck-bg-yellow-soft:   #F6E4A8;
-$ck-bg-yellow-vanille:#FBF3E0;
-$ck-bg-green-soft:    #D9E8D2; // accents chips uniquement — pas d’aplat sidebar
-$ck-bg-green-mist:    #EEF5E9; // dégradé sidebar · rappels grille
-$ck-bg-green-deep:    #6F9A78; // réservé — pas de grand aplat
-$ck-border-soft:      #E2D2C3;
-$ck-border-card:      #D4C4B4; // B1.1 — séparation carte / page
+$ck-bg-page:        #F8EFE3; // ambiance crème chaude globale
+$ck-bg-card:        #FFFDF8; // écrin produit
+$ck-bg-white:       $ck-bg-card;
+$ck-bg-cream:       #F7EFE4;
+$ck-bg-image:       #FAF1D6; // vanille zone image
+$ck-bg-yellow-soft: #F8EAC0; // liant chaleur — chips, filets
+$ck-bg-yellow-halo: #FFF4D8; // halo très subtil blocs
+$ck-bg-green-mist:  #EEF5E9; // sidebar · fonds dilués
+$ck-bg-green-soft:  #D9E8D2; // détails / états actifs — jamais aplat sidebar
+$ck-bg-red-soft:    #F1CFC4;
+$ck-bg-green-deep:  #6F9A78; // réservé — pas de grand aplat
+
+$ck-border-soft:    #E6D4C3;
+$ck-border-card:    $ck-border-soft;
 
 $ck-bg-sidebar-start: $ck-bg-green-mist;
-$ck-bg-sidebar-end:   $ck-bg-cream;
-$ck-bg-image:         $ck-bg-yellow-vanille;
-$ck-sauge-border:     rgba(90, 138, 110, 0.38);
-$ck-text:       #2A1F18;
-$ck-terracotta: #C4715A;
-$ck-sauge:      #5A8A6E;
-$ck-or:         #D4B896;
-$ck-rose:       #C9A0A0;
-$ck-border:     $ck-border-soft;
-$ck-shadow:     rgba(42, 31, 24, 1);
+$ck-bg-sidebar-end:   $ck-bg-page;
+
+$ck-text:           #2A1F18;
+$ck-terracotta:     #C4715A;
+$ck-sauge:          #5A8A6E;
+$ck-sauge-border:   rgba(90, 138, 110, 0.32);
+$ck-or:             #D4B896;
+$ck-rose:           #C9A0A0;
+$ck-border:         $ck-border-soft;
+$ck-shadow:         rgba(42, 31, 24, 1);
