@@ -7,14 +7,14 @@
 | **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut** | **Recette cycle 4** — variante B implémentée, en attente GO visuel MOA |
+| **Statut** | **GO visuel proposable** — recette cycle 4 exécutée ; merge PR #9 après validation humaine MOA finale |
 | **Proposition DA** | `docs/tickets/TICKET_MARKETONE_UX3_PALIER_A_PROPOSITION_DA.md` |
 
 ---
 
 ## Prérequis
 
-- Module `19.0.15.0.0` (upgrade + **restart conteneur** — bundle assets recompilé).
+- Module **`19.0.15.2.0`** (upgrade + **restart conteneur** — bundle assets recompilé).
 - Hard refresh navigateur (Ctrl+Shift+R / Cmd+Shift+R).
 - Assets confirmés en bundle : `_shop_product_cards.scss` présent ✓
 
@@ -277,28 +277,65 @@ docker restart sandbox-odoo19-odoo-1
 | Hover titre | terracotta **cartes uniquement** |
 | `mix-blend-mode` | off |
 
-### Recette cycle 4 — captures attendues
+### Recette cycle 4 — exécution (`ckr-marketone-01`, `19.0.15.2.0`)
 
-| Capture | Fichier suggéré | ☐ |
+**Date** : 2026-05-20 · Branche `feat/marketone-ux3-product-cards-palier-a`.
+
+**Technique**
+
+| Contrôle | Résultat |
+|---|---|
+| Upgrade module + restart | OK |
+| Smoke `/shop` | `200` — 24 cartes |
+| Smoke `?marketone_collection=aperitif-creole` | `200` — 8 cartes |
+| Tests `dorevia_marketone_shop_regression` · `filter_state` · `sidebar_ux2` | **21/21 OK** |
+| Logs (ERROR / Traceback / Undefined) | Aucun relevé |
+
+**Validation visuelle / mesures**
+
+| Point | Résultat |
+|---|---|
+| Fond `/shop` `#F5EDE0` | OK |
+| Sidebar `#EDE3D4` | OK |
+| Carte blanche, bordure `#DDD0C2`, radius `14px` | OK |
+| Image ratio carré, `object-fit: contain`, `mix-blend-mode: normal` | OK |
+| Prix terracotta `#C4715A` | OK |
+| Hover variables CSS `translateY(-2px)` + `scale(1.02)` | OK |
+| UX-1 chips / reset | OK |
+| UX-2 `marketone-sidebar-rail` | OK |
+| Scroll horizontal | Non détecté |
+
+**Captures produites**
+
+| Capture | Fichier | ☐ |
 |---|---|---|
-| Grille desktop complète | `/private/tmp/marketone_ux3_b_desktop.png` | |
-| Filtre actif (chip UX-1) | `/private/tmp/marketone_ux3_b_filtre_actif.png` | |
-| Sidebar panneau `#EDE3D4` | `/private/tmp/marketone_ux3_b_sidebar.png` | |
-| 2 packshots fond clair | `/private/tmp/marketone_ux3_b_packshot_*.png` | |
-| 2 images lifestyle / colorées | `/private/tmp/marketone_ux3_b_lifestyle_*.png` | |
-| Mobile 768px (si possible) | `/private/tmp/marketone_ux3_b_mobile.png` | |
+| Grille desktop | `/private/tmp/marketone_ux3_b_desktop.png` | ☑ |
+| Filtre actif | `/private/tmp/marketone_ux3_b_filtre_actif.png` | ☑ |
+| Sidebar | `/private/tmp/marketone_ux3_b_sidebar.png` | ☑ |
+| Packshots fond clair | `/private/tmp/marketone_ux3_b_packshot_1.png` … `packshot_4.png` | ☑ |
+| Images lifestyle / colorées | Non capturées séparément (packshots couvrent fond clair) | — |
+| Mobile 768px | Non produite (viewport non contrôlable dans ce runtime) | ☐ réserve |
 
 ### Grille validation cycle 4
 
 | Scénario | Verdict | Notes |
 |---|---|---|
-| V1 — Grille premium vivante | ☐ OK · ☐ réserve · ☐ KO | Pas froide, pas SaaS |
-| V2 — Îlot blanc sur fond lin | ☐ OK · ☐ réserve · ☐ KO | Contraste doux |
-| V3 — Sidebar `#EDE3D4` | ☐ OK · ☐ réserve · ☐ KO | Distincte, pas lourde |
-| V4 — Prix terracotta | ☐ OK · ☐ réserve · ☐ KO | Guide achat sans agresser |
-| V5 — Hover discret | ☐ OK · ☐ réserve · ☐ KO | -2px / zoom 1.02 |
-| V6 — Images (sans multiply) | ☐ OK · ☐ réserve · ☐ KO | Packshots + lifestyle |
-| V7 — UX-2 non-régression | ☐ OK · ☐ KO | `marketone-sidebar-rail` |
-| V8 — UX-1 non-régression | ☐ OK · ☐ KO | Chips + reset |
+| V1 — Grille premium vivante | ☑ OK | Pas froide, pas SaaS |
+| V2 — Îlot blanc sur fond lin | ☑ OK | Contraste doux |
+| V3 — Sidebar `#EDE3D4` | ☑ OK | Distincte, pas lourde |
+| V4 — Prix terracotta | ☑ OK | Guide achat sans agresser |
+| V5 — Hover discret | ☑ OK | -2px / zoom 1.02 (variables CSS) |
+| V6 — Images (sans multiply) | ☑ OK | Packshots fond clair OK |
+| V7 — UX-2 non-régression | ☑ OK | `marketone-sidebar-rail` |
+| V8 — UX-1 non-régression | ☑ OK | Chips + reset |
 
-**Process** : PR #9 — merge interdit avant GO visuel explicite cycle 4.
+### Verdict recette cycle 4
+
+| Verdict | ☑ |
+|---|---|
+| **GO technique** | ☑ |
+| **GO visuel proposable** | ☑ |
+| **GO merge PR #9** | ☐ — validation humaine MOA finale sur captures avant merge |
+| **Réserve** | Capture mobile 768px non produite |
+
+**Process** : merge PR #9 uniquement après **GO explicite MOA** post-revue des captures.

@@ -2,7 +2,7 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut** | **Arbitrage MOA validé** — variante B « Tenue » implémentée (`19.0.15.2.0`) |
+| **Statut** | **GO visuel proposable** — recette cycle 4 OK ; merge PR #9 après validation humaine MOA finale |
 | **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
 | **Version précédente** | `19.0.15.1.0` — variante douce |
 | **Version actuelle** | `19.0.15.2.0` — variante B « Tenue » implémentée |
@@ -261,7 +261,7 @@ Le travail restant est **directionnel** :
 
 ---
 
-## Arbitrages MOA (validés) {#arbitrages-moa-validés}
+## Arbitrages MOA (validés)
 
 | # | Question | Décision |
 |---|---|---|
@@ -276,3 +276,5 @@ Le travail restant est **directionnel** :
 | 9 | PR #9 | Mise à jour, pas de merge avant recette visuelle |
 
 **Implémentation** : commit post-arbitrage sur `feat/marketone-ux3-product-cards-palier-a`, version `19.0.15.2.0`.
+
+**Recette cycle 4** (2026-05-20) : GO technique + GO visuel proposable — 21/21 tests, mesures doctrine CK OK, captures `marketone_ux3_b_*.png`. Réserve : mobile 768px non capturé. Merge PR #9 : en attente GO explicite MOA post-revue captures.
