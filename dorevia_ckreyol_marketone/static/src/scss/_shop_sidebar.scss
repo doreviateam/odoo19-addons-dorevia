@@ -5,7 +5,7 @@
         font-family: $marketone-font-body;
         font-size: $marketone-label;
         line-height: 1.5;
-        color: rgba($marketone-text, 0.92);
+        color: rgba($ck-text, 0.92);
         padding-right: clamp(0.75rem, 1.1vw, 1rem);
         align-self: flex-start;
         background: transparent !important;
@@ -23,11 +23,11 @@
         }
 
         .o_wsale_products_grid_before_rail.marketone-sidebar-rail {
-            padding: 0.15rem 0 0.35rem;
+            padding: 0.85rem 0.75rem 1rem;
             margin-left: 0 !important;
-            background: transparent !important;
-            border: none !important;
-            border-radius: 0 !important;
+            background: $ck-bg-sidebar !important;
+            border: 1px solid rgba($ck-border, 0.55) !important;
+            border-radius: 0.75rem !important;
             box-shadow: none !important;
             max-height: none;
             min-height: 0 !important;
@@ -61,7 +61,7 @@
         background: transparent !important;
         border: none !important;
         border-radius: 0 !important;
-        border-bottom: 1px solid rgba($marketone-border, 0.34) !important;
+        border-bottom: 1px solid rgba($ck-border, 0.4) !important;
         margin-bottom: 0 !important;
         box-shadow: none !important;
         padding-bottom: 0.12rem;
@@ -80,12 +80,12 @@
         font-size: 0.9375rem !important;
         font-weight: $marketone-weight-semibold !important;
         letter-spacing: 0.01em;
-        color: rgba($marketone-text, 0.94) !important;
+        color: rgba($ck-text, 0.94) !important;
         padding: 0.72rem 0.58rem !important;
         margin: 0.38rem 0 0.18rem !important;
         border-radius: clamp(7px, 0.5vw, 9px) !important;
-        border: 1px solid rgba($marketone-border, 0.22);
-        background-color: rgba($marketone-surface, 0.82) !important;
+        border: 1px solid rgba($ck-border, 0.45);
+        background-color: rgba(#ffffff, 0.55) !important;
         box-shadow: none;
 
         &::after {
@@ -95,14 +95,14 @@
         }
 
         &:not(.collapsed) {
-            background-color: rgba($marketone-surface-container, 0.95) !important;
-            border-color: rgba($marketone-border, 0.32);
+            background-color: rgba(#ffffff, 0.72) !important;
+            border-color: rgba($ck-border, 0.55);
         }
 
         &:hover {
-            color: $marketone-primary-container !important;
-            background-color: rgba($marketone-surface, 0.98) !important;
-            border-color: rgba($marketone-border, 0.38);
+            color: $ck-terracotta !important;
+            background-color: rgba(#ffffff, 0.82) !important;
+            border-color: rgba($ck-border, 0.65);
         }
 
         &:focus-visible {
@@ -138,7 +138,7 @@
         .form-check-label {
             cursor: pointer;
             line-height: 1.45;
-            color: rgba($marketone-text, 0.94);
+            color: rgba($ck-text, 0.94);
             font-size: $marketone-label;
             width: 100%;
             padding: 0.28rem 0;

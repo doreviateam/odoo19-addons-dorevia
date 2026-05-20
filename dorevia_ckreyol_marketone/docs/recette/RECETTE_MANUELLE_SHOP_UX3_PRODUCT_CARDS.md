@@ -3,12 +3,12 @@
 | Champ | Valeur |
 |-------|--------|
 | **Ticket** | `TICKET_MARKETONE_UX3_PRODUCT_CARDS_PALIER_A` (à créer post-recette) |
-| **Version cible** | **`19.0.15.1.0`** (variante douce MOA) |
+| **Version cible** | **`19.0.15.2.0`** (variante B « Tenue » — doctrine CK) |
 | **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut** | **Recette cycle 3** — variante douce SCSS, avant PR finale |
-| **Kit source** | `docs/Carole/ux3_palier_a.scss` → traduit en tokens Marketone |
+| **Statut** | **Recette cycle 4** — variante B implémentée, en attente GO visuel MOA |
+| **Proposition DA** | `docs/tickets/TICKET_MARKETONE_UX3_PALIER_A_PROPOSITION_DA.md` |
 
 ---
 
@@ -254,3 +254,51 @@ docker restart sandbox-odoo19-odoo-1
 **Cycle 1** : NO GO strict visuel (`object-fit: cover`, hover absent) — corrigé via CSS custom properties Odoo 19 (`ff865ed`).
 
 **Cycle 2** : GO technique, réserve visuelle e-commerce trop rigide.
+
+---
+
+## Variante B « Tenue » — doctrine CK (19.0.15.2.0)
+
+**Arbitrage MOA** : variante B retenue · palette scope `/shop` · alias `$ck-*` locaux.
+
+| Paramètre | Valeur cible |
+|---|---|
+| Fond page `/shop` | `#F5EDE0` (`$ck-bg-page`) |
+| Sidebar panneau | `#EDE3D4` (`$ck-bg-sidebar`) |
+| Fond image carte | `#F0E8DC` (`$ck-bg-image`) |
+| Fond carte | `#ffffff` (îlot lumineux) |
+| Ratio desktop | `1:1` |
+| Bordure carte | `#DDD0C2` |
+| Ombre repos | `0 1px 4px rgba(42,31,24,0.06)` |
+| Ombre hover | `0 4px 16px rgba(42,31,24,0.08)` |
+| Lift hover | `-2px` |
+| Zoom image | `1.02` |
+| Prix | `#C4715A` terracotta |
+| Hover titre | terracotta **cartes uniquement** |
+| `mix-blend-mode` | off |
+
+### Recette cycle 4 — captures attendues
+
+| Capture | Fichier suggéré | ☐ |
+|---|---|---|
+| Grille desktop complète | `/private/tmp/marketone_ux3_b_desktop.png` | |
+| Filtre actif (chip UX-1) | `/private/tmp/marketone_ux3_b_filtre_actif.png` | |
+| Sidebar panneau `#EDE3D4` | `/private/tmp/marketone_ux3_b_sidebar.png` | |
+| 2 packshots fond clair | `/private/tmp/marketone_ux3_b_packshot_*.png` | |
+| 2 images lifestyle / colorées | `/private/tmp/marketone_ux3_b_lifestyle_*.png` | |
+| Mobile 768px (si possible) | `/private/tmp/marketone_ux3_b_mobile.png` | |
+
+### Grille validation cycle 4
+
+| Scénario | Verdict | Notes |
+|---|---|---|
+| V1 — Grille premium vivante | ☐ OK · ☐ réserve · ☐ KO | Pas froide, pas SaaS |
+| V2 — Îlot blanc sur fond lin | ☐ OK · ☐ réserve · ☐ KO | Contraste doux |
+| V3 — Sidebar `#EDE3D4` | ☐ OK · ☐ réserve · ☐ KO | Distincte, pas lourde |
+| V4 — Prix terracotta | ☐ OK · ☐ réserve · ☐ KO | Guide achat sans agresser |
+| V5 — Hover discret | ☐ OK · ☐ réserve · ☐ KO | -2px / zoom 1.02 |
+| V6 — Images (sans multiply) | ☐ OK · ☐ réserve · ☐ KO | Packshots + lifestyle |
+| V7 — UX-2 non-régression | ☐ OK · ☐ KO | `marketone-sidebar-rail` |
+| V8 — UX-1 non-régression | ☐ OK · ☐ KO | Chips + reset |
+
+**Process** : PR #9 — merge interdit avant GO visuel explicite cycle 4.
