@@ -24,3 +24,16 @@ $marketone-error: #ba1a1a;
 $marketone-primary-dark: $marketone-primary-container;
 $marketone-on-primary: #ffffff;
 $marketone-accent: $marketone-primary-container;
+
+// Alias palette CK pastel — scope /shop (doctrine UX-DA, UX-3 Palier A).
+// N'écrase pas les tokens Marketone globaux (home, fiche produit, panier).
+$ck-bg-page:    #F5EDE0;
+$ck-bg-sidebar: #EDE3D4;
+$ck-bg-image:   #F0E8DC;
+$ck-text:       #2A1F18;
+$ck-terracotta: #C4715A;
+$ck-sauge:      #5A8A6E;
+$ck-or:         #D4B896;
+$ck-rose:       #C9A0A0;
+$ck-border:     #DDD0C2;
+$ck-shadow:     rgba(42, 31, 24, 1); // teinte ombre chaude (utiliser avec opacité)

@@ -1,8 +1,8 @@
 // Lot 3 — boutique /shop (Artisanal Terroir).
 
 .marketone-shop {
-    background-color: $marketone-bg-soft;
-    color: $marketone-text;
+    background-color: $ck-bg-page;
+    color: $ck-text;
     font-family: $marketone-font-body;
 
     #o_wsale_container {
@@ -19,7 +19,7 @@
         font-size: $marketone-h2-mobile;
         font-weight: $marketone-weight-semibold;
         line-height: 1.2;
-        color: $marketone-text;
+        color: $ck-text;
 
         @media (min-width: 992px) {
             font-size: $marketone-h2-desktop;
@@ -51,11 +51,11 @@
             font-family: $marketone-font-heading;
             font-weight: $marketone-weight-semibold;
             line-height: 1.25;
-            color: $marketone-text;
+            color: $ck-text;
         }
 
         a:not(.btn) {
-            color: $marketone-text;
+            color: $ck-text;
             text-decoration: none;
 
             &:hover,
@@ -69,7 +69,7 @@
         .product_price {
             margin-top: $marketone-space-xs;
             font-family: $marketone-font-body;
-            color: $marketone-text;
+            color: $ck-text;
 
             .oe_price,
             .oe_currency_value {
