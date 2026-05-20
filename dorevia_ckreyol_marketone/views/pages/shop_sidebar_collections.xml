@@ -27,7 +27,7 @@
     </template>
 
     <template id="marketone_shop_collections_accordion" name="Marketone: accordéon Collections sidebar">
-        <t t-set="marketone_col_expand" t-value="True"/>
+        <t t-set="marketone_col_expand" t-value="False"/>
         <t t-if="isOffcanvas">
             <div name="wsale_products_collections_list" class="wsale_products_collections_list mb-3">
                 <p class="fw-bold mb-2">Collections</p>

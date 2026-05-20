@@ -5,9 +5,15 @@
               inherit_id="website_sale.products_attributes_collapsible"
               name="Marketone: libellé Origines sidebar desktop"
               priority="40">
+        <!-- Renomme le libellé Origines. -->
         <xpath expr="//div[contains(@t-attf-class, 'accordion-item')]//button[contains(@t-attf-class, 'accordion-button')]//b[@t-field='a.name']" position="replace">
             <b t-if="marketone_origin_attribute_id and a.id == marketone_origin_attribute_id">Origines</b>
             <b t-else="" t-field="a.name"/>
+        </xpath>
+        <!-- Origines plié par défaut ; autres attributs dépliés (priority > 34 de ux2_expand). -->
+        <xpath expr="//t[@t-set='_expand_attributes']" position="replace">
+            <t t-set="_expand_attributes"
+               t-value="not (marketone_origin_attribute_id and a.id == marketone_origin_attribute_id)"/>
         </xpath>
     </template>
 
