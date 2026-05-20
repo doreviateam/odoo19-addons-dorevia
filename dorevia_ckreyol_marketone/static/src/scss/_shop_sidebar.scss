@@ -25,10 +25,10 @@
         .o_wsale_products_grid_before_rail.marketone-sidebar-rail {
             padding: 0.85rem 0.75rem 1rem;
             margin-left: 0 !important;
-            background: $ck-bg-sidebar !important;
-            border: 1px solid rgba($ck-border, 0.55) !important;
+            background-color: $ck-bg-card !important;
+            border: 1px solid $ck-border-soft !important;
             border-radius: 0.75rem !important;
-            box-shadow: none !important;
+            box-shadow: 0 2px 12px rgba($ck-shadow, 0.045) !important;
             max-height: none;
             min-height: 0 !important;
             height: auto !important;
@@ -61,7 +61,7 @@
         background: transparent !important;
         border: none !important;
         border-radius: 0 !important;
-        border-bottom: 1px solid rgba($ck-border, 0.4) !important;
+        border-bottom: 1px solid rgba($ck-bg-green-soft, 0.28) !important;
         margin-bottom: 0 !important;
         box-shadow: none !important;
         padding-bottom: 0.12rem;
@@ -84,8 +84,8 @@
         padding: 0.72rem 0.58rem !important;
         margin: 0.38rem 0 0.18rem !important;
         border-radius: clamp(7px, 0.5vw, 9px) !important;
-        border: 1px solid rgba($ck-border, 0.45);
-        background-color: rgba(#ffffff, 0.55) !important;
+        border: 1px solid $ck-border-soft;
+        background-color: $ck-bg-card !important;
         box-shadow: none;
 
         &::after {
@@ -95,14 +95,14 @@
         }
 
         &:not(.collapsed) {
-            background-color: rgba(#ffffff, 0.72) !important;
-            border-color: rgba($ck-border, 0.55);
+            background-color: $ck-bg-cream !important;
+            border-color: $ck-border-soft;
         }
 
         &:hover {
             color: $ck-terracotta !important;
-            background-color: rgba(#ffffff, 0.82) !important;
-            border-color: rgba($ck-border, 0.65);
+            background-color: $ck-bg-image !important;
+            border-color: $ck-border-soft;
         }
 
         &:focus-visible {

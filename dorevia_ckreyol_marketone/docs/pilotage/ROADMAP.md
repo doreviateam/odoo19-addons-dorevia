@@ -175,7 +175,7 @@ mais devient plus lisible, mobile-first et crédible retail pour C-Kreyol.
 
 **Livrables** : `views/pages/product.xml`, `_product.scss`, tests `dorevia_marketone_lot4` (37/37 tests auto OK).
 
-**Recette MOA** : [`docs/recette/RECETTE_MANUELLE_LOT4.md`](../recette/RECETTE_MANUELLE_LOT4.md)
+**Recette MOA** : [`docs/recette/RECETTE_MANUELLE_LOT4.md`](../recette/lots/RECETTE_MANUELLE_LOT4.md)
 
 **Réserves mineures**
 
@@ -196,7 +196,7 @@ Rendu visuel au moins au niveau Artisanal Terroir (Lot 2.1).
 
 **Ticket** : `docs/tickets/TICKET_MARKETONE_LOT5_CART_CHECKOUT.md`
 
-**Recette MOA** : [`docs/recette/RECETTE_MANUELLE_LOT5.md`](../recette/RECETTE_MANUELLE_LOT5.md)
+**Recette MOA** : [`docs/recette/RECETTE_MANUELLE_LOT5.md`](../recette/lots/RECETTE_MANUELLE_LOT5.md)
 
 **Livrables** : `cart.xml` (scope via `checkout_layout`), `_cart.scss`, `_checkout.scss`, tests `dorevia_marketone_lot5` (49/49 non-régression).
 
@@ -226,20 +226,20 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 
 | Étape | Statut |
 |-------|--------|
-| Cadrage | **GO avec réserves** (2026-05-18) — [`TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md`](../tickets/TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md) |
+| Cadrage | **GO avec réserves** (2026-05-18) — [`TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md`](../tickets/lots/TICKET_MARKETONE_LOT6_1_PORTE_INCONTOURNABLES.md) |
 | ADR-023 + CONTRATS C3.A | ✅ |
-| Exécution | **GO avec réserves** — `19.0.6.0.0`, 60/60 tests — [`TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md) (clôturé) |
-| Recette MOA | [`RECETTE_MANUELLE_LOT6_1.md`](../recette/RECETTE_MANUELLE_LOT6_1.md) — GO avec réserves |
+| Exécution | **GO avec réserves** — `19.0.6.0.0`, 60/60 tests — [`TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md`](../tickets/lots/TICKET_MARKETONE_LOT6_1_INCONTOURNABLES_EXEC.md) (clôturé) |
+| Recette MOA | [`RECETTE_MANUELLE_LOT6_1.md`](../recette/lots/RECETTE_MANUELLE_LOT6_1.md) — GO avec réserves |
 
 **Lot 6.2 — Origines** (`19.0.7.0.0`)
 
 | Étape | Statut |
 |-------|--------|
 | ADR-024 / Note univers | **GO MOA** (2026-05-18) |
-| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) |
+| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md`](../tickets/lots/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES.md) |
 | ADR-025 + C3.B | ✅ |
-| Exécution | **GO** — `19.0.7.0.0`, 76/76 tests — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) (clôturé) |
-| Recette MOA | [`RECETTE_MANUELLE_LOT6_2.md`](../recette/RECETTE_MANUELLE_LOT6_2.md) — GO |
+| Exécution | **GO** — `19.0.7.0.0`, 76/76 tests — [`TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md`](../tickets/lots/TICKET_MARKETONE_LOT6_2_PORTE_ORIGINES_EXEC.md) (clôturé) |
+| Recette MOA | [`RECETTE_MANUELLE_LOT6_2.md`](../recette/lots/RECETTE_MANUELLE_LOT6_2.md) — GO |
 
 **Principe** : porte **Boutique** (`/shop`) ; récit territoire **Culture** — lots dédiés ultérieurs.
 
@@ -247,10 +247,10 @@ Checkout invité Odoo 19 : `/shop/checkout` → `/shop/address` avec `marketone-
 
 | Étape | Statut |
 |-------|--------|
-| Cadrage | **GO** — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) (clôturé, référence) |
+| Cadrage | **GO** — [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/boutique/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md) (clôturé, référence) |
 | Photographie | `/shop` · `/incontournables` → `featured` · `/origines` → `origin` |
 | Suite validée | **Culture v1 GO** — Lot 6.3+ sur décision MOA |
-| Taxonomie catégories BO | **GO MOA** (2026-05-19) — BO + recette — [`TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](../tickets/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) |
+| Taxonomie catégories BO | **GO MOA** (2026-05-19) — BO + recette — [`TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md`](../tickets/boutique/TICKET_MARKETONE_CATALOGUE_CATEGORIES_BO_RECETTE.md) |
 
 **Prérequis exploitation (consolidés)**
 
@@ -318,7 +318,7 @@ Alias ou lien → /shop?… → grille filtrée correcte → canonical cohérent
 |-------|--------|
 | **Base** | `ckr-marketone-01` |
 | **Instance** | `sandbox-odoo19-odoo-1` — http://localhost:18079 |
-| **Documentation** | `docs/recette/ENV_REFERENCE.md` |
+| **Documentation** | `docs/recette/reference/ENV_REFERENCE.md` |
 | **Décision** | ADR-013 |
 
 Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans marketplace ni thème tiers.
@@ -329,10 +329,10 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 | Étape | Statut |
 |-------|--------|
-| Cadrage | **GO avec réserves légères** (2026-05-18) — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) |
+| Cadrage | **GO avec réserves légères** (2026-05-18) — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md`](../tickets/culture/TICKET_MARKETONE_CULTURE_TERRITOIRES_CADRAGE.md) |
 | ADR-026 + C8 | ✅ |
-| Exécution | **Clôturé — GO MOA** `19.0.8.0.0` — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) |
-| Recette | [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/RECETTE_MANUELLE_CULTURE_V1.md) — **GO** |
+| Exécution | **Clôturé — GO MOA** `19.0.8.0.0` — [`TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md`](../tickets/culture/TICKET_MARKETONE_CULTURE_TERRITOIRES_EXEC.md) |
+| Recette | [`RECETTE_MANUELLE_CULTURE_V1.md`](../recette/culture/RECETTE_MANUELLE_CULTURE_V1.md) — **GO** |
 | Grammaire URL | `/culture/guadeloupe` — alias Boutique `/origines` inchangé |
 | Tests | **85** post-tests (Lots 1–6.2 + Culture v1), **0** failed |
 
@@ -344,9 +344,9 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 | Étape | Statut |
 |-------|--------|
-| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md) |
-| Exécution | **Clôturé — GO MOA** `19.0.9.0.0` — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) |
-| Recette | [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/RECETTE_MANUELLE_CULTURE_V2.md) — **GO** |
+| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md`](../tickets/culture/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_CADRAGE.md) |
+| Exécution | **Clôturé — GO MOA** `19.0.9.0.0` — [`TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md`](../tickets/culture/TICKET_MARKETONE_CULTURE_V2_TERRITOIRES_LEGERS_EXEC.md) |
+| Recette | [`RECETTE_MANUELLE_CULTURE_V2.md`](../recette/culture/RECETTE_MANUELLE_CULTURE_V2.md) — **GO** |
 | Territoires | `guadeloupe`, `martinique`, `reunion` |
 | Tests | **91** post-tests, **0** failed |
 | ADR-027 + C8.v2 | ✅ |
@@ -358,7 +358,7 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 | Étape | Statut |
 |-------|--------|
-| Ticket | **Clôturé — GO MOA** — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
+| Ticket | **Clôturé — GO MOA** — [`TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md`](../tickets/pilotage/TICKET_MARKETONE_ARBITRAGE_PROCHAINE_ETAPE.md) |
 | Décision | **Option 2** — Savoirs v1 cadrage |
 | Reporté | Culture v3 · Boutique 6.3 |
 
@@ -368,9 +368,9 @@ Créée le 2026-05-18 : socle `website` + `website_sale` + `portal`, sans market
 
 | Étape | Statut |
 |-------|--------|
-| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
+| Cadrage | **GO avec réserves** — [`TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md`](../tickets/savoirs/TICKET_MARKETONE_SAVOIRS_V1_CADRAGE.md) |
 | ADR-028 + C9 | ✅ |
-| Exécution | **Ouverte** — [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) — `19.0.10.0.0` |
+| Exécution | **Ouverte** — [`TICKET_MARKETONE_SAVOIRS_V1_EXEC.md`](../tickets/savoirs/TICKET_MARKETONE_SAVOIRS_V1_EXEC.md) — `19.0.10.0.0` |
 | Modèle | `marketone.savoir.recipe` — workflow 5 états |
 | URLs | `/savoirs/<slug>`, `/savoirs/proposer` — pas de hub |
 

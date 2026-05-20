@@ -32,7 +32,7 @@ Cela inclut une logique de territoire, de langue, de culture, de production et d
 
 ## 2. Doctrine produit C-Kreyol
 
-Le site C-Kreyol porte trois dimensions complémentaires, nommées officiellement **trois univers** (voir [ADR-024](DECISIONS.md#adr-024--structuration-c-kreyol-en-trois-univers-boutique-culture-savoirs) et [NOTE_UNIVERS_CK_MARKETONE.md](NOTE_UNIVERS_CK_MARKETONE.md)) :
+Le site C-Kreyol porte trois dimensions complémentaires, nommées officiellement **trois univers** (voir [ADR-024](./DECISIONS.md#adr-024--structuration-c-kreyol-en-trois-univers-boutique-culture-savoirs) et [NOTE_UNIVERS_CK_MARKETONE.md](./NOTE_UNIVERS_CK_MARKETONE.md)) :
 
 | Univers | Verbe | Dimension ADR-018 |
 |---------|-------|-------------------|
@@ -130,7 +130,7 @@ Le dépôt **`dorevia_ckreyol_marketplace/docs/assets/`** (21 PNG : packshots, m
 | Inspiration design (Stitch) | `stitch_*.png` — pas de copie HTML |
 | Éditorial futur | `mvp02_reference_*`, `hero_reference_*` |
 
-Détail opérationnel : `docs/recette/ASSETS_REFERENCE.md` — ADR-020.
+Détail opérationnel : `docs/recette/reference/ASSETS_REFERENCE.md` — ADR-020.
 
 ---
 

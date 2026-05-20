@@ -3,8 +3,8 @@
 | Champ | Valeur |
 |-------|--------|
 | **Statut** | **GO MOA** — doctrine catalogue (2026-05-19, amendements standard Odoo + navigation transversale) |
-| **ADR** | [ADR-029](DECISIONS.md#adr-029--taxonomie-catalogue-convention-odoo-catégories-e-commerce) |
-| **Contrat** | [C3.C](CONTRACTS.md#c3c--taxonomie-catalogue-moa-2026-05-19) |
+| **ADR** | [ADR-029](./DECISIONS.md#adr-029--taxonomie-catalogue-convention-odoo-catégories-e-commerce) |
+| **Contrat** | [C3.C](./CONTRACTS.md#c3c--taxonomie-catalogue-moa-2026-05-19) |
 
 ---
 
@@ -63,7 +63,7 @@ Ces rayons alimentent un menu transversal **Catégories** (cible UX — hors sco
 
 Chaque produit vendable doit être rattaché à **au moins une** catégorie e-commerce, correspondant à sa **catégorie principale**. Les catégories secondaires sont autorisées pour les sélections, usages et mises en avant, **dans la limite de trois rattachements supplémentaires**. Un produit **ne doit pas dépasser quatre** catégories e-commerce au total.
 
-**Mapping catalogue recette** : [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) (27 produits `ckr-marketone-01`, validation MOA 2026-05-19).
+**Mapping catalogue recette** : [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](./MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) (27 produits `ckr-marketone-01`, validation MOA 2026-05-19).
 
 ---
 
@@ -160,8 +160,8 @@ Il peut aussi être trouvé via :
 
 ## Références
 
-- [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) — tableau produit → catégories (`ckr-marketone-01`)
-- [`CONTRACTS.md`](CONTRACTS.md) — C3, C3.A, C3.C
-- [`DECISIONS.md`](DECISIONS.md) — ADR-023, ADR-029
-- [`NOTE_UNIVERS_CK_MARKETONE.md`](NOTE_UNIVERS_CK_MARKETONE.md) — § Taxonomie catalogue
-- [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md)
+- [`MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](./MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md) — tableau produit → catégories (`ckr-marketone-01`)
+- [`CONTRACTS.md`](./CONTRACTS.md) — C3, C3.A, C3.C
+- [`DECISIONS.md`](./DECISIONS.md) — ADR-023, ADR-029
+- [`NOTE_UNIVERS_CK_MARKETONE.md`](./NOTE_UNIVERS_CK_MARKETONE.md) — § Taxonomie catalogue
+- [`TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md`](../tickets/boutique/TICKET_MARKETONE_CONSOLIDATION_PORTES_BOUTIQUE.md)

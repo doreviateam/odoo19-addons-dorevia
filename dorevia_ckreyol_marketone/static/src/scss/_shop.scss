@@ -1,7 +1,11 @@
 // Lot 3 — boutique /shop (Artisanal Terroir).
 
+body:has(.marketone-shop) {
+    background-color: $ck-bg-body;
+}
+
 .marketone-shop {
-    background-color: $ck-bg-page;
+    background-color: $ck-bg-body;
     color: $ck-text;
     font-family: $marketone-font-body;
 
@@ -10,11 +14,18 @@
         margin-inline: auto;
         padding-block: $marketone-space-lg $marketone-space-xl;
         padding-inline: $marketone-gutter;
+        background-color: transparent;
     }
 
     .o_wsale_products_shop_title,
     #products_grid_content_title {
         margin-bottom: $marketone-space-md;
+        padding: 0.85rem 1.15rem;
+        border-radius: $marketone-radius-md;
+        border: 1px solid $ck-border-soft;
+        border-bottom: 2px solid $ck-bg-yellow-soft;
+        background-color: $ck-bg-card;
+        box-shadow: 0 2px 10px rgba($ck-shadow, 0.05);
         font-family: $marketone-font-heading;
         font-size: $marketone-h2-mobile;
         font-weight: $marketone-weight-semibold;

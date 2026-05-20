@@ -25,15 +25,33 @@ $marketone-primary-dark: $marketone-primary-container;
 $marketone-on-primary: #ffffff;
 $marketone-accent: $marketone-primary-container;
 
-// Alias palette CK pastel — scope /shop (doctrine UX-DA, UX-3 Palier A).
-// N'écrase pas les tokens Marketone globaux (home, fiche produit, panier).
-$ck-bg-page:    #F5EDE0;
-$ck-bg-sidebar: #EDE3D4;
-$ck-bg-image:   #F0E8DC;
-$ck-text:       #2A1F18;
-$ck-terracotta: #C4715A;
-$ck-sauge:      #5A8A6E;
-$ck-or:         #D4B896;
-$ck-rose:       #C9A0A0;
-$ck-border:     #DDD0C2;
-$ck-shadow:     rgba(42, 31, 24, 1); // teinte ombre chaude (utiliser avec opacité)
+// Palette source CK (référence MOA — jamais en aplat saturé sur /shop) :
+//   #43350F brun · #A41756 baie · #2ABD2A vert · #A86F08 ocre · #7286AE ardoise
+//
+// Chaîne chromatique CK — B1.4 « premium first » · aplats uniquement.
+//   body #FFF → page (ocre dilué) → sidebar (lin) → cartes → image → chips → terracotta
+$ck-bg-body:        #FFFFFF;
+$ck-bg-page:        #F2E3D2; // crème chaud — réservé accents (chips hover), pas aplat conteneur
+$ck-bg-cream:       #FAF6F0;
+$ck-bg-sidebar:     #F3EDE5; // végétal-lin, pas bloc vert
+$ck-bg-card:        #FFFDF8; // sidebar · surfaces générales
+$ck-bg-card-body:   #FDF9F0; // corps tuile produit (sous zone image)
+$ck-bg-white:       $ck-bg-card;
+$ck-bg-image:       #F8EEDB; // MOA B1.5 — chaleur produit zone image uniquement
+$ck-bg-yellow-soft: #F5E2B8;
+$ck-bg-green-mist:  #EEF5E9;
+$ck-bg-green-soft:  #D9E8D2; // filets / accordéon ouvert — pas sidebar pleine
+$ck-bg-red-soft:    #F1CFC4;
+$ck-bg-green-deep:  #6F9A78;
+
+$ck-border-soft:    #E2D4BC; // MOA B1.5 §3.2 — bordures chaudes premium
+$ck-border-card:    $ck-border-soft;
+
+$ck-text:           #2A1F18;
+$ck-terracotta:     #C4715A;
+$ck-sauge:          #5A8A6E;
+$ck-sauge-border:   rgba(90, 138, 110, 0.28);
+$ck-or:             #D4B896;
+$ck-rose:           #C9A0A0;
+$ck-border:         $ck-border-soft;
+$ck-shadow:         rgba(42, 31, 24, 1);
