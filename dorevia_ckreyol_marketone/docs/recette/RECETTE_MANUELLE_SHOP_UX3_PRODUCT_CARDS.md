@@ -349,4 +349,4 @@ Sur certaines cartes, le bandeau horizontal du fond image (`#F0E8DC`) accentue e
 **Réserve 2 — mobile 768px** (non bloquante)  
 Aucune capture mobile produite en recette cycle 4 (viewport non contrôlable). CSS responsive documenté : ratio 1:1, hover désactivé ≤768px.
 
-**Merge** : PR [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) — commit merge : _à compléter post-merge_.
+**Merge** : PR [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) — commit `9b6354d8e377378394fb101c66846c0cbf02b8f9` (2026-05-20).
