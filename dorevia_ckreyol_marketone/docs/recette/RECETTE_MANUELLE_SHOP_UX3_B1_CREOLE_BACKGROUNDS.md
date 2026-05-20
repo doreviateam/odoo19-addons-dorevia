@@ -28,7 +28,7 @@ Hard refresh navigateur.
 ```text
 body / wrap shop     → #FFFFFF
 sidebar rail         → #FFFDF8 (blanc chaud)
-cartes               → #FFFDF8 + ombre écrin
+cartes corps         → #FDF9F0 · zone image → #F8EEDB
 zone image produit   → #F8EEDB (ajustement MOA 3.1)
 chips                → pastel discrets
 prix                 → #C4715A
