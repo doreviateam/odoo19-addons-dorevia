@@ -4,7 +4,7 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX3_PALIER_B1_CREOLE_BACKGROUNDS` |
 | **Type** | **UX / DA** — réchauffement visuel SCSS uniquement |
-| **Statut** | **B1.4 premium first** (`19.0.15.7.0`) — recette MOA |
+| **Statut** | **Base directionnelle OK** — ajustements fins (`19.0.15.7.4`) avant GO merge |
 | **Jalon de référence** | ADR-031 · UX-3 Palier A « Tenue » mergé (`19.0.15.2.0`, PR #9) |
 | **Version cible proposée** | `19.0.15.3.0` |
 | **Branche suggérée** | `feat/marketone-ux3-b1-creole-backgrounds` |
@@ -271,3 +271,17 @@ Couleurs **saturées** de la charte d’origine — inspiration créole, **pas**
 | 5 | `#7286AE` | Ardoise | Hors triptyque rouge/jaune/vert B1 — réservé (pas de fond /shop sans arbitrage) |
 
 **Règle** : la palette source donne l’**énergie** ; la chaîne `$ck-bg-*` la **dilue** pour rester premium épicerie fine. Pas de mapping 1:1 drapeau → zone UX.
+
+---
+
+## 17. Retour MOA — base sobre validable (`19.0.15.7.3`+)
+
+**Verdict** : **base directionnelle OK** — ajustements fins avant GO visuel final.
+
+**Conservé** : body neutre `#FFF` · sidebar intégrée (blanc chaud) · cartes écrin · pas dégradé · pas bloc vert · pas page beige lourde.
+
+**À ne pas rouvrir** : body coloré · sidebar verte · dégradés · aplats saturés · cartes multicolores · drapeau explicite.
+
+**Ajustement 3.1** (`19.0.15.7.4`) : `$ck-bg-image: #F8EEDB` — chaleur produit zone image uniquement.
+
+**Merge** : GO visuel MOA explicite post-recette finale.
