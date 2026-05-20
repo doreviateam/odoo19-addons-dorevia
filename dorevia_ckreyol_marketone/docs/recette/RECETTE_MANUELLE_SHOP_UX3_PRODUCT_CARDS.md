@@ -4,11 +4,15 @@
 |-------|--------|
 | **Ticket** | `TICKET_MARKETONE_UX3_PRODUCT_CARDS_PALIER_A` (à créer post-recette) |
 | **Version cible** | **`19.0.15.2.0`** (variante B « Tenue » — doctrine CK) |
-| **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
+| **Branche** | `main` (mergée) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut** | **GO MOA UX-3 Palier A** — variante B « Tenue » · `19.0.15.2.0` |
+| **Statut** | **GO MOA UX-3 Palier A — clôturé / mergé** |
+| **Merge** | PR [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) · `9b6354d` · `main` |
 | **Proposition DA** | `docs/tickets/TICKET_MARKETONE_UX3_PALIER_A_PROPOSITION_DA.md` |
+| **Jalon boutique** | **Référence MOA** avant tout nouveau travail UX `/shop` — voir ADR-031 |
+
+> **Jalon de référence** : avec UX-1 (état filtres) et UX-2 (sidebar), ce palier fixe la grille produit doctrine CK (variante B « Tenue »). Tout ajustement UX boutique ultérieur part de `main` ≥ `19.0.15.2.0` et documente l’écart par rapport à ce jalon.
 
 ---
 

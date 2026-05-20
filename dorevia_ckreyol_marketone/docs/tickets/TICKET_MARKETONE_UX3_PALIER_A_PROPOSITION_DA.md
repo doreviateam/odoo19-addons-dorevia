@@ -2,8 +2,9 @@
 
 | Champ | Valeur |
 |-------|--------|
-| **Statut** | **GO MOA UX-3 Palier A** — variante B « Tenue » mergée (`19.0.15.2.0`) |
-| **Branche** | `feat/marketone-ux3-product-cards-palier-a` |
+| **Statut** | **GO MOA UX-3 Palier A — clôturé / mergé** |
+| **Jalon** | **Référence MOA** avant nouveau travail UX boutique (ADR-031) |
+| **Branche** | `main` |
 | **Version précédente** | `19.0.15.1.0` — variante douce |
 | **Version actuelle** | `19.0.15.2.0` — variante B « Tenue » implémentée |
 | **PR** | [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) — mergée |

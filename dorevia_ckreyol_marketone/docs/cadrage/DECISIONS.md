@@ -503,6 +503,25 @@
 
 ---
 
+## ADR-031 — Jalon UX boutique `/shop` (UX-1 · UX-2 · UX-3 Palier A)
+
+| | |
+|---|---|
+| **Date** | 2026-05-20 |
+| **Statut** | **Acceptée — GO MOA clôturé** |
+| **Version module** | **`19.0.15.2.0`** (minimum `main` post-merge PR #9) |
+| **Merge** | PR [#9](https://github.com/doreviateam/odoo19-addons-dorevia/pull/9) · commit `9b6354d8e377378394fb101c66846c0cbf02b8f9` |
+| **Contexte** | Trois paliers UX successifs sur `/shop` : état utilisateur filtres, sidebar confort, grille produit alignée doctrine CK pastel. |
+| **Décision** | Ce triptyque constitue le **jalon de référence MOA** pour tout **nouveau travail UX boutique** : proposer et arbitrer avant d’implémenter ; ne pas régresser UX-1 / UX-2 ; doctrine CK scope `/shop` via alias `$ck-*` (pas refonte tokens globaux sans ticket). |
+| **UX-1** | Chips filtres, compteur, reset — `19.0.13.0.7+` · recette `RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md` |
+| **UX-2** | Sidebar sticky, accordéons, zones cliquables — `19.0.14.0.0` · PR #8 mergée · recette `RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md` |
+| **UX-3 Palier A** | Variante B « Tenue » : fond lin `#F5EDE0`, sidebar `#EDE3D4`, cartes îlots blancs, image `#F0E8DC`, ratio 1:1, prix `#C4715A`, hover discret, `multiply` off — recette `RECETTE_MANUELLE_SHOP_UX3_PRODUCT_CARDS.md` · ticket `TICKET_MARKETONE_UX3_PALIER_A_PROPOSITION_DA.md` |
+| **Réserves non bloquantes** | (1) Séparation image/texte parfois marquée (bandeau fond image) — reprise SCSS ou moteur image ultérieur ; (2) capture mobile 768px non produite — CSS responsive documenté ; (3) homogénéisation durable visuels = futur moteur normalisation images |
+| **Tests référence** | `dorevia_marketone_shop_regression` · `dorevia_marketone_shop_filter_state` · `dorevia_marketone_shop_sidebar_ux2` — **21/21** au GO merge UX-3 |
+| **Process** | Tests verts ≠ GO produit ; merge UX requiert GO visuel MOA explicite (appliqué UX-3 cycle 4) |
+
+---
+
 ## Décisions en attente (à trancher avant Lots 6.3+)
 
 | Sujet | Options | Décideur |
