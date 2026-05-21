@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- MOA — état vide grille /shop : critères vs catalogue vide. -->
+  <template id="marketone_shop_empty_state"
+            inherit_id="website_sale.products"
+            name="Marketone: état vide grille /shop"
+            priority="38">
+    <xpath expr="//div[hasclass('mt128')][hasclass('mb256')]/t[@t-if='not search']/h3" position="replace">
+      <h3 class="mt8 marketone-shop-empty-state__title" style="text-align: center;">
+        <t t-if="marketone_shop_empty_state_filtered"
+           t-out="marketone_shop_empty_state_label"/>
+        <t t-else="">No product defined</t>
+      </h3>
+    </xpath>
+    <xpath expr="//div[hasclass('mt128')][hasclass('mb256')]/t[@t-if='not search']/p[@t-if='category']" position="attributes">
+      <attribute name="t-if">category and not marketone_shop_empty_state_filtered</attribute>
+    </xpath>
+    <xpath expr="//div[hasclass('mt128')][hasclass('mb256')]/t[@t-else='']/h3" position="replace">
+      <h3 class="mt8 marketone-shop-empty-state__title" style="text-align: center;">
+        <t t-if="marketone_shop_empty_state_filtered"
+           t-out="marketone_shop_empty_state_label"/>
+        <t t-else="">No results</t>
+      </h3>
+    </xpath>
+    <xpath expr="//div[hasclass('mt128')][hasclass('mb256')]/t[@t-else='']/p[1]" position="attributes">
+      <attribute name="t-if">not marketone_shop_empty_state_filtered</attribute>
+    </xpath>
+    <xpath expr="//div[hasclass('mt128')][hasclass('mb256')]/t[@t-else='']/p[2]" position="attributes">
+      <attribute name="t-if">category and not marketone_shop_empty_state_filtered</attribute>
+    </xpath>
+  </template>
+</odoo>

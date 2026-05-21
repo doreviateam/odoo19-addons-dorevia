@@ -24,7 +24,9 @@ class TestMarketoneShopRegression(HttpCase):
     def _sidebar_categories_block(self, html):
         start = html.find("marketone-shop-categories-accordion")
         self.assertGreater(start, -1)
-        end = html.find("products_attributes_filters", start)
+        end = html.find("marketone-shop-collections-accordion", start)
+        if end < 0:
+            end = html.find("products_attributes_filters", start)
         self.assertGreater(end, start)
         return html[start:end]
 
@@ -37,8 +39,8 @@ class TestMarketoneShopRegression(HttpCase):
             end = html.find("o_wsale_products_grid_table_wrapper", start)
         return html[start : end if end > start else start + 4000]
 
-    def test_ux1_chip_bar_before_toolbar_above_grid(self):
-        """Barre chips + reset juste au-dessus de la toolbar catalogue."""
+    def test_ux1_chip_bar_after_toolbar_above_grid(self):
+        """Barre chips sous la ligne recherche / résultat / tri."""
         cat = self.env["product.public.category"].search(
             [("name", "=", "Condiments")], limit=1
         )
@@ -54,9 +56,10 @@ class TestMarketoneShopRegression(HttpCase):
         header_end = html.find("</header>", header_start)
         header_html = html[header_start:header_end]
         bar_pos = header_html.find('aria-label="Filtres actifs"')
-        toolbar_pos = header_html.find("products_header btn-toolbar")
+        toolbar_pos = header_html.find("marketone-shop-catalog-toolbar")
         self.assertGreater(bar_pos, -1)
-        self.assertGreater(toolbar_pos, bar_pos)
+        self.assertGreater(toolbar_pos, -1)
+        self.assertGreater(bar_pos, toolbar_pos)
         grid_pos = html.find("o_wsale_products_grid_table_wrapper", header_end)
         self.assertGreater(grid_pos, header_end)
         bar = self._chip_bar(html)
@@ -142,9 +145,12 @@ class TestMarketoneShopRegression(HttpCase):
         sidebar = html[sidebar_start : sidebar_start + 12000]
         self.assertNotIn("Clear Filters", sidebar)
 
-    def test_r2_counter_wording_trouves(self):
-        """R2 — libellé compteur non ambigu."""
+    def test_r2_grid_title_in_header_not_toolbar(self):
+        """R2 — compteur discret en ligne résultat, absent de la toolbar tri."""
         response = self.url_open("/shop")
         self.assertEqual(response.status_code, 200)
-        self.assertIn("marketone-filter-state__count", response.text)
-        self.assertRegex(response.text, r"produit[s]? trouv[eé]s?")
+        html = response.text
+        self.assertIn('id="products_grid_content_title"', html)
+        self.assertIn("marketone-shop-grid-result", html)
+        self.assertIn("produits disponibles", html)
+        self.assertNotIn("marketone-filter-state__count", html)

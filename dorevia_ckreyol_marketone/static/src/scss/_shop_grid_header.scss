@@ -1,0 +1,122 @@
+// MOA — haut grille /shop : L1 compteur + recherche centrée + tri · L2 chips (QWeb).
+
+.marketone-shop {
+    #o_wsale_products_header {
+        gap: 0.5rem;
+    }
+
+    .products_header.marketone-shop-catalog-toolbar {
+        position: relative;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: center;
+        gap: 0.5rem 0.75rem;
+        width: 100%;
+        min-height: 2.5rem;
+        padding-block: 0.125rem;
+
+        // Gauche — indication résultat (flexible, non dominant).
+        .marketone-shop-grid-meta {
+            flex: 1 1 0;
+            min-width: 0;
+            z-index: 1;
+        }
+
+        .marketone-shop-grid-result,
+        #products_grid_content_title.marketone-shop-grid-result {
+            margin-bottom: 0;
+            padding: 0;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            font-family: $marketone-font-body;
+            font-size: $marketone-label;
+            font-weight: $marketone-weight-medium;
+            line-height: 1.35;
+            color: rgba($ck-text, 0.72);
+        }
+
+        // Centre — recherche visuellement centrée dans la colonne catalogue.
+        .o_wsale_products_header_search_form_container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 2;
+            width: 32rem;
+            max-width: calc(100% - 10rem);
+            margin: 0 !important;
+            padding: 0;
+            transform: translate(-50%, -50%);
+
+            .o_searchbar_form,
+            form.o_wsale_products_searchbar_form {
+                width: 100%;
+                margin-inline: 0 !important;
+            }
+        }
+
+        > a[data-bs-target="#o_wsale_search_modal"] {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 2;
+            transform: translate(-50%, -50%);
+            margin: 0 !important;
+        }
+
+        // Droite — pricelist · tri · filtres mobile.
+        .o_pricelist_dropdown:not(.d-none) {
+            flex: 0 0 auto;
+            margin-left: auto;
+            z-index: 1;
+        }
+
+        .o_sortby_dropdown {
+            flex: 1 1 0;
+            display: flex;
+            justify-content: flex-end;
+            min-width: 0;
+            z-index: 1;
+        }
+
+        .o_pricelist_dropdown:not(.d-none) + .o_sortby_dropdown {
+            flex: 0 0 auto;
+            margin-left: 0.375rem;
+        }
+
+        > button[data-bs-target="#o_wsale_offcanvas"] {
+            flex: 0 0 auto;
+            z-index: 1;
+        }
+
+        @media (max-width: 767.98px) {
+            flex-wrap: wrap;
+            row-gap: 0.5rem;
+
+            .marketone-shop-grid-meta {
+                flex: 1 1 auto;
+                max-width: 58%;
+            }
+
+            .o_wsale_products_header_search_form_container {
+                position: static;
+                transform: none;
+                flex: 1 1 100%;
+                order: 10;
+                width: 100%;
+                max-width: none;
+            }
+
+            > a[data-bs-target="#o_wsale_search_modal"] {
+                position: static;
+                transform: none;
+                order: 10;
+            }
+
+            .o_sortby_dropdown {
+                flex: 0 0 auto;
+                margin-left: auto;
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol Marketone",
-    "version": "19.0.15.8.1",
+    "version": "19.0.15.9.4",
     "category": "Website/Website",
     "summary": "Canal e-commerce C-Kreyol — presentation et orientation (Marketone).",
     "author": "Dorevia",
@@ -30,6 +30,8 @@
         "views/pages/shop_sidebar_origin_label.xml",
         "views/pages/shop_clear_filters.xml",
         "views/pages/shop_filter_state.xml",
+        "views/pages/shop_grid_title.xml",
+        "views/pages/shop_empty_state.xml",
         "views/pages/shop_sidebar_ux2.xml",
         "views/marketone_shop_origin_views.xml",
         "views/marketone_shop_collection_views.xml",
@@ -56,6 +58,7 @@
             "dorevia_ckreyol_marketone/static/src/scss/_footer.scss",
             "dorevia_ckreyol_marketone/static/src/scss/_home.scss",
             "dorevia_ckreyol_marketone/static/src/scss/_shop.scss",
+            "dorevia_ckreyol_marketone/static/src/scss/_shop_grid_header.scss",
             "dorevia_ckreyol_marketone/static/src/scss/_shop_sidebar.scss",
             "dorevia_ckreyol_marketone/static/src/scss/_shop_filter_state.scss",
             "dorevia_ckreyol_marketone/static/src/scss/_shop_product_cards.scss",

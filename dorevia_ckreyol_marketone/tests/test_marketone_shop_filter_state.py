@@ -10,9 +10,70 @@ from odoo.tests.common import HttpCase, TransactionCase
 from odoo.addons.dorevia_ckreyol_marketone.controllers.website_sale import (
     MARKETONE_CATEGORY_PARAM,
     MARKETONE_COLLECTION_PARAM,
+    MARKETONE_SHOP_EMPTY_STATE_FILTERED_LABEL,
     _marketone_is_filtering_by_price,
+    _marketone_shop_empty_state_is_filtered,
+    _marketone_shop_grid_title_label,
     _marketone_should_preserve_price_in_urls,
 )
+
+
+@tagged("post_install", "-at_install", "dorevia_marketone_shop_filter_state")
+class TestMarketoneShopGridTitleLabel(TransactionCase):
+    """Libellés titre principal grille /shop (MOA compteur)."""
+
+    def test_default_plural_and_singular(self):
+        self.assertEqual(
+            _marketone_shop_grid_title_label(50),
+            "50 produits disponibles",
+        )
+        self.assertEqual(
+            _marketone_shop_grid_title_label(1),
+            "1 produit disponible",
+        )
+
+    def test_zero_label(self):
+        self.assertEqual(
+            _marketone_shop_grid_title_label(0),
+            "Aucun produit disponible",
+        )
+        self.assertEqual(
+            _marketone_shop_grid_title_label(0, filtered=True),
+            "Aucun produit trouvé",
+        )
+        self.assertEqual(
+            _marketone_shop_grid_title_label(8),
+            "8 produits disponibles",
+        )
+
+
+@tagged("post_install", "-at_install", "dorevia_marketone_shop_filter_state")
+class TestMarketoneShopEmptyStateLabel(TransactionCase):
+    """État vide central grille /shop — MOA critères vs catalogue."""
+
+    def test_filtered_detection_search_and_chips(self):
+        self.assertTrue(
+            _marketone_shop_empty_state_is_filtered(
+                {"search": "miel"}, {}, []
+            )
+        )
+        self.assertTrue(
+            _marketone_shop_empty_state_is_filtered(
+                {},
+                {},
+                [{"type": "category", "label": "Sauces"}],
+            )
+        )
+        self.assertFalse(_marketone_shop_empty_state_is_filtered({}, {}, []))
+
+    def test_filtered_detection_category_query_param(self):
+        self.assertTrue(
+            _marketone_shop_empty_state_is_filtered(
+                {},
+                {MARKETONE_CATEGORY_PARAM: "condiments-73"},
+                [],
+            )
+        )
 
 
 @tagged("post_install", "-at_install", "dorevia_marketone_shop_filter_state")
@@ -73,24 +134,28 @@ class TestMarketoneShopFilterState(HttpCase):
         start = html.find('aria-label="Filtres actifs"')
         if start < 0:
             return ""
-        end = html.find("products_header btn-toolbar", start)
-        if end < 0:
-            end = html.find("o_wsale_products_grid_table_wrapper", start)
+        end = html.find("o_wsale_products_grid_table_wrapper", start)
         if end < 0:
             end = start + 8000
         return html[start:end]
 
-    def test_shop_counter_visible_without_filters(self):
-        """MOA Q1 — compteur visible même sans filtre actif."""
+    def test_shop_grid_title_default_without_filters(self):
+        """MOA — compteur discret ligne résultat, sans doublon près du tri."""
         response = self.url_open("/shop")
         self.assertEqual(response.status_code, 200)
         html = response.text
-        self.assertIn("marketone-filter-state__count", html)
-        self.assertRegex(
-            html,
-            r"marketone-filter-state__count[^<]*<strong>\d+</strong>[\s\S]*?trouv",
-        )
-        self.assertNotIn('class="marketone-filter-state"', html)
+        self.assertIn('id="products_grid_content_title"', html)
+        self.assertIn("marketone-shop-grid-result", html)
+        self.assertIn("marketone-shop-catalog-toolbar", html)
+        self.assertIn("produits disponibles", html)
+        self.assertNotIn("marketone-filter-state__count", html)
+        self.assertNotIn("produits trouv", html)
+        header_start = html.find('id="o_wsale_products_header"')
+        toolbar_pos = html.find("marketone-shop-catalog-toolbar", header_start)
+        result_pos = html.find("marketone-shop-grid-result", header_start)
+        self.assertGreater(toolbar_pos, header_start)
+        self.assertGreater(result_pos, toolbar_pos)
+        self.assertNotIn("Tous les produits", html[header_start:header_start + 6000])
 
     def test_shop_no_chips_without_filters(self):
         response = self.url_open("/shop")
@@ -276,3 +341,60 @@ class TestMarketoneShopFilterState(HttpCase):
         if "marketone-filter-chips__chip--price" not in bar:
             self.skipTest("Filtre prix non actif sur cette base (bornes catalogue)")
         self.assertIn("Prix :", bar)
+
+    def test_shop_grid_title_with_category_filter(self):
+        cat = self.env["product.public.category"].search(
+            [("name", "=", "Biscuits salés")], limit=1
+        )
+        self.assertTrue(cat)
+        slug = self.env["ir.http"]._slug(cat)
+        response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        self.assertIn("produits disponibles", html)
+        self.assertNotIn("correspondent à votre recherche", html)
+        self.assertNotIn("marketone-filter-state__count", html)
+
+    def test_shop_grid_title_zero_results_search(self):
+        response = self.url_open("/shop?search=zzzzmarketone-zero-zzzz")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Aucun produit trouvé", response.text)
+        self.assertIn(MARKETONE_SHOP_EMPTY_STATE_FILTERED_LABEL, response.text)
+        self.assertNotIn("Aucun produit défini", response.text)
+        self.assertNotIn("correspondent à votre recherche", response.text)
+
+    def test_shop_empty_state_filtered_with_category(self):
+        cat = self.env["product.public.category"].search(
+            [("name", "=", "Incontournables")], limit=1
+        )
+        if not cat:
+            self.skipTest("Catégorie Incontournables absente")
+        slug = self.env["ir.http"]._slug(cat)
+        response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Aucun produit trouvé", response.text)
+        self.assertIn(MARKETONE_SHOP_EMPTY_STATE_FILTERED_LABEL, response.text)
+        self.assertNotIn("Aucun produit défini", response.text)
+
+    def test_shop_filter_chip_category_shows_count(self):
+        cat = self.env["product.public.category"].search(
+            [("name", "=", "Biscuits salés")], limit=1
+        )
+        self.assertTrue(cat)
+        slug = self.env["ir.http"]._slug(cat)
+        response = self.url_open(f"/shop?{MARKETONE_CATEGORY_PARAM}={slug}")
+        self.assertEqual(response.status_code, 200)
+        bar = self._chip_bar_html(response.text)
+        self.assertRegex(
+            bar,
+            r'marketone-filter-chips__chip--category[\s\S]*?Biscuits salés[\s\S]*?'
+            r'marketone-filter-chips__count">\s*\(\d+\)',
+        )
+
+    def test_shop_price_chip_has_no_count(self):
+        response = self.url_open("/shop?min_price=1&max_price=99999")
+        self.assertEqual(response.status_code, 200)
+        bar = self._chip_bar_html(response.text)
+        if "marketone-filter-chips__chip--price" not in bar:
+            self.skipTest("Filtre prix non actif sur cette base (bornes catalogue)")
+        self.assertNotIn("marketone-filter-chips__count", bar)
