@@ -4,13 +4,15 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX4_SHOP_IN_PLACE` |
 | **Type** | **UX** — extension légère `website_sale` / `website_sale_wishlist` |
-| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 clôturé GO avec réserve documentaire** · **Lot 3 — en cours (branche ouverte)** |
-| **Branche Lot 3** | `feat/marketone-ux4-lot3-preview-voir` |
+| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 clôturé GO avec réserve documentaire** · **Lot 3 clôturé GO avec réserve documentaire** · Lot 4 continu |
+| **Branche Lot 3** | `feat/marketone-ux4-lot3-preview-voir` (mergée) |
 | **Version livrée Lot 1** | **`19.0.15.11.1`** |
 | **Version livrée Lot 2** | **`19.0.15.12.3`** |
+| **Version livrée Lot 3** | **`19.0.15.13.1`** |
 | **Branche Lot 2** | `feat/marketone-ux4-lot2-cart-in-place` |
 | **PR Lot 1** | **#12** — mergée |
 | **PR Lot 2** | **#13** — mergée |
+| **PR Lot 3** | **#14** — mergée |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
 | **Branche Lot 1** | `feat/marketone-ux4-lot1-wishlist-toggle` |
@@ -117,7 +119,7 @@ Le chantier **ne part pas de zéro** :
 
 **Verdict MOA (2026-05-22) :** **GO avec réserve documentaire** — visiteur public desktop + mobile validé · scénario connecté L2.C1 non rejoué (compte test absent). Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md`](../recette/ux/RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md).
 
-### Lot 3 — Voir sans sortie / preview in-page · **P2 · EN COURS (implémentation V1)**
+### Lot 3 — Voir sans sortie / preview in-page · **P2 · CLÔTURÉ GO avec réserve**
 
 > **Note d’arbitrage :** [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) — **GO avec réserve documentaire** (2026-05-22).
 
@@ -130,25 +132,30 @@ Le chantier **ne part pas de zéro** :
 | **Lien secondaire** | « Voir la fiche complète » → `product_href` |
 | **Gel MOA** | Photo + titre = liens fiche produit (**inchangés**) |
 | **Branche** | `feat/marketone-ux4-lot3-preview-voir` |
-| **PR cible** | `[CK][UX-4] Lot 3 — Preview Voir sans sortie de /shop` |
+| **PR** | **#14** — mergée |
 | **Recette** | § Lot 3 [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) |
 
 **Contenu preview V1 (validé MOA) :** image · titre · prix · origine si dispo · collection/label si dispo (sans filtre) · description courte · panier · wishlist · lien « Voir la fiche complète ».
 
-**Réserve documentaire Lot 3 :**
+**Critère GO Lot 3 :**
 
-- produit simple / variante unique → preview complète autorisée ;
-- produit multi-variante ou configurable → **fallback fiche produit obligatoire** en V1 (préférence MOA) ;
-- pas de configurateur dans la preview V1 ;
-- pas de deep-link preview V1.
+- [x] Preview in-page · URL `/shop` · pas de modal
+- [x] Desktop offcanvas droit non modal · mobile inline 390 px
+- [x] Photo / titre · lien « Voir la fiche complète » — destinations secondaires
+- [x] Panier + wishlist depuis preview (rebind interactions · correctif `13.1`)
+- [x] Régression B4 · B7 · B8 · B9 · B10 OK
+- [x] Tests auto verts (13/13 tag `dorevia_marketone_shop_in_place`)
 
-**Hors périmètre V1 (confirmé MOA) :** modal popup · refonte fiche · cross-sell · avis clients · contenus Culture/Savoirs longs · changement photo/titre · deep-link preview.
+**Verdict MOA (2026-05-22) :** **GO avec réserve documentaire** — visiteur public desktop + mobile validé · **L3.V1** fallback configurable non rejoué (0 produit multi-variante publié en catalogue recette). Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](../recette/ux/RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md).
 
-**Critères GO Lot 3 (G3.1–G3.10) :** voir recette § Lot 3 · régression **B4 · B7 · B8 · B9 · B10** obligatoire.
+**Réserve documentaire Lot 3 (à rejouer) :**
 
-**Règle de méthode :** PR tôt · **pas de merge sans recette MOA** · recette desktop + mobile obligatoire · Lot 3 isolé · pas d’extension hors périmètre V1.
+- **L3.V1** — fallback fiche produit configurable / multi-variante : rejouer dès qu’un produit éligible est publié en catalogue ;
+- polices Google Fonts CORS sandbox (non bloquant — héritage Lots 1–2).
 
-**Verdict arbitrage MOA (2026-05-22) :** **GO avec réserve documentaire** — fallback fiche obligatoire pour produits configurables / multi-variantes · mobile inline confirmé · pas de deep-link preview V1.
+**Hors périmètre V1 (confirmé MOA) :** modal popup · refonte fiche · cross-sell · avis clients · contenus Culture/Savoirs longs · changement photo/titre · deep-link preview · **V2 preview sans nouvel arbitrage MOA**.
+
+**Correctif `13.1` :** `startInteractions` / `stopInteractions` sur fragment preview injecté · sélecteur panier Lot 2 étendu à `.marketone-shop-preview`.
 
 ---
 
@@ -262,6 +269,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | 2026-05-22 | `19.0.15.12.2` | Lot 2 reprise | **GO avec réserve documentaire** |
 | 2026-05-22 | `19.0.15.12.3` | Lot 2 reprise | **GO MOA** — consolidation panier PTAV origine · PR #13 mergée |
 | 2026-05-22 | — | Lot 3 arbitrage | **GO avec réserve documentaire** · branche `feat/marketone-ux4-lot3-preview-voir` autorisée |
+| 2026-05-22 | `19.0.15.13.1` | Lot 3 | **GO avec réserve documentaire** · PR #14 mergée · correctif rebind preview `13.1` |
 
 **Correctif `12.3` :** transmission `no_variant_attribute_value_ids` (origine unique grille) dans `/shop/cart/add` — consolidation panier standard Odoo.
 

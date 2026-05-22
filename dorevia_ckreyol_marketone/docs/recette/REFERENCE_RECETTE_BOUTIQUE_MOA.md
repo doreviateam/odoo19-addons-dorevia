@@ -3,10 +3,11 @@
 | Champ | Valeur |
 |-------|--------|
 | **Rôle** | **Document maître** — invariants GO MOA + checklist anti-régression |
-| **Version module de référence** | **`19.0.15.12.3`** (UX-4 Lot 2 — panier in-place GO avec réserve) |
+| **Version module de référence** | **`19.0.15.13.1`** (UX-4 Lot 3 — preview Voir in-place GO avec réserve) |
+| **Version Lot 2 (réf.)** | **`19.0.15.12.3`** (UX-4 Lot 2 — panier in-place GO avec réserve) |
 | **Version Lot 1 (réf.)** | **`19.0.15.11.1`** (UX-4 Lot 1 — wishlist toggle GO avec réserve) |
 | **Base** | `ckr-marketone-01` · http://localhost:18079 |
-| **Dernière mise à jour doc** | 2026-05-22 (UX-4 Lot 2 — critères B8 · grille § F) |
+| **Dernière mise à jour doc** | 2026-05-22 (UX-4 Lot 3 — critères B9 · version réf. `13.1`) |
 | **Statut** | **Actif** — à mettre à jour à chaque GO MOA boutique |
 
 > Ce document **ne remplace pas** les recettes détaillées par ticket.  
@@ -291,7 +292,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | Catégories sidebar | [`boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md`](boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md) | GO |
 | Facettes C4 | [`boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_FACETTES_CONTEXTUELLES.md`](boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_FACETTES_CONTEXTUELLES.md) | GO |
 | Wishlist standard | [`RECETTE_VISUELLE_WISHLIST_STANDARD.md`](RECETTE_VISUELLE_WISHLIST_STANDARD.md) | GO MOA `10.2` (réserves) |
-| UX-4 shop-in-place | [`ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) | Lot 1 **GO réserve** `11.1` · Lot 2 **GO réserve** `12.3` · Lot 3 **arbitrage GO réserve** |
+| UX-4 shop-in-place | [`ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) | Lot 1 **GO réserve** `11.1` · Lot 2 **GO réserve** `12.3` · Lot 3 **GO réserve** `13.1` |
 | Fiche produit | [`lots/RECETTE_MANUELLE_LOT4.md`](lots/RECETTE_MANUELLE_LOT4.md) | GO |
 | Panier / checkout | [`lots/RECETTE_MANUELLE_LOT5.md`](lots/RECETTE_MANUELLE_LOT5.md) | — |
 | Environnement | [`reference/ENV_REFERENCE.md`](reference/ENV_REFERENCE.md) | Réf. technique |
@@ -306,5 +307,6 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | 2026-05-22 | Wishlist + sidebar `19.0.15.10.3` | MOA | ☑ | — | ☑ 75/75 | Non | **GO** (R2 clôturée) |
 | 2026-05-22 | UX-4 Lot 1 `19.0.15.11.1` | MOA | ☑ | ☑ B7 | ☑ 79/79 | Non | **GO avec réserve documentaire** |
 | 2026-05-22 | UX-4 Lot 2 `19.0.15.12.3` | MOA | ☑ | ☑ B8 | ☑ 84/84 | Non | **GO avec réserve documentaire** |
+| 2026-05-22 | UX-4 Lot 3 `19.0.15.13.1` | MOA | ☑ | ☑ B9 · B10 | ☑ 13/13 | Non | **GO avec réserve documentaire** |
 
-**Commentaire :** B6 corrigé `10.2` · R2 accordéon Collections validé MOA `10.3`. UX-4 Lot 1 validé visiteur public `11.1` — réserve connecté documentaire (comme wishlist P3–P6). UX-4 Lot 2 validé desktop + mobile `12.3` — consolidation panier PTAV origine · réserve L2.C1 connecté non rejouée.
+**Commentaire :** B6 corrigé `10.2` · R2 accordéon Collections validé MOA `10.3`. UX-4 Lot 1 validé visiteur public `11.1` — réserve connecté documentaire (comme wishlist P3–P6). UX-4 Lot 2 validé desktop + mobile `12.3` — consolidation panier PTAV origine · réserve L2.C1 connecté non rejouée. UX-4 Lot 3 validé desktop + mobile `13.1` — preview légère in-place · réserve **L3.V1** fallback configurable à rejouer dès produit multi-variante publié · pas de V2 preview sans arbitrage MOA.

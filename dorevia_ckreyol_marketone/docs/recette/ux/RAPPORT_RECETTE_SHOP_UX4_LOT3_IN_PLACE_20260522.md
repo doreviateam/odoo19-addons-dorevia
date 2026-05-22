@@ -122,7 +122,7 @@ Résultat JSON : [`recette_ux4_l3_20260522_result.json`](recette_ux4_l3_20260522
 
 ---
 
-## Verdict MOA proposé
+## Verdict MOA
 
 | Verdict | Condition |
 |---------|-----------|
@@ -130,17 +130,11 @@ Résultat JSON : [`recette_ux4_l3_20260522_result.json`](recette_ux4_l3_20260522
 | ☐ GO | — |
 | ☐ NO GO | — |
 
-**Réserves (non bloquantes) :**
+**Verdict MOA (2026-05-22) :** **GO avec réserve documentaire — UX-4 Lot 3.** PR **#14** mergée · merge commit `49448b1`.
 
-1. **L3.V1** — aucun produit multi-variante / configurable publié en catalogue sandbox ; fallback fiche non démontré en conditions réelles (règle couverte par tests auto `_marketone_preview_full_allowed`).
+**Réserves (non bloquantes — à rejouer) :**
+
+1. **L3.V1** — fallback fiche produit configurable / multi-variante : aucun cas publié en catalogue recette (0/50) · rejouer dès qu’un produit éligible est disponible ;
 2. Polices Google Fonts — erreurs réseau CORS sandbox (héritage Lots 1–2).
 
-**Règle merge :** verdict MOA formel requis avant merge PR #14.
-
----
-
-## Grille d’exécution (mise à jour proposée)
-
-| Date | Lot | Version | Exécuteur | Verdict | Rapport |
-|------|-----|---------|-----------|---------|---------|
-| 2026-05-22 | L3 | `19.0.15.13.1` | Codex | **GO avec réserve documentaire (proposé)** | ce document |
+**Règle V2 :** pas d’extension preview V2 sans nouvel arbitrage MOA.
