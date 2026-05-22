@@ -575,6 +575,58 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](R
 
 ---
 
+# Lot 3quater — Harmonisation CTA panier tuile / preview
+
+> **Statut :** **Arbitrage MOA GO** (2026-05-22) · passe **strictement visuelle** post-GO `13.9` · branche `feat/marketone-ux4-lot3quater-cart-cta-tile`.
+>
+> **Note :** [`NOTE_ARBITRAGE_UX4_LOT3QUATER_CART_CTA_TILE.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3QUATER_CART_CTA_TILE.md)
+
+## Objectif MOA
+
+Harmoniser visuellement le CTA panier de la **tuile produit** avec l’esprit du CTA preview : action d’achat **explicite**, sans modifier le comportement Lot 2.
+
+## Périmètre
+
+| In | Out |
+|----|-----|
+| QWeb : libellé `Ajouter` + classe `--tile` | JS interactions |
+| SCSS scoped `.oe_product_image .marketone-shop-card-cart--tile` | Routes · preview · wishlist · clic image |
+| `aria-label` / `title` = « Ajouter au panier » | Full-width tuile · déplacement overlay |
+
+## Critères recette V3quater
+
+| # | Critère | Desktop | Mobile 390 px |
+|---|---------|---------|---------------|
+| **V3quater.1** | CTA panier tuile **lisible** (icône + `Ajouter`) | ☑ auto | ☑ auto |
+| **V3quater.2** | CTA visible au **survol** image (desktop) | ☑ auto | — |
+| **V3quater.3** | CTA **utilisable** sans débordement horizontal | — | ☑ auto |
+| **V3quater.4** | Clic CTA panier → panier uniquement, **pas preview** | ☑ auto | ☑ auto |
+| **V3quater.5** | Clic image hors CTA → **preview** | ☑ auto | ☑ auto |
+| **V3quater.6** | Clic wishlist → wishlist uniquement | ☑ auto | ☐ MOA |
+| **V3quater.7** | Feedback « Ajouté au panier » + compteur header | ☑ auto | ☐ MOA |
+| **V3quater.8** | Console sans erreur JS bloquante | ☑ auto | ☑ auto |
+
+## Smoke non-régression obligatoire
+
+| Critère | Référence | ☐ |
+|---------|-----------|---|
+| Panier in-place Lot 2 | **L2.1–L2.5** | ☑ L2.1 auto |
+| Isolation panier / wishlist | **I5 · I6** | ☑ auto |
+| Retrait naturel preview | **R2-D1** | ☑ auto |
+
+## Verdict Lot 3quater
+
+| Verdict | Condition |
+|---------|-----------|
+| **GO MOA Lot 3quater** | V3quater.1–V3quater.8 OK · smoke L2 + I5/I6 + R2-D1 OK · captures desktop + mobile |
+| **NO GO** | Régression fonctionnelle · débordement mobile · preview / wishlist / image KO |
+
+**Verdict :** ☐ GO MOA Lot 3quater · ☐ NO GO · ☑ **Recette auto OK — en attente validation visuelle MOA** (`14.0`)
+
+Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md)
+
+---
+
 # Lot 4 — Régression globale boutique
 
 > **Statut :** à rejouer **à chaque jalon** (Lots 1, 2, 3) — pas uniquement en fin de chantier.
@@ -694,6 +746,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **R-UX4-6** | Tout passage de version impose : tests auto verts + recette manuelle Lots 1→3ter + smoke `RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md` |
 | **R-UX4-7** | Réserve **R1** doit être traitée lors d'un futur passage visuel premium · pas de remontée bloquante d'ici là |
 | **R-UX4-8** | **Retrait naturel intelligent** — la preview reste ouverte tant que l'utilisateur l'explore (survol · scroll dans le panneau · clic dans le panneau) · elle se retire uniquement quand l'utilisateur reprend la navigation boutique hors preview |
+| **R-UX4-9** | **CTA panier tuile explicite** — icône panier + libellé court `Ajouter` sur la tuile · cohérent avec le CTA complet `Ajouter au panier` de la preview · overlay compact bas-droit |
 
 ### Références preuve `19.0.15.13.9` (version de référence finale)
 

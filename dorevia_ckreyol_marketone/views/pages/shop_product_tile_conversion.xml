@@ -87,14 +87,19 @@
         </xpath>
     </template>
 
-    <!-- UX-4 Lot 2 — handler grille dédié (bouton défini dans shop_product_buttons). -->
+    <!-- UX-4 Lot 2 / 3quater — handler grille + CTA panier tuile explicite (icône + Ajouter). -->
     <template id="marketone_shop_product_buttons_cart"
               inherit_id="website_sale.shop_product_buttons"
-              name="Marketone panier grille UX-4 Lot 2"
+              name="Marketone panier grille UX-4 Lot 2 / 3quater"
               priority="56">
         <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="attributes">
-            <attribute name="class" remove="a-submit" add="marketone-shop-card-cart" separator=" "/>
+            <attribute name="class" remove="a-submit" add="marketone-shop-card-cart marketone-shop-card-cart--tile" separator=" "/>
+            <attribute name="aria-label">Ajouter au panier</attribute>
+            <attribute name="title">Ajouter au panier</attribute>
             <attribute name="t-att-data-show-quantity">False</attribute>
+        </xpath>
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]//span[hasclass('o_label')]" position="replace">
+            <span class="o_label marketone-shop-card-cart__label">Ajouter</span>
         </xpath>
     </template>
 </odoo>

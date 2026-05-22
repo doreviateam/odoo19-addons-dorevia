@@ -1,0 +1,107 @@
+{
+  "version": "19.0.15.14.0",
+  "sections": {
+    "V3quater.1_desktop_label": {
+      "ok": true,
+      "obs": {
+        "found": true,
+        "labelText": "Ajouter",
+        "hasIcon": true,
+        "width": 101,
+        "height": 39,
+        "visible": true
+      }
+    },
+    "V3quater.2_desktop_hover_visible": {
+      "ok": true,
+      "obs": {
+        "found": true,
+        "labelText": "Ajouter",
+        "hasIcon": true,
+        "width": 101,
+        "height": 39,
+        "visible": true
+      }
+    },
+    "V3quater.4_desktop_cart_no_preview": {
+      "ok": true,
+      "obs": {
+        "path": "/shop",
+        "desktopOpen": false,
+        "inlineOpen": false,
+        "hOverflow": false,
+        "cart": "1",
+        "wish": "0"
+      }
+    },
+    "V3quater.5_desktop_image_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.6_desktop_wishlist_no_preview": {
+      "ok": true,
+      "obs": {
+        "path": "/shop",
+        "desktopOpen": false,
+        "inlineOpen": false,
+        "hOverflow": false,
+        "cart": "1",
+        "wish": "1"
+      }
+    },
+    "V3quater.7_desktop_feedback": {
+      "ok": true,
+      "obs": {
+        "hasFeedback": true,
+        "label": "Ajouté au panier"
+      }
+    },
+    "L2.1_no_redirect": {
+      "ok": true,
+      "obs": {}
+    },
+    "R2-D1_hover_scroll_keeps": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.8_desktop_console": {
+      "ok": true,
+      "obs": {
+        "errors": 0
+      }
+    },
+    "V3quater.1_mobile_label": {
+      "ok": true,
+      "obs": {
+        "found": true,
+        "labelText": "Ajouter",
+        "hasIcon": true,
+        "width": 81,
+        "height": 36,
+        "visible": true
+      }
+    },
+    "V3quater.3_mobile_no_overflow": {
+      "ok": true,
+      "obs": {
+        "hOverflow": false,
+        "btnWidth": 81
+      }
+    },
+    "V3quater.4_mobile_cart_no_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.5_mobile_image_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.8_mobile_console": {
+      "ok": true,
+      "obs": {
+        "delta": 0
+      }
+    }
+  },
+  "consoleErrors": []
+}
