@@ -1,0 +1,323 @@
+{
+  "version": "19.0.15.14.1",
+  "pr": 19,
+  "sections": {
+    "V3quater.1_desktop_ajouter": {
+      "ok": true,
+      "obs": {
+        "found": true,
+        "labelText": "Ajouter",
+        "hasIcon": true,
+        "width": 101,
+        "height": 39,
+        "visible": true
+      }
+    },
+    "V3quater.2_desktop_hover_ajouter": {
+      "ok": true,
+      "obs": {
+        "found": true,
+        "labelText": "Ajouter",
+        "hasIcon": true,
+        "width": 101,
+        "height": 39,
+        "visible": true
+      }
+    },
+    "V3qB.1_desktop_no_body": {
+      "ok": true,
+      "obs": {
+        "addedClass": false,
+        "bodyHasFeedback": false,
+        "overlayHidden": true,
+        "labelText": "Ajouté au panier",
+        "labelDisplay": "none",
+        "linkText": "Voir le panier",
+        "linkVisible": false,
+        "overlayOpacity": "0",
+        "cartBtnBottom": 380,
+        "cartBtnRight": 850,
+        "viewCartBottom": 0,
+        "viewCartLeft": 0,
+        "wishlistTop": 214,
+        "overlayBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "V3quater.4_desktop_cart": {
+      "ok": true,
+      "obs": {
+        "path": "/shop",
+        "desktopOpen": false,
+        "inlineOpen": false,
+        "hOverflow": false,
+        "cart": "1",
+        "wish": "0"
+      }
+    },
+    "V3qB.8_desktop_counter": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3qB.1_desktop_light_card": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "bodyHasFeedback": false,
+        "overlayHidden": false,
+        "labelText": "Ajouté au panier",
+        "labelDisplay": "none",
+        "linkText": "Voir le panier",
+        "linkVisible": true,
+        "overlayOpacity": "0",
+        "cartBtnBottom": 423,
+        "cartBtnRight": 849,
+        "viewCartBottom": 423,
+        "viewCartLeft": 390,
+        "wishlistTop": 215,
+        "overlayBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "V3qB.2_desktop_view_cart_hover": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "bodyHasFeedback": false,
+        "overlayHidden": false,
+        "labelText": "Ajouté au panier",
+        "labelDisplay": "none",
+        "linkText": "Voir le panier",
+        "linkVisible": true,
+        "overlayOpacity": "1",
+        "cartBtnBottom": 381,
+        "cartBtnRight": 849,
+        "viewCartBottom": 421,
+        "viewCartLeft": 390,
+        "wishlistTop": 213,
+        "overlayBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "V3qB.2_desktop_pills_balance": {
+      "ok": true,
+      "obs": {
+        "cart": {
+          "found": true,
+          "labelText": "Ajouter",
+          "hasIcon": true,
+          "width": 101,
+          "height": 39,
+          "visible": true
+        },
+        "feedback": {
+          "addedClass": true,
+          "bodyHasFeedback": false,
+          "overlayHidden": false,
+          "labelText": "Ajouté au panier",
+          "labelDisplay": "none",
+          "linkText": "Voir le panier",
+          "linkVisible": true,
+          "overlayOpacity": "1",
+          "cartBtnBottom": 381,
+          "cartBtnRight": 849,
+          "viewCartBottom": 421,
+          "viewCartLeft": 390,
+          "wishlistTop": 213,
+          "overlayBg": "rgba(0, 0, 0, 0)"
+        }
+      }
+    },
+    "V3qB.2_no_wishlist_collision": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "bodyHasFeedback": false,
+        "overlayHidden": false,
+        "labelText": "Ajouté au panier",
+        "labelDisplay": "none",
+        "linkText": "Voir le panier",
+        "linkVisible": true,
+        "overlayOpacity": "1",
+        "cartBtnBottom": 381,
+        "cartBtnRight": 849,
+        "viewCartBottom": 421,
+        "viewCartLeft": 390,
+        "wishlistTop": 213,
+        "overlayBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "V3qB.4_desktop_view_cart_nav": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.5_desktop_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3qB.5_desktop_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater_preview_cta_full": {
+      "ok": true,
+      "obs": {
+        "previewOpen": true,
+        "labelText": "Ajouter au panier"
+      }
+    },
+    "V3quater.6_desktop_wishlist": {
+      "ok": true,
+      "obs": {
+        "path": "/shop",
+        "desktopOpen": false,
+        "inlineOpen": false,
+        "hOverflow": false,
+        "cart": "0",
+        "wish": "1"
+      }
+    },
+    "V3quater.7_desktop_added_state": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "bodyHasFeedback": false,
+        "overlayHidden": false,
+        "labelText": "Ajouté au panier",
+        "labelDisplay": "none",
+        "linkText": "Voir le panier",
+        "linkVisible": true,
+        "overlayOpacity": "1",
+        "cartBtnBottom": 381,
+        "cartBtnRight": 605,
+        "viewCartBottom": 421,
+        "viewCartLeft": 634,
+        "wishlistTop": 213,
+        "overlayBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "L2.1_no_redirect": {
+      "ok": true,
+      "obs": {}
+    },
+    "R2-D1_hover_scroll": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.8_desktop_console": {
+      "ok": true,
+      "obs": {
+        "errors": 0
+      }
+    },
+    "V3qB.9_desktop_console": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.1_mobile_ajouter": {
+      "ok": true,
+      "obs": {
+        "found": true,
+        "labelText": "Ajouter",
+        "hasIcon": true,
+        "width": 81,
+        "height": 36,
+        "visible": true
+      }
+    },
+    "V3quater.3_mobile_no_overflow": {
+      "ok": true,
+      "obs": {
+        "btnWidth": 81
+      }
+    },
+    "V3qB.3_mobile_inline": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "bodyHasFeedback": false,
+        "overlayHidden": false,
+        "labelText": "Ajouté au panier",
+        "labelDisplay": "block",
+        "linkText": "Voir le panier",
+        "linkVisible": true,
+        "overlayOpacity": "1",
+        "cartBtnBottom": 321,
+        "cartBtnRight": 228,
+        "viewCartBottom": 410,
+        "viewCartLeft": 38,
+        "wishlistTop": 207,
+        "overlayBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "V3qB.3_mobile_no_boxed": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "bodyHasFeedback": false,
+        "overlayHidden": false,
+        "labelText": "Ajouté au panier",
+        "labelDisplay": "block",
+        "linkText": "Voir le panier",
+        "linkVisible": true,
+        "overlayOpacity": "1",
+        "cartBtnBottom": 321,
+        "cartBtnRight": 228,
+        "viewCartBottom": 410,
+        "viewCartLeft": 38,
+        "wishlistTop": 207,
+        "overlayBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "V3qB.1_mobile_no_body": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "bodyHasFeedback": false,
+        "overlayHidden": false,
+        "labelText": "Ajouté au panier",
+        "labelDisplay": "block",
+        "linkText": "Voir le panier",
+        "linkVisible": true,
+        "overlayOpacity": "1",
+        "cartBtnBottom": 321,
+        "cartBtnRight": 228,
+        "viewCartBottom": 410,
+        "viewCartLeft": 38,
+        "wishlistTop": 207,
+        "overlayBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "V3quater.4_mobile_cart": {
+      "ok": true,
+      "obs": {
+        "path": "/shop",
+        "desktopOpen": false,
+        "inlineOpen": false,
+        "hOverflow": false,
+        "cart": "1",
+        "wish": "0"
+      }
+    },
+    "V3qB.4_mobile_view_cart": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.5_mobile_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3qB.5_mobile_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3quater.8_mobile_console": {
+      "ok": true,
+      "obs": {
+        "delta": 0
+      }
+    },
+    "V3qB.9_mobile_console": {
+      "ok": true,
+      "obs": {}
+    }
+  },
+  "consoleErrors": []
+}

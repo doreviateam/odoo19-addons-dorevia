@@ -81,6 +81,6 @@ JSON : [`recette_v3quater_14_0_20260522.json`](recette_v3quater_14_0_20260522.js
 | **NO GO** | ☐ |
 | **Recette auto Codex** | ☑ **14/14 OK** sur `19.0.15.14.0` |
 
-**Verdict : recette automatique OK — merge interdit sans validation visuelle MOA** (consigne arbitrage).
+**Verdict : recette automatique OK — ☑ GO MOA PR #19** (merge `9327254` · 2026-05-22).
 
-Le GO global UX-4 `19.0.15.13.9` n’est pas remis en cause ; Lot 3quater = harmonisation visuelle légère uniquement.
+Le GO global UX-4 `19.0.15.13.9` n’est pas remis en cause ; Lot 3quater = harmonisation visuelle légère · version de référence actuelle **`19.0.15.14.1`**.

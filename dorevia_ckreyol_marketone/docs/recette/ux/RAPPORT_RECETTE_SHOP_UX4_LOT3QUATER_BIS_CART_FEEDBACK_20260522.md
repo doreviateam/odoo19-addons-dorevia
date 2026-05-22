@@ -41,7 +41,7 @@
 
 | Verdict | Statut |
 |---------|--------|
-| **GO MOA Lot 3quater bis** | ☐ — en attente recette visuelle MOA |
+| **GO MOA Lot 3quater bis** | ☑ (PR #19 · recette manuelle **30/30** · 2026-05-22) |
 | **Recette auto Codex** | ☑ **18/18 OK** sur `19.0.15.14.1` |
 
-**Merge interdit avant validation visuelle MOA desktop + mobile.**
+**Merge PR #19** — commit `9327254` · version de référence UX-4 **`19.0.15.14.1`**.

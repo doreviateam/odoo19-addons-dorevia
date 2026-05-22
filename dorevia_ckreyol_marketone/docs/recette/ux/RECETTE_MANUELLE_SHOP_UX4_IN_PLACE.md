@@ -8,8 +8,8 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | ☑ **GO GLOBAL MOA UX-4** · version courante **`19.0.15.13.9`** (correctif retrait naturel intelligent R2 · 2026-05-22) · réserves **R1** non bloquante maintenue |
-| **Version de référence UX-4** | **`19.0.15.13.9`** · PR #17 (branche `feat/ck-shop-wishlist-standard-go-moa`) |
+| **Statut recette** | ☑ **GO GLOBAL MOA UX-4** · version courante **`19.0.15.14.1`** (Lot 3quater + 3quater bis · PR #19 · 2026-05-22) · réserves **R1** non bloquante maintenue |
+| **Version de référence UX-4** | **`19.0.15.14.1`** · PR **#19** mergée (`9327254`) |
 | **Version Lot 3ter (livrée)** | **`19.0.15.13.9`** (correctif R2 : survol + scroll panneau) |
 | **Note arbitrage Lot 3ter** | [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md) |
 | **Version Lot 3 (fonctionnel)** | **`19.0.15.13.2`** — **figée** |
@@ -602,8 +602,8 @@ Harmoniser visuellement le CTA panier de la **tuile produit** avec l’esprit du
 | **V3quater.3** | CTA **utilisable** sans débordement horizontal | — | ☑ auto |
 | **V3quater.4** | Clic CTA panier → panier uniquement, **pas preview** | ☑ auto | ☑ auto |
 | **V3quater.5** | Clic image hors CTA → **preview** | ☑ auto | ☑ auto |
-| **V3quater.6** | Clic wishlist → wishlist uniquement | ☑ auto | ☐ MOA |
-| **V3quater.7** | Feedback « Ajouté au panier » + compteur header | ☑ auto | ☐ MOA |
+| **V3quater.6** | Clic wishlist → wishlist uniquement | ☑ auto | ☑ MOA |
+| **V3quater.7** | Feedback « Ajouté au panier » + compteur header | ☑ auto | ☑ MOA |
 | **V3quater.8** | Console sans erreur JS bloquante | ☑ auto | ☑ auto |
 
 ## Smoke non-régression obligatoire
@@ -621,7 +621,7 @@ Harmoniser visuellement le CTA panier de la **tuile produit** avec l’esprit du
 | **GO MOA Lot 3quater** | V3quater.1–V3quater.8 OK · smoke L2 + I5/I6 + R2-D1 OK · captures desktop + mobile |
 | **NO GO** | Régression fonctionnelle · débordement mobile · preview / wishlist / image KO |
 
-**Verdict :** ☐ GO MOA Lot 3quater · ☐ NO GO · ☑ **Recette auto OK — en attente validation visuelle MOA** (`14.0`)
+**Verdict :** ☑ **GO MOA Lot 3quater** · ☐ NO GO · (`14.0` → `14.1` via PR #19)
 
 Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md)
 
@@ -644,7 +644,7 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPP
 | **V3qB.4** | Clic `Voir le panier` → navigation `/shop/cart` | ☑ auto | ☑ auto |
 | **V3qB.5** | Clic image hors CTA → **preview** | ☑ auto | ☑ auto |
 | **V3qB.6** | Clic CTA `Ajouter` → panier uniquement | ☑ auto | ☑ auto |
-| **V3qB.7** | Clic wishlist → wishlist uniquement | ☑ auto | ☐ MOA |
+| **V3qB.7** | Clic wishlist → wishlist uniquement | ☑ auto | ☑ MOA |
 | **V3qB.8** | Compteur header synchronisé | ☑ auto | ☑ auto |
 | **V3qB.9** | Console sans erreur JS bloquante | ☑ auto | ☑ auto |
 
@@ -658,9 +658,9 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPP
 
 ## Verdict Lot 3quater bis
 
-**Verdict :** ☐ GO MOA · ☐ NO GO · ☑ **Recette auto OK — en attente validation visuelle MOA** (`14.1`)
+**Verdict :** ☑ **GO MOA Lot 3quater bis** · ☐ NO GO · (`14.1` · PR #19)
 
-Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md)
+Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md) · recette manuelle PR #19 : [`recette_manuelle_pr19_20260522.json`](recette_manuelle_pr19_20260522.json) (**30/30 OK**)
 
 ---
 
@@ -699,9 +699,9 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **GO partiel** | Lot(s) validé(s) · autres lots pending documenté |
 | **NO GO** | Régression bloquante § A référence |
 
-**Verdict global :** ☑ **GO GLOBAL MOA UX-4** (Lots 1–3ter validés sur `19.0.15.13.8` · clôture documentaire 2026-05-22) · ☐ GO partiel · ☐ NO GO
+**Verdict global :** ☑ **GO GLOBAL MOA UX-4** (Lots 1–3quater bis validés · version **`19.0.15.14.1`** · PR #19 · 2026-05-22) · ☐ GO partiel · ☐ NO GO
 
-> **Lots 1, 2, 3, 3bis, 3ter** : tous **GO MOA** sur `19.0.15.13.8` · réserve **R1** (libellé `Fermer` mobile parfois tronqué en `Ferme`) maintenue **documentaire non bloquante**.
+> **Lots 1, 2, 3, 3bis, 3ter, 3quater, 3quater bis** : tous **GO MOA** · réserve **R1** (libellé `Fermer` mobile parfois tronqué en `Ferme`) maintenue **documentaire non bloquante** · réserve **V3q-contrast** (lisibilité pill `Ajouter` selon contrastes images futures) **non bloquante**.
 > **Lot 4** : régression B1–B10 reste à rejouer à chaque évolution future.
 
 ---
@@ -725,13 +725,14 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | 2026-05-22 | **L3ter I1–I8 clic image (desktop + mobile)** | `19.0.15.13.8` | Dev (Playwright 1440 + 390 px) | **GO clic image tuile = CTA Voir** (Desktop I1·I2·I3·I5·I6·I7·I8 OK · Mobile I1·I2·I4·I5·I6·I7·I8 OK · 14/14 · 0 console error) | [`recette_image_click_I1_I8_13_8_20260522.json`](recette_image_click_I1_I8_13_8_20260522.json) |
 | **2026-05-22** | **UX-4 GLOBAL** | **`19.0.15.13.8`** · `9e14e15` | **MOA** | ☑ **GO GLOBAL MOA UX-4 — clôture documentaire** (Lots 1–3ter validés · 64/64 navigateur · 194/194 auto · V3bis.12 OK · I1–I8 OK · R1 maintenue non bloquante) | § [Clôture documentaire UX-4](#clôture-documentaire-ux-4--version-de-référence-1901513-8) |
 | 2026-05-22 | **Correctif R2 — retrait naturel intelligent** | **`19.0.15.13.9`** | Dev (Playwright 1440 + 390 px) | **GO R2** · bug scroll-pendant-hover corrigé · 16/16 OK · 0 console error · smoke G3.9 OK | [`recette_R2_hover_scroll_13_9_20260522.json`](recette_R2_hover_scroll_13_9_20260522.json) |
+| 2026-05-22 | **L3quater + L3quater bis** | **`19.0.15.14.1`** · PR **#19** | **MOA** | ☑ **GO MOA PR #19** (V3quater + V3qB + smoke **30/30** · tests **29/29** · merge `9327254`) | [`recette_manuelle_pr19_20260522.json`](recette_manuelle_pr19_20260522.json) · [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md) · [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md) |
 
 ---
 
-## Clôture documentaire UX-4 — version de référence `19.0.15.13.8`
+## Clôture documentaire UX-4 — version de référence `19.0.15.14.1`
 
-> **GO GLOBAL MOA prononcé le 2026-05-22** · version de référence finale **`19.0.15.13.9`** · PR **#17** (Lots 1–3ter) + PR **#18** (correctif R2 retrait naturel intelligent).
-> La suspension MOA est **levée**. `19.0.15.13.9` est la **version de référence UX-4 actuelle**, mergée dans `feat/ck-shop-wishlist-standard-go-moa` (commit `52036f3`).
+> **GO GLOBAL MOA maintenu** · version de référence UX-4 actuelle **`19.0.15.14.1`** · PR **#19** mergée (`9327254` · commits `3f695b1` + `a859c9e`).
+> Lots 3quater + 3quater bis : harmonisation visuelle CTA panier tuile + feedback contextualisé « Voir le panier » · périmètre QWeb + SCSS · exception JS défensive preview uniquement.
 
 ### Comportements cibles validés
 
@@ -748,6 +749,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **URL `/shop`** conservée pendant preview | ☑ GO |
 | **Desktop ≥ 992 px** + **Mobile 390 px** sans débordement horizontal | ☑ GO |
 | **Console** sans erreur JS bloquante (Playwright + tests auto) | ☑ GO |
+| **CTA panier tuile** — icône + `Ajouter` overlay bas-droit · feedback « Voir le panier » contextualisé (desktop hover · mobile inline) | ☑ GO (PR #19 · `14.1`) |
 
 ### Couverture preuve
 
@@ -767,7 +769,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **L1.C1 / L1.C2** | Scénario connecté Lot 1 non rejoué faute de compte test MOA | Maintenue | Périmètre visiteur public OK |
 | **L2.C1** | Scénario connecté Lot 2 non rejoué faute de compte test MOA | Maintenue | Périmètre visiteur public OK |
 | **L3.V1** | Fallback multi-variante / configurable à rejouer dès produit publié | Maintenue | Aucun produit éligible publié au moment du GO |
-| **Sandbox** | Polices Google Fonts CORS · lazy bundle / images annulées | Filtrée | Non-fonctionnelles |
+| **V3q-contrast** | Lisibilité pill `Ajouter` selon contrastes visuels des futures images produits | Maintenue | Non bloquante · surveillance continue |
 
 ### Règles maintenues post-GO global UX-4
 
@@ -785,7 +787,18 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **R-UX4-8** | **Retrait naturel intelligent** — la preview reste ouverte tant que l'utilisateur l'explore (survol · scroll dans le panneau · clic dans le panneau) · elle se retire uniquement quand l'utilisateur reprend la navigation boutique hors preview |
 | **R-UX4-9** | **CTA panier tuile explicite** — icône panier + libellé court `Ajouter` sur la tuile · cohérent avec le CTA complet `Ajouter au panier` de la preview · overlay compact bas-droit |
 
-### Références preuve `19.0.15.13.9` (version de référence finale)
+| **Sandbox** | Polices Google Fonts CORS · lazy bundle / images annulées | Filtrée | Non-fonctionnelles |
+
+### Références preuve `19.0.15.14.1` (version de référence actuelle)
+
+| Document | Rôle |
+|----------|------|
+| [`recette_manuelle_pr19_20260522.json`](recette_manuelle_pr19_20260522.json) | Recette manuelle PR #19 — V3quater + V3qB + smoke (**30/30**) |
+| [`recette_v3qb_14_1_20260522.json`](recette_v3qb_14_1_20260522.json) | V3qB.1–9 desktop + mobile (**18/18**) |
+| [`recette_v3quater_14_0_20260522.json`](recette_v3quater_14_0_20260522.json) | V3quater.1–8 desktop + mobile (**14/14**) |
+| [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md) | Rapport Lot 3quater |
+| [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md) | Rapport Lot 3quater bis |
+| Captures `recette_v3qb_14_1_*` · `recette_v3quater_14_0_*` | Preuves visuelles desktop + mobile |
 
 | Document | Rôle |
 |----------|------|
