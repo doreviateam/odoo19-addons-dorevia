@@ -78,8 +78,9 @@
               inherit_id="website_sale.shop_product_buttons"
               name="Marketone: panier grille UX-4 Lot 2"
               priority="56">
-        <xpath expr="//button[hasclass('a-submit')]" position="attributes">
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="attributes">
             <attribute name="class" remove="a-submit" add="marketone-shop-card-cart" separator=" "/>
+            <attribute name="t-att-data-show-quantity">False</attribute>
         </xpath>
     </template>
 </odoo>

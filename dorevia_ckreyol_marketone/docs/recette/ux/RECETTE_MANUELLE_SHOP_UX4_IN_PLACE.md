@@ -8,7 +8,7 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve documentaire MOA** (`19.0.15.11.1`) · **Lot 2 — implémenté** (`19.0.15.12.0`) · Lots 3–4 — planifiés |
+| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — NO GO `12.0`** · correctif **`12.1`** à rejouer · Lots 3–4 gelés |
 
 **Régression obligatoire :** [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE_BOUTIQUE_MOA.md)  
 **Sections à rejouer selon lot :** voir tableau ci-dessous.
@@ -187,7 +187,7 @@ Si le visiteur public est **GO** mais que L1.C1–C2 n’a pas pu être exécut�
 
 # Lot 2 — Panier sans sortie + feedback carte
 
-> **Statut :** **implémenté** — recette § L2 à exécuter (Lot 1 clôturé GO avec réserve).
+> **Statut :** **NO GO `12.0`** · correctif **`12.1`** — recette § L2 à rejouer.
 
 ## Objectif MOA
 

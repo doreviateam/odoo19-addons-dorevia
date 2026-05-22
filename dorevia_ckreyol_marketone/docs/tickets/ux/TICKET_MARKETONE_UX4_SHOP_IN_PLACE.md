@@ -6,7 +6,7 @@
 | **Type** | **UX** — extension légère `website_sale` / `website_sale_wishlist` |
 | **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 en cours** · Lot 3 gelé |
 | **Version livrée Lot 1** | **`19.0.15.11.1`** |
-| **Version cible Lot 2** | **`19.0.15.12.0`** |
+| **Version cible Lot 2** | **`19.0.15.12.1`** (correctif post NO GO recette) |
 | **Branche Lot 2** | `feat/marketone-ux4-lot2-cart-in-place` |
 | **PR Lot 1** | **#12** — mergée |
 | **Base** | `ckr-marketone-01` |
@@ -231,6 +231,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 |------|---------|-----|---------|
 | 2026-05-20 | — | Analyse technique | Validée MOA |
 | 2026-05-22 | `19.0.15.11.1` | Lot 1 | **GO avec réserve documentaire** · PR #12 mergée |
-| 2026-05-22 | `19.0.15.12.0` | Lot 2 | Implémenté — recette L2 pending |
+| 2026-05-22 | `19.0.15.12.0` | Lot 2 | **NO GO** recette navigateur (configurateur + mobile) |
+| 2026-05-22 | `19.0.15.12.1` | Lot 2 fix | En recette |
 
 **Correctif `11.1` (post NO GO recette) :** Odoo 19 utilise l’API `Interaction` (`add_product_to_wishlist_button.js`), pas `publicWidget.ProductWishlist`. Migration vers `marketone_shop_wishlist_toggle.js` · retrait `o_add_wishlist` sur grille · route `remove_by_product` en `jsonrpc`.

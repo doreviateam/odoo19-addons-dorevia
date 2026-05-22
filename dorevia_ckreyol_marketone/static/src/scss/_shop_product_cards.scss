@@ -261,6 +261,17 @@ $_shop-tile-crop-scale: 1.29;
         pointer-events: auto;
     }
 
+    // UX-4 Lot 2 — mobile / touch : panier toujours visible (pas de survol).
+    @media (max-width: 768px), (hover: none) {
+        .oe_product_cart .oe_product_image,
+        .oe_product_cart .o_wsale_product_image {
+            .o_wsale_product_btn {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+    }
+
     .oe_product_cart .o_wsale_product_information {
         background-color: $ck-bg-card-body;
 
