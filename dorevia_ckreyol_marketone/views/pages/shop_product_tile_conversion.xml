@@ -38,6 +38,17 @@
             <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="move"/>
         </xpath>
 
+        <!-- UX-4 Lot 3quater bis — feedback panier : overlay image (desktop) · inline corps (mobile). -->
+        <xpath expr="//div[contains(@t-attf-class, 'oe_product_image')]" position="inside">
+            <div class="marketone-shop-card-cart-feedback marketone-shop-card-cart-feedback--tile"
+                 hidden="hidden"
+                 aria-live="polite">
+                <span class="marketone-shop-card-cart-feedback__label d-inline d-lg-none">Ajouté au panier</span>
+                <a href="/shop/cart"
+                   class="marketone-shop-card-cart-feedback__link">Voir le panier</a>
+            </div>
+        </xpath>
+
         <!-- UX-4 Lot 2 / 3ter — PTAV panier + data preview carte (clic image). -->
         <xpath expr='//form[contains(@t-attf-class, "oe_product_cart")]' position="attributes">
             <attribute name="t-att-data-marketone-no-variant-ptav-ids">",".join(map(str, product._marketone_grid_no_variant_ptav_ids()))</attribute>
@@ -45,14 +56,8 @@
             <attribute name="t-att-data-marketone-preview-allowed">product._marketone_preview_full_allowed()</attribute>
         </xpath>
 
-        <!-- UX-4 Lot 2 — feedback local carte après ajout panier. -->
+        <!-- UX-4 Lot 3 — emplacement preview mobile inline. -->
         <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="after">
-            <div class="marketone-shop-card-cart-feedback" hidden="hidden" aria-live="polite">
-                <span class="marketone-shop-card-cart-feedback__label">Ajouté au panier</span>
-                <a href="/shop/cart"
-                   class="marketone-shop-card-cart-feedback__link">Voir le panier</a>
-            </div>
-            <!-- UX-4 Lot 3 — emplacement preview mobile inline. -->
             <div class="marketone-shop-card-preview-slot d-lg-none"
                  hidden="hidden"
                  aria-live="polite"/>
@@ -87,14 +92,19 @@
         </xpath>
     </template>
 
-    <!-- UX-4 Lot 2 — handler grille dédié (bouton défini dans shop_product_buttons). -->
+    <!-- UX-4 Lot 2 / 3quater — handler grille + CTA panier tuile explicite (icône + Ajouter). -->
     <template id="marketone_shop_product_buttons_cart"
               inherit_id="website_sale.shop_product_buttons"
-              name="Marketone panier grille UX-4 Lot 2"
+              name="Marketone panier grille UX-4 Lot 2 / 3quater"
               priority="56">
         <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="attributes">
-            <attribute name="class" remove="a-submit" add="marketone-shop-card-cart" separator=" "/>
+            <attribute name="class" remove="a-submit" add="marketone-shop-card-cart marketone-shop-card-cart--tile" separator=" "/>
+            <attribute name="aria-label">Ajouter au panier</attribute>
+            <attribute name="title">Ajouter au panier</attribute>
             <attribute name="t-att-data-show-quantity">False</attribute>
+        </xpath>
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]//span[hasclass('o_label')]" position="replace">
+            <span class="o_label marketone-shop-card-cart__label">Ajouter</span>
         </xpath>
     </template>
 </odoo>
