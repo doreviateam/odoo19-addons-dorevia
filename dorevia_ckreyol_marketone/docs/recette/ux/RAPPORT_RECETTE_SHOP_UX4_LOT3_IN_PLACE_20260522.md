@@ -126,13 +126,13 @@ Résultat JSON : [`recette_ux4_l3_20260522_result.json`](recette_ux4_l3_20260522
 
 | Verdict | Condition |
 |---------|-----------|
-| ☐ **GO avec réserve documentaire** | G3.1–G3.10 OK · L3.1–L3.8 OK · régression OK · recette desktop + mobile |
+| ☑ **GO avec réserve documentaire** | G3.1–G3.10 OK · L3.1–L3.8 · L3.F · L3.M OK · régression OK · recette desktop + mobile · tests auto **88/88** |
 | ☐ GO | — |
-| ☑ **Reprise corrective (G3.9)** | Retour MOA visuel — fermeture preview non maîtrisée sur `13.1` · correctif `13.2` + recette L3.F / L3.M requise |
+| ☐ Reprise corrective | Clôturée `13.2` |
 
-**Verdict initial MOA (2026-05-22) :** GO avec réserve documentaire — PR **#14** mergée · merge commit `49448b1`.
+**Verdict MOA final (2026-05-22) :** **GO avec réserve documentaire — UX-4 Lot 3** · version **`19.0.15.13.2`** · PR **#15** (reprise G3.9).
 
-**Suspension MOA (reprise) :** GO Lot 3 **suspendu** tant que **G3.9** (fermeture preview) n’est pas corrigé et recetté (§ **L3.F** desktop · § **L3.M** mobile).
+**Historique :** PR **#14** mergée (`49448b1` · `13.1`) · suspension G3.9 · correctif fermeture **`13.2`** · revalidation MOA manuelle.
 
 ### Correctif `19.0.15.13.2`
 
@@ -187,4 +187,21 @@ Captures : [`capture_ux4_l3_13_2_desktop_close_20260522.png`](capture_ux4_l3_13_
 
 JSON : [`recette_ux4_l3_13_2_close_result.json`](recette_ux4_l3_13_2_close_result.json)
 
-**Verdict reprise proposé :** **GO avec réserve documentaire** — G3.9 revalidé · **L3.V1** maintenue · validation MOA visuelle requise.
+### Recontrôle fermeture ciblé `13.2`
+
+| Surface | Contrôle | Observé | Verdict |
+|---------|----------|---------|---------|
+| Desktop | Croix / bouton **Fermer** | Clic réel sur `Fermer l'aperçu` · preview fermée · panneau vidé | **OK** |
+| Desktop | ESC | Preview fermée · URL `/shop` conservée | **OK** |
+| Desktop | Re-clic **Voir** | Preview fermée · aucun doublon | **OK** |
+| Mobile 390 px | Bouton **Fermer** inline | Clic réel · preview repliée | **OK** |
+| Mobile 390 px | ESC | Preview fermée · pas de débordement horizontal | **OK** |
+| Mobile 390 px | Re-clic **Voir** | Preview fermée · une seule preview active | **OK** |
+
+Captures complémentaires : [`capture_ux4_l3_13_2_desktop_after_close_button_20260522.png`](capture_ux4_l3_13_2_desktop_after_close_button_20260522.png) · [`capture_ux4_l3_13_2_mobile_after_close_button_20260522.png`](capture_ux4_l3_13_2_mobile_after_close_button_20260522.png)
+
+JSON complémentaire : [`recette_ux4_l3_13_2_close_button_result.json`](recette_ux4_l3_13_2_close_button_result.json)
+
+**Verdict reprise :** **GO avec réserve documentaire** — G3.9 revalidé · tests auto **88/88** · **L3.V1** maintenue.
+
+**Merge cible :** PR **#15** — reprise fermeture preview G3.9.

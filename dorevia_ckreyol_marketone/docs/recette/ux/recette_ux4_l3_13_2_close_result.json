@@ -1,84 +1,85 @@
 {
-  "version": "19.0.15.13.2",
-  "executedAt": "2026-05-22T16:03:53.353Z",
-  "verdicts": {
-    "L3.F1": {
-      "ok": true,
-      "detail": "/shop"
-    },
-    "L3.F2": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":true,\"previewBody\":3549,\"activeCta\":true,\"mobileOpen\":0,\"mobileCloseBtn\":true,\"scrollWidth\":1280,\"innerWidth\":1280}"
-    },
-    "L3.F3": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":true,\"previewBody\":3549,\"activeCta\":true,\"mobileOpen\":0,\"mobileCloseBtn\":true,\"scrollWidth\":1280,\"innerWidth\":1280}"
-    },
-    "L3.F4": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":1280,\"innerWidth\":1280}"
-    },
-    "L3.F5": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":1280,\"innerWidth\":1280}"
-    },
-    "L3.F6": {
-      "ok": true,
-      "detail": "ok"
-    },
-    "L3.F7": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":1280,\"innerWidth\":1280}"
-    },
-    "L3.F8": {
-      "ok": true,
-      "detail": "ok"
-    },
-    "L3.F9": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":1280,\"innerWidth\":1280}"
-    },
-    "L3.F10": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":true,\"previewBody\":3528,\"activeCta\":true,\"mobileOpen\":0,\"mobileCloseBtn\":true,\"scrollWidth\":1280,\"innerWidth\":1280}"
-    },
-    "L3.F11": {
-      "ok": true,
-      "detail": "ok"
-    },
-    "G3.9": {
-      "ok": true,
-      "detail": "desktop"
-    },
-    "L3.M1": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":true,\"mobileOpen\":1,\"mobileCloseBtn\":true,\"scrollWidth\":390,\"innerWidth\":390}"
-    },
-    "L3.M2": {
-      "ok": false,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":true,\"mobileOpen\":1,\"mobileCloseBtn\":true,\"scrollWidth\":390,\"innerWidth\":390}"
-    },
-    "L3.M3": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":true,\"mobileOpen\":1,\"mobileCloseBtn\":true,\"scrollWidth\":390,\"innerWidth\":390}"
-    },
-    "L3.M4": {
-      "ok": true,
-      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":390,\"innerWidth\":390}"
-    },
-    "L3.M5": {
-      "ok": true,
-      "detail": "ok"
-    },
-    "L3.M6": {
-      "ok": true,
-      "detail": "ok"
-    }
+  "desktopOpenClick": {
+    "node": "36282",
+    "error": null
   },
-  "consoleErrors": [],
-  "summary": {
-    "failed": [
-      "L3.M2"
-    ]
-  }
+  "desktopBeforeClose": {
+    "modal": false,
+    "overflowX": false,
+    "previewExists": true,
+    "previewRect": {
+      "cx": 1080,
+      "cy": 405.44140625,
+      "h": 664.8828125,
+      "w": 368,
+      "x": 896,
+      "y": 73
+    },
+    "previewText": "Maniocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croustillants, sélection épicerie fine créole.\n\n Ajouter au panier\nVoir la fiche complète",
+    "url": "http://localhost:18079/shop",
+    "visibleClose": [],
+    "voirActive": 1
+  },
+  "desktopClose": {
+    "attempted": false
+  },
+  "desktopAfterClose": {
+    "modal": false,
+    "overflowX": false,
+    "previewExists": true,
+    "previewRect": {
+      "cx": 1080,
+      "cy": 405.44140625,
+      "h": 664.8828125,
+      "w": 368,
+      "x": 896,
+      "y": 73
+    },
+    "previewText": "Maniocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croustillants, sélection épicerie fine créole.\n\n Ajouter au panier\nVoir la fiche complète",
+    "url": "http://localhost:18079/shop",
+    "visibleClose": [],
+    "voirActive": 1
+  },
+  "mobileOpenClick": {
+    "node": "38062",
+    "error": null
+  },
+  "mobileBeforeClose": {
+    "modal": false,
+    "overflowX": false,
+    "previewExists": true,
+    "previewRect": {
+      "cx": 103.5,
+      "cy": 709.671875,
+      "h": 608.84375,
+      "w": 139,
+      "x": 34,
+      "y": 405.25
+    },
+    "previewText": "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croustillants, sélection épicerie fine créole.\n\nVoir la fiche complète",
+    "url": "http://localhost:18079/shop",
+    "visibleClose": [],
+    "voirActive": 1
+  },
+  "mobileClose": {
+    "attempted": false
+  },
+  "mobileAfterClose": {
+    "modal": false,
+    "overflowX": false,
+    "previewExists": true,
+    "previewRect": {
+      "cx": 103.5,
+      "cy": 709.671875,
+      "h": 608.84375,
+      "w": 139,
+      "x": 34,
+      "y": 405.25
+    },
+    "previewText": "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croustillants, sélection épicerie fine créole.\n\nVoir la fiche complète",
+    "url": "http://localhost:18079/shop",
+    "visibleClose": [],
+    "voirActive": 1
+  },
+  "logs": []
 }
