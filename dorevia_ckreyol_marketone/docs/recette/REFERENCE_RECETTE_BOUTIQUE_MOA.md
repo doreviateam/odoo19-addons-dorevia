@@ -3,9 +3,9 @@
 | Champ | Valeur |
 |-------|--------|
 | **Rôle** | **Document maître** — invariants GO MOA + checklist anti-régression |
-| **Version module de référence** | **`19.0.15.10.3`** (dernière baseline connue) |
+| **Version module de référence** | **`19.0.15.11.1`** (UX-4 Lot 1 — wishlist toggle GO avec réserve) |
 | **Base** | `ckr-marketone-01` · http://localhost:18079 |
-| **Dernière mise à jour doc** | 2026-05-22 |
+| **Dernière mise à jour doc** | 2026-05-22 (UX-4 Lot 1 — critères B7–B10) |
 | **Statut** | **Actif** — à mettre à jour à chaque GO MOA boutique |
 
 > Ce document **ne remplace pas** les recettes détaillées par ticket.  
@@ -69,7 +69,8 @@ Sections à rejouer : B__ · B__ · …
 | Tuile / image grille | **B4** · B6 · B1 (smoke) | [`RECETTE_MANUELLE_SHOP_CONVERSION_TILE.md`](boutique/RECETTE_MANUELLE_SHOP_CONVERSION_TILE.md) |
 | Haut grille / compteur / chips | **B2** · B3 · B1 | [`RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md`](ux/RECETTE_MANUELLE_SHOP_UX1_ETAT_FILTRES.md) · [`RECETTE_MANUELLE_SHOP_GRID_TITLE.md`](boutique/RECETTE_MANUELLE_SHOP_GRID_TITLE.md) |
 | Sidebar / filtres | **B3** · B1 | [`RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md`](ux/RECETTE_MANUELLE_SHOP_UX2_SIDEBAR.md) · [`RECETTE_MANUELLE_SHOP_SIDEBAR_ORDRE.md`](boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_ORDRE.md) |
-| Wishlist / header icônes | **B5** · B4 · B1 | [`RECETTE_VISUELLE_WISHLIST_STANDARD.md`](RECETTE_VISUELLE_WISHLIST_STANDARD.md) |
+| Wishlist / header icônes | **B5** · B4 · B1 · **B7** | [`RECETTE_VISUELLE_WISHLIST_STANDARD.md`](RECETTE_VISUELLE_WISHLIST_STANDARD.md) |
+| UX-4 shop-in-place (toggle / panier / preview) | **B7–B10** · zones impactées | [`ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) |
 | Fiche produit (depuis boutique) | B1 · B5 (si wishlist) | [`RECETTE_MANUELLE_LOT4.md`](lots/RECETTE_MANUELLE_LOT4.md) |
 | Panier / checkout | B1 (smoke URL) | [`RECETTE_MANUELLE_LOT5.md`](lots/RECETTE_MANUELLE_LOT5.md) |
 | **Tout ticket `/shop`** | **B1** minimum + zones impactées | Ce document § B |
@@ -130,6 +131,18 @@ Sections à rejouer : B__ · B__ · …
 | W3 | **Pas** de logique métier CK (JS / modèle custom) · standard Odoo | Doctrine ticket |
 | W4 | Fiche produit : wishlist **secondaire** vs achat | Wishlist recette |
 | W5 | Comportement connecté / non connecté : **standard Odoo documenté** (pas de règle CK imposée) | § Vigilance wishlist |
+
+### A7 — UX-4 Shop-in-place (boutique continue)
+
+| ID | Invariant | Source / Lot |
+|----|-----------|--------------|
+| U1 | CTA **premier niveau** carte : pas de navigation forcée (wishlist · panier · Voir preview) | UX-4 doctrine |
+| U2 | Toggle wishlist depuis `/shop` : add **et** remove AJAX sans quitter la page | Lot 1 · **B7** |
+| U3 | Panier depuis grille : mode `stay` · `/shop/cart/update_json` — pas de réimplémentation | Lot 2 · **B8** |
+| U4 | CTA **Voir** : preview non modale in-page (pas popup) | Lot 3 · **B9** |
+| U5 | Photo + titre grille : liens secondaires fiche produit (**gel MOA Lot 3**) | UX-4 arbitrage |
+| U6 | Fiche produit · panier · wishlist pages : destinations **secondaires** volontaires | UX-4 · **B10** |
+| U7 | Extension légère standard Odoo — pas de modèle / logique métier CK wishlist-panier | UX-4 doctrine |
 
 ### A6 — Header boutique
 
@@ -196,6 +209,40 @@ Cocher à **chaque GO** ticket touchant la boutique. Desktop **+** mobile **375 
 | ☐ | Offcanvas filtres : même ordre rubriques |
 | ☐ | Cœur wishlist cliquable |
 
+### B7 — UX-4 Wishlist toggle in-place (Lot 1+)
+
+| ☐ | Contrôle |
+|---|----------|
+| ☐ | 1er clic cœur card : ajout · **URL reste `/shop`** |
+| ☐ | 2e clic même cœur : retrait · compteur header cohérent |
+| ☐ | Cœur retenu terracotta · feedback carte discret |
+| ☐ | Pas de bouton wishlist `disabled` en grille |
+
+### B8 — UX-4 Panier in-place (Lot 2+)
+
+| ☐ | Contrôle |
+|---|----------|
+| ☐ | Clic panier survol : ajout · **URL reste `/shop`** |
+| ☐ | État carte « Ajouté au panier » visible |
+| ☐ | Lien secondaire « Voir le panier » · compteur header +1 |
+
+### B9 — UX-4 Preview « Voir » in-place (Lot 3+)
+
+| ☐ | Contrôle |
+|---|----------|
+| ☐ | Clic **Voir** : preview s’ouvre · **pas** navigation fiche |
+| ☐ | Pas de popup modale · panneau / bloc intégré |
+| ☐ | Lien « Voir la fiche complète » fonctionnel |
+
+### B10 — UX-4 Destinations secondaires
+
+| ☐ | Contrôle |
+|---|----------|
+| ☐ | Photo + titre → fiche produit (liens secondaires) |
+| ☐ | Header panier → `/shop/cart` (volontaire) |
+| ☐ | Header wishlist → `/shop/wishlist` (volontaire) |
+| ☐ | Lien « Voir le panier » / « Voir la fiche complète » explicites sur carte ou preview |
+
 ---
 
 ## § C — Tests automatisés (avant GO)
@@ -203,7 +250,7 @@ Cocher à **chaque GO** ticket touchant la boutique. Desktop **+** mobile **375 
 ```bash
 docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-01 \
   -u dorevia_ckreyol_marketone --test-enable --stop-after-init \
-  --test-tags=dorevia_marketone_shop_regression,dorevia_marketone_shop_filter_state,dorevia_marketone_shop_sidebar,dorevia_marketone_shop_sidebar_collections,dorevia_marketone_shop_wishlist,dorevia_marketone_lot3_shop,dorevia_marketone_smoke \
+  --test-tags=dorevia_marketone_shop_in_place,dorevia_marketone_shop_regression,dorevia_marketone_shop_filter_state,dorevia_marketone_shop_sidebar,dorevia_marketone_shop_sidebar_collections,dorevia_marketone_shop_wishlist,dorevia_marketone_lot3_shop,dorevia_marketone_smoke \
   --http-port=8073
 ```
 
@@ -238,6 +285,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | Catégories sidebar | [`boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md`](boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md) | GO |
 | Facettes C4 | [`boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_FACETTES_CONTEXTUELLES.md`](boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_FACETTES_CONTEXTUELLES.md) | GO |
 | Wishlist standard | [`RECETTE_VISUELLE_WISHLIST_STANDARD.md`](RECETTE_VISUELLE_WISHLIST_STANDARD.md) | GO MOA `10.2` (réserves) |
+| UX-4 shop-in-place | [`ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) | Lot 1 **GO réserve** `11.1` |
 | Fiche produit | [`lots/RECETTE_MANUELLE_LOT4.md`](lots/RECETTE_MANUELLE_LOT4.md) | GO |
 | Panier / checkout | [`lots/RECETTE_MANUELLE_LOT5.md`](lots/RECETTE_MANUELLE_LOT5.md) | — |
 | Environnement | [`reference/ENV_REFERENCE.md`](reference/ENV_REFERENCE.md) | Réf. technique |
@@ -247,8 +295,9 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 
 ## § F — Grille verdict régression (par exécution)
 
-| Date | Ticket / version | Exécuteur | B1–B6 | Tests auto | Régression ? | Verdict |
-|------|------------------|-----------|-------|------------|--------------|---------|
-| 2026-05-22 | Wishlist + sidebar `19.0.15.10.3` | MOA | ☑ | ☑ 75/75 | Non | **GO** (R2 clôturée) |
+| Date | Ticket / version | Exécuteur | B1–B6 | B7–B10 | Tests auto | Régression ? | Verdict |
+|------|------------------|-----------|-------|--------|------------|--------------|---------|
+| 2026-05-22 | Wishlist + sidebar `19.0.15.10.3` | MOA | ☑ | — | ☑ 75/75 | Non | **GO** (R2 clôturée) |
+| 2026-05-22 | UX-4 Lot 1 `19.0.15.11.1` | MOA | ☑ | ☑ B7 | ☑ 79/79 | Non | **GO avec réserve documentaire** |
 
-**Commentaire :** B6 corrigé `10.2` · R2 accordéon Collections validé MOA `10.3`. Réserve connecté documentaire uniquement.
+**Commentaire :** B6 corrigé `10.2` · R2 accordéon Collections validé MOA `10.3`. UX-4 Lot 1 validé visiteur public `11.1` — réserve connecté documentaire (comme wishlist P3–P6).

@@ -44,7 +44,7 @@ class TestMarketoneShopWishlistHttp(HttpCase):
         self.assertIn("marketone-shop-card-wishlist-wrap", html)
         self.assertRegex(
             html,
-            r'marketone-shop-card-wishlist[^"]*o_add_wishlist',
+            r'marketone-shop-card-wishlist[^"]*btn',
         )
         self.assertIn('data-action="o_wishlist"', html)
         self.assertNotIn("marketone-shop-card-wishlist--visual", html)
@@ -60,12 +60,12 @@ class TestMarketoneShopWishlistHttp(HttpCase):
         )
         self.assertTrue(card_blocks, "Au moins une carte produit attendue.")
         for block in card_blocks[:3]:
-            wishlist_buttons = re.findall(
-                r'class="[^"]*o_add_wishlist[^"]*"',
+            marketone_buttons = re.findall(
+                r'class="[^"]*\bmarketone-shop-card-wishlist btn[^"]*"',
                 block,
             )
             self.assertLessEqual(
-                len(wishlist_buttons),
+                len(marketone_buttons),
                 1,
                 "Une seule action wishlist par carte (overlay coin image).",
             )
