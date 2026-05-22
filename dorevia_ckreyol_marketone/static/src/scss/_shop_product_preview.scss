@@ -8,7 +8,7 @@
 }
 
 .marketone-shop-preview-offcanvas {
-    --bs-offcanvas-width: min(26rem, 92vw);
+    --bs-offcanvas-width: #{unquote('min(26rem, 92vw)')};
     z-index: 1040;
     background-color: $ck-bg-card-body;
     border-left: 1px solid $ck-border-soft;
@@ -124,7 +124,7 @@
     align-items: center;
     justify-content: center;
     aspect-ratio: 4 / 5;
-    max-height: min(20rem, 52vw);
+    max-height: unquote('min(20rem, 52vw)');
     padding: 1rem;
 }
 
@@ -337,7 +337,7 @@
     }
 
     .marketone-shop-preview__media-frame {
-        max-height: min(18rem, 68vw);
+        max-height: unquote('min(18rem, 68vw)');
         padding: 0.875rem;
     }
 

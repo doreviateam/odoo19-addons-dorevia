@@ -296,7 +296,7 @@ class TestMarketoneShopInPlacePreview(HttpCase):
         self.assertIn("marketone_shop_preview_offcanvas", html)
         self.assertIn("marketone-shop-preview-offcanvas__close", html)
         self.assertIn("Découvrir le produit", html)
-        self.assertIn("Fermer l'aperçu", html)
+        self.assertIn('aria-label="Fermer l&#39;aperçu"', html)
         self.assertNotIn("marketone-shop-preview-offcanvas__close-text", html)
         self.assertIn("marketone-shop-card-preview-slot", html)
         self.assertIn("data-marketone-preview-allowed", html)
