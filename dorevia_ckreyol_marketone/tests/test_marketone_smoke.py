@@ -31,14 +31,27 @@ class TestMarketoneSmokeInstall(TransactionCase):
                 f"{name} ne doit pas etre installe sur la base Marketone.",
             )
 
-    def test_optional_shop_modules_not_installed(self):
-        for name in ("website_sale_wishlist", "website_sale_comparison"):
-            mod = self.env["ir.module.module"].search([("name", "=", name)], limit=1)
-            self.assertNotEqual(
-                mod.state,
-                "installed",
-                f"{name} ne doit pas etre installe au Lot 1.",
-            )
+    def test_wishlist_dependency_installed(self):
+        mod = self.env["ir.module.module"].search(
+            [("name", "=", "website_sale_wishlist")],
+            limit=1,
+        )
+        self.assertEqual(
+            mod.state,
+            "installed",
+            "website_sale_wishlist doit etre installe (dependance Marketone).",
+        )
+
+    def test_comparison_module_not_installed(self):
+        mod = self.env["ir.module.module"].search(
+            [("name", "=", "website_sale_comparison")],
+            limit=1,
+        )
+        self.assertNotEqual(
+            mod.state,
+            "installed",
+            "website_sale_comparison ne doit pas etre installe au Lot 1.",
+        )
 
 
 @tagged("post_install", "-at_install", "dorevia_marketone_smoke")

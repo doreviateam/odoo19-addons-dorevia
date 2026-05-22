@@ -642,7 +642,7 @@ class WebsiteSaleMarketone(WebsiteSale):
         return QueryURL(url, **url_kwargs)()
 
     def _marketone_build_active_filter_chips(self, values, kwargs):
-        """Chips filtres actifs — Collections → Catégories → Origines → Prix."""
+        """Chips filtres actifs — Catégories → Collections → Origines → Prix."""
         vals = values or {}
         mapping = kwargs or {}
         env = request.env
@@ -654,31 +654,6 @@ class WebsiteSaleMarketone(WebsiteSale):
             for attr_id, value_ids in (vals.get("attrib_values") or {}).items()
         }
         active_attrib_query = _marketone_attrib_values_to_query_list(attrib_values)
-
-        collections, coll_requested = _marketone_resolve_collection_facet(mapping)
-        if coll_requested and collections:
-            for coll in collections.sorted("name"):
-                coll_slug = coll.slug
-                remaining = [
-                    other.slug
-                    for other in collections
-                    if other.id != coll.id
-                ]
-                chips.append(
-                    {
-                        "type": "collection",
-                        "label": coll.name,
-                        "collection_id": coll.id,
-                        "remove_url": self._marketone_shop_keep_url(
-                            vals,
-                            mapping,
-                            path_category,
-                            marketone_collection=remaining or 0,
-                            attribute_values=active_attrib_query or None,
-                        ),
-                        "key": coll_slug,
-                    }
-                )
 
         categories, cat_requested, _cat_invalid = _marketone_resolve_category_facet(
             mapping, path_category=path_category
@@ -711,6 +686,31 @@ class WebsiteSaleMarketone(WebsiteSale):
                             attribute_values=active_attrib_query or None,
                         ),
                         "key": slug,
+                    }
+                )
+
+        collections, coll_requested = _marketone_resolve_collection_facet(mapping)
+        if coll_requested and collections:
+            for coll in collections.sorted("name"):
+                coll_slug = coll.slug
+                remaining = [
+                    other.slug
+                    for other in collections
+                    if other.id != coll.id
+                ]
+                chips.append(
+                    {
+                        "type": "collection",
+                        "label": coll.name,
+                        "collection_id": coll.id,
+                        "remove_url": self._marketone_shop_keep_url(
+                            vals,
+                            mapping,
+                            path_category,
+                            marketone_collection=remaining or 0,
+                            attribute_values=active_attrib_query or None,
+                        ),
+                        "key": coll_slug,
                     }
                 )
 

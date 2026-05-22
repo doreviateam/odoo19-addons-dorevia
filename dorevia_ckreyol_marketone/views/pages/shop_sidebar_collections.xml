@@ -29,9 +29,27 @@
     <template id="marketone_shop_collections_accordion" name="Marketone: accordéon Collections sidebar">
         <t t-set="marketone_col_expand" t-value="False"/>
         <t t-if="isOffcanvas">
-            <div name="wsale_products_collections_list" class="wsale_products_collections_list mb-3">
-                <p class="fw-bold mb-2">Collections</p>
-                <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_checks"/>
+            <div class="accordion-item d-lg-none marketone-offcanvas-collections">
+                <h2 id="o_wsale_offcanvas_collections_header" class="accordion-header mb-0">
+                    <button type="button"
+                            t-attf-class="o_wsale_offcanvas_title accordion-button rounded-0 #{'collapsed' if not marketone_col_expand else ''}"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#o_wsale_offcanvas_collections"
+                            t-att-aria-expanded="'true' if marketone_col_expand else 'false'"
+                            aria-controls="o_wsale_offcanvas_collections">
+                        <b>Collections</b>
+                    </button>
+                </h2>
+                <div id="o_wsale_offcanvas_collections"
+                     t-attf-class="accordion-collapse collapse#{ ' show' if marketone_col_expand else '' }"
+                     aria-labelledby="o_wsale_offcanvas_collections_header">
+                    <div class="accordion-body pt-0">
+                        <div name="wsale_products_collections_list"
+                             class="wsale_products_collections_list">
+                            <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_checks"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </t>
         <t t-else="">
@@ -60,24 +78,35 @@
         </t>
     </template>
 
-    <!-- Ordre MOA : Collections avant Catégories (desktop rail + offcanvas). -->
-    <template id="marketone_shop_sidebar_collections_before_categories"
-              inherit_id="website_sale.products"
-              name="Marketone: collections avant catégories (sidebar)"
-              priority="31">
-        <xpath expr="//div[hasclass('o_wsale_products_grid_before_rail')]/div[@t-if='opt_wsale_categories']" position="before">
-            <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
+    <!-- Ordre MOA : Catégories → Collections → Origines → Prix (desktop rail). -->
+    <template id="marketone_shop_sidebar_collections_after_categories"
+              inherit_id="dorevia_ckreyol_marketone.marketone_products_categories_primary_list"
+              name="Marketone: collections après catégories (sidebar desktop)"
+              priority="33">
+        <xpath expr="//div[contains(@class, 'marketone-shop-categories-accordion')]" position="after">
+            <t t-if="not isOffcanvas">
+                <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
+            </t>
         </xpath>
     </template>
 
-    <template id="marketone_shop_sidebar_collections_offcanvas"
+    <!-- Offcanvas mobile : injection directe dans o_wsale_offcanvas (après accordéon Catégories). -->
+    <template id="marketone_shop_sidebar_collections_offcanvas_after_categories"
               inherit_id="website_sale.o_wsale_offcanvas"
-              name="Marketone: collections avant catégories (offcanvas)"
-              priority="33">
-        <xpath expr="//div[@id='o_wsale_offcanvas_content']/div[@t-if='opt_wsale_categories']" position="before">
+              name="Marketone: collections après catégories (offcanvas)"
+              priority="34">
+        <xpath expr="//div[@id='o_wsale_offcanvas_content']/div[@t-if='opt_wsale_categories']" position="after">
             <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion">
                 <t t-set="isOffcanvas" t-value="True"/>
             </t>
         </xpath>
     </template>
+
+    <!-- Désactive les héritages 19.0.12.1.0 (collections avant catégories) — remplacés ci-dessus. -->
+    <record id="marketone_shop_sidebar_collections_before_categories" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="marketone_shop_sidebar_collections_offcanvas" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
 </odoo>

@@ -167,7 +167,7 @@ class TestMarketoneShopSidebarCollectionsHttp(HttpCase):
         self.assertIn("Col HTTP Lot B", block)
 
     def test_shop_sidebar_rubrique_order(self):
-        """Ordre MOA : Collections → Catégories → Origines → Prix."""
+        """Ordre MOA : Catégories → Collections → Origines → Prix."""
         response = self.url_open("/shop")
         self.assertEqual(response.status_code, 200)
         html = response.text
@@ -179,11 +179,32 @@ class TestMarketoneShopSidebarCollectionsHttp(HttpCase):
         self.assertGreater(cat, -1)
         self.assertGreater(attr, -1)
         self.assertGreater(price, -1)
-        self.assertLess(col, cat)
-        self.assertLess(cat, attr)
+        self.assertLess(cat, col)
+        self.assertLess(col, attr)
         self.assertLess(attr, price)
         sidebar = html[html.find('id="products_grid_before"'): price + 3000]
         self.assertRegex(sidebar, r">\s*Origines\s*<")
+
+    def test_shop_offcanvas_collections_after_categories(self):
+        """Offcanvas mobile — Collections visible entre Catégories et Origines."""
+        response = self.url_open("/shop")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        start = html.find('id="o_wsale_offcanvas_content"')
+        self.assertGreater(start, -1)
+        block = html[start : start + 20000]
+        cat = block.find("o_wsale_offcanvas_categories")
+        col = block.find("o_wsale_offcanvas_collections")
+        col_title = block.find("o_wsale_offcanvas_collections_header")
+        attr = block.find("o_wsale_offcanvas_attribute")
+        self.assertGreater(cat, -1, "Accordéon catégories offcanvas attendu.")
+        self.assertGreater(col, -1, "Accordéon Collections offcanvas attendu.")
+        self.assertGreater(col_title, -1, "En-tête Collections offcanvas attendu.")
+        self.assertGreater(attr, -1, "Facette attributs offcanvas attendue.")
+        self.assertLess(cat, col)
+        self.assertLess(col, attr)
+        self.assertIn("o_wsale_offcanvas_title", block[col_title : col_title + 500])
+        self.assertIn("wsale_products_collections_list", block[col : col + 1200])
 
     def test_shop_filter_single_collection(self):
         url = f"/shop?{MARKETONE_COLLECTION_PARAM}={self.collection.slug}"

@@ -332,19 +332,15 @@ $marketone-sidebar-scroll-ease: cubic-bezier(0.16, 1, 0.3, 1);
         font-family: $marketone-font-heading;
     }
 
-    // Offcanvas mobile — même grammaire.
+    // Offcanvas mobile — grammaire accordéon native (o_wsale_offcanvas_title).
     #o_wsale_offcanvas {
+        .marketone-offcanvas-collections.accordion-item {
+            border-bottom: 1px solid rgba($ck-bg-green-soft, 0.28);
+        }
+
         .wsale_products_collections_list,
         .wsale_products_categories_list {
-            margin-bottom: 0.85rem;
-
-            > p.fw-bold {
-                font-family: $marketone-font-heading;
-                font-size: 0.95rem;
-                font-weight: $marketone-weight-semibold;
-                margin-bottom: 0.55rem;
-                color: $marketone-text;
-            }
+            margin-bottom: 0;
         }
 
         .accordion-button {

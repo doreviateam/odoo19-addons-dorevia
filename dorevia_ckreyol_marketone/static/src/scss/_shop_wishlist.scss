@@ -1,0 +1,107 @@
+// Wishlist standard Odoo — harmonisation cosmétique CK (pas de logique métier).
+
+.marketone-shop-wishlist {
+    background-color: $ck-bg-page;
+
+    .wishlist-section {
+        padding-bottom: $marketone-space-xl !important;
+    }
+
+    .o_wishlist_products_header {
+        h1,
+        .h4-fs {
+            font-family: $marketone-font-heading;
+            font-weight: $marketone-weight-semibold;
+            color: $marketone-text;
+            letter-spacing: -0.02em;
+        }
+    }
+
+    #empty-wishlist-message {
+        h5 {
+            font-family: $marketone-font-body;
+            font-weight: $marketone-weight-medium;
+            color: $marketone-text-muted;
+        }
+
+        .btn-primary {
+            @include marketone-btn-primary;
+        }
+    }
+
+    .o_wishlist_table article.o_wishlist_item,
+    .o_wishlist_table .oe_product_cart {
+        border-radius: $marketone-radius-md;
+        border: 1px solid rgba($ck-border-card, 0.85);
+        background-color: $ck-bg-card-body;
+        box-shadow: 0 6px 16px rgba($ck-shadow, 0.05);
+    }
+
+    button.o_wish_rm,
+    .o_add_wishlist.js_delete_product {
+        min-width: 2rem;
+        min-height: 2rem;
+        border-radius: 999px;
+        transition: color 0.2s ease, border-color 0.2s ease;
+
+        &:hover,
+        &:focus-visible {
+            color: $ck-terracotta;
+        }
+    }
+}
+
+header#top.marketone-chrome {
+    .o_wsale_my_wish {
+        .o_navlink_background_hover,
+        a.rounded-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 999px !important;
+            color: $marketone-text;
+            transition: color 0.2s ease, background-color 0.2s ease;
+
+            &:hover,
+            &:focus-visible {
+                color: $ck-terracotta;
+                background-color: rgba($ck-bg-card-body, 0.92) !important;
+            }
+        }
+
+        .my_wish_quantity {
+            background-color: $ck-terracotta !important;
+            font-size: 0.625rem;
+        }
+    }
+}
+
+.marketone-product {
+    .o_add_wishlist_dyn,
+    button.o_add_wishlist.btn-outline-primary {
+        border-color: rgba($ck-border-card, 0.9);
+        color: rgba($marketone-text, 0.78);
+        background-color: transparent;
+        font-weight: $marketone-weight-medium;
+        transition:
+            color 0.2s ease,
+            border-color 0.2s ease,
+            background-color 0.2s ease;
+
+        &:hover,
+        &:focus-visible {
+            color: $ck-terracotta;
+            border-color: rgba($ck-terracotta, 0.45);
+            background-color: rgba($ck-bg-card-body, 0.6);
+        }
+
+        &.o_in_wishlist,
+        &.disabled {
+            color: $ck-terracotta;
+            border-color: rgba($ck-terracotta, 0.55);
+            background-color: rgba($ck-bg-card-body, 0.75);
+        }
+    }
+}

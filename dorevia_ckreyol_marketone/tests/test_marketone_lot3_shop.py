@@ -114,6 +114,9 @@ class TestMarketoneLot3Shop(HttpCase):
             "CTA Voir doit pointer vers la fiche produit.",
         )
         self.assertIn("marketone-shop-card-wishlist", html)
+        self.assertIn("o_add_wishlist", html)
+        self.assertIn("data-action=\"o_wishlist\"", html)
+        self.assertNotIn("marketone-shop-card-wishlist--visual", html)
         self.assertNotIn("oe_subdescription", html)
         self.assertIn("o_wsale_product_btn", html)
 

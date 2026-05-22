@@ -79,11 +79,16 @@ class TestMarketoneLot21DesignInstall(TransactionCase):
                 f"{name} ne doit pas etre installe.",
             )
 
-    def test_optional_shop_modules_not_installed(self):
-        for name in ("website_sale_wishlist", "website_sale_comparison"):
-            mod = self.env["ir.module.module"].search([("name", "=", name)], limit=1)
-            self.assertNotEqual(
-                mod.state,
-                "installed",
-                f"{name} ne doit pas etre installe.",
-            )
+    def test_wishlist_dependency_installed(self):
+        mod = self.env["ir.module.module"].search(
+            [("name", "=", "website_sale_wishlist")],
+            limit=1,
+        )
+        self.assertEqual(mod.state, "installed")
+
+    def test_comparison_module_not_installed(self):
+        mod = self.env["ir.module.module"].search(
+            [("name", "=", "website_sale_comparison")],
+            limit=1,
+        )
+        self.assertNotEqual(mod.state, "installed")
