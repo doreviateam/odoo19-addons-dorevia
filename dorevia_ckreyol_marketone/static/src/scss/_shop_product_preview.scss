@@ -1,0 +1,99 @@
+// UX-4 Lot 3 — preview « Voir » in-page (.marketone-shop scope).
+
+.marketone-shop-preview-offcanvas {
+    --bs-offcanvas-width: min(26rem, 92vw);
+    z-index: 1040;
+    border-left: 1px solid $ck-border-card;
+    box-shadow: -8px 0 24px rgba($ck-shadow, 0.08);
+
+    &.show {
+        visibility: visible;
+    }
+}
+
+.marketone-shop-preview-offcanvas__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.marketone-shop-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.marketone-shop-preview__media {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: $ck-bg-image-tile;
+}
+
+.marketone-shop-preview__title {
+    font-size: 1.125rem;
+    line-height: 1.35;
+    margin: 0;
+}
+
+.marketone-shop-preview__price {
+    color: $ck-terracotta;
+    font-size: 1.0625rem;
+}
+
+.marketone-shop-preview__meta-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $marketone-text-muted;
+    margin-bottom: 0.25rem;
+}
+
+.marketone-shop-preview__description {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.marketone-shop-preview__cta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.marketone-shop-preview__full-link {
+    display: inline-block;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: $ck-terracotta;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.marketone-shop-card-cta--active {
+    color: $ck-terracotta;
+    font-weight: 600;
+}
+
+.marketone-shop-card-preview-slot {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid $ck-border-card;
+
+    &--open {
+        display: block;
+    }
+}
+
+.marketone-shop-card--preview-open {
+    border-color: $ck-sauge-border;
+}
+
+@media (max-width: 991.98px) {
+    .marketone-shop .oe_product_cart .marketone-shop-card-preview-slot:not([hidden]) {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+}

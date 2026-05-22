@@ -4,11 +4,13 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX4_SHOP_IN_PLACE` |
 | **Type** | **UX** — extension légère `website_sale` / `website_sale_wishlist` |
-| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 en cours** · Lot 3 gelé |
+| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 clôturé GO avec réserve documentaire** · **Lot 3 — en cours (branche ouverte)** |
+| **Branche Lot 3** | `feat/marketone-ux4-lot3-preview-voir` |
 | **Version livrée Lot 1** | **`19.0.15.11.1`** |
-| **Version cible Lot 2** | **`19.0.15.12.2`** (correctif feedback + mobile post NO GO `12.1`) |
+| **Version livrée Lot 2** | **`19.0.15.12.3`** |
 | **Branche Lot 2** | `feat/marketone-ux4-lot2-cart-in-place` |
 | **PR Lot 1** | **#12** — mergée |
+| **PR Lot 2** | **#13** — mergée |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
 | **Branche Lot 1** | `feat/marketone-ux4-lot1-wishlist-toggle` |
@@ -98,32 +100,55 @@ Le chantier **ne part pas de zéro** :
 | **Objectif** | Feedback local carte après add-to-cart sans quitter `/shop` |
 | **Standard** | Service `cart` Odoo 19 · `/shop/cart/add` · mode `stay` |
 | **JS** | Interaction `marketone_shop_cart_add.js` — grille `.marketone-shop-card-cart` |
-| **QWeb** | Feedback « Ajouté au panier » · lien « Voir le panier » · retrait `a-submit` |
-| **SCSS** | `.marketone-shop-card--added-to-cart` · bandeau feedback |
+| **QWeb** | Feedback « Ajouté au panier » · lien « Voir le panier » · retrait `a-submit` · PTAV origine grille |
+| **SCSS** | `.marketone-shop-card--added-to-cart` · bandeau feedback · override mobile `< lg` |
 | **Tests** | Tag `dorevia_marketone_shop_in_place` |
-| **Recette** | § Lot 2 recette UX-4 |
+| **Recette** | § Lot 2 [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) |
+| **PR** | **#13** — mergée |
 
 **Critère GO Lot 2 :**
 
-- [ ] Ajout panier depuis grille sans navigation
-- [ ] État carte visible · lien secondaire panier
-- [ ] Régression conversion tile + B8
+- [x] Ajout panier depuis grille sans navigation
+- [x] État carte visible · lien secondaire panier
+- [x] Compteur header synchronisé
+- [x] Consolidation panier (PTAV origine unique) — correctif `12.3`
+- [x] Régression conversion tile + B8 + Lot 1 OK
+- [x] Tests auto verts (84/84)
 
----
+**Verdict MOA (2026-05-22) :** **GO avec réserve documentaire** — visiteur public desktop + mobile validé · scénario connecté L2.C1 non rejoué (compte test absent). Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md`](../recette/ux/RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md).
 
-### Lot 3 — Voir sans sortie / preview in-page · **P2 · GELÉ**
+### Lot 3 — Voir sans sortie / preview in-page · **P2 · EN COURS (implémentation V1)**
+
+> **Note d’arbitrage :** [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) — **GO avec réserve documentaire** (2026-05-22).
 
 | Élément | Détail |
 |---------|--------|
-| **Objectif** | CTA « Voir » ouvre preview non modale |
-| **Desktop** | Panneau latéral (offcanvas end, non modal) |
-| **Mobile** | Bloc détail intégré / accordéon sous tuile |
-| **Route** | `/shop/product/preview/<template>` (à créer) |
+| **Objectif** | CTA « Voir » → preview in-page · URL reste `/shop` |
+| **Desktop** | Offcanvas latéral **droit non modal** · grille visible · fermeture × / ESC / re-clic |
+| **Mobile** | Preview **inline sous tuile** · une seule ouverte · pas de bottom sheet V1 · 390 px sans débordement |
+| **Route** | `/shop/product/preview/<template>` (fragment HTML) |
 | **Lien secondaire** | « Voir la fiche complète » → `product_href` |
-| **Gel MOA** | Photo + titre restent liens fiche produit |
-| **Recette** | § Lot 3 recette UX-4 |
+| **Gel MOA** | Photo + titre = liens fiche produit (**inchangés**) |
+| **Branche** | `feat/marketone-ux4-lot3-preview-voir` |
+| **PR cible** | `[CK][UX-4] Lot 3 — Preview Voir sans sortie de /shop` |
+| **Recette** | § Lot 3 [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) |
 
-**Ne pas lancer** avant arbitrage MOA spécifique Lot 3.
+**Contenu preview V1 (validé MOA) :** image · titre · prix · origine si dispo · collection/label si dispo (sans filtre) · description courte · panier · wishlist · lien « Voir la fiche complète ».
+
+**Réserve documentaire Lot 3 :**
+
+- produit simple / variante unique → preview complète autorisée ;
+- produit multi-variante ou configurable → **fallback fiche produit obligatoire** en V1 (préférence MOA) ;
+- pas de configurateur dans la preview V1 ;
+- pas de deep-link preview V1.
+
+**Hors périmètre V1 (confirmé MOA) :** modal popup · refonte fiche · cross-sell · avis clients · contenus Culture/Savoirs longs · changement photo/titre · deep-link preview.
+
+**Critères GO Lot 3 (G3.1–G3.10) :** voir recette § Lot 3 · régression **B4 · B7 · B8 · B9 · B10** obligatoire.
+
+**Règle de méthode :** PR tôt · **pas de merge sans recette MOA** · recette desktop + mobile obligatoire · Lot 3 isolé · pas d’extension hors périmètre V1.
+
+**Verdict arbitrage MOA (2026-05-22) :** **GO avec réserve documentaire** — fallback fiche obligatoire pour produits configurables / multi-variantes · mobile inline confirmé · pas de deep-link preview V1.
 
 ---
 
@@ -157,8 +182,10 @@ Le chantier **ne part pas de zéro** :
 |------------|------|
 | Logique métier wishlist / panier custom | Standard Odoo uniquement |
 | Modèles Python dédiés | Interdit |
-| Modales popup preview | Interdit MOA |
-| Changement photo / titre grille | Gel Lot 3 |
+| Modales popup preview | Interdit MOA · confirmé arbitrage |
+| Configurateur variantes dans preview | Interdit V1 |
+| Deep-link preview partageable | Interdit V1 |
+| Changement photo / titre grille | Gel MOA · confirmé arbitrage |
 | Refonte fiche produit / page wishlist | Destinations secondaires |
 | Connecté / fusion session | Réserve documentaire (comme wishlist P3–P6) |
 
@@ -196,7 +223,7 @@ tests/test_marketone_shop_in_place.py          → Lot 1+
 | Régression wishlist GO MOA | Élevé | Recette wishlist + B5 + tests |
 | Régression conversion tile | Élevé | B4 · recette conversion tile |
 | Régression UX-1 / UX-2 | Moyen | B2 · B3 à chaque lot |
-| Variantes produits (panier / preview) | Moyen | Lot 2 : standard Odoo · Lot 3 : sélecteur ou lien fiche |
+| Variantes produits (panier / preview) | Moyen | Lot 2 : standard Odoo · Lot 3 : **fallback fiche** si configurable (V1) |
 | SEO (photo/titre) | Faible | Gel MOA — liens fiche conservés |
 
 ---
@@ -233,5 +260,9 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | 2026-05-22 | `19.0.15.11.1` | Lot 1 | **GO avec réserve documentaire** · PR #12 mergée |
 | 2026-05-22 | `19.0.15.12.1` | Lot 2 reprise | **NO GO** — feedback hidden + mobile KO |
 | 2026-05-22 | `19.0.15.12.2` | Lot 2 reprise | **GO avec réserve documentaire** |
+| 2026-05-22 | `19.0.15.12.3` | Lot 2 reprise | **GO MOA** — consolidation panier PTAV origine · PR #13 mergée |
+| 2026-05-22 | — | Lot 3 arbitrage | **GO avec réserve documentaire** · branche `feat/marketone-ux4-lot3-preview-voir` autorisée |
+
+**Correctif `12.3` :** transmission `no_variant_attribute_value_ids` (origine unique grille) dans `/shop/cart/add` — consolidation panier standard Odoo.
 
 **Correctif `11.1` (post NO GO recette) :** Odoo 19 utilise l’API `Interaction` (`add_product_to_wishlist_button.js`), pas `publicWidget.ProductWishlist`. Migration vers `marketone_shop_wishlist_toggle.js` · retrait `o_add_wishlist` sur grille · route `remove_by_product` en `jsonrpc`.

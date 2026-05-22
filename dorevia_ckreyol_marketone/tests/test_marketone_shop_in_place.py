@@ -197,3 +197,165 @@ class TestMarketoneShopInPlaceCart(HttpCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("/shop", response.url)
         self.assertIn("marketone-shop-card-cart-feedback", response.text)
+
+    def _marketone_default_no_variant_ptav_ids(self, product):
+        return product.attribute_line_ids.filtered(
+            lambda line: line.attribute_id.create_variant == "no_variant"
+            and len(line.value_ids) == 1
+        ).mapped("product_template_value_ids").ids
+
+    def test_shop_grid_exposes_default_no_variant_ptav(self):
+        product = self.env["product.template"].search(
+            [
+                ("name", "ilike", "Maniocookies"),
+                ("sale_ok", "=", True),
+                ("is_published", "=", True),
+            ],
+            limit=1,
+        )
+        if not product:
+            self.skipTest("Produit Maniocookies requis pour consolidation origine.")
+        ptav_ids = self._marketone_default_no_variant_ptav_ids(product)
+        self.assertTrue(ptav_ids, "Origine unique attendue sur Maniocookies.")
+        response = self.url_open("/shop?search=Maniocookies")
+        self.assertEqual(response.status_code, 200)
+        for ptav_id in ptav_ids:
+            self.assertIn(
+                f'data-marketone-no-variant-ptav-ids="{",".join(map(str, ptav_ids))}"',
+                response.text,
+                "PTAV origine doit etre expose dans la tuile grille.",
+            )
+            break
+
+    def test_cart_double_add_consolidates_single_line_with_origin(self):
+        """Lot 2 — double add avec PTAV origine : une ligne qty 2 (standard Odoo)."""
+        self.authenticate(None, None)
+        product = self.env["product.template"].search(
+            [
+                ("name", "ilike", "Maniocookies"),
+                ("sale_ok", "=", True),
+                ("is_published", "=", True),
+            ],
+            limit=1,
+        )
+        if not product:
+            self.skipTest("Produit Maniocookies requis pour consolidation origine.")
+        variant = product.product_variant_id
+        ptav_ids = self._marketone_default_no_variant_ptav_ids(product)
+        partner = self.env.ref("base.public_partner")
+        self.env["sale.order"].sudo().search(
+            [
+                ("partner_id", "=", partner.id),
+                ("website_id", "=", self.website.id),
+                ("state", "=", "draft"),
+            ]
+        ).unlink()
+
+        payload = {
+            "product_template_id": product.id,
+            "product_id": variant.id,
+            "quantity": 1,
+            "no_variant_attribute_value_ids": ptav_ids,
+        }
+        self.make_jsonrpc_request("/shop/cart/add", payload)
+        self.make_jsonrpc_request("/shop/cart/add", payload)
+
+        cart = self.env["sale.order"].sudo().search(
+            [
+                ("partner_id", "=", partner.id),
+                ("website_id", "=", self.website.id),
+                ("state", "=", "draft"),
+            ],
+            limit=1,
+        )
+        lines = cart.order_line.filtered(
+            lambda line: line.product_id.id == variant.id
+        )
+        self.assertEqual(len(lines), 1, "Consolidation sur une seule ligne attendue.")
+        self.assertEqual(lines.product_uom_qty, 2.0)
+
+
+@tagged("post_install", "-at_install", "dorevia_marketone_shop_in_place")
+class TestMarketoneShopInPlacePreview(HttpCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.website = cls.env["website"].search([], limit=1)
+        cls.simple_product = cls.env["product.template"].search(
+            [
+                ("sale_ok", "=", True),
+                ("is_published", "=", True),
+            ],
+            limit=20,
+        ).filtered(lambda product: product._marketone_preview_full_allowed())[:1]
+
+    def test_shop_grid_preview_shell_and_cta_data(self):
+        response = self.url_open("/shop")
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        self.assertIn("marketone_shop_preview_offcanvas", html)
+        self.assertIn("marketone-shop-card-preview-slot", html)
+        self.assertIn("data-marketone-preview-allowed", html)
+        self.assertIn("data-product-template-id", html)
+        self.assertRegex(
+            html,
+            r'marketone-shop-card-cta[^>]*href="/shop/[^"]+"',
+            "CTA Voir conserve href fiche (fallback / SEO).",
+        )
+
+    def test_preview_route_returns_fragment_for_simple_product(self):
+        if not self.simple_product or not self.simple_product._marketone_preview_full_allowed():
+            self.skipTest("Produit simple publié requis pour preview V1.")
+        response = self.url_open(
+            f"/shop/product/preview/{self.simple_product.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        html = response.text
+        self.assertIn("marketone-shop-preview", html)
+        self.assertIn("marketone-shop-preview__full-link", html)
+        self.assertIn("Voir la fiche complète", html)
+        self.assertIn("marketone-shop-card-cart", html)
+        self.assertIn("marketone-shop-card-wishlist", html)
+
+    def test_preview_route_not_found_for_unknown_product(self):
+        response = self.url_open("/shop/product/preview/999999999")
+        self.assertEqual(response.status_code, 404)
+
+    def test_preview_full_allowed_false_for_multi_variant_template(self):
+        multi = self.env["product.template"].search(
+            [
+                ("sale_ok", "=", True),
+                ("is_published", "=", True),
+            ],
+            limit=50,
+        ).filtered(lambda product: product.product_variant_count > 1)[:1]
+        if not multi:
+            attr = self.env["product.attribute"].create({"name": "Taille UX4 Test"})
+            val_s = self.env["product.attribute.value"].create(
+                {"name": "S", "attribute_id": attr.id}
+            )
+            val_m = self.env["product.attribute.value"].create(
+                {"name": "M", "attribute_id": attr.id}
+            )
+            multi = self.env["product.template"].create(
+                {
+                    "name": "C-Kreyol UX-4 Preview Multi",
+                    "type": "consu",
+                    "list_price": 9.0,
+                    "sale_ok": True,
+                    "is_published": True,
+                    "attribute_line_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                "attribute_id": attr.id,
+                                "value_ids": [(6, 0, [val_s.id, val_m.id])],
+                            },
+                        )
+                    ],
+                }
+            )
+        self.assertFalse(multi._marketone_preview_full_allowed())
+        response = self.url_open(f"/shop/product/preview/{multi.id}")
+        self.assertEqual(response.status_code, 404)
