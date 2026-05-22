@@ -187,6 +187,51 @@ $_shop-tile-crop-scale: 1.29;
         }
     }
 
+    // UX-4 Lot 2 — feedback carte après ajout panier depuis la grille.
+    .oe_product_cart.marketone-shop-card--added-to-cart {
+        --o-wsale-card-border-color: rgba($ck-sauge, 0.42);
+    }
+
+    .marketone-shop-card-cart-feedback {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.625rem;
+        margin-top: 0.625rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba($ck-sauge, 0.08);
+        border: 1px solid rgba($ck-sauge, 0.22);
+
+        &[hidden] {
+            display: none !important;
+        }
+
+        &__label {
+            font-family: $marketone-font-body;
+            font-size: $marketone-label-sm;
+            font-weight: $marketone-weight-semibold;
+            color: $ck-sauge;
+            line-height: 1.2;
+        }
+
+        &__link {
+            flex: 0 0 auto;
+            font-family: $marketone-font-body;
+            font-size: $marketone-label-sm;
+            font-weight: $marketone-weight-semibold;
+            color: $ck-text;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            white-space: nowrap;
+
+            &:hover,
+            &:focus-visible {
+                color: $ck-sauge;
+            }
+        }
+    }
+
     .oe_product_cart .oe_product_image,
     .oe_product_cart .o_wsale_product_image {
         // Panier au survol — overlay bas droite de la zone photo.
