@@ -38,6 +38,15 @@
             <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="move"/>
         </xpath>
 
+        <!-- UX-4 Lot 2 — feedback local carte après ajout panier. -->
+        <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="after">
+            <div class="marketone-shop-card-cart-feedback" hidden="hidden" aria-live="polite">
+                <span class="marketone-shop-card-cart-feedback__label">Ajouté au panier</span>
+                <a href="/shop/cart"
+                   class="marketone-shop-card-cart-feedback__link">Voir le panier</a>
+            </div>
+        </xpath>
+
         <!-- Suppression description courte (description_sale) -->
         <xpath expr="//div[hasclass('oe_subdescription_wrapper')]" position="replace"/>
 
@@ -61,6 +70,17 @@
         <xpath expr="//div[hasclass('o_wsale_product_sub')]//div[hasclass('product_price')]"
                position="attributes">
             <attribute name="class" add="marketone-shop-card-price" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- UX-4 Lot 2 — handler grille dédié (bouton défini dans shop_product_buttons). -->
+    <template id="marketone_shop_product_buttons_cart"
+              inherit_id="website_sale.shop_product_buttons"
+              name="Marketone: panier grille UX-4 Lot 2"
+              priority="56">
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="attributes">
+            <attribute name="class" remove="a-submit" add="marketone-shop-card-cart" separator=" "/>
+            <attribute name="t-att-data-show-quantity">False</attribute>
         </xpath>
     </template>
 </odoo>

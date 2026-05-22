@@ -8,7 +8,7 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve documentaire MOA** (`19.0.15.11.1`) · Lots 2–4 — planifiés |
+| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.2`) · Lots 3–4 gelés |
 
 **Régression obligatoire :** [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE_BOUTIQUE_MOA.md)  
 **Sections à rejouer selon lot :** voir tableau ci-dessous.
@@ -187,7 +187,7 @@ Si le visiteur public est **GO** mais que L1.C1–C2 n’a pas pu être exécut�
 
 # Lot 2 — Panier sans sortie + feedback carte
 
-> **Statut :** planifié — ne pas recetter avant implémentation Lot 2.
+> **Statut :** **GO avec réserve documentaire MOA** (`12.2` — 2026-05-22).
 
 ## Objectif MOA
 
@@ -231,7 +231,11 @@ Ajout au panier depuis la grille `/shop` **sans redirection** `/shop/cart`. Feed
 
 ## Verdict Lot 2
 
-**Verdict :** ☐ GO · ☐ GO avec réserve · ☐ NO GO · ☐ Non exécuté (Lot 2 pending)
+**Verdict :** ☐ GO · ☑ GO avec réserve documentaire · ☐ NO GO · ☐ Non exécuté (Lot 2 pending)
+
+**Réserves :** Scénario connecté L2.C1 non rejoué · polices Google Fonts CORS en sandbox (non bloquant).
+
+**Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md)
 
 ---
 

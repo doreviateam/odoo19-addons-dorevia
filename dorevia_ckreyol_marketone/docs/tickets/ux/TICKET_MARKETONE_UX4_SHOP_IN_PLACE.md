@@ -4,9 +4,11 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX4_SHOP_IN_PLACE` |
 | **Type** | **UX** — extension légère `website_sale` / `website_sale_wishlist` |
-| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · Lots 2–3 à venir |
+| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 en cours** · Lot 3 gelé |
 | **Version livrée Lot 1** | **`19.0.15.11.1`** |
-| **PR Lot 1** | **#12** — merge proposable |
+| **Version cible Lot 2** | **`19.0.15.12.2`** (correctif feedback + mobile post NO GO `12.1`) |
+| **Branche Lot 2** | `feat/marketone-ux4-lot2-cart-in-place` |
+| **PR Lot 1** | **#12** — mergée |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
 | **Branche Lot 1** | `feat/marketone-ux4-lot1-wishlist-toggle` |
@@ -89,14 +91,16 @@ Le chantier **ne part pas de zéro** :
 
 ---
 
-### Lot 2 — Ajout panier sans sortie + feedback carte · **P1**
+### Lot 2 — Ajout panier sans sortie + feedback carte · **P1 · CLÔTURÉ GO avec réserve**
 
 | Élément | Détail |
 |---------|--------|
 | **Objectif** | Feedback local carte après add-to-cart sans quitter `/shop` |
-| **Standard** | `WebsiteSale._onClickAdd` · `/shop/cart/update_json` · mode `stay` |
-| **Interdit** | Réimplémenter le panier Odoo |
-| **Livrables** | État « Ajouté au panier » · lien « Voir le panier » · compteur header |
+| **Standard** | Service `cart` Odoo 19 · `/shop/cart/add` · mode `stay` |
+| **JS** | Interaction `marketone_shop_cart_add.js` — grille `.marketone-shop-card-cart` |
+| **QWeb** | Feedback « Ajouté au panier » · lien « Voir le panier » · retrait `a-submit` |
+| **SCSS** | `.marketone-shop-card--added-to-cart` · bandeau feedback |
+| **Tests** | Tag `dorevia_marketone_shop_in_place` |
 | **Recette** | § Lot 2 recette UX-4 |
 
 **Critère GO Lot 2 :**
@@ -165,7 +169,8 @@ Le chantier **ne part pas de zéro** :
 ```text
 views/pages/shop_product_tile_conversion.xml   → CTA carte (QWeb)
 views/pages/shop_product_preview.xml           → Lot 3 — panneau preview
-static/src/interactions/marketone_shop_wishlist_toggle.js → Interaction Odoo 19 (Lot 1) + Lots 2–3
+static/src/interactions/marketone_shop_wishlist_toggle.js → Lot 1
+static/src/interactions/marketone_shop_cart_add.js      → Lot 2
 static/src/scss/_shop_product_cards.scss       → feedback carte
 static/src/scss/_shop_product_preview.scss     → Lot 3
 controllers/website_sale_wishlist.py           → remove_by_product (Lot 1)
@@ -179,7 +184,7 @@ tests/test_marketone_shop_in_place.py          → Lot 1+
 |-------|-----|------|
 | `/shop/wishlist/add` | — | Standard Odoo |
 | `/shop/wishlist/remove_by_product` | 1 | Toggle grille |
-| `/shop/cart/update_json` | 2 | Standard Odoo (stay) |
+| `/shop/cart/add` | 2 | Standard Odoo (stay) |
 | `/shop/product/preview/<id>` | 3 | Fragment HTML preview |
 
 ---
@@ -225,6 +230,8 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | Date | Version | Lot | Verdict |
 |------|---------|-----|---------|
 | 2026-05-20 | — | Analyse technique | Validée MOA |
-| 2026-05-22 | `19.0.15.11.1` | Lot 1 | **GO avec réserve documentaire** |
+| 2026-05-22 | `19.0.15.11.1` | Lot 1 | **GO avec réserve documentaire** · PR #12 mergée |
+| 2026-05-22 | `19.0.15.12.1` | Lot 2 reprise | **NO GO** — feedback hidden + mobile KO |
+| 2026-05-22 | `19.0.15.12.2` | Lot 2 reprise | **GO avec réserve documentaire** |
 
 **Correctif `11.1` (post NO GO recette) :** Odoo 19 utilise l’API `Interaction` (`add_product_to_wishlist_button.js`), pas `publicWidget.ProductWishlist`. Migration vers `marketone_shop_wishlist_toggle.js` · retrait `o_add_wishlist` sur grille · route `remove_by_product` en `jsonrpc`.
