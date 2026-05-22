@@ -38,6 +38,11 @@
             <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="move"/>
         </xpath>
 
+        <!-- UX-4 Lot 2 — PTAV origine unique pour consolidation panier. -->
+        <xpath expr='//form[contains(@t-attf-class, "oe_product_cart")]' position="attributes">
+            <attribute name="t-att-data-marketone-no-variant-ptav-ids">",".join(map(str, product._marketone_grid_no_variant_ptav_ids()))</attribute>
+        </xpath>
+
         <!-- UX-4 Lot 2 — feedback local carte après ajout panier. -->
         <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="after">
             <div class="marketone-shop-card-cart-feedback" hidden="hidden" aria-live="polite">
@@ -45,6 +50,10 @@
                 <a href="/shop/cart"
                    class="marketone-shop-card-cart-feedback__link">Voir le panier</a>
             </div>
+            <!-- UX-4 Lot 3 — emplacement preview mobile inline. -->
+            <div class="marketone-shop-card-preview-slot d-lg-none"
+                 hidden="hidden"
+                 aria-live="polite"/>
         </xpath>
 
         <!-- Suppression description courte (description_sale) -->
@@ -63,6 +72,9 @@
         <xpath expr="//div[hasclass('o_wsale_product_sub')]/*[1]" position="before">
             <a t-att-href="product_href"
                class="marketone-shop-card-cta"
+               t-att-data-product-template-id="product.id"
+               t-att-data-marketone-preview-allowed="product._marketone_preview_full_allowed()"
+               aria-expanded="false"
                aria-label="Voir le produit"
                title="Voir">Voir</a>
         </xpath>
@@ -76,7 +88,7 @@
     <!-- UX-4 Lot 2 — handler grille dédié (bouton défini dans shop_product_buttons). -->
     <template id="marketone_shop_product_buttons_cart"
               inherit_id="website_sale.shop_product_buttons"
-              name="Marketone: panier grille UX-4 Lot 2"
+              name="Marketone panier grille UX-4 Lot 2"
               priority="56">
         <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="attributes">
             <attribute name="class" remove="a-submit" add="marketone-shop-card-cart" separator=" "/>

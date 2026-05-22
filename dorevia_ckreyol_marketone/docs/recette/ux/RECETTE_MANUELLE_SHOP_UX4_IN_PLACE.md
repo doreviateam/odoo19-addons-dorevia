@@ -8,7 +8,10 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.2`) · Lots 3–4 gelés |
+| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — recette exécutée · GO avec réserve documentaire proposé** (`13.1`) · Lot 4 continu |
+| **Branche Lot 3** | `feat/marketone-ux4-lot3-preview-voir` |
+| **PR Lot 3 (cible)** | `[CK][UX-4] Lot 3 — Preview Voir sans sortie de /shop` |
+| **Note arbitrage Lot 3** | [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) |
 
 **Régression obligatoire :** [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE_BOUTIQUE_MOA.md)  
 **Sections à rejouer selon lot :** voir tableau ci-dessous.
@@ -42,7 +45,7 @@ Chaque évolution UX-4 doit prouver **deux choses** :
 |-----|---------------|----------------------|----------------|
 | **Lot 1** | § L1 · § L1.0 (console) | B1 · B4 · B5 · B6 · B7 · [W1–W4](#w1w4--critères-wishlist-standard-lot-1) | `dorevia_marketone_shop_in_place` + wishlist + régression |
 | **Lot 2** | § L2 | B1 · B4 · B8 · conversion tile | + smoke lot3 |
-| **Lot 3** | § L3 | B1 · B4 · B9 · B10 | + preview tests |
+| **Lot 3** | § L3 · § G3 | B1 · **B4** · **B7** · **B8** · **B9** · **B10** | + preview tests |
 | **Lot 4** | § L4 | **B1–B10 complet** | Suite complète § C référence |
 
 ---
@@ -187,7 +190,7 @@ Si le visiteur public est **GO** mais que L1.C1–C2 n’a pas pu être exécut�
 
 # Lot 2 — Panier sans sortie + feedback carte
 
-> **Statut :** **GO avec réserve documentaire MOA** (`12.2` — 2026-05-22).
+> **Statut :** **GO avec réserve documentaire MOA** (`12.3` — 2026-05-22) · PR #13 mergée.
 
 ## Objectif MOA
 
@@ -241,32 +244,99 @@ Ajout au panier depuis la grille `/shop` **sans redirection** `/shop/cart`. Feed
 
 # Lot 3 — Voir sans sortie / preview in-page
 
-> **Statut :** **GELÉ P2** — ne pas exécuter avant arbitrage MOA Lot 3 et implémentation.
+> **Statut :** **Arbitrage MOA GO avec réserve documentaire** (2026-05-22) · branche `feat/marketone-ux4-lot3-preview-voir` autorisée · **pas de merge sans recette MOA**.
+>
+> **Note :** [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md)
 
 ## Objectif MOA
 
-Le CTA **« Voir »** ouvre une prévisualisation produit **non modale** dans `/shop`. Photo et titre restent des liens vers la fiche complète.
+Le CTA **« Voir »** ouvre une prévisualisation produit **non modale** dans `/shop` (URL inchangée). **Photo et titre** restent des liens vers la fiche complète (gel MOA — non modifiable).
 
-## Scénario visiteur public (spec)
+## Prérequis Lot 3
+
+- Lots 1–2 **GO MOA** (`11.1` · `12.3`).
+- Arbitrage MOA Lot 3 validé (note ci-dessus).
+
+## Arbitrages MOA Lot 3 (V1)
+
+| Sujet | Décision MOA |
+|-------|--------------|
+| CTA « Voir » | Preview in-page · URL `/shop` · fiche complète = destination secondaire |
+| Photo / titre | Liens fiche **inchangés** |
+| Desktop | Offcanvas latéral **droit non modal** · grille visible · fermeture × / ESC / re-clic |
+| Mobile | Preview **inline sous tuile** · une seule ouverte · **pas de bottom sheet** V1 · 390 px sans débordement |
+| Contenu V1 | Image · titre · prix · origine · collection/label (sans filtre) · description courte · panier · wishlist · « Voir la fiche complète » |
+| Variantes | Variante unique → preview complète · multi-variante / configurable → **fallback fiche obligatoire** V1 |
+| Deep-link preview | **Interdit V1** |
+| Modal popup | **Interdit** |
+
+## Critères GO Lot 3 (G3.1–G3.10)
+
+| # | Critère | Recette associée | ☐ |
+|---|---------|------------------|---|
+| G3.1 | Clic « Voir » : preview visible · **URL `/shop`** (query/hash acceptés · pas navigation fiche) | L3.1 | |
+| G3.2 | Desktop : panneau latéral droit · grille reste visible · **pas modal bloquante** | L3.2 | |
+| G3.3 | Mobile : preview inline sous tuile · **390 px** sans débordement · une seule preview ouverte | L3.3 | |
+| G3.4 | Photo + titre tuile : navigation fiche **inchangée** | L3.5 · **B10** | |
+| G3.5 | Contenu minimal V1 présent (§ arbitrages) | L3.7 | |
+| G3.6 | Panier depuis preview : comportement aligné Lot 2 · URL `/shop` | L3.8 · **B8** | |
+| G3.7 | Wishlist depuis preview : comportement aligné Lot 1 · URL `/shop` | L3.8 · **B7** | |
+| G3.8 | Lien « Voir la fiche complète » → fiche produit | L3.4 · **B10** | |
+| G3.9 | Fermeture preview (× / ESC / re-clic) sans erreur JS | L3.6 | |
+| G3.10 | Régression **B1 · B4 · B7 · B8 · B9 · B10** · tests auto verts | § Régression Lot 3 | |
+
+## Scénario visiteur public L3
 
 | # | Étape | Résultat attendu | ☐ |
 |---|-------|------------------|---|
-| L3.1 | Clic **Voir** | Preview s’ouvre · URL `/shop` (éventuellement hash/query) | |
-| L3.2 | Desktop | Panneau latéral droit · grille reste visible | |
-| L3.3 | Mobile | Bloc détail intégré / accordéon sous tuile | |
+| L3.1 | Clic **Voir** (produit variante unique) | Preview s’ouvre · URL `/shop` | |
+| L3.2 | Desktop | Panneau latéral droit · grille visible · pas de modal | |
+| L3.3 | Mobile 390 px | Bloc inline sous tuile · pas de bottom sheet · pas de scroll horizontal | |
 | L3.4 | Lien « Voir la fiche complète » | Navigation fiche produit | |
-| L3.5 | Clic photo ou titre | Navigation fiche produit (gel MOA) | |
-| L3.6 | Fermeture preview (ESC / croix) | Retour état grille · pas de modal | |
+| L3.5 | Clic photo ou titre (tuile) | Navigation fiche produit (gel MOA) | |
+| L3.6 | Fermeture preview (× / ESC / re-clic « Voir ») | Retour état grille · pas de modal | |
+| L3.7 | Contenu preview | Image · titre · prix · origine · collection · description courte | |
+| L3.8 | Panier + wishlist depuis preview | Add in-place · compteurs header cohérents | |
+| L3.V1 | Clic **Voir** (produit multi-variante / configurable) | **Fallback fiche produit** (pas preview interactive V1) | |
 
 ## Régression Lot 3
 
-| Section | ☐ |
-|---------|---|
-| B1 · B4 · **B9** · **B10** | |
+| Section | Focus | ☐ |
+|---------|-------|---|
+| **B1** | Smoke `/shop` · `/shop/cart` · `/shop/wishlist` | |
+| **B4** | Tuile conversion : photo · Voir/prix · panier survol · wishlist — **non-régression critique** | |
+| **B7** | Wishlist toggle in-place depuis grille — **conservé** | |
+| **B8** | Panier in-place depuis grille — **conservé** | |
+| **B9** | Preview « Voir » in-place — **nouveau** | |
+| **B10** | Destinations secondaires : photo · titre · fiche · header panier/wishlist | |
+
+Recette conversion tile : [`RECETTE_MANUELLE_SHOP_CONVERSION_TILE.md`](../boutique/RECETTE_MANUELLE_SHOP_CONVERSION_TILE.md).
+
+## Captures attendues Lot 3
+
+| ID | Sujet |
+|----|-------|
+| C-L3-1 | Desktop — preview ouverte · panneau droit · grille visible |
+| C-L3-2 | Mobile 390 px — preview inline sous tuile |
+| C-L3-3 | Contenu preview V1 complet |
+| C-L3-4 | Fermeture preview |
+| C-L3-5 | Fallback fiche — produit configurable (si disponible en catalogue) |
 
 ## Verdict Lot 3
 
-**Verdict :** ☐ GO · ☐ NO GO · ☐ Non exécuté (gel P2)
+| Verdict | Condition |
+|---------|-----------|
+| **GO MOA Lot 3** | G3.1–G3.10 OK · régression B4/B7/B8/B9/B10 OK · tests auto verts · recette desktop + mobile |
+| **GO avec réserve documentaire** | Visiteur public OK · réserve documentée (ex. L3.C1 connecté) |
+| **NO GO** | Régression tuile · modal · navigation forcée fiche au clic « Voir » · preview configurateur |
+
+**Verdict :** ☐ GO · ☑ GO avec réserve documentaire (proposé) · ☐ NO GO · ☐ Non exécuté (dev en cours)
+
+**Réserves :** L3.V1 fallback fiche non rejoué (0 produit multi-variante publié en catalogue sandbox) · polices Google Fonts CORS sandbox (non bloquant).
+
+**Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md)
+
+**Règle merge :** **pas de merge PR Lot 3 sans verdict MOA formel post-recette.**
 
 ---
 
@@ -288,8 +358,8 @@ Validation transversale : tous les invariants boutique + critères UX-4 B7–B10
 | B4 | Cards conversion | ☐ | ☐ | ☐ |
 | B5 | Wishlist | ☐ | ☐ | ☐ |
 | B6 | Mobile | ☐ | ☐ | ☐ |
-| B7 | Wishlist toggle in-place | ☐ | — | ☐ |
-| B8 | Panier in-place | — | ☐ | ☐ |
+| B7 | Wishlist toggle in-place | ☑ | ☑ | ☐ |
+| B8 | Panier in-place | — | ☑ | ☐ |
 | B9 | Preview Voir in-place | — | — | ☐ |
 | B10 | Destinations secondaires | ☐ | ☐ | ☐ |
 
@@ -314,6 +384,8 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | Date | Lot | Version | Exécuteur | Verdict | Rapport |
 |------|-----|---------|-----------|---------|---------|
 | 2026-05-22 | L1 | `19.0.15.11.1` | MOA | **GO avec réserve documentaire** | [`RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md) |
+| 2026-05-22 | L2 | `19.0.15.12.3` | MOA | **GO avec réserve documentaire** | [`RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md) |
+| 2026-05-22 | L3 | `19.0.15.13.1` | Codex | **GO avec réserve documentaire (proposé)** | [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md) |
 
 ---
 

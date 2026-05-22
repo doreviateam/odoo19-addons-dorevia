@@ -977,3 +977,37 @@ class WebsiteSaleMarketone(WebsiteSale):
     )
     def marketone_origines_redirect(self, **kwargs):
         return request.redirect(MARKETONE_ORIGIN_CANONICAL_QUERY, code=301)
+
+    @route(
+        "/shop/product/preview/<int:product_template_id>",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def marketone_shop_product_preview(self, product_template_id, **kwargs):
+        """Fragment HTML preview UX-4 Lot 3 — produits variante unique non configurables."""
+        product = request.env["product.template"].browse(product_template_id).exists()
+        if (
+            not product
+            or not product.can_access_from_current_website()
+            or not product.sale_ok
+            or not product._marketone_preview_full_allowed()
+        ):
+            return request.make_response("", status=404)
+
+        variant = product.product_variant_id
+        return request.render(
+            "dorevia_ckreyol_marketone.marketone_shop_product_preview_fragment",
+            {
+                "product": product,
+                "product_variant": variant,
+                "product_href": product.website_url,
+                "origin_lines": product._marketone_get_origin_shop_lines(),
+                "category_labels": product.public_categ_ids.mapped("name"),
+                "combination_info": product._get_combination_info(
+                    product_id=variant.id,
+                    add_qty=1,
+                ),
+            },
+        )

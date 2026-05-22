@@ -1,0 +1,140 @@
+{
+  "version": "19.0.15.13.0",
+  "branch": "feat/marketone-ux4-lot3-preview-voir",
+  "pr": 14,
+  "executedAt": "2026-05-22T15:45:56.897Z",
+  "checks": {},
+  "consoleErrors": [],
+  "verdicts": {
+    "B1_shop": {
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    "B1_shop_cart": {
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    "B1_shop_wishlist": {
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    "B4": {
+      "ok": true,
+      "detail": "{\"cards\":24,\"voir\":24,\"previewShell\":true}"
+    },
+    "L3.1": {
+      "ok": true,
+      "detail": "http://localhost:18079/shop"
+    },
+    "G3.1": {
+      "ok": true,
+      "detail": "http://localhost:18079/shop"
+    },
+    "G3.2": {
+      "ok": true,
+      "detail": "offcanvas=true"
+    },
+    "G3.5": {
+      "ok": true,
+      "detail": "{\"url\":\"http://localhost:18079/shop\",\"pathname\":\"/shop\",\"innerWidth\":1280,\"scrollWidth\":1280,\"overflowX\":false,\"offcanvasVisible\":true,\"offcanvasBackdrop\":\"false\",\"previewVisible\":true,\"previewTitle\":\"Maniocookies salés La Platine\",\"previewPrice\":\"4,90 €\",\"previewOrigins\":true,\"previewCollections\":true,\"previewDescription\":true,\"previewFullLink\":\"/shop/maniocookies-sales-la-platine-7\",\"previewCartBtn\":true,\"previewWishBtn\":true,\"modalVisible\":false,\"backdropVisible\":false,\"openMobileSlots\":0,\"gridVisible\":true}"
+    },
+    "L3.7": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "G3.8": {
+      "ok": true,
+      "detail": "/shop/maniocookies-sales-la-platine-7"
+    },
+    "G3.6": {
+      "ok": true,
+      "detail": "cart 0->1"
+    },
+    "L3.8_cart": {
+      "ok": true,
+      "detail": "cart 0->1"
+    },
+    "G3.7": {
+      "ok": false,
+      "detail": "wish 0->0"
+    },
+    "L3.8_wish": {
+      "ok": false,
+      "detail": "wish 0->0"
+    },
+    "L3.6_esc": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "L3.6_reclick": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "L3.5": {
+      "ok": true,
+      "detail": "{\"title\":\"/shop/maniocookies-sales-la-platine-7\",\"photo\":\"/shop/maniocookies-sales-la-platine-7\"}"
+    },
+    "G3.4": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "B10_title": {
+      "ok": true,
+      "detail": "/shop/maniocookies-sales-la-platine-7"
+    },
+    "B7": {
+      "ok": true,
+      "detail": "wish 0->1"
+    },
+    "B8": {
+      "ok": true,
+      "detail": "cart 0->1"
+    },
+    "B9": {
+      "ok": true,
+      "detail": "http://localhost:18079/shop"
+    },
+    "L3.3": {
+      "ok": true,
+      "detail": "{\"url\":\"http://localhost:18079/shop\",\"pathname\":\"/shop\",\"innerWidth\":390,\"scrollWidth\":390,\"overflowX\":false,\"offcanvasVisible\":false,\"offcanvasBackdrop\":\"false\",\"previewVisible\":true,\"previewTitle\":\"Maniocookies salés La Platine\",\"previewPrice\":\"4,90 €\",\"previewOrigins\":true,\"previewCollections\":true,\"previewDescription\":true,\"previewFullLink\":\"/shop/maniocookies-sales-la-platine-7\",\"previewCartBtn\":true,\"previewWishBtn\":true,\"modalVisible\":false,\"backdropVisible\":false,\"openMobileSlots\":1,\"gridVisible\":true}"
+    },
+    "G3.3": {
+      "ok": true,
+      "detail": "slots=1"
+    },
+    "G3.3_single": {
+      "ok": true,
+      "detail": "slots=1"
+    },
+    "L3.V1": {
+      "ok": null,
+      "detail": "Aucun produit multi-variante/configurable publié en catalogue (0/50) — réserve documentaire"
+    },
+    "G3.9": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "G3.10": {
+      "ok": true,
+      "detail": "ok"
+    }
+  },
+  "products": {
+    "allowed": {
+      "templateId": "7",
+      "href": "/shop/maniocookies-sales-la-platine-7",
+      "titleHref": "/shop/maniocookies-sales-la-platine-7",
+      "photoHref": "/shop/maniocookies-sales-la-platine-7",
+      "ariaLabel": "Maniocookies salés La Platine"
+    },
+    "denied": null
+  },
+  "summary": {
+    "total": 28,
+    "failed": 2,
+    "failedIds": [
+      "G3.7",
+      "L3.8_wish"
+    ]
+  }
+}
