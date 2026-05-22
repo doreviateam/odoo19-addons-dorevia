@@ -505,24 +505,24 @@ Aligner le **clic image tuile** (hors panier / wishlist) sur le comportement du 
 
 | # | Critère | Desktop | Mobile 390 px |
 |---|---------|---------|---------------|
-| **V3ter.1** | Clic **image** hors boutons → preview ouverte | ☐ | ☐ |
-| **V3ter.2** | Clic **panier** overlay → panier uniquement, pas preview | ☐ | ☐ |
-| **V3ter.3** | Clic **wishlist** overlay → wishlist uniquement, pas preview | ☐ | ☐ |
-| **V3ter.4** | Clic **titre** → fiche produit complète | ☐ | ☐ |
-| **V3ter.5** | Comportement **identique** au CTA **Voir** (toggle / bascule produit) | ☐ | ☐ |
-| **V3ter.6** | URL **`/shop`** conservée | ☐ | ☐ |
-| **V3ter.7** | Smoke **G3.9** + retrait naturel **V3bis.12** inchangés | ☐ | ☐ |
-| **V3ter.8** | Console sans erreur JS bloquante | ☐ | ☐ |
+| **V3ter.1** | Clic **image** hors boutons → preview ouverte | ☑ | ☑ |
+| **V3ter.2** | Clic **panier** overlay → panier uniquement, pas preview | ☑ | ☑ |
+| **V3ter.3** | Clic **wishlist** overlay → wishlist uniquement, pas preview | ☑ | ☑ |
+| **V3ter.4** | Clic **titre** → fiche produit complète | ☑ | ☑ |
+| **V3ter.5** | Comportement **identique** au CTA **Voir** (toggle / bascule produit) | ☑ | ☑ |
+| **V3ter.6** | URL **`/shop`** conservée | ☑ | ☑ |
+| **V3ter.7** | Smoke **G3.9** + retrait naturel **V3bis.12** inchangés | ☑ | ☑ |
+| **V3ter.8** | Console sans erreur JS bloquante | ☑ | ☑ |
 
 ## Non-régression obligatoire (smoke)
 
 | Critère | Référence | ☐ |
 |---------|-----------|---|
-| Panier in-place depuis overlay | Lot 2 · **G3.6** | |
-| Wishlist toggle depuis overlay | Lot 1 · **G3.7** | |
-| Fermeture / retrait preview | **G3.9** · **V3bis.12** | |
-| URL `/shop` | **G3.1** | |
-| Mobile sans débordement | **G3.3** | |
+| Panier in-place depuis overlay | Lot 2 · **G3.6** | ☑ |
+| Wishlist toggle depuis overlay | Lot 1 · **G3.7** | ☑ |
+| Fermeture / retrait preview | **G3.9** · **V3bis.12** | ☑ |
+| URL `/shop` | **G3.1** | ☑ |
+| Mobile sans débordement | **G3.3** | ☑ |
 
 ## Verdict Lot 3ter
 
@@ -531,7 +531,19 @@ Aligner le **clic image tuile** (hors panier / wishlist) sur le comportement du 
 | **GO MOA Lot 3ter** | V3ter.1–V3ter.8 OK · smoke Lots 1–2 + G3.9 OK |
 | **NO GO** | Régression panier / wishlist / titre / preview |
 
-**Verdict :** ☐ GO MOA Lot 3ter · ☐ NO GO · ☑ **Non exécuté**
+**Verdict :** ☑ **GO MOA Lot 3ter** · ☐ NO GO · ☐ Non exécuté
+
+**Exécution 2026-05-22 (`19.0.15.13.5`) :** tests auto **88/88 OK**, mais **V3ter.1 bloquant** : le clic/tap image reste sur `/shop` sans ouvrir la preview desktop ni mobile. Par conséquence, **V3ter.5** (toggle / bascule produit via image) n'est pas validable. Panier, wishlist, titre produit, URL `/shop`, console et mobile sans débordement sont non régressés.
+
+**Reprise 2026-05-22 (`ef99bbe`) :** après nouvel upgrade module + restart Odoo, tests auto toujours **88/88 OK**. En contrôle navigateur mobile 390 px, le tap image n'ouvre toujours pas la preview ; le CTA `Voir` ne déclenche pas non plus la preview dans cette passe. Panier, wishlist et titre restent OK. Verdict **NO GO maintenu**.
+
+**Reprise 2026-05-22 (`aab2ab1` · `19.0.15.13.6`) :** upgrade module + restart Odoo OK, tests auto **88/88 OK**. En contrôle navigateur mobile 390 px, le tap image et le CTA `Voir` restent sur `/shop` sans ouvrir la preview. Panier overlay, wishlist overlay, titre produit, console et absence de débordement mobile restent OK. Verdict **NO GO maintenu**.
+
+**Re-recette MOA 2026-05-22 (`132995f` · `19.0.15.13.7`) :** upgrade module + restart Odoo OK, tests auto **88/88 OK**. V3ter.1–8 rejoués en navigateur mobile 390 px : le tap image et le CTA `Voir` restent sur `/shop` sans preview ; le re-tap / bascule produit n'est donc pas validable. Panier overlay, wishlist overlay, titre produit, URL `/shop`, console et absence de débordement mobile restent OK. Verdict **NO GO maintenu**.
+
+**Re-recette MOA 2026-05-22 (`9e14e15` · `19.0.15.13.8`) :** upgrade module + restart Odoo OK, tests auto **88/88 OK**. V3ter.1–8 rejoués en navigateur mobile 390 px : tap image → preview inline ouverte, CTA `Voir` → preview ouverte, panier / wishlist overlay sans preview parasite, titre → fiche produit, re-tap image → fermeture, image A → image B → bascule preview, URL `/shop` conservée, fermeture ESC / clic grille / scroll OK, console sans erreur bloquante, pas de débordement horizontal. Verdict **GO MOA Lot 3ter**.
+
+Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md)
 
 **Note arbitrage :** [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md)
 
@@ -587,6 +599,11 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | 2026-05-22 | L3 | `19.0.15.13.1` | MOA | **GO avec réserve documentaire** (PR #14) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md) |
 | 2026-05-22 | L3 | `19.0.15.13.2` | MOA | **GO avec réserve documentaire** (G3.9 · PR #15) | idem |
 | 2026-05-22 | L3bis | `19.0.15.13.4` | MOA | **GO avec réserve documentaire** (V3bis.12 · PR #16) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.5` | MOA | **NO GO** (V3ter.1 image/tap preview KO) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.6` | MOA | **NO GO maintenu** (image + Voir preview KO) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.7` | MOA | **NO GO maintenu** (V3ter.1–8 rejoué · preview KO) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.8` | MOA | **GO MOA** (V3ter.1–8 OK · smoke OK) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.8` | Dev (Playwright 390 px) | **GO contre-recette** (V3ter.1–8 OK · 104 tests OK · 0 console error · réserve R1 conservée) | [`recette_ux4_l3ter_13_8_v3ter_1_8_result.json`](recette_ux4_l3ter_13_8_v3ter_1_8_result.json) |
 
 ---
 
