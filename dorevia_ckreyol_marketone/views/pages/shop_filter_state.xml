@@ -17,6 +17,9 @@
                t-attf-class="marketone-filter-chips__chip marketone-filter-chips__chip--#{chip['type']}"
                t-att-title="'Retirer ' + chip['label']">
               <span class="marketone-filter-chips__label" t-out="chip['label']"/>
+              <t t-if="chip.get('count') is not None">
+                <span class="marketone-filter-chips__count" t-out="' (%s)' % chip['count']"/>
+              </t>
               <span class="marketone-filter-chips__remove oi oi-close" role="img" aria-hidden="true"/>
             </a>
           </t>
@@ -29,16 +32,9 @@
             inherit_id="website_sale.products"
             name="Marketone: UX-1 état filtres /shop"
             priority="35">
-    <!-- Colonne catalogue : chips + reset juste au-dessus de la toolbar (sous le titre). -->
-    <xpath expr="//div[@id='products_grid']//header[@id='o_wsale_products_header']//div[hasclass('products_header')]" position="before">
+    <!-- Colonne catalogue : chips sous la ligne recherche / résultat / tri. -->
+    <xpath expr="//div[hasclass('products_header')]" position="after">
       <t t-call="dorevia_ckreyol_marketone.marketone_shop_filter_state_bar"/>
-    </xpath>
-    <xpath expr="//div[hasclass('products_header')]" position="inside">
-      <p class="marketone-filter-state__count mb-0"
-         title="Nombre total de produits correspondant aux filtres actifs (toutes pages)">
-        <strong t-out="marketone_search_count"/>
-        produit<t t-if="marketone_search_count != 1">s</t> trouvé<t t-if="marketone_search_count != 1">s</t>
-      </p>
     </xpath>
   </template>
 </odoo>

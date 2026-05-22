@@ -325,6 +325,52 @@ def _marketone_price_chip_label(env, values):
     return f"Prix : {min_label} — {max_label}"
 
 
+def _marketone_shop_grid_title_label(search_count, filtered=False):
+    """Libellé compteur global grille /shop (MOA)."""
+    count = int(search_count or 0)
+    if count == 0:
+        if filtered:
+            return "Aucun produit trouvé"
+        return "Aucun produit disponible"
+    if count == 1:
+        return "1 produit disponible"
+    return f"{count} produits disponibles"
+
+
+MARKETONE_SHOP_EMPTY_STATE_FILTERED_LABEL = (
+    "Aucun produit ne correspond à cette sélection"
+)
+
+
+def _marketone_shop_empty_state_is_filtered(values, kwargs, chips):
+    """True si recherche ou filtres actifs — état vide central contextualisé MOA."""
+    vals = values or {}
+    mapping = kwargs or {}
+    search = (
+        vals.get("search")
+        or vals.get("original_search")
+        or mapping.get("search")
+        or ""
+    )
+    if str(search).strip():
+        return True
+    if chips:
+        return True
+    if vals.get("tags") or mapping.get("tags"):
+        return True
+    if vals.get("category"):
+        return True
+    if vals.get("attrib_set"):
+        return True
+    if mapping.get("attribute_values"):
+        return True
+    if mapping.get(MARKETONE_CATEGORY_PARAM) or mapping.get(MARKETONE_COLLECTION_PARAM):
+        return True
+    if _marketone_is_filtering_by_price(vals):
+        return True
+    return False
+
+
 class WebsiteSaleMarketone(WebsiteSale):
     """Portes catalogue : Incontournables (6.1) et Origines (6.2)."""
 
@@ -596,7 +642,7 @@ class WebsiteSaleMarketone(WebsiteSale):
         return QueryURL(url, **url_kwargs)()
 
     def _marketone_build_active_filter_chips(self, values, kwargs):
-        """Chips filtres actifs — Collections → Catégories → Origines → Prix."""
+        """Chips filtres actifs — Catégories → Collections → Origines → Prix."""
         vals = values or {}
         mapping = kwargs or {}
         env = request.env
@@ -608,30 +654,6 @@ class WebsiteSaleMarketone(WebsiteSale):
             for attr_id, value_ids in (vals.get("attrib_values") or {}).items()
         }
         active_attrib_query = _marketone_attrib_values_to_query_list(attrib_values)
-
-        collections, coll_requested = _marketone_resolve_collection_facet(mapping)
-        if coll_requested and collections:
-            for coll in collections.sorted("name"):
-                coll_slug = coll.slug
-                remaining = [
-                    other.slug
-                    for other in collections
-                    if other.id != coll.id
-                ]
-                chips.append(
-                    {
-                        "type": "collection",
-                        "label": coll.name,
-                        "remove_url": self._marketone_shop_keep_url(
-                            vals,
-                            mapping,
-                            path_category,
-                            marketone_collection=remaining or 0,
-                            attribute_values=active_attrib_query or None,
-                        ),
-                        "key": coll_slug,
-                    }
-                )
 
         categories, cat_requested, _cat_invalid = _marketone_resolve_category_facet(
             mapping, path_category=path_category
@@ -655,6 +677,7 @@ class WebsiteSaleMarketone(WebsiteSale):
                     {
                         "type": "category",
                         "label": cat.name,
+                        "category_id": cat.id,
                         "remove_url": self._marketone_shop_keep_url(
                             vals,
                             mapping,
@@ -663,6 +686,31 @@ class WebsiteSaleMarketone(WebsiteSale):
                             attribute_values=active_attrib_query or None,
                         ),
                         "key": slug,
+                    }
+                )
+
+        collections, coll_requested = _marketone_resolve_collection_facet(mapping)
+        if coll_requested and collections:
+            for coll in collections.sorted("name"):
+                coll_slug = coll.slug
+                remaining = [
+                    other.slug
+                    for other in collections
+                    if other.id != coll.id
+                ]
+                chips.append(
+                    {
+                        "type": "collection",
+                        "label": coll.name,
+                        "collection_id": coll.id,
+                        "remove_url": self._marketone_shop_keep_url(
+                            vals,
+                            mapping,
+                            path_category,
+                            marketone_collection=remaining or 0,
+                            attribute_values=active_attrib_query or None,
+                        ),
+                        "key": coll_slug,
                     }
                 )
 
@@ -688,6 +736,7 @@ class WebsiteSaleMarketone(WebsiteSale):
                     {
                         "type": "origin",
                         "label": val.name,
+                        "origin_value_id": value_id,
                         "remove_url": self._marketone_shop_keep_url(
                             vals,
                             mapping,
@@ -715,6 +764,86 @@ class WebsiteSaleMarketone(WebsiteSale):
                 }
             )
         return chips
+
+    def _marketone_shop_search_product_for_attrib_values(self, values, kwargs, attrib_values):
+        """Recherche boutique alignée grille avec ``attrib_values`` surchargés."""
+        vals = dict(values or {})
+        vals["attrib_values"] = {
+            int(attr_id): list(value_ids)
+            for attr_id, value_ids in (attrib_values or {}).items()
+        }
+        wk = dict(kwargs or {})
+        wk.pop("attribute_values", None)
+        return self._marketone_shop_search_product_without_facets(vals, wk, set())
+
+    def _marketone_chip_product_count(self, values, kwargs, chip, cache=None):
+        """Compteur optionnel chip — contexte courant sans ambiguïté (MOA)."""
+        cache = cache if cache is not None else {}
+        chip_type = chip.get("type")
+        if chip_type == "price":
+            return None
+        if chip_type == "category":
+            cat_id = chip.get("category_id")
+            if not cat_id:
+                return None
+            if "without_category" not in cache:
+                cache["without_category"] = (
+                    self._marketone_shop_search_product_without_category_facet(
+                        values, kwargs
+                    )
+                )
+            products = cache["without_category"]
+            return len(products.filtered(lambda p, cid=cat_id: cid in p.public_categ_ids.ids))
+        if chip_type == "collection":
+            coll_id = chip.get("collection_id")
+            if not coll_id:
+                return None
+            if "without_collection" not in cache:
+                cache["without_collection"] = (
+                    self._marketone_shop_search_product_without_collection_facet(
+                        values, kwargs
+                    )
+                )
+            products = cache["without_collection"].sudo()
+            return len(
+                products.filtered(
+                    lambda p, cid=coll_id: cid in p.marketone_collection_ids.ids
+                )
+            )
+        if chip_type == "origin":
+            value_id = chip.get("origin_value_id")
+            origin_attr = request.env.ref(
+                "dorevia_ckreyol_marketone.marketone_product_attribute_origin",
+                raise_if_not_found=False,
+            )
+            if not value_id or not origin_attr:
+                return None
+            attrib_values = {
+                int(attr_id): list(value_ids)
+                for attr_id, value_ids in ((values or {}).get("attrib_values") or {}).items()
+            }
+            attrib_values[int(origin_attr.id)] = [int(value_id)]
+            products = self._marketone_shop_search_product_for_attrib_values(
+                values, kwargs, attrib_values
+            )
+            return len(products)
+        return None
+
+    def _marketone_enrich_chip_counts(self, values, kwargs, chips):
+        """Ajoute ``count`` aux chips lorsque le calcul est fiable."""
+        if not chips:
+            return chips
+        cache = {}
+        enriched = []
+        for chip in chips:
+            chip_data = dict(chip)
+            count = self._marketone_chip_product_count(
+                values, kwargs, chip_data, cache=cache
+            )
+            if count is not None:
+                chip_data["count"] = count
+            enriched.append(chip_data)
+        return enriched
 
     def _get_additional_shop_values(self, values, **kwargs):
         result = super()._get_additional_shop_values(values, **kwargs)
@@ -797,7 +926,9 @@ class WebsiteSaleMarketone(WebsiteSale):
                     0
                 ]._marketone_culture_url()
 
-        chips = self._marketone_build_active_filter_chips(values, kwargs)
+        chips = self._marketone_enrich_chip_counts(
+            values, kwargs, self._marketone_build_active_filter_chips(values, kwargs)
+        )
         result["marketone_active_filter_chips"] = chips
         result["marketone_show_filter_state_bar"] = bool(chips)
         result["marketone_search_count"] = search_count
@@ -813,6 +944,18 @@ class WebsiteSaleMarketone(WebsiteSale):
             marketone_collection=0,
         )
         result["marketone_has_active_filters"] = bool(chips)
+        filtered_context = _marketone_shop_empty_state_is_filtered(
+            values, kwargs, chips
+        )
+        result["marketone_shop_grid_title"] = _marketone_shop_grid_title_label(
+            search_count, filtered=filtered_context
+        )
+        result["marketone_shop_empty_state_filtered"] = filtered_context
+        result["marketone_shop_empty_state_label"] = (
+            MARKETONE_SHOP_EMPTY_STATE_FILTERED_LABEL
+            if result["marketone_shop_empty_state_filtered"]
+            else None
+        )
         return result
 
     @route(
@@ -834,3 +977,37 @@ class WebsiteSaleMarketone(WebsiteSale):
     )
     def marketone_origines_redirect(self, **kwargs):
         return request.redirect(MARKETONE_ORIGIN_CANONICAL_QUERY, code=301)
+
+    @route(
+        "/shop/product/preview/<int:product_template_id>",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def marketone_shop_product_preview(self, product_template_id, **kwargs):
+        """Fragment HTML preview UX-4 Lot 3 — produits variante unique non configurables."""
+        product = request.env["product.template"].browse(product_template_id).exists()
+        if (
+            not product
+            or not product.can_access_from_current_website()
+            or not product.sale_ok
+            or not product._marketone_preview_full_allowed()
+        ):
+            return request.make_response("", status=404)
+
+        variant = product.product_variant_id
+        return request.render(
+            "dorevia_ckreyol_marketone.marketone_shop_product_preview_fragment",
+            {
+                "product": product,
+                "product_variant": variant,
+                "product_href": product.website_url,
+                "origin_lines": product._marketone_get_origin_shop_lines(),
+                "category_labels": product.public_categ_ids.mapped("name"),
+                "combination_info": product._get_combination_info(
+                    product_id=variant.id,
+                    add_qty=1,
+                ),
+            },
+        )

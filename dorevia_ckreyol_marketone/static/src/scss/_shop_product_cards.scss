@@ -117,6 +117,13 @@ $_shop-tile-crop-scale: 1.29;
         }
     }
 
+    // UX-4 Lot 3ter — curseur exploration image lorsque preview autorisée.
+    .oe_product_cart[data-marketone-preview-allowed="True"] {
+        .oe_product_image .oe_product_image_link {
+            cursor: pointer;
+        }
+    }
+
     // Wishlist overlay — coin supérieur droit, discret.
     .oe_product_cart .oe_product_image,
     .oe_product_cart .o_wsale_product_image {
@@ -165,11 +172,84 @@ $_shop-tile-crop-scale: 1.29;
                 color: $ck-terracotta;
             }
 
+            &:disabled,
+            &.disabled {
+                opacity: 1;
+                cursor: pointer;
+            }
+
             &--visual {
                 cursor: default;
             }
         }
+    }
 
+    // UX-4 Lot 1 — feedback carte lorsque le produit est retenu en wishlist.
+    .oe_product_cart.marketone-shop-card--in-wishlist {
+        --o-wsale-card-border-color: rgba($ck-terracotta, 0.35);
+
+        .marketone-shop-card-wishlist {
+            color: $ck-terracotta;
+            background: rgba($ck-bg-card-body, 0.94);
+        }
+    }
+
+    // UX-4 Lot 2 — feedback carte après ajout panier depuis la grille.
+    .oe_product_cart.marketone-shop-card--added-to-cart {
+        --o-wsale-card-border-color: rgba($ck-sauge, 0.42);
+
+        .marketone-shop-card-cart-feedback,
+        .marketone-shop-card-cart-feedback--visible {
+            display: flex !important;
+        }
+    }
+
+    .marketone-shop-card-cart-feedback {
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.625rem;
+        margin-top: 0.625rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba($ck-sauge, 0.08);
+        border: 1px solid rgba($ck-sauge, 0.22);
+
+        &[hidden] {
+            display: none !important;
+        }
+
+        &--visible {
+            display: flex !important;
+        }
+
+        &__label {
+            font-family: $marketone-font-body;
+            font-size: $marketone-label-sm;
+            font-weight: $marketone-weight-semibold;
+            color: $ck-sauge;
+            line-height: 1.2;
+        }
+
+        &__link {
+            flex: 0 0 auto;
+            font-family: $marketone-font-body;
+            font-size: $marketone-label-sm;
+            font-weight: $marketone-weight-semibold;
+            color: $ck-text;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            white-space: nowrap;
+
+            &:hover,
+            &:focus-visible {
+                color: $ck-sauge;
+            }
+        }
+    }
+
+    .oe_product_cart .oe_product_image,
+    .oe_product_cart .o_wsale_product_image {
         // Panier au survol — overlay bas droite de la zone photo.
         .o_wsale_product_btn {
             position: absolute;
@@ -195,6 +275,27 @@ $_shop-tile-crop-scale: 1.29;
     .oe_product_cart .oe_product_image .o_wsale_product_btn:focus-within {
         opacity: 1;
         pointer-events: auto;
+    }
+
+    // UX-4 Lot 2 — mobile / touch : panier toujours visible (Odoo 19 masque en visibility:hidden < lg).
+    @media (max-width: 991.98px) {
+        #o_wsale_products_grid.o_wsale_products_opt_actions_onhover .oe_product_cart {
+            .o_wsale_product_btn {
+                visibility: visible !important;
+                pointer-events: auto !important;
+                z-index: 5 !important;
+            }
+
+            .o_wsale_product_action_row .btn,
+            .marketone-shop-card-cart {
+                opacity: 1 !important;
+                transform: none !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                position: relative;
+                z-index: 6 !important;
+            }
+        }
     }
 
     .oe_product_cart .o_wsale_product_information {

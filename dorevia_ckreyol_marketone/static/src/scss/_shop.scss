@@ -18,7 +18,8 @@ body:has(.marketone-shop) {
     }
 
     .o_wsale_products_shop_title,
-    #products_grid_content_title {
+    .marketone-shop-featured-title,
+    .marketone-shop-origin-title {
         margin-bottom: $marketone-space-md;
         padding: 0.85rem 1.15rem;
         border-radius: $marketone-radius-md;
@@ -161,16 +162,16 @@ body:has(.marketone-shop) {
         }
     }
 
-    // Sidebar filtres : Collections → Catégories → Origines → Prix (ordre MOA fixe, flex order).
+    // Sidebar filtres : Catégories → Collections → Origines → Prix (ordre MOA fixe, flex order).
     #products_grid_before .o_wsale_products_grid_before_rail {
         display: flex;
         flex-direction: column;
 
-        .marketone-shop-collections-accordion {
+        .products_categories {
             order: 10;
         }
 
-        .products_categories {
+        .marketone-shop-collections-accordion {
             order: 20;
         }
 

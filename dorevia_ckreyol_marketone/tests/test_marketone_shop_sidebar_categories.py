@@ -126,7 +126,9 @@ class TestMarketoneShopSidebarCategories(HttpCase):
     def _sidebar_block(self, html):
         start = html.find("marketone-shop-categories-accordion")
         self.assertGreater(start, -1)
-        end = html.find("products_attributes_filters", start)
+        end = html.find("marketone-shop-collections-accordion", start)
+        if end < 0:
+            end = html.find("products_attributes_filters", start)
         self.assertGreater(end, start)
         return html[start:end]
 

@@ -16,6 +16,7 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 
 | Zone | Sous-dossier | Contenu |
 |------|--------------|---------|
+| `recette/` | [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](recette/REFERENCE_RECETTE_BOUTIQUE_MOA.md) | **Point d'entrée recette `/shop`** — invariants + anti-régression |
 | `recette/` | [`reference/`](recette/reference/) | Environnement, assets, commandes de base |
 | `recette/` | [`lots/`](recette/lots/) | Recettes des lots socle 1-6 |
 | `recette/` | [`boutique/`](recette/boutique/) | Catalogue, collections, sidebar, portes boutique |
@@ -49,8 +50,9 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 | [`recette/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md`](./recette/boutique/RECETTE_MANUELLE_CATALOGUE_CATEGORIES.md) | Recette manuelle catégories catalogue |
 | [`pilotage/ROADMAP.md`](./pilotage/ROADMAP.md) | Roadmap par lots |
 | [`recette/reference/ENV_REFERENCE.md`](./recette/reference/ENV_REFERENCE.md) | Base `ckr-marketone-01` et validation |
+| **[`recette/REFERENCE_RECETTE_BOUTIQUE_MOA.md`](./recette/REFERENCE_RECETTE_BOUTIQUE_MOA.md)** | **Référence boutique MOA** — invariants + checklist anti-régression `/shop` |
 | [`recette/reference/ASSETS_REFERENCE.md`](./recette/reference/ASSETS_REFERENCE.md) | Banque PNG marketplace (`docs/assets`) — recette BO |
-| [`recette/RECETTE_MANUELLE.md`](./recette/lots/RECETTE_MANUELLE.md) | Plan de recette manuelle MOA (tous lots) |
+| [`recette/RECETTE_MANUELLE.md`](./recette/lots/RECETTE_MANUELLE.md) | Plan de recette manuelle MOA (lots socle — **complété par la référence boutique pour `/shop`**) |
 | [`recette/RECETTE_MANUELLE_LOT4.md`](./recette/lots/RECETTE_MANUELLE_LOT4.md) | **Recette manuelle Lot 4** (fiche produit) |
 
 ## Doctrine produit C-Kreyol

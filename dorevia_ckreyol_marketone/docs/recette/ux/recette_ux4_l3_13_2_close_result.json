@@ -1,0 +1,85 @@
+{
+  "desktopOpenClick": {
+    "node": "36282",
+    "error": null
+  },
+  "desktopBeforeClose": {
+    "modal": false,
+    "overflowX": false,
+    "previewExists": true,
+    "previewRect": {
+      "cx": 1080,
+      "cy": 405.44140625,
+      "h": 664.8828125,
+      "w": 368,
+      "x": 896,
+      "y": 73
+    },
+    "previewText": "Maniocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croustillants, sélection épicerie fine créole.\n\n Ajouter au panier\nVoir la fiche complète",
+    "url": "http://localhost:18079/shop",
+    "visibleClose": [],
+    "voirActive": 1
+  },
+  "desktopClose": {
+    "attempted": false
+  },
+  "desktopAfterClose": {
+    "modal": false,
+    "overflowX": false,
+    "previewExists": true,
+    "previewRect": {
+      "cx": 1080,
+      "cy": 405.44140625,
+      "h": 664.8828125,
+      "w": 368,
+      "x": 896,
+      "y": 73
+    },
+    "previewText": "Maniocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croustillants, sélection épicerie fine créole.\n\n Ajouter au panier\nVoir la fiche complète",
+    "url": "http://localhost:18079/shop",
+    "visibleClose": [],
+    "voirActive": 1
+  },
+  "mobileOpenClick": {
+    "node": "38062",
+    "error": null
+  },
+  "mobileBeforeClose": {
+    "modal": false,
+    "overflowX": false,
+    "previewExists": true,
+    "previewRect": {
+      "cx": 103.5,
+      "cy": 709.671875,
+      "h": 608.84375,
+      "w": 139,
+      "x": 34,
+      "y": 405.25
+    },
+    "previewText": "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croustillants, sélection épicerie fine créole.\n\nVoir la fiche complète",
+    "url": "http://localhost:18079/shop",
+    "visibleClose": [],
+    "voirActive": 1
+  },
+  "mobileClose": {
+    "attempted": false
+  },
+  "mobileAfterClose": {
+    "modal": false,
+    "overflowX": false,
+    "previewExists": true,
+    "previewRect": {
+      "cx": 103.5,
+      "cy": 709.671875,
+      "h": 608.84375,
+      "w": 139,
+      "x": 34,
+      "y": 405.25
+    },
+    "previewText": "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croustillants, sélection épicerie fine créole.\n\nVoir la fiche complète",
+    "url": "http://localhost:18079/shop",
+    "visibleClose": [],
+    "voirActive": 1
+  },
+  "logs": []
+}

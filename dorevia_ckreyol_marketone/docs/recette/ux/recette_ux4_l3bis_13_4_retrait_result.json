@@ -1,0 +1,311 @@
+{
+  "date": "2026-05-22",
+  "branch": "feat/marketone-ux4-lot3bis-preview-premium",
+  "commit": "0ab149a",
+  "version": "19.0.15.13.4",
+  "url": "http://localhost:18079/shop",
+  "base": "ckr-marketone-01",
+  "tests_auto": {
+    "status": "OK",
+    "count": "88/88"
+  },
+  "desktop": {
+    "initial": {
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "inlineOpen": false,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollY": 0,
+      "visibleClose": true
+    },
+    "shots": {
+      "open": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3bis_13_4_desktop_open_20260522.png",
+      "gridClick": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3bis_13_4_desktop_after_grid_click_20260522.png",
+      "scrollOutside": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3bis_13_4_desktop_after_scroll_20260522.png",
+      "scrollInside": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3bis_13_4_desktop_scroll_inside_20260522.png"
+    },
+    "d1_open": {
+      "cssError": false,
+      "desktopOpen": true,
+      "horizontalOverflow": false,
+      "inlineOpen": true,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": true,
+      "scrollY": 69.5,
+      "visibleClose": true
+    },
+    "d2_grid_click": {
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "inlineOpen": false,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollY": 69.5,
+      "visibleClose": true
+    },
+    "d3_reopen_before_scroll": {
+      "cssError": false,
+      "desktopOpen": true,
+      "horizontalOverflow": false,
+      "inlineOpen": true,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": true,
+      "scrollY": 69.5,
+      "visibleClose": true
+    },
+    "d3_scroll_outside": {
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "inlineOpen": false,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollY": 598.5,
+      "visibleClose": true
+    },
+    "d4_scroll_inside": {
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "inlineOpen": false,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollY": 448.5,
+      "visibleClose": true
+    },
+    "d5_cross": {
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "inlineOpen": false,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollY": 448.5,
+      "visibleClose": true
+    },
+    "d5_esc": {
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "inlineOpen": false,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollY": 69.5,
+      "visibleClose": true
+    },
+    "d5_reclick_open": {
+      "cssError": false,
+      "desktopOpen": true,
+      "horizontalOverflow": false,
+      "inlineOpen": true,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": true,
+      "scrollY": 69.5,
+      "visibleClose": true
+    },
+    "d5_reclick": {
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "inlineOpen": false,
+      "modal": false,
+      "modalBackdrop": false,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollY": 69.5,
+      "visibleClose": true
+    },
+    "logs": [],
+    "ok": {
+      "d1": true,
+      "d2": true,
+      "d3": true,
+      "d4": false,
+      "d5_cross": true,
+      "d5_esc": true,
+      "d5_reclick": true,
+      "d6": true
+    }
+  },
+  "mobile": {
+    "initial": {
+      "closeTexts": [],
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "href": "http://localhost:18079/shop",
+      "inlineOpen": false,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollWidth": 390,
+      "scrollY": 0
+    },
+    "m1_open": {
+      "closeTexts": [
+        {
+          "aria": "Fermer l'aperçu",
+          "text": "Fermer"
+        }
+      ],
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "href": "http://localhost:18079/shop",
+      "inlineOpen": true,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "path": "/shop",
+      "previewOpen": true,
+      "scrollWidth": 390,
+      "scrollY": 19.5
+    },
+    "m2_scroll_outside": {
+      "closeTexts": [],
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "href": "http://localhost:18079/shop",
+      "inlineOpen": false,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollWidth": 390,
+      "scrollY": 439.5
+    },
+    "m3_reopen": {
+      "closeTexts": [
+        {
+          "aria": "Fermer l'aperçu",
+          "text": "Fermer"
+        }
+      ],
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "href": "http://localhost:18079/shop",
+      "inlineOpen": true,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "path": "/shop",
+      "previewOpen": true,
+      "scrollWidth": 390,
+      "scrollY": 19.5
+    },
+    "m3_inside_interaction": {
+      "closeTexts": [
+        {
+          "aria": "Fermer l'aperçu",
+          "text": "Fermer"
+        }
+      ],
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "href": "http://localhost:18079/shop",
+      "inlineOpen": true,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "path": "/shop",
+      "previewOpen": true,
+      "scrollWidth": 390,
+      "scrollY": 19.5
+    },
+    "m4_tap_outside": {
+      "closeTexts": [],
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "href": "http://localhost:18079/shop",
+      "inlineOpen": false,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollWidth": 390,
+      "scrollY": 19.5
+    },
+    "m5_reopen": {
+      "closeTexts": [
+        {
+          "aria": "Fermer l'aperçu",
+          "text": "Fermer"
+        }
+      ],
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "href": "http://localhost:18079/shop",
+      "inlineOpen": true,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "path": "/shop",
+      "previewOpen": true,
+      "scrollWidth": 390,
+      "scrollY": 19.5
+    },
+    "m5_close_rect": {
+      "aria": "Fermer l'aperçu",
+      "h": 33.5,
+      "text": "Fermer",
+      "w": 68.5546875,
+      "x": 123.8359375,
+      "y": 393.5
+    },
+    "m5_fermer": {
+      "closeTexts": [],
+      "cssError": false,
+      "desktopOpen": false,
+      "horizontalOverflow": false,
+      "href": "http://localhost:18079/shop",
+      "inlineOpen": false,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "path": "/shop",
+      "previewOpen": false,
+      "scrollWidth": 390,
+      "scrollY": 19.5
+    },
+    "logs": [],
+    "ok": {
+      "m1": true,
+      "m2": true,
+      "m3": true,
+      "m4": true,
+      "m5": true,
+      "m6": true,
+      "console": true
+    }
+  },
+  "verdict": "GO final Lot 3bis",
+  "notes": [
+    "Aucun effet modal/backdrop détecté",
+    "URL /shop conservée",
+    "Pas de débordement horizontal mobile",
+    "Console sans erreur bloquante",
+    "Desktop D4: à 1280x900 la preview n’a pas de scroll interne; interaction interne contrôlée sans fermeture, et retrait naturel confirmé hors preview."
+  ]
+}

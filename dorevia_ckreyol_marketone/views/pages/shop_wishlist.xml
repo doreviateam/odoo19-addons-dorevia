@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wishlist standard Odoo — cosmétique CK uniquement (MOA). -->
+
+    <!-- Bouton grille natif Odoo : doublon avec overlay marketone (coin image). -->
+    <record id="website_sale_wishlist.add_to_wishlist" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- Page /shop/wishlist — scope visuel Marketone. -->
+    <template id="marketone_wishlist_page_scope"
+              inherit_id="website_sale_wishlist.product_wishlist"
+              name="Marketone: page wishlist — scope CK"
+              priority="20">
+        <xpath expr="//div[@id='wrap']" position="attributes">
+            <attribute name="class" add="marketone-shop marketone-shop-wishlist" separator=" "/>
+        </xpath>
+    </template>
+</odoo>

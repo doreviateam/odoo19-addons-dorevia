@@ -91,3 +91,29 @@ class ProductTemplate(models.Model):
 
         detail["base_domain"] = base_domain
         return detail
+
+    def _marketone_grid_no_variant_ptav_ids(self):
+        """PTAV no_variant à origine unique — consolidation panier grille UX-4."""
+        self.ensure_one()
+        return self.attribute_line_ids.filtered(
+            lambda line: line.attribute_id.create_variant == "no_variant"
+            and len(line.value_ids) == 1
+        ).mapped("product_template_value_ids").ids
+
+    def _marketone_preview_full_allowed(self):
+        """Preview V1 complète (panier/wishlist) — variante unique non configurable."""
+        self.ensure_one()
+        if not self.sale_ok or self.type == "combo":
+            return False
+        if self.product_variant_count != 1:
+            return False
+        variant = self.product_variant_id
+        if variant.optional_product_ids:
+            return False
+        for line in self.attribute_line_ids:
+            if (
+                line.attribute_id.create_variant == "always"
+                and len(line.value_ids) > 1
+            ):
+                return False
+        return True

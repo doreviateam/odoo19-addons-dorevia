@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- MOA — haut grille /shop : L1 compteur + recherche + tri · L2 chips. -->
+    <template id="marketone_shop_grid_title"
+              inherit_id="website_sale.products"
+              name="Marketone: haut grille /shop — compteur, recherche, tri"
+              priority="37">
+        <!-- Titres Odoo natifs remplacés par le compteur discret (gauche ligne principale). -->
+        <xpath expr="//h1[hasclass('o_wsale_shop_title')]" position="replace"/>
+        <xpath expr="//h1[contains(@t-attf-class, 'o_wsale_category_title')]" position="replace"/>
+
+        <xpath expr="//div[hasclass('products_header')]" position="attributes">
+            <attribute name="class" add="marketone-shop-catalog-toolbar" separator=" "/>
+        </xpath>
+
+        <!-- Compteur à gauche de la ligne principale (avant le champ recherche). -->
+        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_products_header_search_form_container')]" position="before">
+            <div class="marketone-shop-grid-meta">
+                <p t-if="not marketone_featured_mode and not marketone_origin_mode"
+                   id="products_grid_content_title"
+                   class="marketone-shop-grid-result mb-0"
+                   t-out="marketone_shop_grid_title"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

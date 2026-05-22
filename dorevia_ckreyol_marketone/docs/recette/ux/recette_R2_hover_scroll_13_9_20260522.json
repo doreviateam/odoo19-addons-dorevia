@@ -1,0 +1,162 @@
+{
+  "version": "19.0.15.13.9",
+  "date": "20260522",
+  "sections": {
+    "Desktop": {
+      "R2-D0_preview_opened": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": true,
+          "inlineOpen": false,
+          "scrollY": 0,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-D1_hover_wheel_keeps_panel": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": true,
+          "inlineOpen": false,
+          "scrollY": 400,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-D2_hover_wheel_x2_keeps_panel": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": true,
+          "inlineOpen": false,
+          "scrollY": 800,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-D3_mouse_move_in_panel_keeps_panel": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": true,
+          "inlineOpen": false,
+          "scrollY": 800,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-D4_click_in_panel_keeps_panel": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": true,
+          "inlineOpen": false,
+          "scrollY": 800,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-D5_outside_wheel_closes_panel": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": false,
+          "inlineOpen": false,
+          "scrollY": 800,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-D6_no_backdrop_no_modal": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": false,
+          "inlineOpen": false,
+          "scrollY": 800,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-D7a_esc_still_works": {
+        "ok": true,
+        "obs": {}
+      },
+      "R2-D7b_cross_still_works": {
+        "ok": true,
+        "obs": {}
+      },
+      "R2-D8_console_clean": {
+        "ok": true,
+        "obs": {
+          "errors": 0
+        }
+      }
+    },
+    "Mobile": {
+      "R2-M0_preview_opened": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": false,
+          "inlineOpen": true,
+          "scrollY": 0,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-M1_scroll_in_slot_keeps_preview": {
+        "ok": true,
+        "obs": {
+          "scrolledInSlot": {
+            "found": true,
+            "scrollTop": 0
+          },
+          "after": {
+            "path": "/shop",
+            "desktopOpen": false,
+            "inlineOpen": true,
+            "scrollY": 0,
+            "hOverflow": false,
+            "backdrop": false
+          }
+        }
+      },
+      "R2-M2_page_scroll_outside_closes": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": false,
+          "inlineOpen": false,
+          "scrollY": 0,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-M3_close_btn_still_works": {
+        "ok": true,
+        "obs": {}
+      },
+      "R2-M4_no_overflow": {
+        "ok": true,
+        "obs": {
+          "path": "/shop",
+          "desktopOpen": false,
+          "inlineOpen": false,
+          "scrollY": 0,
+          "hOverflow": false,
+          "backdrop": false
+        }
+      },
+      "R2-M5_console_clean": {
+        "ok": true,
+        "obs": {
+          "delta": 0
+        }
+      }
+    }
+  },
+  "consoleErrors": []
+}
