@@ -5,88 +5,94 @@ import { Interaction } from '@web/public/interaction';
 
 const DESKTOP_QUERY = '(min-width: 992px)';
 
-const IMAGE_CLICK_SELECTOR =
-    '.oe_product_image_link, .oe_product_image_img_wrapper, .oe_product_image_img';
+/** État partagé — une seule preview ouverte, listeners document uniques. */
+const previewState = {
+    activeCta: null,
+    offcanvasEl: null,
+    offcanvasBody: null,
+    offcanvasCloseBtn: null,
+    controller: null,
+    globalListenersBound: false,
+};
 
 /**
  * UX-4 Lot 3 — preview « Voir » in-page depuis /shop.
  * UX-4 Lot 3bis — retrait naturel (clic / scroll hors panneau).
- * UX-4 Lot 3ter — clic image tuile aligné sur CTA Voir.
+ * UX-4 Lot 3ter — clic image tuile (lien photo) aligné sur CTA Voir.
  *
- * Instance unique sur `.marketone-shop` — délégation Colibri (Voir + image).
- * Source preview : dataset du CTA carte (Lot 3bis), pas le formulaire.
+ * Binding direct Colibri sur CTA + lien image (pattern Lot 3bis).
+ * Listeners document / dismiss : instance unique via previewState.
  */
 export class MarketoneShopPreview extends Interaction {
-    static selector = '.marketone-shop';
+    static selector =
+        '.marketone-shop .marketone-shop-card-cta, .marketone-shop .oe_product_cart[data-marketone-preview-allowed="True"] a.oe_product_image_link';
 
     dynamicContent = {
-        _root: { 't-on-click': this.onShopClick },
+        _root: { 't-on-click': this.onTriggerClick },
     };
 
     setup() {
         super.setup();
-        this._activeCta = null;
-        this._offcanvasEl = document.getElementById('marketone_shop_preview_offcanvas');
-        this._offcanvasBody = this._offcanvasEl?.querySelector(
-            '.marketone-shop-preview-offcanvas__body'
-        );
-        this._offcanvasCloseBtn = this._offcanvasEl?.querySelector(
-            '.marketone-shop-preview-offcanvas__close'
-        );
+        previewState.controller = this;
+        previewState.offcanvasEl =
+            previewState.offcanvasEl ||
+            document.getElementById('marketone_shop_preview_offcanvas');
+        previewState.offcanvasBody =
+            previewState.offcanvasBody ||
+            previewState.offcanvasEl?.querySelector('.marketone-shop-preview-offcanvas__body');
+        previewState.offcanvasCloseBtn =
+            previewState.offcanvasCloseBtn ||
+            previewState.offcanvasEl?.querySelector('.marketone-shop-preview-offcanvas__close');
 
-        if (this._offcanvasEl) {
-            this._offcanvasEl.addEventListener('hidden.bs.offcanvas', () => {
-                this._finishDesktopClose();
-            });
+        if (!previewState.globalListenersBound) {
+            previewState.globalListenersBound = true;
+            this._bindGlobalListeners();
         }
+    }
+
+    _bindGlobalListeners() {
+        previewState.offcanvasEl?.addEventListener('hidden.bs.offcanvas', () => {
+            previewState.controller?._finishDesktopClose();
+        });
 
         this._onCloseButtonClick = (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
-            this._closeAll();
+            previewState.controller?._closeAll();
         };
-        this._offcanvasCloseBtn?.addEventListener('click', this._onCloseButtonClick);
+        previewState.offcanvasCloseBtn?.addEventListener('click', this._onCloseButtonClick);
 
         this._onDocumentClickCapture = (ev) => {
             if (ev.target.closest('.marketone-shop-preview__close')) {
                 ev.preventDefault();
                 ev.stopPropagation();
-                this._closeAll();
+                previewState.controller?._closeAll();
             }
         };
         document.addEventListener('click', this._onDocumentClickCapture, true);
 
         this._onOutsideClick = (ev) => {
-            if (!this._activeCta || this._isDismissExemptTarget(ev.target)) {
+            if (!previewState.activeCta || this._isDismissExemptTarget(ev.target)) {
                 return;
             }
-            this._closeAll();
+            previewState.controller?._closeAll();
         };
         document.addEventListener('click', this._onOutsideClick);
 
         this._onOutsideScroll = (ev) => {
-            if (!this._activeCta || this._isScrollInsidePreview(ev.target)) {
+            if (!previewState.activeCta || this._isScrollInsidePreview(ev.target)) {
                 return;
             }
-            this._closeAll();
+            previewState.controller?._closeAll();
         };
         document.addEventListener('scroll', this._onOutsideScroll, true);
 
         this._onKeydown = (ev) => {
             if (ev.key === 'Escape') {
-                this._closeAll();
+                previewState.controller?._closeAll();
             }
         };
         document.addEventListener('keydown', this._onKeydown);
-    }
-
-    destroy() {
-        document.removeEventListener('click', this._onDocumentClickCapture, true);
-        document.removeEventListener('click', this._onOutsideClick);
-        document.removeEventListener('scroll', this._onOutsideScroll, true);
-        document.removeEventListener('keydown', this._onKeydown);
-        this._offcanvasCloseBtn?.removeEventListener('click', this._onCloseButtonClick);
-        super.destroy();
     }
 
     /**
@@ -101,7 +107,9 @@ export class MarketoneShopPreview extends Interaction {
             target.closest('#marketone_shop_preview_offcanvas') ||
                 target.closest('.marketone-shop-preview') ||
                 target.closest('.marketone-shop-card-cta') ||
-                target.closest(IMAGE_CLICK_SELECTOR)
+                target.closest(
+                    '.oe_product_image_link, .oe_product_image_img_wrapper, .oe_product_image_img'
+                )
         );
     }
 
@@ -114,15 +122,24 @@ export class MarketoneShopPreview extends Interaction {
             return false;
         }
         return Boolean(
-            this._offcanvasEl?.contains(target) ||
-                target.closest('.marketone-shop-preview')
+            previewState.offcanvasEl?.contains(target) ||
+                target.closest('.marketone-shop-preview') ||
+                target.closest('.marketone-shop-card-preview-slot--open')
         );
+    }
+
+    /**
+     * @param {HTMLElement} card
+     * @returns {HTMLElement|null}
+     */
+    _getCardPreviewCta(card) {
+        return card.querySelector('.marketone-shop-card-cta');
     }
 
     /**
      * @param {MouseEvent} ev
      */
-    async onShopClick(ev) {
+    async onTriggerClick(ev) {
         if (
             ev.target.closest(
                 '.marketone-shop-card-cart, .marketone-shop-card-wishlist, .o_wsale_product_btn'
@@ -131,39 +148,40 @@ export class MarketoneShopPreview extends Interaction {
             return;
         }
 
-        const cta = ev.target.closest('.marketone-shop-card-cta');
-        const fromImage = Boolean(ev.target.closest(IMAGE_CLICK_SELECTOR));
-        if (!cta && !fromImage) {
-            return;
-        }
-
-        const card = (cta || ev.target).closest('.oe_product_cart');
+        const trigger = ev.currentTarget;
+        const card = trigger.closest('.oe_product_cart');
         if (!card || card.classList.contains('marketone-shop-preview__actions')) {
             return;
         }
 
-        const stateCta = card.querySelector('.marketone-shop-card-cta');
-        if (!stateCta || stateCta.dataset.marketonePreviewAllowed !== 'True') {
+        const cta =
+            trigger.classList.contains('marketone-shop-card-cta')
+                ? trigger
+                : this._getCardPreviewCta(card);
+        if (!cta || cta.dataset.marketonePreviewAllowed !== 'True') {
             return;
         }
 
         ev.preventDefault();
         ev.stopPropagation();
 
-        const templateId = parseInt(stateCta.dataset.productTemplateId, 10);
+        const templateId = parseInt(cta.dataset.productTemplateId, 10);
         if (!templateId) {
             return;
         }
 
-        if (this._activeCta === stateCta) {
+        if (previewState.activeCta === cta) {
             this._closeAll();
             return;
         }
 
         this._closeAllImmediate();
+        this._showMobileLoading(card);
+
         const html = await this.waitFor(this._fetchPreview(templateId));
         if (!html) {
-            const fallbackHref = stateCta.getAttribute('href');
+            this._hideMobileLoading(card);
+            const fallbackHref = cta.getAttribute('href');
             if (fallbackHref) {
                 window.location.href = fallbackHref;
             }
@@ -171,9 +189,46 @@ export class MarketoneShopPreview extends Interaction {
         }
 
         if (window.matchMedia(DESKTOP_QUERY).matches) {
-            this._openDesktop(html, stateCta);
+            this._openDesktop(html, cta);
         } else {
-            this._openMobile(html, card, stateCta);
+            this._openMobile(html, card, cta);
+        }
+    }
+
+    /**
+     * @param {HTMLElement} card
+     */
+    _showMobileLoading(card) {
+        if (window.matchMedia(DESKTOP_QUERY).matches) {
+            return;
+        }
+        const slot = card.querySelector('.marketone-shop-card-preview-slot');
+        if (!slot) {
+            return;
+        }
+        this._clearPreviewContainer(slot);
+        slot.innerHTML =
+            '<div class="marketone-shop-preview marketone-shop-preview--loading" aria-busy="true" aria-live="polite">' +
+            '<div class="marketone-shop-preview__toolbar d-lg-none">' +
+            '<span class="marketone-shop-preview__toolbar-label">Découvrir le produit</span>' +
+            '</div></div>';
+        slot.hidden = false;
+        slot.classList.add('marketone-shop-card-preview-slot--loading');
+        card.classList.add('marketone-shop-card--preview-open');
+    }
+
+    /**
+     * @param {HTMLElement} card
+     */
+    _hideMobileLoading(card) {
+        const slot = card.querySelector('.marketone-shop-card-preview-slot');
+        if (!slot) {
+            return;
+        }
+        slot.classList.remove('marketone-shop-card-preview-slot--loading');
+        if (!slot.querySelector('.marketone-shop-preview')) {
+            slot.hidden = true;
+            card.classList.remove('marketone-shop-card--preview-open');
         }
     }
 
@@ -196,23 +251,23 @@ export class MarketoneShopPreview extends Interaction {
      * @param {HTMLElement} cta
      */
     _openDesktop(html, cta) {
-        if (!this._offcanvasEl || !this._offcanvasBody) {
+        if (!previewState.offcanvasEl || !previewState.offcanvasBody) {
             return;
         }
-        this._clearPreviewContainer(this._offcanvasBody);
-        this._offcanvasBody.innerHTML = html;
-        this._startPreviewInteractions(this._offcanvasBody);
-        this._activeCta = cta;
+        this._clearPreviewContainer(previewState.offcanvasBody);
+        previewState.offcanvasBody.innerHTML = html;
+        this._startPreviewInteractions(previewState.offcanvasBody);
+        previewState.activeCta = cta;
         this._setCtaExpanded(cta, true);
-        this._offcanvasEl.classList.add('marketone-shop-preview-offcanvas--open');
+        previewState.offcanvasEl.classList.add('marketone-shop-preview-offcanvas--open');
         const Offcanvas = window.bootstrap?.Offcanvas;
         if (Offcanvas) {
-            Offcanvas.getOrCreateInstance(this._offcanvasEl, {
+            Offcanvas.getOrCreateInstance(previewState.offcanvasEl, {
                 backdrop: false,
                 scroll: true,
             }).show();
         } else {
-            this._offcanvasEl.classList.add('show');
+            previewState.offcanvasEl.classList.add('show');
         }
     }
 
@@ -230,9 +285,10 @@ export class MarketoneShopPreview extends Interaction {
         slot.innerHTML = html;
         this._startPreviewInteractions(slot);
         slot.hidden = false;
+        slot.classList.remove('marketone-shop-card-preview-slot--loading');
         slot.classList.add('marketone-shop-card-preview-slot--open');
         card.classList.add('marketone-shop-card--preview-open');
-        this._activeCta = cta;
+        previewState.activeCta = cta;
         this._setCtaExpanded(cta, true);
     }
 
@@ -243,7 +299,8 @@ export class MarketoneShopPreview extends Interaction {
 
     _closeAllImmediate() {
         const Offcanvas = window.bootstrap?.Offcanvas;
-        const instance = this._offcanvasEl && Offcanvas?.getInstance(this._offcanvasEl);
+        const instance =
+            previewState.offcanvasEl && Offcanvas?.getInstance(previewState.offcanvasEl);
         if (instance) {
             instance.dispose();
         }
@@ -252,57 +309,61 @@ export class MarketoneShopPreview extends Interaction {
     }
 
     _closeDesktopPanel() {
-        if (!this._offcanvasEl) {
+        if (!previewState.offcanvasEl) {
             return;
         }
         const isOpen =
-            this._offcanvasEl.classList.contains('show') ||
-            this._offcanvasEl.classList.contains('marketone-shop-preview-offcanvas--open');
+            previewState.offcanvasEl.classList.contains('show') ||
+            previewState.offcanvasEl.classList.contains('marketone-shop-preview-offcanvas--open');
         if (!isOpen) {
             return;
         }
         const Offcanvas = window.bootstrap?.Offcanvas;
         if (Offcanvas) {
-            const instance = Offcanvas.getInstance(this._offcanvasEl);
+            const instance = Offcanvas.getInstance(previewState.offcanvasEl);
             if (instance) {
                 instance.hide();
                 return;
             }
         }
-        this._offcanvasEl.classList.remove('show');
+        previewState.offcanvasEl.classList.remove('show');
         this._finishDesktopClose();
     }
 
     _finishDesktopClose() {
-        if (this._offcanvasBody) {
-            this._clearPreviewContainer(this._offcanvasBody);
-            this._offcanvasBody.innerHTML = '';
+        if (previewState.offcanvasBody) {
+            this._clearPreviewContainer(previewState.offcanvasBody);
+            previewState.offcanvasBody.innerHTML = '';
         }
-        if (this._offcanvasEl) {
-            this._offcanvasEl.classList.remove(
+        if (previewState.offcanvasEl) {
+            previewState.offcanvasEl.classList.remove(
                 'show',
                 'marketone-shop-preview-offcanvas--open'
             );
         }
-        this._resetCtaState(this._activeCta);
-        this._activeCta = null;
+        this._resetCtaState(previewState.activeCta);
+        previewState.activeCta = null;
     }
 
     _closeMobile() {
         let closed = false;
-        for (const slot of document.querySelectorAll('.marketone-shop-card-preview-slot--open')) {
+        for (const slot of document.querySelectorAll('.marketone-shop-card-preview-slot--open, .marketone-shop-card-preview-slot--loading')) {
+            const card = slot.closest('.oe_product_cart');
             this._clearPreviewContainer(slot);
             slot.innerHTML = '';
             slot.hidden = true;
-            slot.classList.remove('marketone-shop-card-preview-slot--open');
+            slot.classList.remove(
+                'marketone-shop-card-preview-slot--open',
+                'marketone-shop-card-preview-slot--loading'
+            );
             closed = true;
-        }
-        for (const openCard of document.querySelectorAll('.marketone-shop-card--preview-open')) {
-            openCard.classList.remove('marketone-shop-card--preview-open');
+            if (card) {
+                card.classList.remove('marketone-shop-card--preview-open');
+            }
         }
         if (closed) {
-            this._resetCtaState(this._activeCta);
-            this._activeCta = null;
+            this._resetCtaState(previewState.activeCta);
+            previewState.activeCta = null;
         }
     }
 

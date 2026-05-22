@@ -109,6 +109,14 @@
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+
+    &--loading {
+        min-height: 2.5rem;
+
+        .marketone-shop-preview__toolbar {
+            margin-bottom: 0;
+        }
+    }
 }
 
 .marketone-shop-preview__media {
@@ -321,8 +329,31 @@
     background: rgba($ck-bg-cream, 0.45);
     border-radius: 0 0 0.75rem 0.75rem;
 
-    &--open {
+    &--open,
+    &--loading {
         display: block;
+    }
+
+    &--loading {
+        min-height: 3rem;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 1.75rem;
+            height: 1.75rem;
+            margin: 0.75rem auto;
+            border: 2px solid rgba($ck-sauge, 0.25);
+            border-top-color: $ck-sauge;
+            border-radius: 50%;
+            animation: marketone-preview-slot-spin 0.7s linear infinite;
+        }
+    }
+}
+
+@keyframes marketone-preview-slot-spin {
+    to {
+        transform: rotate(360deg);
     }
 }
 
