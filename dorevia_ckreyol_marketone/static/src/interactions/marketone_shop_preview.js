@@ -5,15 +5,23 @@ import { Interaction } from '@web/public/interaction';
 
 const DESKTOP_QUERY = '(min-width: 992px)';
 
+const IMAGE_CLICK_SELECTOR =
+    '.oe_product_image_link, .oe_product_image_img_wrapper, .oe_product_image_img';
+
 /**
  * UX-4 Lot 3 — preview « Voir » in-page depuis /shop.
  * UX-4 Lot 3bis — retrait naturel (clic / scroll hors panneau).
  * UX-4 Lot 3ter — clic image tuile aligné sur CTA Voir.
  *
- * Instance unique sur `#wrap.marketone-shop` — délégation clic Voir + image.
+ * Instance unique sur `.marketone-shop` — délégation Colibri (Voir + image).
+ * Source preview : dataset du CTA carte (Lot 3bis), pas le formulaire.
  */
 export class MarketoneShopPreview extends Interaction {
-    static selector = '#wrap.marketone-shop';
+    static selector = '.marketone-shop';
+
+    dynamicContent = {
+        _root: { 't-on-click': this.onShopClick },
+    };
 
     setup() {
         super.setup();
@@ -38,11 +46,6 @@ export class MarketoneShopPreview extends Interaction {
             this._closeAll();
         };
         this._offcanvasCloseBtn?.addEventListener('click', this._onCloseButtonClick);
-
-        this._onShopClick = (ev) => {
-            this.onPreviewTriggerClick(ev);
-        };
-        this.el.addEventListener('click', this._onShopClick);
 
         this._onDocumentClickCapture = (ev) => {
             if (ev.target.closest('.marketone-shop-preview__close')) {
@@ -78,7 +81,6 @@ export class MarketoneShopPreview extends Interaction {
     }
 
     destroy() {
-        this.el.removeEventListener('click', this._onShopClick);
         document.removeEventListener('click', this._onDocumentClickCapture, true);
         document.removeEventListener('click', this._onOutsideClick);
         document.removeEventListener('scroll', this._onOutsideScroll, true);
@@ -99,7 +101,7 @@ export class MarketoneShopPreview extends Interaction {
             target.closest('#marketone_shop_preview_offcanvas') ||
                 target.closest('.marketone-shop-preview') ||
                 target.closest('.marketone-shop-card-cta') ||
-                target.closest('.oe_product_image_link, .oe_product_image_img_wrapper, .oe_product_image_img')
+                target.closest(IMAGE_CLICK_SELECTOR)
         );
     }
 
@@ -118,38 +120,9 @@ export class MarketoneShopPreview extends Interaction {
     }
 
     /**
-     * @param {HTMLElement} card
-     * @returns {HTMLElement|null}
-     */
-    _getCardPreviewCta(card) {
-        return card.querySelector('.marketone-shop-card-cta');
-    }
-
-    /**
-     * @param {HTMLElement} card
-     * @returns {boolean}
-     */
-    _isCardPreviewAllowed(card) {
-        const cta = this._getCardPreviewCta(card);
-        const allowed =
-            card.dataset.marketonePreviewAllowed ?? cta?.dataset.marketonePreviewAllowed;
-        return allowed === 'True';
-    }
-
-    /**
-     * @param {HTMLElement} card
-     * @returns {number}
-     */
-    _getCardTemplateId(card) {
-        const cta = this._getCardPreviewCta(card);
-        const raw = card.dataset.productTemplateId ?? cta?.dataset.productTemplateId;
-        return parseInt(raw, 10);
-    }
-
-    /**
      * @param {MouseEvent} ev
      */
-    async onPreviewTriggerClick(ev) {
+    async onShopClick(ev) {
         if (
             ev.target.closest(
                 '.marketone-shop-card-cart, .marketone-shop-card-wishlist, .o_wsale_product_btn'
@@ -159,29 +132,25 @@ export class MarketoneShopPreview extends Interaction {
         }
 
         const cta = ev.target.closest('.marketone-shop-card-cta');
-        const fromImage = Boolean(
-            ev.target.closest(
-                '.oe_product_image_link, .oe_product_image_img_wrapper, .oe_product_image_img'
-            )
-        );
+        const fromImage = Boolean(ev.target.closest(IMAGE_CLICK_SELECTOR));
         if (!cta && !fromImage) {
             return;
         }
 
-        const card = ev.target.closest('.oe_product_cart');
-        if (!card || !this._isCardPreviewAllowed(card)) {
+        const card = (cta || ev.target).closest('.oe_product_cart');
+        if (!card || card.classList.contains('marketone-shop-preview__actions')) {
+            return;
+        }
+
+        const stateCta = card.querySelector('.marketone-shop-card-cta');
+        if (!stateCta || stateCta.dataset.marketonePreviewAllowed !== 'True') {
             return;
         }
 
         ev.preventDefault();
         ev.stopPropagation();
 
-        const stateCta = this._getCardPreviewCta(card);
-        if (!stateCta) {
-            return;
-        }
-
-        const templateId = this._getCardTemplateId(card);
+        const templateId = parseInt(stateCta.dataset.productTemplateId, 10);
         if (!templateId) {
             return;
         }
