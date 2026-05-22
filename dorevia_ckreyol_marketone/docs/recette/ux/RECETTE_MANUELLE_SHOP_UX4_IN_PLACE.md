@@ -8,11 +8,13 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.2`) · Lot 4 continu |
-| **Branche Lot 3** | `fix/marketone-ux4-lot3-preview-close` · PR **#15** |
-| **Branche Lot 3** | `feat/marketone-ux4-lot3-preview-voir` (PR **#14** mergée) |
-| **PR Lot 3** | **#14** — [`[CK][UX-4] Lot 3 — Preview Voir sans sortie de /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/14) — **mergée** |
+| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.2`) · **Lot 3bis — arbitrage GO** (`13.3` cible) · Lot 4 continu |
+| **Version Lot 3 (fonctionnel)** | **`19.0.15.13.2`** — **figée** |
+| **Version Lot 3bis (visuel)** | **`19.0.15.13.3`** (cible) |
+| **Branche Lot 3bis** | `feat/marketone-ux4-lot3bis-preview-premium` (autorisée post-note) |
+| **PR Lot 3** | **#14** · **#15** — mergées |
 | **Note arbitrage Lot 3** | [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) |
+| **Note arbitrage Lot 3bis** | [`NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md) |
 
 **Régression obligatoire :** [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE_BOUTIQUE_MOA.md)  
 **Sections à rejouer selon lot :** voir tableau ci-dessous.
@@ -46,7 +48,8 @@ Chaque évolution UX-4 doit prouver **deux choses** :
 |-----|---------------|----------------------|----------------|
 | **Lot 1** | § L1 · § L1.0 (console) | B1 · B4 · B5 · B6 · B7 · [W1–W4](#w1w4--critères-wishlist-standard-lot-1) | `dorevia_marketone_shop_in_place` + wishlist + régression |
 | **Lot 2** | § L2 | B1 · B4 · B8 · conversion tile | + smoke lot3 |
-| **Lot 3** | § L3 · § G3 | B1 · **B4** · **B7** · **B8** · **B9** · **B10** | + preview tests |
+| **Lot 3** | § L3 · § G3 · § L3.F · § L3.M | B1 · **B4** · **B7** · **B8** · **B9** · **B10** | + preview tests |
+| **Lot 3bis** | § **V3bis** · smoke L3.F / L3.M | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Aucun test auto supplémentaire |
 | **Lot 4** | § L4 | **B1–B10 complet** | Suite complète § C référence |
 
 ---
@@ -367,6 +370,88 @@ Recette conversion tile : [`RECETTE_MANUELLE_SHOP_CONVERSION_TILE.md`](../boutiq
 **Version livrée :** `19.0.15.13.2` · tests auto **88/88** · G3.9 revalidé (L3.F · L3.M).
 
 **Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md)
+
+---
+
+# Lot 3bis — Finition visuelle premium preview
+
+> **Statut :** **Arbitrage MOA GO** (2026-05-22) · **GO fonctionnel Lot 3 figé** sur `19.0.15.13.2` · passe **strictement visuelle** · branche autorisée post-note.
+>
+> **Note :** [`NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md)
+
+## Objectif MOA
+
+Améliorer la **qualité perçue** de la preview produit (mini-fiche courte premium, univers CK) **sans modifier le comportement** validé Lot 3.
+
+## Périmètre
+
+| In | Out |
+|----|-----|
+| SCSS `_shop_product_preview.scss` | JS interactions |
+| QWeb léger (wrappers · libellés · structure chips) | Routes · contrôleurs |
+| Tokens CK existants | Panier / wishlist comportement |
+| Version **`19.0.15.13.3`** | Photo / titre tuile · fallback · deep-link · configurateur |
+
+## Arbitrages MOA figés
+
+| Sujet | Décision |
+|-------|----------|
+| Titre header | **`Découvrir le produit`** (remplace « Aperçu produit ») |
+| Fermeture desktop | **Croix seule** · zone ≥ 44×44 · `aria-label` conservé · pas de bouton texte « Fermer » |
+| Fermeture mobile | **Fermer** texte discret conservé |
+| Image | **`object-fit: contain`** · cadre pastel · pas cover |
+| DA | Fond pastel CK · chips origines/collections · CTA respirant · lien fiche secondaire premium |
+
+## Critères recette visuelle V3bis
+
+| # | Critère | Desktop | Mobile 390 px |
+|---|---------|---------|---------------|
+| **V3bis.1** | Fond panneau / inline ≠ blanc Bootstrap brut · cohérence pastel CK | ☐ | ☐ |
+| **V3bis.2** | Image **cadrée** · contain · masse visuelle maîtrisée | ☐ | ☐ |
+| **V3bis.3** | Titre header **« Découvrir le produit »** | ☐ | ☐ |
+| **V3bis.4** | Fermeture **lisible** (× desktop · Fermer mobile) | ☐ | ☐ |
+| **V3bis.5** | Origines / Collections — chips ou labels pastel élégants | ☐ | ☐ |
+| **V3bis.6** | CTA panier **respirant** (pleine largeur recommandée) | ☐ | ☐ |
+| **V3bis.7** | Wishlist **intégrée** (cohérence tuile CK) | ☐ | ☐ |
+| **V3bis.8** | Lien **« Voir la fiche complète »** — secondaire premium · séparé des CTA | ☐ | ☐ |
+| **V3bis.9** | **Respiration** verticale globale (image · infos · actions) | ☐ | ☐ |
+| **V3bis.10** | **Cohérence palette** CK (pastel · terracotta · sauge) | ☐ | ☐ |
+| **V3bis.11** | Ressenti **maison de sélection** · pas panneau technique | ☐ | ☐ |
+
+## Non-régression fonctionnelle obligatoire (smoke)
+
+> Lot 3 **figé** — toute régression bloque le merge 3bis.
+
+| Critère | Référence | ☐ |
+|---------|-----------|---|
+| Fermeture preview | **G3.9** · **L3.F1–L3.F11** · **L3.M3–L3.M6** | |
+| Panier / wishlist depuis preview | **G3.6–G3.7** | |
+| Lien fiche complète | **G3.8** | |
+| URL `/shop` | **G3.1** | |
+| Mobile sans débordement | **G3.3** · **L3.M1** | |
+| Console sans erreur JS bloquante | **L3.F11** · **L3.M6** | |
+
+## Captures attendues Lot 3bis
+
+| ID | Sujet |
+|----|-------|
+| C-V3bis-1 | Desktop — preview ouverte |
+| C-V3bis-2 | Desktop — preview fermée |
+| C-V3bis-3 | Mobile 390 px — preview ouverte |
+| C-V3bis-4 | Mobile 390 px — preview fermée |
+| C-V3bis-5 | Produit **packshot** |
+| C-V3bis-6 | Produit **lifestyle** (si disponible) |
+
+## Verdict Lot 3bis
+
+| Verdict | Condition |
+|---------|-----------|
+| **GO MOA Lot 3bis** | V3bis.1–V3bis.11 OK · smoke G3.6–G3.9 OK · captures MOA · pas de régression Lot 3 |
+| **NO GO** | Régression fonctionnelle · scope creep · ressenti non premium |
+
+**Verdict :** ☐ GO MOA Lot 3bis · ☐ NO GO · ☑ **Non exécuté** (dev autorisé post-note)
+
+**Règle merge :** **pas de merge PR Lot 3bis sans validation visuelle MOA desktop + mobile.**
 
 ---
 
