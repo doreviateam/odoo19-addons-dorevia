@@ -3,11 +3,12 @@
 | Champ | Valeur |
 |-------|--------|
 | **Rôle** | **Document maître** — invariants GO MOA + checklist anti-régression |
-| **Version module de référence** | **`19.0.15.13.2`** (UX-4 Lot 3 — preview Voir in-place GO avec réserve · G3.9) |
+| **Version module de référence** | **`19.0.15.13.4`** (UX-4 Lot 3bis — preview premium + retrait naturel V3bis.12 GO avec réserve) |
+| **Version Lot 3 (fonctionnel figé)** | **`19.0.15.13.2`** |
 | **Version Lot 2 (réf.)** | **`19.0.15.12.3`** (UX-4 Lot 2 — panier in-place GO avec réserve) |
 | **Version Lot 1 (réf.)** | **`19.0.15.11.1`** (UX-4 Lot 1 — wishlist toggle GO avec réserve) |
 | **Base** | `ckr-marketone-01` · http://localhost:18079 |
-| **Dernière mise à jour doc** | 2026-05-22 (UX-4 Lot 3 reprise G3.9 · version réf. `13.2`) |
+| **Dernière mise à jour doc** | 2026-05-22 (UX-4 Lot 3bis `13.4` · V3bis.12 · PR #16) |
 | **Statut** | **Actif** — à mettre à jour à chaque GO MOA boutique |
 
 > Ce document **ne remplace pas** les recettes détaillées par ticket.  
@@ -309,5 +310,6 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | 2026-05-22 | UX-4 Lot 2 `19.0.15.12.3` | MOA | ☑ | ☑ B8 | ☑ 84/84 | Non | **GO avec réserve documentaire** |
 | 2026-05-22 | UX-4 Lot 3 `19.0.15.13.1` | MOA | ☑ | ☑ B9 · B10 | ☑ 13/13 | Non | **GO avec réserve documentaire** |
 | 2026-05-22 | UX-4 Lot 3 reprise `19.0.15.13.2` | MOA | ☑ | ☑ G3.9 | ☑ 88/88 | Non | **GO avec réserve documentaire** |
+| 2026-05-22 | UX-4 Lot 3bis `19.0.15.13.4` | MOA | ☑ | ☑ V3bis.12 | ☑ 88/88 | R1 mobile | **GO avec réserve documentaire** |
 
 **Commentaire :** B6 corrigé `10.2` · R2 accordéon Collections validé MOA `10.3`. UX-4 Lot 1 validé visiteur public `11.1` — réserve connecté documentaire. UX-4 Lot 2 validé desktop + mobile `12.3` — réserve L2.C1. UX-4 Lot 3 validé `13.2` — preview légère in-place · G3.9 fermeture revalidée · réserve **L3.V1** fallback configurable à rejouer.

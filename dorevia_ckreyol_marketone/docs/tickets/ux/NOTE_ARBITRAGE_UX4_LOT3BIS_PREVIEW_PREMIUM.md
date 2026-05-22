@@ -289,6 +289,10 @@ La preview desktop peut rester ouverte comme un **tiroir permanent** alors que l
 | **GO technique V3bis.12** | Implémentation légère · exception JS documentée · smoke G3.9 préservé |
 | **GO final Lot 3bis** | V3bis.12 recetté MOA · pas de régression |
 
+**Verdict MOA (2026-05-22) :** **GO final Lot 3bis** · version **`19.0.15.13.4`** · PR **#16** · réserve **R1** mobile documentaire.
+
+**Réserve maintenue :** **L3.V1** · **R1** — hors merge bloquant.
+
 ---
 
 ## 11. Historique
@@ -301,3 +305,4 @@ La preview desktop peut rester ouverte comme un **tiroir permanent** alors que l
 | 2026-05-22 | **GO note arbitrage** — branche autorisée post-documentation |
 | 2026-05-22 | GO visuel `13.3` avec réserve R1 mobile |
 | 2026-05-22 | Micro-arbitrage **V3bis.12** retrait naturel · exception JS documentée · cible `13.4` |
+| 2026-05-22 | **GO final Lot 3bis** · V3bis.12 recetté · PR **#16** · réserve R1 mobile |
