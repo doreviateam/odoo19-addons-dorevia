@@ -8,9 +8,9 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | ☑ **GO GLOBAL MOA UX-4** sur **`19.0.15.13.8`** (clôture documentaire 2026-05-22) · réserve **R1** non bloquante maintenue · Lots 1–3ter validés |
-| **Version de référence UX-4** | **`19.0.15.13.8`** · commit `9e14e15` · PR #17 |
-| **Version Lot 3ter (livrée)** | **`19.0.15.13.8`** (clic image tuile → preview · GO MOA) |
+| **Statut recette** | ☑ **GO GLOBAL MOA UX-4** · version courante **`19.0.15.13.9`** (correctif retrait naturel intelligent R2 · 2026-05-22) · réserves **R1** non bloquante maintenue |
+| **Version de référence UX-4** | **`19.0.15.13.9`** · PR #17 (branche `feat/ck-shop-wishlist-standard-go-moa`) |
+| **Version Lot 3ter (livrée)** | **`19.0.15.13.9`** (correctif R2 : survol + scroll panneau) |
 | **Note arbitrage Lot 3ter** | [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md) |
 | **Version Lot 3 (fonctionnel)** | **`19.0.15.13.2`** — **figée** |
 | **Version Lot 3bis (visuel)** | **`19.0.15.13.4`** (cible — incl. retrait naturel V3bis.12) |
@@ -447,6 +447,31 @@ Améliorer la **qualité perçue** de la preview produit (mini-fiche courte prem
 | V3bis.12-M5 | Bouton **Fermer** · smoke L3.M | Fermeture explicite OK | |
 | V3bis.12-M6 | Mobile 390 px | Pas de débordement horizontal | |
 
+## Recette ciblée retrait naturel intelligent — desktop (R2 — ajout MOA 2026-05-22)
+
+> **Règle MOA :** le panneau preview ne doit jamais disparaître tant que le curseur est à l'intérieur, y compris en cas de scroll de la page.
+
+| # | Action | Attendu | ☐ |
+|---|--------|---------|---|
+| **R2-D1** | Ouvrir preview · placer le curseur dans le panneau · scroller (molette) | **Preview maintenue** · page scrolle · panneau reste | ☑ |
+| **R2-D2** | Scroller à nouveau curseur dans le panneau | **Preview maintenue** | ☑ |
+| **R2-D3** | Déplacer le curseur à l'intérieur du panneau | **Preview maintenue** | ☑ |
+| **R2-D4** | Cliquer dans le corps du panneau hors CTA de fermeture | **Preview maintenue** | ☑ |
+| **R2-D5** | Curseur hors panneau · scroller | Preview se ferme (retrait naturel attendu) | ☑ |
+| **R2-D6** | Vérifier l'absence de backdrop / modal après fermeture | Pas de backdrop · pas de modal | ☑ |
+| **R2-D7** | Smoke : croix · ESC · re-clic « Voir » toujours fonctionnels | Fermetures explicites OK | ☑ |
+| **R2-D8** | Console | Aucune erreur JS bloquante | ☑ |
+
+## Recette ciblée retrait naturel intelligent — mobile (R2 — ajout MOA 2026-05-22)
+
+| # | Action | Attendu | ☐ |
+|---|--------|---------|---|
+| **R2-M1** | Ouvrir preview inline · scroller dans le slot preview | **Preview maintenue** | ☑ |
+| **R2-M2** | Scroller la page hors du slot preview | **Repli propre** | ☑ |
+| **R2-M3** | Rouvrir · bouton **Fermer** | Fermeture explicite OK | ☑ |
+| **R2-M4** | Mobile 390 px · pas de débordement horizontal | `hOverflow = false` | ☑ |
+| **R2-M5** | Console mobile | Aucune erreur JS bloquante | ☑ |
+
 ## Non-régression fonctionnelle obligatoire (smoke)
 
 > Lot 3 **figé** — toute régression bloque le merge 3bis.
@@ -610,13 +635,14 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | 2026-05-22 | **L3bis V3bis.12 ciblée** | `19.0.15.13.8` | Dev (Playwright desktop 1440 + mobile 390 px) | **GO retrait naturel rejoué** (D1–D6 OK · M1–M6 OK · 13/13 · 0 console error) | [`recette_v3bis12_13_8_20260522.json`](recette_v3bis12_13_8_20260522.json) |
 | 2026-05-22 | **L3ter I1–I8 clic image (desktop + mobile)** | `19.0.15.13.8` | Dev (Playwright 1440 + 390 px) | **GO clic image tuile = CTA Voir** (Desktop I1·I2·I3·I5·I6·I7·I8 OK · Mobile I1·I2·I4·I5·I6·I7·I8 OK · 14/14 · 0 console error) | [`recette_image_click_I1_I8_13_8_20260522.json`](recette_image_click_I1_I8_13_8_20260522.json) |
 | **2026-05-22** | **UX-4 GLOBAL** | **`19.0.15.13.8`** · `9e14e15` | **MOA** | ☑ **GO GLOBAL MOA UX-4 — clôture documentaire** (Lots 1–3ter validés · 64/64 navigateur · 194/194 auto · V3bis.12 OK · I1–I8 OK · R1 maintenue non bloquante) | § [Clôture documentaire UX-4](#clôture-documentaire-ux-4--version-de-référence-1901513-8) |
+| 2026-05-22 | **Correctif R2 — retrait naturel intelligent** | **`19.0.15.13.9`** | Dev (Playwright 1440 + 390 px) | **GO R2** · bug scroll-pendant-hover corrigé · 16/16 OK · 0 console error · smoke G3.9 OK | [`recette_R2_hover_scroll_13_9_20260522.json`](recette_R2_hover_scroll_13_9_20260522.json) |
 
 ---
 
 ## Clôture documentaire UX-4 — version de référence `19.0.15.13.8`
 
-> **GO GLOBAL MOA prononcé le 2026-05-22** sur `19.0.15.13.8` / commit `9e14e15` / PR **#17**.
-> La suspension MOA est **levée**. `19.0.15.13.8` devient la **version de référence UX-4 actuelle**.
+> **GO GLOBAL MOA prononcé le 2026-05-22** sur `19.0.15.13.8` · mis à jour `19.0.15.13.9` (correctif R2 retrait naturel intelligent) / PR **#17**.
+> La suspension MOA est **levée**. `19.0.15.13.9` est la **version de référence UX-4 actuelle**.
 
 ### Comportements cibles validés
 
