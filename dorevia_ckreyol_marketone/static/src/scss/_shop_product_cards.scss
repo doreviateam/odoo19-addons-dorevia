@@ -190,10 +190,15 @@ $_shop-tile-crop-scale: 1.29;
     // UX-4 Lot 2 — feedback carte après ajout panier depuis la grille.
     .oe_product_cart.marketone-shop-card--added-to-cart {
         --o-wsale-card-border-color: rgba($ck-sauge, 0.42);
+
+        .marketone-shop-card-cart-feedback,
+        .marketone-shop-card-cart-feedback--visible {
+            display: flex !important;
+        }
     }
 
     .marketone-shop-card-cart-feedback {
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: space-between;
         gap: 0.625rem;
@@ -205,6 +210,10 @@ $_shop-tile-crop-scale: 1.29;
 
         &[hidden] {
             display: none !important;
+        }
+
+        &--visible {
+            display: flex !important;
         }
 
         &__label {
@@ -261,13 +270,23 @@ $_shop-tile-crop-scale: 1.29;
         pointer-events: auto;
     }
 
-    // UX-4 Lot 2 — mobile / touch : panier toujours visible (pas de survol).
-    @media (max-width: 768px), (hover: none) {
-        .oe_product_cart .oe_product_image,
-        .oe_product_cart .o_wsale_product_image {
+    // UX-4 Lot 2 — mobile / touch : panier toujours visible (Odoo 19 masque en visibility:hidden < lg).
+    @media (max-width: 991.98px) {
+        #o_wsale_products_grid.o_wsale_products_opt_actions_onhover .oe_product_cart {
             .o_wsale_product_btn {
-                opacity: 1;
-                pointer-events: auto;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                z-index: 5 !important;
+            }
+
+            .o_wsale_product_action_row .btn,
+            .marketone-shop-card-cart {
+                opacity: 1 !important;
+                transform: none !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                position: relative;
+                z-index: 6 !important;
             }
         }
     }

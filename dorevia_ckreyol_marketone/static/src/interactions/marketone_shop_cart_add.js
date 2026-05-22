@@ -1,5 +1,6 @@
 /** @odoo-module **/
 
+import { browser } from '@web/core/browser/browser';
 import { rpc } from '@web/core/network/rpc';
 import { registry } from '@web/core/registry';
 import { Interaction } from '@web/public/interaction';
@@ -29,15 +30,26 @@ export class MarketoneShopCartAdd extends Interaction {
         if (!form) {
             return;
         }
-        const card = el.closest('.oe_product_cart');
+        const card = this._getProductCard(form);
         const product = await this.waitFor(this._resolveProduct(form));
         if (!product?.productTemplateId) {
             return;
         }
-        const added = await this.waitFor(this._addToCart(product));
-        if (added && card) {
+        await this.waitFor(this._addToCart(product));
+        if (card) {
             this.setVisualState(card, true);
         }
+    }
+
+    /**
+     * @param {HTMLFormElement} form
+     * @returns {HTMLElement|null}
+     */
+    _getProductCard(form) {
+        if (form.classList.contains('oe_product_cart')) {
+            return form;
+        }
+        return form.closest('.oe_product_cart');
     }
 
     /**
@@ -74,7 +86,6 @@ export class MarketoneShopCartAdd extends Interaction {
 
     /**
      * @param {Object} product
-     * @returns {Promise<boolean>}
      */
     async _addToCart(product) {
         if (product.isCombo || !product.productId) {
@@ -83,7 +94,7 @@ export class MarketoneShopCartAdd extends Interaction {
                 isConfigured: Boolean(product.productId),
                 showQuantity: false,
             });
-            return true;
+            return;
         }
 
         const data = await rpc('/shop/cart/add', {
@@ -91,13 +102,38 @@ export class MarketoneShopCartAdd extends Interaction {
             product_id: product.productId,
             quantity: product.quantity,
         });
-        wSaleUtils.updateCartNavBar(data);
+        this._syncCartHeader(data.cart_quantity);
         if (data.tracking_info) {
             document.querySelector('.oe_website_sale')?.dispatchEvent(
                 new CustomEvent('add_to_cart_event', { detail: data.tracking_info })
             );
         }
-        return Boolean(data.quantity);
+    }
+
+    /**
+     * Sync header cart counter only — `updateCartNavBar` throws on /shop (no `.oe_cart`).
+     *
+     * @param {number} cartQuantity
+     */
+    _syncCartHeader(cartQuantity) {
+        if (cartQuantity === undefined || cartQuantity === null) {
+            return;
+        }
+        browser.sessionStorage.setItem('website_sale_cart_quantity', cartQuantity);
+        for (const cartQuantityElement of document.querySelectorAll('.my_cart_quantity')) {
+            if (cartQuantity === 0) {
+                cartQuantityElement.classList.add('d-none');
+                continue;
+            }
+            const cartIconElement = document.querySelector('li.o_wsale_my_cart');
+            cartIconElement?.classList.remove('d-none');
+            cartQuantityElement.classList.remove('d-none');
+            cartQuantityElement.classList.add('o_mycart_zoom_animation');
+            setTimeout(() => {
+                cartQuantityElement.textContent = cartQuantity;
+                cartQuantityElement.classList.remove('o_mycart_zoom_animation');
+            }, 300);
+        }
     }
 
     /**
@@ -109,6 +145,7 @@ export class MarketoneShopCartAdd extends Interaction {
         const feedback = card.querySelector('.marketone-shop-card-cart-feedback');
         if (feedback) {
             feedback.hidden = !added;
+            feedback.classList.toggle('marketone-shop-card-cart-feedback--visible', added);
         }
     }
 }
