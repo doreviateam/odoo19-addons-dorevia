@@ -13,9 +13,17 @@
 
 ## Verdict
 
-**NO GO Lot 1.**
+**NO GO Lot 1** (recette initiale sur `19.0.15.11.0`).
 
 Les tests automatisés sont verts et l'ajout wishlist depuis `/shop` ne provoque plus de navigation vers la fiche produit. En revanche, le scénario manuel prioritaire échoue sur le toggle complet : le retrait par second clic depuis `/shop` ne fonctionne pas de manière fiable.
+
+### Correctif Dev `19.0.15.11.1` (2026-05-22)
+
+**Cause racine :** Odoo 19 utilise l'API `Interaction` (`add_product_to_wishlist_button.js`), pas `publicWidget.ProductWishlist`. Le handler standard est add-only et appelle `updateDisabled(el, true)` — comportement observé en recette.
+
+**Correctif :** Interaction `marketone_shop_wishlist_toggle.js` · retrait `o_add_wishlist` sur bouton grille · route `/shop/wishlist/remove_by_product` en `jsonrpc`.
+
+**Action MOA :** rejouer § L1 sur version **`19.0.15.11.1`** (PR #12 mise à jour).
 
 ## Pré-contrôle
 
