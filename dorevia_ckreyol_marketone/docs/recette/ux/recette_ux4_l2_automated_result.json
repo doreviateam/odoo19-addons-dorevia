@@ -1,0 +1,101 @@
+{
+  "verdict": "GO avec réserve documentaire",
+  "version": "19.0.15.12.2",
+  "branch": "feat/marketone-ux4-lot2-cart-in-place",
+  "results": [
+    {
+      "id": "DESKTOP-L2.1",
+      "verdict": "OK",
+      "detail": "http://localhost:18079/shop"
+    },
+    {
+      "id": "DESKTOP-L2.2",
+      "verdict": "OK",
+      "detail": "{\"cardClass\":true,\"hidden\":false,\"display\":\"flex\",\"text\":\"Ajouté au panier\\n                Voir le panier\"}"
+    },
+    {
+      "id": "DESKTOP-L2.3",
+      "verdict": "OK",
+      "detail": "0 -> 1"
+    },
+    {
+      "id": "DESKTOP-L2.4",
+      "verdict": "OK",
+      "detail": "http://localhost:18079/shop/cart"
+    },
+    {
+      "id": "DESKTOP-L2.5",
+      "verdict": "OK",
+      "detail": "http://localhost:18079/shop/cart"
+    },
+    {
+      "id": "MOBILE-btn",
+      "verdict": "OK",
+      "detail": "{\"opacity\":\"1\",\"visibility\":\"visible\",\"pointerEvents\":\"auto\"}"
+    },
+    {
+      "id": "MOBILE-L2.1",
+      "verdict": "OK",
+      "detail": "http://localhost:18079/shop"
+    },
+    {
+      "id": "MOBILE-L2.2",
+      "verdict": "OK",
+      "detail": "{\"cardClass\":true,\"hidden\":false,\"display\":\"flex\",\"text\":\"Ajouté au panier\\n                Voir le panier\"}"
+    },
+    {
+      "id": "MOBILE-L2.3",
+      "verdict": "OK",
+      "detail": "0 -> 1"
+    },
+    {
+      "id": "MOBILE-overflow",
+      "verdict": "OK",
+      "detail": "overflow=false"
+    },
+    {
+      "id": "CONSOLE",
+      "verdict": "KO",
+      "detail": "Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED | Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "id": "B1/shop",
+      "verdict": "OK",
+      "detail": "200"
+    },
+    {
+      "id": "B1/shop/cart",
+      "verdict": "OK",
+      "detail": "200"
+    },
+    {
+      "id": "B1/shop/wishlist",
+      "verdict": "OK",
+      "detail": "200"
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+  ]
+}

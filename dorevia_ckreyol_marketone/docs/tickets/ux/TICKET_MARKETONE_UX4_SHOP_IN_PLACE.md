@@ -91,7 +91,7 @@ Le chantier **ne part pas de zéro** :
 
 ---
 
-### Lot 2 — Ajout panier sans sortie + feedback carte · **P1 · EN COURS**
+### Lot 2 — Ajout panier sans sortie + feedback carte · **P1 · CLÔTURÉ GO avec réserve**
 
 | Élément | Détail |
 |---------|--------|
@@ -232,6 +232,6 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | 2026-05-20 | — | Analyse technique | Validée MOA |
 | 2026-05-22 | `19.0.15.11.1` | Lot 1 | **GO avec réserve documentaire** · PR #12 mergée |
 | 2026-05-22 | `19.0.15.12.1` | Lot 2 reprise | **NO GO** — feedback hidden + mobile KO |
-| 2026-05-22 | `19.0.15.12.2` | Lot 2 fix | En recette |
+| 2026-05-22 | `19.0.15.12.2` | Lot 2 reprise | **GO avec réserve documentaire** |
 
 **Correctif `11.1` (post NO GO recette) :** Odoo 19 utilise l’API `Interaction` (`add_product_to_wishlist_button.js`), pas `publicWidget.ProductWishlist`. Migration vers `marketone_shop_wishlist_toggle.js` · retrait `o_add_wishlist` sur grille · route `remove_by_product` en `jsonrpc`.

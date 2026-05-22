@@ -4,7 +4,8 @@
 |-------|--------|
 | Recette | `RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md` |
 | Lot | UX-4 Lot 2 — Panier sans sortie |
-| Version cible | `19.0.15.12.1` (correctif post NO GO) |
+| Version cible | `19.0.15.12.2` |
+| Verdict final | **GO avec réserve documentaire** (reprise `12.2` — 2026-05-22) |
 | Branche | `feat/marketone-ux4-lot2-cart-in-place` |
 | Base | `ckr-marketone-01` |
 | URL | http://localhost:18079/shop |
@@ -13,16 +14,18 @@
 
 ## Verdict
 
-**NO GO Lot 2** après reprise `19.0.15.12.1`.
+**GO avec réserve documentaire Lot 2** après reprise `19.0.15.12.2` (2026-05-22).
 
-Le correctif `19.0.15.12.1` améliore nettement le desktop : le premier clic panier depuis la grille ajoute bien sans quitter `/shop`, sans ouvrir le configurateur, avec compteur header synchronisé (`9 -> 10`).
+Validé reprise `12.2` (recette navigateur Playwright · sandbox) :
+- desktop L2.1–L2.5 OK · feedback « Ajouté au panier » visible · compteur +1 ;
+- mobile 390 px OK · bouton panier visible · add in-place ;
+- tests auto **82/82** · smoke B1 OK.
 
-Deux points restent bloquants pour un GO MOA :
+Réserve documentaire : scénario connecté L2.C1 non rejoué · erreurs console polices Google Fonts (CORS sandbox, non bloquant).
 
-- le feedback carte `Ajouté au panier` reste caché après le clic direct desktop (`hidden`, `display: none`, pas de classe `.marketone-shop-card--added-to-cart`) ;
-- en mobile 390 px, le panier de tuile reste non exploitable visuellement et le clic forcé sur le bouton finit sur la fiche produit au lieu de rester sur `/shop`.
+### Historique NO GO `12.1` (2026-05-22)
 
-Le verdict actif reste donc **NO GO**, mais le diagnostic a changé : le blocage configurateur desktop est corrigé ; les blocages restants sont **feedback carte** et **mobile**.
+Le correctif `12.1` améliore le desktop (plus de configurateur, compteur OK) mais feedback carte caché et mobile KO — corrigé en `12.2`.
 
 ### Historique première passe `19.0.15.12.0`
 
@@ -221,3 +224,49 @@ L2.2 / L2.4 / mobile restent KO.
 **Correctif mobile :** override `< lg` sur `#o_wsale_products_grid.o_wsale_products_opt_actions_onhover` — `visibility` / `opacity` / `transform` / `z-index` / `pointer-events`.
 
 **Action MOA :** rejouer § L2 sur version **`19.0.15.12.2`** (PR #13 mise à jour).
+
+## Reprise `19.0.15.12.2` — recette exécutée (2026-05-22)
+
+Exécuteur : Codex (Playwright headless · sandbox `ckr-marketone-01` · http://localhost:18079/shop)
+
+### Tests automatisés
+
+**82 tests, 0 failed, 0 error(s)**
+
+### Scénario visiteur public L2 — reprise `12.2`
+
+| Étape | Attendu | Observé | Verdict |
+|-------|---------|---------|---------|
+| L2.1 | Clic panier · URL `/shop` | OK desktop + mobile | OK |
+| L2.2 | Feedback « Ajouté au panier » | `cardClass=true` · `display=flex` | OK |
+| L2.3 | Compteur header +1 | `0 -> 1` (session fraîche) | OK |
+| L2.4 | Lien « Voir le panier » | Navigation `/shop/cart` | OK |
+| L2.5 | Header panier | Navigation `/shop/cart` | OK |
+
+### Mobile 390 px
+
+| Contrôle | Verdict | Détail |
+|----------|---------|--------|
+| Bouton panier visible | OK | `opacity=1` · `visibility=visible` |
+| Add in-place | OK | URL `/shop` · feedback visible |
+| Débordement horizontal | OK | Aucun |
+
+### Régression
+
+| Section | Verdict |
+|---------|---------|
+| B1 smoke | OK (`/shop` · `/shop/cart` · `/shop/wishlist` HTTP 200) |
+| B8 panier in-place | OK |
+| Lot 1 wishlist | OK (tests auto) |
+
+### Console navigateur
+
+Erreurs `net::ERR_FAILED` sur polices Google Fonts (CORS + header sandbox) — **réserve non bloquante**. Pas d'exception JS sur le handler panier Lot 2.
+
+### Captures reprise `12.2`
+
+![UX4 L2 12.2 desktop après](/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l2_12_2_desktop_after_20260522.png)
+
+![UX4 L2 12.2 mobile après](/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l2_12_2_mobile_after_20260522.png)
+
+Résultat JSON : [`recette_ux4_l2_automated_result.json`](recette_ux4_l2_automated_result.json)
