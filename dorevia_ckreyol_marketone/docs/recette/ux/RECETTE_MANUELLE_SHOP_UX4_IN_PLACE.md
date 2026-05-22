@@ -8,8 +8,8 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | ☑ **GO GLOBAL MOA UX-4** · version courante **`19.0.15.14.1`** (Lot 3quater + 3quater bis · PR #19 · 2026-05-22) · réserves **R1** non bloquante maintenue |
-| **Version de référence UX-4** | **`19.0.15.14.1`** · PR **#19** mergée (`9327254`) |
+| **Statut recette** | ☑ **GO GLOBAL MOA UX-4** · version courante **`19.0.15.14.2`** (reprise MOA 3quater bis · suppression lien tuile · 2026-05-22) |
+| **Version de référence UX-4** | **`19.0.15.14.2`** · reprise post-PR #19 |
 | **Version Lot 3ter (livrée)** | **`19.0.15.13.9`** (correctif R2 : survol + scroll panneau) |
 | **Note arbitrage Lot 3ter** | [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md) |
 | **Version Lot 3 (fonctionnel)** | **`19.0.15.13.2`** — **figée** |
@@ -219,7 +219,7 @@ Ajout au panier depuis la grille `/shop` **sans redirection** `/shop/cart`. Feed
 | L2.1 | `/shop` · survol photo · clic panier | URL reste `/shop` | |
 | L2.2 | Observer carte | État « Ajouté au panier » visible | |
 | L2.3 | Observer header | Compteur panier +1 | |
-| L2.4 | Lien « Voir le panier » sur carte (si présent) | Navigation **volontaire** vers `/shop/cart` | |
+| L2.4 | Lien « Voir le panier » sur carte (si présent) | ~~Navigation volontaire vers `/shop/cart`~~ **Révoqué 14.2** — lien tuile supprimé · navigation panier via **header** | |
 | L2.5 | Clic header panier | Navigation `/shop/cart` acceptée (secondaire) | |
 
 ## Scénario connecté
@@ -627,14 +627,44 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPP
 
 ---
 
-# Lot 3quater bis — Feedback « Voir le panier » contextualisé
+# Lot 3quater bis — Feedback panier tuile (reprise MOA)
 
-> **Statut :** **Arbitrage MOA GO** (2026-05-22) · branche PR #19 · version `19.0.15.14.1`.
+> **Statut :** **Re-arbitrage MOA** (2026-05-22) · version **`19.0.15.14.2`**.
 >
-> Desktop : overlay hover bas-gauche « Voir le panier » seul (sans texte « Ajouté ») · état ajouté = bordure sauge + compteur header.
-> Mobile option A : feedback inline court discret dans le corps (sans encart boxed).
+> **Décision MOA :** supprimer le lien **`Voir le panier`** de la tuile produit (desktop et mobile).
+> Navigation panier portée par le **header** (compteur + icône panier).
+>
+> **Desktop :** bordure sauge + compteur header · CTA `Ajouter` seul au survol · pas de pill `Voir le panier`.
+> **Mobile :** label discret « Ajouté au panier » sous le pied de carte · pas de lien · pas d’encart boxed.
 
-## Critères recette V3qB
+## Critères recette V3qR (reprise)
+
+| # | Critère | Desktop | Mobile 390 px |
+|---|---------|---------|---------------|
+| **V3qR.1** | Absence lien `Voir le panier` dans la tuile | ☑ auto | ☑ auto |
+| **V3qR.2** | Clic `Ajouter` → panier uniquement + compteur +1 | ☑ auto | ☑ auto |
+| **V3qR.3** | Desktop survol : CTA `Ajouter` seul (pas de pill `Voir le panier`) | ☑ auto | — |
+| **V3qR.4** | État ajouté discret (bordure sauge) | ☑ auto | ☑ auto |
+| **V3qR.5** | Clic image hors CTA → preview | ☑ auto | ☑ auto |
+| **V3qR.6** | Clic wishlist → wishlist uniquement | ☑ auto | ☐ MOA |
+| **V3qR.7** | Header panier → `/shop/cart` | ☑ auto | ☐ MOA |
+| **V3qR.8** | Mobile : label « Ajouté au panier » sans lien | — | ☑ auto |
+| **V3qR.9** | Console sans erreur JS bloquante | ☑ auto | ☑ auto |
+
+## Verdict Lot 3quater bis (reprise)
+
+**Verdict :** ☐ GO MOA reprise · ☐ NO GO · ☑ **En recette** (`14.2`)
+
+Rapport : [`recette_v3qb_reprise_14_2_20260522.json`](recette_v3qb_reprise_14_2_20260522.json)
+
+---
+
+# Lot 3quater bis — historique (14.1 · PR #19 · révoqué)
+
+> Overlay `Voir le panier` desktop + lien mobile — **révoqué** par re-arbitrage MOA 2026-05-22.
+> Voir section reprise **`14.2`** ci-dessus.
+
+## Critères recette V3qB (historique 14.1)
 
 | # | Critère | Desktop | Mobile 390 px |
 |---|---------|---------|---------------|
@@ -786,6 +816,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **R-UX4-7** | Réserve **R1** doit être traitée lors d'un futur passage visuel premium · pas de remontée bloquante d'ici là |
 | **R-UX4-8** | **Retrait naturel intelligent** — la preview reste ouverte tant que l'utilisateur l'explore (survol · scroll dans le panneau · clic dans le panneau) · elle se retire uniquement quand l'utilisateur reprend la navigation boutique hors preview |
 | **R-UX4-9** | **CTA panier tuile explicite** — icône panier + libellé court `Ajouter` sur la tuile · cohérent avec le CTA complet `Ajouter au panier` de la preview · overlay compact bas-droit |
+| **R-UX4-10** | **Pas de lien panier sur tuile** — après ajout panier, la tuile ne porte pas de lien `Voir le panier` · navigation panier via header uniquement · feedback tuile = bordure sauge + (mobile) label discret « Ajouté au panier » |
 
 | **Sandbox** | Polices Google Fonts CORS · lazy bundle / images annulées | Filtrée | Non-fonctionnelles |
 

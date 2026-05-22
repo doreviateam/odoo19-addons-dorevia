@@ -221,101 +221,16 @@ $_shop-tile-crop-scale: 1.29;
             color: $ck-sauge;
             line-height: 1.2;
         }
-
-        &__link {
-            font-family: $marketone-font-body;
-            font-size: $marketone-label-sm;
-            font-weight: $marketone-weight-semibold;
-            color: $ck-text;
-            text-decoration: underline;
-            text-underline-offset: 2px;
-            white-space: nowrap;
-
-            &:hover,
-            &:focus-visible {
-                color: $ck-sauge;
-            }
-        }
     }
 
-    // Desktop — overlay bas-gauche « Voir le panier » au survol (produit ajouté).
-    @media (min-width: 992px) {
-        .oe_product_cart .oe_product_image,
-        .oe_product_cart .o_wsale_product_image {
-            .marketone-shop-card-cart-feedback--tile {
-                position: absolute;
-                left: 0.625rem;
-                bottom: 0.625rem;
-                z-index: 4;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.2s ease;
-
-                .marketone-shop-card-cart-feedback__label {
-                    display: none;
-                }
-
-                .marketone-shop-card-cart-feedback__link {
-                    display: inline-flex;
-                    align-items: center;
-                    padding: 0.42rem 0.85rem;
-                    border-radius: 0.625rem;
-                    background: rgba($ck-bg-card-body, 0.92);
-                    color: $ck-text;
-                    text-decoration: none;
-                    box-shadow: 0 2px 10px rgba($ck-shadow, 0.12);
-                    backdrop-filter: blur(4px);
-                    line-height: 1.15;
-
-                    &:hover,
-                    &:focus-visible {
-                        color: $ck-sauge;
-                        background: rgba($ck-bg-card-body, 0.98);
-                    }
-                }
-            }
-        }
-
-        .oe_product_cart.marketone-shop-card--added-to-cart {
-            .marketone-shop-card-cart-feedback--tile:not([hidden]),
-            .marketone-shop-card-cart-feedback--tile.marketone-shop-card-cart-feedback--visible {
-                display: block;
-            }
-        }
-
-        .oe_product_cart.marketone-shop-card--added-to-cart:hover .oe_product_image .marketone-shop-card-cart-feedback--tile:not([hidden]),
-        .oe_product_cart.marketone-shop-card--added-to-cart:has(.oe_product_image_link:focus-visible) .oe_product_image .marketone-shop-card-cart-feedback--tile:not([hidden]),
-        .oe_product_cart.marketone-shop-card--added-to-cart .oe_product_image .marketone-shop-card-cart-feedback--tile:focus-within {
-            opacity: 1;
-            pointer-events: auto;
-        }
-    }
-
-    // Mobile — feedback inline court sous l’image, sans encart boxed.
+    // Mobile — label « Ajouté au panier » discret sous le pied de carte, sans encart.
     @media (max-width: 991.98px) {
-        .oe_product_cart .oe_product_image,
-        .oe_product_cart .o_wsale_product_image {
-            overflow: visible;
-
-            .marketone-shop-card-cart-feedback--tile {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                z-index: 2;
-                display: none;
-                flex-direction: row;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: 0.35rem;
-                padding: 0.375rem 1.125rem 0;
-            }
-        }
-
         .oe_product_cart.marketone-shop-card--added-to-cart {
             .marketone-shop-card-cart-feedback--tile:not([hidden]),
             .marketone-shop-card-cart-feedback--tile.marketone-shop-card-cart-feedback--visible {
-                display: flex !important;
+                display: block !important;
+                margin-top: 0.375rem;
+                padding: 0 1.125rem;
             }
         }
     }

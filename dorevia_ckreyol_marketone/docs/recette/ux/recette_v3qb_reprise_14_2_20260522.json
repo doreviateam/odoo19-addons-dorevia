@@ -1,0 +1,80 @@
+{
+  "version": "19.0.15.14.2",
+  "sections": {
+    "V3qR.1_desktop_no_view_cart_link": {
+      "ok": true,
+      "obs": {
+        "addedClass": false,
+        "hasViewCartLink": false,
+        "linkText": "",
+        "labelText": "Ajouté au panier",
+        "labelVisible": false
+      }
+    },
+    "V3qR.2_desktop_cart_add": {
+      "ok": true,
+      "obs": {
+        "path": "/shop",
+        "desktopOpen": false,
+        "inlineOpen": false,
+        "cart": "1",
+        "wish": "0"
+      }
+    },
+    "V3qR.3_desktop_hover_no_view_cart": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "hasViewCartLink": false,
+        "linkText": "",
+        "labelText": "Ajouté au panier",
+        "labelVisible": false
+      }
+    },
+    "V3qR.4_desktop_added_state": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "hasViewCartLink": false,
+        "linkText": "",
+        "labelText": "Ajouté au panier",
+        "labelVisible": false
+      }
+    },
+    "V3qR.5_desktop_image_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3qR.6_desktop_wishlist": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3qR.7_header_cart_nav": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3qR.9_desktop_console": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3qR.8_mobile_label_no_link": {
+      "ok": true,
+      "obs": {
+        "addedClass": true,
+        "hasViewCartLink": false,
+        "linkText": "",
+        "labelText": "Ajouté au panier",
+        "labelVisible": true
+      }
+    },
+    "V3qR.5_mobile_preview": {
+      "ok": true,
+      "obs": {}
+    },
+    "V3qR.9_mobile_console": {
+      "ok": true,
+      "obs": {}
+    }
+  },
+  "consoleErrors": []
+}

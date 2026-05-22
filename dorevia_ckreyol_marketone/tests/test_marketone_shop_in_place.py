@@ -150,7 +150,11 @@ class TestMarketoneShopInPlaceCart(HttpCase):
         self.assertIn("marketone-shop-card-cart", html)
         self.assertIn("marketone-shop-card-cart-feedback", html)
         self.assertIn("Ajouté au panier", html)
-        self.assertIn("Voir le panier", html)
+        self.assertNotIn(
+            "marketone-shop-card-cart-feedback__link",
+            html,
+            "Tuile UX-4 : pas de lien « Voir le panier » sur la carte (navigation panier via header).",
+        )
         self.assertNotRegex(
             html,
             r'marketone-shop-card-cart[^"]*\ba-submit\b',
