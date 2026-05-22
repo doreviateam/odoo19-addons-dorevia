@@ -8,7 +8,7 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — à exécuter** · Lots 2–4 — planifiés |
+| **Statut recette** | **Lot 1 — GO avec réserve documentaire MOA** (`19.0.15.11.1`) · Lots 2–4 — planifiés |
 
 **Régression obligatoire :** [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE_BOUTIQUE_MOA.md)  
 **Sections à rejouer selon lot :** voir tableau ci-dessous.
@@ -177,9 +177,11 @@ Si le visiteur public est **GO** mais que L1.C1–C2 n’a pas pu être exécut�
 
 > **GO avec réserve documentaire** — Scénario connecté / persistance wishlist non rejoué faute de compte test MOA. Périmètre visiteur public validé. Réserve documentaire **non bloquante** pour Lot 1.
 
-**Verdict :** ☐ GO · ☐ GO avec réserve documentaire · ☐ NO GO
+**Verdict :** ☐ GO · ☑ GO avec réserve documentaire · ☐ NO GO
 
-**Réserves :**
+**Réserves :** Scénario connecté / persistance wishlist non rejoué faute de compte test MOA — réserve documentaire **non bloquante** (2026-05-22).
+
+**Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md)
 
 ---
 
@@ -307,7 +309,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 
 | Date | Lot | Version | Exécuteur | Verdict | Rapport |
 |------|-----|---------|-----------|---------|---------|
-| | L1 | `19.0.15.11.0` | | | |
+| 2026-05-22 | L1 | `19.0.15.11.1` | MOA | **GO avec réserve documentaire** | [`RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md) |
 
 ---
 

@@ -3,7 +3,7 @@
 | Champ | Valeur |
 |-------|--------|
 | **Rôle** | **Document maître** — invariants GO MOA + checklist anti-régression |
-| **Version module de référence** | **`19.0.15.11.0`** (UX-4 Lot 1 — wishlist toggle) |
+| **Version module de référence** | **`19.0.15.11.1`** (UX-4 Lot 1 — wishlist toggle GO avec réserve) |
 | **Base** | `ckr-marketone-01` · http://localhost:18079 |
 | **Dernière mise à jour doc** | 2026-05-22 (UX-4 Lot 1 — critères B7–B10) |
 | **Statut** | **Actif** — à mettre à jour à chaque GO MOA boutique |
@@ -285,7 +285,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | Catégories sidebar | [`boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md`](boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_CATEGORIES.md) | GO |
 | Facettes C4 | [`boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_FACETTES_CONTEXTUELLES.md`](boutique/RECETTE_MANUELLE_SHOP_SIDEBAR_FACETTES_CONTEXTUELLES.md) | GO |
 | Wishlist standard | [`RECETTE_VISUELLE_WISHLIST_STANDARD.md`](RECETTE_VISUELLE_WISHLIST_STANDARD.md) | GO MOA `10.2` (réserves) |
-| UX-4 shop-in-place | [`ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) | Lot 1 en cours |
+| UX-4 shop-in-place | [`ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) | Lot 1 **GO réserve** `11.1` |
 | Fiche produit | [`lots/RECETTE_MANUELLE_LOT4.md`](lots/RECETTE_MANUELLE_LOT4.md) | GO |
 | Panier / checkout | [`lots/RECETTE_MANUELLE_LOT5.md`](lots/RECETTE_MANUELLE_LOT5.md) | — |
 | Environnement | [`reference/ENV_REFERENCE.md`](reference/ENV_REFERENCE.md) | Réf. technique |
@@ -298,6 +298,6 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | Date | Ticket / version | Exécuteur | B1–B6 | B7–B10 | Tests auto | Régression ? | Verdict |
 |------|------------------|-----------|-------|--------|------------|--------------|---------|
 | 2026-05-22 | Wishlist + sidebar `19.0.15.10.3` | MOA | ☑ | — | ☑ 75/75 | Non | **GO** (R2 clôturée) |
-| | UX-4 Lot 1 `19.0.15.11.0` | | | ☐ | | | |
+| 2026-05-22 | UX-4 Lot 1 `19.0.15.11.1` | MOA | ☑ | ☑ B7 | ☑ 79/79 | Non | **GO avec réserve documentaire** |
 
-**Commentaire :** B6 corrigé `10.2` · R2 accordéon Collections validé MOA `10.3`. Réserve connecté documentaire uniquement.
+**Commentaire :** B6 corrigé `10.2` · R2 accordéon Collections validé MOA `10.3`. UX-4 Lot 1 validé visiteur public `11.1` — réserve connecté documentaire (comme wishlist P3–P6).

@@ -4,8 +4,9 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX4_SHOP_IN_PLACE` |
 | **Type** | **UX** — extension légère `website_sale` / `website_sale_wishlist` |
-| **Statut** | **En cours** — Lot 1 implémenté · Lots 2–3 à venir |
-| **Version cible Lot 1** | **`19.0.15.11.0`** |
+| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · Lots 2–3 à venir |
+| **Version livrée Lot 1** | **`19.0.15.11.1`** |
+| **PR Lot 1** | **#12** — merge proposable |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
 | **Branche Lot 1** | `feat/marketone-ux4-lot1-wishlist-toggle` |
@@ -63,7 +64,7 @@ Le chantier **ne part pas de zéro** :
 
 ## Découpage en lots
 
-### Lot 1 — Wishlist toggle sans sortie + feedback carte · **P1 · EN COURS**
+### Lot 1 — Wishlist toggle sans sortie + feedback carte · **P1 · CLÔTURÉ GO avec réserve**
 
 | Élément | Détail |
 |---------|--------|
@@ -77,12 +78,14 @@ Le chantier **ne part pas de zéro** :
 
 **Critère GO Lot 1 :**
 
-- [ ] Clic cœur : ajout AJAX · URL reste `/shop`
-- [ ] Second clic : retrait AJAX · cœur retour repos · compteur header synchronisé
-- [ ] Cœur retenu terracotta `#C4715A`
-- [ ] Feedback carte discret (bordure / état `.marketone-shop-card--in-wishlist`)
-- [ ] Régression B1–B6 + wishlist W1–W4 OK
-- [ ] Tests auto verts
+- [x] Clic cœur : ajout AJAX · URL reste `/shop`
+- [x] Second clic : retrait AJAX · cœur retour repos · compteur header synchronisé
+- [x] Cœur retenu terracotta `#C4715A`
+- [x] Feedback carte discret (bordure / état `.marketone-shop-card--in-wishlist`)
+- [x] Régression B1–B6 + wishlist W1–W4 OK
+- [x] Tests auto verts (79/79)
+
+**Verdict MOA (2026-05-22) :** **GO avec réserve documentaire** — visiteur public validé · scénario connecté non rejoué (compte test absent). Rapport : [`RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md`](../recette/ux/RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md).
 
 ---
 
@@ -222,6 +225,6 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | Date | Version | Lot | Verdict |
 |------|---------|-----|---------|
 | 2026-05-20 | — | Analyse technique | Validée MOA |
-| 2026-05-22 | `19.0.15.11.1` | Lot 1 fix Odoo 19 Interaction | En recette |
+| 2026-05-22 | `19.0.15.11.1` | Lot 1 | **GO avec réserve documentaire** |
 
 **Correctif `11.1` (post NO GO recette) :** Odoo 19 utilise l’API `Interaction` (`add_product_to_wishlist_button.js`), pas `publicWidget.ProductWishlist`. Migration vers `marketone_shop_wishlist_toggle.js` · retrait `o_add_wishlist` sur grille · route `remove_by_product` en `jsonrpc`.
