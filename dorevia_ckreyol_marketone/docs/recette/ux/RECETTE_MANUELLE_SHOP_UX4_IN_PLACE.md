@@ -8,7 +8,7 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — arbitrage GO avec réserve · branche autorisée** · Lot 4 continu |
+| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — recette exécutée · GO avec réserve documentaire proposé** (`13.1`) · Lot 4 continu |
 | **Branche Lot 3** | `feat/marketone-ux4-lot3-preview-voir` |
 | **PR Lot 3 (cible)** | `[CK][UX-4] Lot 3 — Preview Voir sans sortie de /shop` |
 | **Note arbitrage Lot 3** | [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) |
@@ -330,9 +330,13 @@ Recette conversion tile : [`RECETTE_MANUELLE_SHOP_CONVERSION_TILE.md`](../boutiq
 | **GO avec réserve documentaire** | Visiteur public OK · réserve documentée (ex. L3.C1 connecté) |
 | **NO GO** | Régression tuile · modal · navigation forcée fiche au clic « Voir » · preview configurateur |
 
-**Verdict :** ☐ GO · ☐ GO avec réserve documentaire · ☐ NO GO · ☐ Non exécuté (dev en cours)
+**Verdict :** ☐ GO · ☑ GO avec réserve documentaire (proposé) · ☐ NO GO · ☐ Non exécuté (dev en cours)
 
-**Règle merge :** **pas de merge PR Lot 3 sans recette MOA desktop + mobile.**
+**Réserves :** L3.V1 fallback fiche non rejoué (0 produit multi-variante publié en catalogue sandbox) · polices Google Fonts CORS sandbox (non bloquant).
+
+**Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md)
+
+**Règle merge :** **pas de merge PR Lot 3 sans verdict MOA formel post-recette.**
 
 ---
 
@@ -381,7 +385,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 |------|-----|---------|-----------|---------|---------|
 | 2026-05-22 | L1 | `19.0.15.11.1` | MOA | **GO avec réserve documentaire** | [`RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_IN_PLACE_20260522.md) |
 | 2026-05-22 | L2 | `19.0.15.12.3` | MOA | **GO avec réserve documentaire** | [`RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md) |
-| 2026-05-22 | L3 | — | MOA | **Arbitrage GO avec réserve** | [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) |
+| 2026-05-22 | L3 | `19.0.15.13.1` | Codex | **GO avec réserve documentaire (proposé)** | [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md) |
 
 ---
 

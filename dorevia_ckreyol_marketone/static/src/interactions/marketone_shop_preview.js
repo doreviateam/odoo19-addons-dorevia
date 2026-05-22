@@ -108,7 +108,9 @@ export class MarketoneShopPreview extends Interaction {
         if (!this._offcanvasEl || !this._offcanvasBody) {
             return;
         }
+        this._clearPreviewContainer(this._offcanvasBody);
         this._offcanvasBody.innerHTML = html;
+        this._startPreviewInteractions(this._offcanvasBody);
         this._activeCta = cta;
         this._setCtaExpanded(cta, true);
         const Offcanvas = window.bootstrap?.Offcanvas;
@@ -132,7 +134,9 @@ export class MarketoneShopPreview extends Interaction {
         if (!slot) {
             return;
         }
+        this._clearPreviewContainer(slot);
         slot.innerHTML = html;
+        this._startPreviewInteractions(slot);
         slot.hidden = false;
         slot.classList.add('marketone-shop-card-preview-slot--open');
         card.classList.add('marketone-shop-card--preview-open');
@@ -150,10 +154,12 @@ export class MarketoneShopPreview extends Interaction {
                 this._offcanvasEl.classList.remove('show');
             }
             if (this._offcanvasBody) {
+                this._clearPreviewContainer(this._offcanvasBody);
                 this._offcanvasBody.innerHTML = '';
             }
         }
         for (const slot of document.querySelectorAll('.marketone-shop-card-preview-slot--open')) {
+            this._clearPreviewContainer(slot);
             slot.innerHTML = '';
             slot.hidden = true;
             slot.classList.remove('marketone-shop-card-preview-slot--open');
@@ -181,6 +187,25 @@ export class MarketoneShopPreview extends Interaction {
     _setCtaExpanded(cta, expanded) {
         cta.setAttribute('aria-expanded', expanded ? 'true' : 'false');
         cta.classList.toggle('marketone-shop-card-cta--active', expanded);
+    }
+
+    /**
+     * @param {HTMLElement} container
+     */
+    _startPreviewInteractions(container) {
+        const root = container.firstElementChild;
+        if (root) {
+            this.services['public.interactions'].startInteractions(root);
+        }
+    }
+
+    /**
+     * @param {HTMLElement} container
+     */
+    _clearPreviewContainer(container) {
+        for (const child of container.children) {
+            this.services['public.interactions'].stopInteractions(child);
+        }
     }
 }
 

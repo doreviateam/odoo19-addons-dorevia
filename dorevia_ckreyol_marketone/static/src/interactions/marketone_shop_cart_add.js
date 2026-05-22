@@ -14,7 +14,8 @@ import wSaleUtils from '@website_sale/js/website_sale_utils';
  * Fallback service `cart` pour combos ou variantes non résolues.
  */
 export class MarketoneShopCartAdd extends Interaction {
-    static selector = '.marketone-shop .marketone-shop-card-cart';
+    static selector =
+        '.marketone-shop .marketone-shop-card-cart, .marketone-shop-preview .marketone-shop-card-cart';
 
     dynamicContent = {
         _root: { 't-on-click.prevent': this.onAddClick },
@@ -80,8 +81,43 @@ export class MarketoneShopCartAdd extends Interaction {
             ...(productId ? { productId } : {}),
             productTemplateId,
             quantity: 1,
+            noVariantAttributeValueIds: this._getNoVariantAttributeValueIds(form),
             ...(isCombo ? { isCombo: true } : {}),
         };
+    }
+
+    /**
+     * PTAV no_variant — aligné WebsiteSale + origine unique grille Marketone.
+     *
+     * @param {HTMLFormElement} form
+     * @returns {number[]}
+     */
+    _getNoVariantAttributeValueIds(form) {
+        const ids = [];
+        for (const el of form.querySelectorAll(
+            'input.no_variant.js_variant_change:checked, select.no_variant.js_variant_change'
+        )) {
+            const id = parseInt(el.value, 10);
+            if (id && !ids.includes(id)) {
+                ids.push(id);
+            }
+        }
+        for (const el of form.querySelectorAll('input.marketone-no-variant-ptav')) {
+            const id = parseInt(el.value, 10);
+            if (id && !ids.includes(id)) {
+                ids.push(id);
+            }
+        }
+        const dataIds = form.dataset.marketoneNoVariantPtavIds;
+        if (dataIds) {
+            for (const rawId of dataIds.split(',')) {
+                const id = parseInt(rawId, 10);
+                if (id && !ids.includes(id)) {
+                    ids.push(id);
+                }
+            }
+        }
+        return ids;
     }
 
     /**
@@ -97,11 +133,15 @@ export class MarketoneShopCartAdd extends Interaction {
             return;
         }
 
-        const data = await rpc('/shop/cart/add', {
+        const payload = {
             product_template_id: product.productTemplateId,
             product_id: product.productId,
             quantity: product.quantity,
-        });
+        };
+        if (product.noVariantAttributeValueIds?.length) {
+            payload.no_variant_attribute_value_ids = product.noVariantAttributeValueIds;
+        }
+        const data = await rpc('/shop/cart/add', payload);
         this._syncCartHeader(data.cart_quantity);
         if (data.tracking_info) {
             document.querySelector('.oe_website_sale')?.dispatchEvent(
