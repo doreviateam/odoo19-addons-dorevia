@@ -1,0 +1,222 @@
+{
+  "date": "2026-05-22",
+  "version": "19.0.15.13.8",
+  "commit": "9e14e15",
+  "sections": {
+    "Desktop": {
+      "I1_image_click_opens_preview": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "productCount": 25
+        }
+      },
+      "I2_url_remains_shop": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop"
+        }
+      },
+      "I3_desktop_offcanvas_open": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "productCount": 25
+        }
+      },
+      "I5_cart_overlay_no_preview": {
+        "ok": true,
+        "observed": {
+          "cartBefore": 0,
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "cartHeader": "1",
+          "wishHeader": "0",
+          "productCount": 24
+        }
+      },
+      "I6_wishlist_overlay_no_preview": {
+        "ok": true,
+        "observed": {
+          "wishBefore": 0,
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "cartHeader": "1",
+          "wishHeader": "1",
+          "productCount": 24
+        }
+      },
+      "I7_title_navigates_pdp": {
+        "ok": true,
+        "observed": {
+          "path": "/shop/maniocookies-sales-la-platine-7",
+          "href": "http://localhost:18079/shop/maniocookies-sales-la-platine-7",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "productCount": 0
+        }
+      },
+      "I8_console_no_blocking_js_error": {
+        "ok": true,
+        "observed": {
+          "deltaErrors": 0
+        }
+      }
+    },
+    "Mobile": {
+      "I1_image_tap_opens_preview": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Maniocookies salés La Platine",
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "productCount": 24
+        }
+      },
+      "I2_url_remains_shop": {
+        "ok": true,
+        "observed": {
+          "path": "/shop"
+        }
+      },
+      "I4_mobile_inline_preview_open": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Maniocookies salés La Platine",
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "productCount": 24
+        }
+      },
+      "I5_cart_overlay_no_preview": {
+        "ok": true,
+        "observed": {
+          "cartBefore": 0,
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "cartHeader": "1",
+          "wishHeader": "0",
+          "productCount": 24
+        }
+      },
+      "I6_wishlist_overlay_no_preview": {
+        "ok": true,
+        "observed": {
+          "wishBefore": 0,
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "cartHeader": "1",
+          "wishHeader": "1",
+          "productCount": 24
+        }
+      },
+      "I7_title_navigates_pdp": {
+        "ok": true,
+        "observed": {
+          "path": "/shop/maniocookies-sales-la-platine-7",
+          "href": "http://localhost:18079/shop/maniocookies-sales-la-platine-7",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "productCount": 0
+        }
+      },
+      "I8_console_no_blocking_js_error": {
+        "ok": true,
+        "observed": {
+          "deltaErrors": 0
+        }
+      }
+    }
+  },
+  "consoleErrors": [],
+  "requestFails": []
+}

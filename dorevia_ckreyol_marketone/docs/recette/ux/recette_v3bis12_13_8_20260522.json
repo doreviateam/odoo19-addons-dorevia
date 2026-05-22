@@ -1,0 +1,272 @@
+{
+  "date": "2026-05-22",
+  "version": "19.0.15.13.8",
+  "commit": "9e14e15",
+  "sections": {
+    "Desktop": {
+      "V3bis.12-D1_panel_open_grid_visible": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "productCount": 25
+        }
+      },
+      "V3bis.12-D2_outside_click_closes_no_backdrop": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop?marketone_category=confitures-74",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "productCount": 6
+        }
+      },
+      "V3bis.12-D3_outside_scroll_retracts_url_shop": {
+        "ok": true,
+        "observed": {
+          "before": {
+            "path": "/shop",
+            "href": "http://localhost:18079/shop?marketone_category=confitures-74",
+            "scrollWidth": 1440,
+            "innerWidth": 1440,
+            "hOverflow": false,
+            "backdrop": false,
+            "modal": false,
+            "previewInlineOpen": false,
+            "previewDesktopOpen": true,
+            "previewTitle": "Confiture ananas vanille",
+            "ctaActive": "Voir",
+            "offcanvasCloseBtn": true,
+            "previewCloseMobile": true,
+            "productCount": 7
+          },
+          "after": {
+            "path": "/shop",
+            "href": "http://localhost:18079/shop?marketone_category=confitures-74",
+            "scrollWidth": 1440,
+            "innerWidth": 1440,
+            "hOverflow": false,
+            "backdrop": false,
+            "modal": false,
+            "previewInlineOpen": false,
+            "previewDesktopOpen": false,
+            "previewTitle": "",
+            "ctaActive": "",
+            "offcanvasCloseBtn": true,
+            "previewCloseMobile": false,
+            "productCount": 6
+          }
+        }
+      },
+      "V3bis.12-D4_inside_scroll_keeps_preview": {
+        "ok": true,
+        "observed": {
+          "innerScrollResult": {
+            "found": true,
+            "scrolled": true
+          },
+          "after": {
+            "path": "/shop",
+            "href": "http://localhost:18079/shop?marketone_category=confitures-74",
+            "scrollWidth": 1440,
+            "innerWidth": 1440,
+            "hOverflow": false,
+            "backdrop": false,
+            "modal": false,
+            "previewInlineOpen": false,
+            "previewDesktopOpen": true,
+            "previewTitle": "Confiture fruits de la passion",
+            "ctaActive": "Voir",
+            "offcanvasCloseBtn": true,
+            "previewCloseMobile": true,
+            "productCount": 7
+          }
+        }
+      },
+      "V3bis.12-D5_smoke_G3.9_close_cross_esc_reclick": {
+        "ok": true,
+        "observed": {
+          "closeCross": true,
+          "closeEsc": true,
+          "closeRecaller": true
+        }
+      },
+      "V3bis.12-D6_console_no_blocking_js_error": {
+        "ok": true,
+        "observed": {
+          "errors": 0
+        }
+      }
+    },
+    "Mobile": {
+      "V3bis.12-M1_inline_open": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Maniocookies salés La Platine",
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "productCount": 24
+        }
+      },
+      "V3bis.12-M2_outside_scroll_dismiss_or_visible": {
+        "ok": true,
+        "observed": {
+          "before": {
+            "path": "/shop",
+            "href": "http://localhost:18079/shop",
+            "scrollWidth": 390,
+            "innerWidth": 390,
+            "hOverflow": false,
+            "backdrop": false,
+            "modal": false,
+            "previewInlineOpen": true,
+            "previewDesktopOpen": false,
+            "previewTitle": "Maniocookies salés La Platine",
+            "ctaActive": "Voir",
+            "offcanvasCloseBtn": true,
+            "previewCloseMobile": true,
+            "productCount": 24
+          },
+          "after": {
+            "path": "/shop",
+            "href": "http://localhost:18079/shop",
+            "scrollWidth": 390,
+            "innerWidth": 390,
+            "hOverflow": false,
+            "backdrop": false,
+            "modal": false,
+            "previewInlineOpen": false,
+            "previewDesktopOpen": false,
+            "previewTitle": "",
+            "ctaActive": "",
+            "offcanvasCloseBtn": true,
+            "previewCloseMobile": false,
+            "productCount": 24
+          }
+        }
+      },
+      "V3bis.12-M3_inside_scroll_keeps_preview": {
+        "ok": true,
+        "observed": {
+          "opened": {
+            "path": "/shop",
+            "href": "http://localhost:18079/shop",
+            "scrollWidth": 390,
+            "innerWidth": 390,
+            "hOverflow": false,
+            "backdrop": false,
+            "modal": false,
+            "previewInlineOpen": true,
+            "previewDesktopOpen": false,
+            "previewTitle": "Crackers manioc Sainte-Anne",
+            "ctaActive": "Voir",
+            "offcanvasCloseBtn": true,
+            "previewCloseMobile": true,
+            "productCount": 24
+          },
+          "after": {
+            "path": "/shop",
+            "href": "http://localhost:18079/shop",
+            "scrollWidth": 390,
+            "innerWidth": 390,
+            "hOverflow": false,
+            "backdrop": false,
+            "modal": false,
+            "previewInlineOpen": true,
+            "previewDesktopOpen": false,
+            "previewTitle": "Crackers manioc Sainte-Anne",
+            "ctaActive": "Voir",
+            "offcanvasCloseBtn": true,
+            "previewCloseMobile": true,
+            "productCount": 24
+          }
+        }
+      },
+      "V3bis.12-M4_outside_tap_dismiss": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "productCount": 24
+        }
+      },
+      "V3bis.12-M5_close_button_and_smoke_L3.M": {
+        "ok": true,
+        "observed": {
+          "m5_close_button": true,
+          "m5_esc": true,
+          "m5_reclick": true
+        }
+      },
+      "V3bis.12-M6_no_horizontal_overflow": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "productCount": 24
+        }
+      },
+      "V3bis.12-Mconsole_no_blocking_js_error": {
+        "ok": true,
+        "observed": {
+          "mobileErrorsDelta": 0
+        }
+      }
+    }
+  },
+  "consoleErrors": [],
+  "requestFails": []
+}
