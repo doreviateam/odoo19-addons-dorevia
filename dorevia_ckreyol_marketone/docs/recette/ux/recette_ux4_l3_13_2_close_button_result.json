@@ -1,0 +1,858 @@
+{
+  "at": "2026-05-22T16:16:41.785Z",
+  "desktop": {
+    "openClick": {
+      "clicked": true,
+      "count": 24
+    },
+    "afterOpen": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1640,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1163.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "visible"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 1199.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "marketone-shop-preview__close btn btn-sm btn-outline-secondary",
+          "display": "inline-block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        }
+      ],
+      "label": "desktop-open",
+      "previewCount": 2,
+      "previewTexts": [
+        "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\n",
+        "Maniocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croust"
+      ],
+      "scrollWidth": 1280,
+      "url": "/shop"
+    },
+    "closeClick": {
+      "clicked": true,
+      "selector": "button/Fermer aperçu",
+      "count": 1
+    },
+    "afterCloseButton": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1640,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1563.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 1599.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "desktop-after-close-button",
+      "previewCount": 0,
+      "previewTexts": [],
+      "scrollWidth": 1280,
+      "url": "/shop"
+    },
+    "beforeEsc": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1640,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1163.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "visible"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 1199.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "marketone-shop-preview__close btn btn-sm btn-outline-secondary",
+          "display": "inline-block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        }
+      ],
+      "label": "desktop-before-esc",
+      "previewCount": 2,
+      "previewTexts": [
+        "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\n",
+        "Maniocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croust"
+      ],
+      "scrollWidth": 1280,
+      "url": "/shop"
+    },
+    "afterEsc": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1640,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1563.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 1599.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "desktop-after-esc",
+      "previewCount": 0,
+      "previewTexts": [],
+      "scrollWidth": 1280,
+      "url": "/shop"
+    },
+    "beforeReclick": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1640,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1163.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "visible"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 1199.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "marketone-shop-preview__close btn btn-sm btn-outline-secondary",
+          "display": "inline-block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        }
+      ],
+      "label": "desktop-before-reclick",
+      "previewCount": 2,
+      "previewTexts": [
+        "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\n",
+        "Maniocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\nBiscuits manioc croust"
+      ],
+      "scrollWidth": 1280,
+      "url": "/shop"
+    },
+    "reclick": {
+      "clicked": true,
+      "count": 25
+    },
+    "afterReclick": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1640,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 1563.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 1599.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "desktop-after-reclick",
+      "previewCount": 0,
+      "previewTexts": [],
+      "scrollWidth": 1280,
+      "url": "/shop"
+    }
+  },
+  "mobile": {
+    "openClick": {
+      "clicked": true,
+      "count": 24
+    },
+    "afterOpen": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "marketone-shop-preview__close btn btn-sm btn-outline-secondary",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 63.5859375,
+            "x": 109.4140625,
+            "y": 394.25
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 615.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 651.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "mobile-open",
+      "previewCount": 1,
+      "previewTexts": [
+        "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\n"
+      ],
+      "scrollWidth": 390,
+      "url": "/shop"
+    },
+    "closeClick": {
+      "clicked": true,
+      "selector": "button/Fermer",
+      "count": 1
+    },
+    "afterCloseButton": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 615.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 651.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "mobile-after-close-button",
+      "previewCount": 0,
+      "previewTexts": [],
+      "scrollWidth": 390,
+      "url": "/shop"
+    },
+    "beforeEsc": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "marketone-shop-preview__close btn btn-sm btn-outline-secondary",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 63.5859375,
+            "x": 109.4140625,
+            "y": 394.25
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 615.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 651.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "mobile-before-esc",
+      "previewCount": 1,
+      "previewTexts": [
+        "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\n"
+      ],
+      "scrollWidth": 390,
+      "url": "/shop"
+    },
+    "afterEsc": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 615.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 651.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "mobile-after-esc",
+      "previewCount": 0,
+      "previewTexts": [],
+      "scrollWidth": 390,
+      "url": "/shop"
+    },
+    "beforeReclick": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "marketone-shop-preview__close btn btn-sm btn-outline-secondary",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 63.5859375,
+            "x": 109.4140625,
+            "y": 394.25
+          },
+          "text": "Fermer",
+          "visibility": "visible"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 615.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 651.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "mobile-before-reclick",
+      "previewCount": 1,
+      "previewTexts": [
+        "Aperçu produit\nFermer\nManiocookies salés La Platine\n4,90 €\nORIGINES\nGuadeloupe\nCOLLECTIONS\nIncontournables, Apéritif créole, Biscuits salés, Cuisine du manioc\n\n"
+      ],
+      "scrollWidth": 390,
+      "url": "/shop"
+    },
+    "reclick": {
+      "clicked": true,
+      "count": 25
+    },
+    "afterReclick": {
+      "closeEls": [
+        {
+          "aria": "Fermer",
+          "cls": "nav-link btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer",
+          "cls": "btn-close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 692,
+            "y": 8
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": "Fermer l'aperçu",
+          "cls": "btn-close marketone-shop-preview-offcanvas__close",
+          "display": "block",
+          "rect": {
+            "h": 32,
+            "w": 32,
+            "x": 615.921875,
+            "y": 12.5
+          },
+          "text": "",
+          "visibility": "hidden"
+        },
+        {
+          "aria": null,
+          "cls": "btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text",
+          "display": "block",
+          "rect": {
+            "h": 25,
+            "w": 64.078125,
+            "x": 651.921875,
+            "y": 16
+          },
+          "text": "Fermer",
+          "visibility": "hidden"
+        }
+      ],
+      "label": "mobile-after-reclick",
+      "previewCount": 0,
+      "previewTexts": [],
+      "scrollWidth": 390,
+      "url": "/shop"
+    }
+  }
+}
