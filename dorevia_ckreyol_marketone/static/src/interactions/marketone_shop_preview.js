@@ -13,6 +13,8 @@ const previewState = {
     offcanvasCloseBtn: null,
     controller: null,
     globalListenersBound: false,
+    /** true quand le pointeur est à l'intérieur du panneau offcanvas desktop. */
+    pointerInPanel: false,
 };
 
 /**
@@ -55,6 +57,17 @@ export class MarketoneShopPreview extends Interaction {
             previewState.controller?._finishDesktopClose();
         });
 
+        // Suivi de la présence du pointeur dans le panneau : tant que le curseur
+        // est à l'intérieur, le scroll de la page ne doit pas fermer la preview.
+        this._onPanelMouseEnter = () => {
+            previewState.pointerInPanel = true;
+        };
+        this._onPanelMouseLeave = () => {
+            previewState.pointerInPanel = false;
+        };
+        previewState.offcanvasEl?.addEventListener('mouseenter', this._onPanelMouseEnter);
+        previewState.offcanvasEl?.addEventListener('mouseleave', this._onPanelMouseLeave);
+
         this._onCloseButtonClick = (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
@@ -80,7 +93,11 @@ export class MarketoneShopPreview extends Interaction {
         document.addEventListener('click', this._onOutsideClick);
 
         this._onOutsideScroll = (ev) => {
-            if (!previewState.activeCta || this._isScrollInsidePreview(ev.target)) {
+            if (
+                !previewState.activeCta ||
+                this._isScrollInsidePreview(ev.target) ||
+                previewState.pointerInPanel
+            ) {
                 return;
             }
             previewState.controller?._closeAll();
@@ -331,6 +348,7 @@ export class MarketoneShopPreview extends Interaction {
     }
 
     _finishDesktopClose() {
+        previewState.pointerInPanel = false;
         if (previewState.offcanvasBody) {
             this._clearPreviewContainer(previewState.offcanvasBody);
             previewState.offcanvasBody.innerHTML = '';
