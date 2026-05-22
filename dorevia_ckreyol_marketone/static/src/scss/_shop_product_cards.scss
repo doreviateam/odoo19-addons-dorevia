@@ -165,11 +165,30 @@ $_shop-tile-crop-scale: 1.29;
                 color: $ck-terracotta;
             }
 
+            &:disabled,
+            &.disabled {
+                opacity: 1;
+                cursor: pointer;
+            }
+
             &--visual {
                 cursor: default;
             }
         }
+    }
 
+    // UX-4 Lot 1 — feedback carte lorsque le produit est retenu en wishlist.
+    .oe_product_cart.marketone-shop-card--in-wishlist {
+        --o-wsale-card-border-color: rgba($ck-terracotta, 0.35);
+
+        .marketone-shop-card-wishlist {
+            color: $ck-terracotta;
+            background: rgba($ck-bg-card-body, 0.94);
+        }
+    }
+
+    .oe_product_cart .oe_product_image,
+    .oe_product_cart .o_wsale_product_image {
         // Panier au survol — overlay bas droite de la zone photo.
         .o_wsale_product_btn {
             position: absolute;
