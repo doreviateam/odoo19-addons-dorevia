@@ -294,6 +294,9 @@ class TestMarketoneShopInPlacePreview(HttpCase):
         self.assertEqual(response.status_code, 200)
         html = response.text
         self.assertIn("marketone_shop_preview_offcanvas", html)
+        self.assertIn("marketone-shop-preview-offcanvas__close", html)
+        self.assertIn("marketone-shop-preview-offcanvas__close-text", html)
+        self.assertIn("Fermer", html)
         self.assertIn("marketone-shop-card-preview-slot", html)
         self.assertIn("data-marketone-preview-allowed", html)
         self.assertIn("data-product-template-id", html)
@@ -312,6 +315,7 @@ class TestMarketoneShopInPlacePreview(HttpCase):
         self.assertEqual(response.status_code, 200)
         html = response.text
         self.assertIn("marketone-shop-preview", html)
+        self.assertIn("marketone-shop-preview__close", html)
         self.assertIn("marketone-shop-preview__full-link", html)
         self.assertIn("Voir la fiche complète", html)
         self.assertIn("marketone-shop-card-cart", html)

@@ -4,11 +4,11 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX4_SHOP_IN_PLACE` |
 | **Type** | **UX** — extension légère `website_sale` / `website_sale_wishlist` |
-| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 clôturé GO avec réserve documentaire** · **Lot 3 clôturé GO avec réserve documentaire** · Lot 4 continu |
-| **Branche Lot 3** | `feat/marketone-ux4-lot3-preview-voir` (mergée) |
+| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 clôturé GO avec réserve documentaire** · **Lot 3 — reprise corrective fermeture preview (G3.9)** · Lot 4 continu |
+| **Branche Lot 3 (reprise)** | `fix/marketone-ux4-lot3-preview-close` |
 | **Version livrée Lot 1** | **`19.0.15.11.1`** |
 | **Version livrée Lot 2** | **`19.0.15.12.3`** |
-| **Version livrée Lot 3** | **`19.0.15.13.1`** |
+| **Version livrée Lot 3** | **`19.0.15.13.1`** (PR #14) · **correctif `19.0.15.13.2`** (fermeture preview) |
 | **Branche Lot 2** | `feat/marketone-ux4-lot2-cart-in-place` |
 | **PR Lot 1** | **#12** — mergée |
 | **PR Lot 2** | **#13** — mergée |
@@ -119,7 +119,7 @@ Le chantier **ne part pas de zéro** :
 
 **Verdict MOA (2026-05-22) :** **GO avec réserve documentaire** — visiteur public desktop + mobile validé · scénario connecté L2.C1 non rejoué (compte test absent). Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md`](../recette/ux/RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md).
 
-### Lot 3 — Voir sans sortie / preview in-page · **P2 · CLÔTURÉ GO avec réserve**
+### Lot 3 — Voir sans sortie / preview in-page · **P2 · REPRISE CORRECTIVE (G3.9)**
 
 > **Note d’arbitrage :** [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) — **GO avec réserve documentaire** (2026-05-22).
 
@@ -146,7 +146,9 @@ Le chantier **ne part pas de zéro** :
 - [x] Régression B4 · B7 · B8 · B9 · B10 OK
 - [x] Tests auto verts (13/13 tag `dorevia_marketone_shop_in_place`)
 
-**Verdict MOA (2026-05-22) :** **GO avec réserve documentaire** — visiteur public desktop + mobile validé · **L3.V1** fallback configurable non rejoué (0 produit multi-variante publié en catalogue recette). Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](../recette/ux/RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md).
+**Verdict MOA (2026-05-22) :** **GO avec réserve documentaire** — PR **#14** mergée · puis **suspension** retour visuel MOA : fermeture preview insuffisamment maîtrisée (**G3.9**).
+
+**Reprise `13.2` :** fermeture explicite × / **Fermer** / ESC / re-clic · mobile **Fermer** inline · recette § **L3.F** / **L3.M**.
 
 **Réserve documentaire Lot 3 (à rejouer) :**
 
@@ -270,6 +272,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | 2026-05-22 | `19.0.15.12.3` | Lot 2 reprise | **GO MOA** — consolidation panier PTAV origine · PR #13 mergée |
 | 2026-05-22 | — | Lot 3 arbitrage | **GO avec réserve documentaire** · branche `feat/marketone-ux4-lot3-preview-voir` autorisée |
 | 2026-05-22 | `19.0.15.13.1` | Lot 3 | **GO avec réserve documentaire** · PR #14 mergée · correctif rebind preview `13.1` |
+| 2026-05-22 | `19.0.15.13.2` | Lot 3 reprise | **G3.9 suspendu** · correctif fermeture preview · recette L3.F / L3.M |
 
 **Correctif `12.3` :** transmission `no_variant_attribute_value_ids` (origine unique grille) dans `/shop/cart/add` — consolidation panier standard Odoo.
 

@@ -8,7 +8,7 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.1`) · Lot 4 continu |
+| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — reprise corrective fermeture preview** (`13.2`) · Lot 4 continu |
 | **Branche Lot 3** | `feat/marketone-ux4-lot3-preview-voir` (PR **#14** mergée) |
 | **PR Lot 3** | **#14** — [`[CK][UX-4] Lot 3 — Preview Voir sans sortie de /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/14) — **mergée** |
 | **Note arbitrage Lot 3** | [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) |
@@ -244,7 +244,7 @@ Ajout au panier depuis la grille `/shop` **sans redirection** `/shop/cart`. Feed
 
 # Lot 3 — Voir sans sortie / preview in-page
 
-> **Statut :** **GO avec réserve documentaire MOA** (`13.1` — 2026-05-22) · PR **#14** mergée.
+> **Statut :** **Reprise corrective MOA — fermeture preview** (`13.2`) · GO Lot 3 **suspendu** tant que **G3.9** / § L3.F non revalidé · PR **#14** mergée (`13.1`) · correctif `13.2` en cours.
 >
 > **Note :** [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md)
 
@@ -282,7 +282,7 @@ Le CTA **« Voir »** ouvre une prévisualisation produit **non modale** dans `/
 | G3.6 | Panier depuis preview : comportement aligné Lot 2 · URL `/shop` | L3.8 · **B8** | |
 | G3.7 | Wishlist depuis preview : comportement aligné Lot 1 · URL `/shop` | L3.8 · **B7** | |
 | G3.8 | Lien « Voir la fiche complète » → fiche produit | L3.4 · **B10** | |
-| G3.9 | Fermeture preview (× / ESC / re-clic) sans erreur JS | L3.6 | |
+| G3.9 | Fermeture preview (× / **Fermer** / ESC / re-clic) sans erreur JS · retour grille propre | L3.6 · **L3.F** · **L3.M** | |
 | G3.10 | Régression **B1 · B4 · B7 · B8 · B9 · B10** · tests auto verts | § Régression Lot 3 | |
 
 ## Scénario visiteur public L3
@@ -294,10 +294,39 @@ Le CTA **« Voir »** ouvre une prévisualisation produit **non modale** dans `/
 | L3.3 | Mobile 390 px | Bloc inline sous tuile · pas de bottom sheet · pas de scroll horizontal | |
 | L3.4 | Lien « Voir la fiche complète » | Navigation fiche produit | |
 | L3.5 | Clic photo ou titre (tuile) | Navigation fiche produit (gel MOA) | |
-| L3.6 | Fermeture preview (× / ESC / re-clic « Voir ») | Retour état grille · pas de modal | |
+| L3.6 | Fermeture preview (× / **Fermer** / ESC / re-clic « Voir ») | Retour état grille · pas de modal · CTA désactivé visuellement | |
 | L3.7 | Contenu preview | Image · titre · prix · origine · collection · description courte | |
 | L3.8 | Panier + wishlist depuis preview | Add in-place · compteurs header cohérents | |
 | L3.V1 | Clic **Voir** (produit multi-variante / configurable) | **Fallback fiche produit** (pas preview interactive V1) | |
+
+## Recette ciblée fermeture preview — desktop (L3.F)
+
+> **Contexte MOA :** retour visuel post-merge `13.1` — fermeture panneau preview insuffisamment maîtrisée · **G3.9 bloquant** jusqu’à revalidation.
+
+| # | Étape | Résultat attendu | ☐ |
+|---|-------|------------------|---|
+| **L3.F1** | Ouvrir `/shop` desktop (≥ 992 px) | Grille visible · HTTP 200 | |
+| **L3.F2** | Cliquer **Voir** sur un produit variante unique | Preview ouverte · URL `/shop` | |
+| **L3.F3** | Constater panneau latéral droit | Offcanvas visible · grille reste utilisable · pas de modal | |
+| **L3.F4** | Fermer via **croix** ou bouton **Fermer** (header panneau) | Panneau disparaît · contenu preview vidé · CTA « Voir » retour repos | |
+| **L3.F5** | Constater grille | Grille scrollable / cliquable · pas de panneau résiduel | |
+| **L3.F6** | Rouvrir une preview (même ou autre produit) | Preview s’ouvre normalement | |
+| **L3.F7** | Fermer via touche **ESC** | Panneau disparaît · état grille propre | |
+| **L3.F8** | Rouvrir une preview | Preview visible | |
+| **L3.F9** | **Re-clic « Voir »** sur le produit ouvert **ou** ouvrir un autre produit | Même produit → fermeture · autre produit → remplacement propre (une seule preview) | |
+| **L3.F10** | Constater comportement | Une seule preview desktop · pas de double panneau · pas de CTA bloqué actif | |
+| **L3.F11** | Console navigateur | Aucune erreur JS **bloquante** | |
+
+## Recette ciblée fermeture preview — mobile (L3.M)
+
+| # | Étape | Résultat attendu | ☐ |
+|---|-------|------------------|---|
+| **L3.M1** | `/shop` · viewport **390 px** | Pas de débordement horizontal | |
+| **L3.M2** | Cliquer **Voir** | Preview **inline** sous tuile | |
+| **L3.M3** | Constater bouton **Fermer** dans la preview | Visible · cliquable | |
+| **L3.M4** | Fermer via **Fermer** · ESC · re-clic **Voir** | Preview repliée · retour grille compréhensible | |
+| **L3.M5** | Ouvrir preview produit A puis produit B | **Une seule** preview ouverte | |
+| **L3.M6** | Console | Aucune erreur JS bloquante | |
 
 ## Régression Lot 3
 
@@ -330,13 +359,15 @@ Recette conversion tile : [`RECETTE_MANUELLE_SHOP_CONVERSION_TILE.md`](../boutiq
 | **GO avec réserve documentaire** | Visiteur public OK · réserve documentée (ex. L3.C1 connecté) |
 | **NO GO** | Régression tuile · modal · navigation forcée fiche au clic « Voir » · preview configurateur |
 
-**Verdict :** ☐ GO · ☑ **GO avec réserve documentaire MOA** · ☐ NO GO · ☐ Non exécuté
+**Verdict :** ☐ GO · ☐ GO avec réserve documentaire · ☐ NO GO · ☑ **Reprise corrective MOA (G3.9 / L3.F)**
 
-**Réserves :** **L3.V1** fallback fiche configurable non rejoué (0 produit multi-variante publié — à rejouer dès cas catalogue disponible) · polices Google Fonts CORS sandbox (non bloquant).
+**Réserves :** **L3.V1** fallback fiche configurable à rejouer · polices Google Fonts CORS sandbox (non bloquant).
+
+**Correctif en cours :** `19.0.15.13.2` — fermeture preview explicite (× + **Fermer** · ESC · re-clic · mobile **Fermer**).
 
 **Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md)
 
-**Merge :** PR **#14** mergée le 2026-05-22 · merge commit `49448b1`.
+**Merge antérieur :** PR **#14** · `49448b1` · revalidation fermeture requise avant clôture définitive.
 
 ---
 

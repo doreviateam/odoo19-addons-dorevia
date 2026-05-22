@@ -1,0 +1,84 @@
+{
+  "version": "19.0.15.13.2",
+  "executedAt": "2026-05-22T16:03:53.353Z",
+  "verdicts": {
+    "L3.F1": {
+      "ok": true,
+      "detail": "/shop"
+    },
+    "L3.F2": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":true,\"previewBody\":3549,\"activeCta\":true,\"mobileOpen\":0,\"mobileCloseBtn\":true,\"scrollWidth\":1280,\"innerWidth\":1280}"
+    },
+    "L3.F3": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":true,\"previewBody\":3549,\"activeCta\":true,\"mobileOpen\":0,\"mobileCloseBtn\":true,\"scrollWidth\":1280,\"innerWidth\":1280}"
+    },
+    "L3.F4": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":1280,\"innerWidth\":1280}"
+    },
+    "L3.F5": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":1280,\"innerWidth\":1280}"
+    },
+    "L3.F6": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "L3.F7": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":1280,\"innerWidth\":1280}"
+    },
+    "L3.F8": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "L3.F9": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":1280,\"innerWidth\":1280}"
+    },
+    "L3.F10": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":true,\"previewBody\":3528,\"activeCta\":true,\"mobileOpen\":0,\"mobileCloseBtn\":true,\"scrollWidth\":1280,\"innerWidth\":1280}"
+    },
+    "L3.F11": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "G3.9": {
+      "ok": true,
+      "detail": "desktop"
+    },
+    "L3.M1": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":true,\"mobileOpen\":1,\"mobileCloseBtn\":true,\"scrollWidth\":390,\"innerWidth\":390}"
+    },
+    "L3.M2": {
+      "ok": false,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":true,\"mobileOpen\":1,\"mobileCloseBtn\":true,\"scrollWidth\":390,\"innerWidth\":390}"
+    },
+    "L3.M3": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":true,\"mobileOpen\":1,\"mobileCloseBtn\":true,\"scrollWidth\":390,\"innerWidth\":390}"
+    },
+    "L3.M4": {
+      "ok": true,
+      "detail": "{\"url\":\"/shop\",\"offcanvas\":false,\"previewBody\":0,\"activeCta\":false,\"mobileOpen\":0,\"mobileCloseBtn\":false,\"scrollWidth\":390,\"innerWidth\":390}"
+    },
+    "L3.M5": {
+      "ok": true,
+      "detail": "ok"
+    },
+    "L3.M6": {
+      "ok": true,
+      "detail": "ok"
+    }
+  },
+  "consoleErrors": [],
+  "summary": {
+    "failed": [
+      "L3.M2"
+    ]
+  }
+}

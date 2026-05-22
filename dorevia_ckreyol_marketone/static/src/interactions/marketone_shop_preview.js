@@ -9,7 +9,7 @@ const DESKTOP_QUERY = '(min-width: 992px)';
  * UX-4 Lot 3 — preview « Voir » in-page depuis /shop.
  *
  * Desktop : offcanvas latéral droit non modal.
- * Mobile : bloc inline sous la tuile (une seule preview ouverte).
+ * Mobile : bloc inline sous tuile (une seule preview ouverte).
  * Fallback : produits configurables → navigation fiche (href conservé).
  */
 export class MarketoneShopPreview extends Interaction {
@@ -26,12 +26,36 @@ export class MarketoneShopPreview extends Interaction {
         this._offcanvasBody = this._offcanvasEl?.querySelector(
             '.marketone-shop-preview-offcanvas__body'
         );
+        this._offcanvasCloseBtn = this._offcanvasEl?.querySelector(
+            '.marketone-shop-preview-offcanvas__close'
+        );
+        this._offcanvasCloseTextBtn = this._offcanvasEl?.querySelector(
+            '.marketone-shop-preview-offcanvas__close-text'
+        );
+
         if (this._offcanvasEl) {
             this._offcanvasEl.addEventListener('hidden.bs.offcanvas', () => {
-                this._resetCtaState(this._activeCta);
-                this._activeCta = null;
+                this._finishDesktopClose();
             });
         }
+
+        this._onCloseButtonClick = (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            this._closeAll();
+        };
+        this._offcanvasCloseBtn?.addEventListener('click', this._onCloseButtonClick);
+        this._offcanvasCloseTextBtn?.addEventListener('click', this._onCloseButtonClick);
+
+        this._onDocumentClick = (ev) => {
+            if (ev.target.closest('.marketone-shop-preview__close')) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                this._closeAll();
+            }
+        };
+        document.addEventListener('click', this._onDocumentClick, true);
+
         this._onKeydown = (ev) => {
             if (ev.key === 'Escape') {
                 this._closeAll();
@@ -41,7 +65,10 @@ export class MarketoneShopPreview extends Interaction {
     }
 
     destroy() {
+        document.removeEventListener('click', this._onDocumentClick, true);
         document.removeEventListener('keydown', this._onKeydown);
+        this._offcanvasCloseBtn?.removeEventListener('click', this._onCloseButtonClick);
+        this._offcanvasCloseTextBtn?.removeEventListener('click', this._onCloseButtonClick);
         super.destroy();
     }
 
@@ -72,7 +99,7 @@ export class MarketoneShopPreview extends Interaction {
             return;
         }
 
-        this._closeAll();
+        this._closeAllImmediate();
         const html = await this.waitFor(this._fetchPreview(templateId));
         if (!html) {
             window.location.href = cta.getAttribute('href');
@@ -113,6 +140,7 @@ export class MarketoneShopPreview extends Interaction {
         this._startPreviewInteractions(this._offcanvasBody);
         this._activeCta = cta;
         this._setCtaExpanded(cta, true);
+        this._offcanvasEl.classList.add('marketone-shop-preview-offcanvas--open');
         const Offcanvas = window.bootstrap?.Offcanvas;
         if (Offcanvas) {
             Offcanvas.getOrCreateInstance(this._offcanvasEl, {
@@ -145,30 +173,73 @@ export class MarketoneShopPreview extends Interaction {
     }
 
     _closeAll() {
-        if (this._offcanvasEl) {
-            const Offcanvas = window.bootstrap?.Offcanvas;
-            if (Offcanvas) {
-                const instance = Offcanvas.getInstance(this._offcanvasEl);
-                instance?.hide();
-            } else {
-                this._offcanvasEl.classList.remove('show');
-            }
-            if (this._offcanvasBody) {
-                this._clearPreviewContainer(this._offcanvasBody);
-                this._offcanvasBody.innerHTML = '';
+        this._closeDesktopPanel();
+        this._closeMobile();
+    }
+
+    _closeAllImmediate() {
+        const Offcanvas = window.bootstrap?.Offcanvas;
+        const instance = this._offcanvasEl && Offcanvas?.getInstance(this._offcanvasEl);
+        if (instance) {
+            instance.dispose();
+        }
+        this._finishDesktopClose();
+        this._closeMobile();
+    }
+
+    _closeDesktopPanel() {
+        if (!this._offcanvasEl) {
+            return;
+        }
+        const isOpen =
+            this._offcanvasEl.classList.contains('show') ||
+            this._offcanvasEl.classList.contains('marketone-shop-preview-offcanvas--open');
+        if (!isOpen) {
+            return;
+        }
+        const Offcanvas = window.bootstrap?.Offcanvas;
+        if (Offcanvas) {
+            const instance = Offcanvas.getInstance(this._offcanvasEl);
+            if (instance) {
+                instance.hide();
+                return;
             }
         }
+        this._offcanvasEl.classList.remove('show');
+        this._finishDesktopClose();
+    }
+
+    _finishDesktopClose() {
+        if (this._offcanvasBody) {
+            this._clearPreviewContainer(this._offcanvasBody);
+            this._offcanvasBody.innerHTML = '';
+        }
+        if (this._offcanvasEl) {
+            this._offcanvasEl.classList.remove(
+                'show',
+                'marketone-shop-preview-offcanvas--open'
+            );
+        }
+        this._resetCtaState(this._activeCta);
+        this._activeCta = null;
+    }
+
+    _closeMobile() {
+        let closed = false;
         for (const slot of document.querySelectorAll('.marketone-shop-card-preview-slot--open')) {
             this._clearPreviewContainer(slot);
             slot.innerHTML = '';
             slot.hidden = true;
             slot.classList.remove('marketone-shop-card-preview-slot--open');
+            closed = true;
         }
         for (const openCard of document.querySelectorAll('.marketone-shop-card--preview-open')) {
             openCard.classList.remove('marketone-shop-card--preview-open');
         }
-        this._resetCtaState(this._activeCta);
-        this._activeCta = null;
+        if (closed) {
+            this._resetCtaState(this._activeCta);
+            this._activeCta = null;
+        }
     }
 
     /**

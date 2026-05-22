@@ -19,8 +19,12 @@
                     </h2>
                     <button type="button"
                             class="btn-close marketone-shop-preview-offcanvas__close"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Fermer"/>
+                            aria-label="Fermer l'aperçu"
+                            title="Fermer"/>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-secondary marketone-shop-preview-offcanvas__close-text">
+                        Fermer
+                    </button>
                 </div>
                 <div class="offcanvas-body marketone-shop-preview-offcanvas__body"/>
             </div>
@@ -32,6 +36,14 @@
               name="Marketone: fragment preview produit">
         <div class="marketone-shop-preview"
              t-att-data-product-template-id="product.id">
+            <div class="marketone-shop-preview__toolbar d-lg-none">
+                <span class="marketone-shop-preview__toolbar-label">Aperçu produit</span>
+                <button type="button"
+                        class="marketone-shop-preview__close btn btn-sm btn-outline-secondary"
+                        aria-label="Fermer l'aperçu">
+                    Fermer
+                </button>
+            </div>
             <div class="marketone-shop-preview__media">
                 <span t-field="product.image_1920"
                       t-options="{'widget': 'image', 'preview_image': 'image_1024', 'class': 'marketone-shop-preview__img w-100'}"/>

@@ -126,15 +126,65 @@ Résultat JSON : [`recette_ux4_l3_20260522_result.json`](recette_ux4_l3_20260522
 
 | Verdict | Condition |
 |---------|-----------|
-| ☑ **GO avec réserve documentaire** | G3.1–G3.10 OK · L3.1–L3.8 OK · régression B4/B7/B8/B9/B10 OK · desktop + mobile 390 px · tests auto 13/13 |
+| ☐ **GO avec réserve documentaire** | G3.1–G3.10 OK · L3.1–L3.8 OK · régression OK · recette desktop + mobile |
 | ☐ GO | — |
-| ☐ NO GO | — |
+| ☑ **Reprise corrective (G3.9)** | Retour MOA visuel — fermeture preview non maîtrisée sur `13.1` · correctif `13.2` + recette L3.F / L3.M requise |
 
-**Verdict MOA (2026-05-22) :** **GO avec réserve documentaire — UX-4 Lot 3.** PR **#14** mergée · merge commit `49448b1`.
+**Verdict initial MOA (2026-05-22) :** GO avec réserve documentaire — PR **#14** mergée · merge commit `49448b1`.
 
-**Réserves (non bloquantes — à rejouer) :**
+**Suspension MOA (reprise) :** GO Lot 3 **suspendu** tant que **G3.9** (fermeture preview) n’est pas corrigé et recetté (§ **L3.F** desktop · § **L3.M** mobile).
 
-1. **L3.V1** — fallback fiche produit configurable / multi-variante : aucun cas publié en catalogue recette (0/50) · rejouer dès qu’un produit éligible est disponible ;
-2. Polices Google Fonts — erreurs réseau CORS sandbox (héritage Lots 1–2).
+### Correctif `19.0.15.13.2`
+
+| Sujet | Action |
+|-------|--------|
+| Croix desktop | Handler JS explicite · nettoyage contenu au `hidden.bs.offcanvas` |
+| Bouton **Fermer** desktop | Ajout CTA texte header · même handler |
+| ESC | Fermeture via `_closeAll()` sans conflit animation |
+| Re-clic **Voir** | Toggle fermeture · remplacement produit via `_closeAllImmediate()` |
+| Mobile | Bouton **Fermer** inline dans fragment preview |
+| Race condition | Remplacement preview sans double panneau / CTA bloqué |
+
+**Réserves (maintenues) :**
+
+1. **L3.V1** — fallback configurable / multi-variante à rejouer dès produit éligible publié ;
+2. Polices Google Fonts — CORS sandbox (non bloquant).
 
 **Règle V2 :** pas d’extension preview V2 sans nouvel arbitrage MOA.
+
+---
+
+## Recette reprise `13.2` — fermeture preview (2026-05-22)
+
+Exécuteur : Codex (Playwright · sandbox `ckr-marketone-01`)
+
+**Tests auto :** `dorevia_marketone_shop_in_place` → **13/13 OK**
+
+### Desktop — L3.F
+
+| Étape | Verdict | Détail |
+|-------|---------|--------|
+| L3.F1–L3.F3 | **OK** | Preview offcanvas ouverte · URL `/shop` |
+| L3.F4–L3.F5 | **OK** | Fermeture bouton **Fermer** · panneau vidé · CTA repos |
+| L3.F6–L3.F7 | **OK** | Réouverture · fermeture **ESC** |
+| L3.F8–L3.F9 | **OK** | Re-clic **Voir** → fermeture |
+| L3.F10 | **OK** | Remplacement preview autre produit |
+| L3.F11 | **OK** | Console sans erreur JS bloquante |
+
+### Mobile 390 px — L3.M
+
+| Étape | Verdict | Détail |
+|-------|---------|--------|
+| L3.M1 | **OK** | `390×390` · pas de débordement |
+| L3.M2 | **OK** | Preview inline ouverte (`mobileOpen=1`) |
+| L3.M3–L3.M4 | **OK** | Bouton **Fermer** visible · repli propre |
+| L3.M5 | **OK** | Une seule preview ouverte |
+| L3.M6 | **OK** | Console OK |
+
+**G3.9 : OK** (post-correctif `13.2`)
+
+Captures : [`capture_ux4_l3_13_2_desktop_close_20260522.png`](capture_ux4_l3_13_2_desktop_close_20260522.png) · [`capture_ux4_l3_13_2_mobile_close_20260522.png`](capture_ux4_l3_13_2_mobile_close_20260522.png)
+
+JSON : [`recette_ux4_l3_13_2_close_result.json`](recette_ux4_l3_13_2_close_result.json)
+
+**Verdict reprise proposé :** **GO avec réserve documentaire** — G3.9 revalidé · **L3.V1** maintenue · validation MOA visuelle requise.
