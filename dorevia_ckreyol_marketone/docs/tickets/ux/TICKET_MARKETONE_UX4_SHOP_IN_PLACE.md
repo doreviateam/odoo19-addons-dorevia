@@ -169,14 +169,16 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](../recette/ux/R
 |---------|--------|
 | **Objectif** | Qualité perçue preview · mini-fiche premium CK · **sans changement fonctionnel** |
 | **Prérequis** | Lot 3 **GO figé** `19.0.15.13.2` |
-| **Version cible** | **`19.0.15.13.3`** |
+| **Version cible** | **`19.0.15.13.4`** |
 | **Branche** | `feat/marketone-ux4-lot3bis-preview-premium` |
 | **PR cible** | `[CK][UX-4] Lot 3bis — Finition visuelle preview premium` |
 | **Recette** | § V3bis [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) |
 
-**Arbitrages MOA :** titre **`Découvrir le produit`** · fermeture desktop **croix seule** · image **contain cadré** · direction DA pastel CK.
+**Arbitrages MOA :** titre **`Découvrir le produit`** · fermeture desktop **croix seule** · image **contain cadré** · direction DA pastel CK · **V3bis.12 retrait naturel** (clic / scroll hors panneau).
 
-**Hors périmètre :** JS · routes · panier/wishlist · photo/titre · fallback · deep-link · configurateur.
+**Hors périmètre :** routes · panier/wishlist · photo/titre · fallback · deep-link · configurateur.
+
+**Exception JS (V3bis.12) :** `marketone_shop_preview.js` — fermeture naturelle uniquement (clic / scroll hors preview).
 
 **Règle :** Lot 3bis **ne remet pas en cause** le GO fonctionnel Lot 3.
 

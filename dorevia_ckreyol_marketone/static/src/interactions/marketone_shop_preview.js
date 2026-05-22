@@ -7,6 +7,7 @@ const DESKTOP_QUERY = '(min-width: 992px)';
 
 /**
  * UX-4 Lot 3 — preview « Voir » in-page depuis /shop.
+ * UX-4 Lot 3bis — retrait naturel (clic / scroll hors panneau).
  *
  * Desktop : offcanvas latéral droit non modal.
  * Mobile : bloc inline sous tuile (une seule preview ouverte).
@@ -29,9 +30,6 @@ export class MarketoneShopPreview extends Interaction {
         this._offcanvasCloseBtn = this._offcanvasEl?.querySelector(
             '.marketone-shop-preview-offcanvas__close'
         );
-        this._offcanvasCloseTextBtn = this._offcanvasEl?.querySelector(
-            '.marketone-shop-preview-offcanvas__close-text'
-        );
 
         if (this._offcanvasEl) {
             this._offcanvasEl.addEventListener('hidden.bs.offcanvas', () => {
@@ -45,16 +43,31 @@ export class MarketoneShopPreview extends Interaction {
             this._closeAll();
         };
         this._offcanvasCloseBtn?.addEventListener('click', this._onCloseButtonClick);
-        this._offcanvasCloseTextBtn?.addEventListener('click', this._onCloseButtonClick);
 
-        this._onDocumentClick = (ev) => {
+        this._onDocumentClickCapture = (ev) => {
             if (ev.target.closest('.marketone-shop-preview__close')) {
                 ev.preventDefault();
                 ev.stopPropagation();
                 this._closeAll();
             }
         };
-        document.addEventListener('click', this._onDocumentClick, true);
+        document.addEventListener('click', this._onDocumentClickCapture, true);
+
+        this._onOutsideClick = (ev) => {
+            if (!this._activeCta || this._isDismissExemptTarget(ev.target)) {
+                return;
+            }
+            this._closeAll();
+        };
+        document.addEventListener('click', this._onOutsideClick);
+
+        this._onOutsideScroll = (ev) => {
+            if (!this._activeCta || this._isScrollInsidePreview(ev.target)) {
+                return;
+            }
+            this._closeAll();
+        };
+        document.addEventListener('scroll', this._onOutsideScroll, true);
 
         this._onKeydown = (ev) => {
             if (ev.key === 'Escape') {
@@ -65,11 +78,41 @@ export class MarketoneShopPreview extends Interaction {
     }
 
     destroy() {
-        document.removeEventListener('click', this._onDocumentClick, true);
+        document.removeEventListener('click', this._onDocumentClickCapture, true);
+        document.removeEventListener('click', this._onOutsideClick);
+        document.removeEventListener('scroll', this._onOutsideScroll, true);
         document.removeEventListener('keydown', this._onKeydown);
         this._offcanvasCloseBtn?.removeEventListener('click', this._onCloseButtonClick);
-        this._offcanvasCloseTextBtn?.removeEventListener('click', this._onCloseButtonClick);
         super.destroy();
+    }
+
+    /**
+     * @param {EventTarget|null} target
+     * @returns {boolean}
+     */
+    _isDismissExemptTarget(target) {
+        if (!(target instanceof Element)) {
+            return false;
+        }
+        return Boolean(
+            target.closest('#marketone_shop_preview_offcanvas') ||
+                target.closest('.marketone-shop-preview') ||
+                target.closest('.marketone-shop-card-cta')
+        );
+    }
+
+    /**
+     * @param {EventTarget|null} target
+     * @returns {boolean}
+     */
+    _isScrollInsidePreview(target) {
+        if (!(target instanceof Element)) {
+            return false;
+        }
+        return Boolean(
+            this._offcanvasEl?.contains(target) ||
+                target.closest('.marketone-shop-preview')
+        );
     }
 
     /**

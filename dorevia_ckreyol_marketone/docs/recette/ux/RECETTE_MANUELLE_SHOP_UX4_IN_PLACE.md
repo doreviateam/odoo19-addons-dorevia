@@ -10,7 +10,7 @@
 | **Base** | `ckr-marketone-01` |
 | **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.2`) · **Lot 3bis — arbitrage GO** (`13.3` cible) · Lot 4 continu |
 | **Version Lot 3 (fonctionnel)** | **`19.0.15.13.2`** — **figée** |
-| **Version Lot 3bis (visuel)** | **`19.0.15.13.3`** (cible) |
+| **Version Lot 3bis (visuel)** | **`19.0.15.13.4`** (cible — incl. retrait naturel V3bis.12) |
 | **Branche Lot 3bis** | `feat/marketone-ux4-lot3bis-preview-premium` (autorisée post-note) |
 | **PR Lot 3** | **#14** · **#15** — mergées |
 | **Note arbitrage Lot 3** | [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) |
@@ -417,6 +417,29 @@ Améliorer la **qualité perçue** de la preview produit (mini-fiche courte prem
 | **V3bis.9** | **Respiration** verticale globale (image · infos · actions) | ☐ | ☐ |
 | **V3bis.10** | **Cohérence palette** CK (pastel · terracotta · sauge) | ☐ | ☐ |
 | **V3bis.11** | Ressenti **maison de sélection** · pas panneau technique | ☐ | ☐ |
+| **V3bis.12** | **Retrait naturel** — clic / scroll hors preview · pas effet modal | ☐ | ☐ |
+
+## Recette ciblée retrait naturel — desktop (V3bis.12)
+
+| # | Action | Attendu | ☐ |
+|---|--------|---------|---|
+| V3bis.12-D1 | Ouvrir une preview | Panneau ouvert · grille visible | |
+| V3bis.12-D2 | Cliquer dans la **grille boutique** hors panneau | Preview se ferme proprement · pas de backdrop | |
+| V3bis.12-D3 | Rouvrir · **scroller** la boutique hors panneau | Preview se retire · URL `/shop` | |
+| V3bis.12-D4 | Rouvrir · interactions **dans** le panneau (scroll interne si contenu long) | Preview **reste ouverte** | |
+| V3bis.12-D5 | Smoke G3.9 : croix · ESC · re-clic **Voir** | Fermetures existantes OK | |
+| V3bis.12-D6 | Console navigateur | Pas d’erreur JS bloquante | |
+
+## Recette ciblée retrait naturel — mobile (V3bis.12)
+
+| # | Action | Attendu | ☐ |
+|---|--------|---------|---|
+| V3bis.12-M1 | Ouvrir preview inline | Bloc sous tuile | |
+| V3bis.12-M2 | **Scroller** la page boutique hors preview | Repli propre ou retrait lisible | |
+| V3bis.12-M3 | Rouvrir · scroller **dans** la preview | Preview **maintenue** | |
+| V3bis.12-M4 | Tap hors preview (hors CTA **Voir**) | Repli propre si applicable | |
+| V3bis.12-M5 | Bouton **Fermer** · smoke L3.M | Fermeture explicite OK | |
+| V3bis.12-M6 | Mobile 390 px | Pas de débordement horizontal | |
 
 ## Non-régression fonctionnelle obligatoire (smoke)
 
@@ -446,7 +469,7 @@ Améliorer la **qualité perçue** de la preview produit (mini-fiche courte prem
 
 | Verdict | Condition |
 |---------|-----------|
-| **GO MOA Lot 3bis** | V3bis.1–V3bis.11 OK · smoke G3.6–G3.9 OK · captures MOA · pas de régression Lot 3 |
+| **GO MOA Lot 3bis** | V3bis.1–V3bis.12 OK · smoke G3.6–G3.9 OK · captures MOA · pas de régression Lot 3 |
 | **NO GO** | Régression fonctionnelle · scope creep · ressenti non premium |
 
 **Verdict :** ☐ GO MOA Lot 3bis · ☐ NO GO · ☑ **Non exécuté** (dev autorisé post-note)
