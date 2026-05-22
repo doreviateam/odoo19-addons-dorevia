@@ -8,7 +8,9 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.2`) · **Lot 3bis — GO avec réserve documentaire** (`13.4`) · Lot 4 continu |
+| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.2`) · **Lot 3bis — GO avec réserve documentaire** (`13.4`) · **Lot 3ter — en recette** (`13.5` cible) · Lot 4 continu |
+| **Version Lot 3ter** | **`19.0.15.13.5`** (cible — clic image → preview) |
+| **Note arbitrage Lot 3ter** | [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md) |
 | **Version Lot 3 (fonctionnel)** | **`19.0.15.13.2`** — **figée** |
 | **Version Lot 3bis (visuel)** | **`19.0.15.13.4`** (cible — incl. retrait naturel V3bis.12) |
 | **Branche Lot 3bis** | `feat/marketone-ux4-lot3bis-preview-premium` (autorisée post-note) |
@@ -52,6 +54,7 @@ Chaque évolution UX-4 doit prouver **deux choses** :
 | **Lot 2** | § L2 | B1 · B4 · B8 · conversion tile | + smoke lot3 |
 | **Lot 3** | § L3 · § G3 · § L3.F · § L3.M | B1 · **B4** · **B7** · **B8** · **B9** · **B10** | + preview tests |
 | **Lot 3bis** | § **V3bis** · smoke L3.F / L3.M | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Aucun test auto supplémentaire |
+| **Lot 3ter** | § **V3ter** · smoke L1 / L2 / G3.9 | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Test grille image preview data |
 | **Lot 4** | § L4 | **B1–B10 complet** | Suite complète § C référence |
 
 ---
@@ -479,6 +482,58 @@ Améliorer la **qualité perçue** de la preview produit (mini-fiche courte prem
 **Réserve documentaire :** **R1** — libellé bouton **Fermer** mobile parfois tronqué (`Ferme`) · cliquable · non bloquant.
 
 **Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md)
+
+---
+
+# Lot 3ter — Clic image tuile → preview
+
+> **Statut :** **Arbitrage MOA GO** (2026-05-22) · micro-évolution isolée post-PR #16 · branche `feat/marketone-ux4-lot3ter-image-preview-click`.
+
+## Objectif MOA
+
+Aligner le **clic image tuile** (hors panier / wishlist) sur le comportement du CTA **Voir** — preview in-page · URL `/shop` conservée.
+
+## Périmètre
+
+| In | Out |
+|----|-----|
+| Clic `oe_product_image_link` → preview | Titre → fiche (inchangé) |
+| QWeb data attributes image | Routes · fallback · deep-link |
+| JS handler partagé preview | Panier Lot 2 · wishlist Lot 1 |
+
+## Critères recette V3ter
+
+| # | Critère | Desktop | Mobile 390 px |
+|---|---------|---------|---------------|
+| **V3ter.1** | Clic **image** hors boutons → preview ouverte | ☐ | ☐ |
+| **V3ter.2** | Clic **panier** overlay → panier uniquement, pas preview | ☐ | ☐ |
+| **V3ter.3** | Clic **wishlist** overlay → wishlist uniquement, pas preview | ☐ | ☐ |
+| **V3ter.4** | Clic **titre** → fiche produit complète | ☐ | ☐ |
+| **V3ter.5** | Comportement **identique** au CTA **Voir** (toggle / bascule produit) | ☐ | ☐ |
+| **V3ter.6** | URL **`/shop`** conservée | ☐ | ☐ |
+| **V3ter.7** | Smoke **G3.9** + retrait naturel **V3bis.12** inchangés | ☐ | ☐ |
+| **V3ter.8** | Console sans erreur JS bloquante | ☐ | ☐ |
+
+## Non-régression obligatoire (smoke)
+
+| Critère | Référence | ☐ |
+|---------|-----------|---|
+| Panier in-place depuis overlay | Lot 2 · **G3.6** | |
+| Wishlist toggle depuis overlay | Lot 1 · **G3.7** | |
+| Fermeture / retrait preview | **G3.9** · **V3bis.12** | |
+| URL `/shop` | **G3.1** | |
+| Mobile sans débordement | **G3.3** | |
+
+## Verdict Lot 3ter
+
+| Verdict | Condition |
+|---------|-----------|
+| **GO MOA Lot 3ter** | V3ter.1–V3ter.8 OK · smoke Lots 1–2 + G3.9 OK |
+| **NO GO** | Régression panier / wishlist / titre / preview |
+
+**Verdict :** ☐ GO MOA Lot 3ter · ☐ NO GO · ☑ **Non exécuté**
+
+**Note arbitrage :** [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md)
 
 ---
 

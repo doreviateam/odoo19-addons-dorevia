@@ -187,6 +187,21 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](../recette/ux/R
 
 ---
 
+### Lot 3ter — Clic image tuile → preview · **En cours**
+
+> **Note :** [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md)
+
+| Élément | Détail |
+|---------|--------|
+| **Objectif** | Clic image tuile = CTA **Voir** · preview in-page |
+| **Version cible** | **`19.0.15.13.5`** |
+| **Branche** | `feat/marketone-ux4-lot3ter-image-preview-click` |
+| **Recette** | § V3ter [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) |
+
+**Hors périmètre :** titre fiche · panier · wishlist · fallback · deep-link · configurateur.
+
+---
+
 ### Lot 4 — Recette visuelle + régression boutique · **Continu**
 
 | Élément | Détail |

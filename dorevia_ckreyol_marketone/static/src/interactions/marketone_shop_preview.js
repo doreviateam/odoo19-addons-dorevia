@@ -8,16 +8,18 @@ const DESKTOP_QUERY = '(min-width: 992px)';
 /**
  * UX-4 Lot 3 — preview « Voir » in-page depuis /shop.
  * UX-4 Lot 3bis — retrait naturel (clic / scroll hors panneau).
+ * UX-4 Lot 3ter — clic image tuile aligné sur CTA Voir.
  *
  * Desktop : offcanvas latéral droit non modal.
  * Mobile : bloc inline sous tuile (une seule preview ouverte).
  * Fallback : produits configurables → navigation fiche (href conservé).
  */
 export class MarketoneShopPreview extends Interaction {
-    static selector = '.marketone-shop .marketone-shop-card-cta';
+    static selector =
+        '.marketone-shop .marketone-shop-card-cta, .marketone-shop .oe_product_image';
 
     dynamicContent = {
-        _root: { 't-on-click': this.onCtaClick },
+        _root: { 't-on-click': this.onPreviewTriggerClick },
     };
 
     setup() {
@@ -97,7 +99,8 @@ export class MarketoneShopPreview extends Interaction {
         return Boolean(
             target.closest('#marketone_shop_preview_offcanvas') ||
                 target.closest('.marketone-shop-preview') ||
-                target.closest('.marketone-shop-card-cta')
+                target.closest('.marketone-shop-card-cta') ||
+                target.closest('.oe_product_image')
         );
     }
 
@@ -116,28 +119,91 @@ export class MarketoneShopPreview extends Interaction {
     }
 
     /**
+     * @param {HTMLElement} card
+     * @returns {HTMLElement|null}
+     */
+    _getCardPreviewCta(card) {
+        return card.querySelector('.marketone-shop-card-cta');
+    }
+
+    /**
+     * @param {HTMLElement} trigger
+     * @param {HTMLElement|null} cta
+     * @returns {boolean}
+     */
+    _isPreviewAllowed(trigger, cta) {
+        const allowed = trigger.dataset.marketonePreviewAllowed ?? cta?.dataset.marketonePreviewAllowed;
+        return allowed === 'True';
+    }
+
+    /**
+     * @param {HTMLElement} trigger
+     * @param {HTMLElement|null} cta
+     * @returns {number}
+     */
+    _getTemplateId(trigger, cta) {
+        return parseInt(trigger.dataset.productTemplateId ?? cta?.dataset.productTemplateId, 10);
+    }
+
+    /**
+     * @param {HTMLElement} card
+     * @returns {boolean}
+     */
+    _isCardPreviewAllowed(card) {
+        return card?.dataset.marketonePreviewAllowed === 'True';
+    }
+
+    /**
+     * @param {HTMLElement} card
+     * @returns {number}
+     */
+    _getCardTemplateId(card) {
+        return parseInt(card?.dataset.productTemplateId, 10);
+    }
+
+    /**
      * @param {MouseEvent} ev
      */
-    async onCtaClick(ev) {
-        const cta = ev.currentTarget;
-        const previewAllowed = cta.dataset.marketonePreviewAllowed === 'True';
-        if (!previewAllowed) {
-            return;
-        }
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        const templateId = parseInt(cta.dataset.productTemplateId, 10);
-        if (!templateId) {
+    async onPreviewTriggerClick(ev) {
+        if (
+            ev.target.closest(
+                '.marketone-shop-card-cart, .marketone-shop-card-wishlist, .o_wsale_product_btn'
+            )
+        ) {
             return;
         }
 
-        const card = cta.closest('.oe_product_cart');
+        const trigger = ev.currentTarget;
+        const card = trigger.closest('.oe_product_cart');
         if (!card) {
             return;
         }
 
-        if (this._activeCta === cta) {
+        const cta = this._getCardPreviewCta(card);
+        const fromImage = trigger.classList.contains('oe_product_image');
+        if (fromImage && !ev.target.closest('.oe_product_image_link, .oe_product_image_img_wrapper, .oe_product_image_img')) {
+            return;
+        }
+
+        const previewAllowed = fromImage
+            ? this._isCardPreviewAllowed(card)
+            : this._isPreviewAllowed(trigger, cta);
+        if (!previewAllowed) {
+            return;
+        }
+
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        const templateId = fromImage
+            ? this._getCardTemplateId(card)
+            : this._getTemplateId(trigger, cta);
+        if (!templateId) {
+            return;
+        }
+
+        const stateCta = cta || trigger;
+        if (this._activeCta === stateCta) {
             this._closeAll();
             return;
         }
@@ -145,14 +211,17 @@ export class MarketoneShopPreview extends Interaction {
         this._closeAllImmediate();
         const html = await this.waitFor(this._fetchPreview(templateId));
         if (!html) {
-            window.location.href = cta.getAttribute('href');
+            const fallbackHref = cta?.getAttribute('href') || trigger.getAttribute('href');
+            if (fallbackHref) {
+                window.location.href = fallbackHref;
+            }
             return;
         }
 
         if (window.matchMedia(DESKTOP_QUERY).matches) {
-            this._openDesktop(html, cta);
+            this._openDesktop(html, stateCta);
         } else {
-            this._openMobile(html, card, cta);
+            this._openMobile(html, card, stateCta);
         }
     }
 
