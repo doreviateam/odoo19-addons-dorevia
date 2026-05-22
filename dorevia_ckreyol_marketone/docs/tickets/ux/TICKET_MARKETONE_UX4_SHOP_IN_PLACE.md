@@ -4,15 +4,17 @@
 |-------|--------|
 | **ID** | `TICKET_MARKETONE_UX4_SHOP_IN_PLACE` |
 | **Type** | **UX** — extension légère `website_sale` / `website_sale_wishlist` |
-| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 clôturé GO avec réserve documentaire** · **Lot 3 clôturé GO avec réserve documentaire** (`13.2` figé) · **Lot 3bis — arbitrage GO** (`13.3` cible) · Lot 4 continu |
+| **Statut** | **Lot 1 clôturé GO avec réserve documentaire** · **Lot 2 clôturé GO avec réserve documentaire** · **Lot 3 clôturé GO avec réserve documentaire** (`13.2` figé) · **Lot 3bis clôturé GO avec réserve documentaire** (`13.4`) · Lot 4 continu |
 | **Branche Lot 3 (reprise)** | `fix/marketone-ux4-lot3-preview-close` · PR **#15** |
 | **Version livrée Lot 1** | **`19.0.15.11.1`** |
 | **Version livrée Lot 2** | **`19.0.15.12.3`** |
 | **Version livrée Lot 3** | **`19.0.15.13.2`** |
+| **Version livrée Lot 3bis** | **`19.0.15.13.4`** |
 | **Branche Lot 2** | `feat/marketone-ux4-lot2-cart-in-place` |
 | **PR Lot 1** | **#12** — mergée |
 | **PR Lot 2** | **#13** — mergée |
 | **PR Lot 3** | **#14** mergée · **#15** (reprise G3.9) |
+| **PR Lot 3bis** | **#16** — GO merge MOA |
 | **Base** | `ckr-marketone-01` |
 | **URL** | http://localhost:18079/shop |
 | **Branche Lot 1** | `feat/marketone-ux4-lot1-wishlist-toggle` |
@@ -161,22 +163,25 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](../recette/ux/R
 
 ---
 
-### Lot 3bis — Finition visuelle premium preview · **P2bis · ARBITRAGE GO**
+### Lot 3bis — Finition visuelle premium preview · **Clôturé GO avec réserve documentaire**
 
-> **Note :** [`NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md`](NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md)
+> **Note :** [`NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md`](NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md)  
+> **Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md`](../recette/ux/RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md)
 
 | Élément | Détail |
 |---------|--------|
-| **Objectif** | Qualité perçue preview · mini-fiche premium CK · **sans changement fonctionnel** |
+| **Objectif** | Qualité perçue preview · mini-fiche premium CK · retrait naturel V3bis.12 |
 | **Prérequis** | Lot 3 **GO figé** `19.0.15.13.2` |
-| **Version cible** | **`19.0.15.13.3`** |
+| **Version livrée** | **`19.0.15.13.4`** |
 | **Branche** | `feat/marketone-ux4-lot3bis-preview-premium` |
-| **PR cible** | `[CK][UX-4] Lot 3bis — Finition visuelle preview premium` |
+| **PR** | **#16** — mergée |
 | **Recette** | § V3bis [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) |
 
-**Arbitrages MOA :** titre **`Découvrir le produit`** · fermeture desktop **croix seule** · image **contain cadré** · direction DA pastel CK.
+**Verdict MOA (2026-05-22) :** **GO avec réserve documentaire** · V3bis.1–V3bis.12 OK · tests **88/88** · réserve **R1** mobile (libellé Fermer tronqué).
 
-**Hors périmètre :** JS · routes · panier/wishlist · photo/titre · fallback · deep-link · configurateur.
+**Arbitrages MOA :** titre **`Découvrir le produit`** · fermeture desktop **croix seule** · image **contain cadré** · direction DA pastel CK · **V3bis.12 retrait naturel**.
+
+**Exception JS (V3bis.12) :** `marketone_shop_preview.js` — fermeture naturelle uniquement (clic / scroll hors preview).
 
 **Règle :** Lot 3bis **ne remet pas en cause** le GO fonctionnel Lot 3.
 
@@ -295,6 +300,7 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | 2026-05-22 | `19.0.15.13.1` | Lot 3 | **GO avec réserve documentaire** · PR #14 mergée · correctif rebind preview `13.1` |
 | 2026-05-22 | `19.0.15.13.2` | Lot 3 reprise | **GO avec réserve documentaire** · G3.9 revalidé · PR #15 |
 | 2026-05-22 | — | Lot 3bis arbitrage | **GO arbitrage** · note `NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md` |
+| 2026-05-22 | `19.0.15.13.4` | Lot 3bis | **GO avec réserve documentaire** · V3bis.12 · PR #16 mergée · réserve R1 mobile |
 
 **Correctif `12.3` :** transmission `no_variant_attribute_value_ids` (origine unique grille) dans `/shop/cart/add` — consolidation panier standard Odoo.
 

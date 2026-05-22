@@ -8,11 +8,13 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.2`) · **Lot 3bis — arbitrage GO** (`13.3` cible) · Lot 4 continu |
+| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.2`) · **Lot 3bis — GO avec réserve documentaire** (`13.4`) · Lot 4 continu |
 | **Version Lot 3 (fonctionnel)** | **`19.0.15.13.2`** — **figée** |
-| **Version Lot 3bis (visuel)** | **`19.0.15.13.3`** (cible) |
+| **Version Lot 3bis (visuel)** | **`19.0.15.13.4`** (cible — incl. retrait naturel V3bis.12) |
 | **Branche Lot 3bis** | `feat/marketone-ux4-lot3bis-preview-premium` (autorisée post-note) |
 | **PR Lot 3** | **#14** · **#15** — mergées |
+| **PR Lot 3bis** | **#16** — [`[CK][UX-4] Lot 3bis — Finition visuelle preview premium`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/16) |
+| **Rapport Lot 3bis** | [`RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md) |
 | **Note arbitrage Lot 3** | [`NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3_PREVIEW_VOIR.md) |
 | **Note arbitrage Lot 3bis** | [`NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3BIS_PREVIEW_PREMIUM.md) |
 
@@ -417,6 +419,29 @@ Améliorer la **qualité perçue** de la preview produit (mini-fiche courte prem
 | **V3bis.9** | **Respiration** verticale globale (image · infos · actions) | ☐ | ☐ |
 | **V3bis.10** | **Cohérence palette** CK (pastel · terracotta · sauge) | ☐ | ☐ |
 | **V3bis.11** | Ressenti **maison de sélection** · pas panneau technique | ☐ | ☐ |
+| **V3bis.12** | **Retrait naturel** — clic / scroll hors preview · pas effet modal | ☐ | ☐ |
+
+## Recette ciblée retrait naturel — desktop (V3bis.12)
+
+| # | Action | Attendu | ☐ |
+|---|--------|---------|---|
+| V3bis.12-D1 | Ouvrir une preview | Panneau ouvert · grille visible | |
+| V3bis.12-D2 | Cliquer dans la **grille boutique** hors panneau | Preview se ferme proprement · pas de backdrop | |
+| V3bis.12-D3 | Rouvrir · **scroller** la boutique hors panneau | Preview se retire · URL `/shop` | |
+| V3bis.12-D4 | Rouvrir · interactions **dans** le panneau (scroll interne si contenu long) | Preview **reste ouverte** | |
+| V3bis.12-D5 | Smoke G3.9 : croix · ESC · re-clic **Voir** | Fermetures existantes OK | |
+| V3bis.12-D6 | Console navigateur | Pas d’erreur JS bloquante | |
+
+## Recette ciblée retrait naturel — mobile (V3bis.12)
+
+| # | Action | Attendu | ☐ |
+|---|--------|---------|---|
+| V3bis.12-M1 | Ouvrir preview inline | Bloc sous tuile | |
+| V3bis.12-M2 | **Scroller** la page boutique hors preview | Repli propre ou retrait lisible | |
+| V3bis.12-M3 | Rouvrir · scroller **dans** la preview | Preview **maintenue** | |
+| V3bis.12-M4 | Tap hors preview (hors CTA **Voir**) | Repli propre si applicable | |
+| V3bis.12-M5 | Bouton **Fermer** · smoke L3.M | Fermeture explicite OK | |
+| V3bis.12-M6 | Mobile 390 px | Pas de débordement horizontal | |
 
 ## Non-régression fonctionnelle obligatoire (smoke)
 
@@ -446,12 +471,14 @@ Améliorer la **qualité perçue** de la preview produit (mini-fiche courte prem
 
 | Verdict | Condition |
 |---------|-----------|
-| **GO MOA Lot 3bis** | V3bis.1–V3bis.11 OK · smoke G3.6–G3.9 OK · captures MOA · pas de régression Lot 3 |
+| **GO MOA Lot 3bis** | V3bis.1–V3bis.12 OK · smoke G3.6–G3.9 OK · captures MOA · pas de régression Lot 3 |
 | **NO GO** | Régression fonctionnelle · scope creep · ressenti non premium |
 
-**Verdict :** ☐ GO MOA Lot 3bis · ☐ NO GO · ☑ **Non exécuté** (dev autorisé post-note)
+**Verdict :** ☑ **GO MOA Lot 3bis avec réserve documentaire** (`13.4` · PR #16) · ☐ NO GO
 
-**Règle merge :** **pas de merge PR Lot 3bis sans validation visuelle MOA desktop + mobile.**
+**Réserve documentaire :** **R1** — libellé bouton **Fermer** mobile parfois tronqué (`Ferme`) · cliquable · non bloquant.
+
+**Rapport :** [`RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md)
 
 ---
 
@@ -490,9 +517,9 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **GO partiel** | Lot(s) validé(s) · autres lots pending documenté |
 | **NO GO** | Régression bloquante § A référence |
 
-**Verdict global :** ☐ GO · ☑ **GO partiel (Lots 1–3 validés par jalons · `13.2`)** · ☐ NO GO
+**Verdict global :** ☐ GO · ☑ **GO partiel (Lots 1–3bis validés par jalons · `13.4`)** · ☐ NO GO
 
-> **Lots 1–3 :** chacun **GO avec réserve documentaire** isolée · **Lot 4** : régression B1–B10 complète à rejouer à chaque évolution.
+> **Lots 1–3bis :** chacun **GO avec réserve documentaire** isolée · **Lot 4** : régression B1–B10 complète à rejouer à chaque évolution.
 
 ---
 
@@ -504,6 +531,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | 2026-05-22 | L2 | `19.0.15.12.3` | MOA | **GO avec réserve documentaire** | [`RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT2_IN_PLACE_20260522.md) |
 | 2026-05-22 | L3 | `19.0.15.13.1` | MOA | **GO avec réserve documentaire** (PR #14) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md) |
 | 2026-05-22 | L3 | `19.0.15.13.2` | MOA | **GO avec réserve documentaire** (G3.9 · PR #15) | idem |
+| 2026-05-22 | L3bis | `19.0.15.13.4` | MOA | **GO avec réserve documentaire** (V3bis.12 · PR #16) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md) |
 
 ---
 

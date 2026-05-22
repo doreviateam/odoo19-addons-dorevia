@@ -54,7 +54,7 @@ Améliorer la **qualité perçue** de la preview : mini-fiche courte **premium**
 
 | Hors scope | Motif |
 |------------|--------|
-| Modification **JS** (interactions preview / panier / wishlist) | Risque régression G3.6–G3.9 |
+| Modification **JS** (interactions preview / panier / wishlist) | Risque régression G3.6–G3.9 — **exception V3bis.12** § 10 |
 | Modification **routes** / contrôleurs | Lot 3 figé |
 | Changement comportement **panier / wishlist** | Lot 1–2 figés |
 | Changement **photo / titre** tuile grille | Gel MOA Lot 3 |
@@ -149,7 +149,7 @@ Améliorer la **qualité perçue** de la preview : mini-fiche courte **premium**
 | `docs/recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md` | § V3bis |
 | `docs/tickets/ux/TICKET_MARKETONE_UX4_SHOP_IN_PLACE.md` | Référence Lot 3bis |
 
-**Non impactés :** `marketone_shop_preview.js` · `marketone_shop_cart_add.js` · `marketone_shop_wishlist_toggle.js` · `controllers/website_sale.py` · `models/product_template.py`.
+| `static/src/interactions/marketone_shop_preview.js` | **V3bis.12** — retrait naturel clic / scroll hors preview |
 
 ---
 
@@ -224,7 +224,78 @@ Voir [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SH
 
 ---
 
-## 10. Historique
+## 10. Micro-arbitrage MOA — Retrait naturel preview (V3bis.12)
+
+| Champ | Valeur |
+|-------|--------|
+| **Statut** | **Validé Dev** — en attente recette MOA (2026-05-22) |
+| **Contexte** | GO visuel Lot 3bis `13.3` avec réserve R1 · **GO final suspendu** |
+| **Version cible** | **`19.0.15.13.4`** |
+
+### 10.1 — Problème MOA
+
+La preview desktop peut rester ouverte comme un **tiroir permanent** alors que l’utilisateur reprend la navigation boutique (grille, filtres, scroll).
+
+### 10.2 — Solution retenue (la plus légère)
+
+| Déclencheur | Comportement | Modal ? |
+|-------------|--------------|---------|
+| **Clic hors preview** | Fermeture via `_closeAll()` | Non — pas de backdrop |
+| **Scroll hors preview** | Fermeture si scroll page / grille | Non |
+| **Clic dans preview** | Maintien ouvert | — |
+| **Scroll dans preview** | Maintien ouvert (contenu long) | — |
+| **Clic CTA Voir** | Logique existante (toggle / bascule produit) | — |
+
+**Implémentation :** reprise **ciblée** de `marketone_shop_preview.js` uniquement.
+
+| Listener | Phase | Rôle |
+|----------|-------|------|
+| `click` capture | capture | Bouton **Fermer** mobile (existant G3.9) |
+| `click` | bubble | Clic hors `#marketone_shop_preview_offcanvas` · hors `.marketone-shop-preview` · hors `.marketone-shop-card-cta` |
+| `scroll` | capture | Scroll hors panneau / preview inline |
+| `keydown` Escape | — | Inchangé G3.9 |
+
+**Zones exemptées du retrait :**
+
+- offcanvas desktop (`#marketone_shop_preview_offcanvas`) ;
+- fragment inline (`.marketone-shop-preview`) ;
+- CTA **Voir** (`.marketone-shop-card-cta`) — évite conflit avec toggle / bascule produit.
+
+### 10.3 — Exception périmètre « zéro JS »
+
+| Avant arbitrage | Après V3bis.12 |
+|-----------------|----------------|
+| Lot 3bis = SCSS + QWeb uniquement | **Exception documentée** : JS limité à la **fermeture naturelle** |
+
+**Hors scope de l’exception :** panier · wishlist · routes · photo/titre · fallback · deep-link · configurateur · modal/backdrop.
+
+### 10.4 — Non-régression obligatoire
+
+| Critère | Référence |
+|---------|-----------|
+| Fermeture explicite | **G3.9** · croix · ESC · re-clic Voir · Fermer mobile |
+| Preview non modale | `data-bs-backdrop=false` · pas de trap focus |
+| URL `/shop` | **G3.1** |
+| Panier / wishlist preview | **G3.6–G3.7** inchangés |
+
+### 10.5 — Recette MOA
+
+§ **V3bis.12** · **V3bis.12-D1–D6** · **V3bis.12-M1–M6** dans [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md).
+
+### 10.6 — Verdict micro-arbitrage
+
+| Verdict | Condition |
+|---------|-----------|
+| **GO technique V3bis.12** | Implémentation légère · exception JS documentée · smoke G3.9 préservé |
+| **GO final Lot 3bis** | V3bis.12 recetté MOA · pas de régression |
+
+**Verdict MOA (2026-05-22) :** **GO final Lot 3bis** · version **`19.0.15.13.4`** · PR **#16** · réserve **R1** mobile documentaire.
+
+**Réserve maintenue :** **L3.V1** · **R1** — hors merge bloquant.
+
+---
+
+## 11. Historique
 
 | Date | Événement |
 |------|-----------|
@@ -232,3 +303,6 @@ Voir [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SH
 | 2026-05-22 | Proposition Dev Lot 3bis — approche validée MOA |
 | 2026-05-22 | Arbitrages figés : titre · fermeture · contain · direction DA |
 | 2026-05-22 | **GO note arbitrage** — branche autorisée post-documentation |
+| 2026-05-22 | GO visuel `13.3` avec réserve R1 mobile |
+| 2026-05-22 | Micro-arbitrage **V3bis.12** retrait naturel · exception JS documentée · cible `13.4` |
+| 2026-05-22 | **GO final Lot 3bis** · V3bis.12 recetté · PR **#16** · réserve R1 mobile |
