@@ -3,7 +3,7 @@
 | Champ | Valeur |
 |-------|--------|
 | **Ticket** | [`TICKET_MARKETONE_UX4_SHOP_IN_PLACE`](../../tickets/ux/TICKET_MARKETONE_UX4_SHOP_IN_PLACE.md) |
-| **Version cible Lot 1** | **`19.0.15.11.0`** |
+| **Version cible Lot 1** | **`19.0.15.11.1`** |
 | **Branche Lot 1** | `feat/marketone-ux4-lot1-wishlist-toggle` |
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
@@ -67,7 +67,7 @@ docker restart sandbox-odoo19-odoo-1
 | ☐ | Contrôle | Valeur attendue |
 |---|----------|-----------------|
 | ☐ | **Branche active** (sandbox / déploiement recette) | `feat/marketone-ux4-lot1-wishlist-toggle` |
-| ☐ | **Version module** (`__manifest__.py` ou Apps → C-Kreyol Marketone) | **`19.0.15.11.0`** |
+| ☐ | **Version module** (`__manifest__.py` ou Apps → C-Kreyol Marketone) | **`19.0.15.11.1`** |
 | ☐ | **Base de données** | `ckr-marketone-01` |
 | ☐ | **URL testée** | http://localhost:18079/shop |
 | ☐ | **PR concernée** | **#12** — UX-4 Lot 1 uniquement |
@@ -77,7 +77,7 @@ docker restart sandbox-odoo19-odoo-1
 
 ```bash
 grep '"version"' dorevia_ckreyol_marketone/__manifest__.py
-# Attendu : "19.0.15.11.0"
+# Attendu : "19.0.15.11.1"
 ```
 
 ---
@@ -98,7 +98,7 @@ Depuis `/shop`, l’utilisateur peut **ajouter et retirer** un produit de la wis
 
 | # | Étape | Résultat attendu | ☐ |
 |---|-------|------------------|---|
-| **L1.0** | Ouvrir la **console navigateur** (F12 / Cmd+Opt+I) sur `/shop` | Aucune **erreur JavaScript rouge** au chargement · asset `marketone_shop_in_place` / `marketone_shop_in_place.js` présent (onglet Network ou Sources) · **pas d’erreur bloquante** au 1er clic cœur (rejouer après L1.3 si besoin) | |
+| **L1.0** | Ouvrir la **console navigateur** (F12 / Cmd+Opt+I) sur `/shop` | Aucune **erreur JavaScript rouge** au chargement · bundle frontend contenant l’interaction **`marketone_shop_wishlist_toggle`** (Odoo 19) · **pas d’erreur bloquante** au 1er / 2e clic cœur | |
 | L1.1 | Ouvrir `/shop` en navigation privée | HTTP 200 · grille visible | |
 | L1.2 | Noter URL et compteur wishlist header (ex. 0) | URL = `/shop` | |
 | L1.3 | Cliquer cœur d’une carte (1er clic) | **Pas de navigation** · URL inchangée · animation optionnelle vers header | |
@@ -316,7 +316,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | Fichier | Rôle |
 |---------|------|
 | `controllers/website_sale_wishlist.py` | Route `remove_by_product` |
-| `static/src/js/marketone_shop_in_place.js` | Toggle grille |
+| `static/src/interactions/marketone_shop_wishlist_toggle.js` | Interaction Odoo 19 — toggle grille |
 | `views/pages/shop_product_tile_conversion.xml` | QWeb `_is_in_wishlist` |
 | `static/src/scss/_shop_product_cards.scss` | Feedback carte |
 | `tests/test_marketone_shop_in_place.py` | Tests auto |

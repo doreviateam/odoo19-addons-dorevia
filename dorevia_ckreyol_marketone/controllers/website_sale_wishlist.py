@@ -7,8 +7,8 @@ from odoo.addons.website_sale_wishlist.controllers.main import WebsiteSaleWishli
 
 class MarketoneWebsiteSaleWishlist(WebsiteSaleWishlist):
     @route(
-        ["/shop/wishlist/remove_by_product"],
-        type="json",
+        "/shop/wishlist/remove_by_product",
+        type="jsonrpc",
         auth="public",
         website=True,
     )
@@ -24,7 +24,7 @@ class MarketoneWebsiteSaleWishlist(WebsiteSaleWishlist):
                 if wish.id in wish_ids:
                     request.session["wishlist_ids"].remove(wish.id)
                     request.session.touch()
-                    wish.sudo().unlink()
+                wish.sudo().unlink()
             else:
                 wish.unlink()
         return True

@@ -45,6 +45,11 @@ class TestMarketoneShopInPlaceWishlist(HttpCase):
         self.assertIn('data-action="o_wishlist"', html)
         self.assertNotRegex(
             html,
+            r'marketone-shop-card-wishlist[^"]*\bo_add_wishlist\b',
+            "Grille UX-4 : pas de classe o_add_wishlist (handler Odoo 19 add-only).",
+        )
+        self.assertNotRegex(
+            html,
             r'marketone-shop-card-wishlist[^>]*disabled',
             "Le coeur grille ne doit pas etre disabled (toggle UX-4).",
         )
@@ -89,7 +94,7 @@ class TestMarketoneShopInPlaceWishlist(HttpCase):
         self.assertIn("/shop", response.url)
         self.assertRegex(
             response.text,
-            r'marketone-shop-card-wishlist[^"]*o_add_wishlist',
+            r'marketone-shop-card-wishlist',
         )
 
     def test_no_duplicate_grid_wishlist_button(self):
@@ -102,12 +107,12 @@ class TestMarketoneShopInPlaceWishlist(HttpCase):
         )
         self.assertTrue(card_blocks, "Au moins une carte produit attendue.")
         for block in card_blocks[:3]:
-            wishlist_buttons = re.findall(
-                r'class="[^"]*o_add_wishlist[^"]*"',
+            marketone_buttons = re.findall(
+                r'class="[^"]*\bmarketone-shop-card-wishlist btn[^"]*"',
                 block,
             )
             self.assertLessEqual(
-                len(wishlist_buttons),
+                len(marketone_buttons),
                 1,
-                "Une seule action wishlist par carte.",
+                "Une seule action wishlist Marketone par carte.",
             )

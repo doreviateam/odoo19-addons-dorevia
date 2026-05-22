@@ -69,7 +69,7 @@ Le chantier **ne part pas de zéro** :
 |---------|--------|
 | **Objectif** | Second clic = retrait wishlist depuis `/shop`, sans navigation |
 | **Standard** | Routes `/shop/wishlist/add` + nouvelle `/shop/wishlist/remove_by_product` |
-| **JS** | `include` léger sur `ProductWishlist` — `marketone_shop_in_place.js` |
+| **JS** | Interaction Odoo 19 `marketone_shop_wishlist_toggle.js` — toggle grille |
 | **QWeb** | `product._is_in_wishlist()` · retrait `disabled` · `t-nocache` |
 | **SCSS** | `.marketone-shop-card--in-wishlist` · cœur terracotta persistant |
 | **Tests** | Tag `dorevia_marketone_shop_in_place` |
@@ -139,7 +139,7 @@ Le chantier **ne part pas de zéro** :
 |------|--------|
 | Grille `/shop` | CTA carte : Voir · Panier · Wishlist |
 | Header | Compteurs panier / wishlist (destinations secondaires OK) |
-| Assets | JS `marketone_shop_in_place.js` · SCSS · QWeb tuile + preview (Lot 3) |
+| Assets | Interaction `marketone_shop_wishlist_toggle.js` · SCSS · QWeb tuile + preview (Lot 3) |
 | Contrôleur | Extension wishlist · preview produit (Lot 3) |
 | Tests | Tags `dorevia_marketone_shop_in_place` + régression existants |
 | Recettes | UX-4 + référence boutique |
@@ -162,7 +162,7 @@ Le chantier **ne part pas de zéro** :
 ```text
 views/pages/shop_product_tile_conversion.xml   → CTA carte (QWeb)
 views/pages/shop_product_preview.xml           → Lot 3 — panneau preview
-static/src/js/marketone_shop_in_place.js       → include ProductWishlist + Lots 2–3
+static/src/interactions/marketone_shop_wishlist_toggle.js → Interaction Odoo 19 (Lot 1) + Lots 2–3
 static/src/scss/_shop_product_cards.scss       → feedback carte
 static/src/scss/_shop_product_preview.scss     → Lot 3
 controllers/website_sale_wishlist.py           → remove_by_product (Lot 1)
@@ -222,4 +222,6 @@ docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf -d ckr-marketone-0
 | Date | Version | Lot | Verdict |
 |------|---------|-----|---------|
 | 2026-05-20 | — | Analyse technique | Validée MOA |
-| 2026-05-22 | `19.0.15.11.0` | Lot 1 impl | En recette |
+| 2026-05-22 | `19.0.15.11.1` | Lot 1 fix Odoo 19 Interaction | En recette |
+
+**Correctif `11.1` (post NO GO recette) :** Odoo 19 utilise l’API `Interaction` (`add_product_to_wishlist_button.js`), pas `publicWidget.ProductWishlist`. Migration vers `marketone_shop_wishlist_toggle.js` · retrait `o_add_wishlist` sur grille · route `remove_by_product` en `jsonrpc`.
