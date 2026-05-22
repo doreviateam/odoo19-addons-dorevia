@@ -641,8 +641,8 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 
 ## Clôture documentaire UX-4 — version de référence `19.0.15.13.8`
 
-> **GO GLOBAL MOA prononcé le 2026-05-22** sur `19.0.15.13.8` · mis à jour `19.0.15.13.9` (correctif R2 retrait naturel intelligent) / PR **#17**.
-> La suspension MOA est **levée**. `19.0.15.13.9` est la **version de référence UX-4 actuelle**.
+> **GO GLOBAL MOA prononcé le 2026-05-22** · version de référence finale **`19.0.15.13.9`** · PR **#17** (Lots 1–3ter) + PR **#18** (correctif R2 retrait naturel intelligent).
+> La suspension MOA est **levée**. `19.0.15.13.9` est la **version de référence UX-4 actuelle**, mergée dans `feat/ck-shop-wishlist-standard-go-moa` (commit `52036f3`).
 
 ### Comportements cibles validés
 
@@ -693,18 +693,20 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **R-UX4-5** | Toute évolution UX-4 doit prouver (a) le nouveau comportement et (b) **non-régression Lots 1→3ter + B1–B10** |
 | **R-UX4-6** | Tout passage de version impose : tests auto verts + recette manuelle Lots 1→3ter + smoke `RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md` |
 | **R-UX4-7** | Réserve **R1** doit être traitée lors d'un futur passage visuel premium · pas de remontée bloquante d'ici là |
+| **R-UX4-8** | **Retrait naturel intelligent** — la preview reste ouverte tant que l'utilisateur l'explore (survol · scroll dans le panneau · clic dans le panneau) · elle se retire uniquement quand l'utilisateur reprend la navigation boutique hors preview |
 
-### Références preuve `19.0.15.13.8`
+### Références preuve `19.0.15.13.9` (version de référence finale)
 
 | Document | Rôle |
 |----------|------|
-| [`RAPPORT_RECETTE_MANUELLE_COMPLETE_UX4_13_8_20260522.md`](RAPPORT_RECETTE_MANUELLE_COMPLETE_UX4_13_8_20260522.md) | Rapport recette manuelle complète Lots 1→3ter + B1 (64/64) |
+| [`RAPPORT_RECETTE_MANUELLE_COMPLETE_UX4_13_8_20260522.md`](RAPPORT_RECETTE_MANUELLE_COMPLETE_UX4_13_8_20260522.md) | Rapport recette manuelle complète Lots 1→3ter + B1 (64/64) — base 13.8 |
 | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) | Rapport Lot 3ter — historique passes 13.5 → 13.8 |
+| [`recette_R2_hover_scroll_13_9_20260522.json`](recette_R2_hover_scroll_13_9_20260522.json) | **R2 retrait naturel intelligent** desktop + mobile 13.9 (16/16) |
 | [`recette_v3bis12_13_8_20260522.json`](recette_v3bis12_13_8_20260522.json) | V3bis.12 retrait naturel desktop + mobile (13/13) |
 | [`recette_image_click_I1_I8_13_8_20260522.json`](recette_image_click_I1_I8_13_8_20260522.json) | I1–I8 clic image desktop + mobile (14/14) |
 | [`recette_ux4_l3ter_13_8_v3ter_1_8_result.json`](recette_ux4_l3ter_13_8_v3ter_1_8_result.json) | V3ter.1–8 mobile 390 px |
 | [`recette_manuelle_complete_13_8_20260522.json`](recette_manuelle_complete_13_8_20260522.json) | Résultats bruts recette manuelle complète (64/64) |
-| Captures `capture_*_13_8_*_20260522.png` | Preuves visuelles desktop + mobile · L1, L2, L3 desktop, L3 mobile, V3ter.1, V3bis.12, I1–I8 |
+| Captures `capture_*_13_8_*_20260522.png` + `capture_R2_13_9_*_20260522.png` | Preuves visuelles desktop + mobile · L1→L3ter · V3bis.12 · I1–I8 · R2 |
 
 ---
 
