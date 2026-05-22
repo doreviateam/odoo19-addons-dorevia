@@ -627,6 +627,43 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPP
 
 ---
 
+# Lot 3quater bis — Feedback « Voir le panier » contextualisé
+
+> **Statut :** **Arbitrage MOA GO** (2026-05-22) · branche PR #19 · version `19.0.15.14.1`.
+>
+> Desktop : overlay hover bas-gauche « Voir le panier » seul (sans texte « Ajouté ») · état ajouté = bordure sauge + compteur header.
+> Mobile option A : feedback inline court discret dans le corps (sans encart boxed).
+
+## Critères recette V3qB
+
+| # | Critère | Desktop | Mobile 390 px |
+|---|---------|---------|---------------|
+| **V3qB.1** | Pas de bloc `Voir le panier` permanent dans le **corps** | ☑ auto | ☑ auto |
+| **V3qB.2** | `Voir le panier` visible au **survol** si produit ajouté (overlay image) | ☑ auto | — |
+| **V3qB.3** | Feedback ajout **lisible** sans hover | bordure + header | ☑ auto |
+| **V3qB.4** | Clic `Voir le panier` → navigation `/shop/cart` | ☑ auto | ☑ auto |
+| **V3qB.5** | Clic image hors CTA → **preview** | ☑ auto | ☑ auto |
+| **V3qB.6** | Clic CTA `Ajouter` → panier uniquement | ☑ auto | ☑ auto |
+| **V3qB.7** | Clic wishlist → wishlist uniquement | ☑ auto | ☐ MOA |
+| **V3qB.8** | Compteur header synchronisé | ☑ auto | ☑ auto |
+| **V3qB.9** | Console sans erreur JS bloquante | ☑ auto | ☑ auto |
+
+## Smoke non-régression obligatoire
+
+| Critère | Référence | ☐ |
+|---------|-----------|---|
+| Panier in-place | **L2.1** | ☑ auto |
+| Isolation panier / wishlist | **I5 · I6** | ☑ auto |
+| Retrait naturel preview | **R2-D1** | ☑ auto |
+
+## Verdict Lot 3quater bis
+
+**Verdict :** ☐ GO MOA · ☐ NO GO · ☑ **Recette auto OK — en attente validation visuelle MOA** (`14.1`)
+
+Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md)
+
+---
+
 # Lot 4 — Régression globale boutique
 
 > **Statut :** à rejouer **à chaque jalon** (Lots 1, 2, 3) — pas uniquement en fin de chantier.

@@ -159,7 +159,7 @@ export class MarketoneShopPreview extends Interaction {
     async onTriggerClick(ev) {
         if (
             ev.target.closest(
-                '.marketone-shop-card-cart, .marketone-shop-card-wishlist, .o_wsale_product_btn'
+                '.marketone-shop-card-cart, .marketone-shop-card-wishlist, .o_wsale_product_btn, .marketone-shop-card-cart-feedback, .marketone-shop-card-cart-feedback__link'
             )
         ) {
             return;

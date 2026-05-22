@@ -38,6 +38,17 @@
             <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="move"/>
         </xpath>
 
+        <!-- UX-4 Lot 3quater bis — feedback panier : overlay image (desktop) · inline corps (mobile). -->
+        <xpath expr="//div[contains(@t-attf-class, 'oe_product_image')]" position="inside">
+            <div class="marketone-shop-card-cart-feedback marketone-shop-card-cart-feedback--tile"
+                 hidden="hidden"
+                 aria-live="polite">
+                <span class="marketone-shop-card-cart-feedback__label d-inline d-lg-none">Ajouté au panier</span>
+                <a href="/shop/cart"
+                   class="marketone-shop-card-cart-feedback__link">Voir le panier</a>
+            </div>
+        </xpath>
+
         <!-- UX-4 Lot 2 / 3ter — PTAV panier + data preview carte (clic image). -->
         <xpath expr='//form[contains(@t-attf-class, "oe_product_cart")]' position="attributes">
             <attribute name="t-att-data-marketone-no-variant-ptav-ids">",".join(map(str, product._marketone_grid_no_variant_ptav_ids()))</attribute>
@@ -45,14 +56,8 @@
             <attribute name="t-att-data-marketone-preview-allowed">product._marketone_preview_full_allowed()</attribute>
         </xpath>
 
-        <!-- UX-4 Lot 2 — feedback local carte après ajout panier. -->
+        <!-- UX-4 Lot 3 — emplacement preview mobile inline. -->
         <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="after">
-            <div class="marketone-shop-card-cart-feedback" hidden="hidden" aria-live="polite">
-                <span class="marketone-shop-card-cart-feedback__label">Ajouté au panier</span>
-                <a href="/shop/cart"
-                   class="marketone-shop-card-cart-feedback__link">Voir le panier</a>
-            </div>
-            <!-- UX-4 Lot 3 — emplacement preview mobile inline. -->
             <div class="marketone-shop-card-preview-slot d-lg-none"
                  hidden="hidden"
                  aria-live="polite"/>
