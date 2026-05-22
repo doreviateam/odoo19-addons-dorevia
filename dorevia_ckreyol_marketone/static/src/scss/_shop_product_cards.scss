@@ -117,6 +117,13 @@ $_shop-tile-crop-scale: 1.29;
         }
     }
 
+    // UX-4 Lot 3ter — curseur exploration image lorsque preview autorisée.
+    .oe_product_cart[data-marketone-preview-allowed="True"] {
+        .oe_product_image .oe_product_image_link {
+            cursor: pointer;
+        }
+    }
+
     // Wishlist overlay — coin supérieur droit, discret.
     .oe_product_cart .oe_product_image,
     .oe_product_cart .o_wsale_product_image {

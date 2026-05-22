@@ -301,6 +301,7 @@ class TestMarketoneShopInPlacePreview(HttpCase):
         self.assertIn("marketone-shop-card-preview-slot", html)
         self.assertIn("data-marketone-preview-allowed", html)
         self.assertIn("data-product-template-id", html)
+        self.assertIn('data-marketone-preview-allowed="True"', html)
         self.assertRegex(
             html,
             r'marketone-shop-card-cta[^>]*href="/shop/[^"]+"',

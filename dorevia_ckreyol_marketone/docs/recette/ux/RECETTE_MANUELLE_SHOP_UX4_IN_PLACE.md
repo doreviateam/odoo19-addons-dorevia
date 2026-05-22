@@ -8,7 +8,10 @@
 | **PR** | **#12** — [`[CK][UX-4] Lot 1 — Wishlist toggle in-place sur /shop`](https://github.com/doreviateam/odoo19-addons-dorevia/pull/12) |
 | **URL** | http://localhost:18079/shop |
 | **Base** | `ckr-marketone-01` |
-| **Statut recette** | **Lot 1 — GO avec réserve MOA** (`11.1`) · **Lot 2 — GO avec réserve MOA** (`12.3`) · **Lot 3 — GO avec réserve MOA** (`13.2`) · **Lot 3bis — GO avec réserve documentaire** (`13.4`) · Lot 4 continu |
+| **Statut recette** | ☑ **GO GLOBAL MOA UX-4** sur **`19.0.15.13.8`** (clôture documentaire 2026-05-22) · réserve **R1** non bloquante maintenue · Lots 1–3ter validés |
+| **Version de référence UX-4** | **`19.0.15.13.8`** · commit `9e14e15` · PR #17 |
+| **Version Lot 3ter (livrée)** | **`19.0.15.13.8`** (clic image tuile → preview · GO MOA) |
+| **Note arbitrage Lot 3ter** | [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md) |
 | **Version Lot 3 (fonctionnel)** | **`19.0.15.13.2`** — **figée** |
 | **Version Lot 3bis (visuel)** | **`19.0.15.13.4`** (cible — incl. retrait naturel V3bis.12) |
 | **Branche Lot 3bis** | `feat/marketone-ux4-lot3bis-preview-premium` (autorisée post-note) |
@@ -52,6 +55,7 @@ Chaque évolution UX-4 doit prouver **deux choses** :
 | **Lot 2** | § L2 | B1 · B4 · B8 · conversion tile | + smoke lot3 |
 | **Lot 3** | § L3 · § G3 · § L3.F · § L3.M | B1 · **B4** · **B7** · **B8** · **B9** · **B10** | + preview tests |
 | **Lot 3bis** | § **V3bis** · smoke L3.F / L3.M | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Aucun test auto supplémentaire |
+| **Lot 3ter** | § **V3ter** · smoke L1 / L2 / G3.9 | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Test grille image preview data |
 | **Lot 4** | § L4 | **B1–B10 complet** | Suite complète § C référence |
 
 ---
@@ -482,6 +486,70 @@ Améliorer la **qualité perçue** de la preview produit (mini-fiche courte prem
 
 ---
 
+# Lot 3ter — Clic image tuile → preview
+
+> **Statut :** **Arbitrage MOA GO** (2026-05-22) · micro-évolution isolée post-PR #16 · branche `feat/marketone-ux4-lot3ter-image-preview-click`.
+
+## Objectif MOA
+
+Aligner le **clic image tuile** (hors panier / wishlist) sur le comportement du CTA **Voir** — preview in-page · URL `/shop` conservée.
+
+## Périmètre
+
+| In | Out |
+|----|-----|
+| Clic `oe_product_image_link` → preview | Titre → fiche (inchangé) |
+| QWeb data attributes image | Routes · fallback · deep-link |
+| JS handler partagé preview | Panier Lot 2 · wishlist Lot 1 |
+
+## Critères recette V3ter
+
+| # | Critère | Desktop | Mobile 390 px |
+|---|---------|---------|---------------|
+| **V3ter.1** | Clic **image** hors boutons → preview ouverte | ☑ | ☑ |
+| **V3ter.2** | Clic **panier** overlay → panier uniquement, pas preview | ☑ | ☑ |
+| **V3ter.3** | Clic **wishlist** overlay → wishlist uniquement, pas preview | ☑ | ☑ |
+| **V3ter.4** | Clic **titre** → fiche produit complète | ☑ | ☑ |
+| **V3ter.5** | Comportement **identique** au CTA **Voir** (toggle / bascule produit) | ☑ | ☑ |
+| **V3ter.6** | URL **`/shop`** conservée | ☑ | ☑ |
+| **V3ter.7** | Smoke **G3.9** + retrait naturel **V3bis.12** inchangés | ☑ | ☑ |
+| **V3ter.8** | Console sans erreur JS bloquante | ☑ | ☑ |
+
+## Non-régression obligatoire (smoke)
+
+| Critère | Référence | ☐ |
+|---------|-----------|---|
+| Panier in-place depuis overlay | Lot 2 · **G3.6** | ☑ |
+| Wishlist toggle depuis overlay | Lot 1 · **G3.7** | ☑ |
+| Fermeture / retrait preview | **G3.9** · **V3bis.12** | ☑ |
+| URL `/shop` | **G3.1** | ☑ |
+| Mobile sans débordement | **G3.3** | ☑ |
+
+## Verdict Lot 3ter
+
+| Verdict | Condition |
+|---------|-----------|
+| **GO MOA Lot 3ter** | V3ter.1–V3ter.8 OK · smoke Lots 1–2 + G3.9 OK |
+| **NO GO** | Régression panier / wishlist / titre / preview |
+
+**Verdict :** ☑ **GO MOA Lot 3ter** · ☐ NO GO · ☐ Non exécuté
+
+**Exécution 2026-05-22 (`19.0.15.13.5`) :** tests auto **88/88 OK**, mais **V3ter.1 bloquant** : le clic/tap image reste sur `/shop` sans ouvrir la preview desktop ni mobile. Par conséquence, **V3ter.5** (toggle / bascule produit via image) n'est pas validable. Panier, wishlist, titre produit, URL `/shop`, console et mobile sans débordement sont non régressés.
+
+**Reprise 2026-05-22 (`ef99bbe`) :** après nouvel upgrade module + restart Odoo, tests auto toujours **88/88 OK**. En contrôle navigateur mobile 390 px, le tap image n'ouvre toujours pas la preview ; le CTA `Voir` ne déclenche pas non plus la preview dans cette passe. Panier, wishlist et titre restent OK. Verdict **NO GO maintenu**.
+
+**Reprise 2026-05-22 (`aab2ab1` · `19.0.15.13.6`) :** upgrade module + restart Odoo OK, tests auto **88/88 OK**. En contrôle navigateur mobile 390 px, le tap image et le CTA `Voir` restent sur `/shop` sans ouvrir la preview. Panier overlay, wishlist overlay, titre produit, console et absence de débordement mobile restent OK. Verdict **NO GO maintenu**.
+
+**Re-recette MOA 2026-05-22 (`132995f` · `19.0.15.13.7`) :** upgrade module + restart Odoo OK, tests auto **88/88 OK**. V3ter.1–8 rejoués en navigateur mobile 390 px : le tap image et le CTA `Voir` restent sur `/shop` sans preview ; le re-tap / bascule produit n'est donc pas validable. Panier overlay, wishlist overlay, titre produit, URL `/shop`, console et absence de débordement mobile restent OK. Verdict **NO GO maintenu**.
+
+**Re-recette MOA 2026-05-22 (`9e14e15` · `19.0.15.13.8`) :** upgrade module + restart Odoo OK, tests auto **88/88 OK**. V3ter.1–8 rejoués en navigateur mobile 390 px : tap image → preview inline ouverte, CTA `Voir` → preview ouverte, panier / wishlist overlay sans preview parasite, titre → fiche produit, re-tap image → fermeture, image A → image B → bascule preview, URL `/shop` conservée, fermeture ESC / clic grille / scroll OK, console sans erreur bloquante, pas de débordement horizontal. Verdict **GO MOA Lot 3ter**.
+
+Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md)
+
+**Note arbitrage :** [`NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md`](../../tickets/ux/NOTE_ARBITRAGE_UX4_LOT3TER_IMAGE_PREVIEW_CLICK.md)
+
+---
+
 # Lot 4 — Régression globale boutique
 
 > **Statut :** à rejouer **à chaque jalon** (Lots 1, 2, 3) — pas uniquement en fin de chantier.
@@ -517,9 +585,10 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **GO partiel** | Lot(s) validé(s) · autres lots pending documenté |
 | **NO GO** | Régression bloquante § A référence |
 
-**Verdict global :** ☐ GO · ☑ **GO partiel (Lots 1–3bis validés par jalons · `13.4`)** · ☐ NO GO
+**Verdict global :** ☑ **GO GLOBAL MOA UX-4** (Lots 1–3ter validés sur `19.0.15.13.8` · clôture documentaire 2026-05-22) · ☐ GO partiel · ☐ NO GO
 
-> **Lots 1–3bis :** chacun **GO avec réserve documentaire** isolée · **Lot 4** : régression B1–B10 complète à rejouer à chaque évolution.
+> **Lots 1, 2, 3, 3bis, 3ter** : tous **GO MOA** sur `19.0.15.13.8` · réserve **R1** (libellé `Fermer` mobile parfois tronqué en `Ferme`) maintenue **documentaire non bloquante**.
+> **Lot 4** : régression B1–B10 reste à rejouer à chaque évolution future.
 
 ---
 
@@ -532,6 +601,84 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | 2026-05-22 | L3 | `19.0.15.13.1` | MOA | **GO avec réserve documentaire** (PR #14) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md) |
 | 2026-05-22 | L3 | `19.0.15.13.2` | MOA | **GO avec réserve documentaire** (G3.9 · PR #15) | idem |
 | 2026-05-22 | L3bis | `19.0.15.13.4` | MOA | **GO avec réserve documentaire** (V3bis.12 · PR #16) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3BIS_PREVIEW_PREMIUM_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.5` | MOA | **NO GO** (V3ter.1 image/tap preview KO) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.6` | MOA | **NO GO maintenu** (image + Voir preview KO) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.7` | MOA | **NO GO maintenu** (V3ter.1–8 rejoué · preview KO) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.8` | MOA | **GO MOA** (V3ter.1–8 OK · smoke OK) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) |
+| 2026-05-22 | L3ter | `19.0.15.13.8` | Dev (Playwright 390 px) | **GO contre-recette** (V3ter.1–8 OK · 104 tests OK · 0 console error · réserve R1 conservée) | [`recette_ux4_l3ter_13_8_v3ter_1_8_result.json`](recette_ux4_l3ter_13_8_v3ter_1_8_result.json) |
+| 2026-05-22 | **L1 + L2 + L3 + L3bis + L3ter + B1** | `19.0.15.13.8` | Dev (Playwright multi-viewport) | **GO recette manuelle complète** (64/64 OK · 0 console error · 0 request fail · 194 tests auto OK) | [`RAPPORT_RECETTE_MANUELLE_COMPLETE_UX4_13_8_20260522.md`](RAPPORT_RECETTE_MANUELLE_COMPLETE_UX4_13_8_20260522.md) |
+| 2026-05-22 | **L3bis V3bis.12 ciblée** | `19.0.15.13.8` | Dev (Playwright desktop 1440 + mobile 390 px) | **GO retrait naturel rejoué** (D1–D6 OK · M1–M6 OK · 13/13 · 0 console error) | [`recette_v3bis12_13_8_20260522.json`](recette_v3bis12_13_8_20260522.json) |
+| 2026-05-22 | **L3ter I1–I8 clic image (desktop + mobile)** | `19.0.15.13.8` | Dev (Playwright 1440 + 390 px) | **GO clic image tuile = CTA Voir** (Desktop I1·I2·I3·I5·I6·I7·I8 OK · Mobile I1·I2·I4·I5·I6·I7·I8 OK · 14/14 · 0 console error) | [`recette_image_click_I1_I8_13_8_20260522.json`](recette_image_click_I1_I8_13_8_20260522.json) |
+| **2026-05-22** | **UX-4 GLOBAL** | **`19.0.15.13.8`** · `9e14e15` | **MOA** | ☑ **GO GLOBAL MOA UX-4 — clôture documentaire** (Lots 1–3ter validés · 64/64 navigateur · 194/194 auto · V3bis.12 OK · I1–I8 OK · R1 maintenue non bloquante) | § [Clôture documentaire UX-4](#clôture-documentaire-ux-4--version-de-référence-1901513-8) |
+
+---
+
+## Clôture documentaire UX-4 — version de référence `19.0.15.13.8`
+
+> **GO GLOBAL MOA prononcé le 2026-05-22** sur `19.0.15.13.8` / commit `9e14e15` / PR **#17**.
+> La suspension MOA est **levée**. `19.0.15.13.8` devient la **version de référence UX-4 actuelle**.
+
+### Comportements cibles validés
+
+| Cible | État `19.0.15.13.8` |
+|-------|---------------------|
+| **Image tuile** → preview produit (offcanvas desktop · inline mobile) | ☑ GO |
+| **CTA « Voir »** → preview produit (offcanvas desktop · inline mobile) | ☑ GO |
+| **Panier** overlay → action panier isolée · pas de preview parasite | ☑ GO |
+| **Wishlist** overlay → action wishlist isolée · pas de preview parasite | ☑ GO |
+| **Titre produit** → fiche produit complète | ☑ GO |
+| **Preview premium** (chips, fond pastel CK, image `contain`, header « Découvrir le produit ») | ☑ GO |
+| **Retrait naturel** (clic hors panneau · scroll hors panneau · scroll DANS panneau préservé · tap hors mobile) | ☑ GO (V3bis.12) |
+| **Fermetures historiques** (× · ESC · re-clic « Voir » · bouton **Fermer** mobile) | ☑ GO (G3.9) |
+| **URL `/shop`** conservée pendant preview | ☑ GO |
+| **Desktop ≥ 992 px** + **Mobile 390 px** sans débordement horizontal | ☑ GO |
+| **Console** sans erreur JS bloquante (Playwright + tests auto) | ☑ GO |
+
+### Couverture preuve
+
+| Source | Volume | Verdict |
+|--------|--------|---------|
+| Tests auto (`dorevia_marketone_*`) | 194 tests | 0 failed · 0 error |
+| Recette manuelle complète Lots 1→3ter + B1 (Playwright multi-viewport) | 64 contrôles | 64/64 OK |
+| Recette ciblée V3bis.12 (Playwright 1440 + 390 px) | 13 contrôles | 13/13 OK |
+| Recette ciblée I1–I8 clic image (Playwright 1440 + 390 px) | 14 contrôles | 14/14 OK |
+| Console / requêtes réseau bloquantes | — | 0 |
+
+### Réserves maintenues — documentaires non bloquantes
+
+| ID | Réserve | Statut | Impact |
+|----|---------|--------|--------|
+| **R1** | Libellé bouton **Fermer** mobile parfois tronqué en `Ferme` | Maintenue | Cliquable · non bloquant |
+| **L1.C1 / L1.C2** | Scénario connecté Lot 1 non rejoué faute de compte test MOA | Maintenue | Périmètre visiteur public OK |
+| **L2.C1** | Scénario connecté Lot 2 non rejoué faute de compte test MOA | Maintenue | Périmètre visiteur public OK |
+| **L3.V1** | Fallback multi-variante / configurable à rejouer dès produit publié | Maintenue | Aucun produit éligible publié au moment du GO |
+| **Sandbox** | Polices Google Fonts CORS · lazy bundle / images annulées | Filtrée | Non-fonctionnelles |
+
+### Règles maintenues post-GO global UX-4
+
+> Toute évolution dérogeant aux règles ci-dessous **requiert un nouvel arbitrage MOA explicite** avant ouverture de branche.
+
+| # | Règle |
+|---|-------|
+| **R-UX4-1** | Aucune **extension preview V2** (deep-link, ouverture preview cross-page, scroll-locking, etc.) sans arbitrage MOA dédié |
+| **R-UX4-2** | Aucun **configurateur preview** : produit multi-variante / configurable → **fallback fiche produit** obligatoire |
+| **R-UX4-3** | Aucune **modification profonde** de la fiche produit (PDP `/shop/<slug>`) sans arbitrage MOA dédié |
+| **R-UX4-4** | Aucune **modification profonde** du tunnel panier (`/shop/cart`, `/shop/checkout`) sans arbitrage MOA dédié |
+| **R-UX4-5** | Toute évolution UX-4 doit prouver (a) le nouveau comportement et (b) **non-régression Lots 1→3ter + B1–B10** |
+| **R-UX4-6** | Tout passage de version impose : tests auto verts + recette manuelle Lots 1→3ter + smoke `RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md` |
+| **R-UX4-7** | Réserve **R1** doit être traitée lors d'un futur passage visuel premium · pas de remontée bloquante d'ici là |
+
+### Références preuve `19.0.15.13.8`
+
+| Document | Rôle |
+|----------|------|
+| [`RAPPORT_RECETTE_MANUELLE_COMPLETE_UX4_13_8_20260522.md`](RAPPORT_RECETTE_MANUELLE_COMPLETE_UX4_13_8_20260522.md) | Rapport recette manuelle complète Lots 1→3ter + B1 (64/64) |
+| [`RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3TER_IMAGE_PREVIEW_CLICK_20260522.md) | Rapport Lot 3ter — historique passes 13.5 → 13.8 |
+| [`recette_v3bis12_13_8_20260522.json`](recette_v3bis12_13_8_20260522.json) | V3bis.12 retrait naturel desktop + mobile (13/13) |
+| [`recette_image_click_I1_I8_13_8_20260522.json`](recette_image_click_I1_I8_13_8_20260522.json) | I1–I8 clic image desktop + mobile (14/14) |
+| [`recette_ux4_l3ter_13_8_v3ter_1_8_result.json`](recette_ux4_l3ter_13_8_v3ter_1_8_result.json) | V3ter.1–8 mobile 390 px |
+| [`recette_manuelle_complete_13_8_20260522.json`](recette_manuelle_complete_13_8_20260522.json) | Résultats bruts recette manuelle complète (64/64) |
+| Captures `capture_*_13_8_*_20260522.png` | Preuves visuelles desktop + mobile · L1, L2, L3 desktop, L3 mobile, V3ter.1, V3bis.12, I1–I8 |
 
 ---
 

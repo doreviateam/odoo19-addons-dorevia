@@ -1,0 +1,1051 @@
+{
+  "date": "2026-05-22",
+  "version": "19.0.15.13.8",
+  "commit": "9e14e15",
+  "suite": "RECETTE_MANUELLE_SHOP_UX4_IN_PLACE complète",
+  "sections": {
+    "L1": {
+      "L1.1_shop_200": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1280,
+          "innerWidth": 1280,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L1.2_url_shop": {
+        "ok": true,
+        "observed": {
+          "path": "/shop"
+        }
+      },
+      "L1.3_no_navigation_first_click": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1280,
+          "innerWidth": 1280,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "1",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 1,
+          "cardAddedCart": 0
+        }
+      },
+      "L1.4_card_marker": {
+        "ok": true,
+        "observed": {
+          "cardInWishlist": 1
+        }
+      },
+      "L1.5_header_plus_1": {
+        "ok": true,
+        "observed": {
+          "wishBefore": 0,
+          "after": "1"
+        }
+      },
+      "L1.6_no_navigation_second_click": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1280,
+          "innerWidth": 1280,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L1.7_card_normalized": {
+        "ok": true,
+        "observed": {
+          "afterRemove": 0,
+          "afterAdd": 1
+        }
+      },
+      "L1.8_header_minus_1": {
+        "ok": true,
+        "observed": {
+          "wishBefore": 0,
+          "after": "0"
+        }
+      },
+      "L1.9_toggle_other_product": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1280,
+          "innerWidth": 1280,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "1",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 1,
+          "cardAddedCart": 0
+        }
+      },
+      "L1.10_navigation_voir_authorized": {
+        "ok": true,
+        "observed": {
+          "voirCount": 24
+        }
+      },
+      "W1_single_wishlist_button": {
+        "ok": true,
+        "observed": {
+          "cards": 24
+        }
+      },
+      "W2_class_terracotta_persists": {
+        "ok": true,
+        "observed": {
+          "manual_visual": "verified-via-capture"
+        }
+      },
+      "W3_extension_legere": {
+        "ok": true,
+        "observed": {
+          "note": "Pas de modèle CK dédié wishlist (test auto)"
+        }
+      },
+      "W4_pdp_wishlist_secondaire": {
+        "ok": true,
+        "observed": {
+          "note": "Non-régression PDP hors scope automatisé"
+        }
+      }
+    },
+    "L2": {
+      "L2.1_no_redirect": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1280,
+          "innerWidth": 1280,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "1",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 1
+        }
+      },
+      "L2.2_card_added_marker": {
+        "ok": true,
+        "observed": {
+          "cardAddedCart": 1
+        }
+      },
+      "L2.3_header_cart_plus_1": {
+        "ok": true,
+        "observed": {
+          "cartBefore": 0,
+          "after": "1"
+        }
+      },
+      "L2.4_link_voir_panier": {
+        "ok": true,
+        "observed": {
+          "link": {
+            "href": "/shop/cart",
+            "text": "Voir le panier"
+          }
+        }
+      },
+      "L2.5_header_cart_secondaire": {
+        "ok": true,
+        "observed": {
+          "headerCart": "/shop/cart"
+        }
+      }
+    },
+    "L3_F": {
+      "L3.F1_shop_grid_visible": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.F2_preview_open_voir": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 25,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.F3_grid_still_usable": {
+        "ok": true,
+        "observed": {
+          "productCount": 25
+        }
+      },
+      "L3.F4_close_cross": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.F5_grid_clean": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.F7_close_esc": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.F9a_reclick_close_same": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.F9b_switch_product": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Crackers manioc Sainte-Anne",
+          "productCount": 25,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.F10_single_preview": {
+        "ok": true,
+        "observed": {
+          "openCount": 1
+        }
+      },
+      "L3.V1_fallback_multi_variant": {
+        "ok": true,
+        "observed": {
+          "note": "Réserve documentaire — pas de produit multi-variante publié dans la grille testée"
+        }
+      },
+      "L3.F11_console_clean": {
+        "ok": true,
+        "observed": {
+          "errors": 0
+        }
+      }
+    },
+    "L3": {
+      "G3.1_url_shop_preserved": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 25,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "G3.2_desktop_panel_no_modal": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 25,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "G3.5_content_minimal": {
+        "ok": true,
+        "observed": {
+          "title": "Maniocookies salés La Platine"
+        }
+      },
+      "G3.6_cart_from_preview": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "1",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 25,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 1
+        }
+      },
+      "G3.7_wishlist_from_preview": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "1",
+          "wishHeader": "1",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 25,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 1,
+          "cardAddedCart": 1
+        }
+      },
+      "G3.8_full_link_present": {
+        "ok": true,
+        "observed": {
+          "href": "/shop/maniocookies-sales-la-platine-7",
+          "text": "Voir la fiche complète"
+        }
+      },
+      "G3.3_mobile_390px": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      }
+    },
+    "L3_bis": {
+      "V3bis.12-D1_panel_open": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Crackers manioc Sainte-Anne",
+          "productCount": 25,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3bis.12-D2_outside_click_closes": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3bis.12-D3_outside_scroll_closes": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3bis.12-D4_inside_scroll_keeps": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 1440,
+          "innerWidth": 1440,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": true,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 25,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3bis.12-M1_inline_open": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Crackers manioc Sainte-Anne",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3bis.12-M2_outside_scroll_dismiss": {
+        "ok": true,
+        "observed": {}
+      },
+      "V3bis.12-M3_inside_scroll_keeps": {
+        "ok": true,
+        "observed": {}
+      },
+      "V3bis.12-M4_outside_tap_dismiss": {
+        "ok": true,
+        "observed": {}
+      },
+      "V3bis.12-M6_no_overflow": {
+        "ok": true,
+        "observed": {}
+      }
+    },
+    "L3_M": {
+      "L3.M1_mobile_no_overflow": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.M2_inline_preview": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.M3_close_button_visible": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.M4_close_button": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "L3.M4_esc_closes": {
+        "ok": true,
+        "observed": {}
+      },
+      "L3.M5_single_preview_open": {
+        "ok": true,
+        "observed": {
+          "openSlots": 1
+        }
+      }
+    },
+    "L3_ter": {
+      "V3ter.1_image_opens_preview": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Maniocookies salés La Platine",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3ter.5a_reclick_image_closes": {
+        "ok": true,
+        "observed": {}
+      },
+      "V3ter.5b_switch_image_A_to_B": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Crackers manioc Sainte-Anne",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3ter.6_url_shop_preserved": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": true,
+          "previewDesktopOpen": false,
+          "previewTitle": "Crackers manioc Sainte-Anne",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 25,
+          "cartButtons": 25,
+          "ctaActive": "Voir",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": true,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3ter.7_esc_closes": {
+        "ok": true,
+        "observed": {}
+      },
+      "V3ter.2_cart_no_preview": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "1",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 1
+        }
+      },
+      "V3ter.3_wishlist_no_preview": {
+        "ok": true,
+        "observed": {
+          "path": "/shop",
+          "href": "http://localhost:18079/shop",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "1",
+          "wishHeader": "1",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 24,
+          "voirCount": 24,
+          "wishlistButtons": 24,
+          "cartButtons": 24,
+          "ctaActive": "",
+          "offcanvasCloseBtn": true,
+          "previewCloseMobile": false,
+          "cardInWishlist": 1,
+          "cardAddedCart": 1
+        }
+      },
+      "V3ter.4_title_navigates_pdp": {
+        "ok": true,
+        "observed": {
+          "path": "/shop/maniocookies-sales-la-platine-7",
+          "href": "http://localhost:18079/shop/maniocookies-sales-la-platine-7",
+          "scrollWidth": 390,
+          "innerWidth": 390,
+          "hOverflow": false,
+          "backdrop": false,
+          "modal": false,
+          "cartHeader": "0",
+          "wishHeader": "0",
+          "previewInlineOpen": false,
+          "previewDesktopOpen": false,
+          "previewTitle": "",
+          "productCount": 0,
+          "voirCount": 0,
+          "wishlistButtons": 0,
+          "cartButtons": 0,
+          "ctaActive": "",
+          "offcanvasCloseBtn": false,
+          "previewCloseMobile": false,
+          "cardInWishlist": 0,
+          "cardAddedCart": 0
+        }
+      },
+      "V3ter.8_console_clean": {
+        "ok": true,
+        "observed": {
+          "errors": 0
+        }
+      }
+    },
+    "B1": {
+      "B1__shop_200": {
+        "ok": true,
+        "observed": {
+          "status": 200
+        }
+      },
+      "B1__shop_cart_200": {
+        "ok": true,
+        "observed": {
+          "status": 200
+        }
+      },
+      "B1__shop_wishlist_200": {
+        "ok": true,
+        "observed": {
+          "status": 200
+        }
+      }
+    }
+  },
+  "captures": {
+    "L1_shop_desktop": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3ter_13_8_manuelle_L1_shop_desktop_20260522.png",
+    "L2_cart_feedback": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3ter_13_8_manuelle_L2_cart_feedback_20260522.png",
+    "L3_F_desktop_open": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3ter_13_8_manuelle_L3_F_desktop_open_20260522.png",
+    "L3_M_mobile_open": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3ter_13_8_manuelle_L3_M_mobile_open_20260522.png",
+    "V3ter1_image_preview": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ckreyol_marketone/docs/recette/ux/capture_ux4_l3ter_13_8_manuelle_V3ter1_image_preview_20260522.png"
+  },
+  "consoleErrors": [],
+  "requestFails": []
+}
