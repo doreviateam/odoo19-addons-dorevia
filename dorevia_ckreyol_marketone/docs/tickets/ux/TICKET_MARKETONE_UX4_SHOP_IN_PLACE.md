@@ -181,7 +181,7 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3_IN_PLACE_20260522.md`](../recette/ux/R
 
 **Arbitrages MOA :** titre **`Découvrir le produit`** · fermeture desktop **croix seule** · image **contain cadré** · direction DA pastel CK · **V3bis.12 retrait naturel**.
 
-**Exception JS (V3bis.12) :** `marketone_shop_preview.js` — fermeture naturelle uniquement (clic / scroll hors preview).
+**Exception JS (V3bis.12 + 3ter) :** `marketone_shop_preview.js` — délégation unique `#wrap.marketone-shop` · fermeture naturelle · clic image.
 
 **Règle :** Lot 3bis **ne remet pas en cause** le GO fonctionnel Lot 3.
 

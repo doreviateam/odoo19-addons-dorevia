@@ -7,7 +7,7 @@
 | **Prérequis** | Lot 3bis **GO** · version réf. **`19.0.15.13.4`** |
 | **Ticket** | [`TICKET_MARKETONE_UX4_SHOP_IN_PLACE.md`](TICKET_MARKETONE_UX4_SHOP_IN_PLACE.md) |
 | **Recette** | § **Lot 3ter** [`RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md`](../recette/ux/RECETTE_MANUELLE_SHOP_UX4_IN_PLACE.md) |
-| **Version cible** | **`19.0.15.13.5`** |
+| **Version cible** | **`19.0.15.13.6`** |
 | **Branche** | `feat/marketone-ux4-lot3ter-image-preview-click` |
 | **PR cible** | `[CK][UX-4] Lot 3ter — Clic image tuile → preview` |
 
@@ -41,7 +41,7 @@ L’image produit est la zone naturelle d’exploration. Depuis le GO preview Lo
 | Couche | Détail |
 |--------|--------|
 | **QWeb** | `form.oe_product_cart` — `data-product-template-id` · `data-marketone-preview-allowed` (partagés avec CTA) |
-| **JS** | Extension `marketone_shop_preview.js` — selector `.oe_product_image` + handler partagé · garde-fous overlays panier/wishlist · clic limité à la zone photo |
+| **JS** | Instance **unique** `#wrap.marketone-shop` · délégation clic **Voir** + zone image · garde-fous overlays |
 | **SCSS** | `cursor: pointer` sur lien image si preview autorisée |
 
 **Non impactés :** routes · panier handler · wishlist handler · preview fragment · titre tuile.
@@ -71,3 +71,4 @@ Smoke obligatoire : **G3.6–G3.9** · **G3.1** · **G3.3** · Lots 1–2 panier
 |------|-----------|
 | 2026-05-22 | Arbitrage MOA clic image → preview |
 | 2026-05-22 | Implémentation Lot 3ter · branche autorisée post-PR #16 |
+| 2026-05-22 | Reprise `13.6` — délégation unique `#wrap.marketone-shop` (fix état preview fragmenté) |
