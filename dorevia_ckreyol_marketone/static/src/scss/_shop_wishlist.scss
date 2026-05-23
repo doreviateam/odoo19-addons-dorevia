@@ -33,16 +33,18 @@
     #o_comparelist_table {
         --o-wsale-card-price-flex-basis: auto;
         --o-wsale-card-price-min-width: 0;
-        --o-wsale-card-info-position: relative;
+        --o-wsale-card-info-position: static;
         --o-wsale-card-info-inset: auto;
         --o-wsale-card-overlay: none;
         --o-wsale-card-btns-inset: auto;
         --o-wsale-card-btn-submit-aspect-ratio: auto;
         --o-wsale-card-btn-aspect-ratio: auto;
+        --o-wsale-card-btn-submit-display: inline-flex;
+        --o-wsale-card-btn-submit-label-display: inline;
 
         &.o_wsale_products_opt_actions_onhover .o_wishlist_item .oe_product_cart,
         &.o_wsale_products_opt_layout_catalog .o_wishlist_item .oe_product_cart {
-            --o-wsale-card-info-position: relative;
+            --o-wsale-card-info-position: static;
             --o-wsale-card-overlay: none;
         }
     }
@@ -65,7 +67,7 @@
         }
 
         .o_wsale_product_information {
-            position: relative !important;
+            position: static !important;
             inset: auto !important;
             background-color: $ck-bg-card-body;
             padding: 1.125rem 1.125rem 1.25rem;
@@ -112,14 +114,17 @@
 
             .oe_product_image_link {
                 overflow: hidden;
+                position: relative;
+                z-index: 1;
             }
 
             .oe_product_image_img {
                 object-fit: cover !important;
             }
 
-            // Panier overlay — calqué boutique · ancré UNIQUEMENT sur la photo.
-            > .o_wsale_product_btn {
+            // Panier overlay — calqué boutique · ancré sur la photo (enfant direct ou déplacé QWeb).
+            > .o_wsale_product_btn,
+            .o_wsale_product_btn {
                 position: absolute !important;
                 top: auto !important;
                 right: 0.625rem !important;
@@ -137,7 +142,7 @@
                 padding: 0 !important;
                 visibility: visible !important;
                 pointer-events: auto !important;
-                z-index: 4 !important;
+                z-index: 6 !important;
                 transform: none !important;
 
                 .o_wsale_product_action_row {
@@ -151,13 +156,20 @@
                     transform: none !important;
                 }
 
-                .btn {
+                .btn,
+                .o_wsale_product_btn_primary,
+                .o_wish_add {
+                    display: inline-flex !important;
                     opacity: 1 !important;
                     transform: none !important;
                     visibility: visible !important;
                     pointer-events: auto !important;
                     aspect-ratio: auto !important;
                     flex-grow: 0 !important;
+                }
+
+                .marketone-wishlist-card-cart--tile {
+                    display: inline-flex !important;
                 }
             }
         }
@@ -179,10 +191,15 @@
             }
         }
 
-        // Retrait wishlist — apparence cœur (position native Odoo `.o_wish_rm` sur l’article).
+        // Retrait wishlist — overlay haut-droit carte (ancrage oe_product_cart, pas le bloc titre).
         .marketone-wishlist-card-remove,
         .o_wish_rm.marketone-wishlist-card-remove {
-            z-index: 5;
+            position: absolute !important;
+            top: 0.625rem !important;
+            right: 0.625rem !important;
+            left: auto !important;
+            bottom: auto !important;
+            z-index: 7;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -323,6 +340,17 @@
     }
 
     @media (max-width: 991.98px) {
+        #o_comparelist_table.o_wsale_products_opt_actions_onhover,
+        #o_comparelist_table.o_wsale_products_opt_actions_inline,
+        #o_comparelist_table {
+            .o_wishlist_item .oe_product_cart .oe_product_image > .o_wsale_product_btn,
+            .o_wishlist_item .oe_product_cart .o_wsale_product_image > .o_wsale_product_btn {
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+        }
+
         .o_wishlist_item .oe_product_cart {
             .oe_product_image > .o_wsale_product_btn,
             .o_wsale_product_image > .o_wsale_product_btn {

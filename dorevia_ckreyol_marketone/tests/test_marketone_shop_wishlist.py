@@ -130,7 +130,29 @@ class TestMarketoneShopWishlistHttp(HttpCase):
             r'marketone-wishlist-card-remove[^>]*>\s*<i[^>]*fa-heart',
         )
 
-    def test_wishlist_card_cta_no_preview(self):
+    def test_wishlist_card_cart_btn_inside_image(self):
+        """Lot 3quinquies — CTA panier ancré zone photo (pas pied de carte)."""
+        self._ensure_wishlist_item()
+        html = self._open_wishlist_html()
+        wishlist_blocks = re.findall(
+            r'<article[^>]*class="[^"]*o_wishlist_item[^"]*"[^>]*>.*?</article>',
+            html,
+            flags=re.DOTALL,
+        )
+        self.assertTrue(wishlist_blocks, "Au moins une carte wishlist attendue.")
+        block = wishlist_blocks[0]
+        idx_info = block.find("o_wsale_product_information")
+        idx_add = block.find("o_wish_add")
+        idx_img = block.find("oe_product_image")
+        self.assertGreater(idx_info, 0, "Bloc information attendu.")
+        self.assertGreater(idx_add, 0, "CTA panier attendu.")
+        self.assertGreater(idx_img, 0, "Zone image attendue.")
+        self.assertLess(
+            idx_add,
+            idx_info,
+            "CTA panier doit être rendu dans la zone photo, avant le bloc information.",
+        )
+
         """Lot 3quinquies — CTA Voir wishlist sans preview autorisée."""
         self._ensure_wishlist_item()
         html = self._open_wishlist_html()

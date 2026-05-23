@@ -667,7 +667,7 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](
 
 # Lot 3quinquies — Alignement carte Wishlist / Boutique
 
-> **Statut :** **Arbitrage MOA GO** (2026-05-22) · branche `feat/marketone-ux4-lot3quinquies-wishlist-card-align` · version cible **`19.0.15.14.3`**.
+> **Statut :** **Arbitrage MOA GO** (2026-05-22) · branche `feat/marketone-ux4-lot3quinquies-wishlist-card-align` · version cible **`19.0.15.14.6`** (correctif CSS post-recette MOA).
 >
 > **Merge interdit** avant recette visuelle MOA desktop + mobile.
 
@@ -717,7 +717,13 @@ La carte produit affichée dans `/shop/wishlist` doit partager la **même gramma
 | **GO MOA Lot 3quinquies** | W3q5.1–W3q5.11 OK · smoke V3quater + L1 + L2 + preview OK · captures desktop + mobile |
 | **NO GO** | Régression boutique / preview · bouton full-width · preview sur wishlist · panier KO |
 
-**Verdict :** ☐ **GO MOA Lot 3quinquies** · ☐ NO GO · (`14.3` · PR dédiée en attente recette visuelle MOA)
+**Verdict :** ☐ **GO MOA Lot 3quinquies** · ☑ **NO GO provisoire** (révoqué post-capture MOA) · ☐ **GO MOA `14.6`** en attente re-recette visuelle
+
+**Exécution 2026-05-23 (`16c9c39` · `19.0.15.14.3`) — révoquée :** recette navigateur mobile 390 px : **CTA `Ajouter` absent** sur la photo · **cœur retrait** aligné sur le titre (pas haut-droit image) · prix parfois tronqué. Verdict initial **GO** annulé.
+
+**Correctif `19.0.15.14.6` :** neutralisation CSS Odoo `#o_comparelist_table` (variables onhover / submit display) · `position: static` sur `.o_wsale_product_information` pour ancrer `.o_wish_rm` sur `.oe_product_cart` · visibilité mobile forcée du panier overlay · test auto `o_wish_add` rendu **avant** le bloc information. Tests `dorevia_marketone_shop_wishlist` **13/13 OK** — **re-recette MOA desktop + mobile requise** avant merge PR #21.
+
+Rapport initial (14.3) : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUINQUIES_WISHLIST_CARD_ALIGN_20260523.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUINQUIES_WISHLIST_CARD_ALIGN_20260523.md)
 
 ---
 
@@ -783,6 +789,8 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **2026-05-22** | **UX-4 GLOBAL** | **`19.0.15.13.8`** · `9e14e15` | **MOA** | ☑ **GO GLOBAL MOA UX-4 — clôture documentaire** (Lots 1–3ter validés · 64/64 navigateur · 194/194 auto · V3bis.12 OK · I1–I8 OK · R1 maintenue non bloquante) | § [Clôture documentaire UX-4](#clôture-documentaire-ux-4--version-de-référence-1901513-8) |
 | 2026-05-22 | **Correctif R2 — retrait naturel intelligent** | **`19.0.15.13.9`** | Dev (Playwright 1440 + 390 px) | **GO R2** · bug scroll-pendant-hover corrigé · 16/16 OK · 0 console error · smoke G3.9 OK | [`recette_R2_hover_scroll_13_9_20260522.json`](recette_R2_hover_scroll_13_9_20260522.json) |
 | 2026-05-22 | **L3quater + L3quater bis** | **`19.0.15.14.1`** · PR **#19** | **MOA** | ☑ **GO MOA PR #19** (V3quater + V3qB + smoke **30/30** · tests **29/29** · merge `9327254`) | [`recette_manuelle_pr19_20260522.json`](recette_manuelle_pr19_20260522.json) · [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md) · [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md) |
+| 2026-05-23 | **L3quinquies — carte wishlist alignée boutique** | **`19.0.15.14.3`** · `16c9c39` | **MOA** | ☑ **GO révoqué** (CTA `Ajouter` / cœur KO mobile) | [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUINQUIES_WISHLIST_CARD_ALIGN_20260523.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUINQUIES_WISHLIST_CARD_ALIGN_20260523.md) |
+| 2026-05-23 | **L3quinquies — correctif CSS wishlist `14.6`** | **`19.0.15.14.6`** | Dev | **En attente re-recette MOA** (tests auto wishlist OK · fix ancrage cœur + visibilité panier) | — |
 
 ---
 
