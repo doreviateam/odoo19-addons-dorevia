@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol Marketone",
-    "version": "19.0.15.14.3",
+    "version": "19.0.15.14.4",
     "category": "Website/Website",
     "summary": "Canal e-commerce C-Kreyol — presentation et orientation (Marketone).",
     "author": "Dorevia",
