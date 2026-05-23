@@ -7,13 +7,13 @@
         <field name="active" eval="False"/>
     </record>
 
-    <!-- Page /shop/wishlist — scope visuel Marketone. -->
+    <!-- Page /shop/wishlist — scope visuel wishlist uniquement (pas marketone-shop / UX-4 boutique). -->
     <template id="marketone_wishlist_page_scope"
               inherit_id="website_sale_wishlist.product_wishlist"
               name="Marketone: page wishlist — scope CK"
               priority="20">
         <xpath expr="//div[@id='wrap']" position="attributes">
-            <attribute name="class" add="marketone-shop marketone-shop-wishlist" separator=" "/>
+            <attribute name="class" add="marketone-shop-wishlist" separator=" "/>
         </xpath>
     </template>
 </odoo>

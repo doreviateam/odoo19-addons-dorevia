@@ -166,6 +166,10 @@ export class MarketoneShopPreview extends Interaction {
         }
 
         const trigger = ev.currentTarget;
+        if (trigger.closest('.marketone-shop-wishlist')) {
+            return;
+        }
+
         const card = trigger.closest('.oe_product_cart');
         if (!card || card.classList.contains('marketone-shop-preview__actions')) {
             return;

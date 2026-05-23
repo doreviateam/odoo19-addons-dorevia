@@ -56,6 +56,7 @@ Chaque évolution UX-4 doit prouver **deux choses** :
 | **Lot 3** | § L3 · § G3 · § L3.F · § L3.M | B1 · **B4** · **B7** · **B8** · **B9** · **B10** | + preview tests |
 | **Lot 3bis** | § **V3bis** · smoke L3.F / L3.M | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Aucun test auto supplémentaire |
 | **Lot 3ter** | § **V3ter** · smoke L1 / L2 / G3.9 | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Test grille image preview data |
+| **Lot 3quinquies** | § **W3q5** · smoke V3quater + L1 + L2 + preview | Smoke **V3quater** · **L1** · **L2** · **G3** | `dorevia_marketone_shop_wishlist` |
 | **Lot 4** | § L4 | **B1–B10 complet** | Suite complète § C référence |
 
 ---
@@ -664,6 +665,62 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](
 
 ---
 
+# Lot 3quinquies — Alignement carte Wishlist / Boutique
+
+> **Statut :** **Arbitrage MOA GO** (2026-05-22) · branche `feat/marketone-ux4-lot3quinquies-wishlist-card-align` · version cible **`19.0.15.14.3`**.
+>
+> **Merge interdit** avant recette visuelle MOA desktop + mobile.
+
+## Objectif MOA
+
+La carte produit affichée dans `/shop/wishlist` doit partager la **même grammaire visuelle** que la boutique (titre, CTA `Voir`, prix, CTA panier compact, retrait wishlist, hiérarchie globale), **sans** hériter des comportements UX-4 boutique (preview, panier in-place grille, toggle wishlist overlay grille).
+
+## Périmètre
+
+| In | Out |
+|----|-----|
+| Scope `.marketone-shop-wishlist` (retrait `.marketone-shop` du wrap) | Carte `/shop` · preview · clic image boutique |
+| QWeb slots wishlist : `o_wish_price`, `o_wish_add`, `o_wish_rm` | `.marketone-shop-card-cart` sur `.o_wish_add` |
+| SCSS `_shop_wishlist.scss` | Nouvelle logique métier · handlers Odoo wishlist |
+| Exclusion défensive preview `.marketone-shop-wishlist` | Preview sur page wishlist |
+
+## Critères recette W3q5
+
+| # | Critère | Desktop | Mobile 390 px |
+|---|---------|---------|---------------|
+| **W3q5.1** | Page HTTP 200 · scope **`marketone-shop-wishlist`** · **pas** `marketone-shop` sur `#wrap` | ☑ auto | ☑ auto |
+| **W3q5.2** | CTA panier **compact** (icône + `Ajouter`) overlay bas-droit | ☑ auto | — |
+| **W3q5.3** | CTA panier **utilisable** sans débordement horizontal | — | ☑ auto |
+| **W3q5.4** | **Absence** bouton full-width « Ajouter au panier » | ☑ auto | ☑ auto |
+| **W3q5.5** | CTA **`Voir`** aligné pied de carte (gauche) | ☑ MOA | ☑ MOA |
+| **W3q5.6** | **Prix** bas-droit · terracotta · hiérarchie `.marketone-shop-card-price` | ☑ auto | ☑ MOA |
+| **W3q5.7** | **Titre** cohérent boutique (2 lignes · hiérarchie) | ☑ MOA | ☑ MOA |
+| **W3q5.8** | **Retrait** wishlist haut-droit · style cœur · handler `o_wish_rm` conservé | ☑ auto | ☑ MOA |
+| **W3q5.9** | Clic **`Ajouter`** → panier OK + compteur header | ☑ MOA | ☑ MOA |
+| **W3q5.10** | Retrait wishlist OK + compteur wishlist synchronisé | ☑ MOA | ☑ MOA |
+| **W3q5.11** | Clic **`Voir`** → **fiche produit** (pas preview) · console sans erreur JS bloquante | ☑ auto | ☑ auto |
+
+## Smoke non-régression obligatoire
+
+| Critère | Référence | ☐ |
+|---------|-----------|---|
+| Grille boutique CTA panier tuile | **V3quater.1–8** | ☐ |
+| Preview boutique | **L3.F · L3.M · G3** | ☐ |
+| Wishlist toggle grille | **L1.1–L1.6** | ☐ |
+| Panier boutique in-place | **L2.1–L2.5** | ☐ |
+| Mobile 390 px sans débordement | **V3quater.3** | ☐ |
+
+## Verdict Lot 3quinquies
+
+| Verdict | Condition |
+|---------|-----------|
+| **GO MOA Lot 3quinquies** | W3q5.1–W3q5.11 OK · smoke V3quater + L1 + L2 + preview OK · captures desktop + mobile |
+| **NO GO** | Régression boutique / preview · bouton full-width · preview sur wishlist · panier KO |
+
+**Verdict :** ☐ **GO MOA Lot 3quinquies** · ☐ NO GO · (`14.3` · PR dédiée en attente recette visuelle MOA)
+
+---
+
 # Lot 4 — Régression globale boutique
 
 > **Statut :** à rejouer **à chaque jalon** (Lots 1, 2, 3) — pas uniquement en fin de chantier.
@@ -786,6 +843,7 @@ Commande identique à [`REFERENCE_RECETTE_BOUTIQUE_MOA.md`](../REFERENCE_RECETTE
 | **R-UX4-7** | Réserve **R1** doit être traitée lors d'un futur passage visuel premium · pas de remontée bloquante d'ici là |
 | **R-UX4-8** | **Retrait naturel intelligent** — la preview reste ouverte tant que l'utilisateur l'explore (survol · scroll dans le panneau · clic dans le panneau) · elle se retire uniquement quand l'utilisateur reprend la navigation boutique hors preview |
 | **R-UX4-9** | **CTA panier tuile explicite** — icône panier + libellé court `Ajouter` sur la tuile · cohérent avec le CTA complet `Ajouter au panier` de la preview · overlay compact bas-droit |
+| **R-UX4-11** | **Cohérence carte Boutique / Wishlist** — la carte produit affichée dans la boutique et la carte produit affichée dans la liste de souhaits doivent partager la même grammaire visuelle : titre, CTA `Voir`, prix, CTA panier compact, cœur / retrait wishlist et hiérarchie globale · la wishlist ne doit pas apparaître comme une expérience visuelle séparée ou ancienne génération |
 
 | **Sandbox** | Polices Google Fonts CORS · lazy bundle / images annulées | Filtrée | Non-fonctionnelles |
 

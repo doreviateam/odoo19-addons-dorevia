@@ -29,13 +29,128 @@ class TestMarketoneShopWishlistInstall(TransactionCase):
 
 @tagged("post_install", "-at_install", "dorevia_marketone_shop_wishlist")
 class TestMarketoneShopWishlistHttp(HttpCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.website = cls.env["website"].search([], limit=1)
+        cls.product = cls.env["product.template"].search(
+            [
+                ("sale_ok", "=", True),
+                ("is_published", "=", True),
+            ],
+            limit=1,
+        )
+        if not cls.product:
+            cls.product = cls.env["product.template"].create(
+                {
+                    "name": "C-Kreyol UX-4 Wishlist Card",
+                    "type": "consu",
+                    "list_price": 9.5,
+                    "sale_ok": True,
+                    "is_published": True,
+                }
+            )
+        cls.variant = cls.product.product_variant_id
+
+    def _ensure_wishlist_item(self):
+        self.authenticate(None, None)
+        self.env["product.wishlist"].sudo().search(
+            [
+                ("product_id", "=", self.variant.id),
+                ("website_id", "=", self.website.id),
+            ]
+        ).unlink()
+        self.make_jsonrpc_request(
+            "/shop/wishlist/add",
+            {"product_id": self.variant.id},
+        )
+
+    def _open_wishlist_html(self):
+        response = self.url_open("/shop/wishlist")
+        self.assertEqual(response.status_code, 200)
+        return response.text
+
     def test_shop_wishlist_page_http_200(self):
         response = self.url_open("/shop/wishlist")
         self.assertEqual(response.status_code, 200)
 
     def test_shop_wishlist_page_scope_class(self):
         response = self.url_open("/shop/wishlist")
-        self.assertIn("marketone-shop-wishlist", response.text)
+        html = response.text
+        self.assertIn("marketone-shop-wishlist", html)
+        wrap_match = re.search(
+            r'<div id="wrap"[^>]*class="([^"]*)"',
+            html,
+        )
+        self.assertTrue(wrap_match, "Wrap wishlist attendu.")
+        wrap_classes = wrap_match.group(1).split()
+        self.assertIn("marketone-shop-wishlist", wrap_classes)
+        self.assertNotIn(
+            "marketone-shop",
+            wrap_classes,
+            "La page wishlist ne doit pas porter le scope boutique UX-4.",
+        )
+
+    def test_wishlist_card_compact_cart_markup(self):
+        """Lot 3quinquies — CTA panier compact sans marketone-shop-card-cart."""
+        self._ensure_wishlist_item()
+        html = self._open_wishlist_html()
+        self.assertIn("o_wishlist_item", html)
+        wishlist_blocks = re.findall(
+            r'<article[^>]*class="[^"]*o_wishlist_item[^"]*"[^>]*>.*?</article>',
+            html,
+            flags=re.DOTALL,
+        )
+        self.assertTrue(wishlist_blocks, "Au moins une carte wishlist attendue.")
+        block = wishlist_blocks[0]
+        self.assertIn("marketone-wishlist-card-cart--tile", block)
+        self.assertIn("marketone-wishlist-card-cart__label", block)
+        self.assertRegex(block, r'o_wish_add[^>]*marketone-wishlist-card-cart')
+        self.assertNotRegex(block, r'o_wish_add[^>]*marketone-shop-card-cart')
+        self.assertNotRegex(
+            block,
+            r'o_wish_add[^>]*>\s*<i[^>]*fa-shopping-cart[^>]*>\s*<span[^>]*>\s*Add to Cart',
+        )
+
+    def test_wishlist_card_price_and_remove_markup(self):
+        """Lot 3quinquies — prix aligné boutique · retrait cœur overlay."""
+        self._ensure_wishlist_item()
+        html = self._open_wishlist_html()
+        wishlist_blocks = re.findall(
+            r'<article[^>]*class="[^"]*o_wishlist_item[^"]*"[^>]*>.*?</article>',
+            html,
+            flags=re.DOTALL,
+        )
+        self.assertTrue(wishlist_blocks, "Au moins une carte wishlist attendue.")
+        block = wishlist_blocks[0]
+        self.assertRegex(block, r'o_wish_price[^"]*marketone-shop-card-price')
+        self.assertRegex(block, r'o_wish_rm[^"]*marketone-wishlist-card-remove')
+        self.assertRegex(
+            block,
+            r'marketone-wishlist-card-remove[^>]*>\s*<i[^>]*fa-heart',
+        )
+
+    def test_wishlist_card_cta_no_preview(self):
+        """Lot 3quinquies — CTA Voir wishlist sans preview autorisée."""
+        self._ensure_wishlist_item()
+        html = self._open_wishlist_html()
+        wishlist_blocks = re.findall(
+            r'<article[^>]*class="[^"]*o_wishlist_item[^"]*"[^>]*>.*?</article>',
+            html,
+            flags=re.DOTALL,
+        )
+        self.assertTrue(wishlist_blocks, "Au moins une carte wishlist attendue.")
+        for block in wishlist_blocks[:3]:
+            cta_matches = re.findall(
+                r'<a[^>]*class="[^"]*marketone-shop-card-cta[^"]*"[^>]*>',
+                block,
+            )
+            for cta in cta_matches:
+                self.assertIn(
+                    'data-marketone-preview-allowed="False"',
+                    cta,
+                    "CTA Voir wishlist doit désactiver la preview.",
+                )
 
     def test_shop_card_wishlist_overlay_functional(self):
         response = self.url_open("/shop")

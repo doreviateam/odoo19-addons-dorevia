@@ -1,4 +1,4 @@
-// Wishlist standard Odoo — harmonisation cosmétique CK (pas de logique métier).
+// UX-4 Lot 3quinquies — grammaire carte wishlist alignée boutique (scope strict, zéro JS métier).
 
 .marketone-shop-wishlist {
     background-color: $ck-bg-page;
@@ -29,24 +29,272 @@
         }
     }
 
-    .o_wishlist_table article.o_wishlist_item,
-    .o_wishlist_table .oe_product_cart {
-        border-radius: $marketone-radius-md;
-        border: 1px solid rgba($ck-border-card, 0.85);
+    // Carte produit — même îlot que boutique.
+    .o_wishlist_item .oe_product_cart {
+        position: relative;
+        --o-wsale-card-border-color: #{$ck-border-card};
+        border: 1px solid var(--o-wsale-card-border-color);
+        border-radius: 0.875rem;
         background-color: $ck-bg-card-body;
-        box-shadow: 0 6px 16px rgba($ck-shadow, 0.05);
+        box-shadow: 0 10px 24px rgba($ck-shadow, 0.07);
+        overflow: hidden;
+
+        // Slots boutique non pertinents sur page wishlist.
+        .marketone-shop-card-wishlist-wrap,
+        .marketone-shop-card-cart-feedback,
+        .marketone-shop-card-preview-slot {
+            display: none !important;
+        }
+
+        .oe_product_image,
+        .o_wsale_product_image {
+            position: relative;
+            background: $ck-bg-image-tile;
+
+            .oe_product_image_link {
+                overflow: hidden;
+            }
+
+            .oe_product_image_img {
+                object-fit: cover !important;
+            }
+        }
+
+        // Retrait wishlist — overlay haut-droit (comportement o_wish_rm conservé).
+        .marketone-wishlist-card-remove {
+            position: absolute;
+            top: 0.625rem;
+            right: 0.625rem;
+            z-index: 5;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            padding: 0;
+            margin: 0;
+            border: none;
+            border-radius: 999px;
+            background: rgba($ck-bg-card-body, 0.82);
+            color: $ck-terracotta;
+            box-shadow: 0 2px 8px rgba($ck-shadow, 0.08);
+            backdrop-filter: blur(4px);
+            line-height: 1;
+            transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+
+            .fa {
+                font-size: 0.8125rem;
+            }
+
+            &:hover,
+            &:focus-visible {
+                color: $ck-terracotta;
+                background: rgba($ck-bg-card-body, 0.94);
+                box-shadow: 0 3px 10px rgba($ck-shadow, 0.1);
+            }
+        }
+
+        // Panier overlay image — compact icône + Ajouter (pas marketone-shop-card-cart).
+        .o_wsale_product_btn {
+            position: absolute;
+            inset: auto 0.625rem 0.625rem auto;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+
+            .marketone-wishlist-card-cart--tile {
+                display: inline-flex !important;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 0.375rem;
+                width: auto !important;
+                min-height: 2.45rem;
+                aspect-ratio: auto !important;
+                padding: 0.42rem 0.85rem;
+                border-radius: 0.625rem !important;
+                font-family: $marketone-font-body;
+                font-size: 0.8125rem;
+                font-weight: $marketone-weight-semibold;
+                line-height: 1.15;
+                white-space: nowrap;
+                box-shadow: 0 2px 10px rgba($ck-shadow, 0.12);
+                pointer-events: none;
+
+                .marketone-wishlist-card-cart__label,
+                .o_label {
+                    display: inline !important;
+                    font-size: inherit;
+                    font-weight: inherit;
+                }
+
+                .fa-shopping-cart {
+                    font-size: 0.95rem;
+                }
+            }
+        }
+
+        &:hover .oe_product_image .o_wsale_product_btn,
+        &:has(.oe_product_image_link:focus-visible) .oe_product_image .o_wsale_product_btn,
+        .oe_product_image .o_wsale_product_btn:focus-within {
+            opacity: 1;
+            pointer-events: auto;
+
+            .marketone-wishlist-card-cart--tile {
+                pointer-events: auto;
+            }
+        }
+
+        .o_wsale_product_information {
+            background-color: $ck-bg-card-body;
+            padding: 1.125rem 1.125rem 1.25rem;
+
+            .marketone-shop-card-title,
+            .o_wsale_products_item_title {
+                font-family: $marketone-font-body;
+                font-size: 1rem;
+                font-weight: $marketone-weight-semibold;
+                color: $ck-text;
+                line-height: 1.3;
+                min-height: calc(2 * 1.3 * 1em);
+                max-height: calc(2 * 1.3 * 1em);
+                overflow: hidden;
+                margin-bottom: 0.75rem;
+
+                a {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    color: inherit;
+                    text-decoration: none;
+
+                    &:hover,
+                    &:focus-visible {
+                        color: $ck-terracotta;
+                    }
+                }
+            }
+        }
+
+        // Pied de carte — Voir gauche · prix droite (comme boutique).
+        .o_wsale_product_sub.marketone-shop-card-footer {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+
+            .marketone-shop-card-cta {
+                flex: 0 0 auto;
+                order: 1;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.4375rem 0.9375rem;
+                border-radius: $marketone-radius-pill;
+                border: 1px solid $ck-border-card;
+                background: transparent;
+                color: $ck-text;
+                font-family: $marketone-font-body;
+                font-size: $marketone-label;
+                font-weight: $marketone-weight-semibold;
+                line-height: 1;
+                text-decoration: none;
+                white-space: nowrap;
+                transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+
+                &:hover,
+                &:focus-visible {
+                    color: $ck-terracotta;
+                    border-color: rgba($ck-terracotta, 0.45);
+                    background: rgba($ck-terracotta, 0.04);
+                    text-decoration: none;
+                }
+            }
+
+            .marketone-shop-card-price,
+            .o_wish_price,
+            .product_price {
+                flex: 0 0 auto;
+                order: 2;
+                margin-left: auto;
+                text-align: right;
+                font-size: 1.125rem;
+                font-weight: $marketone-weight-semibold;
+                color: $ck-terracotta;
+                letter-spacing: -0.02em;
+                line-height: 1;
+
+                .oe_strikethrough,
+                del,
+                .text-muted {
+                    font-size: $marketone-label;
+                    font-weight: $marketone-weight-regular;
+                    color: rgba($ck-text, 0.55);
+                }
+            }
+        }
     }
 
-    button.o_wish_rm,
-    .o_add_wishlist.js_delete_product {
-        min-width: 2rem;
-        min-height: 2rem;
-        border-radius: 999px;
-        transition: color 0.2s ease, border-color 0.2s ease;
+    @media (max-width: 991.98px) {
+        .o_wishlist_item .oe_product_cart {
+            .o_wsale_product_btn {
+                opacity: 1;
+                pointer-events: auto;
 
-        &:hover,
-        &:focus-visible {
-            color: $ck-terracotta;
+                .marketone-wishlist-card-cart--tile {
+                    pointer-events: auto;
+                    font-size: 0.75rem;
+                    min-height: 2.25rem;
+                    padding: 0.35rem 0.65rem;
+                    gap: 0.3rem;
+                    max-width: calc(100% - 0.5rem);
+
+                    .fa-shopping-cart {
+                        font-size: 0.875rem;
+                    }
+                }
+            }
+
+            .o_wsale_product_information {
+                padding: 0.875rem 0.875rem 1rem;
+
+                .marketone-shop-card-title,
+                .o_wsale_products_item_title {
+                    font-size: $marketone-label;
+                }
+
+                .marketone-shop-card-cta {
+                    padding: 0.375rem 0.75rem;
+                    font-size: $marketone-label-sm;
+                }
+
+                .marketone-shop-card-price,
+                .o_wish_price {
+                    font-size: 1rem;
+                }
+            }
+
+            .marketone-wishlist-card-remove {
+                width: 1.75rem;
+                height: 1.75rem;
+                top: 0.5rem;
+                right: 0.5rem;
+
+                .fa {
+                    font-size: 0.75rem;
+                }
+            }
         }
     }
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- UX-4 Lot 3quinquies — alignement carte wishlist sur grammaire boutique (visuel uniquement). -->
+
+    <!-- Prix wishlist — même slot terracotta bas-droit que la boutique. -->
+    <template id="marketone_wishlist_item_price"
+              inherit_id="website_sale_wishlist.product_wishlist"
+              name="Marketone wishlist — prix aligné boutique"
+              priority="24">
+        <xpath expr="//div[hasclass('o_wish_price')]" position="attributes">
+            <attribute name="class" add="marketone-shop-card-price product_price" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- CTA Voir wishlist — navigation fiche uniquement (pas preview UX-4). -->
+    <template id="marketone_wishlist_item_cta"
+              inherit_id="website_sale.products_item"
+              name="Marketone wishlist — CTA Voir sans preview"
+              priority="58">
+        <xpath expr="//a[hasclass('marketone-shop-card-cta')]" position="attributes">
+            <attribute name="t-att-data-marketone-preview-allowed">'False' if marketone_wishlist_card else product._marketone_preview_full_allowed()</attribute>
+        </xpath>
+    </template>
+
+    <!-- CTA panier wishlist — compact icône + Ajouter (handler Odoo o_wish_add conservé). -->
+    <template id="marketone_wishlist_item_cart"
+              inherit_id="website_sale_wishlist.product_wishlist"
+              name="Marketone wishlist — CTA panier compact"
+              priority="25">
+        <xpath expr="//t[@t-call='website_sale.products_item']" position="before">
+            <t t-set="marketone_wishlist_card" t-value="True"/>
+        </xpath>
+        <xpath expr="//button[hasclass('o_wish_add')]" position="replace">
+            <button t-else=""
+                    id="add_to_cart_button"
+                    type="button"
+                    class="o_wsale_product_btn_primary btn btn-primary o_wish_add marketone-wishlist-card-cart marketone-wishlist-card-cart--tile"
+                    t-att-data-show-quantity="is_view_active('website_sale.product_quantity')"
+                    t-att-data-product-template-id="product.id"
+                    t-att-data-product-product-id="product_variant.id"
+                    t-att-data-product-type="product.type"
+                    t-att-data-ptav-ids="json.dumps(product_variant.product_template_attribute_value_ids.ids)"
+                    aria-label="Ajouter au panier"
+                    title="Ajouter au panier">
+                <i class="fa fa-shopping-cart o_not-animable" aria-hidden="true"/>
+                <span class="o_label marketone-wishlist-card-cart__label">Ajouter</span>
+            </button>
+        </xpath>
+        <xpath expr="//button[hasclass('o_wish_rm')]" position="attributes">
+            <attribute name="class" remove="btn-light" add="marketone-wishlist-card-remove" separator=" "/>
+            <attribute name="aria-label">Retirer de la liste</attribute>
+            <attribute name="title">Retirer de la liste</attribute>
+        </xpath>
+        <xpath expr="//button[hasclass('o_wish_rm')]//i" position="replace">
+            <i class="fa fa-heart o_not-animable" aria-hidden="true"/>
+        </xpath>
+    </template>
+</odoo>
