@@ -321,10 +321,29 @@ class TestMarketoneShopInPlacePreview(HttpCase):
         self.assertIn("Découvrir le produit", html)
         self.assertIn("Fermer", html)
         self.assertIn("marketone-shop-preview__media-frame", html)
-        self.assertIn("marketone-shop-preview__full-link", html)
+        self.assertIn("marketone-shop-preview__scroll", html)
+        self.assertIn("marketone-shop-preview__footer", html)
+        self.assertIn("marketone-shop-preview__full-cta", html)
+        self.assertNotIn("marketone-shop-preview__full-link", html)
         self.assertIn("Voir la fiche complète", html)
         self.assertIn("marketone-shop-card-cart", html)
         self.assertIn("marketone-shop-card-wishlist", html)
+
+    def test_preview_fragment_footer_actions_structure(self):
+        """Lot 3sexies — CTA regroupés dans footer sticky (scroll + footer)."""
+        if not self.simple_product or not self.simple_product._marketone_preview_full_allowed():
+            self.skipTest("Produit simple publié requis pour preview V1.")
+        html = self.url_open(
+            f"/shop/product/preview/{self.simple_product.id}"
+        ).text
+        scroll_pos = html.find("marketone-shop-preview__scroll")
+        footer_pos = html.find("marketone-shop-preview__footer")
+        full_cta_pos = html.find("marketone-shop-preview__full-cta")
+        cart_pos = html.find("marketone-shop-card-cart")
+        self.assertGreater(scroll_pos, 0, "Zone scroll attendue.")
+        self.assertGreater(footer_pos, scroll_pos, "Footer après la zone scroll.")
+        self.assertGreater(full_cta_pos, footer_pos, "CTA fiche dans le footer.")
+        self.assertGreater(cart_pos, footer_pos, "CTA panier dans le footer.")
 
     def test_preview_route_not_found_for_unknown_product(self):
         response = self.url_open("/shop/product/preview/999999999")

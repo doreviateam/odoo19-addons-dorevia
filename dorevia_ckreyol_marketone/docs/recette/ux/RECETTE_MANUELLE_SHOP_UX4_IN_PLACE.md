@@ -56,6 +56,7 @@ Chaque évolution UX-4 doit prouver **deux choses** :
 | **Lot 3** | § L3 · § G3 · § L3.F · § L3.M | B1 · **B4** · **B7** · **B8** · **B9** · **B10** | + preview tests |
 | **Lot 3bis** | § **V3bis** · smoke L3.F / L3.M | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Aucun test auto supplémentaire |
 | **Lot 3ter** | § **V3ter** · smoke L1 / L2 / G3.9 | Smoke **G3.6–G3.9** · **G3.1** · **G3.3** | Test grille image preview data |
+| **Lot 3sexies** | § **W3sexies** · smoke L3 · L3bis · L3ter · L2 · L1 | Smoke preview · retrait naturel · panier/wishlist preview | `dorevia_marketone_shop_in_place` |
 | **Lot 4** | § L4 | **B1–B10 complet** | Suite complète § C référence |
 
 ---
@@ -661,6 +662,63 @@ Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_CART_CTA_TILE_20260522.md`](RAPP
 **Verdict :** ☑ **GO MOA Lot 3quater bis** · ☐ NO GO · (`14.1` · PR #19)
 
 Rapport : [`RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md`](RAPPORT_RECETTE_SHOP_UX4_LOT3QUATER_BIS_CART_FEEDBACK_20260522.md) · recette manuelle PR #19 : [`recette_manuelle_pr19_20260522.json`](recette_manuelle_pr19_20260522.json) (**30/30 OK**)
+
+---
+
+# Lot 3sexies — Preview actions bottom sticky
+
+> **Statut :** **Arbitrage MOA GO** (2026-05-23) · branche `feat/marketone-ux4-lot3sexies-preview-actions-sticky` · version cible **`19.0.15.14.8`**.
+>
+> **Merge interdit** avant recette visuelle MOA desktop + mobile.
+
+## Objectif MOA
+
+Améliorer la zone d’action du panneau « Découvrir le produit » : CTA toujours visibles en bas, contenu scrollable au-dessus, sans transformer la preview en fiche produit complète.
+
+## Périmètre
+
+| In | Out |
+|----|-----|
+| Wrapper QWeb `__scroll` + `__footer` | JS preview · routes · handlers panier/wishlist |
+| SCSS flex footer sticky local | `position: fixed` viewport |
+| CTA secondaire premium « Voir la fiche complète » | Contenu preview additionnel |
+| Wishlist conservée dans le footer | Deep-link · configurateur |
+
+## Critères recette W3sexies
+
+| # | Critère | Desktop | Mobile 390 px |
+|---|---------|---------|---------------|
+| **W3sexies.1** | Zone CTA visible en bas sans scroller | ☐ MOA | ☐ MOA |
+| **W3sexies.2** | Contenu produit scrollable au-dessus des CTA | ☐ MOA | ☐ MOA |
+| **W3sexies.3** | « Ajouter au panier » = CTA principal terracotta | ☐ auto | ☐ MOA |
+| **W3sexies.4** | « Voir la fiche complète » = CTA secondaire premium (outline) | ☐ MOA | ☐ MOA |
+| **W3sexies.5** | Clic panier → panier OK + compteur header | ☐ MOA | ☐ MOA |
+| **W3sexies.6** | Clic fiche complète → navigation fiche produit | ☐ auto | ☐ auto |
+| **W3sexies.7** | Wishlist preview inchangée (toggle OK) | ☐ MOA | ☐ MOA |
+| **W3sexies.8** | Fermeture croix / ESC / re-clic Voir inchangée | ☐ MOA | ☐ MOA |
+| **W3sexies.9** | Retrait naturel hors panneau inchangé | ☐ MOA | ☐ MOA |
+| **W3sexies.10** | Scroll **dans** le panneau ne ferme pas la preview | ☐ MOA | ☐ MOA |
+| **W3sexies.11** | Pas de débordement horizontal | — | ☐ MOA |
+| **W3sexies.12** | Console sans erreur JS bloquante | ☐ auto | ☐ auto |
+
+## Smoke non-régression obligatoire
+
+| Critère | Référence | ☐ |
+|---------|-----------|---|
+| Preview Lot 3 | **L3 · L3.F · L3.M** | ☐ |
+| Retrait naturel | **V3bis · R2** | ☐ |
+| Clic image → preview | **V3ter.1–8** | ☐ |
+| Panier preview | **L2 · I5** | ☐ |
+| Wishlist preview | **L1 · I6** | ☐ |
+
+## Verdict Lot 3sexies
+
+| Verdict | Condition |
+|---------|-----------|
+| **GO MOA Lot 3sexies** | W3sexies.1–W3sexies.12 OK · smoke ci-dessus OK · captures desktop + mobile |
+| **NO GO** | Régression dismiss / panier / wishlist · fixed viewport · débordement mobile |
+
+**Verdict :** ☐ **GO MOA Lot 3sexies** · ☐ NO GO · (`14.8` · PR dédiée)
 
 ---
 

@@ -2,6 +2,7 @@
 <odoo>
     <!-- UX-4 Lot 3 — coque offcanvas desktop (non modal). -->
     <!-- UX-4 Lot 3bis — finition visuelle premium (libellés · structure · fermeture desktop). -->
+    <!-- UX-4 Lot 3sexies — zone scroll + footer actions sticky (CTA panier · fiche · wishlist). -->
     <template id="marketone_shop_preview_offcanvas_shell"
               inherit_id="website_sale.products"
               name="Marketone: preview Voir — offcanvas desktop"
@@ -33,57 +34,61 @@
               name="Marketone: fragment preview produit">
         <div class="marketone-shop-preview"
              t-att-data-product-template-id="product.id">
-            <div class="marketone-shop-preview__toolbar d-lg-none">
-                <span class="marketone-shop-preview__toolbar-label">Découvrir le produit</span>
-                <button type="button"
-                        class="marketone-shop-preview__close btn btn-sm btn-outline-secondary"
-                        aria-label="Fermer l'aperçu">
-                    Fermer
-                </button>
-            </div>
-            <div class="marketone-shop-preview__media">
-                <div class="marketone-shop-preview__media-frame">
-                    <span t-field="product.image_1920"
-                          t-options="{'widget': 'image', 'preview_image': 'image_1024', 'class': 'marketone-shop-preview__img w-100'}"/>
+            <div class="marketone-shop-preview__scroll">
+                <div class="marketone-shop-preview__toolbar d-lg-none">
+                    <span class="marketone-shop-preview__toolbar-label">Découvrir le produit</span>
+                    <button type="button"
+                            class="marketone-shop-preview__close btn btn-sm btn-outline-secondary"
+                            aria-label="Fermer l'aperçu">
+                        Fermer
+                    </button>
+                </div>
+                <div class="marketone-shop-preview__media">
+                    <div class="marketone-shop-preview__media-frame">
+                        <span t-field="product.image_1920"
+                              t-options="{'widget': 'image', 'preview_image': 'image_1024', 'class': 'marketone-shop-preview__img w-100'}"/>
+                    </div>
+                </div>
+                <div class="marketone-shop-preview__body">
+                    <div class="marketone-shop-preview__intro">
+                        <h3 class="marketone-shop-preview__title" t-out="product.name"/>
+                        <div class="marketone-shop-preview__price" aria-label="Prix">
+                            <span class="fw-bold"
+                                  t-out="combination_info['price']"
+                                  t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                        </div>
+                    </div>
+                    <div t-if="origin_lines or category_labels"
+                         class="marketone-shop-preview__meta">
+                        <div t-if="origin_lines" class="marketone-shop-preview__meta-block marketone-shop-preview__origins">
+                            <span class="marketone-shop-preview__meta-label">Origines</span>
+                            <ul class="marketone-shop-preview__meta-list list-inline mb-0">
+                                <li t-foreach="origin_lines"
+                                    t-as="line"
+                                    class="list-inline-item">
+                                    <span class="marketone-shop-preview__chip marketone-shop-preview__chip--origin"
+                                          t-out="line['label']"/>
+                                </li>
+                            </ul>
+                        </div>
+                        <div t-if="category_labels" class="marketone-shop-preview__meta-block marketone-shop-preview__collections">
+                            <span class="marketone-shop-preview__meta-label">Collections</span>
+                            <ul class="marketone-shop-preview__meta-list list-inline mb-0">
+                                <li t-foreach="category_labels"
+                                    t-as="label"
+                                    class="list-inline-item">
+                                    <span class="marketone-shop-preview__chip marketone-shop-preview__chip--collection"
+                                          t-out="label"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p t-if="product.description_sale"
+                       class="marketone-shop-preview__description text-muted"
+                       t-out="product.description_sale"/>
                 </div>
             </div>
-            <div class="marketone-shop-preview__body">
-                <div class="marketone-shop-preview__intro">
-                    <h3 class="marketone-shop-preview__title" t-out="product.name"/>
-                    <div class="marketone-shop-preview__price" aria-label="Prix">
-                        <span class="fw-bold"
-                              t-out="combination_info['price']"
-                              t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
-                    </div>
-                </div>
-                <div t-if="origin_lines or category_labels"
-                     class="marketone-shop-preview__meta">
-                    <div t-if="origin_lines" class="marketone-shop-preview__meta-block marketone-shop-preview__origins">
-                        <span class="marketone-shop-preview__meta-label">Origines</span>
-                        <ul class="marketone-shop-preview__meta-list list-inline mb-0">
-                            <li t-foreach="origin_lines"
-                                t-as="line"
-                                class="list-inline-item">
-                                <span class="marketone-shop-preview__chip marketone-shop-preview__chip--origin"
-                                      t-out="line['label']"/>
-                            </li>
-                        </ul>
-                    </div>
-                    <div t-if="category_labels" class="marketone-shop-preview__meta-block marketone-shop-preview__collections">
-                        <span class="marketone-shop-preview__meta-label">Collections</span>
-                        <ul class="marketone-shop-preview__meta-list list-inline mb-0">
-                            <li t-foreach="category_labels"
-                                t-as="label"
-                                class="list-inline-item">
-                                <span class="marketone-shop-preview__chip marketone-shop-preview__chip--collection"
-                                      t-out="label"/>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <p t-if="product.description_sale"
-                   class="marketone-shop-preview__description text-muted"
-                   t-out="product.description_sale"/>
+            <div class="marketone-shop-preview__footer">
                 <form class="oe_product_cart marketone-shop-preview__actions"
                       t-att-data-marketone-no-variant-ptav-ids="','.join(map(str, product._marketone_grid_no_variant_ptav_ids()))">
                     <input type="hidden" name="product_id" t-att-value="product_variant.id"/>
@@ -114,7 +119,7 @@
                     </div>
                 </form>
                 <a t-att-href="product_href"
-                   class="marketone-shop-preview__full-link">
+                   class="marketone-shop-preview__full-cta btn">
                     Voir la fiche complète
                 </a>
             </div>
