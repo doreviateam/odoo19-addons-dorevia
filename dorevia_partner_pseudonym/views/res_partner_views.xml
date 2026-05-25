@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_pseudonym" model="ir.ui.view">
+        <field name="name">res.partner.form.pseudonym</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']/.." position="before">
+                <div class="d-flex align-items-baseline w-md-50">
+                    <i
+                        class="fa fa-fw me-1 fa-tag text-primary"
+                        title="Pseudonyme"
+                    />
+                    <field
+                        name="pseudonym"
+                        class="w-100"
+                        placeholder="Ex. Super U, surnom…"
+                    />
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_tree_pseudonym" model="ir.ui.view">
+        <field name="name">res.partner.tree.pseudonym</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <field name="complete_name" position="after">
+                <field name="pseudonym" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_partner_search_pseudonym" model="ir.ui.view">
+        <field name="name">res.partner.search.pseudonym</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name'][@filter_domain]" position="attributes">
+                <attribute name="filter_domain">['|', '|', '|', '|', '|', ('complete_name', 'ilike', self), ('ref', 'ilike', self), ('email', 'ilike', self), ('vat', 'ilike', self), ('company_registry', 'ilike', self), ('pseudonym', 'ilike', self)]</attribute>
+            </xpath>
+            <field name="name" position="after">
+                <field name="pseudonym"/>
+            </field>
+            <filter name="inactive" position="before">
+                <filter
+                    name="filter_has_pseudonym"
+                    string="Avec pseudonyme"
+                    domain="[('pseudonym', '!=', False)]"
+                />
+                <separator/>
+            </filter>
+            <group name="group_by" position="inside">
+                <filter
+                    name="group_by_pseudonym"
+                    string="Pseudonyme / enseigne"
+                    context="{'group_by': 'pseudonym'}"
+                />
+            </group>
+        </field>
+    </record>
+</odoo>
