@@ -142,6 +142,30 @@ class TestGlcSalaryAllocation(AccountTestInvoicingCommon):
                 }
             )
 
+    def test_negative_percent_refused(self):
+        """Pourcentage négatif refusé en ventilation salariale."""
+        allocation = self._create_allocation(method="percent")
+        with self.assertRaises(ValidationError):
+            self.env["glc.salary.allocation.line"].create(
+                {
+                    "allocation_id": allocation.id,
+                    "activity_account_id": self.bar.id,
+                    "percent": -10.0,
+                }
+            )
+
+    def test_negative_hours_refused(self):
+        """Heures négatives refusées en ventilation salariale."""
+        allocation = self._create_allocation(method="hours")
+        with self.assertRaises(ValidationError):
+            self.env["glc.salary.allocation.line"].create(
+                {
+                    "allocation_id": allocation.id,
+                    "activity_account_id": self.bar.id,
+                    "hours": -5.0,
+                }
+            )
+
     def test_payroll_variance_banner_informative(self):
         """CA7 — bandeau écart masse comptable informatif."""
         payroll_account = self.env["account.account"].search(

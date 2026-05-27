@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import itertools
+
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
@@ -30,8 +32,15 @@ class TestGlcBudget(AccountTestInvoicingCommon):
         cls.subventions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_subventions")
         cls.adhesions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_adhesions")
         cls.period = "2026-04-01"
+        existing_years = cls.env["glc.budget"].search([]).mapped("year")
+        base_year = max(existing_years + [2100]) + 1
+        cls._year_counter = itertools.count(base_year)
 
-    def _create_budget(self, scenario="initial", year=2026):
+    def _next_test_year(self):
+        return next(self._year_counter)
+
+    def _create_budget(self, scenario="initial", year=None):
+        year = year if year is not None else self._next_test_year()
         return self.env["glc.budget"].create(
             {
                 "name": "Budget test %s %s" % (year, scenario),
@@ -63,8 +72,8 @@ class TestGlcBudget(AccountTestInvoicingCommon):
 
     def test_budget_scenarios(self):
         """CA2 — scénarios initial / revised / landing."""
-        for idx, scenario in enumerate(("initial", "revised", "landing")):
-            budget = self._create_budget(scenario=scenario, year=2026 + idx)
+        for scenario in ("initial", "revised", "landing"):
+            budget = self._create_budget(scenario=scenario)
             self.assertEqual(budget.scenario, scenario)
 
     def test_budget_line_monthly_activity(self):
@@ -76,26 +85,26 @@ class TestGlcBudget(AccountTestInvoicingCommon):
 
     def test_line_types_domains(self):
         """CA4 — types revenue / expense / funding cohérents."""
-        budget = self._create_budget(year=2027)
+        budget = self._create_budget()
         self._create_line(budget, line_type="revenue", account=self.bar)
         self._create_line(budget, line_type="expense", account=self.structure)
         self._create_line(budget, line_type="funding", account=self.subventions)
 
     def test_funding_account_refused_on_expense(self):
         """CA5 — compte Financements refusé sur charge."""
-        budget = self._create_budget(year=2028)
+        budget = self._create_budget()
         with self.assertRaises(ValidationError):
             self._create_line(budget, line_type="expense", account=self.subventions)
 
     def test_activity_account_refused_on_funding(self):
         """CA6 — compte Activités refusé sur financement."""
-        budget = self._create_budget(year=2029)
+        budget = self._create_budget()
         with self.assertRaises(ValidationError):
             self._create_line(budget, line_type="funding", account=self.bar)
 
     def test_workflow_draft_validated_archived(self):
         """CA7 — workflow brouillon → validé → archivé."""
-        budget = self._create_budget(year=2030)
+        budget = self._create_budget()
         self._create_line(budget)
         budget.action_validate()
         self.assertEqual(budget.state, "validated")
@@ -111,7 +120,7 @@ class TestGlcBudget(AccountTestInvoicingCommon):
 
     def test_no_accounting_entries_generated(self):
         """CA8 — aucune écriture comptable ni analytique."""
-        budget = self._create_budget(year=2031)
+        budget = self._create_budget()
         moves_before = self.env["account.move"].search_count([])
         analytic_before = self.env["account.analytic.line"].search_count([])
         self._create_line(budget, line_type="revenue", account=self.bar, amount=5000.0)
@@ -123,20 +132,21 @@ class TestGlcBudget(AccountTestInvoicingCommon):
 
     def test_unique_budget_per_company_year_scenario(self):
         """Contrainte unicité budget."""
-        self._create_budget(scenario="initial", year=2032)
+        year = self._next_test_year()
+        self._create_budget(scenario="initial", year=year)
         with self.assertRaises(Exception):
-            self._create_budget(scenario="initial", year=2032)
+            self._create_budget(scenario="initial", year=year)
 
     def test_unique_budget_line(self):
         """Contrainte unicité ligne."""
-        budget = self._create_budget(year=2033)
+        budget = self._create_budget()
         self._create_line(budget, line_type="expense", account=self.structure)
         with self.assertRaises(Exception):
             self._create_line(budget, line_type="expense", account=self.structure)
 
     def test_period_must_be_first_of_month(self):
         """Période = 1er jour du mois."""
-        budget = self._create_budget(year=2034)
+        budget = self._create_budget()
         with self.assertRaises(ValidationError):
             self.env["glc.budget.line"].create(
                 {
@@ -150,6 +160,6 @@ class TestGlcBudget(AccountTestInvoicingCommon):
 
     def test_negative_amount_refused(self):
         """Montant ≥ 0."""
-        budget = self._create_budget(year=2035)
+        budget = self._create_budget()
         with self.assertRaises(ValidationError):
             self._create_line(budget, amount=-1.0)

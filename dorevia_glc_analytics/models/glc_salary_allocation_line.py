@@ -88,6 +88,10 @@ class GlcSalaryAllocationLine(models.Model):
     @api.constrains("percent", "hours")
     def _check_method_fields(self):
         for line in self:
+            if (line.percent or 0.0) < 0:
+                raise ValidationError(_("Le pourcentage ne peut pas être négatif."))
+            if (line.hours or 0.0) < 0:
+                raise ValidationError(_("Les heures ne peuvent pas être négatives."))
             if line.allocation_id.method == "percent" and (line.hours or 0.0):
                 raise ValidationError(_("Les heures ne sont pas utilisées en méthode pourcentage."))
             if line.allocation_id.method == "hours" and (line.percent or 0.0):
