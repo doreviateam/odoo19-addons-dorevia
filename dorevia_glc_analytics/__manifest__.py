@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.4.0.0",
+    "version": "19.0.4.1.0",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — plans Activités et Financements.",
     "description": """
@@ -32,6 +32,8 @@ Palier 4 — Cockpit couverture des salaires :
 * agrégation réalisé analytique + ventilations Palier 2 + budget Palier 3 ;
 * alertes rouge / orange / vert ;
 * détail Activité × Mois.
+
+Palier 4bis — Finition UX cockpit (wording MOA, présentation GLC).
 
 Les paliers suivants (bénévolat, rapport CA) seront ajoutés progressivement.
 Voir docs/PALIERS.md.

@@ -23,6 +23,7 @@ from .glc_constants import (
 class GlcCoverageCockpit(models.TransientModel):
     _name = "glc.coverage.cockpit"
     _description = "Cockpit couverture des salaires GLC"
+    _rec_name = "display_title"
 
     company_id = fields.Many2one(
         "res.company",
@@ -76,38 +77,97 @@ class GlcCoverageCockpit(models.TransientModel):
         "res.currency",
         compute="_compute_currency_id",
     )
-    date_from = fields.Date(readonly=True)
-    date_to = fields.Date(readonly=True)
+    date_from = fields.Date(string="Du", readonly=True)
+    date_to = fields.Date(string="Au", readonly=True)
+    display_title = fields.Char(
+        string="Titre",
+        compute="_compute_display_title",
+    )
 
-    activity_revenue_realized = fields.Monetary(readonly=True, currency_field="currency_id")
-    funding_realized = fields.Monetary(readonly=True, currency_field="currency_id")
-    resources_realized = fields.Monetary(readonly=True, currency_field="currency_id")
-    payroll_realized = fields.Monetary(readonly=True, currency_field="currency_id")
-    general_expenses_realized = fields.Monetary(readonly=True, currency_field="currency_id")
-    fixed_charges_realized = fields.Monetary(readonly=True, currency_field="currency_id")
+    activity_revenue_realized = fields.Monetary(
+        string="Recettes d'activité (réalisé)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    funding_realized = fields.Monetary(
+        string="Financements (réalisé)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    resources_realized = fields.Monetary(
+        string="Ressources disponibles (réalisé)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    payroll_realized = fields.Monetary(
+        string="Masse salariale (réalisé)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    general_expenses_realized = fields.Monetary(
+        string="Frais généraux (réalisé)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    fixed_charges_realized = fields.Monetary(
+        string="Charges fixes (réalisé)",
+        readonly=True,
+        currency_field="currency_id",
+        help="Masse salariale + frais généraux.",
+    )
 
-    activity_revenue_budget = fields.Monetary(readonly=True, currency_field="currency_id")
-    funding_budget = fields.Monetary(readonly=True, currency_field="currency_id")
-    resources_budget = fields.Monetary(readonly=True, currency_field="currency_id")
-    payroll_budget = fields.Monetary(readonly=True, currency_field="currency_id")
-    general_expenses_budget = fields.Monetary(readonly=True, currency_field="currency_id")
+    activity_revenue_budget = fields.Monetary(
+        string="Recettes d'activité (budget)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    funding_budget = fields.Monetary(
+        string="Financements (budget)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    resources_budget = fields.Monetary(
+        string="Ressources disponibles (budget)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    payroll_budget = fields.Monetary(
+        string="Masse salariale (budget)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    general_expenses_budget = fields.Monetary(
+        string="Frais généraux (budget)",
+        readonly=True,
+        currency_field="currency_id",
+    )
 
     salary_coverage_rate = fields.Float(
-        string="Taux couverture salaires (%)",
+        string="Taux de couverture des salaires (%)",
         digits=(16, 2),
         readonly=True,
     )
-    balance_after_payroll = fields.Monetary(readonly=True, currency_field="currency_id")
-    balance_after_fixed = fields.Monetary(readonly=True, currency_field="currency_id")
+    balance_after_payroll = fields.Monetary(
+        string="Solde après salaires",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    balance_after_fixed = fields.Monetary(
+        string="Solde après salaires et frais généraux",
+        readonly=True,
+        currency_field="currency_id",
+    )
     alert_status = fields.Selection(
+        string="Statut alerte",
         selection=[
-            ("red", "Rouge"),
-            ("orange", "Orange"),
-            ("green", "Vert"),
+            ("red", "Rouge — ressources insuffisantes"),
+            ("orange", "Orange — salaires couverts, frais généraux non"),
+            ("green", "Vert — salaires et frais généraux couverts"),
         ],
         readonly=True,
     )
-    alert_message = fields.Char(readonly=True)
+    alert_message = fields.Char(string="Message alerte", readonly=True)
+    is_refreshed = fields.Boolean(string="Calcul effectué", readonly=True, default=False)
     line_ids = fields.One2many(
         "glc.coverage.cockpit.line",
         "cockpit_id",
@@ -118,6 +178,23 @@ class GlcCoverageCockpit(models.TransientModel):
     def _compute_currency_id(self):
         for cockpit in self:
             cockpit.currency_id = cockpit.company_id.currency_id
+
+    @api.depends("year", "month", "budget_scenario", "activity_account_id")
+    def _compute_display_title(self):
+        month_labels = dict(self._fields["month"].selection)
+        scenario_labels = dict(self._fields["budget_scenario"].selection)
+        for cockpit in self:
+            period = month_labels.get(cockpit.month, "")
+            if cockpit.month == "0":
+                period = _("Année complète")
+            activity = cockpit.activity_account_id.display_name or _("Toutes activités")
+            cockpit.display_title = _(
+                "Cockpit GLC · %(year)s · %(period)s · %(scenario)s · %(activity)s",
+                year=cockpit.year,
+                period=period,
+                scenario=scenario_labels.get(cockpit.budget_scenario, cockpit.budget_scenario),
+                activity=activity,
+            )
 
     @api.constrains("year")
     def _check_year(self):
@@ -265,13 +342,27 @@ class GlcCoverageCockpit(models.TransientModel):
     @api.model
     def _compute_alert_status(self, resources, payroll, general_expenses):
         if resources < payroll:
-            return "red", _("Ressources insuffisantes pour couvrir la masse salariale.")
+            return (
+                "red",
+                _(
+                    "Les ressources disponibles ne couvrent pas la masse salariale "
+                    "(recettes d'activité + financements insuffisants)."
+                ),
+            )
         if resources < payroll + general_expenses:
             return (
                 "orange",
-                _("Ressources suffisantes pour les salaires mais insuffisantes pour salaires + frais généraux."),
+                _(
+                    "Les ressources couvrent la masse salariale, mais pas les frais généraux "
+                    "(Structure & Administration)."
+                ),
             )
-        return "green", _("Ressources suffisantes pour salaires et frais généraux.")
+        return (
+            "green",
+            _(
+                "Les ressources couvrent la masse salariale et les frais généraux."
+            ),
+        )
 
     def _aggregate_period(self, period_start, period_end):
         self.ensure_one()
@@ -429,6 +520,7 @@ class GlcCoverageCockpit(models.TransientModel):
                 "balance_after_fixed": balance_after_fixed,
                 "alert_status": alert_status,
                 "alert_message": alert_message,
+                "is_refreshed": True,
             }
         )
 
@@ -452,14 +544,42 @@ class GlcCoverageCockpitLine(models.TransientModel):
         required=True,
         ondelete="cascade",
     )
-    period_date = fields.Date(required=True)
-    analytic_account_id = fields.Many2one("account.analytic.account", required=True)
+    period_date = fields.Date(string="Mois", required=True)
+    analytic_account_id = fields.Many2one(
+        "account.analytic.account",
+        string="Activité GLC",
+        required=True,
+    )
     currency_id = fields.Many2one(related="cockpit_id.currency_id")
-    revenue_realized = fields.Monetary(currency_field="currency_id")
-    revenue_budget = fields.Monetary(currency_field="currency_id")
-    expense_realized = fields.Monetary(currency_field="currency_id")
-    expense_budget = fields.Monetary(currency_field="currency_id")
-    payroll_realized = fields.Monetary(currency_field="currency_id")
-    payroll_budget = fields.Monetary(currency_field="currency_id")
-    variance_revenue = fields.Monetary(currency_field="currency_id")
-    variance_payroll = fields.Monetary(currency_field="currency_id")
+    revenue_realized = fields.Monetary(
+        string="Recettes (réalisé)",
+        currency_field="currency_id",
+    )
+    revenue_budget = fields.Monetary(
+        string="Recettes (budget)",
+        currency_field="currency_id",
+    )
+    expense_realized = fields.Monetary(
+        string="Frais généraux (réalisé)",
+        currency_field="currency_id",
+    )
+    expense_budget = fields.Monetary(
+        string="Frais généraux (budget)",
+        currency_field="currency_id",
+    )
+    payroll_realized = fields.Monetary(
+        string="Masse salariale (réalisé)",
+        currency_field="currency_id",
+    )
+    payroll_budget = fields.Monetary(
+        string="Masse salariale (budget)",
+        currency_field="currency_id",
+    )
+    variance_revenue = fields.Monetary(
+        string="Écart recettes",
+        currency_field="currency_id",
+    )
+    variance_payroll = fields.Monetary(
+        string="Écart masse salariale",
+        currency_field="currency_id",
+    )
