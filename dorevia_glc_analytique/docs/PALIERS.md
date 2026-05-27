@@ -12,7 +12,7 @@
 | Palier | Objectif | Statut |
 |---|---|---|
 | **0** | Socle analytique installable | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) |
-| **1** | Règles d'affectation et contrôles | À faire |
+| **1** | Règles d'affectation et contrôles | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #25](https://github.com/doreviateam/odoo19-addons-dorevia/pull/25) |
 | **2** | Ventilation salariale | À faire |
 | **3** | Registre bénévole | À faire |
 | **4** | Rapport CA mensuel | À faire |
@@ -40,8 +40,8 @@ La V1.1 fonctionnelle = paliers 0 à 5. Ne pas livrer tout le bloc d'un coup.
 
 | Plan | Palier 0 (install) | Palier 1 (contrôles) |
 |---|---|---|
-| GLC - Activités | `optional` sur factures clients et fournisseurs | `mandatory` + rapport anomalies |
-| GLC - Financements | `optional` sur factures clients ; `unavailable` sur achats | `mandatory` sur recettes + contrôles |
+| GLC - Activités | `optional` sur factures clients et fournisseurs | `optional` + rapport anomalies **non bloquant** |
+| GLC - Financements | `optional` sur factures clients ; `unavailable` sur achats | `optional` + contrôles A2/A3 (A3 si mapping explicite) |
 
 Le Palier 0 **prépare** l'usage des deux axes sans bloquer la comptabilité courante.
 
@@ -58,15 +58,21 @@ Le Palier 0 **prépare** l'usage des deux axes sans bloquer la comptabilité cou
 
 ## Palier 1 — Règles d'affectation et contrôles
 
+**Ticket :** [TICKET_PALIER_1.md](./TICKET_PALIER_1.md)  
+**Recette :** [RECETTE_MANUELLE_PALIER_1.md](./RECETTE_MANUELLE_PALIER_1.md)  
 **Référence :** [REGLES_AFFECTATION.md](./REGLES_AFFECTATION.md)
 
 ### Livrables
 
-- Rapport ou assistant « anomalies analytiques du mois »
-- Contrôle factures fournisseurs sans activité
-- Contrôle recettes sans double axe Activités + Financements
-- Contrôle écritures de paie avec analytique interdite
-- Alerte poids `STRUCTURE` > seuil
+- Wizard + liste **Anomalies analytiques GLC** (`glc.analytic.anomaly.wizard` / `.line`)
+- Contrôles A1–A6 (cf. ticket)
+- Paramètres : date de bascule, seuil STRUCTURE
+- Tests automatisés CA1–CA8
+- **Non bloquant** — applicabilités `optional` conservées par défaut
+
+### Hors périmètre Palier 1
+
+Identique au ticket §7 (pas de ventilation, CA, clôture, corrections auto).
 
 ---
 

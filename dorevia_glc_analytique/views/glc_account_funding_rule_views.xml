@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_glc_account_funding_rule_list" model="ir.ui.view">
+        <field name="name">glc.account.funding.rule.list</field>
+        <field name="model">glc.account.funding.rule</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="account_id"/>
+                <field name="funding_code"/>
+                <field name="funding_analytic_account_id" readonly="1"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_glc_account_funding_rule_form" model="ir.ui.view">
+        <field name="name">glc.account.funding.rule.form</field>
+        <field name="model">glc.account.funding.rule</field>
+        <field name="arch" type="xml">
+            <form string="Règle financement GLC">
+                <sheet>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="account_id"/>
+                        <field name="funding_code"/>
+                        <field name="funding_analytic_account_id"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_glc_account_funding_rule" model="ir.actions.act_window">
+        <field name="name">Règles financement (A3)</field>
+        <field name="res_model">glc.account.funding.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
