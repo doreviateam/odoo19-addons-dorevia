@@ -24,14 +24,51 @@
             }
         }
 
-        // Séparation verticale fine entre les 3 familles
+        // Libellés de familles : blocs plus évidents sans surcharge
+        .o_glc_family_row {
+            th.o_glc_family_recettes,
+            th.o_glc_family_payroll,
+            th.o_glc_family_expense {
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                background-color: #f3f4f6;
+                border-radius: 3px;
+                padding: 2px 6px;
+            }
+            th.o_glc_family_performance {
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                background-color: #f8f9fa;
+                border-radius: 3px;
+                padding: 2px 6px;
+            }
+        }
+
+        // Début de bloc : respiration avant Salaires / Frais
         .o_glc_family_payroll,
         .o_glc_family_expense {
-            border-left: 1px solid var(--bs-border-color-translucent);
+            padding-left: 14px;
         }
-        thead .o_glc_family_payroll,
-        thead .o_glc_family_expense {
-            border-left: 1px solid var(--bs-border-color);
+
+        // Bloc Performance : synthèse décisionnelle légèrement détachée
+        .o_glc_family_performance {
+            border-left: 2px solid #b8bdc5;
+            padding-left: 16px;
+            background-color: #f8f9fa;
+        }
+
+        // Conserver la teinte Performance au survol (table-hover Bootstrap)
+        &.table-hover > tbody > tr:hover > td.o_glc_family_performance,
+        &.table-hover > tfoot > tr:hover > td.o_glc_family_performance {
+            background-color: #eef0f3;
+        }
+
+        // Fin de bloc : séparateur vertical après la colonne Écart
+        .o_glc_family_recettes_end,
+        .o_glc_family_payroll_end,
+        .o_glc_family_expense_end {
+            border-right: 1px solid #d6d9de;
+            padding-right: 14px;
         }
 
         // Bandeau "titre de mois" : discret, fond gris léger, majuscules, séparateur fin
@@ -95,11 +132,13 @@
             }
         }
 
-        // Écarts : lecture rapide sans surcharge
-        .o_glc_variance_negative {
+        // Écarts / performance : lecture rapide sans surcharge
+        .o_glc_variance_negative,
+        .o_glc_performance_negative {
             color: #b02a2a;
         }
-        .o_glc_variance_positive {
+        .o_glc_variance_positive,
+        .o_glc_performance_positive {
             color: #198754;
         }
 

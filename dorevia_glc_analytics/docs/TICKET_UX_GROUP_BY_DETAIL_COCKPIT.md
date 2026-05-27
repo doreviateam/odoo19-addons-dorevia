@@ -321,5 +321,98 @@ Elle vise à rendre le détail **exploitable comme une vraie vue Odoo** : group�
 
 ---
 
+## 12. Complément fonctionnel — bloc PERFORMANCE (`19.0.4.5.0`)
+
+**Statut :** **GO MOA fonctionnel** — 2026-05-27.
+
+### 12.1. Objectif métier
+
+Permettre de lire directement, par activité et par mois :
+
+> Est-ce que chaque activité couvre ses charges réelles ?
+
+### 12.2. Structure des colonnes (header widget)
+
+```text
+RECETTES | SALAIRES | DÉPENSES | PERFORMANCE
+Réel     | Budget   | Écart
+```
+
+**Doctrine MOA :** les salaires restent volontairement séparés des dépenses. Dans cette vue de pilotage, les salaires ne sont pas traités comme une dépense ordinaire, mais comme une ressource humaine mobilisée par l'activité. Le bloc **Dépenses** correspond aux **dépenses hors salaires**.
+
+Renommages MOA :
+- **Masse salariale** → **Salaires**
+- **Frais généraux** → **Dépenses** (hors salaires)
+
+### 12.3. Formules
+
+| Indicateur | Formule |
+|---|---|
+| Performance réelle | `revenue_realized - payroll_realized - expense_realized` |
+| Performance budget | `revenue_budget - payroll_budget - expense_budget` |
+| Écart performance | `performance_realized - performance_budget` |
+
+Disponible sur :
+- chaque ligne activité ;
+- chaque sous-total mensuel (agrégation des montants de base puis formule) ;
+- la ligne **TOTAL PÉRIODE**.
+
+### 12.4. Implémentation
+
+| Couche | Détail |
+|---|---|
+| Modèle `glc.coverage.cockpit.line` | Champs calculés `performance_realized`, `performance_budget`, `variance_performance` |
+| Widget OWL | Bloc PERFORMANCE + libellés Salaires/Dépenses ; sous-totaux et total période via `computePerformanceAmounts()` |
+| Affichage | Zéros → `—` ; performance/écart positifs vert discret, négatifs rouge discret ; zéro non coloré |
+
+### 12.5. Tests
+
+- `test_activity_line_performance_formula`
+- `test_multi_month_performance_sums_from_activity_lines`
+
+---
+
+## 13. Finition UX — séparation visuelle des familles (`19.0.4.5.1`)
+
+**Statut :** **GO MOA UX** — 2026-05-27.
+
+### 13.1. Objectif
+
+Renforcer la lecture en **4 blocs métier distincts** (RECETTES | SALAIRES | DÉPENSES | PERFORMANCE), et non une suite continue de 12 colonnes.
+
+### 13.2. Implémentation (SCSS + classes XML)
+
+| Élément | Détail |
+|---|---|
+| Séparateurs verticaux | Après chaque colonne **Écart** des blocs Recettes, Salaires et Dépenses : `border-right: 1px solid #d6d9de` + `padding-right: 14px` |
+| Respiration inter-blocs | `padding-left: 14px` au début des blocs Salaires et Dépenses |
+| Headers familles | `font-weight: 700`, `letter-spacing: 0.04em`, fond `#f3f4f6`, `border-radius: 3px`, `padding: 2px 6px` |
+| Bloc Performance | Légèrement détaché : `border-left: 2px solid #b8bdc5`, `padding-left: 16px`, fond discret `#f8f9fa` sur les 3 colonnes |
+
+### 13.3. Conservé sans régression
+
+Bandeaux mois, sous-totaux mensuels, double bordure TOTAL PÉRIODE, zéros `—`, couleurs vert/rouge sur valeurs non nulles, aucun lien externe/fallback exposé.
+
+### 13.4. Verdict MOA — cible UX validée
+
+La vue **Détail par activité** est la **cible UX validée** pour ce palier (`19.0.4.5.1`) :
+
+- blocs clairement séparés ;
+- lecture immédiate des 4 familles métier ;
+- performance calculée sur lignes activité, sous-totaux mensuels et total période ;
+- parcours utilisateur entièrement contenu dans le cockpit.
+
+### 13.5. Polish optionnel — fond bloc Performance (`19.0.4.5.2`)
+
+Fond gris bleuté très discret `#f8f9fa` sur les 3 colonnes Performance (header, lignes, sous-totaux, total période). Polish non bloquant — renforce la lecture « indicateur synthétique / conclusion » sans alourdir le tableau.
+
+### 13.6. Wording MOA — Dépenses hors salaires (`19.0.4.5.3`)
+
+Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet aligné : *recettes, salaires, dépenses hors salaires et performance*. Formules inchangées (`expense_*` = frais généraux / charges hors masse salariale).
+
+---
+
 *Ticket rédigé MOA — 2026-05-27.  
-Verdict final MOA UX-GROUPBY — 2026-05-27 (version livrée `19.0.4.4.2`).*
+Verdict final MOA UX-GROUPBY — 2026-05-27 (version livrée `19.0.4.4.2`).  
+Complément PERFORMANCE — `19.0.4.5.0` — GO MOA fonctionnel 2026-05-27.  
+Finition séparation familles — `19.0.4.5.1` — GO MOA UX 2026-05-27 — **cible UX validée pour ce palier**.*

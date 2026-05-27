@@ -54,8 +54,8 @@
                     <notebook>
                         <page string="Détail par activité">
                             <p class="text-muted">
-                                Par activité et par mois : recettes, masse salariale et frais généraux
-                                (charges de structure), comparés au prévu.
+                                Par activité et par mois : recettes, salaires, dépenses hors salaires
+                                et performance, comparés au prévu.
                                 Sous-totaux mensuels et total période calculés côté client.
                             </p>
                             <field name="detail_line_count" invisible="1"/>

@@ -8,26 +8,30 @@
                     <thead class="o_glc_detail_thead">
                         <tr class="o_glc_family_row text-uppercase small text-muted">
                             <th rowspan="2" class="o_glc_col_activity align-bottom">Activité</th>
-                            <th colspan="3" class="text-center o_glc_family_recettes">Recettes</th>
-                            <th colspan="3" class="text-center o_glc_family_payroll">Masse salariale</th>
-                            <th colspan="3" class="text-center o_glc_family_expense">Frais généraux</th>
+                            <th colspan="3" class="text-center o_glc_family_recettes o_glc_family_recettes_end">Recettes</th>
+                            <th colspan="3" class="text-center o_glc_family_payroll o_glc_family_payroll_end">Salaires</th>
+                            <th colspan="3" class="text-center o_glc_family_expense o_glc_family_expense_end">Dépenses</th>
+                            <th colspan="3" class="text-center o_glc_family_performance">Performance</th>
                         </tr>
                         <tr class="o_glc_subheader_row small text-muted">
                             <th class="text-end o_glc_family_recettes">Réel</th>
                             <th class="text-end">Budget</th>
-                            <th class="text-end">Écart</th>
+                            <th class="text-end o_glc_family_recettes_end">Écart</th>
                             <th class="text-end o_glc_family_payroll">Réel</th>
                             <th class="text-end">Budget</th>
-                            <th class="text-end">Écart</th>
+                            <th class="text-end o_glc_family_payroll_end">Écart</th>
                             <th class="text-end o_glc_family_expense">Réel</th>
                             <th class="text-end">Budget</th>
-                            <th class="text-end">Écart</th>
+                            <th class="text-end o_glc_family_expense_end">Écart</th>
+                            <th class="text-end o_glc_family_performance">Réel</th>
+                            <th class="text-end o_glc_family_performance">Budget</th>
+                            <th class="text-end o_glc_family_performance">Écart</th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="groupedData.months" t-as="month" t-key="month.monthKey">
                             <tr class="o_glc_month_title">
-                                <th colspan="10" t-esc="month.monthLabel"/>
+                                <th colspan="13" t-esc="month.monthLabel"/>
                             </tr>
                             <t t-foreach="month.lines" t-as="line" t-key="line.id">
                                 <tr class="o_glc_activity_row">
@@ -36,20 +40,26 @@
                                         t-esc="formatAmount(line.revenue_realized)"/>
                                     <td t-att-class="amountClass(line.revenue_budget)"
                                         t-esc="formatAmount(line.revenue_budget)"/>
-                                    <td t-att-class="varianceClass(line.variance_revenue)"
+                                    <td t-att-class="varianceClass(line.variance_revenue, '', 'o_glc_family_recettes_end')"
                                         t-esc="formatAmount(line.variance_revenue)"/>
                                     <td t-att-class="amountClass(line.payroll_realized, 'o_glc_family_payroll')"
                                         t-esc="formatAmount(line.payroll_realized)"/>
                                     <td t-att-class="amountClass(line.payroll_budget)"
                                         t-esc="formatAmount(line.payroll_budget)"/>
-                                    <td t-att-class="varianceClass(line.variance_payroll)"
+                                    <td t-att-class="varianceClass(line.variance_payroll, '', 'o_glc_family_payroll_end')"
                                         t-esc="formatAmount(line.variance_payroll)"/>
                                     <td t-att-class="amountClass(line.expense_realized, 'o_glc_family_expense')"
                                         t-esc="formatAmount(line.expense_realized)"/>
                                     <td t-att-class="amountClass(line.expense_budget)"
                                         t-esc="formatAmount(line.expense_budget)"/>
-                                    <td t-att-class="varianceClass(line.variance_expense)"
+                                    <td t-att-class="varianceClass(line.variance_expense, '', 'o_glc_family_expense_end')"
                                         t-esc="formatAmount(line.variance_expense)"/>
+                                    <td t-att-class="performanceClass(line.performance_realized, 'o_glc_family_performance')"
+                                        t-esc="formatAmount(line.performance_realized)"/>
+                                    <td t-att-class="amountClass(line.performance_budget)"
+                                        t-esc="formatAmount(line.performance_budget)"/>
+                                    <td t-att-class="performanceClass(line.variance_performance)"
+                                        t-esc="formatAmount(line.variance_performance)"/>
                                 </tr>
                             </t>
                             <tr t-if="groupedData.multiMonth" class="o_glc_subtotal_row">
@@ -60,20 +70,26 @@
                                     t-esc="formatAmount(month.totals.revenue_realized)"/>
                                 <td t-att-class="amountClass(month.totals.revenue_budget)"
                                     t-esc="formatAmount(month.totals.revenue_budget)"/>
-                                <td t-att-class="varianceClass(month.totals.variance_revenue) + ' fw-bold'"
+                                <td t-att-class="varianceClass(month.totals.variance_revenue, '', 'o_glc_family_recettes_end') + ' fw-bold'"
                                     t-esc="formatAmount(month.totals.variance_revenue)"/>
                                 <td t-att-class="amountClass(month.totals.payroll_realized, 'o_glc_family_payroll')"
                                     t-esc="formatAmount(month.totals.payroll_realized)"/>
                                 <td t-att-class="amountClass(month.totals.payroll_budget)"
                                     t-esc="formatAmount(month.totals.payroll_budget)"/>
-                                <td t-att-class="varianceClass(month.totals.variance_payroll) + ' fw-bold'"
+                                <td t-att-class="varianceClass(month.totals.variance_payroll, '', 'o_glc_family_payroll_end') + ' fw-bold'"
                                     t-esc="formatAmount(month.totals.variance_payroll)"/>
                                 <td t-att-class="amountClass(month.totals.expense_realized, 'o_glc_family_expense')"
                                     t-esc="formatAmount(month.totals.expense_realized)"/>
                                 <td t-att-class="amountClass(month.totals.expense_budget)"
                                     t-esc="formatAmount(month.totals.expense_budget)"/>
-                                <td t-att-class="varianceClass(month.totals.variance_expense) + ' fw-bold'"
+                                <td t-att-class="varianceClass(month.totals.variance_expense, '', 'o_glc_family_expense_end') + ' fw-bold'"
                                     t-esc="formatAmount(month.totals.variance_expense)"/>
+                                <td t-att-class="performanceClass(month.totals.performance_realized, 'o_glc_family_performance') + ' fw-bold'"
+                                    t-esc="formatAmount(month.totals.performance_realized)"/>
+                                <td t-att-class="amountClass(month.totals.performance_budget, 'o_glc_family_performance')"
+                                    t-esc="formatAmount(month.totals.performance_budget)"/>
+                                <td t-att-class="performanceClass(month.totals.variance_performance, 'o_glc_family_performance') + ' fw-bold'"
+                                    t-esc="formatAmount(month.totals.variance_performance)"/>
                             </tr>
                         </t>
                     </tbody>
@@ -84,20 +100,26 @@
                                 t-esc="formatAmount(groupedData.periodTotals.revenue_realized)"/>
                             <td t-att-class="amountClass(groupedData.periodTotals.revenue_budget)"
                                 t-esc="formatAmount(groupedData.periodTotals.revenue_budget)"/>
-                            <td t-att-class="varianceClass(groupedData.periodTotals.variance_revenue)"
+                            <td t-att-class="varianceClass(groupedData.periodTotals.variance_revenue, '', 'o_glc_family_recettes_end')"
                                 t-esc="formatAmount(groupedData.periodTotals.variance_revenue)"/>
                             <td t-att-class="amountClass(groupedData.periodTotals.payroll_realized, 'o_glc_family_payroll')"
                                 t-esc="formatAmount(groupedData.periodTotals.payroll_realized)"/>
                             <td t-att-class="amountClass(groupedData.periodTotals.payroll_budget)"
                                 t-esc="formatAmount(groupedData.periodTotals.payroll_budget)"/>
-                            <td t-att-class="varianceClass(groupedData.periodTotals.variance_payroll)"
+                            <td t-att-class="varianceClass(groupedData.periodTotals.variance_payroll, '', 'o_glc_family_payroll_end')"
                                 t-esc="formatAmount(groupedData.periodTotals.variance_payroll)"/>
                             <td t-att-class="amountClass(groupedData.periodTotals.expense_realized, 'o_glc_family_expense')"
                                 t-esc="formatAmount(groupedData.periodTotals.expense_realized)"/>
                             <td t-att-class="amountClass(groupedData.periodTotals.expense_budget)"
                                 t-esc="formatAmount(groupedData.periodTotals.expense_budget)"/>
-                            <td t-att-class="varianceClass(groupedData.periodTotals.variance_expense)"
+                            <td t-att-class="varianceClass(groupedData.periodTotals.variance_expense, '', 'o_glc_family_expense_end')"
                                 t-esc="formatAmount(groupedData.periodTotals.variance_expense)"/>
+                            <td t-att-class="performanceClass(groupedData.periodTotals.performance_realized, 'o_glc_family_performance')"
+                                t-esc="formatAmount(groupedData.periodTotals.performance_realized)"/>
+                            <td t-att-class="amountClass(groupedData.periodTotals.performance_budget, 'o_glc_family_performance')"
+                                t-esc="formatAmount(groupedData.periodTotals.performance_budget)"/>
+                            <td t-att-class="performanceClass(groupedData.periodTotals.variance_performance, 'o_glc_family_performance')"
+                                t-esc="formatAmount(groupedData.periodTotals.variance_performance)"/>
                         </tr>
                     </tfoot>
                 </table>

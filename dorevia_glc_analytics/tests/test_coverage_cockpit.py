@@ -487,6 +487,72 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         )
         self.assertAlmostEqual(cockpit.activity_revenue_realized, 3000.0)
 
+    def test_activity_line_performance_formula(self):
+        """Performance activité = recettes - salaires - frais (réel, budget, écart)."""
+        year = self._next_test_year()
+        self._create_revenue_on_account(
+            self.bar, 5000.0, invoice_date="%s-06-15" % year
+        )
+        self._create_validated_allocation(
+            amount=2000.0,
+            period_date="%s-06-01" % year,
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 6, 1),
+            date_to=date(year, 6, 30),
+        )
+        cockpit.action_refresh()
+
+        bar_line = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.analytic_account_id == self.bar
+        )
+        self.assertTrue(bar_line)
+        self.assertAlmostEqual(
+            bar_line.performance_realized,
+            bar_line.revenue_realized
+            - bar_line.payroll_realized
+            - bar_line.expense_realized,
+        )
+        self.assertAlmostEqual(
+            bar_line.performance_budget,
+            bar_line.revenue_budget
+            - bar_line.payroll_budget
+            - bar_line.expense_budget,
+        )
+        self.assertAlmostEqual(
+            bar_line.variance_performance,
+            bar_line.performance_realized - bar_line.performance_budget,
+        )
+
+    def test_multi_month_performance_sums_from_activity_lines(self):
+        """Performance mensuelle agrégée = somme des performances activité du mois."""
+        year = self._next_test_year()
+        self._create_revenue_on_account(
+            self.bar, 1000.0, invoice_date="%s-01-15" % year
+        )
+        self._create_revenue_on_account(
+            self.bar, 2000.0, invoice_date="%s-02-15" % year
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 1, 1),
+            date_to=date(year, 2, 28),
+        )
+        cockpit.action_refresh()
+
+        january_lines = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.month_key == self._month_key(year, 1)
+        )
+        self.assertTrue(january_lines)
+        expected = sum(january_lines.mapped("performance_realized"))
+        computed = (
+            sum(january_lines.mapped("revenue_realized"))
+            - sum(january_lines.mapped("payroll_realized"))
+            - sum(january_lines.mapped("expense_realized"))
+        )
+        self.assertAlmostEqual(expected, computed)
+
     def test_partial_month_excludes_entries_before_date_from(self):
         """P4 — période partielle : réalisé limité aux dates exactes."""
         year = self._next_test_year()
