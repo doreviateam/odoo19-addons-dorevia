@@ -22,4 +22,20 @@
         action="action_glc_analytic_accounts_financements"
         sequence="20"/>
 
+    <menuitem
+        id="menu_glc_analytic_anomalies"
+        name="Anomalies analytiques"
+        parent="menu_glc_analytique_root"
+        action="action_glc_analytic_anomaly_wizard"
+        groups="dorevia_glc_analytique.group_glc_manager"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_glc_funding_rules"
+        name="Règles financement (A3)"
+        parent="menu_glc_analytique_root"
+        action="action_glc_account_funding_rule"
+        groups="dorevia_glc_analytique.group_glc_manager"
+        sequence="40"/>
+
 </odoo>

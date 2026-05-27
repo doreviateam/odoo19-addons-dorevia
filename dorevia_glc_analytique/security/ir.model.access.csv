@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_glc_anomaly_wizard_manager,glc.analytic.anomaly.wizard manager,model_glc_analytic_anomaly_wizard,dorevia_glc_analytique.group_glc_manager,1,1,1,1
+access_glc_anomaly_line_manager,glc.analytic.anomaly.line manager,model_glc_analytic_anomaly_line,dorevia_glc_analytique.group_glc_manager,1,1,1,1
+access_glc_funding_rule_manager,glc.account.funding.rule manager,model_glc_account_funding_rule,dorevia_glc_analytique.group_glc_manager,1,1,1,1

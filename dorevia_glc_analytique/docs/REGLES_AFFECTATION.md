@@ -86,7 +86,8 @@ Si le poids de `STRUCTURE` dépasse le seuil paramétré (% des charges totales)
 ## 5. Modèles de distribution par défaut (Odoo 19)
 
 > **Palier 0 :** les plans GLC sont installés avec applicabilité `optional` — pas de blocage à la validation des pièces.  
-> **Palier 1 :** passage en `mandatory` selon la matrice ci-dessous + rapport d'anomalies.
+> **Palier 1 :** rapport d'anomalies ([TICKET_PALIER_1.md](./TICKET_PALIER_1.md)) — diagnostic non bloquant.  
+> **Post-Palier 1 :** passage en `mandatory` selon la matrice ci-dessous + validation MOA explicite.
 
 À paramétrer en Phase 1 sur les journaux comptables :
 

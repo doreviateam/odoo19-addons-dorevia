@@ -36,7 +36,7 @@ La [spec V1.1](./docs/README.md) reste la cible fonctionnelle globale. Voir [doc
 |---|---|
 | [Spécification fonctionnelle V1.1](./docs/README.md) | Cahier des charges complet (cible) |
 | [Recette manuelle Palier 0](./docs/RECETTE_MANUELLE_PALIER_0.md) | Scénario de test MOA — socle analytique |
-| [Découpage en paliers](./docs/PALIERS.md) | Roadmap de développement |
+| [Découpage en paliers](./docs/PALIERS.md) | Roadmap · [Palier 1 ticket](./docs/TICKET_PALIER_1.md) |
 | [Règles d'affectation](./docs/REGLES_AFFECTATION.md) | Matrice double axe (application Palier 1+) |
 | [Matrice de migration](./docs/MATRICE_MIGRATION.md) | Correspondance ancien plan → plan cible |
 
