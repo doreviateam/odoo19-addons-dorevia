@@ -38,4 +38,20 @@
         groups="dorevia_glc_analytique.group_glc_manager"
         sequence="40"/>
 
+    <menuitem
+        id="menu_glc_employee_cost_lines"
+        name="Coûts salariés mensuels"
+        parent="menu_glc_analytique_root"
+        action="action_glc_employee_cost_line"
+        groups="dorevia_glc_analytique.group_glc_manager"
+        sequence="50"/>
+
+    <menuitem
+        id="menu_glc_salary_allocations"
+        name="Ventilations salariales"
+        parent="menu_glc_analytique_root"
+        action="action_glc_salary_allocation"
+        groups="dorevia_glc_analytique.group_glc_manager"
+        sequence="60"/>
+
 </odoo>

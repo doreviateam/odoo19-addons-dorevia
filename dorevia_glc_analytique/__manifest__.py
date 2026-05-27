@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytique",
-    "version": "19.0.2.0.0",
+    "version": "19.0.3.0.0",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — plans Activités et Financements.",
     "description": """
@@ -21,14 +21,21 @@ Palier 1 — Contrôles non bloquants :
 * mapping explicite pour le contrôle A3 ;
 * synthèse poids STRUCTURE (bandeau, pas ligne à ligne).
 
-Les paliers suivants (ventilation salariale, bénévolat, rapport CA) seront
-ajoutés progressivement. Voir docs/PALIERS.md.
+Palier 2 — Ventilation salariale :
+
+* coûts salariés mensuels (`glc.employee.cost.line`) ;
+* ventilations par activité (`glc.salary.allocation`) ;
+* overlay de gestion — pas d'écriture comptable ni analytique paie.
+
+Les paliers suivants (bénévolat, rapport CA) seront ajoutés progressivement.
+Voir docs/PALIERS.md.
 """,
     "author": "Dorevia",
     "license": "LGPL-3",
     "depends": [
         "account",
         "analytic",
+        "hr",
     ],
     "data": [
         "security/glc_security.xml",
@@ -39,6 +46,8 @@ ajoutés progressivement. Voir docs/PALIERS.md.
         "views/account_analytic_account_views.xml",
         "views/glc_account_funding_rule_views.xml",
         "views/glc_analytic_anomaly_views.xml",
+        "views/glc_employee_cost_line_views.xml",
+        "views/glc_salary_allocation_views.xml",
         "views/glc_menus.xml",
     ],
     "installable": True,
