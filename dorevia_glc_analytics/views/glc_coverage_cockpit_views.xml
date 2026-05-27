@@ -52,10 +52,33 @@
                     </group>
 
                     <notebook>
-                        <page string="Détail par activité">
+                        <page string="Synthèse graphique" name="page_synthesis">
+                            <p class="text-muted mb-1">
+                                Lecture immédiate de pilotage :
+                                marge d'activité, structure mensuelle et marge par activité.
+                            </p>
+                            <p class="text-muted small mb-3">
+                                Marge d'activité = Recettes − Salaires − Dépenses hors salaires.
+                            </p>
+                            <div class="alert alert-light border mb-0" role="status"
+                                 invisible="detail_line_count">
+                                <p class="mb-2">
+                                    Aucune donnée détaillée disponible pour cette période
+                                    et ces filtres.
+                                </p>
+                                <p class="mb-0">
+                                    Vérifiez la période et le scénario budgétaire pour afficher
+                                    la synthèse graphique.
+                                </p>
+                            </div>
+                            <field name="line_ids" nolabel="1" readonly="1"
+                                   widget="glc_coverage_synthesis"
+                                   invisible="not detail_line_count"/>
+                        </page>
+                        <page string="Détail par activité" name="page_detail">
                             <p class="text-muted">
                                 Par activité et par mois : recettes, salaires, dépenses hors salaires
-                                et performance, comparés au prévu.
+                                et marge d'activité, comparés au prévu.
                                 Sous-totaux mensuels et total période calculés côté client.
                             </p>
                             <field name="detail_line_count" invisible="1"/>
