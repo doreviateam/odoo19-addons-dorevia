@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_glc_budget_user,glc.budget user,model_glc_budget,dorevia_glc_analytics.group_glc_user,1,0,0,0
+access_glc_budget_manager,glc.budget manager,model_glc_budget,dorevia_glc_analytics.group_glc_manager,1,1,1,1
+access_glc_budget_line_user,glc.budget.line user,model_glc_budget_line,dorevia_glc_analytics.group_glc_user,1,0,0,0
+access_glc_budget_line_manager,glc.budget.line manager,model_glc_budget_line,dorevia_glc_analytics.group_glc_manager,1,1,1,1

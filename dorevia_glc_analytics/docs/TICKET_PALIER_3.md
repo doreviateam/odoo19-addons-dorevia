@@ -240,8 +240,8 @@ Le Palier 3 **prépare les données** ; il n’implémente **pas** le cockpit.
 
 - [ ] [PALIERS.md](./PALIERS.md) — statut Palier 3
 - [ ] [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md) — lien croisé
-- [ ] `RECETTE_MANUELLE_PALIER_3.md` — recette MOA
-- [ ] README module `dorevia_glc_budget`
+- [x] `RECETTE_MANUELLE_PALIER_3.md` — recette MOA (2026-05-27 · `glc-rgl-test-import`)
+- [x] README module `dorevia_glc_budget`
 
 ---
 
