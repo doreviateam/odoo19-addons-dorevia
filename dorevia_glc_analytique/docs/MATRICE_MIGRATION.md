@@ -11,11 +11,14 @@
 
 GLC dispose aujourd'hui d'un plan analytique comportant **9 comptes**. Le plan cible en compte **11** (7 Activités + 4 Financements) répartis sur **2 plans analytiques Odoo 19**.
 
-Inventaire Phase 0 extrait de la base `glc-rgl-test-import` le **27/05/2026** :
+Inventaire Phase 0 extrait de la base **`glc-rgl-test-import`** le **27/05/2026** :
 
 - source comptes : `account.analytic.account`, hors comptes créés par le module `dorevia_glc_analytique` ;
 - source soldes : agrégat `account.analytic.line.amount` par compte analytique ;
 - résultat : **0 ligne analytique trouvée** sur les 9 comptes historiques, donc soldes analytiques extraits à `0,00`.
+
+> **Périmètre de l'inventaire :** base de **recette / import** (`glc-rgl-test-import`).  
+> Les codes, soldes et correspondances ci-dessous sont une **première photographie** à **confirmer ultérieurement** sur la **base de production GLC** ou la **base source finale** retenue pour la bascule (notamment le solde `RH_PERSONNEL` et la présence de lignes analytiques historiques).
 
 Ce document formalise la correspondance **ancien → nouveau** et les règles de traitement des soldes historiques.
 
@@ -35,7 +38,7 @@ Ce document formalise la correspondance **ancien → nouveau** et les règles de
 
 ## 3. Inventaire des comptes analytiques existants avant migration GLC
 
-Extraction réalisée après installation du Palier 0 sur la base de recette. Les comptes cibles GLC créés par le module sont exclus de ce tableau.
+Extraction réalisée après installation du Palier 0 sur la base de recette **`glc-rgl-test-import`**. Les comptes cibles GLC créés par le module sont exclus de ce tableau. **À rejouer sur base prod / source finale avant gel Phase 0.**
 
 | Code | Nom | Plan analytique | Statut | Société | Solde analytique extrait | Lignes analytiques |
 |---|---|---|---|---|---:|---:|
@@ -108,7 +111,8 @@ Total coûts salariaux ventilés du mois
 
 ## 6. Checklist Phase 0
 
-- [x] Inventorier les 9 comptes analytiques actuels (codes exacts, libellés, soldes)
+- [x] Inventorier les 9 comptes analytiques actuels (codes exacts, libellés, soldes) — *recette `glc-rgl-test-import`*
+- [ ] **Rejouer l'inventaire sur base de production ou base source finale**
 - [ ] Valider la matrice ligne par ligne avec le gestionnaire
 - [ ] Trancher le traitement des écritures antérieures à la date de bascule
 - [ ] Définir la date de bascule et le mois pilote
