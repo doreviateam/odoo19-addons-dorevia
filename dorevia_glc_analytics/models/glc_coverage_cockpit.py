@@ -927,6 +927,45 @@ class GlcCoverageCockpitLine(models.TransientModel):
         string="Écart frais gén.",
         currency_field="currency_id",
     )
+    performance_realized = fields.Monetary(
+        string="Performance réel",
+        currency_field="currency_id",
+        compute="_compute_performance",
+    )
+    performance_budget = fields.Monetary(
+        string="Performance budget",
+        currency_field="currency_id",
+        compute="_compute_performance",
+    )
+    variance_performance = fields.Monetary(
+        string="Écart performance",
+        currency_field="currency_id",
+        compute="_compute_performance",
+    )
+
+    @api.depends(
+        "revenue_realized",
+        "revenue_budget",
+        "payroll_realized",
+        "payroll_budget",
+        "expense_realized",
+        "expense_budget",
+    )
+    def _compute_performance(self):
+        for line in self:
+            line.performance_realized = (
+                line.revenue_realized
+                - line.payroll_realized
+                - line.expense_realized
+            )
+            line.performance_budget = (
+                line.revenue_budget
+                - line.payroll_budget
+                - line.expense_budget
+            )
+            line.variance_performance = (
+                line.performance_realized - line.performance_budget
+            )
 
     @api.model_create_multi
     def create(self, vals_list):

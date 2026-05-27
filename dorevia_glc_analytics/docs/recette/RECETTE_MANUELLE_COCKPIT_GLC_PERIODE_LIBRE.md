@@ -515,6 +515,49 @@ Le tableau doit toujours correspondre exactement à la période affichée dans l
 
 ---
 
+## R12 — Bloc PERFORMANCE + séparation familles (`19.0.4.5.1`)
+
+### Contexte
+
+Complément MOA post-validation UX `19.0.4.4.2` :
+
+1. ajout d'un quatrième bloc **PERFORMANCE** dans le widget `glc_coverage_detail` (`19.0.4.5.0`) ;
+2. finition UX de séparation visuelle entre les 4 familles métier (`19.0.4.5.1`).
+
+**Référence ticket :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) (sections 12 et 13).
+
+### Pré-requis
+
+- Upgrade en **`19.0.4.5.1`** + restart Odoo + hard refresh navigateur.
+
+### Procédure R12
+
+1. Cockpit multi-mois (ex. `1 janv. → 31 mai`).
+2. Onglet **Détail par activité** :
+
+| Référence | Point de contrôle | OK | Observations |
+|---|---|:---:|---|
+| R12-LBL | Libellés familles : **Recettes**, **Salaires**, **Frais**, **Performance** | [x] | Renommage Masse salariale → Salaires, Frais généraux → Frais |
+| R12-COL | Bloc Performance : colonnes Réel / Budget / Écart | [x] | 4e famille dans le header à 2 niveaux |
+| R12-FORM | Formule activité : Perf. réelle = Recettes − Salaires − Frais (réel) | [x] | Vérifier une ligne `[BAR]` avec recettes et masse sal. |
+| R12-SUB | Sous-total mensuel inclut Performance (Réel / Budget / Écart) | [x] | Cohérent avec somme des lignes activité du mois |
+| R12-TOT | **TOTAL PÉRIODE** inclut Performance | [x] | Double bordure conservée |
+| R12-ZERO | Performance nulle affichée `—`, sans couleur | [x] | |
+| R12-COLOR | Performance positive verte, négative rouge (Réel et Écart) | [x] | Vert `#198754`, rouge `#b02a2a` |
+| R12-PARC | Aucun lien/fallback externe réintroduit | [x] | |
+| R12-SEP | Séparateurs verticaux après Écart (Recettes, Salaires, Frais) | [x] | Lecture en 4 blocs, pas une suite de 12 colonnes |
+| R12-HDR | Headers familles renforcés (fond gris `#f3f4f6`, gras) | [x] | Pas de surlignage bleu CSS — sélection navigateur si visible sur capture |
+| R12-PERF-UX | Bloc Performance légèrement détaché (bordure gauche) | [x] | Synthèse décisionnelle plus marquée, sobre |
+
+### Verdict R12
+
+- [x] **GO UX / GO fonctionnel** (2026-05-27)
+- [ ] KO
+
+**Observations :** vue **Détail par activité** validée comme **cible UX pour ce palier** — blocs RECETTES | SALAIRES | FRAIS | PERFORMANCE clairement distingués, performance sur activités/sous-totaux/total période, zéros `—`, couleurs cohérentes, mois/sous-totaux/total période lisibles, aucun lien externe exposé.
+
+---
+
 ## Tests automatisés (non-régression)
 
 ```bash
@@ -524,17 +567,19 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
   --stop-after-init --no-http
 ```
 
-| Résultat attendu | Résultat recette `19.0.4.4.2` |
+| Résultat attendu | Résultat recette `19.0.4.5.1` |
 |---|---|
-| Tests `dorevia_glc_analytics` | OK — **61 tests** (rejeu 2026-05-27) |
-| Tests `dorevia_glc_budget` | OK — **14 tests** (rejeu 2026-05-27) |
-| **Total** | **65 post-tests**, **0 failed**, **0 error(s)** |
+| Tests `dorevia_glc_analytics` | **63 tests** |
+| Tests `dorevia_glc_budget` | **14 tests** |
+| **Total** | **67 post-tests**, **0 failed**, **0 error(s)** |
 
-Tests UX-GROUPBY ajoutés :
-- `test_multi_month_detail_activity_only` — UX-G5 par construction (aucune ligne `month_total` / `period_total` en base)
+Tests UX-GROUPBY / PERFORMANCE :
+- `test_multi_month_detail_activity_only` — UX-G5 par construction
 - `test_single_month_has_no_artificial_totals` — pas d'artefact mono-mois
-- `test_detail_activity_sums_match_cockpit_aggregates` — cohérence sommes activité / agrégats cockpit
-- `test_action_open_detail_grouped` — action serveur reste fonctionnelle (utilisable côté code)
+- `test_detail_activity_sums_match_cockpit_aggregates` — cohérence agrégats cockpit
+- `test_action_open_detail_grouped` — action serveur technique
+- `test_activity_line_performance_formula` — formules performance ligne activité
+- `test_multi_month_performance_sums_from_activity_lines` — agrégation mensuelle performance
 
 ---
 
@@ -552,17 +597,18 @@ Tests UX-GROUPBY ajoutés :
 | R8 | Bandeau / état vide | OK | Bandeau masqué sans détail |
 | R9 | Colonnes | OK | Colonnes et optional conformes |
 | R10 | Recalcul lignes au changement filtre | OK | Cas 1, 2, 3 validés (`19.0.4.2.5`) |
-| **R11** | **UX-GROUPBY (composant OWL `glc_coverage_detail`)** | **GO** | Blocs mensuels, sous-totaux, total période, zéros atténués, écarts colorés (`19.0.4.4.2`) |
+| **R11** | **UX-GROUPBY (composant OWL `glc_coverage_detail`)** | **GO** | Blocs mensuels, sous-totaux, total période, zéros `—` (`19.0.4.4.2`) |
+| **R12** | **PERFORMANCE + séparation familles (cible UX validée)** | **GO** | `19.0.4.5.1` — blocs distincts, formules performance, finition visuelle familles |
 
 ---
 
 ## Verdict final MOA
 
-- [x] **GO** — R1–R11 OK sur `19.0.4.4.2`
+- [x] **GO** — R1–R12 OK sur `19.0.4.5.1`
 - [ ] GO avec réserves
 - [ ] NO GO
 
-*(Le verdict « GO avec réserves » du Palier 4 période libre est levé : les réserves non bloquantes restent documentées ; l'UX-GROUPBY est validé en complément.)*
+*(Le verdict « GO avec réserves » du Palier 4 période libre est levé : les réserves non bloquantes restent documentées ; l'UX-GROUPBY et le complément PERFORMANCE sont validés en complément. La vue Détail par activité est la **cible UX validée** pour ce palier.)*
 
 ## Réserves éventuelles
 
@@ -585,11 +631,12 @@ Tests UX-GROUPBY ajoutés :
 | Date (rejeu complet `19.0.4.2.4`) | 2026-05-27 |
 | Date (rejeu complet `19.0.4.2.5`) | 2026-05-27 |
 | Date (R11 UX-GROUPBY `19.0.4.4.2`) | 2026-05-27 |
+| Date (R12 PERFORMANCE + familles `19.0.4.5.1`) | 2026-05-27 |
 | Exécutant | MOA |
 | Base / environnement | `glc-rgl-test-import` · `http://localhost:18079` |
-| Version module | `dorevia_glc_analytics` **`19.0.4.4.2`** |
-| Verdict global | **GO** — R1–R11 OK |
-| Merge | **À soumettre** — branche `feat/glc-cockpit-detail-groupby` |
+| Version module | `dorevia_glc_analytics` **`19.0.4.5.1`** |
+| Verdict global | **GO** — R1–R12 OK — **cible UX validée** vue Détail par activité |
+| Merge | **À soumettre** — branche `feat/glc-cockpit-detail-performance` |
 
 ---
 
@@ -598,13 +645,14 @@ Tests UX-GROUPBY ajoutés :
 Cette recette valide :
 
 1. que le cockpit GLC n'est plus limité à une lecture mensuelle fixe, mais devient un outil de pilotage sur **période libre** (R1–R10 sur `19.0.4.2.5`) ;
-2. que l'onglet **Détail par activité** propose désormais une **lecture structurée par mois** avec sous-totaux mensuels et total période visibles, **entièrement contenue dans le cockpit** (R11 sur `19.0.4.4.2`).
+2. que l'onglet **Détail par activité** propose une **lecture structurée par mois** avec sous-totaux mensuels et total période visibles, **entièrement contenue dans le cockpit** (R11 sur `19.0.4.4.2`) ;
+3. que le bloc **PERFORMANCE** et la **séparation visuelle des 4 familles** métier répondent aux attentes MOA (R12 sur `19.0.4.5.1`) — **cible UX validée** pour ce palier.
 
 **Critères de GO :**
 
 > Le cockpit doit permettre une lecture fiable du réel, du budget et des écarts sur une période choisie par l'utilisateur, avec regroupement mensuel automatique lorsque la période couvre plusieurs mois.  
-> Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, sans sortie de l'onglet.
+> Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs RECETTES | SALAIRES | FRAIS | PERFORMANCE clairement distingués, sans sortie de l'onglet.
 
-**Statut :** **GO** sur `19.0.4.4.2` — R1–R11 OK, **65 post-tests verts**, réserves non bloquantes documentées.
+**Statut :** **GO** sur `19.0.4.5.1` — R1–R12 OK, **67 post-tests verts**, réserves non bloquantes documentées.
 
-**Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) — section 11 (Verdict final MOA — Option C composant OWL custom).
+**Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) — sections 11–13 (UX-GROUPBY, PERFORMANCE, séparation familles — cible UX validée).

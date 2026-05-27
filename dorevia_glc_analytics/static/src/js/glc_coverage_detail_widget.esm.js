@@ -17,6 +17,22 @@ const NUMERIC_FIELDS = [
     "variance_expense",
 ];
 
+export function computePerformanceAmounts(data) {
+    const performance_realized =
+        (data.revenue_realized || 0) -
+        (data.payroll_realized || 0) -
+        (data.expense_realized || 0);
+    const performance_budget =
+        (data.revenue_budget || 0) -
+        (data.payroll_budget || 0) -
+        (data.expense_budget || 0);
+    return {
+        performance_realized,
+        performance_budget,
+        variance_performance: performance_realized - performance_budget,
+    };
+}
+
 export class GlcCoverageDetailField extends Component {
     static template = "dorevia_glc_analytics.GlcCoverageDetail";
     static props = { ...standardFieldProps };
@@ -60,10 +76,13 @@ export class GlcCoverageDetailField extends Component {
         return cls;
     }
 
-    varianceClass(value, familyClass) {
+    varianceClass(value, familyClass, familyEndClass) {
         let cls = "text-end o_monetary_field";
         if (familyClass) {
             cls += " " + familyClass;
+        }
+        if (familyEndClass) {
+            cls += " " + familyEndClass;
         }
         if (this.isZero(value)) {
             cls += " o_glc_zero";
@@ -71,6 +90,24 @@ export class GlcCoverageDetailField extends Component {
             cls += " o_glc_variance_negative";
         } else {
             cls += " o_glc_variance_positive";
+        }
+        return cls;
+    }
+
+    performanceClass(value, familyClass, familyEndClass) {
+        let cls = "text-end o_monetary_field";
+        if (familyClass) {
+            cls += " " + familyClass;
+        }
+        if (familyEndClass) {
+            cls += " " + familyEndClass;
+        }
+        if (this.isZero(value)) {
+            cls += " o_glc_zero";
+        } else if (value < 0) {
+            cls += " o_glc_performance_negative";
+        } else {
+            cls += " o_glc_performance_positive";
         }
         return cls;
     }
@@ -87,6 +124,13 @@ export class GlcCoverageDetailField extends Component {
         for (const key of NUMERIC_FIELDS) {
             target[key] += source[key] || 0;
         }
+    }
+
+    _withPerformance(data) {
+        return {
+            ...data,
+            ...computePerformanceAmounts(data),
+        };
     }
 
     get groupedData() {
@@ -108,7 +152,7 @@ export class GlcCoverageDetailField extends Component {
                 });
             }
             const month = map.get(key);
-            month.lines.push({ id: r.id, ...data });
+            month.lines.push({ id: r.id, ...this._withPerformance(data) });
             this._accumulate(month.totals, data);
         }
         const months = [...map.values()].sort((a, b) =>
@@ -117,7 +161,9 @@ export class GlcCoverageDetailField extends Component {
         const periodTotals = this._emptyTotals();
         for (const m of months) {
             this._accumulate(periodTotals, m.totals);
+            Object.assign(m.totals, computePerformanceAmounts(m.totals));
         }
+        Object.assign(periodTotals, computePerformanceAmounts(periodTotals));
         return {
             months,
             periodTotals,
@@ -146,6 +192,9 @@ export const glcCoverageDetailField = {
         { name: "expense_realized", type: "monetary" },
         { name: "expense_budget", type: "monetary" },
         { name: "variance_expense", type: "monetary" },
+        { name: "performance_realized", type: "monetary" },
+        { name: "performance_budget", type: "monetary" },
+        { name: "variance_performance", type: "monetary" },
     ],
 };
 
