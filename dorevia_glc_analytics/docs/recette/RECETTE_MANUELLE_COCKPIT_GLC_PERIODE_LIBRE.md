@@ -537,15 +537,15 @@ Complément MOA post-validation UX `19.0.4.4.2` :
 
 | Référence | Point de contrôle | OK | Observations |
 |---|---|:---:|---|
-| R12-LBL | Libellés familles : **Recettes**, **Salaires**, **Frais**, **Performance** | [x] | Renommage Masse salariale → Salaires, Frais généraux → Frais |
+| R12-LBL | Libellés familles : **Recettes**, **Salaires**, **Dépenses**, **Performance** | [x] | Dépenses = hors salaires (doctrine MOA pilotage) |
 | R12-COL | Bloc Performance : colonnes Réel / Budget / Écart | [x] | 4e famille dans le header à 2 niveaux |
-| R12-FORM | Formule activité : Perf. réelle = Recettes − Salaires − Frais (réel) | [x] | Vérifier une ligne `[BAR]` avec recettes et masse sal. |
+| R12-FORM | Formule activité : Perf. réelle = Recettes − Salaires − Dépenses (réel) | [x] | Vérifier une ligne `[BAR]` avec recettes et masse sal. |
 | R12-SUB | Sous-total mensuel inclut Performance (Réel / Budget / Écart) | [x] | Cohérent avec somme des lignes activité du mois |
 | R12-TOT | **TOTAL PÉRIODE** inclut Performance | [x] | Double bordure conservée |
 | R12-ZERO | Performance nulle affichée `—`, sans couleur | [x] | |
 | R12-COLOR | Performance positive verte, négative rouge (Réel et Écart) | [x] | Vert `#198754`, rouge `#b02a2a` |
 | R12-PARC | Aucun lien/fallback externe réintroduit | [x] | |
-| R12-SEP | Séparateurs verticaux après Écart (Recettes, Salaires, Frais) | [x] | Lecture en 4 blocs, pas une suite de 12 colonnes |
+| R12-SEP | Séparateurs verticaux après Écart (Recettes, Salaires, Dépenses) | [x] | Lecture en 4 blocs, pas une suite de 12 colonnes |
 | R12-HDR | Headers familles renforcés (fond gris `#f3f4f6`, gras) | [x] | Pas de surlignage bleu CSS — sélection navigateur si visible sur capture |
 | R12-PERF-UX | Bloc Performance légèrement détaché (bordure gauche + fond `#f8f9fa`) | [x] | Synthèse décisionnelle plus marquée, sobre |
 
@@ -554,7 +554,7 @@ Complément MOA post-validation UX `19.0.4.4.2` :
 - [x] **GO UX / GO fonctionnel** (2026-05-27)
 - [ ] KO
 
-**Observations :** vue **Détail par activité** validée comme **cible UX pour ce palier** — blocs RECETTES | SALAIRES | FRAIS | PERFORMANCE clairement distingués, performance sur activités/sous-totaux/total période, zéros `—`, couleurs cohérentes, mois/sous-totaux/total période lisibles, aucun lien externe exposé.
+**Observations :** vue **Détail par activité** validée comme **cible UX pour ce palier** — blocs RECETTES | SALAIRES | DÉPENSES | PERFORMANCE clairement distingués (dépenses = hors salaires), performance sur activités/sous-totaux/total période, zéros `—`, couleurs cohérentes, mois/sous-totaux/total période lisibles, aucun lien externe exposé.
 
 ---
 
@@ -634,7 +634,7 @@ Tests UX-GROUPBY / PERFORMANCE :
 | Date (R12 PERFORMANCE + familles `19.0.4.5.1`) | 2026-05-27 |
 | Exécutant | MOA |
 | Base / environnement | `glc-rgl-test-import` · `http://localhost:18079` |
-| Version module | `dorevia_glc_analytics` **`19.0.4.5.2`** (polish fond Performance) |
+| Version module | `dorevia_glc_analytics` **`19.0.4.5.3`** (wording Dépenses hors salaires) |
 | Verdict global | **GO** — R1–R12 OK — **cible UX validée** vue Détail par activité |
 | Merge | **À soumettre** — branche `feat/glc-cockpit-detail-performance` |
 
@@ -651,7 +651,7 @@ Cette recette valide :
 **Critères de GO :**
 
 > Le cockpit doit permettre une lecture fiable du réel, du budget et des écarts sur une période choisie par l'utilisateur, avec regroupement mensuel automatique lorsque la période couvre plusieurs mois.  
-> Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs RECETTES | SALAIRES | FRAIS | PERFORMANCE clairement distingués, sans sortie de l'onglet.
+> Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs RECETTES | SALAIRES | DÉPENSES | PERFORMANCE clairement distingués, sans sortie de l'onglet.
 
 **Statut :** **GO** sur `19.0.4.5.1` — R1–R12 OK, **67 post-tests verts**, réserves non bloquantes documentées.
 

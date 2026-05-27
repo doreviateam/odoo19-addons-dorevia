@@ -334,13 +334,15 @@ Permettre de lire directement, par activité et par mois :
 ### 12.2. Structure des colonnes (header widget)
 
 ```text
-RECETTES | SALAIRES | FRAIS | PERFORMANCE
+RECETTES | SALAIRES | DÉPENSES | PERFORMANCE
 Réel     | Budget   | Écart
 ```
 
+**Doctrine MOA :** les salaires restent volontairement séparés des dépenses. Dans cette vue de pilotage, les salaires ne sont pas traités comme une dépense ordinaire, mais comme une ressource humaine mobilisée par l'activité. Le bloc **Dépenses** correspond aux **dépenses hors salaires**.
+
 Renommages MOA :
 - **Masse salariale** → **Salaires**
-- **Frais généraux** → **Frais**
+- **Frais généraux** → **Dépenses** (hors salaires)
 
 ### 12.3. Formules
 
@@ -360,7 +362,7 @@ Disponible sur :
 | Couche | Détail |
 |---|---|
 | Modèle `glc.coverage.cockpit.line` | Champs calculés `performance_realized`, `performance_budget`, `variance_performance` |
-| Widget OWL | Bloc PERFORMANCE + libellés Salaires/Frais ; sous-totaux et total période via `computePerformanceAmounts()` |
+| Widget OWL | Bloc PERFORMANCE + libellés Salaires/Dépenses ; sous-totaux et total période via `computePerformanceAmounts()` |
 | Affichage | Zéros → `—` ; performance/écart positifs vert discret, négatifs rouge discret ; zéro non coloré |
 
 ### 12.5. Tests
@@ -376,14 +378,14 @@ Disponible sur :
 
 ### 13.1. Objectif
 
-Renforcer la lecture en **4 blocs métier distincts** (RECETTES | SALAIRES | FRAIS | PERFORMANCE), et non une suite continue de 12 colonnes.
+Renforcer la lecture en **4 blocs métier distincts** (RECETTES | SALAIRES | DÉPENSES | PERFORMANCE), et non une suite continue de 12 colonnes.
 
 ### 13.2. Implémentation (SCSS + classes XML)
 
 | Élément | Détail |
 |---|---|
-| Séparateurs verticaux | Après chaque colonne **Écart** des blocs Recettes, Salaires et Frais : `border-right: 1px solid #d6d9de` + `padding-right: 14px` |
-| Respiration inter-blocs | `padding-left: 14px` au début des blocs Salaires et Frais |
+| Séparateurs verticaux | Après chaque colonne **Écart** des blocs Recettes, Salaires et Dépenses : `border-right: 1px solid #d6d9de` + `padding-right: 14px` |
+| Respiration inter-blocs | `padding-left: 14px` au début des blocs Salaires et Dépenses |
 | Headers familles | `font-weight: 700`, `letter-spacing: 0.04em`, fond `#f3f4f6`, `border-radius: 3px`, `padding: 2px 6px` |
 | Bloc Performance | Légèrement détaché : `border-left: 2px solid #b8bdc5`, `padding-left: 16px`, fond discret `#f8f9fa` sur les 3 colonnes |
 
@@ -403,6 +405,10 @@ La vue **Détail par activité** est la **cible UX validée** pour ce palier (`1
 ### 13.5. Polish optionnel — fond bloc Performance (`19.0.4.5.2`)
 
 Fond gris bleuté très discret `#f8f9fa` sur les 3 colonnes Performance (header, lignes, sous-totaux, total période). Polish non bloquant — renforce la lecture « indicateur synthétique / conclusion » sans alourdir le tableau.
+
+### 13.6. Wording MOA — Dépenses hors salaires (`19.0.4.5.3`)
+
+Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet aligné : *recettes, salaires, dépenses hors salaires et performance*. Formules inchangées (`expense_*` = frais généraux / charges hors masse salariale).
 
 ---
 
