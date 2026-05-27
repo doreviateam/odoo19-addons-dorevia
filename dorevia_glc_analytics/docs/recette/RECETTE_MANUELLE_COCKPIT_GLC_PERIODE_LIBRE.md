@@ -601,7 +601,7 @@ Tests UX-GROUPBY / PERFORMANCE :
 | R10 | Recalcul lignes au changement filtre | OK | Cas 1, 2, 3 validés (`19.0.4.2.5`) |
 | **R11** | **UX-GROUPBY (composant OWL `glc_coverage_detail`)** | **GO** | Blocs mensuels, sous-totaux, total période, zéros `—` (`19.0.4.4.2`) |
 | **R12** | **PERFORMANCE + séparation familles (cible UX validée)** | **GO** | `19.0.4.5.1` — blocs distincts, formules performance, finition visuelle familles |
-| **R13** | **Synthèse graphique — Marge d'activité (4 KPI + 3 graphes Chart.js)** | **À recetter** | `19.0.4.6.1` — onglet 1 cockpit GLC, wording MOA Marge |
+| **R13** | **Synthèse graphique — Marge d'activité (4 KPI + 3 graphes Chart.js)** | **GO** | `19.0.4.6.1` — onglet 1 cockpit GLC, wording MOA Marge |
 
 ---
 
@@ -626,37 +626,39 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 | Référence | Point de contrôle | OK | Observations |
 |---|---|:---:|---|
-| R13-ORDER | Ordre des onglets : Synthèse graphique · Détail par activité · Ressources · Charges de structure · Infos | [ ] | Synthèse en premier |
-| R13-WORDING | Wording **Marge d'activité** (et non « Performance ») dans KPI, titres graphes et intro onglet | [ ] | Doctrine `19.0.4.6.1` : SALAIRES conservé, PERFORMANCE → MARGE D'ACTIVITÉ |
-| R13-FORMULE | Précision visible : « Marge d'activité = Recettes − Salaires − Dépenses hors salaires » | [ ] | Sous le titre de l'onglet Synthèse |
-| R13-KPI-MR | KPI **Marge réelle** signée (vert si > 0, rouge si < 0, neutre si 0) | [ ] | Format `+ x €` / `- x €` / `—` |
-| R13-KPI-MB | KPI **Marge budget** affichée neutre | [ ] | |
-| R13-KPI-VM | KPI **Écart de marge** signé, vert/rouge selon signe | [ ] | |
-| R13-KPI-COV | KPI Couverture salaires : seuils vert ≥ 100 %, orange 80–100 %, rouge < 80 % | [ ] | Formule `Recettes réelles / Salaires réels × 100` ; `—` si salaires = 0 |
-| R13-GR1 | Graphique **Marge d'activité mensuelle** (barres réel vs budget) | [ ] | Vert réel, gris budget |
-| R13-GR2 | Graphique Structure mensuelle (barres Recettes / Salaires / Dépenses) | [ ] | **Salaires et dépenses en valeurs positives de consommation** |
-| R13-GR3 | Graphique **Marge d'activité par activité** (barres horizontales) | [ ] | Tri décroissant ; vert si positive, rouge si négative |
-| R13-LAYOUT | Grille graphiques : 2 par ligne (responsive 1 colonne sous 992 px) | [ ] | `19.0.4.6.0` |
-| R13-REFRESH | Modification des filtres → graphes mis à jour | [ ] | Auto-save + re-render Chart.js |
-| R13-EMPTY | Période sans données → message bandeau, pas de canvas vide | [ ] | |
-| R13-COHESION | Palette cohérente avec le widget Détail (verts/rouges sobres, fond `#f8f9fa` Marge) | [ ] | |
-| R13-PARC | Aucun lien externe / drill-down réintroduit | [ ] | Onglet en lecture pure |
+| R13-ORDER | Ordre des onglets : Synthèse graphique · Détail par activité · Ressources · Charges de structure · Infos | [x] | Synthèse en premier |
+| R13-WORDING | Wording **Marge d'activité** (et non « Performance ») dans KPI, titres graphes et intro onglet | [x] | Doctrine `19.0.4.6.1` : SALAIRES conservé, PERFORMANCE → MARGE D'ACTIVITÉ |
+| R13-FORMULE | Précision visible : « Marge d'activité = Recettes − Salaires − Dépenses hors salaires » | [x] | Sous le titre de l'onglet Synthèse |
+| R13-KPI-MR | KPI **Marge réelle** signée (vert si > 0, rouge si < 0, neutre si 0) | [x] | Format `+ x €` / `- x €` / `—` |
+| R13-KPI-MB | KPI **Marge budget** affichée neutre | [x] | |
+| R13-KPI-VM | KPI **Écart de marge** signé, vert/rouge selon signe | [x] | |
+| R13-KPI-COV | KPI Couverture salaires : seuils vert ≥ 100 %, orange 80–100 %, rouge < 80 % | [x] | Formule `Recettes réelles / Salaires réels × 100` ; `—` si salaires = 0 |
+| R13-GR1 | Graphique **Marge d'activité mensuelle** (barres réel vs budget) | [x] | Vert réel, gris budget |
+| R13-GR2 | Graphique Structure mensuelle (barres Recettes / Salaires / Dépenses) | [x] | **Salaires et dépenses en valeurs positives de consommation** |
+| R13-GR3 | Graphique **Marge d'activité par activité** (barres horizontales) | [x] | Tri décroissant ; vert si positive, rouge si négative |
+| R13-LAYOUT | Grille graphiques : 2 par ligne (responsive 1 colonne sous 992 px) | [x] | `19.0.4.6.0` |
+| R13-REFRESH | Modification des filtres → graphes mis à jour | [x] | Auto-save + re-render Chart.js |
+| R13-EMPTY | Période sans données → message bandeau, pas de canvas vide | [x] | |
+| R13-COHESION | Palette cohérente avec le widget Détail (verts/rouges sobres, fond `#f8f9fa` Marge) | [x] | |
+| R13-PARC | Aucun lien externe / drill-down réintroduit | [x] | Onglet en lecture pure |
 
 ### Verdict R13
 
-- [ ] GO
+- [x] **GO** (2026-05-27)
 - [ ] KO
+
+**Observations :** onglet **Synthèse graphique** validé MOA comme **onglet 1 de pilotage**. 4 KPI + 3 graphes Chart.js conformes ; grammaire **RECETTES | SALAIRES | DÉPENSES | MARGE D'ACTIVITÉ** appliquée de manière cohérente dans toute la doc et le code UI ; formule visible sous le titre ; couverture des salaires sur les seuils MOA validés ; pas de lien externe / drill-down.
 
 ---
 
 ## Verdict final MOA
 
 - [x] **GO** — R1–R12 OK sur `19.0.4.5.1`
-- [ ] **GO** — R1–R13 sur `19.0.4.6.1` (Synthèse graphique — Marge d'activité — à recetter)
+- [x] **GO** — R1–R13 OK sur `19.0.4.6.1` — **onglet 1 Synthèse graphique validé MOA**
 - [ ] GO avec réserves
 - [ ] NO GO
 
-*(Le verdict « GO avec réserves » du Palier 4 période libre est levé : les réserves non bloquantes restent documentées ; l'UX-GROUPBY et le complément PERFORMANCE sont validés en complément. La vue Détail par activité est la **cible UX validée** pour ce palier.)*
+*(Le verdict « GO avec réserves » du Palier 4 période libre est levé : les réserves non bloquantes restent documentées ; l'UX-GROUPBY, le complément Marge d'activité et la Synthèse graphique sont validés en complément. Le cockpit GLC dispose désormais d'une **double lecture** : Synthèse graphique pour le pilotage immédiat, Détail par activité pour la justification chiffrée.)*
 
 ## Réserves éventuelles
 
@@ -680,11 +682,12 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | Date (rejeu complet `19.0.4.2.5`) | 2026-05-27 |
 | Date (R11 UX-GROUPBY `19.0.4.4.2`) | 2026-05-27 |
 | Date (R12 PERFORMANCE + familles `19.0.4.5.1`) | 2026-05-27 |
+| Date (R13 Synthèse graphique — Marge d'activité `19.0.4.6.1`) | 2026-05-27 |
 | Exécutant | MOA |
 | Base / environnement | `glc-rgl-test-import` · `http://localhost:18079` |
-| Version module | `dorevia_glc_analytics` **`19.0.4.5.3`** (wording Dépenses hors salaires) |
-| Verdict global | **GO** — R1–R12 OK — **cible UX validée** vue Détail par activité |
-| Merge | **À soumettre** — branche `feat/glc-cockpit-detail-performance` |
+| Version module | `dorevia_glc_analytics` **`19.0.4.6.1`** (Synthèse graphique + wording Marge d'activité) |
+| Verdict global | **GO** — R1–R13 OK — **double lecture cockpit validée** (Synthèse graphique + Détail par activité) |
+| Merge | **À soumettre** — branche `feat/glc-cockpit-synthese-graphique` |
 
 ---
 
@@ -694,13 +697,15 @@ Cette recette valide :
 
 1. que le cockpit GLC n'est plus limité à une lecture mensuelle fixe, mais devient un outil de pilotage sur **période libre** (R1–R10 sur `19.0.4.2.5`) ;
 2. que l'onglet **Détail par activité** propose une **lecture structurée par mois** avec sous-totaux mensuels et total période visibles, **entièrement contenue dans le cockpit** (R11 sur `19.0.4.4.2`) ;
-3. que le bloc **PERFORMANCE** et la **séparation visuelle des 4 familles** métier répondent aux attentes MOA (R12 sur `19.0.4.5.1`) — **cible UX validée** pour ce palier.
+3. que le bloc **Marge d'activité** et la **séparation visuelle des 4 familles** métier répondent aux attentes MOA (R12 sur `19.0.4.5.1`) — **cible UX validée** pour la vue Détail ;
+4. que l'onglet **Synthèse graphique** offre une **lecture immédiate de pilotage** (4 KPI + 3 graphes Marge / Structure / Par activité) avec la grammaire métier **Recettes | Salaires | Dépenses | Marge d'activité** (R13 sur `19.0.4.6.1`) — **onglet 1 cockpit GLC validé MOA**.
 
 **Critères de GO :**
 
 > Le cockpit doit permettre une lecture fiable du réel, du budget et des écarts sur une période choisie par l'utilisateur, avec regroupement mensuel automatique lorsque la période couvre plusieurs mois.  
-> Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs RECETTES | SALAIRES | DÉPENSES | PERFORMANCE clairement distingués, sans sortie de l'onglet.
+> Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs RECETTES | SALAIRES | DÉPENSES | MARGE D'ACTIVITÉ clairement distingués, sans sortie de l'onglet.  
+> La synthèse graphique doit offrir une lecture instantanée du pilotage (marge d'activité, structure mensuelle, marge par activité) en complément du détail chiffré.
 
-**Statut :** **GO** sur `19.0.4.5.1` — R1–R12 OK, **67 post-tests verts**, réserves non bloquantes documentées.
+**Statut :** **GO** sur `19.0.4.6.1` — R1–R13 OK, **67 post-tests verts**, réserves non bloquantes documentées.
 
-**Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) — sections 11–13 (UX-GROUPBY, PERFORMANCE, séparation familles — cible UX validée).
+**Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) — sections 11–13 (UX-GROUPBY, Marge d'activité, séparation familles) · [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](../TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md) — onglet 1 Synthèse graphique.
