@@ -547,7 +547,7 @@ Complément MOA post-validation UX `19.0.4.4.2` :
 | R12-PARC | Aucun lien/fallback externe réintroduit | [x] | |
 | R12-SEP | Séparateurs verticaux après Écart (Recettes, Salaires, Frais) | [x] | Lecture en 4 blocs, pas une suite de 12 colonnes |
 | R12-HDR | Headers familles renforcés (fond gris `#f3f4f6`, gras) | [x] | Pas de surlignage bleu CSS — sélection navigateur si visible sur capture |
-| R12-PERF-UX | Bloc Performance légèrement détaché (bordure gauche) | [x] | Synthèse décisionnelle plus marquée, sobre |
+| R12-PERF-UX | Bloc Performance légèrement détaché (bordure gauche + fond `#f8f9fa`) | [x] | Synthèse décisionnelle plus marquée, sobre |
 
 ### Verdict R12
 

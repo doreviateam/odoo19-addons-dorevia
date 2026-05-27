@@ -385,7 +385,7 @@ Renforcer la lecture en **4 blocs métier distincts** (RECETTES | SALAIRES | FRA
 | Séparateurs verticaux | Après chaque colonne **Écart** des blocs Recettes, Salaires et Frais : `border-right: 1px solid #d6d9de` + `padding-right: 14px` |
 | Respiration inter-blocs | `padding-left: 14px` au début des blocs Salaires et Frais |
 | Headers familles | `font-weight: 700`, `letter-spacing: 0.04em`, fond `#f3f4f6`, `border-radius: 3px`, `padding: 2px 6px` |
-| Bloc Performance | Légèrement détaché : `border-left: 2px solid #b8bdc5`, `padding-left: 16px` |
+| Bloc Performance | Légèrement détaché : `border-left: 2px solid #b8bdc5`, `padding-left: 16px`, fond discret `#f8f9fa` sur les 3 colonnes |
 
 ### 13.3. Conservé sans régression
 

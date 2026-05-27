@@ -28,11 +28,17 @@
         .o_glc_family_row {
             th.o_glc_family_recettes,
             th.o_glc_family_payroll,
-            th.o_glc_family_expense,
-            th.o_glc_family_performance {
+            th.o_glc_family_expense {
                 font-weight: 700;
                 letter-spacing: 0.04em;
                 background-color: #f3f4f6;
+                border-radius: 3px;
+                padding: 2px 6px;
+            }
+            th.o_glc_family_performance {
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                background-color: #f8f9fa;
                 border-radius: 3px;
                 padding: 2px 6px;
             }
@@ -48,6 +54,13 @@
         .o_glc_family_performance {
             border-left: 2px solid #b8bdc5;
             padding-left: 16px;
+            background-color: #f8f9fa;
+        }
+
+        // Conserver la teinte Performance au survol (table-hover Bootstrap)
+        &.table-hover > tbody > tr:hover > td.o_glc_family_performance,
+        &.table-hover > tfoot > tr:hover > td.o_glc_family_performance {
+            background-color: #eef0f3;
         }
 
         // Fin de bloc : séparateur vertical après la colonne Écart

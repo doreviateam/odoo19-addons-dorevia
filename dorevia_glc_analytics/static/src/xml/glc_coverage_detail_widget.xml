@@ -24,8 +24,8 @@
                             <th class="text-end">Budget</th>
                             <th class="text-end o_glc_family_expense_end">Écart</th>
                             <th class="text-end o_glc_family_performance">Réel</th>
-                            <th class="text-end">Budget</th>
-                            <th class="text-end">Écart</th>
+                            <th class="text-end o_glc_family_performance">Budget</th>
+                            <th class="text-end o_glc_family_performance">Écart</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,9 +86,9 @@
                                     t-esc="formatAmount(month.totals.variance_expense)"/>
                                 <td t-att-class="performanceClass(month.totals.performance_realized, 'o_glc_family_performance') + ' fw-bold'"
                                     t-esc="formatAmount(month.totals.performance_realized)"/>
-                                <td t-att-class="amountClass(month.totals.performance_budget)"
+                                <td t-att-class="amountClass(month.totals.performance_budget, 'o_glc_family_performance')"
                                     t-esc="formatAmount(month.totals.performance_budget)"/>
-                                <td t-att-class="performanceClass(month.totals.variance_performance) + ' fw-bold'"
+                                <td t-att-class="performanceClass(month.totals.variance_performance, 'o_glc_family_performance') + ' fw-bold'"
                                     t-esc="formatAmount(month.totals.variance_performance)"/>
                             </tr>
                         </t>
@@ -116,9 +116,9 @@
                                 t-esc="formatAmount(groupedData.periodTotals.variance_expense)"/>
                             <td t-att-class="performanceClass(groupedData.periodTotals.performance_realized, 'o_glc_family_performance')"
                                 t-esc="formatAmount(groupedData.periodTotals.performance_realized)"/>
-                            <td t-att-class="amountClass(groupedData.periodTotals.performance_budget)"
+                            <td t-att-class="amountClass(groupedData.periodTotals.performance_budget, 'o_glc_family_performance')"
                                 t-esc="formatAmount(groupedData.periodTotals.performance_budget)"/>
-                            <td t-att-class="performanceClass(groupedData.periodTotals.variance_performance)"
+                            <td t-att-class="performanceClass(groupedData.periodTotals.variance_performance, 'o_glc_family_performance')"
                                 t-esc="formatAmount(groupedData.periodTotals.variance_performance)"/>
                         </tr>
                     </tfoot>
