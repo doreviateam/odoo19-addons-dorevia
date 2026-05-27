@@ -35,6 +35,7 @@ La [spec V1.1](./docs/README.md) reste la cible fonctionnelle globale. Voir [doc
 | Document | Description |
 |---|---|
 | [Spécification fonctionnelle V1.1](./docs/README.md) | Cahier des charges complet (cible) |
+| [Recette manuelle Palier 0](./docs/RECETTE_MANUELLE_PALIER_0.md) | Scénario de test MOA — socle analytique |
 | [Découpage en paliers](./docs/PALIERS.md) | Roadmap de développement |
 | [Règles d'affectation](./docs/REGLES_AFFECTATION.md) | Matrice double axe (application Palier 1+) |
 | [Matrice de migration](./docs/MATRICE_MIGRATION.md) | Correspondance ancien plan → plan cible |
@@ -48,4 +49,4 @@ analytic
 
 ## Version
 
-**Palier 0** — `19.0.1.0.0`
+**Palier 0** — `19.0.1.0.0` — **Validé MOA** (recette 2026-05-27, base `glc-rgl-test-import`)

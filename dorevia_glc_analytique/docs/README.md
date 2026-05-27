@@ -8,6 +8,7 @@
 
 **Annexes :**
 
+- [Recette manuelle Palier 0](./RECETTE_MANUELLE_PALIER_0.md)
 - [Découpage en paliers](./PALIERS.md)
 - [Règles d’affectation analytique](./REGLES_AFFECTATION.md)
 - [Matrice de migration analytique](./MATRICE_MIGRATION.md)

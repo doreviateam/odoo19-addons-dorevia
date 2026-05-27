@@ -11,7 +11,7 @@
 
 | Palier | Objectif | Statut |
 |---|---|---|
-| **0** | Socle analytique installable | Livré |
+| **0** | Socle analytique installable | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) |
 | **1** | Règles d'affectation et contrôles | À faire |
 | **2** | Ventilation salariale | À faire |
 | **3** | Registre bénévole | À faire |
@@ -34,7 +34,7 @@ La V1.1 fonctionnelle = paliers 0 à 5. Ne pas livrer tout le bloc d'un coup.
 - Groupes de sécurité de base (`Utilisateur GLC`, `Gestionnaire GLC`)
 - Applicabilités Odoo 19 **non bloquantes** (`optional` sur factures ; Financements masqué sur achats)
 - Tests d'installation et de nomenclature
-- Documentation embarquée
+- Documentation embarquée ([recette manuelle Palier 0](./RECETTE_MANUELLE_PALIER_0.md))
 
 ### Applicabilités Palier 0 vs Palier 1
 
