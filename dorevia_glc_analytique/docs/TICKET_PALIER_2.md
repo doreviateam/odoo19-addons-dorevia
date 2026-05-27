@@ -128,7 +128,7 @@ Historique mensuel du coût salarié chargé.
 | `reference_hours` | Heures mensuelles de référence |
 | `hourly_cost` | Coût horaire calculé (stored computed) |
 | `currency_id` | Devise |
-| `source` | `manual` / `import` (V1 : saisie manuelle prioritaire) |
+| `source` | `manual` (V1 — pas d’import paie auto) |
 | `note` | Commentaire |
 
 **Formule :**
@@ -139,7 +139,7 @@ Coût horaire = coût mensuel chargé / heures mensuelles de référence
 
 **Contrainte d’unicité :** `(company_id, employee_id, period_date)`.
 
-**Définition V1 du coût mensuel chargé :** salaire brut + charges patronales + avantages en nature (à valider avec la paie GLC). Saisie manuelle ou import CSV — **pas** de lien `hr_payroll` en V1 (évolution V2).
+**Définition V1 du coût mensuel chargé :** salaire brut + charges patronales + avantages en nature (à valider avec la paie GLC). **Saisie manuelle** prioritaire — **pas** d’import paie automatique ni de lien `hr_payroll` en V1 (évolution V2).
 
 ### 4.4 Montants ventilés par activité
 
@@ -245,7 +245,8 @@ Aucune modification du wizard anomalies Palier 1 dans ce ticket, sauf documentat
 ## 11. Hors périmètre Palier 2
 
 - Écritures comptables ou analytiques automatiques
-- Intégration `hr_payroll` / bulletins
+- Intégration `hr_payroll` / bulletins / **import paie automatique**
+- **Timesheets salariés** (`hr_timesheet` ou équivalent) — hors Palier 2
 - Registre bénévole (Palier 3)
 - Rapport CA / coût complet affiché (Palier 4 — consomme les données Palier 2)
 - Clôture analytique mensuelle (Palier 5)
