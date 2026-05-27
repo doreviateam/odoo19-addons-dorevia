@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="dorevia_glc_analytics.GlcCoverageSynthesis">
+        <div class="o_glc_coverage_synthesis">
+            <t t-set="agg" t-value="aggregates"/>
+            <t t-if="agg.hasLines">
+                <div class="o_glc_kpi_row d-flex flex-wrap gap-3 mb-4">
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Performance réelle</div>
+                        <div t-att-class="'o_glc_kpi_value ' + signedClass(agg.periodTotals.performance_realized)"
+                             t-esc="formatSignedAmount(agg.periodTotals.performance_realized)"/>
+                        <div class="o_glc_kpi_hint">sur la période</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Performance budget</div>
+                        <div class="o_glc_kpi_value o_glc_kpi_neutral"
+                             t-esc="formatSignedAmount(agg.periodTotals.performance_budget)"/>
+                        <div class="o_glc_kpi_hint">prévu sur la période</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Écart performance</div>
+                        <div t-att-class="'o_glc_kpi_value ' + signedClass(agg.periodTotals.variance_performance)"
+                             t-esc="formatSignedAmount(agg.periodTotals.variance_performance)"/>
+                        <div class="o_glc_kpi_hint">réel − budget</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Couverture des salaires</div>
+                        <div t-att-class="'o_glc_kpi_value ' + coverageClass(agg.salaryCoverageRate)"
+                             t-esc="formatCoverageRate(agg.salaryCoverageRate)"/>
+                        <div class="o_glc_kpi_hint">recettes / salaires × 100</div>
+                    </div>
+                </div>
+
+                <div class="o_glc_chart_block mb-4">
+                    <h6 class="o_glc_chart_title">Performance mensuelle — réel vs budget</h6>
+                    <div class="o_glc_chart_canvas_wrapper">
+                        <canvas t-ref="perfChart"/>
+                    </div>
+                </div>
+
+                <div class="o_glc_chart_block mb-4">
+                    <h6 class="o_glc_chart_title">Structure mensuelle — Recettes / Salaires / Dépenses</h6>
+                    <p class="o_glc_chart_legend small text-muted mb-2">
+                        Salaires et dépenses affichés en valeurs positives de consommation.
+                    </p>
+                    <div class="o_glc_chart_canvas_wrapper">
+                        <canvas t-ref="structChart"/>
+                    </div>
+                </div>
+
+                <div class="o_glc_chart_block">
+                    <h6 class="o_glc_chart_title">Performance réelle par activité — cumul période</h6>
+                    <div class="o_glc_chart_canvas_wrapper o_glc_chart_activity">
+                        <canvas t-ref="activityChart"/>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>
