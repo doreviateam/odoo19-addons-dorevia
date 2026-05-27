@@ -54,4 +54,11 @@
         groups="dorevia_glc_analytics.group_glc_manager"
         sequence="60"/>
 
+    <menuitem
+        id="menu_glc_coverage_cockpit"
+        name="Cockpit couverture des salaires"
+        parent="menu_glc_analytique_root"
+        action="action_glc_coverage_cockpit"
+        sequence="65"/>
+
 </odoo>

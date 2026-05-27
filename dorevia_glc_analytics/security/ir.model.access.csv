@@ -8,3 +8,7 @@ access_glc_salary_allocation_user,glc.salary.allocation user,model_glc_salary_al
 access_glc_salary_allocation_manager,glc.salary.allocation manager,model_glc_salary_allocation,dorevia_glc_analytics.group_glc_manager,1,1,1,1
 access_glc_salary_allocation_line_user,glc.salary.allocation.line user,model_glc_salary_allocation_line,dorevia_glc_analytics.group_glc_user,1,0,0,0
 access_glc_salary_allocation_line_manager,glc.salary.allocation.line manager,model_glc_salary_allocation_line,dorevia_glc_analytics.group_glc_manager,1,1,1,1
+access_glc_coverage_cockpit_user,glc.coverage.cockpit user,model_glc_coverage_cockpit,dorevia_glc_analytics.group_glc_user,1,1,1,1
+access_glc_coverage_cockpit_manager,glc.coverage.cockpit manager,model_glc_coverage_cockpit,dorevia_glc_analytics.group_glc_manager,1,1,1,1
+access_glc_coverage_cockpit_line_user,glc.coverage.cockpit.line user,model_glc_coverage_cockpit_line,dorevia_glc_analytics.group_glc_user,1,1,1,1
+access_glc_coverage_cockpit_line_manager,glc.coverage.cockpit.line manager,model_glc_coverage_cockpit_line,dorevia_glc_analytics.group_glc_manager,1,1,1,1
