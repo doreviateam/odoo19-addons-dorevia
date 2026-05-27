@@ -400,6 +400,10 @@ La vue **Détail par activité** est la **cible UX validée** pour ce palier (`1
 - performance calculée sur lignes activité, sous-totaux mensuels et total période ;
 - parcours utilisateur entièrement contenu dans le cockpit.
 
+### 13.5. Polish optionnel — fond bloc Performance (`19.0.4.5.2`)
+
+Fond gris bleuté très discret `#f8f9fa` sur les 3 colonnes Performance (header, lignes, sous-totaux, total période). Polish non bloquant — renforce la lecture « indicateur synthétique / conclusion » sans alourdir le tableau.
+
 ---
 
 *Ticket rédigé MOA — 2026-05-27.  

@@ -634,7 +634,7 @@ Tests UX-GROUPBY / PERFORMANCE :
 | Date (R12 PERFORMANCE + familles `19.0.4.5.1`) | 2026-05-27 |
 | Exécutant | MOA |
 | Base / environnement | `glc-rgl-test-import` · `http://localhost:18079` |
-| Version module | `dorevia_glc_analytics` **`19.0.4.5.1`** |
+| Version module | `dorevia_glc_analytics` **`19.0.4.5.2`** (polish fond Performance) |
 | Verdict global | **GO** — R1–R12 OK — **cible UX validée** vue Détail par activité |
 | Merge | **À soumettre** — branche `feat/glc-cockpit-detail-performance` |
 
