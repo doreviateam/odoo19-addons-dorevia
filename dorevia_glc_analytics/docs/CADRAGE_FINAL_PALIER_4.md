@@ -1,8 +1,8 @@
 # Cadrage final Palier 4 — Cockpit couverture des salaires
 
 **Date :** 2026-05-27  
-**Statut :** **En attente validation MOA** — socle Paliers 0–3 stabilisé sur `main`  
-**Gate développement :** aucune branche `feat/glc-cockpit-palier-4` avant **GO MOA explicite** sur ce document
+**Statut :** **Validé MOA (Option A)** — invariants I1–I7 acceptés · PR #32  
+**Gate développement :** branche `feat/glc-cockpit-palier-4` ouverte uniquement après **GO MOA explicite** (G7)
 
 **Références :** [AUDIT_GLC_ANALYTICS_BUDGET_AVANT_PALIER_4.md](./AUDIT_GLC_ANALYTICS_BUDGET_AVANT_PALIER_4.md) · [TICKET_PALIER_4.md](./TICKET_PALIER_4.md) · [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)
 
@@ -21,7 +21,7 @@ Le socle Paliers 0–3 est **gelé et validé MOA** :
 | Règle RH / Personnel (PR #31) | Figée |
 | Tests recette (`glc-rgl-test-import`) | 39 tests, 0 échec |
 
-Le Palier 4 est **cadré mais non démarré**. Ce document fige les **invariants non négociables** du cockpit avant ouverture du développement.
+Le Palier 4 est **cadré et validé MOA** (invariants I1–I7). Le développement cockpit reste **en attente du GO explicite** (G7).
 
 ---
 
@@ -156,20 +156,18 @@ Frais généraux      = axe analytique Frais généraux (I2)
 | G2 | Audit officiel mergé (PR #29) | ✅ Validé |
 | G3 | Maintenance P2 mergée (PR #30) | ✅ Validé |
 | G4 | Règle RH / Personnel figée (PR #31) | ✅ Validé |
-| G5 | **Invariants I1–I7 validés MOA** (ce document) | ☐ En attente |
+| G5 | **Invariants I1–I7 validés MOA** (ce document) | ✅ Validé (2026-05-27 · Option A) |
 | G6 | Jeu de données recette budget + réalisé + ventilations | ☐ À confirmer |
 | G7 | **GO MOA explicite** ouverture `feat/glc-cockpit-palier-4` | ☐ En attente |
 
 ---
 
-## 5. Décision MOA attendue
+## 5. Décision MOA
 
-**Option A — GO cadrage final :** les invariants I1–I7 sont acceptés tels quels → autorisation d’ouvrir la branche `feat/glc-cockpit-palier-4`.
+**Option A — GO cadrage final** : **validée MOA (2026-05-27)**.
 
-**Option B — Ajustements :** préciser les réserves MOA sur ce document avant tout développement.
-
-**Option C — Report :** maintenir le gel Palier 4.
+Les invariants I1–I7 sont acceptés tels quels. Prochaine étape : confirmation G6 (jeu de données recette) puis **GO explicite G7** pour ouvrir `feat/glc-cockpit-palier-4`.
 
 ---
 
-*Document préparé pour validation MOA — Palier 4 non démarré.*
+*Document validé MOA — Palier 4 cadré, développement non démarré (G7 en attente).*

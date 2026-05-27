@@ -105,8 +105,9 @@ Charges fixes = RH / Personnel + Frais généraux
 - [ ] Jeu de données budget + réalisé sur `glc-rgl-test-import`
 - [ ] Validation MOA des formules d’agrégation et des seuils d’alerte
 - [x] Règle d’agrégation masse salariale réelle (ventilations Palier 2) figée MOA — cf. §2
-- [ ] Invariants I1–I7 validés MOA — [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md)
-- [ ] **GO MOA explicite** avant ouverture branche `feat/glc-cockpit-palier-4`
+- [x] Invariants I1–I7 validés MOA — [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) (Option A · 2026-05-27)
+- [ ] Jeu de données recette budget + réalisé + ventilations (G6)
+- [ ] **GO MOA explicite** avant ouverture branche `feat/glc-cockpit-palier-4` (G7)
 
 ---
 
