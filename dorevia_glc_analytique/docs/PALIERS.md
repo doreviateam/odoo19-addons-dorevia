@@ -13,7 +13,7 @@
 |---|---|---|
 | **0** | Socle analytique installable | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) |
 | **1** | Règles d'affectation et contrôles | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #25](https://github.com/doreviateam/odoo19-addons-dorevia/pull/25) |
-| **2** | Ventilation salariale | **Cadrage** — [ticket](./TICKET_PALIER_2.md) · branche `feat/glc-analytique-palier-2` |
+| **2** | Ventilation salariale | **Cadrage validé MOA** — [ticket](./TICKET_PALIER_2.md) · branche `feat/glc-analytique-palier-2` · prêt dev |
 | **3** | Registre bénévole | À faire |
 | **4** | Rapport CA mensuel | À faire |
 | **5** | Clôture analytique mensuelle | À faire |

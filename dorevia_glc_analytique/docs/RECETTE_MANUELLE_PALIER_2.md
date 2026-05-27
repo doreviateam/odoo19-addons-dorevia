@@ -26,8 +26,10 @@ Module : dorevia_glc_analytique (Palier 2)
 |---|---|---|
 | T1 | `glc.employee.cost.line` — coût + heures ref. | Coût horaire calculé |
 | T2 | Ventilation `percent` 100 % sur 3 activités | Validation OK |
-| T3 | Ventilation `percent` ≠ 100 % | Validation refusée |
-| T4 | Ventilation `hours` | Montants = heures × coût horaire |
+| T3 | Ventilation `percent` ≠ 100 % en brouillon | Brouillon OK |
+| T3b | Ventilation `percent` ≠ 100 % à validation | Validation refusée |
+| T4 | Ventilation `hours` + `reference_hours` > 0 | Montants = heures × coût horaire |
+| T4b | Ventilation `hours` total ≠ référence à validation | Validation refusée |
 | T5 | Ligne activité Financements | Refus / contrainte |
 | T6 | Masse comptable vs total ventilé | Bandeau écart > 5 % si écart |
 
@@ -41,8 +43,9 @@ Module : dorevia_glc_analytique (Palier 2)
 | P2.2 | Créer coût mensuel salarié test | `hourly_cost` OK | ☐ | |
 | P2.3 | Menu **Ventilations salariales** | Formulaire + lignes | ☐ | |
 | P2.4 | Ventilation T2 (100 %) | État `validated` | ☐ | |
-| P2.5 | Ventilation T3 (≠ 100 %) | Validation bloquée | ☐ | |
-| P2.6 | Ventilation T4 (heures) | Montants cohérents | ☐ | |
+| P2.5 | Ventilation T3b (≠ 100 % à validation) | Validation bloquée | ☐ | |
+| P2.5bis | Ventilation T3 partielle en brouillon | Enregistrement OK | ☐ | |
+| P2.6 | Ventilation T4 / T4b (heures) | Montants · validation si total = référence | ☐ | |
 | P2.7 | T5 Financements | Refus | ☐ | |
 | P2.8 | Bandeau écart masse comptable | Alerte si seuil | ☐ | |
 | P2.9 | Vérifier absence écriture comptable | Pas de `account.move` créé | ☐ | |

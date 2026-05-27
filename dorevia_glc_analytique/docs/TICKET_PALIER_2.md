@@ -3,7 +3,7 @@
 **Module :** `dorevia_glc_analytique`  
 **Branche cible :** `feat/glc-analytique-palier-2`  
 **Version cible :** `19.0.3.0.0`  
-**Statut :** Cadrage MOA / architecture  
+**Statut :** Cadrage validé MOA / architecture — prêt pour développement  
 **Prérequis :**
 - Palier 0 gelé : socle analytique
 - Palier 1 gelé : assistant anomalies analytiques (PR #25 mergée)
@@ -125,7 +125,7 @@ Historique mensuel du coût salarié chargé.
 | `employee_id` | Salarié |
 | `period_date` | Premier jour du mois |
 | `cost_amount` | Coût mensuel chargé |
-| `reference_hours` | Heures mensuelles de référence |
+| `reference_hours` | Heures mensuelles de référence — **obligatoire et > 0** si méthode `hours` sur la ventilation liée |
 | `hourly_cost` | Coût horaire calculé (stored computed) |
 | `currency_id` | Devise |
 | `source` | `manual` (V1 — pas d’import paie auto) |
@@ -166,10 +166,19 @@ Montant activité = heures activité × coût horaire
 | `validated` | Ventilation validée MOA / gestionnaire | Lecture seule sauf déverrouillage contrôlé |
 | `locked` | Mois verrouillé (préparation Palier 5) | Aucune modification |
 
-**Règle de validation :**
+**Règles de validation (gel MOA) :**
 
-- méthode `percent` → somme des `percent` = **100 %** (tolérance documentée, ex. 0,01 pt) ;
-- méthode `hours` → somme des `hours` = **`reference_hours`** du coût mensuel (ou règle MOA explicite).
+| Méthode | Brouillon (`draft` / `to_check`) | Validation (`validated`) |
+|---|---|---|
+| `percent` | Ventilation **partielle** autorisée (total `< 100 %`) | **Refusée** si somme des `percent` ≠ **100 %** (tolérance 0,01 pt) |
+| `hours` | Ventilation **partielle** autorisée (total heures `< reference_hours`) | **Refusée** si somme des `hours` ≠ **`reference_hours`** du coût mensuel lié |
+
+**Prérequis méthode `hours` :**
+
+- `glc.employee.cost.line.reference_hours` **obligatoire** et **strictement > 0** ;
+- impossible de valider une ventilation `hours` sans coût mensuel lié conforme.
+
+**Aucune génération** d’écriture comptable (`account.move`) ni analytique (`analytic_distribution`) à la validation.
 
 ---
 
@@ -192,7 +201,7 @@ Montant activité = heures activité × coût horaire
 
 ## 7. Contrôle vs masse salariale comptable
 
-Comparaison **informatives** (bandeau / smart button), sans blocage comptable :
+Comparaison **informative** (bandeau / smart button), **non bloquante** — aucun impact sur validation comptable ni sur la validation des ventilations salariales :
 
 ```text
 Masse salariale comptable du mois =
@@ -228,9 +237,9 @@ Aucune modification du wizard anomalies Palier 1 dans ce ticket, sauf documentat
 |---|---|
 | `account` | Lecture masse salariale comptable (Palier 0) |
 | `analytic` | Comptes activités cibles (Palier 0) |
-| **`hr`** | `employee_id` → `hr.employee` (spec §9.2) |
+| **`hr`** | `employee_id` → **`hr.employee`** (validé MOA — pas `res.partner`) |
 
-**Nouveau dans `__manifest__.py` :** `"hr"` (à confirmer MOA : module RH installé sur instance GLC).
+**Nouveau dans `__manifest__.py` :** `"hr"` (validé MOA — module RH installé sur instance GLC).
 
 ---
 
@@ -263,10 +272,10 @@ Aucune modification du wizard anomalies Palier 1 dans ce ticket, sauf documentat
 | CA1 | Menus Coûts salariés / Ventilations visibles pour Gestionnaire GLC |
 | CA2 | Création `glc.employee.cost.line` avec coût horaire calculé |
 | CA3 | Ventilation `percent` — total 100 % → validation possible |
-| CA4 | Ventilation `percent` — total ≠ 100 % → validation refusée |
-| CA5 | Ventilation `hours` — montants = heures × coût horaire |
+| CA4 | Ventilation `percent` — total ≠ 100 % → validation refusée (partiel OK en brouillon) |
+| CA5 | Ventilation `hours` — `reference_hours` > 0 · montants = heures × coût horaire · validation si total heures = référence |
 | CA6 | Activité Financements refusée sur ligne de ventilation |
-| CA7 | Bandeau écart masse comptable vs total ventilé (seuil 5 %) |
+| CA7 | Bandeau écart masse comptable vs total ventilé (seuil 5 %) — **informatif, non bloquant** |
 | CA8 | Aucune écriture comptable / analytique paie générée · tests auto verts |
 | CA9 | Non-régression Palier 0 + Palier 1 (17 tests anomalies) |
 
@@ -292,23 +301,34 @@ Ne pas mélanger avec :
 - Palier 3+ (tickets séparés)
 ```
 
-**Séquence proposée :**
+**Séquence :**
 
-1. Validation MOA du présent cadrage
+1. ~~Validation MOA du présent cadrage~~ — **GO MOA 2026-05-27**
 2. Développement Palier 2 sur branche dédiée
 3. Recette MOA sur `glc-rgl-test-import`
 4. Merge PR Palier 2
 
 ---
 
-## 15. Points de vigilance MOA (à trancher avant dev)
+## 15. Décisions MOA gelées (cadrage validé)
 
-1. **Module `hr`** — confirmé installé sur l’instance GLC ? Sinon alternative `res.partner` (non recommandé spec).
-2. **Coût mensuel chargé** — définition exacte validée avec la paie (brut + charges patronales + AN ?).
-3. **Heures de référence** — contrat / forfait jours : règle si `reference_hours` = 0 ou absent.
-4. **Ventilation partielle** — autoriser `< 100 %` en brouillon seulement, ou interdit ?
-5. **Masse comptable** — périmètre exact des comptes `631/633/641/645` sur le plan GLC.
-6. **Rétroactif** — première ventilation sur mois pilote : officielle ou calibrage non officiel (cf. matrice migration).
+| # | Décision |
+|---|---|
+| D1 | **Doctrine** — pas d’écriture comptable, pas d’écriture analytique de paie, overlay de gestion uniquement |
+| D2 | **Applicabilités** — restent `optional`, aucun `mandatory` |
+| D3 | **Salarié** — porté par `hr.employee`, pas `res.partner` · dépendance `hr` validée |
+| D4 | **`reference_hours`** — obligatoire et **> 0** pour toute ventilation en méthode `hours` |
+| D5 | **Méthode `percent`** — validation uniquement si total = **100 %** |
+| D6 | **Méthode `hours`** — validation uniquement si total heures = **heures de référence** |
+| D7 | **Ventilation partielle** — autorisée en brouillon, **refusée à la validation** |
+| D8 | **Masse salariale comptable** — contrôle **informatif, non bloquant** |
+| D9 | **Aucune génération** d’écriture comptable ou analytique à la validation |
+
+### Points ouverts (non bloquants Palier 2)
+
+- Définition exacte du coût mensuel chargé avec la paie GLC (brut + charges + AN).
+- Périmètre fin des comptes `631/633/641/645` sur le plan comptable GLC.
+- Première ventilation rétroactive mois pilote : calibrage vs officiel (cf. matrice migration).
 
 ---
 
