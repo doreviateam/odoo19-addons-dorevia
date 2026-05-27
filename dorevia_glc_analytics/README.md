@@ -53,6 +53,7 @@ Le script `migrations/19.0.3.1.0/pre-migrate.py` reprend la même logique lors d
 | [Cadrage Budget & Cockpit](./docs/CADRAGE_BUDGET_COCKPIT.md) | Roadmap post-Palier 2 |
 | [Ticket Palier 3 — Budget](./docs/TICKET_PALIER_3.md) | Module `dorevia_glc_budget` |
 | [Ticket Palier 4 — Cockpit](./docs/TICKET_PALIER_4.md) | Couverture des salaires |
+| [Cadrage final Palier 4](./docs/CADRAGE_FINAL_PALIER_4.md) | Invariants non négociables cockpit (gate MOA) |
 | [Recette manuelle Palier 0](./docs/RECETTE_MANUELLE_PALIER_0.md) | Socle analytique |
 | [Recette manuelle Palier 1](./docs/RECETTE_MANUELLE_PALIER_1.md) | Anomalies analytiques |
 | [Recette manuelle Palier 2](./docs/RECETTE_MANUELLE_PALIER_2.md) | Ventilation salariale |

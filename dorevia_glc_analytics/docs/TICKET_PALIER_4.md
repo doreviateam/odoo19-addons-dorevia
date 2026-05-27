@@ -4,9 +4,9 @@
 **Dépendance :** `dorevia_glc_budget` (Palier 3)  
 **Branche cible :** `feat/glc-cockpit-palier-4`  
 **Version cible analytics :** `19.0.4.0.0`  
-**Statut :** Cadrage — **ne pas démarrer avant GO MOA explicite** (règle RH figée §2, maintenance P2 livrée)
+**Statut :** Cadrage — **ne pas démarrer avant GO MOA explicite** sur [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) (invariants I1–I7)
 
-**Références :** [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md) · [TICKET_PALIER_3.md](./TICKET_PALIER_3.md) · [PALIERS.md](./PALIERS.md)
+**Références :** [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) · [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md) · [TICKET_PALIER_3.md](./TICKET_PALIER_3.md) · [PALIERS.md](./PALIERS.md)
 
 ---
 
@@ -105,7 +105,9 @@ Charges fixes = RH / Personnel + Frais généraux
 - [ ] Jeu de données budget + réalisé sur `glc-rgl-test-import`
 - [ ] Validation MOA des formules d’agrégation et des seuils d’alerte
 - [x] Règle d’agrégation masse salariale réelle (ventilations Palier 2) figée MOA — cf. §2
-- [ ] **GO MOA explicite** avant ouverture branche `feat/glc-cockpit-palier-4`
+- [x] Invariants I1–I7 validés MOA — [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) (Option A · 2026-05-27)
+- [ ] Jeu de données recette budget + réalisé + ventilations (G6)
+- [ ] **GO MOA explicite** avant ouverture branche `feat/glc-cockpit-palier-4` (G7)
 
 ---
 
