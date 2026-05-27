@@ -7,6 +7,8 @@
 
 **Hors périmètre :** cockpit, alertes, exports, trésorerie, OCA Budget, écritures comptables/analytiques.
 
+**Statut document :** **Validé MOA** — recette exécutée sur `glc-rgl-test-import` (2026-05-27).
+
 ---
 
 ## Contexte de recette
@@ -49,14 +51,14 @@ docker compose restart odoo
 
 | Pas | Action | Contrôles | OK | Observations |
 |---|---|---|---|---|
-| P3.1 | Apps → **Dorevia GLC Budget** | Module installé | ☐ | |
-| P3.2 | Menu **Budgets prévisionnels** | Accès Utilisateur GLC | ☐ | |
-| P3.3 | Créer budget B1 + lignes B2–B4 | Montants enregistrés | ☐ | |
-| P3.4 | Tenter B5 (SUBVENTIONS en charge) | Message d'erreur | ☐ | |
-| P3.5 | Valider budget | État **Validé** | ☐ | |
-| P3.6 | Tenter ajout ligne | Refus | ☐ | |
-| P3.7 | Archiver | État **Archivé** | ☐ | |
-| P3.8 | Vérifier comptabilité | Aucune nouvelle écriture | ☐ | |
+| P3.1 | Apps → **Dorevia GLC Budget** | Module installé | ☑ | |
+| P3.2 | Menu **Budgets prévisionnels** | Accès Utilisateur GLC | ☑ | |
+| P3.3 | Créer budget B1 + lignes B2–B4 | Montants enregistrés | ☑ | |
+| P3.4 | Tenter B5 (SUBVENTIONS en charge) | Message d'erreur | ☑ | |
+| P3.5 | Valider budget | État **Validé** | ☑ | |
+| P3.6 | Tenter ajout ligne | Refus | ☑ | |
+| P3.7 | Archiver | État **Archivé** | ☑ | |
+| P3.8 | Vérifier comptabilité | Aucune nouvelle écriture | ☑ | |
 
 ---
 
@@ -68,20 +70,49 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
   --test-enable --test-tags=/dorevia_glc_budget --stop-after-init --no-http
 ```
 
-| Résultat attendu | Valeur |
+| Résultat attendu | Résultat recette |
 |---|---|
-| Tests `/dorevia_glc_budget` | **12 post-tests, 0 échec** |
-| Non-régression `/dorevia_glc_analytics` | **25 post-tests, 0 échec** |
+| Tests `/dorevia_glc_budget` | **12 post-tests, 0 échec, 0 erreur** |
+| Non-régression `/dorevia_glc_analytics` | **25 post-tests, 0 échec, 0 erreur** |
 
 ---
 
-## Critères MOA (rappel)
+## Critères MOA
 
-- [ ] CA1 — Module installable sans OCA Budget
-- [ ] CA2 — Scénarios `initial` / `revised` / `landing`
-- [ ] CA3 — Lignes mensuelles par axe analytique
-- [ ] CA4 — Types recette / charge / financement
-- [ ] CA5 — Refus Financements sur recette/charge
-- [ ] CA6 — Refus Activités sur financement
-- [ ] CA7 — Workflow brouillon → validé → archivé
-- [ ] CA8 — Aucune écriture comptable ni analytique
+- [x] CA1 — Module installable sans OCA Budget
+- [x] CA2 — Scénarios `initial` / `revised` / `landing`
+- [x] CA3 — Lignes mensuelles par axe analytique
+- [x] CA4 — Types recette / charge / financement
+- [x] CA5 — Refus Financements sur recette/charge
+- [x] CA6 — Refus Activités sur financement
+- [x] CA7 — Workflow brouillon → validé → archivé
+- [x] CA8 — Aucune écriture comptable ni analytique
+
+---
+
+## Clôture recette — `glc-rgl-test-import` (2026-05-27)
+
+| Contrôle | Résultat |
+|---|---|
+| Installation `dorevia_glc_budget` | OK |
+| Redémarrage Odoo | OK |
+| Tests automatisés `/dorevia_glc_budget` | **12 post-tests, 0 échec, 0 erreur** |
+| Non-régression `/dorevia_glc_analytics` | **25 post-tests, 0 échec, 0 erreur** |
+| Parcours P3.1–P3.8 (shell + contrôles métier) | OK |
+| Budget 2026 scénario `initial` | OK |
+| Lignes charge / recette / financement | OK |
+| Refus `SUBVENTIONS` en charge | OK |
+| Validation budget | OK |
+| Refus ajout ligne post-validation | OK |
+| Archivage | OK |
+| Aucune écriture `account.move` / `account.analytic.line` | OK |
+
+### Points de vigilance (non bloquants)
+
+- Warnings modules OCA incompatibles dans les logs Docker — sans impact sur le périmètre GLC Budget.
+- Erreurs SQL de contraintes d'unicité visibles pendant les tests automatisés — **attendues** (tests `test_unique_budget_*`) ; la suite termine en vert.
+
+### Suite immédiate
+
+- Palier 3 **validé MOA** — prêt pour merge **PR #28** et gel Palier 3.
+- **Palier 4 cockpit** : hors périmètre jusqu'au gel MOA Palier 3 post-merge.
