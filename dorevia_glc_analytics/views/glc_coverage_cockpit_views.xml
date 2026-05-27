@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_glc_coverage_cockpit_form" model="ir.ui.view">
+        <field name="name">glc.coverage.cockpit.form</field>
+        <field name="model">glc.coverage.cockpit</field>
+        <field name="arch" type="xml">
+            <form string="Cockpit couverture des salaires">
+                <header>
+                    <button name="action_refresh" type="object"
+                            string="Actualiser" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-danger mb-3" role="alert"
+                         invisible="alert_status != 'red'">
+                        <strong>Alerte rouge</strong>
+                        <span class="ms-2">
+                            <field name="alert_message" nolabel="1" readonly="1"/>
+                        </span>
+                    </div>
+                    <div class="alert alert-warning mb-3" role="alert"
+                         invisible="alert_status != 'orange'">
+                        <strong>Alerte orange</strong>
+                        <span class="ms-2">
+                            <field name="alert_message" nolabel="1" readonly="1"/>
+                        </span>
+                    </div>
+                    <div class="alert alert-success mb-3" role="alert"
+                         invisible="alert_status != 'green'">
+                        <strong>Alerte verte</strong>
+                        <span class="ms-2">
+                            <field name="alert_message" nolabel="1" readonly="1"/>
+                        </span>
+                    </div>
+                    <group>
+                        <group string="Filtres">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="year"/>
+                            <field name="month"/>
+                            <field name="activity_account_id"/>
+                            <field name="budget_scenario"/>
+                        </group>
+                        <group string="Période analysée">
+                            <field name="date_from" readonly="1"/>
+                            <field name="date_to" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="alert_status" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Synthèse ressources">
+                        <group>
+                            <field name="activity_revenue_realized" readonly="1"/>
+                            <field name="funding_realized" readonly="1"/>
+                            <field name="resources_realized" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="activity_revenue_budget" readonly="1"/>
+                            <field name="funding_budget" readonly="1"/>
+                            <field name="resources_budget" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Synthèse charges">
+                        <group>
+                            <field name="payroll_realized" readonly="1"/>
+                            <field name="general_expenses_realized" readonly="1"/>
+                            <field name="fixed_charges_realized" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="payroll_budget" readonly="1"/>
+                            <field name="general_expenses_budget" readonly="1"/>
+                            <field name="salary_coverage_rate" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Soldes et alerte">
+                        <group>
+                            <field name="balance_after_payroll" readonly="1"/>
+                            <field name="balance_after_fixed" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook invisible="not line_ids">
+                        <page string="Détail Activité × Mois">
+                            <field name="line_ids" nolabel="1">
+                                <list create="0" delete="0" edit="0">
+                                    <field name="period_date"/>
+                                    <field name="analytic_account_id"/>
+                                    <field name="revenue_realized" sum="Total"/>
+                                    <field name="revenue_budget" sum="Total"/>
+                                    <field name="variance_revenue" sum="Total"/>
+                                    <field name="payroll_realized" sum="Total"/>
+                                    <field name="payroll_budget" sum="Total"/>
+                                    <field name="variance_payroll" sum="Total"/>
+                                    <field name="expense_realized" sum="Total" optional="show"/>
+                                    <field name="expense_budget" sum="Total" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_glc_coverage_cockpit" model="ir.actions.act_window">
+        <field name="name">Cockpit couverture des salaires</field>
+        <field name="res_model">glc.coverage.cockpit</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+</odoo>

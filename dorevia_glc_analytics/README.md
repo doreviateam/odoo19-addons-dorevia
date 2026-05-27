@@ -12,9 +12,9 @@ Module Odoo 19 CE — **Pilotage analytique associatif** pour GLC (Saint-Aignan-
 | 1 — Anomalies analytiques | `19.0.2.0.0` | Validé MOA |
 | 2 — Ventilation salariale | `19.0.3.0.0` | Validé MOA · **gelé** |
 
-**Version courante :** `19.0.3.1.0` (renommage technique du module).
+**Version courante :** `19.0.4.0.0` (Palier 4 cockpit en cours).
 
-**Suite MOA :** Palier 3 — module `dorevia_glc_budget` (budget prévisionnel) → Palier 4 — cockpit couverture des salaires.  
+**Suite MOA :** Palier 4 — cockpit couverture des salaires (en développement) · Palier 3 gelé dans `dorevia_glc_budget`.  
 Voir [cadrage Budget & Cockpit](./docs/CADRAGE_BUDGET_COCKPIT.md) · [ticket Palier 3](./docs/TICKET_PALIER_3.md) · [PALIERS.md](./docs/PALIERS.md).
 
 ## Renommage module (`19.0.3.1.0`)
@@ -54,6 +54,7 @@ Le script `migrations/19.0.3.1.0/pre-migrate.py` reprend la même logique lors d
 | [Ticket Palier 3 — Budget](./docs/TICKET_PALIER_3.md) | Module `dorevia_glc_budget` |
 | [Ticket Palier 4 — Cockpit](./docs/TICKET_PALIER_4.md) | Couverture des salaires |
 | [Cadrage final Palier 4](./docs/CADRAGE_FINAL_PALIER_4.md) | Invariants non négociables cockpit (gate MOA) |
+| [Recette manuelle Palier 4](./docs/RECETTE_MANUELLE_PALIER_4.md) | Cockpit couverture des salaires |
 | [Recette manuelle Palier 0](./docs/RECETTE_MANUELLE_PALIER_0.md) | Socle analytique |
 | [Recette manuelle Palier 1](./docs/RECETTE_MANUELLE_PALIER_1.md) | Anomalies analytiques |
 | [Recette manuelle Palier 2](./docs/RECETTE_MANUELLE_PALIER_2.md) | Ventilation salariale |

@@ -157,8 +157,8 @@ Frais généraux      = axe analytique Frais généraux (I2)
 | G3 | Maintenance P2 mergée (PR #30) | ✅ Validé |
 | G4 | Règle RH / Personnel figée (PR #31) | ✅ Validé |
 | G5 | **Invariants I1–I7 validés MOA** (ce document) | ✅ Validé (2026-05-27 · Option A) |
-| G6 | Jeu de données recette budget + réalisé + ventilations | ☐ À confirmer |
-| G7 | **GO MOA explicite** ouverture `feat/glc-cockpit-palier-4` | ☐ En attente |
+| G6 | Jeu de données recette budget + réalisé + ventilations | ✅ Validé (2026-05-27 · fonctionnel pour démarrage) |
+| G7 | **GO MOA explicite** ouverture `feat/glc-cockpit-palier-4` | ✅ Validé (2026-05-27) |
 
 ---
 
@@ -170,4 +170,4 @@ Les invariants I1–I7 sont acceptés tels quels. Prochaine étape : confirmatio
 
 ---
 
-*Document validé MOA — Palier 4 cadré, développement non démarré (G7 en attente).*
+*Document validé MOA — Palier 4 en développement (`feat/glc-cockpit-palier-4`).*

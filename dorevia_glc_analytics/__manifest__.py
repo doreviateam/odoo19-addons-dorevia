@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.3.1.0",
+    "version": "19.0.4.0.0",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — plans Activités et Financements.",
     "description": """
@@ -27,6 +27,12 @@ Palier 2 — Ventilation salariale :
 * ventilations par activité (`glc.salary.allocation`) ;
 * overlay de gestion — pas d'écriture comptable ni analytique paie.
 
+Palier 4 — Cockpit couverture des salaires :
+
+* agrégation réalisé analytique + ventilations Palier 2 + budget Palier 3 ;
+* alertes rouge / orange / vert ;
+* détail Activité × Mois.
+
 Les paliers suivants (bénévolat, rapport CA) seront ajoutés progressivement.
 Voir docs/PALIERS.md.
 """,
@@ -48,6 +54,7 @@ Voir docs/PALIERS.md.
         "views/glc_analytic_anomaly_views.xml",
         "views/glc_employee_cost_line_views.xml",
         "views/glc_salary_allocation_views.xml",
+        "views/glc_coverage_cockpit_views.xml",
         "views/glc_menus.xml",
     ],
     "installable": True,
