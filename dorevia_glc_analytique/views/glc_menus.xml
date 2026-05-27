@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_glc_analytique_root"
+        name="Pilotage GLC"
+        parent="account.menu_finance"
+        groups="dorevia_glc_analytique.group_glc_user"
+        sequence="90"/>
+
+    <menuitem
+        id="menu_glc_activites"
+        name="Activités GLC"
+        parent="menu_glc_analytique_root"
+        action="action_glc_analytic_accounts_activites"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_glc_financements"
+        name="Financements GLC"
+        parent="menu_glc_analytique_root"
+        action="action_glc_analytic_accounts_financements"
+        sequence="20"/>
+
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!--
+            Palier 0 — applicabilités non bloquantes.
+            Les deux plans sont visibles sur les pièces concernées (optional).
+            Le passage en mandatory + contrôles d'anomalies est prévu au Palier 1.
+        -->
+        <record id="analytic_plan_glc_activites" model="account.analytic.plan">
+            <field name="name">GLC - Activités</field>
+            <field name="description">Pilotage opérationnel GLC — que consomme et que produit chaque activité.</field>
+            <field name="default_applicability">optional</field>
+            <field name="applicability_ids" eval="[
+                (0, 0, {'business_domain': 'bill', 'applicability': 'optional'}),
+                (0, 0, {'business_domain': 'invoice', 'applicability': 'optional'}),
+            ]"/>
+        </record>
+
+        <record id="analytic_plan_glc_financements" model="account.analytic.plan">
+            <field name="name">GLC - Financements</field>
+            <field name="description">Qualification des ressources GLC — d'où viennent les financements.</field>
+            <field name="default_applicability">optional</field>
+            <field name="applicability_ids" eval="[
+                (0, 0, {'business_domain': 'invoice', 'applicability': 'optional'}),
+                (0, 0, {'business_domain': 'bill', 'applicability': 'unavailable'}),
+            ]"/>
+        </record>
+
+    </data>
+</odoo>
