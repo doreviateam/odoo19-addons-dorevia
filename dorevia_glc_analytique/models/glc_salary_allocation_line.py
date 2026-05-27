@@ -21,7 +21,10 @@ class GlcSalaryAllocationLine(models.Model):
         required=True,
         check_company=True,
         domain=lambda self: [
-            ("plan_id", "=", self.env.ref("dorevia_glc_analytique.analytic_plan_glc_activites").id)
+            ("plan_id", "=", self.env.ref("dorevia_glc_analytique.analytic_plan_glc_activites").id),
+            "|",
+            ("company_id", "=", False),
+            ("company_id", "in", self.env.companies.ids),
         ],
     )
     percent = fields.Float(string="Pourcentage (%)", digits=(16, 2))

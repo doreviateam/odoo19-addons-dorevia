@@ -3,7 +3,7 @@
 **Module :** `dorevia_glc_analytique`  
 **Branche cible :** `feat/glc-analytique-palier-2`  
 **Version cible :** `19.0.3.0.0`  
-**Statut :** Cadrage validé MOA / architecture — prêt pour développement  
+**Statut :** Validé MOA — gelé (recette 2026-05-27 · PR #26)  
 **Prérequis :**
 - Palier 0 gelé : socle analytique
 - Palier 1 gelé : assistant anomalies analytiques (PR #25 mergée)
