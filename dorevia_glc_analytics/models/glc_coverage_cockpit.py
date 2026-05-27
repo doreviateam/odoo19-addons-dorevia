@@ -22,40 +22,28 @@ from .glc_constants import (
 
 class GlcCoverageCockpit(models.TransientModel):
     _name = "glc.coverage.cockpit"
-    _description = "Cockpit couverture des salaires GLC"
+    _description = "Cockpit couverture des charges de structure GLC"
     _rec_name = "display_title"
 
     company_id = fields.Many2one(
         "res.company",
+        string="Société",
         required=True,
         default=lambda self: self.env.company,
     )
-    year = fields.Integer(
+    date_from = fields.Date(
+        string="Date de début",
         required=True,
-        default=lambda self: fields.Date.context_today(self).year,
+        default=lambda self: self._default_date_range()[0],
     )
-    month = fields.Selection(
-        selection=[
-            ("0", "Toute l'année"),
-            ("1", "Janvier"),
-            ("2", "Février"),
-            ("3", "Mars"),
-            ("4", "Avril"),
-            ("5", "Mai"),
-            ("6", "Juin"),
-            ("7", "Juillet"),
-            ("8", "Août"),
-            ("9", "Septembre"),
-            ("10", "Octobre"),
-            ("11", "Novembre"),
-            ("12", "Décembre"),
-        ],
+    date_to = fields.Date(
+        string="Date de fin",
         required=True,
-        default="0",
+        default=lambda self: self._default_date_range()[1],
     )
     activity_account_id = fields.Many2one(
         "account.analytic.account",
-        string="Activité GLC",
+        string="Activité",
         check_company=True,
         domain=lambda self: [
             ("plan_id", "=", self.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites").id),
@@ -65,6 +53,7 @@ class GlcCoverageCockpit(models.TransientModel):
         ],
     )
     budget_scenario = fields.Selection(
+        string="Scénario budgétaire",
         selection=[
             ("initial", "Initial"),
             ("revised", "Révisé"),
@@ -77,20 +66,24 @@ class GlcCoverageCockpit(models.TransientModel):
         "res.currency",
         compute="_compute_currency_id",
     )
-    date_from = fields.Date(string="Du", readonly=True)
-    date_to = fields.Date(string="Au", readonly=True)
+    period_range_label = fields.Char(
+        string="Période analysée",
+        compute="_compute_period_labels",
+        store=True,
+    )
     display_title = fields.Char(
         string="Titre",
         compute="_compute_display_title",
+        store=True,
     )
 
     activity_revenue_realized = fields.Monetary(
-        string="Recettes d'activité (réalisé)",
+        string="Recettes réalisées",
         readonly=True,
         currency_field="currency_id",
     )
     funding_realized = fields.Monetary(
-        string="Financements (réalisé)",
+        string="Financements réalisés",
         readonly=True,
         currency_field="currency_id",
     )
@@ -100,118 +93,347 @@ class GlcCoverageCockpit(models.TransientModel):
         currency_field="currency_id",
     )
     payroll_realized = fields.Monetary(
-        string="Masse salariale (réalisé)",
+        string="Dont masse salariale (réalisé)",
         readonly=True,
         currency_field="currency_id",
     )
     general_expenses_realized = fields.Monetary(
-        string="Frais généraux (réalisé)",
+        string="Dont frais généraux (réalisé)",
         readonly=True,
         currency_field="currency_id",
     )
     fixed_charges_realized = fields.Monetary(
-        string="Charges fixes (réalisé)",
+        string="Charges de structure (réalisé)",
         readonly=True,
         currency_field="currency_id",
         help="Masse salariale + frais généraux.",
     )
 
     activity_revenue_budget = fields.Monetary(
-        string="Recettes d'activité (budget)",
+        string="Recettes prévues",
         readonly=True,
         currency_field="currency_id",
     )
     funding_budget = fields.Monetary(
-        string="Financements (budget)",
+        string="Financements prévus",
         readonly=True,
         currency_field="currency_id",
     )
     resources_budget = fields.Monetary(
-        string="Ressources disponibles (budget)",
+        string="Ressources disponibles (prévu)",
         readonly=True,
         currency_field="currency_id",
     )
     payroll_budget = fields.Monetary(
-        string="Masse salariale (budget)",
+        string="Dont masse salariale (prévu)",
         readonly=True,
         currency_field="currency_id",
     )
     general_expenses_budget = fields.Monetary(
-        string="Frais généraux (budget)",
+        string="Dont frais généraux (prévu)",
         readonly=True,
         currency_field="currency_id",
     )
 
     salary_coverage_rate = fields.Float(
-        string="Taux de couverture des salaires (%)",
+        string="Couverture masse salariale (%)",
         digits=(16, 2),
         readonly=True,
+        help="Lecture intermédiaire : ressources disponibles / masse salariale.",
     )
     balance_after_payroll = fields.Monetary(
-        string="Solde après salaires",
+        string="Solde après masse salariale",
         readonly=True,
         currency_field="currency_id",
     )
     balance_after_fixed = fields.Monetary(
-        string="Solde après salaires et frais généraux",
+        string="Solde après charges de structure",
         readonly=True,
         currency_field="currency_id",
     )
     alert_status = fields.Selection(
         string="Statut alerte",
         selection=[
-            ("red", "Rouge — ressources insuffisantes"),
-            ("orange", "Orange — salaires couverts, frais généraux non"),
-            ("green", "Vert — salaires et frais généraux couverts"),
+            ("red", "Rouge — masse salariale non couverte"),
+            ("orange", "Orange — charges de structure partiellement couvertes"),
+            ("green", "Vert — charges de structure couvertes"),
         ],
         readonly=True,
     )
     alert_message = fields.Char(string="Message alerte", readonly=True)
     is_refreshed = fields.Boolean(string="Calcul effectué", readonly=True, default=False)
+    refresh_key = fields.Char(string="Clé recalcul", readonly=True, copy=False)
     line_ids = fields.One2many(
         "glc.coverage.cockpit.line",
         "cockpit_id",
         readonly=True,
     )
+    detail_line_count = fields.Integer(
+        string="Nombre de lignes détail",
+        compute="_compute_detail_line_count",
+    )
+
+    _FILTER_FIELDS = frozenset(
+        {"company_id", "date_from", "date_to", "activity_account_id", "budget_scenario"}
+    )
+
+    @api.model
+    def _default_date_range(self, reference=None):
+        today = reference or fields.Date.context_today(self)
+        date_from = date(today.year, today.month, 1)
+        date_to = date(today.year, today.month, monthrange(today.year, today.month)[1])
+        return date_from, date_to
+
+    @api.model
+    def _default_open_values(self):
+        date_from, date_to = self._default_date_range()
+        return {
+            "company_id": self.env.company.id,
+            "date_from": date_from,
+            "date_to": date_to,
+            "budget_scenario": "initial",
+            "activity_account_id": False,
+        }
+
+    @api.model
+    def _domain_for_open_values(self, values):
+        domain = []
+        for field_name in (
+            "company_id",
+            "date_from",
+            "date_to",
+            "budget_scenario",
+            "activity_account_id",
+        ):
+            value = values[field_name]
+            if field_name == "activity_account_id" and not value:
+                domain.append((field_name, "=", False))
+            else:
+                domain.append((field_name, "=", value))
+        return domain
+
+    @api.model
+    def action_open_default_cockpit(self):
+        values = self._default_open_values()
+        cockpit = self.search(
+            self._domain_for_open_values(values),
+            limit=1,
+            order="id desc",
+        )
+        if not cockpit:
+            cockpit = self.create(values)
+        cockpit.with_context(glc_cockpit_auto_refreshing=True).action_refresh()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Cockpit couverture des charges de structure"),
+            "res_model": self._name,
+            "res_id": cockpit.id,
+            "view_mode": "form",
+            "target": "current",
+            "context": {
+                "form_view_initial_mode": "edit",
+                "no_breadcrumbs": True,
+            },
+        }
+
+    def action_open_detail_grouped(self):
+        """Ouvre une vraie vue liste Odoo (group_by natif non fiable en one2many inline)."""
+        self.ensure_one()
+        if self._needs_refresh():
+            self.with_context(glc_cockpit_auto_refreshing=True).action_refresh()
+        list_view = self.env.ref(
+            "dorevia_glc_analytics.view_glc_coverage_cockpit_line_list_grouped"
+        )
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Détail par activité — %s") % (self.display_title or ""),
+            "res_model": "glc.coverage.cockpit.line",
+            "view_mode": "list",
+            "views": [(list_view.id, "list")],
+            "domain": [
+                ("cockpit_id", "=", self.id),
+                ("line_kind", "=", "activity"),
+            ],
+            "context": {
+                "search_default_group_month": 1,
+                "create": False,
+                "edit": False,
+                "delete": False,
+            },
+            "target": "current",
+        }
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        cleaned_vals_list = [
+            {key: value for key, value in vals.items() if key != "line_ids"}
+            for vals in vals_list
+        ]
+        cockpits = super().create(cleaned_vals_list)
+        stale = cockpits.filtered(lambda c: not c.is_refreshed)
+        if stale and not self.env.context.get("glc_cockpit_auto_refreshing"):
+            stale.with_context(glc_cockpit_auto_refreshing=True).action_refresh()
+        return cockpits
+
+    def web_read(self, specification):
+        self._ensure_refreshed_for_display()
+        return super().web_read(specification)
+
+    def web_save(self, vals, specification, next_id=None):
+        if "line_ids" in vals:
+            vals = {key: value for key, value in vals.items() if key != "line_ids"}
+        return super().web_save(vals, specification, next_id=next_id)
+
+    def _ensure_refreshed_for_display(self):
+        if self.env.context.get("glc_cockpit_auto_refreshing"):
+            return
+        stale = self.filtered(lambda cockpit: cockpit._needs_refresh())
+        if stale:
+            stale.with_context(glc_cockpit_auto_refreshing=True).action_refresh()
+
+    def _current_refresh_key(self):
+        self.ensure_one()
+        return "%s|%s|%s" % (
+            self.date_from or "",
+            self.date_to or "",
+            self.budget_scenario or "",
+        )
+
+    def _needs_refresh(self):
+        self.ensure_one()
+        if not self.is_refreshed or not self.refresh_key:
+            return True
+        return self.refresh_key != self._current_refresh_key()
+
+    @api.model
+    def _cron_refresh_cockpits(self):
+        for cockpit in self.search([]):
+            cockpit.action_refresh()
+
+    def write(self, vals):
+        if "line_ids" in vals:
+            vals = {key: value for key, value in vals.items() if key != "line_ids"}
+        res = super().write(vals)
+        if not self.env.context.get("glc_cockpit_auto_refreshing"):
+            should_refresh = self._FILTER_FIELDS.intersection(vals) or self.filtered(
+                lambda cockpit: cockpit._needs_refresh()
+            )
+            if should_refresh:
+                self.with_context(glc_cockpit_auto_refreshing=True).action_refresh()
+        return res
 
     @api.depends("company_id")
     def _compute_currency_id(self):
         for cockpit in self:
             cockpit.currency_id = cockpit.company_id.currency_id
 
-    @api.depends("year", "month", "budget_scenario", "activity_account_id")
+    _SHORT_MONTHS = {
+        1: "janv.",
+        2: "févr.",
+        3: "mars",
+        4: "avr.",
+        5: "mai",
+        6: "juin",
+        7: "juil.",
+        8: "août",
+        9: "sept.",
+        10: "oct.",
+        11: "nov.",
+        12: "déc.",
+    }
+
+    _LONG_MONTHS = {
+        1: "Janvier",
+        2: "Février",
+        3: "Mars",
+        4: "Avril",
+        5: "Mai",
+        6: "Juin",
+        7: "Juillet",
+        8: "Août",
+        9: "Septembre",
+        10: "Octobre",
+        11: "Novembre",
+        12: "Décembre",
+    }
+
+    @api.model
+    def _format_short_date(self, value):
+        return "%s %s" % (value.day, self._SHORT_MONTHS[value.month])
+
+    @api.depends("date_from", "date_to")
+    def _compute_period_labels(self):
+        for cockpit in self:
+            if cockpit.date_from and cockpit.date_to:
+                start = cockpit._format_short_date(cockpit.date_from)
+                end = cockpit._format_short_date(cockpit.date_to)
+                cockpit.period_range_label = _("%(start)s → %(end)s", start=start, end=end)
+            else:
+                cockpit.period_range_label = False
+
+    @api.depends("date_from", "date_to", "budget_scenario")
     def _compute_display_title(self):
-        month_labels = dict(self._fields["month"].selection)
         scenario_labels = dict(self._fields["budget_scenario"].selection)
         for cockpit in self:
-            period = month_labels.get(cockpit.month, "")
-            if cockpit.month == "0":
-                period = _("Année complète")
-            activity = cockpit.activity_account_id.display_name or _("Toutes activités")
+            if not cockpit.date_from or not cockpit.date_to:
+                cockpit.display_title = _("Cockpit GLC")
+                continue
+            scenario = scenario_labels.get(
+                cockpit.budget_scenario, cockpit.budget_scenario
+            )
+            if cockpit._is_full_single_calendar_month():
+                period = cockpit._LONG_MONTHS[cockpit.date_from.month]
+            else:
+                start = cockpit._format_short_date(cockpit.date_from)
+                end = cockpit._format_short_date(cockpit.date_to)
+                period = _("%(start)s → %(end)s", start=start, end=end)
             cockpit.display_title = _(
-                "Cockpit GLC · %(year)s · %(period)s · %(scenario)s · %(activity)s",
-                year=cockpit.year,
+                "Cockpit GLC · %(year)s · %(period)s · %(scenario)s",
+                year=cockpit.date_from.year,
                 period=period,
-                scenario=scenario_labels.get(cockpit.budget_scenario, cockpit.budget_scenario),
-                activity=activity,
+                scenario=scenario,
             )
 
-    @api.constrains("year")
-    def _check_year(self):
+    @api.depends("line_ids", "line_ids.line_kind")
+    def _compute_detail_line_count(self):
         for cockpit in self:
-            if cockpit.year < 2000 or cockpit.year > 2100:
-                raise UserError(_("L'année doit être comprise entre 2000 et 2100."))
+            cockpit.detail_line_count = len(
+                cockpit.line_ids.filtered(lambda line: line.line_kind == "activity")
+            )
+
+    @api.constrains("date_from", "date_to")
+    def _check_date_range(self):
+        for cockpit in self:
+            if cockpit.date_from and cockpit.date_to and cockpit.date_from > cockpit.date_to:
+                raise UserError(
+                    _("La date de début doit être antérieure ou égale à la date de fin.")
+                )
+
+    def _is_full_single_calendar_month(self):
+        self.ensure_one()
+        if not self.date_from or not self.date_to:
+            return False
+        if (
+            self.date_from.year != self.date_to.year
+            or self.date_from.month != self.date_to.month
+        ):
+            return False
+        last_day = monthrange(self.date_from.year, self.date_from.month)[1]
+        return self.date_from.day == 1 and self.date_to.day == last_day
 
     def _period_bounds(self):
         self.ensure_one()
-        month = int(self.month)
-        if month:
-            date_from = date(self.year, month, 1)
-            date_to = date(self.year, month, monthrange(self.year, month)[1])
-        else:
-            date_from = date(self.year, 1, 1)
-            date_to = date(self.year, 12, 31)
-        return date_from, date_to
+        return self.date_from, self.date_to
+
+    def _month_slice_bounds(self, month_start):
+        self.ensure_one()
+        date_from, date_to = self._period_bounds()
+        month_end = date(
+            month_start.year,
+            month_start.month,
+            monthrange(month_start.year, month_start.month)[1],
+        )
+        return max(date_from, month_start), min(date_to, month_end)
 
     def _month_starts_in_period(self):
         self.ensure_one()
@@ -301,13 +523,25 @@ class GlcCoverageCockpit(models.TransientModel):
         domain = [
             ("allocation_id.company_id", "=", self.company_id.id),
             ("allocation_id.state", "in", ("validated", "locked")),
-            ("allocation_id.period_date", ">=", date_from),
-            ("allocation_id.period_date", "<=", date_to),
         ]
         if activity_account:
             domain.append(("activity_account_id", "=", activity_account.id))
         lines = self.env["glc.salary.allocation.line"].search(domain)
-        return sum(lines.mapped("amount"))
+        total = 0.0
+        for line in lines:
+            alloc_date = line.allocation_id.period_date
+            if not alloc_date:
+                continue
+            month_start = date(alloc_date.year, alloc_date.month, 1)
+            month_end = date(
+                alloc_date.year,
+                alloc_date.month,
+                monthrange(alloc_date.year, alloc_date.month)[1],
+            )
+            if month_end < date_from or month_start > date_to:
+                continue
+            total += line.amount
+        return total
 
     def _ensure_budget_module(self):
         if "glc.budget.line" not in self.env:
@@ -319,16 +553,18 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _budget_lines(self, date_from=None, date_to=None, analytic_accounts=None, line_type=None):
         self._ensure_budget_module()
+        period_start, period_end = self._period_bounds()
+        date_from = date_from or period_start
+        date_to = date_to or period_end
+        month_period_from = date(date_from.year, date_from.month, 1)
+        month_period_to = date(date_to.year, date_to.month, 1)
         domain = [
             ("company_id", "=", self.company_id.id),
-            ("year", "=", self.year),
             ("scenario", "=", self.budget_scenario),
             ("budget_id.state", "in", ("validated", "archived")),
+            ("period_date", ">=", month_period_from),
+            ("period_date", "<=", month_period_to),
         ]
-        if date_from:
-            domain.append(("period_date", ">=", date_from))
-        if date_to:
-            domain.append(("period_date", "<=", date_to))
         if analytic_accounts:
             domain.append(("analytic_account_id", "in", analytic_accounts.ids))
         if line_type:
@@ -345,22 +581,21 @@ class GlcCoverageCockpit(models.TransientModel):
             return (
                 "red",
                 _(
-                    "Les ressources disponibles ne couvrent pas la masse salariale "
-                    "(recettes d'activité + financements insuffisants)."
+                    "Les ressources disponibles ne couvrent pas la masse salariale."
                 ),
             )
         if resources < payroll + general_expenses:
             return (
                 "orange",
                 _(
-                    "Les ressources couvrent la masse salariale, mais pas les frais généraux "
-                    "(Structure & Administration)."
+                    "Les ressources couvrent la masse salariale, "
+                    "mais pas toutes les charges de structure."
                 ),
             )
         return (
             "green",
             _(
-                "Les ressources couvrent la masse salariale et les frais généraux."
+                "Les ressources couvrent les charges de structure."
             ),
         )
 
@@ -420,9 +655,19 @@ class GlcCoverageCockpit(models.TransientModel):
         }
 
     def action_refresh(self):
+        for cockpit in self:
+            cockpit._action_refresh_single()
+        return True
+
+    def _action_refresh_single(self):
         self.ensure_one()
+        if self.activity_account_id:
+            super(
+                GlcCoverageCockpit,
+                self.with_context(glc_cockpit_auto_refreshing=True),
+            ).write({"activity_account_id": False})
         self._ensure_budget_module()
-        self.line_ids.unlink()
+        self.line_ids.with_context(glc_cockpit_auto_refreshing=True).unlink()
         date_from, date_to = self._period_bounds()
         totals = self._aggregate_period(date_from, date_to)
 
@@ -443,6 +688,7 @@ class GlcCoverageCockpit(models.TransientModel):
         line_vals = []
         activity_accounts = self._activity_accounts()
         for month_start in self._month_starts_in_period():
+            slice_from, slice_to = self._month_slice_bounds(month_start)
             month_end = date(
                 month_start.year,
                 month_start.month,
@@ -451,7 +697,7 @@ class GlcCoverageCockpit(models.TransientModel):
             for account in activity_accounts:
                 if account.code in GLC_COCKPIT_ACTIVITY_REVENUE_CODES:
                     revenue_realized = self._sum_analytic_realized(
-                        account, month_start, month_end
+                        account, slice_from, slice_to
                     )
                     revenue_budget = self._sum_budget(
                         month_start, month_end, account, "revenue"
@@ -464,14 +710,14 @@ class GlcCoverageCockpit(models.TransientModel):
                 expense_budget = 0.0
                 if account.code == GLC_COCKPIT_GENERAL_EXPENSE_CODE:
                     expense_realized = self._sum_analytic_realized(
-                        account, month_start, month_end
+                        account, slice_from, slice_to
                     )
                     expense_budget = self._sum_budget(
                         month_start, month_end, account, "expense"
                     )
 
                 payroll_realized = self._sum_payroll_realized(
-                    month_start, month_end, account
+                    slice_from, slice_to, account
                 )
                 payroll_budget = 0.0
                 if account.code in GLC_COCKPIT_PAYROLL_BUDGET_CODES:
@@ -491,29 +737,29 @@ class GlcCoverageCockpit(models.TransientModel):
                 ):
                     continue
 
+                line_amounts = {
+                    "revenue_realized": revenue_realized,
+                    "revenue_budget": revenue_budget,
+                    "expense_realized": expense_realized,
+                    "expense_budget": expense_budget,
+                    "payroll_realized": payroll_realized,
+                    "payroll_budget": payroll_budget,
+                }
                 line_vals.append(
-                    {
-                        "cockpit_id": self.id,
-                        "period_date": month_start,
-                        "analytic_account_id": account.id,
-                        "revenue_realized": revenue_realized,
-                        "revenue_budget": revenue_budget,
-                        "expense_realized": expense_realized,
-                        "expense_budget": expense_budget,
-                        "payroll_realized": payroll_realized,
-                        "payroll_budget": payroll_budget,
-                        "variance_revenue": revenue_realized - revenue_budget,
-                        "variance_payroll": payroll_realized - payroll_budget,
-                    }
+                    self._prepare_activity_line_vals(
+                        month_start,
+                        account,
+                        line_amounts,
+                    )
                 )
 
         if line_vals:
-            self.env["glc.coverage.cockpit.line"].create(line_vals)
+            self.env["glc.coverage.cockpit.line"].with_context(
+                glc_cockpit_auto_refreshing=True
+            ).create(line_vals)
 
-        self.write(
+        self.with_context(glc_cockpit_auto_refreshing=True).write(
             {
-                "date_from": date_from,
-                "date_to": date_to,
                 **totals,
                 "salary_coverage_rate": salary_coverage_rate,
                 "balance_after_payroll": balance_after_payroll,
@@ -521,58 +767,152 @@ class GlcCoverageCockpit(models.TransientModel):
                 "alert_status": alert_status,
                 "alert_message": alert_message,
                 "is_refreshed": True,
+                "refresh_key": self._current_refresh_key(),
             }
         )
 
+        return True
+
+    @api.model
+    def _empty_line_amounts(self):
         return {
-            "type": "ir.actions.act_window",
-            "name": _("Cockpit couverture des salaires"),
-            "res_model": "glc.coverage.cockpit",
-            "res_id": self.id,
-            "view_mode": "form",
-            "target": "current",
+            "has_amounts": False,
+            "revenue_realized": 0.0,
+            "revenue_budget": 0.0,
+            "expense_realized": 0.0,
+            "expense_budget": 0.0,
+            "payroll_realized": 0.0,
+            "payroll_budget": 0.0,
+        }
+
+    @api.model
+    def _accumulate_line_amounts(self, target, source):
+        for key in (
+            "revenue_realized",
+            "revenue_budget",
+            "expense_realized",
+            "expense_budget",
+            "payroll_realized",
+            "payroll_budget",
+        ):
+            target[key] += source[key]
+        target["has_amounts"] = True
+
+    @api.model
+    def _month_key(self, month_start):
+        return "%04d-%02d" % (month_start.year, month_start.month)
+
+    @api.model
+    def _month_label(self, month_start):
+        return _("%(month)s %(year)s") % {
+            "month": self._LONG_MONTHS[month_start.month],
+            "year": month_start.year,
+        }
+
+    def _prepare_activity_line_vals(self, month_start, account, amounts):
+        self.ensure_one()
+        return {
+            "cockpit_id": self.id,
+            "line_kind": "activity",
+            "period_date": month_start,
+            "month_key": self._month_key(month_start),
+            "month_label": self._month_label(month_start),
+            "analytic_account_id": account.id,
+            "activity_label": account.display_name,
+            "revenue_realized": amounts["revenue_realized"],
+            "revenue_budget": amounts["revenue_budget"],
+            "expense_realized": amounts["expense_realized"],
+            "expense_budget": amounts["expense_budget"],
+            "payroll_realized": amounts["payroll_realized"],
+            "payroll_budget": amounts["payroll_budget"],
+            "variance_revenue": amounts["revenue_realized"] - amounts["revenue_budget"],
+            "variance_payroll": amounts["payroll_realized"] - amounts["payroll_budget"],
+            "variance_expense": amounts["expense_realized"] - amounts["expense_budget"],
+        }
+
+    def _prepare_total_line_vals(self, period_date, line_kind, amounts, label):
+        self.ensure_one()
+        if line_kind == "period_total":
+            month_key = "9999-99"
+            month_label = ""
+        else:
+            month_key = self._month_key(period_date)
+            month_label = self._month_label(period_date)
+        return {
+            "cockpit_id": self.id,
+            "line_kind": line_kind,
+            "period_date": period_date,
+            "month_key": month_key,
+            "month_label": month_label,
+            "activity_label": label,
+            "revenue_realized": amounts["revenue_realized"],
+            "revenue_budget": amounts["revenue_budget"],
+            "expense_realized": amounts["expense_realized"],
+            "expense_budget": amounts["expense_budget"],
+            "payroll_realized": amounts["payroll_realized"],
+            "payroll_budget": amounts["payroll_budget"],
+            "variance_revenue": amounts["revenue_realized"] - amounts["revenue_budget"],
+            "variance_payroll": amounts["payroll_realized"] - amounts["payroll_budget"],
+            "variance_expense": amounts["expense_realized"] - amounts["expense_budget"],
         }
 
 
 class GlcCoverageCockpitLine(models.TransientModel):
     _name = "glc.coverage.cockpit.line"
     _description = "Détail cockpit couverture GLC"
-    _order = "period_date, analytic_account_id"
+    _order = "month_key, line_kind, analytic_account_id, id"
+    _rec_name = "activity_label"
 
     cockpit_id = fields.Many2one(
         "glc.coverage.cockpit",
         required=True,
         ondelete="cascade",
     )
+    line_kind = fields.Selection(
+        string="Type de ligne",
+        selection=[
+            ("activity", "Activité"),
+            ("month_total", "Total mensuel"),
+            ("period_total", "Total période"),
+        ],
+        required=True,
+        default="activity",
+    )
     period_date = fields.Date(string="Mois", required=True)
+    month_key = fields.Char(string="Clé mois", required=True, index=True)
+    month_label = fields.Char(string="Libellé mois")
     analytic_account_id = fields.Many2one(
         "account.analytic.account",
-        string="Activité GLC",
-        required=True,
+        string="Activité",
     )
-    currency_id = fields.Many2one(related="cockpit_id.currency_id")
+    activity_label = fields.Char(string="Libellé activité")
+    currency_id = fields.Many2one(
+        related="cockpit_id.currency_id",
+        store=True,
+        readonly=True,
+    )
     revenue_realized = fields.Monetary(
-        string="Recettes (réalisé)",
+        string="Recettes réel",
         currency_field="currency_id",
     )
     revenue_budget = fields.Monetary(
-        string="Recettes (budget)",
+        string="Recettes budget",
         currency_field="currency_id",
     )
     expense_realized = fields.Monetary(
-        string="Frais généraux (réalisé)",
+        string="Frais gén. réel",
         currency_field="currency_id",
     )
     expense_budget = fields.Monetary(
-        string="Frais généraux (budget)",
+        string="Frais gén. budget",
         currency_field="currency_id",
     )
     payroll_realized = fields.Monetary(
-        string="Masse salariale (réalisé)",
+        string="Masse sal. réel",
         currency_field="currency_id",
     )
     payroll_budget = fields.Monetary(
-        string="Masse salariale (budget)",
+        string="Masse sal. budget",
         currency_field="currency_id",
     )
     variance_revenue = fields.Monetary(
@@ -580,6 +920,31 @@ class GlcCoverageCockpitLine(models.TransientModel):
         currency_field="currency_id",
     )
     variance_payroll = fields.Monetary(
-        string="Écart masse salariale",
+        string="Écart masse sal.",
         currency_field="currency_id",
     )
+    variance_expense = fields.Monetary(
+        string="Écart frais gén.",
+        currency_field="currency_id",
+    )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        if not self.env.context.get("glc_cockpit_auto_refreshing"):
+            return self.browse()
+        cleaned_vals_list = [
+            vals for vals in vals_list if vals.get("cockpit_id")
+        ]
+        if not cleaned_vals_list:
+            return self.browse()
+        return super().create(cleaned_vals_list)
+
+    def write(self, vals):
+        if not self.env.context.get("glc_cockpit_auto_refreshing"):
+            return True
+        return super().write(vals)
+
+    def unlink(self):
+        if not self.env.context.get("glc_cockpit_auto_refreshing"):
+            return True
+        return super().unlink()

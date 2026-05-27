@@ -1,11 +1,11 @@
 # Ticket Palier 4bis — Finition UX cockpit
 
 **Module :** `dorevia_glc_analytics` *(extension)*  
-**Branche cible :** `feat/glc-palier-4bis-cockpit-ux`  
-**Version cible :** `19.0.4.1.0`  
-**Statut :** **En cours** — Palier 4 moteur gelé MOA (`19.0.4.0.0`)
+**Branches :** `feat/glc-palier-4bis-cockpit-ux` (P4bis période libre) · `feat/glc-cockpit-detail-groupby` (UX-GROUPBY)  
+**Version livrée :** `19.0.4.4.2`  
+**Statut :** **GO MOA** sur `19.0.4.4.2` — Palier 4 période libre **GO avec réserves** sur `19.0.4.2.5` ; UX-GROUPBY **GO MOA** (Option C composant OWL custom) → [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](./TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md)
 
-**Références :** [TICKET_PALIER_4.md](./TICKET_PALIER_4.md) · [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) · [RECETTE_MANUELLE_PALIER_4.md](./RECETTE_MANUELLE_PALIER_4.md)
+**Références :** [TICKET_PALIER_4.md](./TICKET_PALIER_4.md) · [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) · [RECETTE_MANUELLE_PALIER_4.md](./RECETTE_MANUELLE_PALIER_4.md) · [Recette période libre](./recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md)
 
 ---
 
@@ -32,6 +32,7 @@ Rendre le cockpit **lisible en français** et **présentable à GLC**, sans modi
 | Bandeau d’alerte clarifié | Modification de `dorevia_glc_budget` |
 | Tableau Activité × Mois lisible | Nouveaux indicateurs métier |
 | Titre écran (fini le nom technique `glc.coverage.cockpit,N`) | |
+| Onglets détail : Activité × Mois · Ressources · Charges de structure (verdict en haut) | |
 
 ---
 
@@ -50,8 +51,20 @@ Rendre le cockpit **lisible en français** et **présentable à GLC**, sans modi
 - [ ] CA-UX2 — KPI regroupés Réalisé / Budget avec wording MOA
 - [ ] CA-UX3 — Bandeau alerte compréhensible sans connaissance technique
 - [ ] CA-UX4 — Tableau Activité × Mois en français métier
-- [ ] CA-UX5 — Titre écran = libellé métier (pas le nom technique du modèle)
+- [ ] CA-UX5 — Titre métier complet dans l'en-tête Odoo uniquement (pas de doublon H1 dans le corps)
 - [ ] CA-UX6 — 46 tests GLC verts, invariants I1–I7 inchangés
+- [ ] CA-UX7 — Filtres · alerte visible · onglets : Détail par activité · Ressources · Charges de structure · Infos
+- [ ] CA-UX8 — Wording lecture CA : filtres FR, colonnes tableau courtes, période cohérente avec le mois sélectionné
+- [ ] CA-UX9 — Breadcrumb / nom d'enregistrement = titre métier courant (`display_title`), sans répétition dans le corps
+- [ ] CA-UX10 — Ouverture directe état par défaut + recalcul auto ; pas de bouton Actualiser visible
+- [ ] CA-UX11 — Pas d'en-tête technique Odoo (breadcrumb / titre d'enregistrement) dans l'écran cockpit
+- [ ] CA-UX12 — Wording charges de structure (dont masse salariale / frais généraux, solde et alertes alignés MOA)
+- [ ] CA-UX13 — Onglet Détail sans ligne : état vide explicite, bandeau alerte masqué
+- [ ] CA-UX14 — Filtre Activité retiré de la vue ; titre sans mention d'activité ; toutes activités actives
+- [ ] CA-UX15 — Champ Mois analysé retiré des filtres visibles (redondant avec titre, Mois et Période analysée)
+- [ ] CA-P4-PERIOD — Filtres date de début / date de fin + regroupement mensuel automatique
+- [x] CA-P4-R10 — Recalcul immédiat des lignes et KPI au changement date_from / date_to / scénario (totaux mensuels et total période)
+- [x] CA-UX-GROUPBY — Détail par activité structuré par mois avec sous-totaux mensuels + total période ; lignes `activity` seules en base ; anti-double comptage UX-G5 par construction backend → [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](./TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) *(arbitrage final MOA : Option C composant OWL custom `glc_coverage_detail` — `19.0.4.4.2`)*
 
 ---
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.4.1.0",
+    "version": "19.0.4.4.2",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — plans Activités et Financements.",
     "description": """
@@ -41,6 +41,7 @@ Voir docs/PALIERS.md.
     "author": "Dorevia",
     "license": "LGPL-3",
     "depends": [
+        "web",
         "account",
         "analytic",
         "hr",
@@ -51,6 +52,7 @@ Voir docs/PALIERS.md.
         "data/analytic_plan_data.xml",
         "data/analytic_account_data.xml",
         "data/ir_config_parameter_data.xml",
+        "data/glc_coverage_cockpit_cron.xml",
         "views/account_analytic_account_views.xml",
         "views/glc_account_funding_rule_views.xml",
         "views/glc_analytic_anomaly_views.xml",
@@ -62,4 +64,12 @@ Voir docs/PALIERS.md.
     "installable": True,
     "application": False,
     "pre_init_hook": "pre_init_hook",
+    "assets": {
+        "web.assets_backend": [
+            "dorevia_glc_analytics/static/src/js/glc_coverage_cockpit_form_view.esm.js",
+            "dorevia_glc_analytics/static/src/js/glc_coverage_detail_widget.esm.js",
+            "dorevia_glc_analytics/static/src/xml/glc_coverage_detail_widget.xml",
+            "dorevia_glc_analytics/static/src/scss/glc_coverage_detail_widget.scss",
+        ],
+    },
 }
