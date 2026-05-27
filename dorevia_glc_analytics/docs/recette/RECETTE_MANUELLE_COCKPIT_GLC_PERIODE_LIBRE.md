@@ -14,7 +14,7 @@ Tests automatisés **65/65 OK** sur `dorevia_glc_analytics` + `dorevia_glc_budge
 |---|---|
 | Module cockpit | `dorevia_glc_analytics` |
 | Module budget (prérequis) | `dorevia_glc_budget` |
-| Version attendue | `19.0.4.2.5` |
+| Version attendue | `19.0.4.4.2` |
 | Palier | 4 — Cockpit GLC |
 | Évolution | période libre `date_from` / `date_to` + regroupement mensuel automatique |
 
@@ -39,7 +39,7 @@ Vérifier que le cockpit GLC permet désormais une lecture sur période libre, a
 - Instance de recette redémarrée.
 - **Restart obligatoire du worker Odoo** après upgrade (`docker compose restart odoo`) — un `-u dorevia_glc_analytics` met à jour la DB mais **ne recharge pas le code Python en mémoire** du processus serveur.
 - Navigateur rafraîchi avec **hard refresh** (`Ctrl+Shift+R` / `Cmd+Shift+R`) — **requis MOA** après upgrade pour charger le JS `glc_coverage_cockpit_form_view.esm.js` (refactor `webSave`).
-- Modules installés ou mis à jour en version `19.0.4.2.5` :
+- Modules installés ou mis à jour en version `19.0.4.4.2` :
 
 ```bash
 docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
