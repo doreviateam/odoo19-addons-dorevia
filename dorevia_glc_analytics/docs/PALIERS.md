@@ -18,7 +18,7 @@
 | **1** | `dorevia_glc_analytics` | Règles d'affectation et contrôles | **Validé MOA · gelé** · [PR #25](https://github.com/doreviateam/odoo19-addons-dorevia/pull/25) |
 | **2** | `dorevia_glc_analytics` | Ventilation salariale | **Validé MOA · gelé** · [PR #26](https://github.com/doreviateam/odoo19-addons-dorevia/pull/26) |
 | **3** | `dorevia_glc_budget` | Budget prévisionnel mensuel par axe analytique | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #28](https://github.com/doreviateam/odoo19-addons-dorevia/pull/28) |
-| **4** | `dorevia_glc_analytics` (+ budget) | Cockpit couverture des salaires | **Recette MOA validée** · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) · merge en attente |
+| **4** | `dorevia_glc_analytics` (+ budget) | Cockpit couverture des salaires | **Validé MOA · gelé** · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) · `19.0.4.0.0` |
 | **5** | extensions | Graphiques, exports, scénarios, trésorerie | À planifier |
 
 ### Paliers V1.1 reportés (post-cockpit)
@@ -112,7 +112,7 @@ Saisir une trajectoire prévisionnelle simple, **mois par mois**, par axe analyt
 
 **Ticket :** [TICKET_PALIER_4.md](./TICKET_PALIER_4.md)  
 **Recette :** [RECETTE_MANUELLE_PALIER_4.md](./RECETTE_MANUELLE_PALIER_4.md)  
-**Statut :** **Recette MOA validée** (2026-05-27) · merge [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) en attente
+**Statut :** **Validé MOA · gelé** (2026-05-27) · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) mergée
 
 ### Objectif
 
@@ -210,4 +210,4 @@ dorevia_glc_budget/             # Palier 3
 └── tests/
 ```
 
-**Prochaine livraison = Palier 3 uniquement** (`dorevia_glc_budget`).
+**Prochaine livraison = Palier 5** (enrichissements cockpit — à planifier).

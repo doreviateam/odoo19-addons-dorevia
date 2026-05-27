@@ -94,7 +94,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 | Parcours P4.1–P4.6 | OK |
 | Tests automatisés (46) | OK |
 | Invariants I1–I7 | OK |
-| PR #33 | **Recette MOA validée — merge en attente décision MOA** |
+| PR #33 | **Mergée** — Palier 4 **gelé MOA** (`19.0.4.0.0`) |
 
 ### Points de vigilance (non bloquants)
 
@@ -103,5 +103,5 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 
 ### Suite immédiate
 
-- Décision MOA explicite pour **merge PR #33** sur `main`.
-- Gel Palier 4 post-merge (version `19.0.4.0.0`).
+- Palier 4 **gelé MOA** sur `main`.
+- Palier 5 : enrichissements cockpit (hors périmètre immédiat).

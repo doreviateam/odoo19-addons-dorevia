@@ -4,7 +4,7 @@
 **Dépendance :** `dorevia_glc_budget` (Palier 3)  
 **Branche cible :** `feat/glc-cockpit-palier-4`  
 **Version cible analytics :** `19.0.4.0.0`  
-**Statut :** **Recette MOA validée** (2026-05-27 · `glc-rgl-test-import`) · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) — merge en attente
+**Statut :** **Validé MOA · gelé** (2026-05-27 · `glc-rgl-test-import` · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) mergée)
 
 **Références :** [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) · [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md) · [TICKET_PALIER_3.md](./TICKET_PALIER_3.md) · [PALIERS.md](./PALIERS.md)
 

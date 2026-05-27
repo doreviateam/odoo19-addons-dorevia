@@ -170,4 +170,4 @@ Les invariants I1–I7 sont acceptés tels quels. Prochaine étape : confirmatio
 
 ---
 
-*Document validé MOA — Palier 4 en développement (`feat/glc-cockpit-palier-4`).*
+*Palier 4 livré et gelé MOA sur `main` — version `19.0.4.0.0` · PR #33 mergée.*

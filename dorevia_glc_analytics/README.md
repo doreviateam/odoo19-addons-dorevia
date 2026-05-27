@@ -11,10 +11,11 @@ Module Odoo 19 CE — **Pilotage analytique associatif** pour GLC (Saint-Aignan-
 | 0 — Socle analytique | `19.0.1.0.0` | Validé MOA |
 | 1 — Anomalies analytiques | `19.0.2.0.0` | Validé MOA |
 | 2 — Ventilation salariale | `19.0.3.0.0` | Validé MOA · **gelé** |
+| 4 — Cockpit couverture salaires | `19.0.4.0.0` | Validé MOA · **gelé** |
 
-**Version courante :** `19.0.4.0.0` (Palier 4 cockpit en cours).
+**Version courante :** `19.0.4.0.0` (Palier 4 cockpit).
 
-**Suite MOA :** Palier 4 — cockpit couverture des salaires (en développement) · Palier 3 gelé dans `dorevia_glc_budget`.  
+**Suite MOA :** Palier 5 — enrichissements cockpit (exports, scénarios, trésorerie) · Palier 3 gelé dans `dorevia_glc_budget`.  
 Voir [cadrage Budget & Cockpit](./docs/CADRAGE_BUDGET_COCKPIT.md) · [ticket Palier 3](./docs/TICKET_PALIER_3.md) · [PALIERS.md](./docs/PALIERS.md).
 
 ## Renommage module (`19.0.3.1.0`)
