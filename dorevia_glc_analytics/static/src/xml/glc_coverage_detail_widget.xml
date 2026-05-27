@@ -11,7 +11,7 @@
                             <th colspan="3" class="text-center o_glc_family_recettes o_glc_family_recettes_end">Recettes</th>
                             <th colspan="3" class="text-center o_glc_family_payroll o_glc_family_payroll_end">Salaires</th>
                             <th colspan="3" class="text-center o_glc_family_expense o_glc_family_expense_end">Dépenses</th>
-                            <th colspan="3" class="text-center o_glc_family_performance">Performance</th>
+                            <th colspan="3" class="text-center o_glc_family_performance">Marge d'activité</th>
                         </tr>
                         <tr class="o_glc_subheader_row small text-muted">
                             <th class="text-end o_glc_family_recettes">Réel</th>

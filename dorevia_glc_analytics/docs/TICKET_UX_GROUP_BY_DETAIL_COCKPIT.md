@@ -415,4 +415,5 @@ Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet 
 *Ticket rédigé MOA — 2026-05-27.  
 Verdict final MOA UX-GROUPBY — 2026-05-27 (version livrée `19.0.4.4.2`).  
 Complément PERFORMANCE — `19.0.4.5.0` — GO MOA fonctionnel 2026-05-27.  
-Finition séparation familles — `19.0.4.5.1` — GO MOA UX 2026-05-27 — **cible UX validée pour ce palier**.*
+Finition séparation familles — `19.0.4.5.1` — GO MOA UX 2026-05-27 — **cible UX validée pour ce palier**.  
+Wording MOA — `19.0.4.6.1` — bloc « PERFORMANCE » renommé **« Marge d'activité »** dans l'UI (noms techniques conservés ; formule inchangée).*

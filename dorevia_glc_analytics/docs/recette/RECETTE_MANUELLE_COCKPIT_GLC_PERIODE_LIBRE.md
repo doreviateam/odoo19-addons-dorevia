@@ -517,6 +517,8 @@ Le tableau doit toujours correspondre exactement à la période affichée dans l
 
 ## R12 — Bloc PERFORMANCE + séparation familles (`19.0.4.5.1`)
 
+> **Note de wording — `19.0.4.6.1` :** le bloc historiquement nommé **PERFORMANCE** est désormais libellé **« Marge d'activité »** dans l'UI (en-tête famille, KPI, titres de graphiques). Les noms techniques (`performance_realized`, `performance_budget`, `variance_performance`, `o_glc_family_performance`, `computePerformanceAmounts`) sont **conservés**. Formule inchangée : Marge d'activité = Recettes − Salaires − Dépenses hors salaires.
+
 ### Contexte
 
 Complément MOA post-validation UX `19.0.4.4.2` :
@@ -567,7 +569,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
   --stop-after-init --no-http
 ```
 
-| Résultat attendu | Résultat recette `19.0.4.6.0` |
+| Résultat attendu | Résultat recette `19.0.4.6.1` |
 |---|---|
 | Tests `dorevia_glc_analytics` | **63 tests** |
 | Tests `dorevia_glc_budget` | **14 tests** |
@@ -599,21 +601,25 @@ Tests UX-GROUPBY / PERFORMANCE :
 | R10 | Recalcul lignes au changement filtre | OK | Cas 1, 2, 3 validés (`19.0.4.2.5`) |
 | **R11** | **UX-GROUPBY (composant OWL `glc_coverage_detail`)** | **GO** | Blocs mensuels, sous-totaux, total période, zéros `—` (`19.0.4.4.2`) |
 | **R12** | **PERFORMANCE + séparation familles (cible UX validée)** | **GO** | `19.0.4.5.1` — blocs distincts, formules performance, finition visuelle familles |
-| **R13** | **Synthèse graphique (4 KPI + 3 graphes Chart.js)** | **À recetter** | `19.0.4.6.0` — onglet 1 cockpit GLC |
+| **R13** | **Synthèse graphique — Marge d'activité (4 KPI + 3 graphes Chart.js)** | **À recetter** | `19.0.4.6.1` — onglet 1 cockpit GLC, wording MOA Marge |
 
 ---
 
-## R13 — Onglet Synthèse graphique (`19.0.4.6.0`)
+## R13 — Onglet Synthèse graphique — Marge d'activité (`19.0.4.6.1`)
 
 ### Contexte
 
 Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage en complément du Détail par activité (cible UX validée).
 
+**Doctrine wording MOA (`19.0.4.6.1`) :** le bloc historiquement nommé **PERFORMANCE** est désormais libellé **« Marge d'activité »** (ou **« Marge »** selon la place). **SALAIRES** est conservé. Formule inchangée :
+
+> Marge d'activité = Recettes − Salaires − Dépenses hors salaires
+
 **Référence ticket :** [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](../TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md).
 
 ### Pré-requis
 
-- Upgrade en **`19.0.4.6.0`** + restart Odoo + hard refresh navigateur.
+- Upgrade en **`19.0.4.6.1`** + restart Odoo + hard refresh navigateur.
 - Cockpit multi-mois (ex. `1 janv. → 31 mai`) avec au moins une activité ayant recettes, salaires et dépenses sur la période.
 
 ### Procédure R13
@@ -621,16 +627,19 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | Référence | Point de contrôle | OK | Observations |
 |---|---|:---:|---|
 | R13-ORDER | Ordre des onglets : Synthèse graphique · Détail par activité · Ressources · Charges de structure · Infos | [ ] | Synthèse en premier |
-| R13-KPI-PERF | KPI Performance réelle affichée signée (vert si > 0, rouge si < 0, neutre si 0) | [ ] | Format `+ x €` / `- x €` / `—` |
-| R13-KPI-BUD | KPI Performance budget affichée neutre | [ ] | |
-| R13-KPI-VAR | KPI Écart performance signé, vert/rouge selon signe | [ ] | |
+| R13-WORDING | Wording **Marge d'activité** (et non « Performance ») dans KPI, titres graphes et intro onglet | [ ] | Doctrine `19.0.4.6.1` : SALAIRES conservé, PERFORMANCE → MARGE D'ACTIVITÉ |
+| R13-FORMULE | Précision visible : « Marge d'activité = Recettes − Salaires − Dépenses hors salaires » | [ ] | Sous le titre de l'onglet Synthèse |
+| R13-KPI-MR | KPI **Marge réelle** signée (vert si > 0, rouge si < 0, neutre si 0) | [ ] | Format `+ x €` / `- x €` / `—` |
+| R13-KPI-MB | KPI **Marge budget** affichée neutre | [ ] | |
+| R13-KPI-VM | KPI **Écart de marge** signé, vert/rouge selon signe | [ ] | |
 | R13-KPI-COV | KPI Couverture salaires : seuils vert ≥ 100 %, orange 80–100 %, rouge < 80 % | [ ] | Formule `Recettes réelles / Salaires réels × 100` ; `—` si salaires = 0 |
-| R13-GR1 | Graphique Performance mensuelle (barres réel vs budget) | [ ] | Vert réel, gris budget |
+| R13-GR1 | Graphique **Marge d'activité mensuelle** (barres réel vs budget) | [ ] | Vert réel, gris budget |
 | R13-GR2 | Graphique Structure mensuelle (barres Recettes / Salaires / Dépenses) | [ ] | **Salaires et dépenses en valeurs positives de consommation** |
-| R13-GR3 | Graphique Performance par activité (barres horizontales) | [ ] | Tri décroissant ; vert si positive, rouge si négative |
+| R13-GR3 | Graphique **Marge d'activité par activité** (barres horizontales) | [ ] | Tri décroissant ; vert si positive, rouge si négative |
+| R13-LAYOUT | Grille graphiques : 2 par ligne (responsive 1 colonne sous 992 px) | [ ] | `19.0.4.6.0` |
 | R13-REFRESH | Modification des filtres → graphes mis à jour | [ ] | Auto-save + re-render Chart.js |
 | R13-EMPTY | Période sans données → message bandeau, pas de canvas vide | [ ] | |
-| R13-COHESION | Palette cohérente avec le widget Détail (verts/rouges sobres, fond `#f8f9fa` Performance) | [ ] | |
+| R13-COHESION | Palette cohérente avec le widget Détail (verts/rouges sobres, fond `#f8f9fa` Marge) | [ ] | |
 | R13-PARC | Aucun lien externe / drill-down réintroduit | [ ] | Onglet en lecture pure |
 
 ### Verdict R13
@@ -643,7 +652,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 ## Verdict final MOA
 
 - [x] **GO** — R1–R12 OK sur `19.0.4.5.1`
-- [ ] **GO** — R1–R13 sur `19.0.4.6.0` (Synthèse graphique à recetter)
+- [ ] **GO** — R1–R13 sur `19.0.4.6.1` (Synthèse graphique — Marge d'activité — à recetter)
 - [ ] GO avec réserves
 - [ ] NO GO
 

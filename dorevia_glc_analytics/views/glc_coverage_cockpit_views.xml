@@ -53,9 +53,12 @@
 
                     <notebook>
                         <page string="Synthèse graphique" name="page_synthesis">
-                            <p class="text-muted">
+                            <p class="text-muted mb-1">
                                 Lecture immédiate de pilotage :
-                                performance, structure mensuelle et performance par activité.
+                                marge d'activité, structure mensuelle et marge par activité.
+                            </p>
+                            <p class="text-muted small mb-3">
+                                Marge d'activité = Recettes − Salaires − Dépenses hors salaires.
                             </p>
                             <div class="alert alert-light border mb-0" role="status"
                                  invisible="detail_line_count">
@@ -75,7 +78,7 @@
                         <page string="Détail par activité" name="page_detail">
                             <p class="text-muted">
                                 Par activité et par mois : recettes, salaires, dépenses hors salaires
-                                et performance, comparés au prévu.
+                                et marge d'activité, comparés au prévu.
                                 Sous-totaux mensuels et total période calculés côté client.
                             </p>
                             <field name="detail_line_count" invisible="1"/>

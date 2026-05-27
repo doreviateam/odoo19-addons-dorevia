@@ -279,13 +279,13 @@ export class GlcCoverageSynthesisField extends Component {
                 labels,
                 datasets: [
                     {
-                        label: "Performance réelle",
+                        label: "Marge réelle",
                         data: realData,
                         backgroundColor: COLOR_REAL,
                         borderRadius: 2,
                     },
                     {
-                        label: "Performance budget",
+                        label: "Marge budget",
                         data: budgetData,
                         backgroundColor: COLOR_BUDGET,
                         borderRadius: 2,
@@ -335,7 +335,7 @@ export class GlcCoverageSynthesisField extends Component {
                 labels,
                 datasets: [
                     {
-                        label: "Performance réelle (cumul période)",
+                        label: "Marge réelle (cumul période)",
                         data,
                         backgroundColor: colors,
                         borderRadius: 2,
@@ -367,7 +367,7 @@ export class GlcCoverageSynthesisField extends Component {
 
 export const glcCoverageSynthesisField = {
     component: GlcCoverageSynthesisField,
-    displayName: "Synthèse graphique cockpit GLC",
+    displayName: "Synthèse graphique cockpit GLC (marge d'activité)",
     supportedTypes: ["one2many"],
     relatedFields: () => [
         { name: "line_kind", type: "selection" },

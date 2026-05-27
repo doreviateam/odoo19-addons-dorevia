@@ -46,12 +46,26 @@
     .o_glc_kpi_warning  { color: #f0a020; }
     .o_glc_kpi_neutral  { color: var(--bs-body-color, #2c2c2c); }
 
+    // Grille des graphiques : 2 colonnes par ligne (responsive 1 colonne sous 992 px)
+    .o_glc_chart_grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    @media (max-width: 991.98px) {
+        .o_glc_chart_grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
     // Bloc graphique
     .o_glc_chart_block {
         background-color: #ffffff;
         border: 1px solid var(--bs-border-color, #d6d9de);
         border-radius: 6px;
         padding: 1rem 1rem 0.75rem 1rem;
+        min-width: 0;
     }
 
     .o_glc_chart_title {
@@ -70,8 +84,7 @@
     }
 
     .o_glc_chart_canvas_wrapper.o_glc_chart_activity {
-        height: auto;
+        height: 280px;
         min-height: 220px;
-        max-height: 460px;
     }
 }
