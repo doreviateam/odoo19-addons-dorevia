@@ -61,6 +61,7 @@ Le script `migrations/19.0.3.1.0/pre-migrate.py` reprend la même logique lors d
 | [Recette manuelle Palier 2](./docs/RECETTE_MANUELLE_PALIER_2.md) | Ventilation salariale |
 | [Découpage en paliers](./docs/PALIERS.md) | Roadmap |
 | [Audit Paliers 0–3 (avant Palier 4)](./docs/AUDIT_GLC_ANALYTICS_BUDGET_AVANT_PALIER_4.md) | Référence audit officiel MOA |
+| [Release note jalon Paliers 0–4](./docs/RELEASE_NOTE_GLC_ANALYTICS_BUDGET_PALIERS_0_4.md) | Synthèse livraison MOA · versions · limites |
 | [Règles d'affectation](./docs/REGLES_AFFECTATION.md) | Matrice double axe |
 | [Matrice de migration](./docs/MATRICE_MIGRATION.md) | Ancien plan → plan cible |
 

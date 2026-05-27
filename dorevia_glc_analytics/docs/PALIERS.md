@@ -6,7 +6,8 @@
 > GLC pilote ses activités avec deux axes : **ce que l'association fait**, et **ce qui finance ce qu'elle fait**.  
 > Après le Palier 2, la priorité MOA est un **cockpit de soutenabilité économique** (couverture des salaires).
 
-**Cadrage détaillé :** [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)
+**Cadrage détaillé :** [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)  
+**Release note jalon :** [RELEASE_NOTE_GLC_ANALYTICS_BUDGET_PALIERS_0_4.md](./RELEASE_NOTE_GLC_ANALYTICS_BUDGET_PALIERS_0_4.md)
 
 ---
 
