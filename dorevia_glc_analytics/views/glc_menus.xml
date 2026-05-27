@@ -56,7 +56,7 @@
 
     <menuitem
         id="menu_glc_coverage_cockpit"
-        name="Cockpit couverture des salaires"
+        name="Cockpit couverture des charges de structure"
         parent="menu_glc_analytique_root"
         action="action_glc_coverage_cockpit"
         sequence="65"/>

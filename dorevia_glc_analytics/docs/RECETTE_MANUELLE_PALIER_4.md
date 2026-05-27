@@ -104,4 +104,5 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 ### Suite immédiate
 
 - Palier 4 **gelé MOA** sur `main`.
+- Palier 4bis / **période libre** : [Recette manuelle période libre](./recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md).
 - Palier 5 : enrichissements cockpit (hors périmètre immédiat).

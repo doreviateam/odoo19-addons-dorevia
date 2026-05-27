@@ -1,0 +1,112 @@
+// ---------------------------------------------------------------------------
+// Widget OWL "glc_coverage_detail"
+// Style sobre, aligné sur l'esprit des vues Odoo natives.
+// ---------------------------------------------------------------------------
+
+.o_glc_coverage_detail {
+    .o_glc_detail_table {
+        // En-tête à 2 niveaux : familles + sous-libellés
+        thead {
+            th {
+                vertical-align: bottom;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+            .o_glc_family_row th {
+                border-bottom: 1px solid var(--bs-border-color);
+                padding-top: 0.5rem;
+                padding-bottom: 0.25rem;
+            }
+            .o_glc_subheader_row th {
+                border-bottom: 1px solid var(--bs-border-color);
+                padding-top: 0.25rem;
+                padding-bottom: 0.5rem;
+            }
+        }
+
+        // Séparation verticale fine entre les 3 familles
+        .o_glc_family_payroll,
+        .o_glc_family_expense {
+            border-left: 1px solid var(--bs-border-color-translucent);
+        }
+        thead .o_glc_family_payroll,
+        thead .o_glc_family_expense {
+            border-left: 1px solid var(--bs-border-color);
+        }
+
+        // Bandeau "titre de mois" : discret, fond gris léger, majuscules, séparateur fin
+        .o_glc_month_title th {
+            background-color: var(--bs-tertiary-bg, #f4f4f6);
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--bs-secondary-color, #6c757d);
+            padding: 0.5rem 0.75rem;
+            border-top: 1px solid var(--bs-border-color);
+            border-bottom: 1px solid var(--bs-border-color);
+        }
+
+        // Lignes d'activité : indentation légère sous le mois
+        .o_glc_activity_row {
+            .o_glc_activity_label {
+                padding-left: 1.5rem;
+            }
+            td {
+                border-top: none;
+                padding-top: 0.35rem;
+                padding-bottom: 0.35rem;
+            }
+        }
+
+        // Sous-total mensuel : ligne de synthèse sobre, gras, séparateur fin haut
+        .o_glc_subtotal_row {
+            font-weight: 700;
+            background-color: rgba(0, 0, 0, 0.015);
+            td {
+                border-top: 1px solid var(--bs-border-color-translucent);
+                padding-top: 0.4rem;
+                padding-bottom: 0.4rem;
+            }
+            .o_glc_subtotal_label {
+                padding-left: 1.5rem;
+                font-style: italic;
+                color: var(--bs-body-color);
+            }
+        }
+
+        // Total période : footer net et marqué, séparation forte avec le dernier mois
+        .o_glc_period_total_foot {
+            .o_glc_period_total_row {
+                font-weight: 700;
+                background-color: var(--bs-tertiary-bg, #f4f4f6);
+                td {
+                    border-top: 3px double var(--bs-emphasis-color, #2c2c2c);
+                    border-bottom: 1px solid var(--bs-border-color);
+                    padding-top: 0.7rem;
+                    padding-bottom: 0.7rem;
+                    font-size: 1rem;
+                }
+                .o_glc_period_total_label {
+                    padding-left: 0.75rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.03em;
+                }
+            }
+        }
+
+        // Écarts : lecture rapide sans surcharge
+        .o_glc_variance_negative {
+            color: #b02a2a;
+        }
+        .o_glc_variance_positive {
+            color: #198754;
+        }
+
+        // Zéros : atténués pour réduire le bruit visuel des colonnes peu renseignées
+        .o_glc_zero {
+            color: var(--bs-tertiary-color, #adb5bd);
+            font-weight: normal;
+        }
+    }
+}

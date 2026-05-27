@@ -19,8 +19,9 @@
 | **1** | `dorevia_glc_analytics` | Règles d'affectation et contrôles | **Validé MOA · gelé** · [PR #25](https://github.com/doreviateam/odoo19-addons-dorevia/pull/25) |
 | **2** | `dorevia_glc_analytics` | Ventilation salariale | **Validé MOA · gelé** · [PR #26](https://github.com/doreviateam/odoo19-addons-dorevia/pull/26) |
 | **3** | `dorevia_glc_budget` | Budget prévisionnel mensuel par axe analytique | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #28](https://github.com/doreviateam/odoo19-addons-dorevia/pull/28) |
-| **4** | `dorevia_glc_analytics` (+ budget) | Cockpit couverture des salaires | **Validé MOA · gelé** · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) · `19.0.4.0.0` |
-| **5** | extensions | Graphiques, exports, scénarios, trésorerie | À planifier |
+| **4** | `dorevia_glc_analytics` (+ budget) | Cockpit couverture des salaires | **Validé MOA · gelé** · `19.0.4.0.0` · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) |
+| **4bis** | `dorevia_glc_analytics` | Finition UX cockpit + période libre + UX-GROUPBY | **GO MOA** (`19.0.4.4.2`) · [TICKET_PALIER_4BIS.md](./TICKET_PALIER_4BIS.md) · UX-GROUPBY Option C OWL → [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](./TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) |
+| **5** | extensions | Graphiques, exports, scénarios, trésorerie | **En pause MOA** |
 
 ### Paliers V1.1 reportés (post-cockpit)
 
