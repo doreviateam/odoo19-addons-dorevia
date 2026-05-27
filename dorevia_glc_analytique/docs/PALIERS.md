@@ -13,7 +13,7 @@
 |---|---|---|
 | **0** | Socle analytique installable | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) |
 | **1** | Règles d'affectation et contrôles | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #25](https://github.com/doreviateam/odoo19-addons-dorevia/pull/25) |
-| **2** | Ventilation salariale | À faire |
+| **2** | Ventilation salariale | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #26](https://github.com/doreviateam/odoo19-addons-dorevia/pull/26) |
 | **3** | Registre bénévole | À faire |
 | **4** | Rapport CA mensuel | À faire |
 | **5** | Clôture analytique mensuelle | À faire |
@@ -78,6 +78,8 @@ Identique au ticket §7 (pas de ventilation, CA, clôture, corrections auto).
 
 ## Palier 2 — Ventilation salariale
 
+**Ticket :** [TICKET_PALIER_2.md](./TICKET_PALIER_2.md)  
+**Recette :** [RECETTE_MANUELLE_PALIER_2.md](./RECETTE_MANUELLE_PALIER_2.md)  
 **Référence :** spec §8.2, §9.2, [MATRICE_MIGRATION.md](./MATRICE_MIGRATION.md)
 
 ### Livrables

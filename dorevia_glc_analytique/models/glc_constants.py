@@ -38,3 +38,5 @@ GLC_FUNDING_MESSAGES = {
     "DONS": "Don sans financement DONS",
     "SUBVENTIONS": "Subvention sans financement SUBVENTIONS",
 }
+
+GLC_PERCENT_TOLERANCE = 0.01

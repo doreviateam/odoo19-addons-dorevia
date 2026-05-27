@@ -7,5 +7,10 @@
             <field name="value">30</field>
         </record>
 
+        <record id="ir_config_parameter_glc_salary_allocation_variance_pct" model="ir.config_parameter">
+            <field name="key">dorevia_glc_analytique.salary_allocation_variance_pct</field>
+            <field name="value">5</field>
+        </record>
+
     </data>
 </odoo>
