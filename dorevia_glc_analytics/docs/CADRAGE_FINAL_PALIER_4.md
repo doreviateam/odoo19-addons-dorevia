@@ -39,27 +39,36 @@ Ces règles sont **structurantes** pour toute implémentation Palier 4. Aucune d
 
 **Interdit :** recalculer ou resaisir le prévisionnel dans le cockpit ; modifier le module `dorevia_glc_budget`.
 
-### I2 — Source réalisé cockpit : `account.analytic.line` (révision MOA 2026-05-28)
+### I2 — Source réalisé cockpit : `account.analytic.line` (révision MOA 2026-05-28 · raffiné `19.0.4.8.0`)
 
 | Attribut | Valeur |
 |---|---|
 | Modèle | `account.analytic.line` |
-| Périmètre | **toutes** les écritures charge/produit + distribution analytique exploitable |
+| Règle de remontée | **date dans la période** + **montant non nul** + **GL classe 6 ou 7** + **distribution analytique exploitable** |
 | Origines | facture client/fournisseur · OD · rapprochement bancaire · caisse |
-| Agrégation | mois × compte analytique × société × nature comptable (7xxx / 6xxx / financement) |
+| Agrégation | mois × compte analytique × société × nature comptable (classe 6 / classe 7) |
 
 **Règle :** la présence ou l'absence d'une facture **n'est pas** un critère d'inclusion.
 
-**Mapping familles cockpit :**
+**Mapping familles cockpit (cartographie GL × plan analytique) :**
 
-| Compte GL | Famille |
-|---|---|
-| 7xxx (revenus) | RECETTES |
-| 631 / 633 / 641 / 645 | SALAIRES |
-| 6xxx hors payroll | DÉPENSES |
-| axes financement | RESSOURCES / FINANCEMENTS |
+| Compte GL | Compte analytique | Famille cockpit | Sens |
+|---|---|---|---|
+| **7xxx** | Plan **Activités GLC** *(toute activité)* | **RECETTES** | + |
+| **7xxx** | Plan **Financements GLC** *(SUBVENTIONS, ADHESIONS, …)* | **RESSOURCES / FINANCEMENTS** | + |
+| **631 / 633 / 641 / 645** | Plan **Activités GLC** *(toute activité)* | **SALAIRES** | − |
+| **6xxx hors payroll** | Plan **Activités GLC** *(toute activité)* | **DÉPENSES** | − |
 
-**Exclusions (I5) :** 411/401 · 512/53 · lettrage seul · sans analytique · comptes legacy / `RH_PERSONNEL`.
+**Toutes** les activités du plan Activités peuvent recevoir des recettes, dépenses ou salaires — il n'y a **plus** de restriction par code analytique (`BAR`, `STRUCTURE`, etc.). Les dépenses **MISSIONS, RESIDENCES, LOCATION_RADIO** apparaissent désormais dans le détail.
+
+**Exclusions (I5) :** classes **1xx / 4xx / 5xx** (164, 401, 411, 467, 512, 53), lettrage seul, lignes sans analytique exploitable, comptes legacy / `RH_PERSONNEL`.
+
+**Défense en profondeur (cumulée) :**
+
+1. `account_type` ∈ income / income_other / expense / expense_direct_cost / expense_depreciation
+2. **garde-fou explicite** : `general_account_id.code` commence par `6` ou `7`
+3. exclusion préfixes `164` + codes analytiques legacy
+4. exclusion préfixes payroll (631/633/641/645) des DÉPENSES
 
 ### I3 — Palier 2 ventilations salariales : rôle contrôle (R2 — révision MOA 2026-05-28)
 
@@ -183,4 +192,5 @@ Les invariants I1–I7 sont acceptés tels quels. Prochaine étape : confirmatio
 ---
 
 *Palier 4 livré et gelé MOA sur `main` — version `19.0.4.0.0` · PR #33 mergée.*  
-*Révision I2/I3/I4 source réalisé cockpit — MOA validée 2026-05-28 · `19.0.4.7.0` · [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md).*
+*Révision I2/I3/I4 source réalisé cockpit — MOA validée 2026-05-28 · `19.0.4.7.0` · [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md).*  
+*Raffinement I2 doctrine classe 6/7 (toute activité) — MOA validée 2026-05-28 · `19.0.4.8.0` · [TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md](./TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md).*

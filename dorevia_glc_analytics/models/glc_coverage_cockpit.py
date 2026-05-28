@@ -509,37 +509,60 @@ class GlcCoverageCockpit(models.TransientModel):
             domain.append((field_name, "=like", prefix + "%"))
         return domain
 
-    def _analytic_line_domain(self, date_from, date_to, analytic_accounts):
-        """Réalisé exploitation hors masse salariale (recettes, dépenses, financements)."""
-        domain = [
+    @api.model
+    def _class_prefix_domain(self, class_prefix):
+        """Garde-fou explicite : code GL commence par `class_prefix` (`'6'` ou `'7'`)."""
+        return [("general_account_id.code", "=like", class_prefix + "%")]
+
+    def _common_period_domain(self, date_from, date_to, analytic_accounts):
+        return [
             ("company_id", "=", self.company_id.id),
             ("date", ">=", date_from),
             ("date", "<=", date_to),
+            *self._analytic_accounts_domain(analytic_accounts),
+            *self._excluded_analytic_domain(),
+        ]
+
+    def _revenue_analytic_line_domain(self, date_from, date_to, analytic_accounts):
+        """Recettes / financements — classe 7 + analytique exploitable."""
+        domain = [
+            *self._common_period_domain(date_from, date_to, analytic_accounts),
             (
                 "general_account_id.account_type",
                 "in",
-                list(GLC_INCOME_ACCOUNT_TYPES + GLC_EXPENSE_ACCOUNT_TYPES),
+                list(GLC_INCOME_ACCOUNT_TYPES),
             ),
-            *self._analytic_accounts_domain(analytic_accounts),
-            *self._excluded_analytic_domain(),
+            *self._class_prefix_domain("7"),
+        ]
+        for prefix in GLC_EXCLUDED_GL_ACCOUNT_PREFIXES:
+            domain.append(("general_account_id.code", "not like", prefix + "%"))
+        return domain
+
+    def _expense_analytic_line_domain(self, date_from, date_to, analytic_accounts):
+        """Dépenses hors masse salariale — classe 6 hors payroll + analytique exploitable."""
+        domain = [
+            *self._common_period_domain(date_from, date_to, analytic_accounts),
+            (
+                "general_account_id.account_type",
+                "in",
+                list(GLC_EXPENSE_ACCOUNT_TYPES),
+            ),
+            *self._class_prefix_domain("6"),
         ]
         for prefix in GLC_PAYROLL_ACCOUNT_PREFIXES + GLC_EXCLUDED_GL_ACCOUNT_PREFIXES:
             domain.append(("general_account_id.code", "not like", prefix + "%"))
         return domain
 
     def _payroll_analytic_line_domain(self, date_from, date_to, analytic_accounts):
-        """Réalisé masse salariale depuis la comptabilité analytique (631/633/641/645)."""
+        """Masse salariale — classe 6 payroll (631/633/641/645) + analytique exploitable."""
         domain = [
-            ("company_id", "=", self.company_id.id),
-            ("date", ">=", date_from),
-            ("date", "<=", date_to),
+            *self._common_period_domain(date_from, date_to, analytic_accounts),
             (
                 "general_account_id.account_type",
                 "in",
                 list(GLC_EXPENSE_ACCOUNT_TYPES),
             ),
-            *self._analytic_accounts_domain(analytic_accounts),
-            *self._excluded_analytic_domain(),
+            *self._class_prefix_domain("6"),
             *self._prefix_or_domain(
                 "general_account_id.code", GLC_PAYROLL_ACCOUNT_PREFIXES
             ),
@@ -553,26 +576,37 @@ class GlcCoverageCockpit(models.TransientModel):
         """Montant exploitable toujours positif pour le cockpit."""
         return abs(line.amount)
 
-    def _sum_analytic_realized(self, analytic_accounts, date_from, date_to):
-        if not analytic_accounts:
-            return 0.0
-        lines = self.env["account.analytic.line"].search(
-            self._analytic_line_domain(date_from, date_to, analytic_accounts)
-        )
+    def _sum_lines(self, domain):
+        lines = self.env["account.analytic.line"].search(domain)
         return sum(self._signed_analytic_amount(line) for line in lines)
 
+    def _sum_revenue_realized(self, analytic_accounts, date_from, date_to):
+        """Σ classe 7 + analytique sur les comptes passés (recettes ou financements)."""
+        if not analytic_accounts:
+            return 0.0
+        return self._sum_lines(
+            self._revenue_analytic_line_domain(date_from, date_to, analytic_accounts)
+        )
+
+    def _sum_expense_realized(self, analytic_accounts, date_from, date_to):
+        """Σ classe 6 hors payroll + analytique sur les comptes passés (dépenses)."""
+        if not analytic_accounts:
+            return 0.0
+        return self._sum_lines(
+            self._expense_analytic_line_domain(date_from, date_to, analytic_accounts)
+        )
+
     def _sum_payroll_realized(self, date_from, date_to, activity_account=None):
-        """Masse salariale réalisée = écritures charge payroll + analytique (I2 révisé)."""
+        """Σ classe 6 payroll + analytique (toutes activités par défaut)."""
         if activity_account:
             analytic_accounts = activity_account
         else:
             analytic_accounts = self._activity_accounts()
         if not analytic_accounts:
             return 0.0
-        lines = self.env["account.analytic.line"].search(
+        return self._sum_lines(
             self._payroll_analytic_line_domain(date_from, date_to, analytic_accounts)
         )
-        return sum(self._signed_analytic_amount(line) for line in lines)
 
     def _ensure_budget_module(self):
         if "glc.budget.line" not in self.env:
@@ -632,21 +666,26 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _aggregate_period(self, period_start, period_end):
         self.ensure_one()
-        revenue_accounts = self._analytic_accounts_by_codes(GLC_COCKPIT_ACTIVITY_REVENUE_CODES)
+        activity_accounts = self._activity_accounts()
         funding_accounts = self._analytic_accounts_by_codes(GLC_COCKPIT_FUNDING_CODES)
-        general_accounts = self._analytic_accounts_by_codes((GLC_COCKPIT_GENERAL_EXPENSE_CODE,))
-        payroll_budget_accounts = self._analytic_accounts_by_codes(GLC_COCKPIT_PAYROLL_BUDGET_CODES)
-
-        if self.activity_account_id:
-            revenue_accounts = self.activity_account_id & revenue_accounts
-            general_accounts = self.activity_account_id & general_accounts
-
-        activity_revenue_realized = self._sum_analytic_realized(
-            revenue_accounts, period_start, period_end
+        revenue_budget_accounts = self._analytic_accounts_by_codes(
+            GLC_COCKPIT_ACTIVITY_REVENUE_CODES
         )
-        funding_realized = self._sum_analytic_realized(funding_accounts, period_start, period_end)
-        general_expenses_realized = self._sum_analytic_realized(
-            general_accounts, period_start, period_end
+        general_budget_accounts = self._analytic_accounts_by_codes(
+            (GLC_COCKPIT_GENERAL_EXPENSE_CODE,)
+        )
+        payroll_budget_accounts = self._analytic_accounts_by_codes(
+            GLC_COCKPIT_PAYROLL_BUDGET_CODES
+        )
+
+        activity_revenue_realized = self._sum_revenue_realized(
+            activity_accounts, period_start, period_end
+        )
+        funding_realized = self._sum_revenue_realized(
+            funding_accounts, period_start, period_end
+        )
+        general_expenses_realized = self._sum_expense_realized(
+            activity_accounts, period_start, period_end
         )
         payroll_realized = self._sum_payroll_realized(
             period_start,
@@ -655,13 +694,13 @@ class GlcCoverageCockpit(models.TransientModel):
         )
 
         activity_revenue_budget = self._sum_budget(
-            period_start, period_end, revenue_accounts, "revenue"
+            period_start, period_end, revenue_budget_accounts, "revenue"
         )
         funding_budget = self._sum_budget(
             period_start, period_end, funding_accounts, "funding"
         )
         general_expenses_budget = self._sum_budget(
-            period_start, period_end, general_accounts, "expense"
+            period_start, period_end, general_budget_accounts, "expense"
         )
         payroll_budget = self._sum_budget(
             period_start, period_end, payroll_budget_accounts, "expense"
@@ -726,35 +765,35 @@ class GlcCoverageCockpit(models.TransientModel):
                 monthrange(month_start.year, month_start.month)[1],
             )
             for account in activity_accounts:
+                revenue_realized = self._sum_revenue_realized(
+                    account, slice_from, slice_to
+                )
                 if account.code in GLC_COCKPIT_ACTIVITY_REVENUE_CODES:
-                    revenue_realized = self._sum_analytic_realized(
-                        account, slice_from, slice_to
-                    )
                     revenue_budget = self._sum_budget(
                         month_start, month_end, account, "revenue"
                     )
                 else:
-                    revenue_realized = 0.0
                     revenue_budget = 0.0
 
-                expense_realized = 0.0
-                expense_budget = 0.0
+                expense_realized = self._sum_expense_realized(
+                    account, slice_from, slice_to
+                )
                 if account.code == GLC_COCKPIT_GENERAL_EXPENSE_CODE:
-                    expense_realized = self._sum_analytic_realized(
-                        account, slice_from, slice_to
-                    )
                     expense_budget = self._sum_budget(
                         month_start, month_end, account, "expense"
                     )
+                else:
+                    expense_budget = 0.0
 
                 payroll_realized = self._sum_payroll_realized(
                     slice_from, slice_to, account
                 )
-                payroll_budget = 0.0
                 if account.code in GLC_COCKPIT_PAYROLL_BUDGET_CODES:
                     payroll_budget = self._sum_budget(
                         month_start, month_end, account, "expense"
                     )
+                else:
+                    payroll_budget = 0.0
 
                 if not any(
                     (

@@ -2,11 +2,11 @@
 
 ## Statut
 
-**GO MOA** sur cockpit GLC période libre — **R1–R14 automatisé OK** sur **`19.0.4.7.0`** (2026-05-28).  
-**74 post-tests verts** (`dorevia_glc_analytics` 70 + `dorevia_glc_budget` 14) · upgrade + restart worker confirmés sur `glc-rgl-test-import`.  
-Compléments manuels R14 **R14-CAISSE**, **R14-OD**, **R14-645-REEL** : **en attente MOA** (interface / données réelles).
+**GO MOA** sur cockpit GLC période libre — **R1–R15 automatisé** cible sur **`19.0.4.8.0`** (2026-05-28).  
+Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : toutes les activités (MISSIONS, RESIDENCES, LOCATION_RADIO, …) remontent dans le détail dès lors qu'elles portent du réel.  
+Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** et **R15-DEP-MISSIONS-REEL** : à jouer côté interface / données réelles.
 
-*(Historique : GO avec réserves Palier 4 `19.0.4.2.5` · UX-GROUPBY `19.0.4.4.2` · Marge d'activité `19.0.4.5.1` · Synthèse graphique `19.0.4.6.1` · source réalisé `19.0.4.7.0`.)*
+*(Historique : GO avec réserves Palier 4 `19.0.4.2.5` · UX-GROUPBY `19.0.4.4.2` · Marge d'activité `19.0.4.5.1` · Synthèse graphique `19.0.4.6.1` · source réalisé `19.0.4.7.0` · doctrine classe 6/7 `19.0.4.8.0`.)*
 
 ## Module
 
@@ -14,7 +14,7 @@ Compléments manuels R14 **R14-CAISSE**, **R14-OD**, **R14-645-REEL** : **en att
 |---|---|
 | Module cockpit | `dorevia_glc_analytics` |
 | Module budget (prérequis) | `dorevia_glc_budget` |
-| Version attendue | `19.0.4.7.0` |
+| Version attendue | `19.0.4.8.0` |
 | Palier | 4 — Cockpit GLC |
 | Évolution | période libre `date_from` / `date_to` + regroupement mensuel automatique |
 
@@ -609,6 +609,7 @@ Tests UX-GROUPBY / PERFORMANCE :
 | **R12** | **PERFORMANCE + séparation familles (cible UX validée)** | **GO** | `19.0.4.5.1` — blocs distincts, formules performance, finition visuelle familles |
 | **R13** | **Synthèse graphique — Marge d'activité (4 KPI + 3 graphes Chart.js)** | **GO** | `19.0.4.6.1` — onglet 1 cockpit GLC, wording MOA Marge |
 | **R14** | **Source de vérité réalisé cockpit (compta analytique + Palier 2 contrôle R2)** | **GO (auto)** | `19.0.4.7.0` — refonte `_sum_payroll_realized` · **74 post-tests verts** (2026-05-28) |
+| **R15** | **Doctrine classe 6/7 + analytique (toute activité)** | **GO (auto cible)** | `19.0.4.8.0` — MISSIONS, RESIDENCES, LOCATION_RADIO remontent ; exclusion explicite 4xx / 5xx (2026-05-28) |
 
 ---
 
@@ -663,6 +664,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 - [x] **GO** — R1–R12 OK sur `19.0.4.5.1`
 - [x] **GO** — R1–R13 OK sur `19.0.4.6.1` — **onglet 1 Synthèse graphique validé MOA**
 - [x] **GO** — R1–R14 automatisé OK sur `19.0.4.7.0` — **source réalisé cockpit validée technique** (2026-05-28)
+- [ ] **R1–R15 automatisé** sur `19.0.4.8.0` — **doctrine classe 6/7 toute activité** — *recette en cours*
 
 ---
 
@@ -700,6 +702,34 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | Restart worker Odoo | OK |
 | Version installée confirmée | **`19.0.4.7.0`** |
 | Non-régression `post_install` analytics + budget | **74 tests · 0 failed · 0 error** |
+
+---
+
+## R15 — Doctrine classe 6/7 + analytique (`19.0.4.8.0`)
+
+**Objectif :** valider que **toute** activité du plan **Activités GLC** portant un mouvement réel (classe 6 ou 7 + analytique) remonte dans le cockpit — pas seulement BAR / PRESTATIONS / PRIVATISATIONS / STRUCTURE.
+
+**Référence :** [TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md](../TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md) · raffinement I2 ([CADRAGE_FINAL_PALIER_4.md](../CADRAGE_FINAL_PALIER_4.md)).
+
+| Réf | Cas | Famille attendue | Auto |
+|---|---|---|:---:|
+| R15-DEP-MISSIONS | 625xxx + [MISSIONS] | **DÉPENSES MISSIONS** | ✅ |
+| R15-DEP-RESIDENCES | 615xxx + [RESIDENCES] | **DÉPENSES RESIDENCES** | ✅ |
+| R15-DEP-BAR | 606xxx + [BAR] | **DÉPENSES BAR** | ✅ |
+| R15-REV-PRESTATIONS | 706xxx + [PRESTATIONS] | RECETTES PRESTATIONS | ✅ |
+| R15-EXCL-467 | 467xxx + analytique | **Exclue** *(classe 4)* | ✅ |
+| R15-MULTI | Recettes + dépenses + salaires multi-activités | Répartition correcte par axe | ✅ |
+| R15-TOTAL | Somme lignes détail = totaux période | Cohérence agrégats | ✅ |
+
+**Recette manuelle MOA (complément) :**
+
+| Réf | Cas | Statut MOA |
+|---|---|:---:|
+| R15-DEP-MISSIONS-REEL | Cas 625100 + [MISSIONS] 1 552 € sur `glc-rgl-test-import` 2026 | [ ] |
+| R15-DETAIL-ACTIVITES | Vérifier que MISSIONS, RESIDENCES, LOCATION_RADIO apparaissent dans le détail Activités si elles portent du réel | [ ] |
+| R15-SYNTHESE-STRUCTURE | Graphe Structure mensuelle : barres Dépenses incluent toutes les activités, pas seulement STRUCTURE | [ ] |
+
+**Verdict R15 automatisé :** **GO cible** — 7 tests Python ajoutés sur `19.0.4.8.0`.
 
 ---
 

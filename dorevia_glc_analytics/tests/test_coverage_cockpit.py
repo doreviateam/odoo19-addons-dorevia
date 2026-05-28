@@ -34,6 +34,8 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         cls.prestations = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_prestations")
         cls.privatisations = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_privatisations")
         cls.structure = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_structure")
+        cls.missions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_missions")
+        cls.residences = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_residences")
         cls.subventions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_subventions")
         existing_years = cls.env["glc.budget"].search([]).mapped("year")
         cls.test_year = max(y for y in existing_years + [2050] if y < 2100) + 1
@@ -222,6 +224,45 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
                 "date": line_date,
                 "amount": -abs(amount),
                 "general_account_id": expense_account.id,
+                "account_id": analytic_account.id,
+                "company_id": self.env.company.id,
+            }
+        )
+
+    def _get_or_create_income_account(self, code="706100"):
+        account = self.env["account.account"].search(
+            [
+                ("company_ids", "in", self.env.company.id),
+                ("code", "=", code),
+                ("account_type", "in", ("income", "income_other")),
+            ],
+            limit=1,
+        )
+        if not account:
+            account = self.env["account.account"].create(
+                {
+                    "name": "Produit test %s" % code,
+                    "code": code,
+                    "account_type": "income",
+                }
+            )
+        return account
+
+    def _create_revenue_analytic_line(
+        self, analytic_account, amount, invoice_date=None, income_code="706100"
+    ):
+        """Écriture produit classe 7 + analytique (rapprochement / OD)."""
+        if invoice_date:
+            line_date = Date.from_string(invoice_date)
+        else:
+            line_date = Date.from_string(self.invoice_date)
+        income_account = self._get_or_create_income_account(income_code)
+        return self.env["account.analytic.line"].create(
+            {
+                "name": "Recette test cockpit",
+                "date": line_date,
+                "amount": abs(amount),
+                "general_account_id": income_account.id,
                 "account_id": analytic_account.id,
                 "company_id": self.env.company.id,
             }
@@ -1071,3 +1112,204 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         )
         cockpit.action_refresh()
         self.assertAlmostEqual(cockpit.activity_revenue_realized, 0.0)
+
+    def test_expense_on_missions_surfaces_in_cockpit(self):
+        """R15-DEP-MISSIONS — charge 625xxx + [MISSIONS] remonte en DÉPENSES."""
+        year = self._next_test_year()
+        self._create_expense_analytic_line(
+            self.missions,
+            1552.0,
+            invoice_date="%s-04-15" % year,
+            expense_code="625100",
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 4, 1),
+            date_to=date(year, 4, 30),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 1552.0)
+        missions_line = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.analytic_account_id == self.missions
+        )
+        self.assertTrue(missions_line, "Une ligne MISSIONS doit exister dans le détail")
+        self.assertAlmostEqual(missions_line.expense_realized, 1552.0)
+        self.assertAlmostEqual(missions_line.revenue_realized, 0.0)
+        self.assertAlmostEqual(missions_line.payroll_realized, 0.0)
+
+    def test_expense_on_residences_surfaces_in_cockpit(self):
+        """R15-DEP-RESIDENCES — charge 615xxx + [RESIDENCES] remonte en DÉPENSES."""
+        year = self._next_test_year()
+        self._create_expense_analytic_line(
+            self.residences,
+            420.0,
+            invoice_date="%s-05-20" % year,
+            expense_code="615500",
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 5, 1),
+            date_to=date(year, 5, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 420.0)
+        residences_line = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.analytic_account_id == self.residences
+        )
+        self.assertTrue(residences_line)
+        self.assertAlmostEqual(residences_line.expense_realized, 420.0)
+
+    def test_expense_on_bar_surfaces_in_cockpit(self):
+        """R15-DEP-BAR — charge 606xxx + [BAR] remonte en DÉPENSES sur l'activité BAR."""
+        year = self._next_test_year()
+        self._create_expense_analytic_line(
+            self.bar,
+            980.0,
+            invoice_date="%s-06-20" % year,
+            expense_code="606100",
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 6, 1),
+            date_to=date(year, 6, 30),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 980.0)
+        bar_line = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.analytic_account_id == self.bar
+        )
+        self.assertAlmostEqual(bar_line.expense_realized, 980.0)
+
+    def test_revenue_on_prestations_surfaces_in_cockpit(self):
+        """R15-REV-PRESTATIONS — produit 706xxx + [PRESTATIONS] remonte en RECETTES."""
+        year = self._next_test_year()
+        self._create_revenue_analytic_line(
+            self.prestations,
+            3500.0,
+            invoice_date="%s-07-15" % year,
+            income_code="706200",
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 7, 1),
+            date_to=date(year, 7, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 3500.0)
+        prestations_line = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.analytic_account_id == self.prestations
+        )
+        self.assertAlmostEqual(prestations_line.revenue_realized, 3500.0)
+
+    def test_class_4_account_excluded_even_with_analytic(self):
+        """R15-EXCL-467 — compte 467 (passage) + analytique → exclu, même classe 4."""
+        year = self._next_test_year()
+        suspense = self.env["account.account"].search(
+            [
+                ("company_ids", "in", self.env.company.id),
+                ("code", "=like", "467%"),
+            ],
+            limit=1,
+        )
+        if not suspense:
+            suspense = self.env["account.account"].create(
+                {
+                    "name": "Comptes d'attente test",
+                    "code": "467000",
+                    "account_type": "asset_current",
+                }
+            )
+        self.env["account.analytic.line"].create(
+            {
+                "name": "Passage 467 test cockpit",
+                "date": date(year, 8, 15),
+                "amount": -2200.0,
+                "general_account_id": suspense.id,
+                "account_id": self.structure.id,
+                "company_id": self.env.company.id,
+            }
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 8, 1),
+            date_to=date(year, 8, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 0.0)
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 0.0)
+        self.assertAlmostEqual(cockpit.payroll_realized, 0.0)
+
+    def test_multi_activity_realized_split(self):
+        """R15-MULTI — recettes / dépenses / salaires se répartissent par activité."""
+        year = self._next_test_year()
+        month_iso = "%s-09-15" % year
+        self._create_revenue_analytic_line(
+            self.bar, 4000.0, invoice_date=month_iso, income_code="707000"
+        )
+        self._create_expense_analytic_line(
+            self.bar, 1200.0, invoice_date=month_iso, expense_code="606300"
+        )
+        self._create_expense_analytic_line(
+            self.missions, 800.0, invoice_date=month_iso, expense_code="625100"
+        )
+        self._create_expense_analytic_line(
+            self.residences, 350.0, invoice_date=month_iso, expense_code="615500"
+        )
+        self._create_payroll_on_account(
+            self.structure, 2500.0, invoice_date=month_iso, payroll_code="641000"
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 9, 1),
+            date_to=date(year, 9, 30),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 4000.0)
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 1200.0 + 800.0 + 350.0)
+        self.assertAlmostEqual(cockpit.payroll_realized, 2500.0)
+
+        by_account = {
+            line.analytic_account_id: line
+            for line in cockpit.line_ids
+            if line.line_kind == "activity"
+        }
+        self.assertAlmostEqual(by_account[self.bar].revenue_realized, 4000.0)
+        self.assertAlmostEqual(by_account[self.bar].expense_realized, 1200.0)
+        self.assertAlmostEqual(by_account[self.missions].expense_realized, 800.0)
+        self.assertAlmostEqual(by_account[self.residences].expense_realized, 350.0)
+        self.assertAlmostEqual(by_account[self.structure].payroll_realized, 2500.0)
+
+    def test_detail_totals_match_period_aggregates(self):
+        """R15-TOTAL — somme des lignes détail = totaux période (cohérence)."""
+        year = self._next_test_year()
+        month_iso = "%s-10-15" % year
+        self._create_revenue_analytic_line(
+            self.bar, 2500.0, invoice_date=month_iso, income_code="707000"
+        )
+        self._create_expense_analytic_line(
+            self.missions, 600.0, invoice_date=month_iso, expense_code="625100"
+        )
+        self._create_expense_analytic_line(
+            self.structure, 400.0, invoice_date=month_iso, expense_code="622100"
+        )
+        self._create_payroll_on_account(
+            self.bar, 1500.0, invoice_date=month_iso, payroll_code="641000"
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 10, 1),
+            date_to=date(year, 10, 31),
+        )
+        cockpit.action_refresh()
+        activity_lines = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+        )
+        self.assertAlmostEqual(
+            sum(activity_lines.mapped("revenue_realized")),
+            cockpit.activity_revenue_realized,
+        )
+        self.assertAlmostEqual(
+            sum(activity_lines.mapped("expense_realized")),
+            cockpit.general_expenses_realized,
+        )
+        self.assertAlmostEqual(
+            sum(activity_lines.mapped("payroll_realized")),
+            cockpit.payroll_realized,
+        )
