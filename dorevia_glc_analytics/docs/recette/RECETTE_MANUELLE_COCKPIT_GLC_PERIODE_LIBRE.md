@@ -668,6 +668,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | **Rechargement code Python après upgrade** | Non *(procédure connue)* | `docker compose restart odoo` obligatoire après `-u`. |
 | **Hard refresh navigateur après upgrade JS** | Non *(procédure connue)* | `Cmd+Shift+R` requis pour recharger le widget `glc_coverage_detail` (JS + XML + SCSS). |
 | **Groupes pliables / dépliables dans l'onglet** | Non *(limite Odoo)* | `group_by` natif non supporté dans une `<list>` x2many inline — compromis MOA acté ; lecture entièrement à plat dans l'onglet. |
+| **Source de vérité du réalisé cockpit** | **Oui *(cadrage ouvert)*** | Écart fonctionnel identifié — cadrage Palier 4 I2/I3 vs doctrine MOA cible (écritures charge/produit + analytique, toutes origines). Voir [TICKET_COCKPIT_SOURCE_REALISE.md](../TICKET_COCKPIT_SOURCE_REALISE.md). Correctif **`19.0.4.7.0`** après validation MOA section 10. |
 
 ---
 
