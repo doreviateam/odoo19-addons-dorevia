@@ -1106,9 +1106,22 @@ class GlcCoverageCockpitLine(models.TransientModel):
     def create(self, vals_list):
         if not self.env.context.get("glc_cockpit_auto_refreshing"):
             return self.browse()
-        cleaned_vals_list = [
-            vals for vals in vals_list if vals.get("cockpit_id")
-        ]
+        cockpit_model = self.env["glc.coverage.cockpit"]
+        cleaned_vals_list = []
+        for vals in vals_list:
+            if not vals.get("cockpit_id"):
+                continue
+            if not vals.get("analytic_section"):
+                account = self.env["account.analytic.account"].browse(
+                    vals.get("analytic_account_id")
+                )
+                if account:
+                    vals["analytic_section"] = cockpit_model._analytic_section_for_account(
+                        account
+                    )
+                else:
+                    vals["analytic_section"] = "activity"
+            cleaned_vals_list.append(vals)
         if not cleaned_vals_list:
             return self.browse()
         return super().create(cleaned_vals_list)
