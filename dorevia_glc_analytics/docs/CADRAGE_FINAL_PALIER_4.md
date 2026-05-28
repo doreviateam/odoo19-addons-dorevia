@@ -39,45 +39,57 @@ Ces règles sont **structurantes** pour toute implémentation Palier 4. Aucune d
 
 **Interdit :** recalculer ou resaisir le prévisionnel dans le cockpit ; modifier le module `dorevia_glc_budget`.
 
-### I2 — Source réalisé analytique : `account.analytic.line`
+### I2 — Source réalisé cockpit : `account.analytic.line` (révision MOA 2026-05-28)
 
 | Attribut | Valeur |
 |---|---|
 | Modèle | `account.analytic.line` |
-| Périmètre | réalisé d’**exploitation** hors masse salariale (cf. I3) |
-| Agrégation | mois × compte analytique × société × nature produit / charge / financement |
+| Périmètre | **toutes** les écritures charge/produit + distribution analytique exploitable |
+| Origines | facture client/fournisseur · OD · rapprochement bancaire · caisse |
+| Agrégation | mois × compte analytique × société × nature comptable (7xxx / 6xxx / financement) |
 
-**Interdit :** inclure dans ce flux les montants déjà couverts par les ventilations salariales Palier 2 (cf. I3).
+**Règle :** la présence ou l'absence d'une facture **n'est pas** un critère d'inclusion.
 
-### I3 — Source masse salariale réalisée : ventilations Palier 2
+**Mapping familles cockpit :**
+
+| Compte GL | Famille |
+|---|---|
+| 7xxx (revenus) | RECETTES |
+| 631 / 633 / 641 / 645 | SALAIRES |
+| 6xxx hors payroll | DÉPENSES |
+| axes financement | RESSOURCES / FINANCEMENTS |
+
+**Exclusions (I5) :** 411/401 · 512/53 · lettrage seul · sans analytique · comptes legacy / `RH_PERSONNEL`.
+
+### I3 — Palier 2 ventilations salariales : rôle contrôle (R2 — révision MOA 2026-05-28)
 
 | Attribut | Valeur |
 |---|---|
 | Modèle | `glc.salary.allocation` + `glc.salary.allocation.line` |
-| États retenus | `validated`, `locked` uniquement |
-| Montant | somme de `glc.salary.allocation.line.amount` |
-| Agrégation | mois de ventilation × activité GLC × société |
+| Rôle cockpit | **Contrôle / ventilation RH / analyse d'écart** — **pas** source primaire du réalisé |
+| Bandeau écart Palier 2 | Informatif (masse comptable vs ventilée) |
 
-**Invariant RH / Personnel (figé MOA, PR #31) :**
+**Invariant révisé :**
 
-> La masse salariale réalisée du cockpit est calculée **prioritairement** depuis les ventilations salariales Palier 2 validées ou verrouillées, **sans double comptage** avec les anciennes écritures analytiques RH historiques sur `account.analytic.line`.
+> Le réalisé cockpit **SALAIRES** provient des `account.analytic.line` portant un compte 631/633/641/645 et une distribution analytique activité. Les ventilations Palier 2 **ne suralimentent pas** le cockpit.
 
-| Donnée cockpit | Source | Exclusion |
-|---|---|---|
-| Masse salariale réalisée | Ventilations Palier 2 | Écritures analytiques RH historiques |
-| Ligne budgétaire RH / Personnel | `glc.budget.line` type `expense` | — |
-| Écart masse comptable vs ventilée | Bandeau Palier 2 | **Informatif uniquement** — pas source cockpit |
+| Donnée cockpit | Source |
+|---|---|
+| Masse salariale réalisée | `account.analytic.line` (comptes payroll + analytique activité) |
+| Ventilations Palier 2 | Contrôle RH — bandeau écart informatif |
+| Ligne budgétaire RH / Personnel | `glc.budget.line` type `expense` (I1) |
 
-### I4 — Pas de double comptage RH
+### I4 — Pas de double comptage (révision MOA 2026-05-28)
 
 Règle opérationnelle :
 
 ```text
-Réalisé cockpit (charges salariales) = ventilations Palier 2 (I3)
-Réalisé cockpit (autres charges/recettes) = account.analytic.line (I2)
+Réalisé cockpit (toutes familles) = account.analytic.line charge/produit + analytique
+Palier 2 = contrôle uniquement — jamais additionné au réalisé cockpit
+Anti-doublon : une charge mois × société × activité × famille = comptée une seule fois
 ```
 
-Les écritures analytiques portant sur des comptes / axes RH historiques **ne sont pas additionnées** aux ventilations Palier 2 pour le même périmètre temporel et société.
+Les ventilations Palier 2 validées **ne sont plus agrégées** dans `payroll_realized` du cockpit.
 
 ### I5 — Exclusion des flux bilan / trésorerie
 
@@ -113,7 +125,7 @@ Avec :
 Recettes d’activité = BAR + PRESTATIONS + PRIVATISATIONS
 Financements        = SUBVENTIONS (+ adhésions si retenu en recette)
 Ressources          = Recettes d’activité + Financements
-Masse salariale     = agrégat ventilations Palier 2 (I3)
+Masse salariale     = account.analytic.line comptes 631/633/641/645 + analytique (I2/I3 révisés)
 Frais généraux      = axe analytique Frais généraux (I2)
 ```
 
@@ -133,7 +145,7 @@ Frais généraux      = axe analytique Frais généraux (I2)
 **Inclus :**
 
 - vue synthèse + détail Activité × Mois ;
-- croisement réalisé (I2 + I3) vs budget (I1) ;
+- croisement réalisé (I2 révisé) vs budget (I1) ;
 - KPI couverture et écarts ;
 - bandeau alerte rouge / orange / vert (I6) ;
 - filtres : société · année · mois · activité ;
@@ -170,4 +182,5 @@ Les invariants I1–I7 sont acceptés tels quels. Prochaine étape : confirmatio
 
 ---
 
-*Palier 4 livré et gelé MOA sur `main` — version `19.0.4.0.0` · PR #33 mergée.*
+*Palier 4 livré et gelé MOA sur `main` — version `19.0.4.0.0` · PR #33 mergée.*  
+*Révision I2/I3/I4 source réalisé cockpit — MOA validée 2026-05-28 · `19.0.4.7.0` · [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md).*

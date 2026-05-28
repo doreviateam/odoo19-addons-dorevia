@@ -50,7 +50,8 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
 
     def _next_test_year(self):
         year = next(self._year_counter)
-        if year >= 2100:
+        if year >= 2099:
+            type(self)._year_counter = itertools.count(self.test_year)
             year = self.test_year
         return year
 
@@ -148,6 +149,83 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         line.write({"analytic_distribution": {str(account.id): 100}})
         invoice.action_post()
         return invoice
+
+    def _get_or_create_payroll_account(self, code="645200"):
+        account = self.env["account.account"].search(
+            [
+                ("company_ids", "in", self.env.company.id),
+                ("code", "=", code),
+            ],
+            limit=1,
+        )
+        if not account:
+            account = self.env["account.account"].create(
+                {
+                    "name": "Compte paie test %s" % code,
+                    "code": code,
+                    "account_type": "expense",
+                }
+            )
+        return account
+
+    def _create_payroll_on_account(
+        self, analytic_account, amount, invoice_date=None, payroll_code="645200"
+    ):
+        """Écriture charge payroll + analytique (facture, OD ou rapprochement)."""
+        if invoice_date:
+            line_date = Date.from_string(invoice_date)
+        else:
+            line_date = Date.from_string(self.invoice_date)
+        payroll_account = self._get_or_create_payroll_account(payroll_code)
+        return self.env["account.analytic.line"].create(
+            {
+                "name": "Masse salariale test cockpit",
+                "date": line_date,
+                "amount": -abs(amount),
+                "general_account_id": payroll_account.id,
+                "account_id": analytic_account.id,
+                "company_id": self.env.company.id,
+            }
+        )
+
+    def _get_or_create_expense_account(self, code="622100"):
+        account = self.env["account.account"].search(
+            [
+                ("company_ids", "in", self.env.company.id),
+                ("code", "=", code),
+                ("account_type", "in", ("expense", "expense_direct_cost")),
+            ],
+            limit=1,
+        )
+        if not account:
+            account = self.env["account.account"].create(
+                {
+                    "name": "Charge test %s" % code,
+                    "code": code,
+                    "account_type": "expense",
+                }
+            )
+        return account
+
+    def _create_expense_analytic_line(
+        self, analytic_account, amount, invoice_date=None, expense_code="622100"
+    ):
+        """Écriture charge hors payroll + analytique (rapprochement / OD)."""
+        if invoice_date:
+            line_date = Date.from_string(invoice_date)
+        else:
+            line_date = Date.from_string(self.invoice_date)
+        expense_account = self._get_or_create_expense_account(expense_code)
+        return self.env["account.analytic.line"].create(
+            {
+                "name": "Charge test cockpit",
+                "date": line_date,
+                "amount": -abs(amount),
+                "general_account_id": expense_account.id,
+                "account_id": analytic_account.id,
+                "company_id": self.env.company.id,
+            }
+        )
 
     def _create_validated_allocation(self, amount=3000.0, bar_percent=100.0, employee=None, period_date=None):
         employee = employee or self.employee
@@ -265,24 +343,29 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
 
     def test_alert_green_when_resources_cover_fixed_charges(self):
         """CA6 — alerte verte si ressources ≥ salaires + frais généraux."""
-        year = self.test_year
+        year = self._next_test_year()
+        period = "%s-06-01" % year
+        invoice_date = "%s-06-15" % year
         self._create_validated_budget(
             year,
             [
                 {
-                    "period_date": self.period,
+                    "period_date": period,
                     "line_type": "revenue",
                     "analytic_account_id": self.bar.id,
                     "amount": 10000.0,
                 },
             ],
         )
-        self._create_revenue_on_account(self.bar, 12000.0)
-        self._create_revenue_on_account(self.subventions, 2000.0)
-        self._create_validated_allocation(amount=3000.0)
-        self._create_expense_on_account(self.structure, 1500.0)
+        self._create_revenue_on_account(self.bar, 12000.0, invoice_date=invoice_date)
+        self._create_revenue_on_account(self.subventions, 2000.0, invoice_date=invoice_date)
+        self._create_payroll_on_account(self.bar, 3000.0, invoice_date=invoice_date)
+        self._create_expense_on_account(self.structure, 1500.0, invoice_date=invoice_date)
 
-        cockpit = self._create_cockpit(year=year)
+        cockpit = self._create_cockpit(
+            date_from=date(year, 6, 1),
+            date_to=date(year, 6, 30),
+        )
         cockpit.action_refresh()
 
         self.assertEqual(cockpit.alert_status, "green")
@@ -294,11 +377,15 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
 
     def test_alert_red_when_resources_below_payroll(self):
         """CA6 — alerte rouge si ressources < masse salariale."""
-        year = self.test_year
-        self._create_revenue_on_account(self.bar, 1000.0)
-        self._create_validated_allocation(amount=5000.0)
+        year = self._next_test_year()
+        invoice_date = "%s-06-15" % year
+        self._create_revenue_on_account(self.bar, 1000.0, invoice_date=invoice_date)
+        self._create_payroll_on_account(self.bar, 5000.0, invoice_date=invoice_date)
 
-        cockpit = self._create_cockpit(year=year)
+        cockpit = self._create_cockpit(
+            date_from=date(year, 6, 1),
+            date_to=date(year, 6, 30),
+        )
         cockpit.action_refresh()
 
         self.assertEqual(cockpit.alert_status, "red")
@@ -306,12 +393,18 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
 
     def test_alert_orange_when_resources_cover_payroll_only(self):
         """CA6 — alerte orange si ressources ≥ salaires mais < salaires + frais généraux."""
-        year = self.test_year
-        self._create_revenue_on_account(self.bar, 6500.0)
-        self._create_validated_allocation(amount=3000.0)
-        self._create_expense_on_account(self.structure, 4000.0)
+        year = self._next_test_year()
+        invoice_date = "%s-07-15" % year
+        self._create_revenue_on_account(self.bar, 6500.0, invoice_date=invoice_date)
+        self._create_payroll_on_account(self.bar, 3000.0, invoice_date=invoice_date)
+        self._create_expense_analytic_line(
+            self.structure, 4000.0, invoice_date=invoice_date
+        )
 
-        cockpit = self._create_cockpit(year=year)
+        cockpit = self._create_cockpit(
+            date_from=date(year, 7, 1),
+            date_to=date(year, 7, 31),
+        )
         cockpit.action_refresh()
 
         self.assertEqual(cockpit.alert_status, "orange")
@@ -321,8 +414,8 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             cockpit.payroll_realized + cockpit.general_expenses_realized,
         )
 
-    def test_payroll_from_validated_allocation_only(self):
-        """CA3 — masse salariale lue depuis ventilations validées uniquement."""
+    def test_payroll_from_analytic_lines_not_allocations(self):
+        """R14 — masse salariale lue depuis compta analytique, pas Palier 2."""
         year = self.test_year
         draft_employee = self.env["hr.employee"].create(
             {"name": "Salarié brouillon cockpit", "company_id": self.env.company.id}
@@ -352,11 +445,12 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             }
         )
         self._create_validated_allocation(amount=2500.0)
+        self._create_payroll_on_account(self.bar, 1800.0)
 
         cockpit = self._create_cockpit(year=year)
         cockpit.action_refresh()
 
-        self.assertAlmostEqual(cockpit.payroll_realized, 2500.0)
+        self.assertAlmostEqual(cockpit.payroll_realized, 1800.0)
 
     def test_budget_aggregation_from_glc_budget_line(self):
         """CA1 — prévisionnel lu depuis glc.budget.line validé."""
@@ -398,7 +492,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         """CA — détail Activité × Mois."""
         year = self.test_year
         self._create_revenue_on_account(self.bar, 4000.0)
-        self._create_validated_allocation(amount=2000.0)
+        self._create_payroll_on_account(self.bar, 2000.0)
 
         cockpit = self._create_cockpit(year=year)
         cockpit.action_refresh()
@@ -493,9 +587,10 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self._create_revenue_on_account(
             self.bar, 5000.0, invoice_date="%s-06-15" % year
         )
-        self._create_validated_allocation(
-            amount=2000.0,
-            period_date="%s-06-01" % year,
+        self._create_payroll_on_account(
+            self.bar,
+            2000.0,
+            invoice_date="%s-06-15" % year,
         )
         cockpit = self._create_cockpit(
             date_from=date(year, 6, 1),
@@ -836,3 +931,143 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         )
         self.assertTrue(february_lines)
         self.assertEqual(cockpit.refresh_key, cockpit._current_refresh_key())
+
+    def test_realized_revenue_from_invoice_analytic(self):
+        """R14-FAC-CLI — facture client 7xxx + analytique → RECETTES."""
+        year = self._next_test_year()
+        self._create_revenue_on_account(
+            self.bar, 3500.0, invoice_date="%s-07-15" % year
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 7, 1),
+            date_to=date(year, 7, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 3500.0)
+
+    def test_realized_expense_from_invoice_analytic(self):
+        """R14-FAC-FOU — facture fournisseur 6xxx hors payroll + STRUCTURE → DÉPENSES."""
+        year = self._next_test_year()
+        self._create_expense_on_account(
+            self.structure, 900.0, invoice_date="%s-07-15" % year
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 7, 1),
+            date_to=date(year, 7, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 900.0)
+
+    def test_realized_payroll_from_bank_recon_645_analytic(self):
+        """R14-BNK-645 — rapprochement 645200 + [STRUCTURE] → SALAIRES."""
+        year = self._next_test_year()
+        self._create_payroll_on_account(
+            self.structure,
+            154.0,
+            invoice_date="%s-05-20" % year,
+            payroll_code="645200",
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 5, 1),
+            date_to=date(year, 5, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.payroll_realized, 154.0)
+        structure_line = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.analytic_account_id == self.structure
+        )
+        self.assertAlmostEqual(structure_line.payroll_realized, 154.0)
+        self.assertAlmostEqual(structure_line.expense_realized, 0.0)
+
+    def test_realized_expense_from_bank_recon_6xx_analytic(self):
+        """R14-BNK-6XX — rapprochement 6xxx hors payroll + analytique → DÉPENSES."""
+        year = self._next_test_year()
+        self._create_expense_analytic_line(
+            self.structure, 420.0, invoice_date="%s-08-10" % year
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 8, 1),
+            date_to=date(year, 8, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 420.0)
+
+    def test_no_double_count_payroll_allocation_and_analytic(self):
+        """R14-NODOUBLON — Palier 2 ne suralimente pas le réalisé cockpit."""
+        year = self._next_test_year()
+        period = "%s-09-01" % year
+        self._create_validated_allocation(
+            amount=2500.0,
+            period_date=period,
+        )
+        self._create_payroll_on_account(
+            self.bar,
+            1500.0,
+            invoice_date="%s-09-15" % year,
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 9, 1),
+            date_to=date(year, 9, 30),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.payroll_realized, 1500.0)
+
+    def test_excluded_treasury_512_not_in_cockpit(self):
+        """R14-EXCL-512 — trésorerie exclue du réalisé cockpit."""
+        year = self._next_test_year()
+        bank_account = self.env["account.account"].search(
+            [
+                ("company_ids", "in", self.env.company.id),
+                ("account_type", "in", ("asset_cash", "asset_current")),
+                ("code", "=like", "512%"),
+            ],
+            limit=1,
+        )
+        self.assertTrue(bank_account)
+        self.env["account.analytic.line"].create(
+            {
+                "name": "Trésorerie test cockpit",
+                "date": date(year, 10, 15),
+                "amount": -5000.0,
+                "general_account_id": bank_account.id,
+                "account_id": self.bar.id,
+                "company_id": self.env.company.id,
+            }
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 10, 1),
+            date_to=date(year, 10, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 0.0)
+        self.assertAlmostEqual(cockpit.payroll_realized, 0.0)
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 0.0)
+
+    def test_excluded_partner_411_401_not_in_cockpit(self):
+        """R14-EXCL-411 — comptes tiers exclus du réalisé cockpit."""
+        year = self._next_test_year()
+        receivable = self.env["account.account"].search(
+            [
+                ("company_ids", "in", self.env.company.id),
+                ("account_type", "=", "asset_receivable"),
+            ],
+            limit=1,
+        )
+        self.assertTrue(receivable)
+        self.env["account.analytic.line"].create(
+            {
+                "name": "Tiers test cockpit",
+                "date": date(year, 11, 15),
+                "amount": 3000.0,
+                "general_account_id": receivable.id,
+                "account_id": self.bar.id,
+                "company_id": self.env.company.id,
+            }
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 11, 1),
+            date_to=date(year, 11, 30),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 0.0)

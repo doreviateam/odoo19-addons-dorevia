@@ -569,11 +569,17 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
   --stop-after-init --no-http
 ```
 
-| Résultat attendu | Résultat recette `19.0.4.6.1` |
+| Résultat attendu | Résultat recette `19.0.4.7.0` |
 |---|---|
-| Tests `dorevia_glc_analytics` | **63 tests** |
+| Tests `dorevia_glc_analytics` | **70 tests** |
 | Tests `dorevia_glc_budget` | **14 tests** |
-| **Total** | **67 post-tests**, **0 failed**, **0 error(s)** |
+| **Total** | **74 post-tests**, **0 failed**, **0 error(s)** |
+
+Tests source réalisé R14 :
+- `test_payroll_from_analytic_lines_not_allocations` — Palier 2 ≠ source cockpit
+- `test_realized_payroll_from_bank_recon_645_analytic` — 645200 + STRUCTURE → SALAIRES
+- `test_no_double_count_payroll_allocation_and_analytic` — anti-doublon
+- `test_excluded_treasury_512_not_in_cockpit` / `test_excluded_partner_411_401_not_in_cockpit`
 
 Tests UX-GROUPBY / PERFORMANCE :
 - `test_multi_month_detail_activity_only` — UX-G5 par construction
@@ -602,6 +608,7 @@ Tests UX-GROUPBY / PERFORMANCE :
 | **R11** | **UX-GROUPBY (composant OWL `glc_coverage_detail`)** | **GO** | Blocs mensuels, sous-totaux, total période, zéros `—` (`19.0.4.4.2`) |
 | **R12** | **PERFORMANCE + séparation familles (cible UX validée)** | **GO** | `19.0.4.5.1` — blocs distincts, formules performance, finition visuelle familles |
 | **R13** | **Synthèse graphique — Marge d'activité (4 KPI + 3 graphes Chart.js)** | **GO** | `19.0.4.6.1` — onglet 1 cockpit GLC, wording MOA Marge |
+| **R14** | **Source de vérité réalisé cockpit (compta analytique + Palier 2 contrôle R2)** | **GO (auto)** | `19.0.4.7.0` — refonte `_sum_payroll_realized` |
 
 ---
 
@@ -655,6 +662,38 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 - [x] **GO** — R1–R12 OK sur `19.0.4.5.1`
 - [x] **GO** — R1–R13 OK sur `19.0.4.6.1` — **onglet 1 Synthèse graphique validé MOA**
+
+---
+
+## R14 — Source de vérité du réalisé cockpit (`19.0.4.7.0`)
+
+**Objectif :** valider que le réalisé cockpit agrège les écritures charge/produit + analytique (toutes origines), avec Palier 2 en **contrôle R2** uniquement.
+
+**Référence :** [TICKET_COCKPIT_SOURCE_REALISE.md](../TICKET_COCKPIT_SOURCE_REALISE.md) · cadrage I2/I3 révisés.
+
+| Réf | Cas | Famille attendue | Auto |
+|---|---|---|:---:|
+| R14-FAC-CLI | Facture client 7xxx + analytique [BAR] | RECETTES | ✅ |
+| R14-FAC-FOU | Facture fournisseur 6xxx hors payroll + [STRUCTURE] | DÉPENSES | ✅ |
+| R14-BNK-6XX | Rapprochement / OD 6xxx hors payroll + analytique | DÉPENSES | ✅ |
+| R14-BNK-645 | Rapprochement 645200 + [STRUCTURE] | **SALAIRES** | ✅ |
+| R14-NODOUBLON | Compta analytique payroll + ventilation Palier 2 même mois | Pas de double comptage | ✅ |
+| R14-EXCL-512 | Ligne trésorerie 512 + analytique | **Exclue** | ✅ |
+| R14-EXCL-411 | Ligne tiers 411 + analytique | **Exclue** | ✅ |
+
+**Recette manuelle MOA (complément) :**
+
+| Réf | Cas | Statut MOA |
+|---|---|:---:|
+| R14-CAISSE | Opération caisse charge/produit + analytique | [ ] |
+| R14-OD | Écriture comptable directe + analytique | [ ] |
+| R14-645-REEL | Cas révélateur 645200 + [STRUCTURE] rapprochement bancaire sur `glc-rgl-test-import` | [ ] |
+
+**Verdict R14 automatisé :** **GO** — 7 tests Python verts sur `19.0.4.7.0`.
+
+---
+
+## Verdict recette (mise à jour)
 - [ ] GO avec réserves
 - [ ] NO GO
 
@@ -706,6 +745,6 @@ Cette recette valide :
 > Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs RECETTES | SALAIRES | DÉPENSES | MARGE D'ACTIVITÉ clairement distingués, sans sortie de l'onglet.  
 > La synthèse graphique doit offrir une lecture instantanée du pilotage (marge d'activité, structure mensuelle, marge par activité) en complément du détail chiffré.
 
-**Statut :** **GO** sur `19.0.4.6.1` — R1–R13 OK, **67 post-tests verts**, réserves non bloquantes documentées.
+**Statut :** **GO** sur `19.0.4.7.0` — R1–R14 (auto) OK, **74 post-tests verts**, recette manuelle R14-CAISSE/OD/645-REEL en attente MOA.
 
 **Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) — sections 11–13 (UX-GROUPBY, Marge d'activité, séparation familles) · [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](../TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md) — onglet 1 Synthèse graphique.

@@ -482,7 +482,35 @@ class GlcCoverageCockpit(models.TransientModel):
             ]
         )
 
+    def _analytic_accounts_domain(self, analytic_accounts):
+        return [
+            "|",
+            ("auto_account_id", "in", analytic_accounts.ids),
+            ("account_id", "in", analytic_accounts.ids),
+        ]
+
+    def _excluded_analytic_domain(self):
+        excluded = self._excluded_analytic_accounts()
+        if not excluded:
+            return []
+        return [
+            ("auto_account_id", "not in", excluded.ids),
+            ("account_id", "not in", excluded.ids),
+        ]
+
+    @api.model
+    def _prefix_or_domain(self, field_name, prefixes):
+        if not prefixes:
+            return []
+        if len(prefixes) == 1:
+            return [(field_name, "=like", prefixes[0] + "%")]
+        domain = ["|"] * (len(prefixes) - 1)
+        for prefix in prefixes:
+            domain.append((field_name, "=like", prefix + "%"))
+        return domain
+
     def _analytic_line_domain(self, date_from, date_to, analytic_accounts):
+        """Réalisé exploitation hors masse salariale (recettes, dépenses, financements)."""
         domain = [
             ("company_id", "=", self.company_id.id),
             ("date", ">=", date_from),
@@ -492,17 +520,31 @@ class GlcCoverageCockpit(models.TransientModel):
                 "in",
                 list(GLC_INCOME_ACCOUNT_TYPES + GLC_EXPENSE_ACCOUNT_TYPES),
             ),
-            "|",
-            ("auto_account_id", "in", analytic_accounts.ids),
-            ("account_id", "in", analytic_accounts.ids),
+            *self._analytic_accounts_domain(analytic_accounts),
+            *self._excluded_analytic_domain(),
         ]
-        excluded = self._excluded_analytic_accounts()
-        if excluded:
-            domain += [
-                ("auto_account_id", "not in", excluded.ids),
-                ("account_id", "not in", excluded.ids),
-            ]
         for prefix in GLC_PAYROLL_ACCOUNT_PREFIXES + GLC_EXCLUDED_GL_ACCOUNT_PREFIXES:
+            domain.append(("general_account_id.code", "not like", prefix + "%"))
+        return domain
+
+    def _payroll_analytic_line_domain(self, date_from, date_to, analytic_accounts):
+        """Réalisé masse salariale depuis la comptabilité analytique (631/633/641/645)."""
+        domain = [
+            ("company_id", "=", self.company_id.id),
+            ("date", ">=", date_from),
+            ("date", "<=", date_to),
+            (
+                "general_account_id.account_type",
+                "in",
+                list(GLC_EXPENSE_ACCOUNT_TYPES),
+            ),
+            *self._analytic_accounts_domain(analytic_accounts),
+            *self._excluded_analytic_domain(),
+            *self._prefix_or_domain(
+                "general_account_id.code", GLC_PAYROLL_ACCOUNT_PREFIXES
+            ),
+        ]
+        for prefix in GLC_EXCLUDED_GL_ACCOUNT_PREFIXES:
             domain.append(("general_account_id.code", "not like", prefix + "%"))
         return domain
 
@@ -520,28 +562,17 @@ class GlcCoverageCockpit(models.TransientModel):
         return sum(self._signed_analytic_amount(line) for line in lines)
 
     def _sum_payroll_realized(self, date_from, date_to, activity_account=None):
-        domain = [
-            ("allocation_id.company_id", "=", self.company_id.id),
-            ("allocation_id.state", "in", ("validated", "locked")),
-        ]
+        """Masse salariale réalisée = écritures charge payroll + analytique (I2 révisé)."""
         if activity_account:
-            domain.append(("activity_account_id", "=", activity_account.id))
-        lines = self.env["glc.salary.allocation.line"].search(domain)
-        total = 0.0
-        for line in lines:
-            alloc_date = line.allocation_id.period_date
-            if not alloc_date:
-                continue
-            month_start = date(alloc_date.year, alloc_date.month, 1)
-            month_end = date(
-                alloc_date.year,
-                alloc_date.month,
-                monthrange(alloc_date.year, alloc_date.month)[1],
-            )
-            if month_end < date_from or month_start > date_to:
-                continue
-            total += line.amount
-        return total
+            analytic_accounts = activity_account
+        else:
+            analytic_accounts = self._activity_accounts()
+        if not analytic_accounts:
+            return 0.0
+        lines = self.env["account.analytic.line"].search(
+            self._payroll_analytic_line_domain(date_from, date_to, analytic_accounts)
+        )
+        return sum(self._signed_analytic_amount(line) for line in lines)
 
     def _ensure_budget_module(self):
         if "glc.budget.line" not in self.env:
