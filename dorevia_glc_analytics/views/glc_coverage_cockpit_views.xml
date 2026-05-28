@@ -79,9 +79,9 @@
                             <p class="text-muted">
                                 Par axe analytique et par mois : recettes ou financements (classe 7),
                                 salaires, dépenses hors salaires (classe 6) et marge d'activité,
-                                comparés au prévu. Tous les plans analytiques GLC sont inclus
-                                (Activités, Financements, …). Sous-totaux mensuels et total période
-                                calculés côté client.
+                                comparés au prévu. Tous les axes analytiques avec mouvement réel
+                                sont listés sans regroupement par plan.
+                                Sous-totaux mensuels et total période calculés côté client.
                             </p>
                             <field name="detail_line_count" invisible="1"/>
                             <div class="alert alert-light border mb-0" role="status"

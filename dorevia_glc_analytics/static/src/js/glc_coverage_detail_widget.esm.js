@@ -17,13 +17,6 @@ const NUMERIC_FIELDS = [
     "variance_expense",
 ];
 
-const SECTION_ORDER = { activity: 0, funding: 1, other: 2 };
-const SECTION_LABELS = {
-    activity: "Activités GLC",
-    funding: "Financements GLC",
-    other: "Autres axes analytiques",
-};
-
 export function computePerformanceAmounts(data) {
     const performance_realized =
         (data.revenue_realized || 0) -
@@ -140,32 +133,6 @@ export class GlcCoverageDetailField extends Component {
         };
     }
 
-    _buildDisplayLines(lines) {
-        const sorted = [...lines].sort((a, b) => {
-            const sectionA = SECTION_ORDER[a.analytic_section] ?? 9;
-            const sectionB = SECTION_ORDER[b.analytic_section] ?? 9;
-            if (sectionA !== sectionB) {
-                return sectionA - sectionB;
-            }
-            return (a.activity_label || "").localeCompare(b.activity_label || "", "fr");
-        });
-        const display = [];
-        let lastSection = null;
-        for (const line of sorted) {
-            const section = line.analytic_section || "other";
-            if (section !== lastSection) {
-                display.push({
-                    type: "section",
-                    key: `section-${section}`,
-                    label: SECTION_LABELS[section] || section,
-                });
-                lastSection = section;
-            }
-            display.push({ type: "line", ...line });
-        }
-        return display;
-    }
-
     get groupedData() {
         const list = this.props.record.data[this.props.name];
         const records = (list && list.records) || [];
@@ -193,9 +160,11 @@ export class GlcCoverageDetailField extends Component {
         );
         const periodTotals = this._emptyTotals();
         for (const m of months) {
+            m.lines.sort((a, b) =>
+                (a.activity_label || "").localeCompare(b.activity_label || "", "fr")
+            );
             this._accumulate(periodTotals, m.totals);
             Object.assign(m.totals, computePerformanceAmounts(m.totals));
-            m.displayLines = this._buildDisplayLines(m.lines);
         }
         Object.assign(periodTotals, computePerformanceAmounts(periodTotals));
         return {
@@ -216,7 +185,6 @@ export const glcCoverageDetailField = {
         { name: "month_key", type: "char" },
         { name: "month_label", type: "char" },
         { name: "activity_label", type: "char" },
-        { name: "analytic_section", type: "selection" },
         { name: "currency_id", type: "many2one", relation: "res.currency" },
         { name: "revenue_realized", type: "monetary" },
         { name: "revenue_budget", type: "monetary" },

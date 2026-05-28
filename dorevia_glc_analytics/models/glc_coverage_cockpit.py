@@ -985,7 +985,7 @@ class GlcCoverageCockpit(models.TransientModel):
 class GlcCoverageCockpitLine(models.TransientModel):
     _name = "glc.coverage.cockpit.line"
     _description = "Détail cockpit couverture GLC"
-    _order = "month_key, analytic_section, activity_label, id"
+    _order = "month_key, activity_label, id"
     _rec_name = "activity_label"
 
     cockpit_id = fields.Many2one(
