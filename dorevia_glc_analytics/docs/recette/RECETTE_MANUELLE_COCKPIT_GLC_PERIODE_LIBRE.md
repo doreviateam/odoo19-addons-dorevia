@@ -668,6 +668,20 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | **Rechargement code Python après upgrade** | Non *(procédure connue)* | `docker compose restart odoo` obligatoire après `-u`. |
 | **Hard refresh navigateur après upgrade JS** | Non *(procédure connue)* | `Cmd+Shift+R` requis pour recharger le widget `glc_coverage_detail` (JS + XML + SCSS). |
 | **Groupes pliables / dépliables dans l'onglet** | Non *(limite Odoo)* | `group_by` natif non supporté dans une `<list>` x2many inline — compromis MOA acté ; lecture entièrement à plat dans l'onglet. |
+| **Responsive avancé — vue Détail par activité** | Non *(palier ultérieur)* | **Arbitrage MOA post-R13 (2026-05-27) :** le cockpit GLC est **assumé outil de pilotage desktop** pour ce palier. Sur largeur réduite, le tableau `glc_coverage_detail` reste fonctionnel mais dense (12 colonnes, libellés activité multi-lignes, scroll horizontal peu confortable). **GO desktop** ; refonte responsive **hors périmètre immédiat**. Voir stratégie palier ultérieur ci-dessous. |
+| **Responsive avancé — Synthèse graphique** | Non *(palier ultérieur)* | KPI cards et graphes Chart.js s'adaptent partiellement (grille 1 col sous 992 px) ; polish responsive complet non cadré pour ce palier. |
+
+### Stratégie responsive — palier ultérieur (hors périmètre `19.0.4.6.1`)
+
+| Mode | Cible |
+|---|---|
+| **Desktop** | Tableau Détail complet conservé tel quel (cible actuelle validée MOA). |
+| **Tablette / largeur intermédiaire** | Scroll horizontal propre (`overflow-x: auto`) ; colonne **Activité** sticky à gauche ; réduction des retours à la ligne ; largeur minimale assumée du tableau. |
+| **Mobile** | Ne pas afficher le tableau 12 colonnes tel quel ; privilégier l'onglet **Synthèse graphique** ; ou basculer vers une lecture en **cartes par activité/mois**. |
+
+**Quick wins possibles (peu coûteux, palier ultérieur) :** `overflow-x: auto` propre sur le conteneur ; colonne Activité sticky ; largeur minimale explicite ; message discret *« Vue détaillée optimisée pour écran large »*.
+
+**Verdict MOA :** pas de refonte responsive dans la PR #36 ; réserve documentée, amélioration future.
 
 ---
 
@@ -687,7 +701,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | Base / environnement | `glc-rgl-test-import` · `http://localhost:18079` |
 | Version module | `dorevia_glc_analytics` **`19.0.4.6.1`** (Synthèse graphique + wording Marge d'activité) |
 | Verdict global | **GO** — R1–R13 OK — **double lecture cockpit validée** (Synthèse graphique + Détail par activité) |
-| Merge | **À soumettre** — branche `feat/glc-cockpit-synthese-graphique` |
+| Merge | **Mergé** — PR [#36](https://github.com/doreviateam/odoo19-addons-dorevia/pull/36) · `9339833` |
 
 ---
 

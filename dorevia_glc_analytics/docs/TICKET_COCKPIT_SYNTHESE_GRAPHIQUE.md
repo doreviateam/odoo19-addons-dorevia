@@ -194,6 +194,23 @@ La synthèse graphique respecte cette grammaire **sans la réinterpréter** : le
 - Pas de drill-down depuis les graphiques vers les lignes — l'utilisateur reste sur l'onglet Détail pour cela ;
 - Pas de nouveau scénario budgétaire ni nouveau champ sur les lignes ;
 - Pas de changement des formules Marge d'activité / Couverture salaires (formule inchangée — seul le wording UI évolue).
+- **Responsive avancé** — refonte responsive du tableau Détail par activité **hors périmètre `19.0.4.6.1`** ; cockpit assumé **desktop-first** pour ce palier (réserve MOA documentée — voir recette R13 / ticket UX Détail section 13.7).
+
+---
+
+## 13. Réserve UX — responsive (post-R13, 2026-05-27)
+
+**Constat MOA :** sur largeur réduite, le tableau Détail par activité (12 colonnes) reste fonctionnel mais dense. La Synthèse graphique s'adapte partiellement (grille 1 col sous 992 px) ; le Détail ne l'est pas.
+
+**Arbitrage :** **GO desktop** pour ce palier. Responsive avancé = palier ultérieur.
+
+| Mode | Stratégie cible |
+|---|---|
+| Desktop | Tableau Détail complet (validé MOA) |
+| Tablette | Scroll horizontal propre ; colonne Activité sticky ; largeur min assumée |
+| Mobile | Synthèse graphique prioritaire ; ou cartes activité/mois — pas le tableau 12 col |
+
+**Quick wins possibles (peu coûteux) :** `overflow-x: auto`, sticky Activité, message *« Vue détaillée optimisée pour écran large »*.
 
 ---
 

@@ -408,7 +408,18 @@ Fond gris bleuté très discret `#f8f9fa` sur les 3 colonnes Performance (header
 
 ### 13.6. Wording MOA — Dépenses hors salaires (`19.0.4.5.3`)
 
-Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet aligné : *recettes, salaires, dépenses hors salaires et performance*. Formules inchangées (`expense_*` = frais généraux / charges hors masse salariale).
+Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet aligné : *recettes, salaires, dépenses hors salaires et marge d'activité*. Formules inchangées (`expense_*` = frais généraux / charges hors masse salariale).
+
+### 13.7. Réserve UX — responsive (hors périmètre `19.0.4.6.1`)
+
+**Arbitrage MOA post-R13 (2026-05-27) :** la vue **Détail par activité** (`glc_coverage_detail`) n'est **pas réellement responsive** sur largeur réduite. Le tableau 12 colonnes reste fonctionnel mais devient dense (libellés activité multi-lignes, lecture horizontale peu confortable). Le cockpit GLC est **assumé outil de pilotage desktop** pour ce palier — **GO desktop** ; refonte responsive **hors périmètre immédiat**.
+
+**Stratégie palier ultérieur :**
+- **Desktop** — tableau complet conservé ;
+- **Tablette** — scroll horizontal propre, colonne Activité sticky, largeur minimale assumée ;
+- **Mobile** — privilégier Synthèse graphique ou cartes activité/mois (pas le tableau 12 colonnes).
+
+**Quick wins possibles :** `overflow-x: auto`, colonne Activité sticky, message *« Vue détaillée optimisée pour écran large »*.
 
 ---
 
@@ -416,4 +427,5 @@ Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet 
 Verdict final MOA UX-GROUPBY — 2026-05-27 (version livrée `19.0.4.4.2`).  
 Complément PERFORMANCE — `19.0.4.5.0` — GO MOA fonctionnel 2026-05-27.  
 Finition séparation familles — `19.0.4.5.1` — GO MOA UX 2026-05-27 — **cible UX validée pour ce palier**.  
-Wording MOA — `19.0.4.6.1` — bloc « PERFORMANCE » renommé **« Marge d'activité »** dans l'UI (noms techniques conservés ; formule inchangée).*
+Wording MOA — `19.0.4.6.1` — bloc « PERFORMANCE » renommé **« Marge d'activité »** dans l'UI (noms techniques conservés ; formule inchangée).  
+Réserve UX responsive — post-R13 2026-05-27 — **GO desktop** ; refonte responsive hors périmètre immédiat (section 13.7).*
