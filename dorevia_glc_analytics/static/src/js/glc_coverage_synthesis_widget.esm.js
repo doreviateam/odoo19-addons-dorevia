@@ -129,6 +129,22 @@ export class GlcCoverageSynthesisField extends Component {
         return value < 0 ? "o_glc_kpi_negative" : "o_glc_kpi_positive";
     }
 
+    _cockpitSalaryCoverageRate() {
+        const rate = this.props.record.data.salary_coverage_rate;
+        if (rate === false || rate === null || rate === undefined) {
+            return null;
+        }
+        return rate;
+    }
+
+    get resourcesRealized() {
+        return this.props.record.data.resources_realized || 0;
+    }
+
+    get fundingRealized() {
+        return this.props.record.data.funding_realized || 0;
+    }
+
     _emptyTotals() {
         const totals = {};
         for (const key of NUMERIC_FIELDS) {
@@ -194,11 +210,7 @@ export class GlcCoverageSynthesisField extends Component {
 
         const perfPeriod = computePerformanceAmounts(periodTotals);
 
-        let salaryCoverageRate = null;
-        if (!this.isZero(periodTotals.payroll_realized)) {
-            salaryCoverageRate =
-                (periodTotals.revenue_realized / periodTotals.payroll_realized) * 100;
-        }
+        const salaryCoverageRate = this._cockpitSalaryCoverageRate();
 
         return {
             hasLines: months.length > 0,
@@ -312,7 +324,7 @@ export class GlcCoverageSynthesisField extends Component {
             data: {
                 labels,
                 datasets: [
-                    { label: "Recettes", data: revenueData, backgroundColor: COLOR_REVENUE, borderRadius: 2 },
+                    { label: "Ressources", data: revenueData, backgroundColor: COLOR_REVENUE, borderRadius: 2 },
                     { label: "Salaires", data: payrollData, backgroundColor: COLOR_PAYROLL, borderRadius: 2 },
                     { label: "Dépenses", data: expenseData, backgroundColor: COLOR_EXPENSE, borderRadius: 2 },
                 ],

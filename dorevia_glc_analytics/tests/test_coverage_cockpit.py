@@ -177,21 +177,14 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
     def _create_payroll_on_account(
         self, analytic_account, amount, invoice_date=None, payroll_code="645200"
     ):
-        """Écriture charge payroll + analytique (facture, OD ou rapprochement)."""
-        if invoice_date:
-            line_date = Date.from_string(invoice_date)
-        else:
-            line_date = Date.from_string(self.invoice_date)
+        """Écriture charge payroll + analytique (colonne plan Odoo 19)."""
         payroll_account = self._get_or_create_payroll_account(payroll_code)
-        return self.env["account.analytic.line"].create(
-            {
-                "name": "Masse salariale test cockpit",
-                "date": line_date,
-                "amount": -abs(amount),
-                "general_account_id": payroll_account.id,
-                "account_id": analytic_account.id,
-                "company_id": self.env.company.id,
-            }
+        return self._create_analytic_line_on_plan(
+            analytic_account,
+            -abs(amount),
+            invoice_date=invoice_date,
+            gl_account=payroll_account,
+            account_type="expense",
         )
 
     def _get_or_create_expense_account(self, code="622100"):
@@ -216,21 +209,14 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
     def _create_expense_analytic_line(
         self, analytic_account, amount, invoice_date=None, expense_code="622100"
     ):
-        """Écriture charge hors payroll + analytique (rapprochement / OD)."""
-        if invoice_date:
-            line_date = Date.from_string(invoice_date)
-        else:
-            line_date = Date.from_string(self.invoice_date)
+        """Écriture charge hors payroll + analytique (colonne plan Odoo 19)."""
         expense_account = self._get_or_create_expense_account(expense_code)
-        return self.env["account.analytic.line"].create(
-            {
-                "name": "Charge test cockpit",
-                "date": line_date,
-                "amount": -abs(amount),
-                "general_account_id": expense_account.id,
-                "account_id": analytic_account.id,
-                "company_id": self.env.company.id,
-            }
+        return self._create_analytic_line_on_plan(
+            analytic_account,
+            -abs(amount),
+            invoice_date=invoice_date,
+            gl_account=expense_account,
+            account_type="expense",
         )
 
     def _get_or_create_income_account(self, code="706100"):
@@ -252,24 +238,42 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             )
         return account
 
-    def _create_revenue_analytic_line(
-        self, analytic_account, amount, invoice_date=None, income_code="706100"
+    def _create_analytic_line_on_plan(
+        self, analytic_account, amount, invoice_date=None, gl_account=None, account_type="income"
     ):
-        """Écriture produit classe 7 + analytique (rapprochement / OD)."""
+        """Écriture analytique sur la colonne plan Odoo 19 (x_plan3_id, x_plan4_id, …)."""
         if invoice_date:
             line_date = Date.from_string(invoice_date)
         else:
             line_date = Date.from_string(self.invoice_date)
-        income_account = self._get_or_create_income_account(income_code)
+        if gl_account is None:
+            if account_type in ("income", "income_other"):
+                gl_account = self._get_or_create_income_account("741100")
+            else:
+                gl_account = self._get_or_create_expense_account("625100")
+        plan_column = analytic_account.plan_id._column_name()
         return self.env["account.analytic.line"].create(
             {
-                "name": "Recette test cockpit",
+                "name": "Ligne test cockpit multi-plan",
                 "date": line_date,
-                "amount": abs(amount),
-                "general_account_id": income_account.id,
-                "account_id": analytic_account.id,
+                "amount": amount,
+                "general_account_id": gl_account.id,
                 "company_id": self.env.company.id,
+                plan_column: analytic_account.id,
             }
+        )
+
+    def _create_revenue_analytic_line(
+        self, analytic_account, amount, invoice_date=None, income_code="706100"
+    ):
+        """Écriture produit classe 7 + analytique (colonne plan Odoo 19)."""
+        income_account = self._get_or_create_income_account(income_code)
+        return self._create_analytic_line_on_plan(
+            analytic_account,
+            abs(amount),
+            invoice_date=invoice_date,
+            gl_account=income_account,
+            account_type="income",
         )
 
     def _create_validated_allocation(self, amount=3000.0, bar_percent=100.0, employee=None, period_date=None):
@@ -1379,6 +1383,32 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         )
         self.assertTrue(rp_line)
         self.assertAlmostEqual(rp_line.revenue_realized, 3200.0)
+
+    def test_funding_subventions_on_plan_column_surfaces_in_detail(self):
+        """R15-FUND-PLAN — 741xxx sur x_plan4_id [SUBVENTIONS] comme en production."""
+        year = self._next_test_year()
+        income_account = self._get_or_create_income_account("741000")
+        self._create_analytic_line_on_plan(
+            self.subventions,
+            2500.0,
+            invoice_date="%s-05-08" % year,
+            gl_account=income_account,
+            account_type="income",
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 5, 1),
+            date_to=date(year, 5, 31),
+        )
+        cockpit.action_refresh()
+        self.assertAlmostEqual(cockpit.funding_realized, 2500.0)
+        self.assertAlmostEqual(cockpit.resources_realized, 2500.0)
+        subventions_line = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.analytic_account_id == self.subventions
+        )
+        self.assertTrue(subventions_line)
+        self.assertAlmostEqual(subventions_line.revenue_realized, 2500.0)
+        self.assertEqual(subventions_line.analytic_section, "funding")
 
     def test_resources_realized_includes_all_funding_plans(self):
         """R15-FUND-TOTAL — ressources = recettes activité + tous financements (tous plans)."""

@@ -2,7 +2,7 @@
 
 **Module :** `dorevia_glc_analytics`
 **Branche :** `feat/glc-cockpit-doctrine-classe-6-7-19.0.4.8.0`
-**Version cible :** `19.0.4.8.1`
+**Version cible :** `19.0.4.8.2`
 **Statut :** **Validé MOA — implémenté** (2026-05-28)
 **Référence amont :** [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md) (`19.0.4.7.0`, PR #40) · [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md)
 
@@ -186,7 +186,25 @@ Réserve documentée (déjà tracée) : **mapping budget vs lecture réalisé** 
 
 ---
 
-## 8. Décisions MOA (2026-05-28)
+## 10. Écart recette visuelle MOA (2026-05-28) — colonnes multi-plan Odoo 19
+
+**Symptôme :** `741000 + [SUBVENTIONS]` du 08/05/2026 (2 500 €) visible dans le plan Financements GLC, **absent** du tableau Détail cockpit.
+
+**Cause racine :** en Odoo 19 multi-plan, les écritures ne sont pas toujours sur `account_id` :
+- plan **Activités GLC** → `x_plan3_id`
+- plan **Financements GLC** → `x_plan4_id`
+
+Le domaine cockpit ne couvrait que `account_id` / `auto_account_id` partiellement. Les subventions en production sont sur **`x_plan4_id`**.
+
+**Correctif `19.0.4.8.2` :**
+- `_plan_column_names()` + `_or_domain()` : recherche sur **toutes** les colonnes plan (`account_id`, `x_plan2_id`, `x_plan3_id`, `x_plan4_id`, …)
+- Détail : regroupement **Activités GLC** / **Financements GLC** (`analytic_section`)
+- Synthèse : KPI **Ressources totales** + couverture salaires = `resources_realized / payroll` (inclut financements)
+- Test R15-FUND-PLAN : 741000 sur `x_plan4_id` [SUBVENTIONS]
+
+---
+
+## 11. Décisions MOA (2026-05-28)
 
 | Point | Décision |
 |---|---|

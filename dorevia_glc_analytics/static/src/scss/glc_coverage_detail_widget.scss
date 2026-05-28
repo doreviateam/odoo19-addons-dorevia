@@ -84,6 +84,16 @@
             border-bottom: 1px solid var(--bs-border-color);
         }
 
+        .o_glc_section_title th {
+            background-color: rgba(59, 125, 221, 0.06);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            color: var(--bs-body-color, #212529);
+            padding: 0.35rem 0.75rem 0.35rem 1rem;
+            border-bottom: 1px solid var(--bs-border-color-translucent);
+        }
+
         // Lignes d'activité : indentation légère sous le mois
         .o_glc_activity_row {
             .o_glc_activity_label {

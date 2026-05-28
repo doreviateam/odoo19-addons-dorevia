@@ -25,10 +25,16 @@
                         <div class="o_glc_kpi_hint">réel − budget</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Ressources totales</div>
+                        <div class="o_glc_kpi_value o_glc_kpi_positive"
+                             t-esc="formatAmount(resourcesRealized)"/>
+                        <div class="o_glc_kpi_hint">recettes activité + financements</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
                         <div class="o_glc_kpi_label">Couverture des salaires</div>
                         <div t-att-class="'o_glc_kpi_value ' + coverageClass(agg.salaryCoverageRate)"
                              t-esc="formatCoverageRate(agg.salaryCoverageRate)"/>
-                        <div class="o_glc_kpi_hint">recettes / salaires × 100</div>
+                        <div class="o_glc_kpi_hint">ressources / salaires × 100</div>
                     </div>
                 </div>
 
@@ -41,7 +47,7 @@
                     </div>
 
                     <div class="o_glc_chart_block">
-                        <h6 class="o_glc_chart_title">Structure mensuelle — Recettes / Salaires / Dépenses</h6>
+                        <h6 class="o_glc_chart_title">Structure mensuelle — Ressources / Salaires / Dépenses</h6>
                         <p class="o_glc_chart_legend small text-muted mb-2">
                             Salaires et dépenses affichés en valeurs positives de consommation.
                         </p>

@@ -14,7 +14,7 @@ Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** et **R15-DEP-MISSION
 |---|---|
 | Module cockpit | `dorevia_glc_analytics` |
 | Module budget (prérequis) | `dorevia_glc_budget` |
-| Version attendue | `19.0.4.8.1` |
+| Version attendue | `19.0.4.8.2` |
 | Palier | 4 — Cockpit GLC |
 | Évolution | période libre `date_from` / `date_to` + regroupement mensuel automatique |
 
@@ -728,7 +728,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 | Réf | Cas | Statut MOA |
 |---|---|:---:|
-| R15-DEP-MISSIONS-REEL | Cas 625100 + [MISSIONS] 1 552 € sur `glc-rgl-test-import` 2026 | [ ] |
+| R15-FUND-PLAN | 741000 + [SUBVENTIONS] 08/05/2026 sur x_plan4_id | Détail + ressources 2 500 € | [ ] |
 | R15-DETAIL-ACTIVITES | Vérifier que MISSIONS, RESIDENCES, LOCATION_RADIO apparaissent dans le détail Activités si elles portent du réel | [ ] |
 | R15-SYNTHESE-STRUCTURE | Graphe Structure mensuelle : barres Dépenses incluent toutes les activités, pas seulement STRUCTURE | [ ] |
 

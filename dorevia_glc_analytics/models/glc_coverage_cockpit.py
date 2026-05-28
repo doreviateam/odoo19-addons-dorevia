@@ -504,21 +504,35 @@ class GlcCoverageCockpit(models.TransientModel):
             ]
         )
 
+    def _plan_column_names(self):
+        """Colonnes analytiques Odoo 19 (account_id, x_plan3_id, x_plan4_id, …)."""
+        return self.env["account.analytic.line"]._get_plan_fnames()
+
+    def _or_domain(self, field_name, operator, values):
+        columns = self._plan_column_names()
+        if not columns:
+            return [("auto_account_id", operator, values)]
+        if len(columns) == 1:
+            return [(columns[0], operator, values)]
+        domain = ["|"] * (len(columns) - 1)
+        for column in columns:
+            domain.append((column, operator, values))
+        return domain
+
     def _analytic_accounts_domain(self, analytic_accounts):
-        return [
-            "|",
-            ("auto_account_id", "in", analytic_accounts.ids),
-            ("account_id", "in", analytic_accounts.ids),
-        ]
+        if not analytic_accounts:
+            return [(1, "=", 0)]
+        return self._or_domain("placeholder", "in", analytic_accounts.ids)
 
     def _excluded_analytic_domain(self):
         excluded = self._excluded_analytic_accounts()
         if not excluded:
             return []
-        return [
-            ("auto_account_id", "not in", excluded.ids),
-            ("account_id", "not in", excluded.ids),
-        ]
+        columns = self._plan_column_names()
+        if not columns:
+            return [("auto_account_id", "not in", excluded.ids)]
+        match_excluded = self._or_domain("placeholder", "in", excluded.ids)
+        return ["!"] + match_excluded
 
     @api.model
     def _prefix_or_domain(self, field_name, prefixes):
@@ -906,11 +920,25 @@ class GlcCoverageCockpit(models.TransientModel):
             "year": month_start.year,
         }
 
+    @api.model
+    def _analytic_section_for_account(self, account):
+        if self._is_funding_analytic_account(account):
+            return "funding"
+        plan_activites = self.env.ref(
+            "dorevia_glc_analytics.analytic_plan_glc_activites",
+            raise_if_not_found=False,
+        )
+        if plan_activites and account.plan_id == plan_activites:
+            return "activity"
+        return "other"
+
     def _prepare_activity_line_vals(self, month_start, account, amounts):
         self.ensure_one()
+        section = self._analytic_section_for_account(account)
         return {
             "cockpit_id": self.id,
             "line_kind": "activity",
+            "analytic_section": section,
             "period_date": month_start,
             "month_key": self._month_key(month_start),
             "month_label": self._month_label(month_start),
@@ -957,7 +985,7 @@ class GlcCoverageCockpit(models.TransientModel):
 class GlcCoverageCockpitLine(models.TransientModel):
     _name = "glc.coverage.cockpit.line"
     _description = "Détail cockpit couverture GLC"
-    _order = "month_key, line_kind, analytic_account_id, id"
+    _order = "month_key, analytic_section, activity_label, id"
     _rec_name = "activity_label"
 
     cockpit_id = fields.Many2one(
@@ -983,6 +1011,16 @@ class GlcCoverageCockpitLine(models.TransientModel):
         string="Activité",
     )
     activity_label = fields.Char(string="Libellé activité")
+    analytic_section = fields.Selection(
+        string="Famille analytique",
+        selection=[
+            ("activity", "Activités"),
+            ("funding", "Financements"),
+            ("other", "Autres"),
+        ],
+        required=True,
+        default="activity",
+    )
     currency_id = fields.Many2one(
         related="cockpit_id.currency_id",
         store=True,
