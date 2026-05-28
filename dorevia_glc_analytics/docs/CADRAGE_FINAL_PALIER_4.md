@@ -45,6 +45,7 @@ Ces règles sont **structurantes** pour toute implémentation Palier 4. Aucune d
 |---|---|
 | Modèle | `account.analytic.line` |
 | Règle de remontée | **date dans la période** + **montant non nul** + **GL classe 6 ou 7** + **distribution analytique exploitable** |
+| Périmètre analytique | **tous les comptes analytiques, tous plans** (Activités GLC, Financements GLC, autres) — hors codes legacy / `RH_PERSONNEL` |
 | Origines | facture client/fournisseur · OD · rapprochement bancaire · caisse |
 | Agrégation | mois × compte analytique × société × nature comptable (classe 6 / classe 7) |
 
@@ -55,11 +56,12 @@ Ces règles sont **structurantes** pour toute implémentation Palier 4. Aucune d
 | Compte GL | Compte analytique | Famille cockpit | Sens |
 |---|---|---|---|
 | **7xxx** | Plan **Activités GLC** *(toute activité)* | **RECETTES** | + |
-| **7xxx** | Plan **Financements GLC** *(SUBVENTIONS, ADHESIONS, …)* | **RESSOURCES / FINANCEMENTS** | + |
-| **631 / 633 / 641 / 645** | Plan **Activités GLC** *(toute activité)* | **SALAIRES** | − |
-| **6xxx hors payroll** | Plan **Activités GLC** *(toute activité)* | **DÉPENSES** | − |
+| **7xxx** | Plan **Financements GLC** *(SUBVENTIONS, ADHESIONS, DONS, RESSOURCES_PROPRES)* | **RESSOURCES / FINANCEMENTS** | + |
+| **7xxx** | **Tout autre plan analytique** | **RECETTES** *(classe 7 = entrée)* | + |
+| **631 / 633 / 641 / 645** | **Tout plan analytique exploitable** | **SALAIRES** | − |
+| **6xxx hors payroll** | **Tout plan analytique exploitable** | **DÉPENSES** | − |
 
-**Toutes** les activités du plan Activités peuvent recevoir des recettes, dépenses ou salaires — il n'y a **plus** de restriction par code analytique (`BAR`, `STRUCTURE`, etc.). Les dépenses **MISSIONS, RESIDENCES, LOCATION_RADIO** apparaissent désormais dans le détail.
+**Tous les plans analytiques** sont pris en compte par défaut. Le filtre par plan (Activités GLC / Financements GLC / …) est une **option UX ultérieure**, pas une limite de calcul.
 
 **Exclusions (I5) :** classes **1xx / 4xx / 5xx** (164, 401, 411, 467, 512, 53), lettrage seul, lignes sans analytique exploitable, comptes legacy / `RH_PERSONNEL`.
 
@@ -193,4 +195,4 @@ Les invariants I1–I7 sont acceptés tels quels. Prochaine étape : confirmatio
 
 *Palier 4 livré et gelé MOA sur `main` — version `19.0.4.0.0` · PR #33 mergée.*  
 *Révision I2/I3/I4 source réalisé cockpit — MOA validée 2026-05-28 · `19.0.4.7.0` · [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md).*  
-*Raffinement I2 doctrine classe 6/7 (toute activité) — MOA validée 2026-05-28 · `19.0.4.8.0` · [TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md](./TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md).*
+*Raffinement I2 doctrine classe 6/7 (toute activité, tous plans) — MOA validée 2026-05-28 · `19.0.4.8.1` · [TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md](./TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md).*

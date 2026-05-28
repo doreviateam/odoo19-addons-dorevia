@@ -2,8 +2,8 @@
 
 ## Statut
 
-**GO MOA** sur cockpit GLC période libre — **R1–R15 automatisé** cible sur **`19.0.4.8.0`** (2026-05-28).  
-Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : toutes les activités (MISSIONS, RESIDENCES, LOCATION_RADIO, …) remontent dans le détail dès lors qu'elles portent du réel.  
+**GO MOA** sur cockpit GLC période libre — **R1–R15 automatisé** cible sur **`19.0.4.8.1`** (2026-05-28).  
+Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : **tous les plans analytiques** par défaut (Activités + Financements + autres). Filtre par plan = option UX ultérieure.  
 Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** et **R15-DEP-MISSIONS-REEL** : à jouer côté interface / données réelles.
 
 *(Historique : GO avec réserves Palier 4 `19.0.4.2.5` · UX-GROUPBY `19.0.4.4.2` · Marge d'activité `19.0.4.5.1` · Synthèse graphique `19.0.4.6.1` · source réalisé `19.0.4.7.0` · doctrine classe 6/7 `19.0.4.8.0`.)*
@@ -14,7 +14,7 @@ Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** et **R15-DEP-MISSION
 |---|---|
 | Module cockpit | `dorevia_glc_analytics` |
 | Module budget (prérequis) | `dorevia_glc_budget` |
-| Version attendue | `19.0.4.8.0` |
+| Version attendue | `19.0.4.8.1` |
 | Palier | 4 — Cockpit GLC |
 | Évolution | période libre `date_from` / `date_to` + regroupement mensuel automatique |
 
@@ -609,7 +609,7 @@ Tests UX-GROUPBY / PERFORMANCE :
 | **R12** | **PERFORMANCE + séparation familles (cible UX validée)** | **GO** | `19.0.4.5.1` — blocs distincts, formules performance, finition visuelle familles |
 | **R13** | **Synthèse graphique — Marge d'activité (4 KPI + 3 graphes Chart.js)** | **GO** | `19.0.4.6.1` — onglet 1 cockpit GLC, wording MOA Marge |
 | **R14** | **Source de vérité réalisé cockpit (compta analytique + Palier 2 contrôle R2)** | **GO (auto)** | `19.0.4.7.0` — refonte `_sum_payroll_realized` · **74 post-tests verts** (2026-05-28) |
-| **R15** | **Doctrine classe 6/7 + analytique (toute activité)** | **GO (auto cible)** | `19.0.4.8.0` — MISSIONS, RESIDENCES, LOCATION_RADIO remontent ; exclusion explicite 4xx / 5xx (2026-05-28) |
+| **R15** | **Doctrine classe 6/7 + analytique (tous plans, toute activité)** | **GO (auto cible)** | `19.0.4.8.1` — MISSIONS, financements SUBVENTIONS/ADHESIONS/RP remontent ; exclusion explicite 4xx / 5xx |
 
 ---
 
@@ -719,7 +719,10 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | R15-REV-PRESTATIONS | 706xxx + [PRESTATIONS] | RECETTES PRESTATIONS | ✅ |
 | R15-EXCL-467 | 467xxx + analytique | **Exclue** *(classe 4)* | ✅ |
 | R15-MULTI | Recettes + dépenses + salaires multi-activités | Répartition correcte par axe | ✅ |
-| R15-TOTAL | Somme lignes détail = totaux période | Cohérence agrégats | ✅ |
+| R15-FUND-SUB | 741xxx + [SUBVENTIONS] | FINANCEMENTS + détail | ✅ |
+| R15-FUND-ADH | 756xxx + [ADHESIONS] | FINANCEMENTS + détail | ✅ |
+| R15-FUND-RP | 758xxx + [RESSOURCES_PROPRES] | ressource propre + détail | ✅ |
+| R15-FUND-TOTAL | Recettes BAR + financements multi-plans | `resources_realized` cohérent | ✅ |
 
 **Recette manuelle MOA (complément) :**
 

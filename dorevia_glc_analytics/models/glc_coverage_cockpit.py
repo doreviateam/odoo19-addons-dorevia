@@ -457,21 +457,43 @@ class GlcCoverageCockpit(models.TransientModel):
             ]
         )
 
-    def _activity_accounts(self):
+    @api.model
+    def _is_funding_analytic_account(self, account):
+        """Compte analytique de financement (plan Financements GLC ou type financement)."""
+        if not account:
+            return False
+        if account.glc_activity_type == "financement":
+            return True
+        plan_financements = self.env.ref(
+            "dorevia_glc_analytics.analytic_plan_glc_financements",
+            raise_if_not_found=False,
+        )
+        if plan_financements and account.plan_id == plan_financements:
+            return True
+        return account.code in GLC_COCKPIT_FUNDING_CODES
+
+    def _cockpit_analytic_accounts(self):
+        """Tous les comptes analytiques exploitables cockpit (tous plans par défaut)."""
         self.ensure_one()
         if self.activity_account_id:
             return self.activity_account_id
-        return self.env["account.analytic.account"].search(
-            [
-                (
-                    "plan_id",
-                    "=",
-                    self.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites").id,
-                ),
-                ("company_id", "in", [False, self.company_id.id]),
-                ("glc_report_active", "=", True),
-            ]
+        excluded = self._excluded_analytic_accounts()
+        domain = [("company_id", "in", [False, self.company_id.id])]
+        if excluded:
+            domain.append(("id", "not in", excluded.ids))
+        return self.env["account.analytic.account"].search(domain)
+
+    def _funding_analytic_accounts(self):
+        return self._cockpit_analytic_accounts().filtered(
+            lambda account: self._is_funding_analytic_account(account)
         )
+
+    def _activity_revenue_analytic_accounts(self):
+        return self._cockpit_analytic_accounts() - self._funding_analytic_accounts()
+
+    def _activity_accounts(self):
+        """Alias rétrocompat — périmètre élargi à tous les plans analytiques."""
+        return self._cockpit_analytic_accounts()
 
     def _excluded_analytic_accounts(self):
         codes = set(GLC_COCKPIT_SALARY_EXCLUDED_ANALYTIC_CODES) | set(GLC_LEGACY_ANALYTIC_CODES)
@@ -601,7 +623,7 @@ class GlcCoverageCockpit(models.TransientModel):
         if activity_account:
             analytic_accounts = activity_account
         else:
-            analytic_accounts = self._activity_accounts()
+            analytic_accounts = self._cockpit_analytic_accounts()
         if not analytic_accounts:
             return 0.0
         return self._sum_lines(
@@ -666,8 +688,9 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _aggregate_period(self, period_start, period_end):
         self.ensure_one()
-        activity_accounts = self._activity_accounts()
-        funding_accounts = self._analytic_accounts_by_codes(GLC_COCKPIT_FUNDING_CODES)
+        cockpit_accounts = self._cockpit_analytic_accounts()
+        funding_accounts = self._funding_analytic_accounts()
+        activity_revenue_accounts = self._activity_revenue_analytic_accounts()
         revenue_budget_accounts = self._analytic_accounts_by_codes(
             GLC_COCKPIT_ACTIVITY_REVENUE_CODES
         )
@@ -679,13 +702,13 @@ class GlcCoverageCockpit(models.TransientModel):
         )
 
         activity_revenue_realized = self._sum_revenue_realized(
-            activity_accounts, period_start, period_end
+            activity_revenue_accounts, period_start, period_end
         )
         funding_realized = self._sum_revenue_realized(
             funding_accounts, period_start, period_end
         )
         general_expenses_realized = self._sum_expense_realized(
-            activity_accounts, period_start, period_end
+            cockpit_accounts, period_start, period_end
         )
         payroll_realized = self._sum_payroll_realized(
             period_start,
@@ -756,7 +779,7 @@ class GlcCoverageCockpit(models.TransientModel):
         )
 
         line_vals = []
-        activity_accounts = self._activity_accounts()
+        cockpit_accounts = self._cockpit_analytic_accounts()
         for month_start in self._month_starts_in_period():
             slice_from, slice_to = self._month_slice_bounds(month_start)
             month_end = date(
@@ -764,11 +787,15 @@ class GlcCoverageCockpit(models.TransientModel):
                 month_start.month,
                 monthrange(month_start.year, month_start.month)[1],
             )
-            for account in activity_accounts:
+            for account in cockpit_accounts:
                 revenue_realized = self._sum_revenue_realized(
                     account, slice_from, slice_to
                 )
-                if account.code in GLC_COCKPIT_ACTIVITY_REVENUE_CODES:
+                if self._is_funding_analytic_account(account):
+                    revenue_budget = self._sum_budget(
+                        month_start, month_end, account, "funding"
+                    )
+                elif account.code in GLC_COCKPIT_ACTIVITY_REVENUE_CODES:
                     revenue_budget = self._sum_budget(
                         month_start, month_end, account, "revenue"
                     )

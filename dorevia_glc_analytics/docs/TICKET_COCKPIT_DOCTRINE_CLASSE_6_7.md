@@ -2,8 +2,8 @@
 
 **Module :** `dorevia_glc_analytics`
 **Branche :** `feat/glc-cockpit-doctrine-classe-6-7-19.0.4.8.0`
-**Version cible :** `19.0.4.8.0`
-**Statut :** **Validé MOA — implémentation en cours** (2026-05-28)
+**Version cible :** `19.0.4.8.1`
+**Statut :** **Validé MOA — implémenté** (2026-05-28)
 **Référence amont :** [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md) (`19.0.4.7.0`, PR #40) · [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md)
 
 ---
@@ -44,7 +44,26 @@ Conséquence : une charge **625100 + [MISSIONS]** (ex. : 1 552 € sur `glc-rgl-
 | Compte analytique | Plan | Réception classe 7 | Réception classe 6 |
 |---|---|---|---|
 | `BAR`, `PRESTATIONS`, `PRIVATISATIONS`, `RESIDENCES`, `MISSIONS`, `LOCATION_RADIO`, `STRUCTURE` | **Activités GLC** | **RECETTES** | **DÉPENSES** (hors payroll) ou **SALAIRES** |
-| `SUBVENTIONS`, `ADHESIONS`, `DONS`, `RESSOURCES_PROPRES` | **Financements GLC** | **FINANCEMENTS / RESSOURCES** | n/a *(financements ne portent pas de charge)* |
+| `SUBVENTIONS`, `ADHESIONS`, `DONS`, `RESSOURCES_PROPRES` | **Financements GLC** | **FINANCEMENTS / RESSOURCES** | n/a *(financements ne portent pas de charge en pratique)* |
+
+**Clarification MOA complémentaire (2026-05-28) — périmètre analytique :**
+
+> Par défaut, le cockpit traite **tous les comptes analytiques, quel que soit leur plan**, dès lors qu'ils sont associés à une ligne comptable réelle de classe 6 ou 7.
+
+| Règle | Valeur |
+|---|---|
+| Périmètre analytique par défaut | **Tous les plans** (Activités GLC, Financements GLC, et tout autre plan) |
+| Filtre par plan analytique | **Option UX ultérieure** — ne doit pas limiter le calcul par défaut |
+| Exclusions analytiques | codes legacy (`BAR_RESTAU`, …) · `RH_PERSONNEL` |
+| Filtre `glc_report_active` | **Hors périmètre calcul réalisé** — réservé à un futur filtre d'affichage |
+
+**Exemples financements (classe 7) :**
+
+| Écriture | Résultat cockpit |
+|---|---|
+| 741xxx + [SUBVENTIONS] | ressource SUBVENTIONS (onglet Ressources + détail) |
+| 756xxx + [ADHESIONS] | ressource ADHESIONS |
+| 758xxx + [RESSOURCES_PROPRES] | ressource propre |
 
 ---
 
@@ -89,31 +108,34 @@ Les classes hors 6/7 ne remontent pas dans le cockpit, même si la ligne porte u
 
 ### 5.1. Comptabilité analytique — domaines
 
-| Méthode | Comportement `19.0.4.8.0` |
+| Méthode | Comportement `19.0.4.8.1` |
 |---|---|
-| `_analytic_line_domain` | classe **6** hors payroll, sur **tout compte analytique actif** du plan Activités ; ajout `=like '6%'` ; exclusions inchangées |
-| `_payroll_analytic_line_domain` | classe **6** payroll (631/633/641/645) ; inchangé |
-| `_funding_line_domain` *(nouveau)* | classe **7**, sur comptes analytiques **plan Financements** |
-| `_revenue_line_domain` *(nouveau)* | classe **7**, sur **tout compte analytique actif** du plan Activités |
+| `_cockpit_analytic_accounts` *(nouveau)* | **tous** les comptes analytiques société, **tous plans**, hors codes legacy / `RH_PERSONNEL` |
+| `_funding_analytic_accounts` | sous-ensemble financement (plan Financements GLC ou `glc_activity_type = financement`) |
+| `_activity_revenue_analytic_accounts` | cockpit accounts − funding accounts |
+| `_revenue_analytic_line_domain` | classe **7** + analytique exploitable |
+| `_expense_analytic_line_domain` | classe **6** hors payroll + analytique exploitable |
+| `_payroll_analytic_line_domain` | classe **6** payroll (631/633/641/645) + analytique exploitable |
 
 ### 5.2. Agrégation `_aggregate_period`
 
 | Indicateur | Périmètre analytique | Périmètre GL |
 |---|---|---|
-| `activity_revenue_realized` | **tous comptes plan Activités actifs** | classe 7 |
-| `general_expenses_realized` | **tous comptes plan Activités actifs** | classe 6 hors payroll |
-| `payroll_realized` | **tous comptes plan Activités actifs** | classe 6 payroll |
-| `funding_realized` | comptes plan Financements (`SUBVENTIONS`, `ADHESIONS`, …) | classe 7 |
+| `activity_revenue_realized` | comptes **hors financement** (tous plans) | classe 7 |
+| `funding_realized` | comptes **financement** (plan Financements GLC) | classe 7 |
+| `general_expenses_realized` | **tous** comptes analytiques exploitables | classe 6 hors payroll |
+| `payroll_realized` | **tous** comptes analytiques exploitables | classe 6 payroll |
 
 ### 5.3. Détail par activité
 
-Pour **chaque** compte du plan Activités (actif) × mois :
+Pour **chaque** compte analytique exploitable (tous plans) × mois :
 
 - `revenue_realized` = classe 7 + cet axe
 - `expense_realized` = classe 6 hors payroll + cet axe
 - `payroll_realized` = classe 6 payroll + cet axe
+- comptes financement : budget lu via `line_type = funding`
 
-→ Lignes **MISSIONS**, **RESIDENCES**, **LOCATION_RADIO** désormais visibles si elles portent des montants réels (et plus seulement si elles portent du budget salaires).
+→ **SUBVENTIONS**, **ADHESIONS**, **RESSOURCES_PROPRES** apparaissent dans le détail dès qu'ils portent du réel classe 7.
 
 ### 5.4. Budget — hors scope `19.0.4.8.0`
 
@@ -137,8 +159,10 @@ Réserve documentée (déjà tracée) : **mapping budget vs lecture réalisé** 
 | R15-REV-PRESTATIONS | 706xxx + `[PRESTATIONS]` | RECETTES PRESTATIONS | auto |
 | R15-EXCL-467 | 467xxx + `[STRUCTURE]` | **exclu** *(classe 4)* | auto |
 | R15-EXCL-512-PAR-CLASS | 512xxx + analytique | **exclu** *(classe 5)* | auto |
-| R15-TOTAL-DETAIL | Somme par activité × famille = totaux période | cohérence | auto |
-| R15-MULTI-ACTIVITY | 1 mois, 4 activités avec recettes / dépenses / salaires | toutes lignes visibles | auto |
+| R15-FUND-SUB | 741xxx + [SUBVENTIONS] | FINANCEMENTS + détail | auto |
+| R15-FUND-ADH | 756xxx + [ADHESIONS] | FINANCEMENTS + détail | auto |
+| R15-FUND-RP | 758xxx + [RESSOURCES_PROPRES] | FINANCEMENTS + détail | auto |
+| R15-FUND-TOTAL | Recettes BAR + financements multi-plans | `resources_realized` cohérent | auto |
 
 **Non-régression :** 74 post-tests `19.0.4.7.0` conservés.
 
@@ -169,6 +193,9 @@ Réserve documentée (déjà tracée) : **mapping budget vs lecture réalisé** 
 | Date + montant + classe 6/7 + analytique = règle unique de remontée | ✅ GO |
 | Étendre DÉPENSES à toutes les activités (pas seulement STRUCTURE) | ✅ GO |
 | Étendre RECETTES à toutes les activités (pas seulement BAR/PRESTATIONS/PRIVATISATIONS) | ✅ GO |
+| Périmètre analytique = **tous les plans** par défaut (pas seulement Activités GLC) | ✅ GO |
+| Financements (SUBVENTIONS, ADHESIONS, RESSOURCES_PROPRES) visibles dans le détail | ✅ GO |
+| Filtre par plan analytique = option UX ultérieure, pas limite de calcul | ✅ GO |
 | Garde-fou explicite classe 6/7 sur le code GL | ✅ GO |
 | Exclusions 4xx / 5xx (411/401/467/512/53) confirmées | ✅ GO |
 | Mapping budget Palier 3 inchangé dans `19.0.4.8.0` | ✅ GO *(réserve documentée)* |
