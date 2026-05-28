@@ -265,6 +265,8 @@ Réalisé cockpit (toutes familles) =
 | Cadrage MOA section 10 | **GO** — R2 retenu pour Palier 2 |
 | Implémentation `19.0.4.7.0` | **Livré** — `_sum_payroll_realized` basculé sur `account.analytic.line` |
 | Tests automatisés R14 | **7 nouveaux tests** · **74 post-tests verts** (70 analytics + 14 budget) |
+| Recette MOA `19.0.4.7.0` (2026-05-28) | **GO technique** — upgrade + restart + rejeu complet sur `glc-rgl-test-import` |
+| Compléments manuels R14 | **En attente** — R14-CAISSE · R14-OD · R14-645-REEL |
 
 ### Implémentation (2026-05-28)
 

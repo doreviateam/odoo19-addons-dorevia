@@ -2,11 +2,11 @@
 
 ## Statut
 
-**GO avec réserves** sur Palier 4 période libre (`19.0.4.2.5`) — R1–R10 OK.  
-**GO MOA UX-GROUPBY** sur `19.0.4.4.2` — R11 (composant OWL `glc_coverage_detail`) — 2026-05-27.  
-Tests automatisés **65/65 OK** sur `dorevia_glc_analytics` + `dorevia_glc_budget`.
+**GO MOA** sur cockpit GLC période libre — **R1–R14 automatisé OK** sur **`19.0.4.7.0`** (2026-05-28).  
+**74 post-tests verts** (`dorevia_glc_analytics` 70 + `dorevia_glc_budget` 14) · upgrade + restart worker confirmés sur `glc-rgl-test-import`.  
+Compléments manuels R14 **R14-CAISSE**, **R14-OD**, **R14-645-REEL** : **en attente MOA** (interface / données réelles).
 
-*(Passages précédents : GO avec réserves — navigation sans erreur ; correctifs `19.0.4.2.1` → `19.0.4.2.5` ; itérations UX-GROUPBY `19.0.4.3.0` → `19.0.4.4.2`.)*
+*(Historique : GO avec réserves Palier 4 `19.0.4.2.5` · UX-GROUPBY `19.0.4.4.2` · Marge d'activité `19.0.4.5.1` · Synthèse graphique `19.0.4.6.1` · source réalisé `19.0.4.7.0`.)*
 
 ## Module
 
@@ -14,7 +14,7 @@ Tests automatisés **65/65 OK** sur `dorevia_glc_analytics` + `dorevia_glc_budge
 |---|---|
 | Module cockpit | `dorevia_glc_analytics` |
 | Module budget (prérequis) | `dorevia_glc_budget` |
-| Version attendue | `19.0.4.4.2` |
+| Version attendue | `19.0.4.7.0` |
 | Palier | 4 — Cockpit GLC |
 | Évolution | période libre `date_from` / `date_to` + regroupement mensuel automatique |
 
@@ -569,11 +569,11 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
   --stop-after-init --no-http
 ```
 
-| Résultat attendu | Résultat recette `19.0.4.7.0` |
+| Résultat attendu | Résultat recette `19.0.4.7.0` (2026-05-28) |
 |---|---|
-| Tests `dorevia_glc_analytics` | **70 tests** |
-| Tests `dorevia_glc_budget` | **14 tests** |
-| **Total** | **74 post-tests**, **0 failed**, **0 error(s)** |
+| Tests `dorevia_glc_analytics` | **70 tests** — **0 failed, 0 error** |
+| Tests `dorevia_glc_budget` | **14 tests** — **0 failed, 0 error** |
+| **Total** | **74 post-tests** — **GO technique MOA** |
 
 Tests source réalisé R14 :
 - `test_payroll_from_analytic_lines_not_allocations` — Palier 2 ≠ source cockpit
@@ -608,7 +608,7 @@ Tests UX-GROUPBY / PERFORMANCE :
 | **R11** | **UX-GROUPBY (composant OWL `glc_coverage_detail`)** | **GO** | Blocs mensuels, sous-totaux, total période, zéros `—` (`19.0.4.4.2`) |
 | **R12** | **PERFORMANCE + séparation familles (cible UX validée)** | **GO** | `19.0.4.5.1` — blocs distincts, formules performance, finition visuelle familles |
 | **R13** | **Synthèse graphique — Marge d'activité (4 KPI + 3 graphes Chart.js)** | **GO** | `19.0.4.6.1` — onglet 1 cockpit GLC, wording MOA Marge |
-| **R14** | **Source de vérité réalisé cockpit (compta analytique + Palier 2 contrôle R2)** | **GO (auto)** | `19.0.4.7.0` — refonte `_sum_payroll_realized` |
+| **R14** | **Source de vérité réalisé cockpit (compta analytique + Palier 2 contrôle R2)** | **GO (auto)** | `19.0.4.7.0` — refonte `_sum_payroll_realized` · **74 post-tests verts** (2026-05-28) |
 
 ---
 
@@ -662,6 +662,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 - [x] **GO** — R1–R12 OK sur `19.0.4.5.1`
 - [x] **GO** — R1–R13 OK sur `19.0.4.6.1` — **onglet 1 Synthèse graphique validé MOA**
+- [x] **GO** — R1–R14 automatisé OK sur `19.0.4.7.0` — **source réalisé cockpit validée technique** (2026-05-28)
 
 ---
 
@@ -689,12 +690,23 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | R14-OD | Écriture comptable directe + analytique | [ ] |
 | R14-645-REEL | Cas révélateur 645200 + [STRUCTURE] rapprochement bancaire sur `glc-rgl-test-import` | [ ] |
 
-**Verdict R14 automatisé :** **GO** — 7 tests Python verts sur `19.0.4.7.0`.
+**Verdict R14 automatisé :** **GO** — 7 tests Python verts · **rejeu complet 74 post-tests** sur `glc-rgl-test-import` (2026-05-28).
+
+**Procédure exécutée (2026-05-28) :**
+
+| Étape | Résultat |
+|---|---|
+| `-u dorevia_glc_analytics` sur `glc-rgl-test-import` | OK |
+| Restart worker Odoo | OK |
+| Version installée confirmée | **`19.0.4.7.0`** |
+| Non-régression `post_install` analytics + budget | **74 tests · 0 failed · 0 error** |
 
 ---
 
 ## Verdict recette (mise à jour)
-- [ ] GO avec réserves
+
+- [x] **GO** — R1–R14 automatisé OK sur `19.0.4.7.0` (2026-05-28)
+- [ ] Compléments manuels R14-CAISSE / R14-OD / R14-645-REEL
 - [ ] NO GO
 
 *(Le verdict « GO avec réserves » du Palier 4 période libre est levé : les réserves non bloquantes restent documentées ; l'UX-GROUPBY, le complément Marge d'activité et la Synthèse graphique sont validés en complément. Le cockpit GLC dispose désormais d'une **double lecture** : Synthèse graphique pour le pilotage immédiat, Détail par activité pour la justification chiffrée.)*
@@ -722,11 +734,13 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | Date (R11 UX-GROUPBY `19.0.4.4.2`) | 2026-05-27 |
 | Date (R12 PERFORMANCE + familles `19.0.4.5.1`) | 2026-05-27 |
 | Date (R13 Synthèse graphique — Marge d'activité `19.0.4.6.1`) | 2026-05-27 |
+| Date (R14 source réalisé — auto `19.0.4.7.0`) | **2026-05-28** |
 | Exécutant | MOA |
 | Base / environnement | `glc-rgl-test-import` · `http://localhost:18079` |
-| Version module | `dorevia_glc_analytics` **`19.0.4.6.1`** (Synthèse graphique + wording Marge d'activité) |
-| Verdict global | **GO** — R1–R13 OK — **double lecture cockpit validée** (Synthèse graphique + Détail par activité) |
-| Merge | **À soumettre** — branche `feat/glc-cockpit-synthese-graphique` |
+| Version module | `dorevia_glc_analytics` **`19.0.4.7.0`** (source réalisé cockpit · refonte I2/I3) |
+| Verdict global | **GO technique** — R1–R14 automatisé OK · **74 post-tests verts** |
+| Merge | **PR #40** — branche `feat/glc-cockpit-source-realise-19.0.4.7.0` |
+| Compléments manuels R14 | **En attente MOA** — R14-CAISSE · R14-OD · R14-645-REEL |
 
 ---
 
@@ -737,7 +751,8 @@ Cette recette valide :
 1. que le cockpit GLC n'est plus limité à une lecture mensuelle fixe, mais devient un outil de pilotage sur **période libre** (R1–R10 sur `19.0.4.2.5`) ;
 2. que l'onglet **Détail par activité** propose une **lecture structurée par mois** avec sous-totaux mensuels et total période visibles, **entièrement contenue dans le cockpit** (R11 sur `19.0.4.4.2`) ;
 3. que le bloc **Marge d'activité** et la **séparation visuelle des 4 familles** métier répondent aux attentes MOA (R12 sur `19.0.4.5.1`) — **cible UX validée** pour la vue Détail ;
-4. que l'onglet **Synthèse graphique** offre une **lecture immédiate de pilotage** (4 KPI + 3 graphes Marge / Structure / Par activité) avec la grammaire métier **Recettes | Salaires | Dépenses | Marge d'activité** (R13 sur `19.0.4.6.1`) — **onglet 1 cockpit GLC validé MOA**.
+4. que l'onglet **Synthèse graphique** offre une **lecture immédiate de pilotage** (4 KPI + 3 graphes Marge / Structure / Par activité) avec la grammaire métier **Recettes | Salaires | Dépenses | Marge d'activité** (R13 sur `19.0.4.6.1`) — **onglet 1 cockpit GLC validé MOA** ;
+5. que le **réalisé cockpit** agrège les écritures charge/produit + analytique (toutes origines), avec Palier 2 en contrôle R2 uniquement (R14 auto sur `19.0.4.7.0`) — **validé technique MOA** (2026-05-28).
 
 **Critères de GO :**
 
@@ -745,6 +760,6 @@ Cette recette valide :
 > Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs RECETTES | SALAIRES | DÉPENSES | MARGE D'ACTIVITÉ clairement distingués, sans sortie de l'onglet.  
 > La synthèse graphique doit offrir une lecture instantanée du pilotage (marge d'activité, structure mensuelle, marge par activité) en complément du détail chiffré.
 
-**Statut :** **GO** sur `19.0.4.7.0` — R1–R14 (auto) OK, **74 post-tests verts**, recette manuelle R14-CAISSE/OD/645-REEL en attente MOA.
+**Statut :** **GO technique** sur `19.0.4.7.0` — R1–R14 automatisé OK · **74 post-tests verts** (2026-05-28) · compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** en attente MOA.
 
-**Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) — sections 11–13 (UX-GROUPBY, Marge d'activité, séparation familles) · [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](../TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md) — onglet 1 Synthèse graphique.
+**Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) · [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](../TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md) · [TICKET_COCKPIT_SOURCE_REALISE.md](../TICKET_COCKPIT_SOURCE_REALISE.md) — source réalisé `19.0.4.7.0`.
