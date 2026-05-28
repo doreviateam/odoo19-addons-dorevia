@@ -416,11 +416,11 @@ Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet 
 
 | Amélioration | Détail |
 |---|---|
-| Scroll horizontal | Conteneur `overflow-x: auto` ; `min-width: 1320px` sur le tableau |
+| Scroll horizontal | Conteneur `overflow-x: auto` en **fallback** uniquement ; laptop : `width: 100%`, `table-layout: fixed`, **pas de min-width forcée** |
 | Colonne Activité sticky | Classe `o_glc_col_sticky` (header, lignes, sous-totaux, total période) |
 | Libellés activité | `min-width` / `max-width` ; **2 lignes max** + ellipsis ; `title` au survol pour le libellé complet |
-| Colonnes numériques | `white-space: nowrap` ; `min-width` assumée |
-| Laptop ≤ 1600 px | Paddings légèrement réduits ; message discret *« Vue détaillée optimisée pour écran large »* |
+| Colonnes numériques | `white-space: nowrap` ; répartition via `<colgroup>` sur laptop |
+| Laptop ≤ 1600 px | Paddings réduits, séparateurs familles compacts, header **« Marge »** (libellé court), typo légèrement réduite |
 
 Structure métier **inchangée** : RECETTES | SALAIRES | DÉPENSES | MARGE D'ACTIVITÉ · Réel/Budget/Écart · mois/sous-totaux/total période.
 
@@ -430,4 +430,5 @@ Structure métier **inchangée** : RECETTES | SALAIRES | DÉPENSES | MARGE D'ACT
 Verdict final MOA UX-GROUPBY — 2026-05-27 (version livrée `19.0.4.4.2`).  
 Complément PERFORMANCE — `19.0.4.5.0` — GO MOA fonctionnel 2026-05-27.  
 Finition séparation familles — `19.0.4.5.1` — GO MOA UX 2026-05-27 — **cible UX validée pour ce palier**.  
-Wording MOA — `19.0.4.6.1` — bloc « PERFORMANCE » renommé **« Marge d'activité »** dans l'UI (noms techniques conservés ; formule inchangée).*
+Wording MOA — `19.0.4.6.1` — bloc « PERFORMANCE » renommé **« Marge d'activité »** dans l'UI (noms techniques conservés ; formule inchangée).  
+Confort laptop — `19.0.4.6.2` — scroll horizontal, colonne Activité sticky, ellipsis 2 lignes (section 13.8).*

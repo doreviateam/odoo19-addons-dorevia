@@ -4,33 +4,26 @@
 // ---------------------------------------------------------------------------
 
 .o_glc_coverage_detail {
-    // Conteneur scroll horizontal maîtrisé (laptop / largeur intermédiaire)
+    // Fallback scroll uniquement si la largeur disponible est vraiment insuffisante
     .o_glc_detail_scroll {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         max-width: 100%;
     }
 
-    // Message discret : visible uniquement quand le scroll horizontal est probable
-    .o_glc_detail_laptop_hint {
+    // Libellé famille Marge : version courte sur laptop
+    .o_glc_lbl_short {
         display: none;
     }
 
-    @media (max-width: 1600px) {
-        .o_glc_detail_laptop_hint {
-            display: block;
-        }
-    }
-
     .o_glc_detail_table {
-        min-width: 1320px;
+        width: 100%;
         table-layout: auto;
 
-        // Colonnes numériques : pas de compression excessive
+        // Colonnes numériques : pas de retour à la ligne
         th.text-end,
         td.text-end {
             white-space: nowrap;
-            min-width: 5.25rem;
         }
 
         // Colonne Activité sticky + ellipsis 2 lignes max
@@ -38,8 +31,6 @@
             position: sticky;
             left: 0;
             z-index: 2;
-            min-width: 13.5rem;
-            max-width: 16rem;
             background-color: var(--bs-body-bg, #fff);
             box-shadow: 1px 0 0 var(--bs-border-color-translucent, #dee2e6);
         }
@@ -99,20 +90,19 @@
             }
         }
 
-        // Début de bloc : respiration avant Salaires / Frais
+        // Début de bloc : respiration avant Salaires / Dépenses
         .o_glc_family_payroll,
         .o_glc_family_expense {
             padding-left: 14px;
         }
 
-        // Bloc Performance : synthèse décisionnelle légèrement détachée
+        // Bloc Marge d'activité : synthèse légèrement détachée
         .o_glc_family_performance {
             border-left: 2px solid #b8bdc5;
             padding-left: 16px;
             background-color: #f8f9fa;
         }
 
-        // Conserver la teinte Performance au survol (table-hover Bootstrap)
         &.table-hover > tbody > tr:hover > td.o_glc_family_performance,
         &.table-hover > tfoot > tr:hover > td.o_glc_family_performance {
             background-color: #eef0f3;
@@ -126,7 +116,6 @@
             padding-right: 14px;
         }
 
-        // Bandeau "titre de mois" : discret, fond gris léger, majuscules, séparateur fin
         .o_glc_month_title th {
             background-color: var(--bs-tertiary-bg, #f4f4f6);
             text-transform: uppercase;
@@ -139,7 +128,6 @@
             border-bottom: 1px solid var(--bs-border-color);
         }
 
-        // Lignes d'activité : indentation légère sous le mois
         .o_glc_activity_row {
             td {
                 border-top: none;
@@ -148,7 +136,6 @@
             }
         }
 
-        // Sous-total mensuel : ligne de synthèse sobre, gras, séparateur fin haut
         .o_glc_subtotal_row {
             font-weight: 700;
             background-color: rgba(0, 0, 0, 0.015);
@@ -167,7 +154,6 @@
             }
         }
 
-        // Total période : footer net et marqué, séparation forte avec le dernier mois
         .o_glc_period_total_foot {
             .o_glc_period_total_row {
                 font-weight: 700;
@@ -190,7 +176,6 @@
             }
         }
 
-        // Sticky : conserver le fond au survol (table-hover Bootstrap)
         &.table-hover > tbody > tr:hover > td.o_glc_col_sticky {
             background-color: var(--bs-table-hover-bg, rgba(0, 0, 0, 0.075));
         }
@@ -203,7 +188,6 @@
             background-color: var(--bs-tertiary-bg, #f4f4f6);
         }
 
-        // Écarts / performance : lecture rapide sans surcharge
         .o_glc_variance_negative,
         .o_glc_performance_negative {
             color: #b02a2a;
@@ -213,38 +197,87 @@
             color: #198754;
         }
 
-        // Zéros : atténués pour réduire le bruit visuel des colonnes peu renseignées
         .o_glc_zero {
             color: var(--bs-tertiary-color, #adb5bd);
             font-weight: normal;
         }
 
-        // Laptop / largeur intermédiaire : paddings légèrement réduits
+        // Desktop large : confort de lecture avec largeur minimale assumée
+        @media (min-width: 1601px) {
+            min-width: 1280px;
+
+            .o_glc_col_sticky {
+                min-width: 13.5rem;
+                max-width: 16rem;
+            }
+
+            th.text-end,
+            td.text-end {
+                min-width: 5rem;
+            }
+        }
+
+        // Laptop : tenir dans la largeur disponible, éviter le scroll horizontal
         @media (max-width: 1600px) {
+            width: 100%;
+            min-width: 0;
+            table-layout: fixed;
+            font-size: 0.8125rem;
+
+            col.o_glc_col_activity_width {
+                width: 9.5rem;
+            }
+
+            .o_glc_col_sticky {
+                min-width: 0;
+                max-width: 9.5rem;
+            }
+
+            .o_glc_activity_label {
+                padding-left: 0.75rem;
+            }
+
+            .o_glc_subtotal_label {
+                padding-left: 0.75rem;
+            }
+
             th,
             td {
-                padding-left: 0.35rem;
-                padding-right: 0.35rem;
+                padding-left: 0.2rem;
+                padding-right: 0.2rem;
+            }
+
+            .o_glc_family_row th {
+                letter-spacing: 0.02em;
+                padding: 1px 4px;
             }
 
             .o_glc_family_payroll,
             .o_glc_family_expense {
-                padding-left: 10px;
+                padding-left: 4px;
             }
 
             .o_glc_family_performance {
-                padding-left: 12px;
+                padding-left: 6px;
             }
 
             .o_glc_family_recettes_end,
             .o_glc_family_payroll_end,
             .o_glc_family_expense_end {
-                padding-right: 10px;
+                padding-right: 4px;
             }
 
             th.text-end,
             td.text-end {
-                min-width: 4.75rem;
+                min-width: 0;
+            }
+
+            .o_glc_lbl_full {
+                display: none;
+            }
+
+            .o_glc_lbl_short {
+                display: inline;
             }
         }
     }
