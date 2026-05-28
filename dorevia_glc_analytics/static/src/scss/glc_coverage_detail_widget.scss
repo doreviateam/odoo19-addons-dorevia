@@ -4,7 +4,62 @@
 // ---------------------------------------------------------------------------
 
 .o_glc_coverage_detail {
+    // Conteneur scroll horizontal maîtrisé (laptop / largeur intermédiaire)
+    .o_glc_detail_scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+    }
+
+    // Message discret : visible uniquement quand le scroll horizontal est probable
+    .o_glc_detail_laptop_hint {
+        display: none;
+    }
+
+    @media (max-width: 1600px) {
+        .o_glc_detail_laptop_hint {
+            display: block;
+        }
+    }
+
     .o_glc_detail_table {
+        min-width: 1320px;
+        table-layout: auto;
+
+        // Colonnes numériques : pas de compression excessive
+        th.text-end,
+        td.text-end {
+            white-space: nowrap;
+            min-width: 5.25rem;
+        }
+
+        // Colonne Activité sticky + ellipsis 2 lignes max
+        .o_glc_col_sticky {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            min-width: 13.5rem;
+            max-width: 16rem;
+            background-color: var(--bs-body-bg, #fff);
+            box-shadow: 1px 0 0 var(--bs-border-color-translucent, #dee2e6);
+        }
+
+        thead .o_glc_col_sticky {
+            z-index: 4;
+            background-color: var(--bs-body-bg, #fff);
+        }
+
+        .o_glc_activity_label {
+            padding-left: 1.5rem;
+            white-space: normal;
+            line-height: 1.25;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+        }
+
         // En-tête à 2 niveaux : familles + sous-libellés
         thead {
             th {
@@ -86,9 +141,6 @@
 
         // Lignes d'activité : indentation légère sous le mois
         .o_glc_activity_row {
-            .o_glc_activity_label {
-                padding-left: 1.5rem;
-            }
             td {
                 border-top: none;
                 padding-top: 0.35rem;
@@ -110,6 +162,9 @@
                 font-style: italic;
                 color: var(--bs-body-color);
             }
+            .o_glc_col_sticky {
+                background-color: rgba(0, 0, 0, 0.015);
+            }
         }
 
         // Total période : footer net et marqué, séparation forte avec le dernier mois
@@ -129,7 +184,23 @@
                     text-transform: uppercase;
                     letter-spacing: 0.03em;
                 }
+                .o_glc_col_sticky {
+                    background-color: var(--bs-tertiary-bg, #f4f4f6);
+                }
             }
+        }
+
+        // Sticky : conserver le fond au survol (table-hover Bootstrap)
+        &.table-hover > tbody > tr:hover > td.o_glc_col_sticky {
+            background-color: var(--bs-table-hover-bg, rgba(0, 0, 0, 0.075));
+        }
+
+        &.table-hover > tbody > tr.o_glc_subtotal_row:hover > td.o_glc_col_sticky {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        &.table-hover > tfoot > tr:hover > td.o_glc_col_sticky {
+            background-color: var(--bs-tertiary-bg, #f4f4f6);
         }
 
         // Écarts / performance : lecture rapide sans surcharge
@@ -146,6 +217,35 @@
         .o_glc_zero {
             color: var(--bs-tertiary-color, #adb5bd);
             font-weight: normal;
+        }
+
+        // Laptop / largeur intermédiaire : paddings légèrement réduits
+        @media (max-width: 1600px) {
+            th,
+            td {
+                padding-left: 0.35rem;
+                padding-right: 0.35rem;
+            }
+
+            .o_glc_family_payroll,
+            .o_glc_family_expense {
+                padding-left: 10px;
+            }
+
+            .o_glc_family_performance {
+                padding-left: 12px;
+            }
+
+            .o_glc_family_recettes_end,
+            .o_glc_family_payroll_end,
+            .o_glc_family_expense_end {
+                padding-right: 10px;
+            }
+
+            th.text-end,
+            td.text-end {
+                min-width: 4.75rem;
+            }
         }
     }
 }

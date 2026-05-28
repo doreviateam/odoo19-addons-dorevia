@@ -668,6 +668,8 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | **Rechargement code Python après upgrade** | Non *(procédure connue)* | `docker compose restart odoo` obligatoire après `-u`. |
 | **Hard refresh navigateur après upgrade JS** | Non *(procédure connue)* | `Cmd+Shift+R` requis pour recharger le widget `glc_coverage_detail` (JS + XML + SCSS). |
 | **Groupes pliables / dépliables dans l'onglet** | Non *(limite Odoo)* | `group_by` natif non supporté dans une `<list>` x2many inline — compromis MOA acté ; lecture entièrement à plat dans l'onglet. |
+| **Responsive mobile / refonte complète** | Non *(palier ultérieur)* | Cockpit **desktop-first** ; mode mobile = Synthèse graphique ou cartes activité/mois — hors périmètre `19.0.4.6.x`. |
+| **Confort laptop — Détail par activité** | Non *(partiellement adressé `19.0.4.6.2`)* | Passe CSS : scroll horizontal, Activité sticky, ellipsis 2 lignes, paddings réduits ≤ 1600 px. **GO laptop raisonnable** ; pas de refonte responsive. |
 
 ---
 

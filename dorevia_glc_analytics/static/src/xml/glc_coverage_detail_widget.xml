@@ -4,10 +4,14 @@
     <t t-name="dorevia_glc_analytics.GlcCoverageDetail">
         <div class="o_glc_coverage_detail">
             <t t-if="groupedData.hasLines">
+                <p class="o_glc_detail_laptop_hint text-muted small mb-2">
+                    Vue détaillée optimisée pour écran large — défilement horizontal disponible.
+                </p>
+                <div class="o_glc_detail_scroll">
                 <table class="o_list_table o_glc_detail_table table table-sm table-hover mb-0 align-middle">
                     <thead class="o_glc_detail_thead">
                         <tr class="o_glc_family_row text-uppercase small text-muted">
-                            <th rowspan="2" class="o_glc_col_activity align-bottom">Activité</th>
+                            <th rowspan="2" class="o_glc_col_activity o_glc_col_sticky align-bottom">Activité</th>
                             <th colspan="3" class="text-center o_glc_family_recettes o_glc_family_recettes_end">Recettes</th>
                             <th colspan="3" class="text-center o_glc_family_payroll o_glc_family_payroll_end">Salaires</th>
                             <th colspan="3" class="text-center o_glc_family_expense o_glc_family_expense_end">Dépenses</th>
@@ -35,7 +39,9 @@
                             </tr>
                             <t t-foreach="month.lines" t-as="line" t-key="line.id">
                                 <tr class="o_glc_activity_row">
-                                    <td class="o_glc_activity_label" t-esc="line.activity_label"/>
+                                    <td class="o_glc_activity_label o_glc_col_sticky"
+                                        t-att-title="line.activity_label"
+                                        t-esc="line.activity_label"/>
                                     <td t-att-class="amountClass(line.revenue_realized, 'o_glc_family_recettes')"
                                         t-esc="formatAmount(line.revenue_realized)"/>
                                     <td t-att-class="amountClass(line.revenue_budget)"
@@ -63,7 +69,7 @@
                                 </tr>
                             </t>
                             <tr t-if="groupedData.multiMonth" class="o_glc_subtotal_row">
-                                <td class="o_glc_subtotal_label">
+                                <td class="o_glc_subtotal_label o_glc_col_sticky">
                                     Sous-total <t t-esc="month.monthLabel"/>
                                 </td>
                                 <td t-att-class="amountClass(month.totals.revenue_realized, 'o_glc_family_recettes')"
@@ -95,7 +101,7 @@
                     </tbody>
                     <tfoot t-if="groupedData.multiMonth" class="o_glc_period_total_foot">
                         <tr class="o_glc_period_total_row">
-                            <td class="o_glc_period_total_label">Total période</td>
+                            <td class="o_glc_period_total_label o_glc_col_sticky">Total période</td>
                             <td t-att-class="amountClass(groupedData.periodTotals.revenue_realized, 'o_glc_family_recettes')"
                                 t-esc="formatAmount(groupedData.periodTotals.revenue_realized)"/>
                             <td t-att-class="amountClass(groupedData.periodTotals.revenue_budget)"
@@ -123,6 +129,7 @@
                         </tr>
                     </tfoot>
                 </table>
+                </div>
             </t>
         </div>
     </t>

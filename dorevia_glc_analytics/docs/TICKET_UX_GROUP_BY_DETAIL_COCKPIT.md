@@ -408,7 +408,21 @@ Fond gris bleuté très discret `#f8f9fa` sur les 3 colonnes Performance (header
 
 ### 13.6. Wording MOA — Dépenses hors salaires (`19.0.4.5.3`)
 
-Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet aligné : *recettes, salaires, dépenses hors salaires et performance*. Formules inchangées (`expense_*` = frais généraux / charges hors masse salariale).
+Libellé famille **Frais** → **Dépenses** ; texte d'introduction de l'onglet aligné : *recettes, salaires, dépenses hors salaires et marge d'activité*. Formules inchangées (`expense_*` = frais généraux / charges hors masse salariale).
+
+### 13.8. Confort laptop — passe CSS légère (`19.0.4.6.2`)
+
+**Arbitrage MOA :** GO desktop large ; amélioration **laptop raisonnable** ; refonte responsive / mobile **hors périmètre**.
+
+| Amélioration | Détail |
+|---|---|
+| Scroll horizontal | Conteneur `overflow-x: auto` ; `min-width: 1320px` sur le tableau |
+| Colonne Activité sticky | Classe `o_glc_col_sticky` (header, lignes, sous-totaux, total période) |
+| Libellés activité | `min-width` / `max-width` ; **2 lignes max** + ellipsis ; `title` au survol pour le libellé complet |
+| Colonnes numériques | `white-space: nowrap` ; `min-width` assumée |
+| Laptop ≤ 1600 px | Paddings légèrement réduits ; message discret *« Vue détaillée optimisée pour écran large »* |
+
+Structure métier **inchangée** : RECETTES | SALAIRES | DÉPENSES | MARGE D'ACTIVITÉ · Réel/Budget/Écart · mois/sous-totaux/total période.
 
 ---
 
