@@ -1,8 +1,8 @@
 # Ticket — Cockpit · Qualité comptable, analytique & suivi paiement
 
 **Module :** `dorevia_glc_analytics` *(extension cockpit)*  
-**Version installée (réf.) :** **`19.0.5.0.1`** · lot trésorerie Palier 5 **GO complet MOA**  
-**Statut :** **GO cadrage MOA confirmé** (2026-05-29) — recette validée · Option A · V1 Q1+Q2+Q3 · **GQ-6 en attente — pas de GO code**  
+**Version testée sandbox :** **`19.0.7.0.2`** · lot trésorerie Palier 5 **GO complet MOA**  
+**Statut :** **GO PR GQ-6** (2026-05-29) — recette serveur + navigateur MOA validées · PR ouverte vers `main`  
 **Date ouverture :** 2026-05-29
 
 **Références :** [MEMO_RAFFINEMENT_QUALITE_COMPTABLE_ANALYTIQUE.md](./MEMO_RAFFINEMENT_QUALITE_COMPTABLE_ANALYTIQUE.md) · [Recette qualité & paiement](./recette/RECETTE_MANUELLE_COCKPIT_QUALITE_PAIEMENT.md) · [PALIERS.md](./PALIERS.md) · [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) · [TICKET_PALIER_1.md](./TICKET_PALIER_1.md) · [Recette période libre](./recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md)
@@ -70,7 +70,7 @@ Avant de piloter, vérifier que les données de pilotage sont fiables.
 
 | Bloc | Contenu V1 |
 |---|---|
-| **Q1 — Couverture analytique** | KPI période · compteur pièces · liste actionnable des pièces/lignes non couvertes |
+| **Q1 — Confiance analytique** | KPI période · compteur **lignes comptables** · listes actionnables lignes / écritures à qualifier |
 | **Q2 — Lettrage tiers** | Taux clients / fournisseurs · montants non lettrés · ancienneté *(bucket 0–30 / 31–60 / 61–90 / 90+ j)* |
 | **Q3 — Suivi paiement** | Synthèse clients + fournisseurs · statuts Odoo · reste à encaisser / payer |
 | **Transversal** | Filtres **société** · **période cockpit** · pièces **postées** uniquement |
@@ -92,32 +92,32 @@ Avant de piloter, vérifier que les données de pilotage sont fiables.
 
 ---
 
-## 5. Bloc Q1 — Taux de couverture analytique
+## 5. Bloc Q1 — Confiance analytique
 
 ### 5.1 Question métier
 
-Les pièces d’exploitation de la période sont-elles **correctement rattachées** à un axe analytique GLC exploitable ?
+Les **lignes comptables éligibles au pilotage** de la période sont-elles **correctement rattachées** à un axe analytique GLC exploitable ? *(Inclut factures, écritures bancaires et écritures diverses sans facture associée.)*
 
-### 5.2 Définition V1
+### 5.2 Définition livrée
 
 ```text
-Taux couverture analytique =
-  Pièces postées « pertinentes » entièrement couvertes
+Confiance analytique =
+  Lignes comptables éligibles couvertes analytiquement
   /
-  Pièces postées « pertinentes » contrôlées
+  Lignes comptables éligibles contrôlées
 ```
 
-**Pièce couverte :** toutes les lignes **métier pertinentes** portent une `analytic_distribution` non vide **ou** génèrent des `account.analytic.line` exploitables cockpit.
+**Ligne couverte :** `analytic_distribution` non vide **ou** `account.analytic.line` générée.
 
-### 5.3 Périmètre pièces V1
+### 5.3 Périmètre lignes V1
 
 | Inclus | Exclus |
 |---|---|
-| `out_invoice` · `out_refund` | Écritures banque 512/53 |
-| `in_invoice` · `in_refund` | Lignes TVA · lignes tiers 401/411 seules |
-| Lignes produit / charge (`display_type = product`) | Écritures purement bilan |
+| Lignes charge/produit classes 6/7 postées | Lignes banque 512/53/580 |
+| Factures · avoirs · écritures `entry` / banque | Lignes TVA · lignes tiers 401/411 seules |
+| Lignes produit / charge (`display_type = product`) | Masse salariale · comptes hors exploitation |
 | État **`posted`** | Brouillons · annulés |
-| Date pièce ∈ `[date_from, date_to]` cockpit | Hors période |
+| Date ligne ∈ `[date_from, date_to]` cockpit | Hors période |
 
 **Alignement Palier 1 :** réutiliser la logique de distinction lignes métier / techniques du wizard `glc.analytic.anomaly.wizard` (contrôles A1–A6) — **sans dupliquer** les règles métier contradictoires.
 
@@ -125,12 +125,13 @@ Taux couverture analytique =
 
 | Indicateur | Type |
 |---|---|
-| `quality_analytic_moves_checked` | Entier |
-| `quality_analytic_moves_covered` | Entier |
-| `quality_analytic_coverage_rate` | % |
-| `quality_analytic_moves_uncovered` | Entier |
-| Liste pièces non couvertes | Action `account.move` filtrée |
-| Détail lignes sans analytique | Sous-liste `account.move.line` |
+| `quality_analytic_lines_checked` | Entier |
+| `quality_analytic_lines_covered` | Entier |
+| `quality_analytic_confidence_rate` | % |
+| `quality_analytic_lines_to_qualify` | Entier |
+| `quality_analytic_confidence_detail` | Texte synthèse MOA |
+| Liste lignes à qualifier | Action `account.move.line` filtrée |
+| Écritures concernées | Action `account.move` filtrée |
 
 ### 5.5 Seuils MOA proposés *(mémo)*
 
@@ -402,7 +403,7 @@ Scénarios **QP-*** · critères GO / NO GO · cas paiement partiel / impayé / 
 | GQ-3 | Ce ticket **revu MOA** | **OK** — 2026-05-29 |
 | GQ-4 | Emplacement UI arbitré *(§8)* | **OK** — **Option A** · 2 onglets |
 | GQ-5 | Périmètre V1 vs V2 accepté | **OK** — Q1 + Q2 + Q3 |
-| GQ-6 | GO MOA explicite « démarrage code » | **En attente** — GO cadrage confirmé · **pas de GO code** |
+| GQ-6 | Validation lot qualité / paiement | **GO PR** — `19.0.7.0.2` · `104/104` · recette navigateur MOA validée |
 
 ---
 
@@ -411,9 +412,9 @@ Scénarios **QP-*** · critères GO / NO GO · cas paiement partiel / impayé / 
 | Phase | Contenu | Version cible |
 |---|---|---|
 | **1** | Cadrage MOA *(ce ticket)* | — |
-| **2** | Q1 couverture analytique + tests | `19.0.6.x.0` |
-| **3** | Q2 lettrage + Q3 suivi paiement + UI | `19.0.6.x.0` ou `19.0.7.0.0` |
-| **4** | Recette MOA + non-régression 95+ | GO lot |
+| **2** | Q1 confiance analytique par lignes + tests | Réalisé sandbox `19.0.7.0.2` |
+| **3** | Q2 lettrage + Q3 suivi paiement + UI | Réalisé sandbox `19.0.7.0.2` |
+| **4** | Recette navigateur MOA + non-régression 104+ | **GO** — 2026-05-29 |
 
 **Règle commit :** un commit / PR **ne mélange jamais** modification agrégats exploitation et code qualité/paiement sans revue explicite.
 
@@ -427,11 +428,45 @@ Scénarios **QP-*** · critères GO / NO GO · cas paiement partiel / impayé / 
 | **GO avec réserves** | MVP réduit *(ex. paiement seul, sans lettrage)* |
 | **NO GO** | Repositionner dans menu hors cockpit |
 
-**Statut actuel :** **GO cadrage MOA confirmé** (2026-05-29) — recette validée · Option A · V1 Q1+Q2+Q3 · **GQ-6 en attente — aucun code autorisé**
+**Statut actuel :** **GO PR GQ-6** (2026-05-29) — `dorevia_glc_analytics 19.0.7.0.2` · `104/104 OK` · Q1/Q2/Q3 · recette MOA validée · PR vers `main`.
 
 ---
 
-## 17. Liens
+## 17. Validation GQ-6 — GO PR
+
+**Décision MOA :** **GO PR GQ-6** — recette serveur + navigateur validées.
+
+| Contrôle | Résultat |
+|---|---|
+| Upgrade `-u dorevia_glc_analytics` | **OK** |
+| Version module | **`19.0.7.0.2`** |
+| Worker redémarré après `-u` | **OK** *(requis après renommage champs Q1)* |
+| Base | `glc-rgl-test-import` |
+| URL | `http://localhost:18079` |
+| Tests module | **104/104 OK** |
+| Tests GQ-6 dédiés | **9/9 OK** |
+| Palier 4 cockpit | **OK** |
+| Palier 5 trésorerie TREF | **OK** |
+| `_aggregate_period()` | **Inchangé** |
+| `_aggregate_treasury()` | **Inchangé** |
+| Onglet **Contrôles qualité** | **OK** — Q1 Confiance analytique par lignes |
+| Onglet **Tiers & paiements** | **OK** — Q3 suivi paiement |
+| Recette navigateur MOA | **OK** — wording · drill-down · invariants |
+
+Correctifs validés :
+
+- extension Odoo 19 corrigée pour ne pas créer de modèle parasite ;
+- migration restauration nomenclature officielle après pollution WIP `19.0.6.0.0` ;
+- KPI fournisseur Q3 affiché en valeur absolue pour lecture MOA ;
+- Q1 refactoré : agrégat par **lignes comptables** (incl. écritures bancaires sans facture).
+
+Commits : `f16a8fb` · `67610a4` · `1c06d23` sur `feat/glc-qualite-paiement-gq6`.
+
+Recette : [RECETTE_MANUELLE_COCKPIT_QUALITE_PAIEMENT.md](./recette/RECETTE_MANUELLE_COCKPIT_QUALITE_PAIEMENT.md).
+
+---
+
+## 18. Liens
 
 | Document | Rôle |
 |---|---|

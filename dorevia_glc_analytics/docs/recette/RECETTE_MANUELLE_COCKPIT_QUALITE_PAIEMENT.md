@@ -1,9 +1,9 @@
 # Recette manuelle — Cockpit · Qualité comptable, analytique & suivi paiement
 
 **Module :** `dorevia_glc_analytics` (extension cockpit — lot qualité / paiement)  
-**Version cible :** **`19.0.6.x.0`** *(à confirmer à l’implémentation)*  
+**Version testée sandbox :** **`19.0.7.0.2`**  
 **Prérequis :** Palier 4 réaligné **`19.0.4.9.0`** gelé · Palier 5 trésorerie **`19.0.5.0.1`** GO complet MOA · `dorevia_glc_budget` installé  
-**Statut document :** **Validée MOA — base recette GO cadrage** (2026-05-29) · **GQ-6 en attente — pas de GO code**
+**Statut document :** **GO PR GQ-6** (2026-05-29) — recette serveur + navigateur MOA validées
 
 **Références :** [TICKET_COCKPIT_QUALITE_COMPTABLE_ANALYTIQUE_SUIVI_PAIEMENT.md](../TICKET_COCKPIT_QUALITE_COMPTABLE_ANALYTIQUE_SUIVI_PAIEMENT.md) · [MEMO_RAFFINEMENT_QUALITE_COMPTABLE_ANALYTIQUE.md](../MEMO_RAFFINEMENT_QUALITE_COMPTABLE_ANALYTIQUE.md) · [Recette Palier 5 trésorerie](./RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [Recette période libre Palier 4](./RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md) · [PALIERS.md](../PALIERS.md)
 
@@ -56,10 +56,10 @@ docker compose restart odoo
 
 | Contrôle | Attendu | OK | Observations |
 |---|---|:---:|---|
-| Version module `dorevia_glc_analytics` | **`19.0.6.x.0`** | [ ] | |
-| Palier 5 trésorerie non régressé | Onglet **Trésorerie** présent | [ ] | |
-| Worker Odoo redémarré après `-u` | Oui | [ ] | |
-| Hard refresh navigateur | `Cmd+Shift+R` | [ ] | |
+| Version module `dorevia_glc_analytics` | **`19.0.7.0.2`** | [x] | Upgrade sandbox OK |
+| Palier 5 trésorerie non régressé | Onglet **Trésorerie** présent | [x] | Recette navigateur MOA |
+| Worker Odoo redémarré après `-u` | Oui | [x] | Obligatoire après renommage champs Q1 |
+| Hard refresh navigateur | `Cmd+Shift+R` | [x] | |
 
 ### 1.2 Société et paramètres cockpit
 
@@ -354,22 +354,26 @@ Un seul item suffit :
 
 | Champ | Valeur |
 |---|---|
-| Date recette | |
-| Exécutant | |
-| Version testée | |
+| Date recette | 2026-05-29 |
+| Exécutant | MOA |
+| Version testée | `dorevia_glc_analytics 19.0.7.0.2` |
 | Base | `glc-rgl-test-import` |
-| Période testée | |
-| Preuve invariant exploitation | Recette · Cumul RH · Dépense · Solde : |
-| Preuve trésorerie | Entrées · Sorties · Solde : |
-| Post-install | tests · failed · error |
+| Période testée | `13 avr. 2026 → 31 mai 2026` |
+| Preuve invariant exploitation | Recette `7 794,00 €` · Cumul RH `0,00 €` · Dépense `4 851,51 €` · Solde `2 942,49 €` — inchangés après navigation qualité/paiement |
+| Preuve trésorerie | Compte Courant GLC solde `-1 627,11 €` · Livret Bleu `30 000,00 €` sans impact exploitation |
+| Post-install | `104/104 OK` · `0 failed` · `0 error` |
 
 ### Verdict
 
-- [ ] **GO complet**
+- [x] **GO complet**
 - [ ] **GO avec réserve**
-- [ ] **NO GO**
+- [ ] **NO GO PR temporaire**
 
 **Commentaires MOA :**
+
+Recette serveur et navigateur validées. Q1 reformulé **Confiance analytique** au niveau **lignes comptables éligibles** (incl. écritures bancaires sans facture). Q2/Q3 alimentés. Invariants exploitation et trésorerie respectés.
+
+**Réserve mineure non bloquante :** conserver le terme « lignes comptables » dans le bloc Q1 ; éviter « factures » / « pièces » dans ce bloc ; phrase synthèse sur une ligne si possible.
 
 ---
 
@@ -383,4 +387,190 @@ Un seul item suffit :
 
 ---
 
-*Recette validée MOA post-GO cadrage 2026-05-29. Implémentation autorisée uniquement après **GO code (GQ-6)** explicite. Ne pas confondre avec recette Palier 5 trésorerie.*
+*Recette validée MOA — GO PR GQ-6 du 2026-05-29. Ne pas confondre avec recette Palier 5 trésorerie.*
+
+---
+
+## 12. Compte-rendu validation sandbox GQ-6
+
+**Décision respectée :** **GO PR GQ-6** — recette serveur + navigateur MOA
+
+### 12.1 Upgrade sandbox
+
+| Étape | Résultat |
+|---|---|
+| `-u dorevia_glc_analytics` | **OK** |
+| Version module | **`19.0.7.0.2`** |
+| Worker redémarré | **OK** |
+| URL | `http://localhost:18079` |
+
+Note sandbox : la base était restée en nomenclature WIP `19.0.6.0.0` (`BAR_REST`, `FIN_EXT`, plan unique). La migration `19.0.7.0.1` et la normalisation hooks ont restauré la nomenclature officielle Palier 5 : `BAR`, `SUBVENTIONS`, deux plans.
+
+### 12.2 Tests serveur
+
+| Bloc | Résultat |
+|---|---|
+| Total module `dorevia_glc_analytics` | **104/104 OK** |
+| Tests GQ-6 dédiés | **9/9 OK** |
+| Palier 4 cockpit | **OK** |
+| Palier 5 trésorerie TREF | **OK** |
+| Anomalies / setup / RH | **OK** |
+| Échecs | **0 failed · 0 error** |
+
+### 12.3 Checklist avant PR
+
+| Point | Statut | Preuve |
+|---|---|---|
+| `dorevia_glc_analytics 19.0.7.0.x` | **OK** | `19.0.7.0.2` en base |
+| `_aggregate_period()` inchangé | **OK** | 0 diff sur `glc_coverage_cockpit.py` |
+| `_aggregate_treasury()` inchangé | **OK** | idem |
+| Onglet **Contrôles qualité** | **OK** | présent dans la vue form |
+| Onglet **Tiers & paiements** | **OK** | présent dans la vue form |
+| Texte d'aide MOA | **OK** | « Ils ne modifient pas Recette · Cumul RH · Dépense · Solde » |
+| Q1/Q2/Q3 alimentés | **OK** | champs calculés au refresh · 0 si période vide |
+| Tests qualité / paiement | **OK** | 9/9 |
+| Non-régression Palier 4 + 5 | **OK** | inclus dans 104/104 |
+
+### 12.4 Correctifs appliqués pendant validation
+
+| Problème | Correctif |
+|---|---|
+| Extension Odoo 19 créait un modèle parasite | `_inherit = "glc.coverage.cockpit"` + `TransientModel` |
+| Sandbox polluée WIP `19.0.6.0.0` | Migration restauration nomenclature officielle |
+| Montant fournisseur négatif en Q3 | KPI en valeur absolue pour affichage MOA |
+| Registry worker stale après `-u` | `docker compose restart odoo` après upgrade |
+
+Commits sur `feat/glc-qualite-paiement-gq6` : `f16a8fb` · `67610a4` · `1c06d23`.
+
+### 12.5 Recette navigateur MOA
+
+Période : `13 avr. 2026 → 31 mai 2026` · journal **Compte Courant GLC**
+
+| Étape | Attendu | OK | Observations |
+|---|---|:---:|---|
+| Ouvrir `http://localhost:18079` | Odoo accessible | [x] | |
+| Menu cockpit | Comptabilité → Pilotage GLC → Cockpit couverture des charges de structure | [x] | |
+| Hard refresh | `Cmd+Shift+R` | [x] | |
+| Onglet **Contrôles qualité** | Présent · lisible | [x] | Q1 Confiance analytique · Q2 lettrage |
+| Onglet **Tiers & paiements** | Présent · lisible | [x] | Q3 suivi paiement |
+| Onglet **Trésorerie** | Non régressé | [x] | Solde `-1 627,11 €` |
+| Wording Q1 | Confiance analytique · lignes comptables | [x] | Pas de « factures » / « pièces » dans le bloc Q1 |
+| Détail Q1 | Phrase synthèse une ligne | [x] | `36 lignes comptables contrôlées · 36 couvertes analytiquement · 0 à qualifier` |
+| Drill-down Q1 | Lignes à qualifier · Écritures concernées | [x] | |
+| KPI exploitation avant navigation | Recette · Cumul RH · Dépense · Solde notés | [x] | Voir §12.7 |
+| Navigation qualité / paiement | Aucun impact exploitation | [x] | |
+| KPI exploitation après navigation | Identiques aux valeurs initiales | [x] | |
+| Bascule journal Livret Bleu | Trésorerie recalculée · exploitation inchangée | [x] | Trésorerie `30 000,00 €` |
+
+### 12.6 Verdict courant
+
+- [x] **GO validation sandbox**
+- [x] **GO recette navigateur MOA**
+- [x] **GO PR GQ-6**
+
+### 12.7 Rejeu contrôle serveur Codex
+
+Contrôle exécuté le 2026-05-29 sur `glc-rgl-test-import`.
+
+> Le navigateur intégré Codex ne peut pas accéder à `http://localhost:18079` à cause de la politique réseau locale. Le rejeu ci-dessous valide donc la partie serveur / modèle / actions, mais ne remplace pas la recette visuelle MOA.
+
+Période testée : `13 avr. 2026 → 31 mai 2026`  
+Journal bancaire : `Compte Courant GLC`
+
+| Contrôle | Résultat |
+|---|---|
+| Version module | **`19.0.7.0.2`** |
+| Menu cockpit | **OK** — `Cockpit couverture des charges de structure` |
+| Vue form cockpit | **OK** |
+| Onglet **Contrôles qualité** | **OK** — présent dans la vue |
+| Onglet **Tiers & paiements** | **OK** — présent dans la vue |
+| Onglet **Trésorerie** | **OK** — présent dans la vue |
+| Wording Q1 **Confiance analytique** | **OK** — libellés présents |
+| Drill-down **Lignes à qualifier** | **OK** — action exécutable |
+| Drill-down **Écritures concernées** | **OK** — action exécutable |
+| Texte d'aide MOA | **OK** — mentionne que les indicateurs ne modifient pas l'exploitation |
+| Actions listes Q1/Q2/Q3 | **OK** — domaines exécutables |
+| Invariant exploitation après actions | **OK** |
+| Invariant trésorerie après actions | **OK** |
+| Invariant exploitation après second refresh | **OK** |
+| Invariant trésorerie après second refresh | **OK** |
+
+KPI exploitation relevés :
+
+| KPI | Valeur |
+|---|---:|
+| Recette activité | `7 794,00 €` |
+| Financements | `0,00 €` |
+| Ressources réalisées | `7 794,00 €` |
+| Cumul RH | `0,00 €` |
+| Dépense hors salaires | `4 851,51 €` |
+| Charges de structure | `4 851,51 €` |
+| Solde après charges | `2 942,49 €` |
+
+Trésorerie relevée :
+
+| KPI | Valeur |
+|---|---:|
+| Entrées trésorerie | `14 272,07 €` |
+| Sorties trésorerie | `15 899,18 €` |
+| Solde trésorerie période | `-1 627,11 €` |
+
+Q1 — confiance analytique :
+
+| Indicateur | Valeur |
+|---|---:|
+| Lignes comptables contrôlées | `36` |
+| Lignes couvertes analytiquement | `36` |
+| Lignes à qualifier | `0` |
+| Confiance analytique | `100,00 %` |
+| Statut | `green` |
+| Détail affiché | `36 lignes comptables contrôlées · 36 couvertes analytiquement · 0 à qualifier` |
+
+Q2 — lettrage tiers :
+
+| Indicateur | Valeur |
+|---|---:|
+| Taux lettrage clients | `0,00 %` |
+| Montant client non lettré | `5 715,00 €` |
+| Lignes client ouvertes | `15` |
+| Taux lettrage fournisseurs | `0,88 %` |
+| Montant fournisseur non lettré | `26 922,64 €` |
+| Lignes fournisseur ouvertes | `116` |
+
+Q3 — tiers & paiements :
+
+| Indicateur | Valeur |
+|---|---:|
+| Factures clients période | `4` |
+| Montant factures clients | `3 350,00 €` |
+| Clients payés / partiels / en cours / non payés | `0 / 0 / 0 / 4` |
+| Reste à encaisser | `3 350,00 €` |
+| Factures fournisseurs période | `15` |
+| Montant factures fournisseurs | `3 961,33 €` |
+| Fournisseurs payés / partiels / en cours / non payés | `0 / 0 / 0 / 15` |
+| Reste à payer | `3 961,33 €` |
+
+Actions actionnables contrôlées :
+
+| Action | Nombre retourné |
+|---|---:|
+| Lignes à qualifier | `0` |
+| Écritures concernées | `0` |
+| Lignes clients non lettrées | `15` |
+| Lignes fournisseurs non lettrées | `116` |
+| Factures clients période | `4` |
+| Factures clients ouvertes | `4` |
+| Factures fournisseurs période | `15` |
+| Factures fournisseurs ouvertes | `15` |
+
+Post-install relancé :
+
+| Lot | Résultat |
+|---|---|
+| Total post-install | **104/104 OK** |
+| Échecs | **0 failed** |
+| Erreurs | **0 error** |
+
+Note : les erreurs SQL de doublon visibles dans les logs correspondent aux tests attendus de contraintes d'unicité budget ; elles sont capturées par les tests et le résultat final est vert.
+
+**Verdict final :** **GO PR GQ-6** — `19.0.7.0.2` · recette serveur + navigateur MOA validées.

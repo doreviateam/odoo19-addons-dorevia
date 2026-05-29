@@ -199,7 +199,7 @@
                                            decoration-success="quality_analytic_confidence_status == 'green'"
                                            decoration-warning="quality_analytic_confidence_status == 'orange'"
                                            decoration-danger="quality_analytic_confidence_status == 'red'"/>
-                                    <field name="quality_analytic_confidence_detail" readonly="1" nolabel="1" class="text-muted"/>
+                                    <field name="quality_analytic_confidence_detail" readonly="1" nolabel="1" class="text-muted text-nowrap"/>
                                 </group>
                                 <group>
                                     <field name="quality_analytic_lines_checked" readonly="1"/>
