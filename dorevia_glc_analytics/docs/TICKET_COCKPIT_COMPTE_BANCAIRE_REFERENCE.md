@@ -2,7 +2,7 @@
 
 **Module :** `dorevia_glc_analytics` (+ croisement `dorevia_cash_guard` en lecture seule)  
 **Version installée (réf.) :** `19.0.4.9.0` *(Palier 4 — exploitation)*  
-**Statut :** **Décision MOA figée** — **non implémenté** (Palier 5 / extension trésorerie)  
+**Statut :** **Décision MOA figée** — cadrage / implémentation → [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)  
 **Date :** 2026-05-28
 
 **Références :** [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md) · [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) § I5 · [PALIERS.md](./PALIERS.md) § Palier 5 · [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md)

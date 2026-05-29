@@ -62,6 +62,21 @@ class GlcCoverageCockpit(models.TransientModel):
         required=True,
         default="initial",
     )
+    reference_bank_journal_id = fields.Many2one(
+        "account.journal",
+        string="Compte bancaire de référence",
+        check_company=True,
+        domain="[('type', '=', 'bank'), ('company_id', '=', company_id)]",
+        default=lambda self: self._default_reference_bank_journal_id(),
+        help="Point de vue trésorerie du cockpit — n'affecte pas les KPI d'exploitation.",
+    )
+    reference_bank_account_id = fields.Many2one(
+        "account.account",
+        string="Compte 512 de référence",
+        compute="_compute_reference_bank_account_id",
+        store=True,
+        readonly=True,
+    )
     currency_id = fields.Many2one(
         "res.currency",
         compute="_compute_currency_id",
@@ -198,10 +213,81 @@ class GlcCoverageCockpit(models.TransientModel):
         readonly=True,
         help="Vrai si au moins une ligne budget existe sur le périmètre cockpit.",
     )
+    treasury_inflow = fields.Monetary(
+        string="Entrées trésorerie",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    treasury_outflow = fields.Monetary(
+        string="Sorties trésorerie",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    treasury_internal_inflow = fields.Monetary(
+        string="Virements internes (entrées)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    treasury_internal_outflow = fields.Monetary(
+        string="Virements internes (sorties)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    treasury_net = fields.Monetary(
+        string="Solde trésorerie période",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    treasury_has_data = fields.Boolean(
+        string="Mouvements trésorerie sur la période",
+        readonly=True,
+    )
 
     _FILTER_FIELDS = frozenset(
-        {"company_id", "date_from", "date_to", "activity_account_id", "budget_scenario"}
+        {
+            "company_id",
+            "date_from",
+            "date_to",
+            "activity_account_id",
+            "budget_scenario",
+            "reference_bank_journal_id",
+        }
     )
+
+    @api.model
+    def _default_reference_bank_journal_id(self):
+        company = self.env.company
+        if company.glc_default_bank_journal_id:
+            return company.glc_default_bank_journal_id.id
+        journal = self.env["account.journal"].search(
+            [
+                ("type", "=", "bank"),
+                ("company_id", "=", company.id),
+            ],
+            limit=1,
+        )
+        return journal.id if journal else False
+
+    @api.model
+    def _journal_bank_account(self, journal):
+        if not journal:
+            return self.env["account.account"]
+        return (
+            journal.default_account_id
+            or journal.payment_debit_account_id
+            or journal.payment_credit_account_id
+        )
+
+    @api.depends("reference_bank_journal_id")
+    def _compute_reference_bank_account_id(self):
+        for cockpit in self:
+            cockpit.reference_bank_account_id = cockpit._journal_bank_account(
+                cockpit.reference_bank_journal_id
+            )
+
+    def _resolve_reference_bank_account(self):
+        self.ensure_one()
+        return self._journal_bank_account(self.reference_bank_journal_id)
 
     @api.model
     def _default_date_range(self, reference=None):
@@ -219,6 +305,7 @@ class GlcCoverageCockpit(models.TransientModel):
             "date_to": date_to,
             "budget_scenario": "initial",
             "activity_account_id": False,
+            "reference_bank_journal_id": self._default_reference_bank_journal_id(),
         }
 
     @api.model
@@ -230,9 +317,10 @@ class GlcCoverageCockpit(models.TransientModel):
             "date_to",
             "budget_scenario",
             "activity_account_id",
+            "reference_bank_journal_id",
         ):
             value = values[field_name]
-            if field_name == "activity_account_id" and not value:
+            if field_name in ("activity_account_id", "reference_bank_journal_id") and not value:
                 domain.append((field_name, "=", False))
             else:
                 domain.append((field_name, "=", value))
@@ -319,10 +407,11 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _current_refresh_key(self):
         self.ensure_one()
-        return "%s|%s|%s" % (
+        return "%s|%s|%s|%s" % (
             self.date_from or "",
             self.date_to or "",
             self.budget_scenario or "",
+            self.reference_bank_journal_id.id or "",
         )
 
     def _needs_refresh(self):
@@ -430,6 +519,13 @@ class GlcCoverageCockpit(models.TransientModel):
             cockpit.detail_line_count = len(
                 cockpit.line_ids.filtered(lambda line: line.line_kind == "activity")
             )
+
+    @api.onchange("company_id")
+    def _onchange_company_id_reference_bank(self):
+        if self.company_id:
+            self.reference_bank_journal_id = self.with_company(
+                self.company_id
+            )._default_reference_bank_journal_id()
 
     @api.constrains("date_from", "date_to")
     def _check_date_range(self):
@@ -756,6 +852,76 @@ class GlcCoverageCockpit(models.TransientModel):
             )
         return sum(lines.mapped("amount"))
 
+    @api.model
+    def _is_cash_account(self, account):
+        if not account:
+            return False
+        if account.account_type == "asset_cash":
+            return True
+        return (account.code or "").startswith("53")
+
+    def _is_internal_transfer_move(self, move):
+        """Virement interne : trésorerie ↔ trésorerie ou compte 580."""
+        if any(
+            (line.account_id.code or "").startswith("580")
+            for line in move.line_ids
+        ):
+            return True
+        cash_lines = move.line_ids.filtered(
+            lambda line: self._is_cash_account(line.account_id)
+        )
+        account_ids = set(cash_lines.mapped("account_id.id"))
+        return len(cash_lines) >= 2 and len(account_ids) >= 2
+
+    def _treasury_move_line_domain(self, date_from, date_to):
+        self.ensure_one()
+        account = self._resolve_reference_bank_account()
+        if not account:
+            return [(0, "=", 1)]
+        return [
+            ("company_id", "=", self.company_id.id),
+            ("parent_state", "=", "posted"),
+            ("date", ">=", date_from),
+            ("date", "<=", date_to),
+            ("account_id", "=", account.id),
+        ]
+
+    def _aggregate_treasury(self, date_from, date_to):
+        """Lecture trésorerie S1 — account.move.line sur le compte 512 de référence."""
+        self.ensure_one()
+        empty = {
+            "treasury_inflow": 0.0,
+            "treasury_outflow": 0.0,
+            "treasury_internal_inflow": 0.0,
+            "treasury_internal_outflow": 0.0,
+            "treasury_net": 0.0,
+            "treasury_has_data": False,
+        }
+        if not self._resolve_reference_bank_account():
+            return empty
+        lines = self.env["account.move.line"].search(
+            self._treasury_move_line_domain(date_from, date_to)
+        )
+        inflow = outflow = internal_in = internal_out = 0.0
+        for line in lines:
+            is_internal = self._is_internal_transfer_move(line.move_id)
+            if line.debit:
+                inflow += line.debit
+                if is_internal:
+                    internal_in += line.debit
+            if line.credit:
+                outflow += line.credit
+                if is_internal:
+                    internal_out += line.credit
+        return {
+            "treasury_inflow": inflow,
+            "treasury_outflow": outflow,
+            "treasury_internal_inflow": internal_in,
+            "treasury_internal_outflow": internal_out,
+            "treasury_net": inflow - outflow,
+            "treasury_has_data": bool(lines),
+        }
+
     def _aggregate_period(self, period_start, period_end):
         self.ensure_one()
         cockpit_accounts = self._cockpit_analytic_accounts()
@@ -838,6 +1004,7 @@ class GlcCoverageCockpit(models.TransientModel):
         self.line_ids.with_context(glc_cockpit_auto_refreshing=True).unlink()
         date_from, date_to = self._period_bounds()
         totals = self._aggregate_period(date_from, date_to)
+        treasury = self._aggregate_treasury(date_from, date_to)
 
         salary_coverage_rate = 0.0
         if totals["payroll_realized"]:
@@ -945,6 +1112,7 @@ class GlcCoverageCockpit(models.TransientModel):
         self.with_context(glc_cockpit_auto_refreshing=True).write(
             {
                 **totals,
+                **treasury,
                 "salary_coverage_rate": salary_coverage_rate,
                 "balance_after_payroll": balance_after_payroll,
                 "balance_after_fixed": balance_after_fixed,

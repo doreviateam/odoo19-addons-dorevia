@@ -11,6 +11,7 @@ const GLC_COCKPIT_FILTER_FIELDS = new Set([
     "budget_scenario",
     "company_id",
     "activity_account_id",
+    "reference_bank_journal_id",
 ]);
 
 export class GlcCoverageCockpitFormController extends FormController {

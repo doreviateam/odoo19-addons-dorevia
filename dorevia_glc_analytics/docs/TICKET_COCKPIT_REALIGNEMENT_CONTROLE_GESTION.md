@@ -2,7 +2,7 @@
 
 **Module :** `dorevia_glc_analytics` (+ `dorevia_glc_budget` pour le prévisionnel)  
 **Version installée (réf.) :** `19.0.4.9.0`  
-**Statut :** **GO technique recette R17** (2026-05-28) — rejeu serveur `glc-rgl-test-import` · upgrade `-u dorevia_glc_analytics` OK · **88 post-tests verts** (84 analytics + 14 budget) · GO visuel navigateur en attente MOA poste local  
+**Statut :** **GO livraison MOA** — Palier 4 réaligné **gelé** · **`19.0.4.9.0`** (2026-05-28) · branche poussée · **88 post-tests verts** · prochaine séquence : cadrage Palier 5 avant code  
 **Date :** 2026-05-28
 
 **Références :** [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) · [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md) · [TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md](./TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md) · [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) · [Recette période libre](./recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md)
@@ -215,7 +215,28 @@ Ensuite : qualité des données (§3.5), budget enrichi (§3.7).
 
 ## 5. Verdict MOA
 
-**GO technique recette ciblée R17** (2026-05-28) — rejeu serveur `glc-rgl-test-import` :
+### GO livraison — Palier 4 réaligné (2026-05-28)
+
+**Décision MOA : GO livraison branche.** Le Palier 4 est considéré comme **réaligné et figé** en **`19.0.4.9.0`**.
+
+| Point validé | Statut |
+|---|---|
+| Grammaire Recette · Cumul RH · Dépense · Solde | OK |
+| Libellés « Dépenses hors salaires » | OK |
+| Filtre Axe analytique conservé au refresh | OK |
+| Titre dynamique selon axe filtré | OK |
+| Messages budget absent (`has_budget_data`) | OK |
+| Contrôle RH V1 (onglet Infos) | OK |
+| Non-régression post-install | **88 tests · 0 failed · 0 error(s)** |
+| Doctrine compte bancaire de référence | Consignée séparément ([db07117](https://github.com/doreviateam/odoo19-addons-dorevia/commit/db07117)) — **sans impact code** |
+
+**Réserve structurante :** bloc trésorerie / compte bancaire de référence → **Palier 5**, non implémenté dans `19.0.4.9.0`.
+
+**Décision :** Palier 4 réaligné **gelé** · prochaine séquence = **cadrage Palier 5 avant tout code**.
+
+### Preuve technique recette R17
+
+Rejeu serveur `glc-rgl-test-import` :
 
 | Contrôle | Résultat |
 |---|---|
@@ -226,12 +247,13 @@ Ensuite : qualité des données (§3.5), budget enrichi (§3.7).
 
 **Note logs :** erreurs SQL `duplicate key` budget / ligne budget — **attendues** (tests contraintes unicité).
 
-**Réserve :** contrôle visuel navigateur R17 + compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** — poste MOA local (`Cmd+Shift+R` sur `http://localhost:18079`). Environnement Codex : accès `localhost:18079` bloqué par policy réseau.
+**Réserve non bloquante :** compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** — données réelles / poste MOA local.
 
-**Réserve maintenue — lots suivants :**
+**Lots suivants (hors Palier 4 gelé) :**
 
 - budget multi-axes / réalisé non budgété par axe ;
-- onglet **Données exclues / à contrôler** (§3.5).
+- onglet **Données exclues / à contrôler** (§3.5) ;
+- **Palier 5** — trésorerie / compte bancaire de référence ([TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)).
 
 **GO trajectoire** — le module est un **tableau de bord de pilotage d'exploitation** avec réalignement métier **`19.0.4.9.0`**.
 

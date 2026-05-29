@@ -98,7 +98,7 @@ Le cockpit GLC est rattaché à un **compte bancaire de référence** (sélectio
 
 > **Triple lecture :** compte bancaire de référence = point de vue · compte comptable = nature · compte analytique = qualification métier.
 
-Implémentation : Palier 5 — cf. [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md).
+Implémentation : Palier 5 — cf. [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · doctrine [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md).
 
 ### 4. Opérations de bilan hors analytique d’exploitation
 

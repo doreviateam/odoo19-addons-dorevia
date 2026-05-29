@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.4.9.0",
+    "version": "19.0.5.0.1",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — cockpit pilotage d'exploitation.",
     "description": """
@@ -37,7 +37,9 @@ Palier 4 — Cockpit pilotage d'exploitation GLC :
 
 Palier 4bis — Finition UX cockpit (wording MOA, tableau de bord).
 
-Doctrine et évolutions : docs/TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md
+Palier 5 — Trésorerie cockpit (compte bancaire de référence, lecture séparée).
+
+Doctrine et évolutions : docs/TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md
 
 Les paliers suivants (bénévolat, rapport CA) seront ajoutés progressivement.
 Voir docs/PALIERS.md.
@@ -62,6 +64,7 @@ Voir docs/PALIERS.md.
         "views/glc_analytic_anomaly_views.xml",
         "views/glc_employee_cost_line_views.xml",
         "views/glc_salary_allocation_views.xml",
+        "views/res_company_views.xml",
         "views/glc_coverage_cockpit_views.xml",
         "views/glc_menus.xml",
     ],

@@ -2,10 +2,10 @@
 
 ## Statut
 
-**GO MOA** — recette ciblée **R17** sur **`19.0.4.9.0`** (2026-05-28) : **GO technique**, réserve visuelle navigateur (contrôle serveur + templates OWL).  
+**GO livraison MOA** — Palier 4 réaligné **gelé** · **`19.0.4.9.0`** (2026-05-28) · **88 post-tests verts** · branche poussée.  
 Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : **tous les plans analytiques** par défaut.  
-Réalignement contrôle de gestion : [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) — **P1/P3/P4 GO recette · P2 partiel**.  
-Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** et **R15-DEP-MISSIONS-REEL** : à jouer côté interface / données réelles.
+Réalignement contrôle de gestion : [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) — **GO livraison**.  
+Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** : non bloquants · à jouer sur données réelles.
 
 *(Historique : … · wording Solde `19.0.4.8.9` · finition synthèse `19.0.4.8.10` · libellés axe `19.0.4.8.14` · réalignement métier `19.0.4.9.0`.)*
 
@@ -800,38 +800,35 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 **Note logs :** deux erreurs SQL `duplicate key` sur contraintes d'unicité budget / ligne budget — **attendues** (tests de non-régression contraintes). Le résumé Odoo final confirme `0 failed, 0 error(s)`.
 
-**Réserve restante :** contrôle visuel navigateur R17 + compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** — poste MOA local (`Cmd+Shift+R` sur `http://localhost:18079`). Environnement Codex : accès `localhost:18079` bloqué par policy réseau.
+**Réserve non bloquante :** compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** — données réelles / poste MOA local.
 
-- [x] **GO technique** (2026-05-28)
-- [ ] **GO visuel navigateur** *(en attente MOA sur poste local)*
+- [x] **GO livraison MOA** (2026-05-28) — Palier 4 réaligné figé `19.0.4.9.0`
 - [ ] KO
 
-**Réserves maintenues (lots suivants) :**
+**Réserves structurantes / lots suivants :**
 
 - Budget partiel : réalisés non budgétés par axe ou cartographie budget multi-axes ;
 - Onglet **Données exclues / à contrôler** non livré (`19.0.4.9.0`) ;
-- **Compte bancaire de référence / bloc trésorerie** — doctrine MOA figée, implémentation Palier 5 ([TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md)).
+- **Compte bancaire de référence / bloc trésorerie** — Palier 5 · cadrage ouvert ([TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)) · doctrine ([TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md)).
 
 ---
 
 ## Verdict recette (mise à jour)
 
-- [x] **GO** — R1–R14 automatisé OK sur `19.0.4.7.0` (2026-05-28)
-- [x] **GO technique R17** — réalignement métier `19.0.4.9.0` (2026-05-28) · **88 post-tests verts**
-- [ ] GO visuel navigateur R17 (poste MOA)
-- [ ] Compléments manuels R14-CAISSE / R14-OD / R14-645-REEL
+- [x] **GO livraison MOA** — Palier 4 réaligné **`19.0.4.9.0`** (2026-05-28) · **88 post-tests verts** · branche poussée
+- [ ] Compléments manuels R14-CAISSE / R14-OD / R14-645-REEL *(non bloquants)*
 - [ ] NO GO
 
-*(Le verdict « GO avec réserves » du Palier 4 période libre est levé : les réserves non bloquantes restent documentées ; l'UX-GROUPBY, le complément Marge d'activité et la Synthèse graphique sont validés en complément. Le cockpit GLC dispose désormais d'une **double lecture** : Synthèse graphique pour le pilotage immédiat, Détail par activité pour la justification chiffrée.)*
+*(Palier 4 réaligné **gelé**. Réserve structurante : trésorerie / compte bancaire de référence → Palier 5, doctrine documentée sans impact code. Prochaine séquence : cadrage Palier 5 avant tout code.)*
 
 ## Réserves éventuelles
 
 | Réserve | Bloquante | Commentaire |
 |---|---:|---|
-| **Contrôle visuel navigateur R17** | Non *(2026-05-28)* | Recette serveur + templates OK ; validation MOA sur poste local recommandée (`Cmd+Shift+R`). |
-| **Budget multi-axes / réalisé non budgété** | Non *(lot suivant)* | `has_budget_data` + messages ; cartographie budget à étendre — cf. R17 réserves. |
+| **Compte bancaire de référence / trésorerie** | **Structurante** *(Palier 5)* | Cadrage ouvert — [TICKET_PALIER_5](../TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · doctrine [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) · non implémentée `19.0.4.9.0`. |
+| **Budget multi-axes / réalisé non budgété** | Non *(lot suivant)* | `has_budget_data` + messages ; cartographie budget à étendre. |
 | **Onglet Données exclues** | Non *(lot suivant)* | §3.5 ticket réalignement — non livré `19.0.4.9.0`. |
-| **Compte bancaire de référence / trésorerie** | Non *(Palier 5)* | Doctrine MOA 2026-05-28 : POV compte courant par défaut ; virements internes visibles en trésorerie, exclus KPI exploitation — cf. [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md). |
+| **Compléments manuels R14** | Non | R14-CAISSE · R14-OD · R14-645-REEL — données réelles. |
 | Mapping budget **`STRUCTURE`** vs **`payroll_budget`** | Non | Ambiguïté KPI budget masse salariale vs frais généraux — hors périmètre recette période libre. |
 | **Rechargement code Python après upgrade** | Non *(procédure connue)* | `docker compose restart odoo` obligatoire après `-u`. |
 | **Hard refresh navigateur après upgrade JS** | Non *(procédure connue)* | `Cmd+Shift+R` requis pour recharger le widget `glc_coverage_detail` (JS + XML + SCSS). |
@@ -856,7 +853,8 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | Exécutant | MOA |
 | Base / environnement | `glc-rgl-test-import` · `http://localhost:18079` |
 | Version module | `dorevia_glc_analytics` **`19.0.4.9.0`** |
-| Verdict global | **GO technique R17** · rejeu serveur 2026-05-28 · **88 post-tests verts** · GO visuel navigateur en attente |
+| Verdict global | **GO livraison MOA** · Palier 4 réaligné gelé **`19.0.4.9.0`** · **88 post-tests verts** |
+| Date verdict livraison | **2026-05-28** |
 | Modules installés | `dorevia_glc_analytics` **`19.0.4.9.0`** · `dorevia_glc_budget` **`19.0.1.0.0`** |
 | Référence ticket | [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) |
 | Compléments manuels R14 | **En attente MOA** — R14-CAISSE · R14-OD · R14-645-REEL |
@@ -879,6 +877,6 @@ Cette recette valide :
 > Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs **RECETTE | CUMUL RH | DÉPENSE | SOLDE** clairement distingués, sans sortie de l'onglet.  
 > La synthèse graphique doit offrir une lecture instantanée du pilotage (marge d'activité, structure mensuelle, marge par activité) en complément du détail chiffré.
 
-**Statut :** **GO technique recette R17** (2026-05-28) · **88 post-tests verts** · GO visuel navigateur en attente MOA poste local.
+**Statut :** **GO livraison MOA** — Palier 4 réaligné **gelé** · **`19.0.4.9.0`** (2026-05-28) · **88 post-tests verts** · trésorerie → cadrage Palier 5.
 
 **Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) · [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](../TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md) · [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) — **`19.0.4.9.0`**.

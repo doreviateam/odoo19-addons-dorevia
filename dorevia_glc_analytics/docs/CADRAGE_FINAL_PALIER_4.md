@@ -1,8 +1,8 @@
 # Cadrage final Palier 4 — Cockpit couverture des salaires
 
-**Date :** 2026-05-27  
-**Statut :** **Validé MOA (Option A)** — invariants I1–I7 acceptés · PR #32  
-**Gate développement :** branche `feat/glc-cockpit-palier-4` ouverte uniquement après **GO MOA explicite** (G7)
+**Date :** 2026-05-27 · **réalignement MOA** 2026-05-28  
+**Statut :** **GO livraison MOA** — Palier 4 réaligné **gelé** · **`19.0.4.9.0`** · invariants I1–I7 + réalignement contrôle de gestion  
+**Gate développement :** Palier 5 — cadrage ouvert ([TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)) · doctrine [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md)
 
 **Références :** [AUDIT_GLC_ANALYTICS_BUDGET_AVANT_PALIER_4.md](./AUDIT_GLC_ANALYTICS_BUDGET_AVANT_PALIER_4.md) · [TICKET_PALIER_4.md](./TICKET_PALIER_4.md) · [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)
 
