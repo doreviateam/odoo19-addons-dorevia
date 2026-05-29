@@ -2,7 +2,12 @@
 
 from odoo import api, models
 
-from .glc_constants import GLC_EXPENSE_ACCOUNT_TYPES, GLC_INCOME_ACCOUNT_TYPES
+from .glc_constants import (
+    GLC_EXCLUDED_GL_ACCOUNT_PREFIXES,
+    GLC_EXPENSE_ACCOUNT_TYPES,
+    GLC_INCOME_ACCOUNT_TYPES,
+    GLC_PAYROLL_ACCOUNT_PREFIXES,
+)
 
 
 class GlcCoverageCockpit(models.TransientModel):
@@ -10,9 +15,6 @@ class GlcCoverageCockpit(models.TransientModel):
 
     _inherit = "glc.coverage.cockpit"
 
-    _GLC_QUALITY_MOVE_TYPES = frozenset(
-        {"out_invoice", "out_refund", "in_invoice", "in_refund"}
-    )
     _GLC_PAYMENT_TRACKING_STATES = frozenset(
         {"not_paid", "in_payment", "partial", "paid", "reversed", "legacy"}
     )
@@ -23,6 +25,9 @@ class GlcCoverageCockpit(models.TransientModel):
             "asset_cash",
             "liability_credit_card",
         }
+    )
+    _GLC_EXCLUDED_LINE_DISPLAY_TYPES = frozenset(
+        {"line_section", "line_note", "tax", "payment_term"},
     )
 
     @api.model
@@ -35,17 +40,29 @@ class GlcCoverageCockpit(models.TransientModel):
         return bool(ref_date and date_from <= ref_date <= date_to)
 
     @api.model
+    def _glc_account_code_excluded_from_q1(self, account_code):
+        code = account_code or ""
+        if code.startswith(("512", "53", "580")):
+            return True
+        for prefix in GLC_PAYROLL_ACCOUNT_PREFIXES + GLC_EXCLUDED_GL_ACCOUNT_PREFIXES:
+            if code.startswith(prefix):
+                return True
+        return False
+
+    @api.model
     def _glc_is_coverage_controlled_line(self, line):
-        """Ligne métier pertinente pour le contrôle couverture analytique (Q1)."""
-        if line.display_type in ("line_section", "line_note"):
+        """Ligne comptable éligible au pilotage GLC (Q1 — confiance analytique)."""
+        if line.display_type in self._GLC_EXCLUDED_LINE_DISPLAY_TYPES:
             return False
-        move = line.move_id
-        if move.move_type not in self._GLC_QUALITY_MOVE_TYPES:
+        if line.parent_state != "posted":
             return False
         account_type = line.account_id.account_type
         if account_type in self._GLC_EXCLUDED_ACCOUNT_TYPES:
             return False
-        if (line.account_id.code or "").startswith(("512", "53")):
+        account_code = line.account_id.code or ""
+        if self._glc_account_code_excluded_from_q1(account_code):
+            return False
+        if not (account_code.startswith("6") or account_code.startswith("7")):
             return False
         return account_type in GLC_INCOME_ACCOUNT_TYPES + GLC_EXPENSE_ACCOUNT_TYPES
 
@@ -59,13 +76,6 @@ class GlcCoverageCockpit(models.TransientModel):
                 [("move_line_id", "=", line.id)], limit=1
             )
         )
-
-    @api.model
-    def _glc_move_is_analytically_covered(self, move):
-        controlled = move.line_ids.filtered(self._glc_is_coverage_controlled_line)
-        if not controlled:
-            return True
-        return all(self._glc_line_has_analytic_coverage(line) for line in controlled)
 
     @api.model
     def _glc_reconcile_partner_account_types(self):

@@ -2,35 +2,41 @@
 
 from odoo import _, api, fields, models
 
+from .glc_constants import GLC_EXPENSE_ACCOUNT_TYPES, GLC_INCOME_ACCOUNT_TYPES
+
 
 class GlcCoverageCockpit(models.TransientModel):
     _inherit = "glc.coverage.cockpit"
 
-    # --- Q1 Couverture analytique ---
-    quality_analytic_moves_checked = fields.Integer(
-        string="Pièces contrôlées (analytique)",
+    # --- Q1 Confiance analytique (lignes comptables éligibles pilotage) ---
+    quality_analytic_lines_checked = fields.Integer(
+        string="Lignes comptables contrôlées",
         readonly=True,
     )
-    quality_analytic_moves_covered = fields.Integer(
-        string="Pièces couvertes (analytique)",
+    quality_analytic_lines_covered = fields.Integer(
+        string="Lignes couvertes analytiquement",
         readonly=True,
     )
-    quality_analytic_moves_uncovered = fields.Integer(
-        string="Pièces non couvertes (analytique)",
+    quality_analytic_lines_to_qualify = fields.Integer(
+        string="Lignes à qualifier",
         readonly=True,
     )
-    quality_analytic_coverage_rate = fields.Float(
-        string="Taux couverture analytique (%)",
+    quality_analytic_confidence_rate = fields.Float(
+        string="Confiance analytique (%)",
         readonly=True,
         digits=(16, 2),
     )
-    quality_analytic_coverage_status = fields.Selection(
+    quality_analytic_confidence_status = fields.Selection(
         selection=[
             ("green", "Vert"),
             ("orange", "Orange"),
             ("red", "Rouge"),
         ],
-        string="Statut couverture analytique",
+        string="Statut confiance analytique",
+        readonly=True,
+    )
+    quality_analytic_confidence_detail = fields.Char(
+        string="Détail confiance analytique",
         readonly=True,
     )
 
@@ -217,33 +223,45 @@ class GlcCoverageCockpit(models.TransientModel):
         currency_field="currency_id",
     )
 
-    def _quality_analytic_moves(self, date_from, date_to):
+    def _quality_analytic_controlled_lines(self, date_from, date_to):
         self.ensure_one()
-        moves = self.env["account.move"].search(
-            [
-                ("company_id", "=", self.company_id.id),
-                ("state", "=", "posted"),
-                ("move_type", "in", list(self._GLC_QUALITY_MOVE_TYPES)),
-            ]
-        )
-        moves = moves.filtered(lambda move: self._glc_move_in_period(move, date_from, date_to))
-        return moves.filtered(
-            lambda move: move.line_ids.filtered(self._glc_is_coverage_controlled_line)
-        )
+        domain = [
+            ("company_id", "=", self.company_id.id),
+            ("parent_state", "=", "posted"),
+            ("date", ">=", date_from),
+            ("date", "<=", date_to),
+            ("display_type", "not in", list(self._GLC_EXCLUDED_LINE_DISPLAY_TYPES)),
+            (
+                "account_id.account_type",
+                "in",
+                list(GLC_INCOME_ACCOUNT_TYPES + GLC_EXPENSE_ACCOUNT_TYPES),
+            ),
+        ]
+        lines = self.env["account.move.line"].search(domain)
+        return lines.filtered(self._glc_is_coverage_controlled_line)
 
     def _aggregate_quality_analytic(self, date_from, date_to):
         self.ensure_one()
-        moves = self._quality_analytic_moves(date_from, date_to)
-        checked = len(moves)
-        covered = len(moves.filtered(self._glc_move_is_analytically_covered))
-        uncovered = checked - covered
+        lines = self._quality_analytic_controlled_lines(date_from, date_to)
+        checked = len(lines)
+        covered = len(lines.filtered(self._glc_line_has_analytic_coverage))
+        to_qualify = checked - covered
         rate = (covered / checked * 100.0) if checked else 100.0
+        detail = _(
+            "%(checked)s lignes comptables contrôlées · %(covered)s couvertes "
+            "analytiquement · %(to_qualify)s à qualifier"
+        ) % {
+            "checked": checked,
+            "covered": covered,
+            "to_qualify": to_qualify,
+        }
         return {
-            "quality_analytic_moves_checked": checked,
-            "quality_analytic_moves_covered": covered,
-            "quality_analytic_moves_uncovered": uncovered,
-            "quality_analytic_coverage_rate": rate,
-            "quality_analytic_coverage_status": self._glc_coverage_rate_status(rate),
+            "quality_analytic_lines_checked": checked,
+            "quality_analytic_lines_covered": covered,
+            "quality_analytic_lines_to_qualify": to_qualify,
+            "quality_analytic_confidence_rate": rate,
+            "quality_analytic_confidence_status": self._glc_coverage_rate_status(rate),
+            "quality_analytic_confidence_detail": detail,
         }
 
     def _reconcile_lines_domain_base(self, date_to, partner_type):
@@ -394,30 +412,39 @@ class GlcCoverageCockpit(models.TransientModel):
             **self._aggregate_payment_tracking(date_from, date_to),
         }
 
-    def _uncovered_move_ids(self, date_from, date_to):
+    def _lines_to_qualify_ids(self, date_from, date_to):
         self.ensure_one()
-        moves = self._quality_analytic_moves(date_from, date_to)
-        return moves.filtered(
-            lambda move: not self._glc_move_is_analytically_covered(move)
+        lines = self._quality_analytic_controlled_lines(date_from, date_to)
+        return lines.filtered(
+            lambda line: not self._glc_line_has_analytic_coverage(line)
         ).ids
 
-    def _uncovered_move_line_domain(self, date_from, date_to):
+    def _moves_with_lines_to_qualify_ids(self, date_from, date_to):
         self.ensure_one()
-        move_ids = self._uncovered_move_ids(date_from, date_to)
-        if not move_ids:
-            return [(0, "=", 1)]
-        return [
-            ("move_id", "in", move_ids),
-            ("display_type", "not in", ("line_section", "line_note")),
-        ]
+        line_ids = self._lines_to_qualify_ids(date_from, date_to)
+        if not line_ids:
+            return []
+        return (
+            self.env["account.move.line"]
+            .browse(line_ids)
+            .mapped("move_id")
+            .ids
+        )
 
-    def action_open_quality_uncovered_moves(self):
+    def _lines_to_qualify_domain(self, date_from, date_to):
+        self.ensure_one()
+        line_ids = self._lines_to_qualify_ids(date_from, date_to)
+        if not line_ids:
+            return [(0, "=", 1)]
+        return [("id", "in", line_ids)]
+
+    def action_open_quality_moves_to_qualify(self):
         self.ensure_one()
         date_from, date_to = self._period_bounds()
-        move_ids = self._uncovered_move_ids(date_from, date_to)
+        move_ids = self._moves_with_lines_to_qualify_ids(date_from, date_to)
         return {
             "type": "ir.actions.act_window",
-            "name": _("Pièces sans couverture analytique"),
+            "name": _("Écritures à qualifier"),
             "res_model": "account.move",
             "view_mode": "list,form",
             "domain": [("id", "in", move_ids)],
@@ -425,15 +452,15 @@ class GlcCoverageCockpit(models.TransientModel):
             "target": "current",
         }
 
-    def action_open_quality_uncovered_move_lines(self):
+    def action_open_quality_lines_to_qualify(self):
         self.ensure_one()
         date_from, date_to = self._period_bounds()
         return {
             "type": "ir.actions.act_window",
-            "name": _("Lignes sans couverture analytique"),
+            "name": _("Lignes à qualifier"),
             "res_model": "account.move.line",
             "view_mode": "list,form",
-            "domain": self._uncovered_move_line_domain(date_from, date_to),
+            "domain": self._lines_to_qualify_domain(date_from, date_to),
             "context": {"create": False},
             "target": "current",
         }

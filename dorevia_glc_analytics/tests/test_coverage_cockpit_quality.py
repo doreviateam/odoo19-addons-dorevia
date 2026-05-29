@@ -33,23 +33,23 @@ class TestGlcCoverageCockpitQuality(TestGlcCoverageCockpitTreasury):
         after = self._exploitation_snapshot(cockpit)
 
         self.assertEqual(before, after)
-        self.assertGreater(cockpit.quality_analytic_moves_checked, 0)
+        self.assertGreater(cockpit.quality_analytic_lines_checked, 0)
 
-    def test_q1_covered_move_increases_coverage_rate(self):
-        """CA-Q1-01 — pièce avec analytique = couverte."""
+    def test_q1_covered_line_increases_confidence_rate(self):
+        """CA-Q1-01 — ligne avec analytique = couverte."""
         year = self._next_test_year()
         invoice_date = "%s-06-10" % year
         self._create_revenue_on_account(self.bar, 1000.0, invoice_date=invoice_date)
         cockpit = self._create_cockpit(year=year)
         cockpit.action_refresh()
 
-        self.assertGreaterEqual(cockpit.quality_analytic_moves_checked, 1)
-        self.assertGreaterEqual(cockpit.quality_analytic_moves_covered, 1)
-        self.assertEqual(cockpit.quality_analytic_moves_uncovered, 0)
-        self.assertAlmostEqual(cockpit.quality_analytic_coverage_rate, 100.0)
+        self.assertGreaterEqual(cockpit.quality_analytic_lines_checked, 1)
+        self.assertGreaterEqual(cockpit.quality_analytic_lines_covered, 1)
+        self.assertEqual(cockpit.quality_analytic_lines_to_qualify, 0)
+        self.assertAlmostEqual(cockpit.quality_analytic_confidence_rate, 100.0)
 
-    def test_q1_uncovered_move_detected(self):
-        """CA-Q1-03 — pièce sans analytique remontée comme non couverte."""
+    def test_q1_line_to_qualify_detected(self):
+        """CA-Q1-03 — ligne sans analytique remontée comme à qualifier."""
         year = self._next_test_year()
         invoice_date = "%s-06-12" % year
         invoice = self._create_invoice_one_line(
@@ -67,9 +67,35 @@ class TestGlcCoverageCockpitQuality(TestGlcCoverageCockpitTreasury):
         cockpit = self._create_cockpit(year=year)
         cockpit.action_refresh()
 
-        self.assertGreaterEqual(cockpit.quality_analytic_moves_uncovered, 1)
-        action = cockpit.action_open_quality_uncovered_moves()
-        self.assertIn(invoice.id, action["domain"][0][2])
+        self.assertGreaterEqual(cockpit.quality_analytic_lines_to_qualify, 1)
+        action = cockpit.action_open_quality_lines_to_qualify()
+        self.assertIn(product_line.id, action["domain"][0][2])
+
+    def test_q1_bank_entry_expense_line_without_invoice(self):
+        """CA-Q1-04 — écriture bancaire sans facture incluse au contrôle Q1."""
+        year = self._next_test_year()
+        move_date = "%s-06-07" % year
+        expense_account = self._get_or_create_expense_account("622200")
+        move = self._create_bank_move(
+            self.bank_journal,
+            self.bank_account,
+            500.0,
+            move_date=move_date,
+            counterpart_account=expense_account,
+            inflow=False,
+        )
+        expense_line = move.line_ids.filtered(
+            lambda move_line: move_line.account_id == expense_account
+        )
+        expense_line.write({"analytic_distribution": False})
+
+        cockpit = self._create_cockpit(year=year)
+        cockpit.action_refresh()
+
+        self.assertGreaterEqual(cockpit.quality_analytic_lines_checked, 1)
+        self.assertGreaterEqual(cockpit.quality_analytic_lines_to_qualify, 1)
+        move_action = cockpit.action_open_quality_moves_to_qualify()
+        self.assertIn(move.id, move_action["domain"][0][2])
 
     def test_q2_unreconciled_customer_line_counted(self):
         """CA-Q2-02 — ligne client ouverte comptabilisée."""
@@ -165,4 +191,4 @@ class TestGlcCoverageCockpitQuality(TestGlcCoverageCockpitTreasury):
             post=True,
         )
         cockpit.action_refresh()
-        self.assertGreater(cockpit.quality_analytic_moves_checked, 0)
+        self.assertGreater(cockpit.quality_analytic_lines_checked, 0)

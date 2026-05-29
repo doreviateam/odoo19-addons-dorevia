@@ -191,29 +191,30 @@
                                 Ces indicateurs mesurent la fiabilité des données et le cycle de
                                 paiement. Ils ne modifient pas Recette · Cumul RH · Dépense · Solde.
                             </p>
-                            <group string="Q1 — Couverture analytique">
+                            <group string="Q1 — Confiance analytique">
                                 <group>
-                                    <field name="quality_analytic_moves_checked" readonly="1"/>
-                                    <field name="quality_analytic_moves_covered" readonly="1"/>
-                                    <field name="quality_analytic_moves_uncovered" readonly="1"/>
+                                    <field name="quality_analytic_confidence_rate" readonly="1"/>
+                                    <field name="quality_analytic_confidence_status" readonly="1"
+                                           widget="badge"
+                                           decoration-success="quality_analytic_confidence_status == 'green'"
+                                           decoration-warning="quality_analytic_confidence_status == 'orange'"
+                                           decoration-danger="quality_analytic_confidence_status == 'red'"/>
+                                    <field name="quality_analytic_confidence_detail" readonly="1" nolabel="1" class="text-muted"/>
                                 </group>
                                 <group>
-                                    <field name="quality_analytic_coverage_rate" readonly="1"/>
-                                    <field name="quality_analytic_coverage_status" readonly="1"
-                                           widget="badge"
-                                           decoration-success="quality_analytic_coverage_status == 'green'"
-                                           decoration-warning="quality_analytic_coverage_status == 'orange'"
-                                           decoration-danger="quality_analytic_coverage_status == 'red'"/>
+                                    <field name="quality_analytic_lines_checked" readonly="1"/>
+                                    <field name="quality_analytic_lines_covered" readonly="1"/>
+                                    <field name="quality_analytic_lines_to_qualify" readonly="1"/>
                                 </group>
                             </group>
                             <div class="mb-3">
-                                <button name="action_open_quality_uncovered_moves"
+                                <button name="action_open_quality_lines_to_qualify"
                                         type="object"
-                                        string="Pièces non couvertes"
+                                        string="Lignes à qualifier"
                                         class="btn-link"/>
-                                <button name="action_open_quality_uncovered_move_lines"
+                                <button name="action_open_quality_moves_to_qualify"
                                         type="object"
-                                        string="Lignes non couvertes"
+                                        string="Écritures concernées"
                                         class="btn-link ms-2"/>
                             </div>
                             <group string="Q2 — Lettrage tiers (stock à fin période)">
