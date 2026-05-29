@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 
 from .glc_constants import (
     GLC_EXPENSE_ACCOUNT_TYPES,
+    GLC_FUNDING_ANALYTIC_CODES,
     GLC_FUNDING_MESSAGES,
     GLC_INCOME_ACCOUNT_TYPES,
     GLC_LEGACY_ANALYTIC_CODES,
@@ -201,12 +202,23 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
             "amount": line.balance,
         }
 
+    def _accounts_from_distribution(self, distribution):
+        account_ids = self._distribution_account_ids(distribution)
+        if not account_ids:
+            return self.env["account.analytic.account"]
+        return self.env["account.analytic.account"].browse(account_ids).exists()
+
     def _analyze_move_line(self, line):
         distribution = line.analytic_distribution or {}
         plan_activites = self._get_plan("analytic_plan_glc_activites")
-        plan_financements = self._get_plan("analytic_plan_glc_financements")
-        activity_accounts = self._accounts_for_plan(distribution, plan_activites)
-        funding_accounts = self._accounts_for_plan(distribution, plan_financements)
+        distributed_accounts = self._accounts_from_distribution(distribution)
+        funding_accounts = distributed_accounts.filtered(
+            lambda account: account.code in GLC_FUNDING_ANALYTIC_CODES
+        )
+        activity_accounts = distributed_accounts.filtered(
+            lambda account: account.plan_id == plan_activites
+            and account.code not in GLC_FUNDING_ANALYTIC_CODES
+        )
         base = self._line_base_vals(line)
         common = {
             **base,
@@ -293,7 +305,7 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
                 "anomaly_type": "a2_revenue_no_funding",
                 "message": _("Recette sans financement GLC"),
                 "recommendation": _(
-                    "Affecter un compte du plan GLC - Financements (ex. RESSOURCES_PROPRES)."
+                    "Affecter un axe financement GLC (ex. RESSOURCES_PROPRES)."
                 ),
             }
         ]

@@ -21,7 +21,9 @@
 | **3** | `dorevia_glc_budget` | Budget prévisionnel mensuel par axe analytique | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #28](https://github.com/doreviateam/odoo19-addons-dorevia/pull/28) |
 | **4** | `dorevia_glc_analytics` (+ budget) | Cockpit pilotage d'exploitation GLC | **GO livraison MOA · gelé** · **`19.0.4.9.0`** · [TICKET réalignement](./TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) |
 | **4bis** | `dorevia_glc_analytics` | Finition UX cockpit + période libre + UX-GROUPBY | **Intégré Palier 4 réaligné** (`19.0.4.9.0`) · [TICKET_PALIER_4BIS.md](./TICKET_PALIER_4BIS.md) |
-| **5** | extensions | Trésorerie · exports · scénarios | **GO complet MOA** · lot trésorerie **`19.0.5.0.1`** (2026-05-29) · **95/95** · recette navigateur §2 à §5 OK · [TICKET_PALIER_5](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [Recette P5](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) |
+| **5** | extensions | Trésorerie · exports · scénarios | **GO complet MOA** · lot trésorerie **`19.0.5.0.1`** (2026-05-29) · [TICKET_PALIER_5](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) |
+| **5bis** | `dorevia_glc_analytics` | Qualité comptable · analytique · suivi paiement (GQ-6) | **GO MOA · mergé** · **`19.0.7.0.2`** · [PR #45](https://github.com/doreviateam/odoo19-addons-dorevia/pull/45) |
+| **5ter** | `dorevia_glc_analytics` | Nomenclature plan analytique unique | **`19.0.8.0.0`** · [ETAT_NOMENCLATURE_ANALYTIQUE.md](./ETAT_NOMENCLATURE_ANALYTIQUE.md) |
 
 ### Paliers V1.1 reportés (post-cockpit)
 
@@ -42,8 +44,8 @@
 
 ### Livrables
 
-- Plan analytique `GLC - Activités` (7 comptes)
-- Plan analytique `GLC - Financements` (4 comptes)
+- Plan analytique **`GLC - Activités`** unique (**11 axes** : activités + financements)
+- ~~Plan analytique `GLC - Financements`~~ → archivé depuis **`19.0.8.0.0`** · voir [ETAT_NOMENCLATURE_ANALYTIQUE.md](./ETAT_NOMENCLATURE_ANALYTIQUE.md)
 - Extension légère `account.analytic.account` (type, ordre, rapport)
 - Groupes de sécurité de base (`Utilisateur GLC`, `Gestionnaire GLC`)
 - Applicabilités Odoo 19 **non bloquantes** (`optional`)

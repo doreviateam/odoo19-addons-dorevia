@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
 def migrate(cr, version):
-    from odoo.addons.dorevia_glc_analytics.hooks import _normalize_glc_official_analytic_seed
+    from odoo.addons.dorevia_glc_analytics.hooks import migrate_glc_analytic_nomenclature
 
-    _normalize_glc_official_analytic_seed(cr)
+    migrate_glc_analytic_nomenclature(cr)
