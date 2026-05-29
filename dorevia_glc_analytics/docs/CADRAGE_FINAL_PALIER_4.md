@@ -102,11 +102,11 @@ Anti-doublon : une charge mois × société × activité × famille = comptée u
 
 Les ventilations Palier 2 validées **ne sont plus agrégées** dans `payroll_realized` du cockpit.
 
-### I5 — Exclusion des flux bilan / trésorerie
+### I5 — Exclusion des flux bilan / trésorerie *(KPI exploitation)*
 
-Le cockpit lit l’**exploitation**, pas la trésorerie ni le bilan.
+Le cockpit lit l’**exploitation** (Recette · Cumul RH · Dépense · Solde), pas la trésorerie ni le bilan, pour ces KPI.
 
-Flux **exclus** du réalisé cockpit (doctrine [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)) :
+Flux **exclus** du réalisé cockpit d’exploitation (doctrine [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)) :
 
 | Flux | Exemple |
 |---|---|
@@ -117,6 +117,8 @@ Flux **exclus** du réalisé cockpit (doctrine [CADRAGE_BUDGET_COCKPIT.md](./CAD
 | Transfert bancaire pur | sans impact activité GLC |
 
 Ces flux ne doivent **pas** alimenter le plan **Activités GLC** ni fausser les KPI de couverture.
+
+**Lecture trésorerie distincte (MOA 2026-05-28) :** un compte bancaire de référence (défaut : compte courant) donne le **point de vue trésorerie** — virements internes **visibles** en trésorerie, **toujours exclus** des KPI exploitation. Cf. [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md).
 
 **Hors périmètre Palier 4 :** bloc trésorerie, soldes bancaires, échéancier emprunts (→ Palier 5).
 

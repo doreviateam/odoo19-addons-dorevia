@@ -138,7 +138,7 @@ Alerte de gestion (rouge / orange / vert)
 
 ## Palier 5 — Enrichissements de pilotage
 
-Hors périmètre immédiat :
+Hors périmètre immédiat Palier 4 :
 
 - graphiques avancés ;
 - export Excel / PDF ;
@@ -146,8 +146,10 @@ Hors périmètre immédiat :
 - comparaison budget initial / révisé / atterrissage ;
 - scénarios multiples ;
 - projections fin d'année ;
-- bloc trésorerie ;
+- **bloc trésorerie** — compte bancaire de référence (défaut GLC : compte courant), lecture entrées / sorties / virements internes depuis le POV du compte observé ;
 - intégration OCA Budget si besoin futur.
+
+**Doctrine trésorerie figée MOA (2026-05-28) :** triple lecture — compte bancaire de référence (POV trésorerie) · compte comptable (nature) · compte analytique (qualification métier). Virements internes visibles en trésorerie, exclus des KPI exploitation. Cf. [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md).
 
 ---
 
@@ -171,6 +173,7 @@ Le module **`dorevia_glc_analytics`** reste le socle du réalisé analytique, de
 | Plans analytiques | `GLC - Activités` et `GLC - Financements` |
 | Compte comptable | = nature juridique/comptable |
 | Compte analytique | = activité / destination métier |
+| Compte bancaire de référence | = point de vue trésorerie cockpit (défaut GLC : compte courant) — [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) |
 | Flux bilan | N'alimentent pas l'analytique d'exploitation |
 | Budget GLC | Module séparé `dorevia_glc_budget`, pas OCA Budget |
 | Ventilation salariale | Overlay — pas d'écriture paie analytique |
