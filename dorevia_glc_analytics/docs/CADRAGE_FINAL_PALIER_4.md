@@ -1,8 +1,8 @@
 # Cadrage final Palier 4 — Cockpit couverture des salaires
 
-**Date :** 2026-05-27  
-**Statut :** **Validé MOA (Option A)** — invariants I1–I7 acceptés · PR #32  
-**Gate développement :** branche `feat/glc-cockpit-palier-4` ouverte uniquement après **GO MOA explicite** (G7)
+**Date :** 2026-05-27 · **réalignement MOA** 2026-05-28  
+**Statut :** **GO livraison MOA** — Palier 4 réaligné **gelé** · **`19.0.4.9.0`** · invariants I1–I7 + réalignement contrôle de gestion  
+**Gate développement :** Palier 5 — cadrage ouvert ([TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)) · doctrine [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md)
 
 **Références :** [AUDIT_GLC_ANALYTICS_BUDGET_AVANT_PALIER_4.md](./AUDIT_GLC_ANALYTICS_BUDGET_AVANT_PALIER_4.md) · [TICKET_PALIER_4.md](./TICKET_PALIER_4.md) · [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)
 
@@ -39,51 +39,74 @@ Ces règles sont **structurantes** pour toute implémentation Palier 4. Aucune d
 
 **Interdit :** recalculer ou resaisir le prévisionnel dans le cockpit ; modifier le module `dorevia_glc_budget`.
 
-### I2 — Source réalisé analytique : `account.analytic.line`
+### I2 — Source réalisé cockpit : `account.analytic.line` (révision MOA 2026-05-28 · raffiné `19.0.4.8.0`)
 
 | Attribut | Valeur |
 |---|---|
 | Modèle | `account.analytic.line` |
-| Périmètre | réalisé d’**exploitation** hors masse salariale (cf. I3) |
-| Agrégation | mois × compte analytique × société × nature produit / charge / financement |
+| Règle de remontée | **date dans la période** + **montant non nul** + **GL classe 6 ou 7** + **distribution analytique exploitable** |
+| Périmètre analytique | **tous les comptes analytiques, tous plans** (Activités GLC, Financements GLC, autres) — hors codes legacy / `RH_PERSONNEL` |
+| Origines | facture client/fournisseur · OD · rapprochement bancaire · caisse |
+| Agrégation | mois × compte analytique × société × nature comptable (classe 6 / classe 7) |
 
-**Interdit :** inclure dans ce flux les montants déjà couverts par les ventilations salariales Palier 2 (cf. I3).
+**Règle :** la présence ou l'absence d'une facture **n'est pas** un critère d'inclusion.
 
-### I3 — Source masse salariale réalisée : ventilations Palier 2
+**Mapping familles cockpit (cartographie GL × plan analytique) :**
+
+| Compte GL | Compte analytique | Famille cockpit | Sens |
+|---|---|---|---|
+| **7xxx** | Plan **Activités GLC** *(toute activité)* | **RECETTES** | + |
+| **7xxx** | Plan **Financements GLC** *(SUBVENTIONS, ADHESIONS, DONS, RESSOURCES_PROPRES)* | **RESSOURCES / FINANCEMENTS** | + |
+| **7xxx** | **Tout autre plan analytique** | **RECETTES** *(classe 7 = entrée)* | + |
+| **631 / 633 / 641 / 645** | **Tout plan analytique exploitable** | **SALAIRES** | − |
+| **6xxx hors payroll** | **Tout plan analytique exploitable** | **DÉPENSES** | − |
+
+**Tous les plans analytiques** sont pris en compte par défaut. Le filtre par plan (Activités GLC / Financements GLC / …) est une **option UX ultérieure**, pas une limite de calcul.
+
+**Exclusions (I5) :** classes **1xx / 4xx / 5xx** (164, 401, 411, 467, 512, 53), lettrage seul, lignes sans analytique exploitable, comptes legacy / `RH_PERSONNEL`.
+
+**Défense en profondeur (cumulée) :**
+
+1. `account_type` ∈ income / income_other / expense / expense_direct_cost / expense_depreciation
+2. **garde-fou explicite** : `general_account_id.code` commence par `6` ou `7`
+3. exclusion préfixes `164` + codes analytiques legacy
+4. exclusion préfixes payroll (631/633/641/645) des DÉPENSES
+
+### I3 — Palier 2 ventilations salariales : rôle contrôle (R2 — révision MOA 2026-05-28)
 
 | Attribut | Valeur |
 |---|---|
 | Modèle | `glc.salary.allocation` + `glc.salary.allocation.line` |
-| États retenus | `validated`, `locked` uniquement |
-| Montant | somme de `glc.salary.allocation.line.amount` |
-| Agrégation | mois de ventilation × activité GLC × société |
+| Rôle cockpit | **Contrôle / ventilation RH / analyse d'écart** — **pas** source primaire du réalisé |
+| Bandeau écart Palier 2 | Informatif (masse comptable vs ventilée) |
 
-**Invariant RH / Personnel (figé MOA, PR #31) :**
+**Invariant révisé :**
 
-> La masse salariale réalisée du cockpit est calculée **prioritairement** depuis les ventilations salariales Palier 2 validées ou verrouillées, **sans double comptage** avec les anciennes écritures analytiques RH historiques sur `account.analytic.line`.
+> Le réalisé cockpit **SALAIRES** provient des `account.analytic.line` portant un compte 631/633/641/645 et une distribution analytique activité. Les ventilations Palier 2 **ne suralimentent pas** le cockpit.
 
-| Donnée cockpit | Source | Exclusion |
-|---|---|---|
-| Masse salariale réalisée | Ventilations Palier 2 | Écritures analytiques RH historiques |
-| Ligne budgétaire RH / Personnel | `glc.budget.line` type `expense` | — |
-| Écart masse comptable vs ventilée | Bandeau Palier 2 | **Informatif uniquement** — pas source cockpit |
+| Donnée cockpit | Source |
+|---|---|
+| Masse salariale réalisée | `account.analytic.line` (comptes payroll + analytique activité) |
+| Ventilations Palier 2 | Contrôle RH — bandeau écart informatif |
+| Ligne budgétaire RH / Personnel | `glc.budget.line` type `expense` (I1) |
 
-### I4 — Pas de double comptage RH
+### I4 — Pas de double comptage (révision MOA 2026-05-28)
 
 Règle opérationnelle :
 
 ```text
-Réalisé cockpit (charges salariales) = ventilations Palier 2 (I3)
-Réalisé cockpit (autres charges/recettes) = account.analytic.line (I2)
+Réalisé cockpit (toutes familles) = account.analytic.line charge/produit + analytique
+Palier 2 = contrôle uniquement — jamais additionné au réalisé cockpit
+Anti-doublon : une charge mois × société × activité × famille = comptée une seule fois
 ```
 
-Les écritures analytiques portant sur des comptes / axes RH historiques **ne sont pas additionnées** aux ventilations Palier 2 pour le même périmètre temporel et société.
+Les ventilations Palier 2 validées **ne sont plus agrégées** dans `payroll_realized` du cockpit.
 
-### I5 — Exclusion des flux bilan / trésorerie
+### I5 — Exclusion des flux bilan / trésorerie *(KPI exploitation)*
 
-Le cockpit lit l’**exploitation**, pas la trésorerie ni le bilan.
+Le cockpit lit l’**exploitation** (Recette · Cumul RH · Dépense · Solde), pas la trésorerie ni le bilan, pour ces KPI.
 
-Flux **exclus** du réalisé cockpit (doctrine [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)) :
+Flux **exclus** du réalisé cockpit d’exploitation (doctrine [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)) :
 
 | Flux | Exemple |
 |---|---|
@@ -94,6 +117,8 @@ Flux **exclus** du réalisé cockpit (doctrine [CADRAGE_BUDGET_COCKPIT.md](./CAD
 | Transfert bancaire pur | sans impact activité GLC |
 
 Ces flux ne doivent **pas** alimenter le plan **Activités GLC** ni fausser les KPI de couverture.
+
+**Lecture trésorerie distincte (MOA 2026-05-28) :** un compte bancaire de référence (défaut : compte courant) donne le **point de vue trésorerie** — virements internes **visibles** en trésorerie, **toujours exclus** des KPI exploitation. Cf. [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md).
 
 **Hors périmètre Palier 4 :** bloc trésorerie, soldes bancaires, échéancier emprunts (→ Palier 5).
 
@@ -113,7 +138,7 @@ Avec :
 Recettes d’activité = BAR + PRESTATIONS + PRIVATISATIONS
 Financements        = SUBVENTIONS (+ adhésions si retenu en recette)
 Ressources          = Recettes d’activité + Financements
-Masse salariale     = agrégat ventilations Palier 2 (I3)
+Masse salariale     = account.analytic.line comptes 631/633/641/645 + analytique (I2/I3 révisés)
 Frais généraux      = axe analytique Frais généraux (I2)
 ```
 
@@ -133,7 +158,7 @@ Frais généraux      = axe analytique Frais généraux (I2)
 **Inclus :**
 
 - vue synthèse + détail Activité × Mois ;
-- croisement réalisé (I2 + I3) vs budget (I1) ;
+- croisement réalisé (I2 révisé) vs budget (I1) ;
 - KPI couverture et écarts ;
 - bandeau alerte rouge / orange / vert (I6) ;
 - filtres : société · année · mois · activité ;
@@ -170,4 +195,6 @@ Les invariants I1–I7 sont acceptés tels quels. Prochaine étape : confirmatio
 
 ---
 
-*Palier 4 livré et gelé MOA sur `main` — version `19.0.4.0.0` · PR #33 mergée.*
+*Palier 4 livré et gelé MOA sur `main` — version `19.0.4.0.0` · PR #33 mergée.*  
+*Révision I2/I3/I4 source réalisé cockpit — MOA validée 2026-05-28 · `19.0.4.7.0` · [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md).*  
+*Raffinement I2 doctrine classe 6/7 (toute activité, tous plans) — MOA validée 2026-05-28 · `19.0.4.8.1` · [TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md](./TICKET_COCKPIT_DOCTRINE_CLASSE_6_7.md).*

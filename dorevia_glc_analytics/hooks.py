@@ -1,5 +1,57 @@
 # -*- coding: utf-8 -*-
 
+GLC_ACTIVITY_ACCOUNT_NORMALIZATION = {
+    "analytic_account_glc_structure": {
+        "name": "Structure & Administration",
+        "code": "STRUCTURE",
+        "glc_activity_type": "charge",
+        "glc_display_sequence": 10,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_bar": {
+        "name": "Bar, Restauration & Cuisine",
+        "code": "BAR",
+        "glc_activity_type": "mixte",
+        "glc_display_sequence": 20,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_prestations": {
+        "name": "Prestations & Animations",
+        "code": "PRESTATIONS",
+        "glc_activity_type": "mixte",
+        "glc_display_sequence": 30,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_residences": {
+        "name": "Résidences artistiques",
+        "code": "RESIDENCES",
+        "glc_activity_type": "charge_subventionnee",
+        "glc_display_sequence": 40,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_missions": {
+        "name": "Déplacements & Missions",
+        "code": "MISSIONS",
+        "glc_activity_type": "charge",
+        "glc_display_sequence": 50,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_privatisations": {
+        "name": "Privatisation d'espace",
+        "code": "PRIVATISATIONS",
+        "glc_activity_type": "mixte",
+        "glc_display_sequence": 60,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_location_radio": {
+        "name": "Location Radio Grand Lieu",
+        "code": "LOCATION_RADIO",
+        "glc_activity_type": "recette",
+        "glc_display_sequence": 70,
+        "glc_report_active": True,
+    },
+}
+
 
 def _rename_module_records(cr):
     """Renomme dorevia_glc_analytique → dorevia_glc_analytics (SQL idempotent)."""
@@ -57,6 +109,28 @@ def _rename_module_records(cr):
         WHERE key LIKE 'dorevia_glc_analytique.%'
         """
     )
+
+
+def _normalize_glc_activity_accounts(cr):
+    """Aligne les comptes Activités GLC officiels malgré le noupdate XML."""
+    for xml_id, values in GLC_ACTIVITY_ACCOUNT_NORMALIZATION.items():
+        cr.execute(
+            """
+            UPDATE account_analytic_account AS account
+               SET name = jsonb_build_object('en_US', %(name)s::text, 'fr_FR', %(name)s::text),
+                   code = %(code)s,
+                   glc_activity_type = %(glc_activity_type)s,
+                   glc_display_sequence = %(glc_display_sequence)s,
+                   glc_report_active = %(glc_report_active)s,
+                   active = TRUE
+              FROM ir_model_data AS data
+             WHERE data.module = 'dorevia_glc_analytics'
+               AND data.name = %(xml_id)s
+               AND data.model = 'account.analytic.account'
+               AND data.res_id = account.id
+            """,
+            {**values, "xml_id": xml_id},
+        )
 
 
 def pre_init_hook(env):

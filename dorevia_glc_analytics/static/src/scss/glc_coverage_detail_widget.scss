@@ -4,60 +4,63 @@
 // ---------------------------------------------------------------------------
 
 .o_glc_coverage_detail {
+    .o_glc_detail_toolbar {
+        .form-check-label {
+            cursor: pointer;
+            user-select: none;
+        }
+    }
+
     .o_glc_detail_table {
-        // En-tête à 2 niveaux : familles + sous-libellés
-        thead {
+        // En-tête : fond homogène sur toute la ligne (mode simple et complet)
+        thead.o_glc_detail_thead {
+            $glc-detail-header-bg: var(--bs-tertiary-bg, #f4f4f6);
+            background-color: $glc-detail-header-bg;
+
+            tr {
+                background-color: $glc-detail-header-bg;
+            }
+
             th {
                 vertical-align: bottom;
                 font-weight: 600;
                 white-space: nowrap;
+                background-color: $glc-detail-header-bg !important;
+                text-transform: none;
+                border-bottom: 1px solid var(--bs-border-color);
             }
+
             .o_glc_family_row th {
-                border-bottom: 1px solid var(--bs-border-color);
                 padding-top: 0.5rem;
-                padding-bottom: 0.25rem;
+                padding-bottom: 0.35rem;
+                font-weight: 700;
+                letter-spacing: 0.02em;
+                color: var(--bs-secondary-color, #6c757d);
             }
+
             .o_glc_subheader_row th {
-                border-bottom: 1px solid var(--bs-border-color);
-                padding-top: 0.25rem;
+                padding-top: 0.2rem;
                 padding-bottom: 0.5rem;
+                font-weight: 600;
+                font-size: 0.75rem;
+                color: var(--bs-secondary-color, #6c757d);
             }
         }
 
-        // Libellés de familles : blocs plus évidents sans surcharge
-        .o_glc_family_row {
-            th.o_glc_family_recettes,
-            th.o_glc_family_payroll,
-            th.o_glc_family_expense {
-                font-weight: 700;
-                letter-spacing: 0.04em;
-                background-color: #f3f4f6;
-                border-radius: 3px;
-                padding: 2px 6px;
-            }
-            th.o_glc_family_performance {
-                font-weight: 700;
-                letter-spacing: 0.04em;
-                background-color: #f8f9fa;
-                border-radius: 3px;
-                padding: 2px 6px;
-            }
-        }
-
-        // Début de bloc : respiration avant Salaires / Frais
+        // Séparateurs verticaux entre familles (en-tête et corps)
         .o_glc_family_payroll,
         .o_glc_family_expense {
             padding-left: 14px;
         }
 
-        // Bloc Performance : synthèse décisionnelle légèrement détachée
-        .o_glc_family_performance {
+        // Bloc Solde : synthèse décisionnelle légèrement détachée (corps uniquement)
+        td.o_glc_family_performance {
             border-left: 2px solid #b8bdc5;
             padding-left: 16px;
             background-color: #f8f9fa;
         }
 
-        // Conserver la teinte Performance au survol (table-hover Bootstrap)
+        // Conserver la teinte Solde au survol (table-hover Bootstrap)
         &.table-hover > tbody > tr:hover > td.o_glc_family_performance,
         &.table-hover > tfoot > tr:hover > td.o_glc_family_performance {
             background-color: #eef0f3;
@@ -96,19 +99,29 @@
             }
         }
 
-        // Sous-total mensuel : ligne de synthèse sobre, gras, séparateur fin haut
+        // Sous-total mensuel : synthèse plus lisible que les lignes d'activité
         .o_glc_subtotal_row {
             font-weight: 700;
-            background-color: rgba(0, 0, 0, 0.015);
+            font-size: 0.95rem;
+            background-color: rgba(0, 0, 0, 0.03);
+
             td {
-                border-top: 1px solid var(--bs-border-color-translucent);
-                padding-top: 0.4rem;
-                padding-bottom: 0.4rem;
+                border-top: 1px solid var(--bs-border-color);
+                padding-top: 0.55rem;
+                padding-bottom: 0.55rem;
+                font-weight: 700 !important;
             }
+
             .o_glc_subtotal_label {
                 padding-left: 1.5rem;
-                font-style: italic;
-                color: var(--bs-body-color);
+                font-style: normal;
+                font-weight: 700;
+                color: var(--bs-emphasis-color, #212529);
+            }
+
+            // Conserver le gras même sur les zéros (—)
+            .o_glc_zero {
+                font-weight: 700 !important;
             }
         }
 
@@ -132,7 +145,7 @@
             }
         }
 
-        // Écarts / performance : lecture rapide sans surcharge
+        // Écarts / solde : lecture rapide sans surcharge
         .o_glc_variance_negative,
         .o_glc_performance_negative {
             color: #b02a2a;

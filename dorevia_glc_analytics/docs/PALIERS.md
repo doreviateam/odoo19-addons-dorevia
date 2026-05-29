@@ -19,9 +19,9 @@
 | **1** | `dorevia_glc_analytics` | Règles d'affectation et contrôles | **Validé MOA · gelé** · [PR #25](https://github.com/doreviateam/odoo19-addons-dorevia/pull/25) |
 | **2** | `dorevia_glc_analytics` | Ventilation salariale | **Validé MOA · gelé** · [PR #26](https://github.com/doreviateam/odoo19-addons-dorevia/pull/26) |
 | **3** | `dorevia_glc_budget` | Budget prévisionnel mensuel par axe analytique | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #28](https://github.com/doreviateam/odoo19-addons-dorevia/pull/28) |
-| **4** | `dorevia_glc_analytics` (+ budget) | Cockpit couverture des salaires | **Validé MOA · gelé** · `19.0.4.0.0` · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) |
-| **4bis** | `dorevia_glc_analytics` | Finition UX cockpit + période libre + UX-GROUPBY | **GO MOA** (`19.0.4.4.2`) · [TICKET_PALIER_4BIS.md](./TICKET_PALIER_4BIS.md) · UX-GROUPBY Option C OWL → [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](./TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) |
-| **5** | extensions | Graphiques, exports, scénarios, trésorerie | **En pause MOA** |
+| **4** | `dorevia_glc_analytics` (+ budget) | Cockpit pilotage d'exploitation GLC | **GO livraison MOA · gelé** · **`19.0.4.9.0`** · [TICKET réalignement](./TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) |
+| **4bis** | `dorevia_glc_analytics` | Finition UX cockpit + période libre + UX-GROUPBY | **Intégré Palier 4 réaligné** (`19.0.4.9.0`) · [TICKET_PALIER_4BIS.md](./TICKET_PALIER_4BIS.md) |
+| **5** | extensions | Trésorerie · exports · scénarios | **GO complet MOA** · lot trésorerie **`19.0.5.0.1`** (2026-05-29) · **95/95** · recette navigateur §2 à §5 OK · [TICKET_PALIER_5](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [Recette P5](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) |
 
 ### Paliers V1.1 reportés (post-cockpit)
 
@@ -110,11 +110,11 @@ Saisir une trajectoire prévisionnelle simple, **mois par mois**, par axe analyt
 
 ---
 
-## Palier 4 — Cockpit couverture des salaires
+## Palier 4 — Cockpit pilotage d'exploitation GLC
 
-**Ticket :** [TICKET_PALIER_4.md](./TICKET_PALIER_4.md)  
-**Recette :** [RECETTE_MANUELLE_PALIER_4.md](./RECETTE_MANUELLE_PALIER_4.md)  
-**Statut :** **Validé MOA · gelé** (2026-05-27) · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33) mergée
+**Ticket :** [TICKET_PALIER_4.md](./TICKET_PALIER_4.md) · [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](./TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md)  
+**Recette :** [RECETTE_MANUELLE_PALIER_4.md](./RECETTE_MANUELLE_PALIER_4.md) · [Recette période libre](./recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md)  
+**Statut :** **GO livraison MOA · gelé** (2026-05-28) · **`19.0.4.9.0`** — grammaire Recette · Cumul RH · Dépense · Solde
 
 ### Objectif
 
@@ -138,7 +138,7 @@ Alerte de gestion (rouge / orange / vert)
 
 ## Palier 5 — Enrichissements de pilotage
 
-Hors périmètre immédiat :
+Hors périmètre immédiat Palier 4 :
 
 - graphiques avancés ;
 - export Excel / PDF ;
@@ -146,8 +146,20 @@ Hors périmètre immédiat :
 - comparaison budget initial / révisé / atterrissage ;
 - scénarios multiples ;
 - projections fin d'année ;
-- bloc trésorerie ;
+- **bloc trésorerie** — compte bancaire de référence (défaut GLC : compte courant), lecture entrées / sorties / virements internes depuis le POV du compte observé ;
 - intégration OCA Budget si besoin futur.
+
+**Doctrine trésorerie figée MOA (2026-05-28) :** triple lecture — compte bancaire de référence (POV trésorerie) · compte comptable (nature) · compte analytique (qualification métier). Virements internes visibles en trésorerie, exclus des KPI exploitation.
+
+> **Invariant Palier 5 :** un cockpit = période + compte bancaire de référence + lecture trésorerie séparée. Les KPI exploitation ne changent jamais quand on change de compte bancaire.
+
+**Ticket cadrage :** [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · **Doctrine :** [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) · **Recette :** [RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)
+
+**Lot trésorerie livré `19.0.5.0.1` (2026-05-29) :** compte bancaire de référence · param société · onglet Trésorerie S1 · tests TREF **7/7** · rejeu cockpit+budget **70/70** · post-install **95/95** · migration nomenclature Activités GLC legacy · recette navigateur §2 à §5 **OK**.
+
+**Preuve MOA finale :** sur `13 avr. → 31 mai 2026`, `Compte Courant GLC` et `GLC - Livret Bleu` conservent les KPI exploitation identiques (Recette `7 794,00 €` · Cumul RH `0,00 €` · Dépense `4 851,51 €` · Solde `2 942,49 €`) tandis que le solde trésorerie change selon le compte observé (`-1 627,11 €` vs `30 000,00 €`).
+
+**Reste Palier 5 (non livré) :** exports Excel/PDF · scénarios budget · projections · commentaires de gestion.
 
 ---
 
@@ -171,6 +183,7 @@ Le module **`dorevia_glc_analytics`** reste le socle du réalisé analytique, de
 | Plans analytiques | `GLC - Activités` et `GLC - Financements` |
 | Compte comptable | = nature juridique/comptable |
 | Compte analytique | = activité / destination métier |
+| Compte bancaire de référence | = point de vue trésorerie cockpit (défaut GLC : compte courant) — [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) |
 | Flux bilan | N'alimentent pas l'analytique d'exploitation |
 | Budget GLC | Module séparé `dorevia_glc_budget`, pas OCA Budget |
 | Ventilation salariale | Overlay — pas d'écriture paie analytique |
@@ -212,4 +225,4 @@ dorevia_glc_budget/             # Palier 3
 └── tests/
 ```
 
-**Prochaine livraison = Palier 5** (enrichissements cockpit — à planifier).
+**Prochaine livraison = commit Palier 5 trésorerie `19.0.5.0.1`** (GO technique MOA 2026-05-29 · **95/95**) · puis exports / scénarios Palier 5 élargi.

@@ -78,12 +78,29 @@ Alerte de gestion
 | `625` | Missions, déplacements, réceptions |
 | `74` | Subventions d’exploitation |
 | `164` | Emprunts / dette financière |
+| `512` / `53` | Trésorerie / caisse — trace du flux |
+| `580` | Virements internes |
 
 ### 2. Compte analytique = activité / destination métier
 
 Exemples : Bar & Restau · Prestation & Animation · Privatisation Espace · RH / Personnel · Frais généraux · Résidence artiste · Déplacement & Mission · Subvention d’exploitation · Adhésions / Financements.
 
-### 3. Opérations de bilan hors analytique d’exploitation
+### 3. Compte bancaire de référence = point de vue trésorerie *(décision MOA 2026-05-28)*
+
+Le cockpit GLC est rattaché à un **compte bancaire de référence** (sélectionnable ; défaut GLC : **compte courant**).
+
+| Lecture | Règle |
+|---|---|
+| Entrée sur le compte de référence | Entrée de trésorerie pour le cockpit |
+| Sortie du compte de référence | Sortie de trésorerie pour le cockpit |
+| Virement interne impliquant ce compte | Visible comme mouvement trésorerie du compte observé |
+| Virement interne | **Exclu** de recette, charge, marge d’activité et financement économique |
+
+> **Triple lecture :** compte bancaire de référence = point de vue · compte comptable = nature · compte analytique = qualification métier.
+
+Implémentation : Palier 5 — cf. [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · doctrine [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md).
+
+### 4. Opérations de bilan hors analytique d’exploitation
 
 Ne **pas** alimenter le plan **Activités GLC** :
 
@@ -93,7 +110,7 @@ Ne **pas** alimenter le plan **Activités GLC** :
 - reprise de solde ;
 - compte de transfert bancaire.
 
-Ces flux impactent la trésorerie, pas la lecture d’exploitation.
+Ces flux impactent la trésorerie (lecture compte bancaire de référence), pas les KPI d’exploitation Recette · Cumul RH · Dépense · Solde.
 
 ---
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_company_form_glc_bank_journal" model="ir.ui.view">
+        <field name="name">res.company.form.glc.bank.journal</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="glc_default_bank_journal_id"
+                       groups="dorevia_glc_analytics.group_glc_manager"
+                       options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
