@@ -27,7 +27,7 @@ GLC_ANALYTIC_ACCOUNT_NORMALIZATION = {
     "analytic_account_glc_residences": {
         "name": "Résidences artistiques",
         "code": "RESIDENCES",
-        "glc_activity_type": "charge_subventionnee",
+        "glc_activity_type": "charge",
         "glc_display_sequence": 40,
         "glc_report_active": True,
     },
@@ -55,28 +55,28 @@ GLC_ANALYTIC_ACCOUNT_NORMALIZATION = {
     "analytic_account_glc_adhesions": {
         "name": "Adhésions",
         "code": "ADHESIONS",
-        "glc_activity_type": "financement",
+        "glc_activity_type": "recette",
         "glc_display_sequence": 80,
         "glc_report_active": True,
     },
     "analytic_account_glc_dons": {
         "name": "Dons",
         "code": "DONS",
-        "glc_activity_type": "financement",
+        "glc_activity_type": "recette",
         "glc_display_sequence": 90,
         "glc_report_active": True,
     },
     "analytic_account_glc_subventions": {
         "name": "Subventions",
         "code": "SUBVENTIONS",
-        "glc_activity_type": "financement",
+        "glc_activity_type": "recette",
         "glc_display_sequence": 100,
         "glc_report_active": True,
     },
     "analytic_account_glc_ressources_propres": {
         "name": "Ressources propres",
         "code": "RESSOURCES_PROPRES",
-        "glc_activity_type": "financement",
+        "glc_activity_type": "recette",
         "glc_display_sequence": 110,
         "glc_report_active": True,
     },
@@ -243,8 +243,27 @@ def _normalize_glc_activites_plan(cr):
     )
 
 
+def _migrate_glc_activity_type_legacy_values(cr):
+    """Types GLC legacy → charge / recette / mixte uniquement."""
+    cr.execute(
+        """
+        UPDATE account_analytic_account
+           SET glc_activity_type = 'charge'
+         WHERE glc_activity_type = 'charge_subventionnee'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE account_analytic_account
+           SET glc_activity_type = 'recette'
+         WHERE glc_activity_type = 'financement'
+        """
+    )
+
+
 def migrate_glc_analytic_nomenclature(cr):
     """Plan unique GLC — consolidation + alignement nomenclature officielle."""
+    _migrate_glc_activity_type_legacy_values(cr)
     _migrate_to_single_glc_plan(cr)
     _normalize_glc_activites_plan(cr)
     _normalize_glc_analytic_accounts(cr)

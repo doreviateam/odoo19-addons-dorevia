@@ -34,7 +34,7 @@
             <field name="name">Résidences artistiques</field>
             <field name="code">RESIDENCES</field>
             <field name="plan_id" ref="analytic_plan_glc_activites"/>
-            <field name="glc_activity_type">charge_subventionnee</field>
+            <field name="glc_activity_type">charge</field>
             <field name="glc_display_sequence">40</field>
             <field name="glc_report_active" eval="True"/>
         </record>
@@ -71,7 +71,7 @@
             <field name="name">Adhésions</field>
             <field name="code">ADHESIONS</field>
             <field name="plan_id" ref="analytic_plan_glc_activites"/>
-            <field name="glc_activity_type">financement</field>
+            <field name="glc_activity_type">recette</field>
             <field name="glc_display_sequence">80</field>
             <field name="glc_report_active" eval="True"/>
         </record>
@@ -80,7 +80,7 @@
             <field name="name">Dons</field>
             <field name="code">DONS</field>
             <field name="plan_id" ref="analytic_plan_glc_activites"/>
-            <field name="glc_activity_type">financement</field>
+            <field name="glc_activity_type">recette</field>
             <field name="glc_display_sequence">90</field>
             <field name="glc_report_active" eval="True"/>
         </record>
@@ -89,7 +89,7 @@
             <field name="name">Subventions</field>
             <field name="code">SUBVENTIONS</field>
             <field name="plan_id" ref="analytic_plan_glc_activites"/>
-            <field name="glc_activity_type">financement</field>
+            <field name="glc_activity_type">recette</field>
             <field name="glc_display_sequence">100</field>
             <field name="glc_report_active" eval="True"/>
         </record>
@@ -98,7 +98,7 @@
             <field name="name">Ressources propres</field>
             <field name="code">RESSOURCES_PROPRES</field>
             <field name="plan_id" ref="analytic_plan_glc_activites"/>
-            <field name="glc_activity_type">financement</field>
+            <field name="glc_activity_type">recette</field>
             <field name="glc_display_sequence">110</field>
             <field name="glc_report_active" eval="True"/>
         </record>
