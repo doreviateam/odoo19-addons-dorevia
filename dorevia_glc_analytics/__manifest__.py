@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.5.0.1",
+    "version": "19.0.7.0.2",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — cockpit pilotage d'exploitation.",
     "description": """
@@ -38,6 +38,8 @@ Palier 4 — Cockpit pilotage d'exploitation GLC :
 Palier 4bis — Finition UX cockpit (wording MOA, tableau de bord).
 
 Palier 5 — Trésorerie cockpit (compte bancaire de référence, lecture séparée).
+
+Lot GQ-6 — Qualité comptable & suivi paiement (onglets Contrôles qualité · Tiers & paiements).
 
 Doctrine et évolutions : docs/TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md
 

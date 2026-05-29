@@ -183,6 +183,142 @@
                             </group>
                             <field name="treasury_has_data" invisible="1"/>
                         </page>
+                        <page string="Contrôles qualité" name="page_quality">
+                            <p class="text-muted mb-1">
+                                Fiabilité des données comptables et analytiques sur la période.
+                            </p>
+                            <p class="text-muted small mb-3">
+                                Ces indicateurs mesurent la fiabilité des données et le cycle de
+                                paiement. Ils ne modifient pas Recette · Cumul RH · Dépense · Solde.
+                            </p>
+                            <group string="Q1 — Confiance analytique">
+                                <group>
+                                    <field name="quality_analytic_confidence_rate" readonly="1"/>
+                                    <field name="quality_analytic_confidence_status" readonly="1"
+                                           widget="badge"
+                                           decoration-success="quality_analytic_confidence_status == 'green'"
+                                           decoration-warning="quality_analytic_confidence_status == 'orange'"
+                                           decoration-danger="quality_analytic_confidence_status == 'red'"/>
+                                    <field name="quality_analytic_confidence_detail" readonly="1" nolabel="1" class="text-muted text-nowrap"/>
+                                </group>
+                                <group>
+                                    <field name="quality_analytic_lines_checked" readonly="1"/>
+                                    <field name="quality_analytic_lines_covered" readonly="1"/>
+                                    <field name="quality_analytic_lines_to_qualify" readonly="1"/>
+                                </group>
+                            </group>
+                            <div class="mb-3">
+                                <button name="action_open_quality_lines_to_qualify"
+                                        type="object"
+                                        string="Lignes à qualifier"
+                                        class="btn-link"/>
+                                <button name="action_open_quality_moves_to_qualify"
+                                        type="object"
+                                        string="Écritures concernées"
+                                        class="btn-link ms-2"/>
+                            </div>
+                            <group string="Q2 — Lettrage tiers (stock à fin période)">
+                                <group string="Clients (411)">
+                                    <field name="quality_reconcile_rate_customer" readonly="1"/>
+                                    <field name="quality_unreconciled_amount_customer" readonly="1"/>
+                                    <field name="quality_unreconciled_count_customer" readonly="1"/>
+                                    <button name="action_open_unreconciled_customer_lines"
+                                            type="object"
+                                            string="Lignes clients non lettrées"
+                                            class="btn-link"/>
+                                </group>
+                                <group string="Fournisseurs (401)">
+                                    <field name="quality_reconcile_rate_supplier" readonly="1"/>
+                                    <field name="quality_unreconciled_amount_supplier" readonly="1"/>
+                                    <field name="quality_unreconciled_count_supplier" readonly="1"/>
+                                    <button name="action_open_unreconciled_supplier_lines"
+                                            type="object"
+                                            string="Lignes fournisseurs non lettrées"
+                                            class="btn-link"/>
+                                </group>
+                            </group>
+                            <group string="Ancienneté créances / dettes ouvertes">
+                                <group string="Clients">
+                                    <field name="quality_aging_customer_0_30" readonly="1"/>
+                                    <field name="quality_aging_customer_31_60" readonly="1"/>
+                                    <field name="quality_aging_customer_61_90" readonly="1"/>
+                                    <field name="quality_aging_customer_90_plus" readonly="1"/>
+                                </group>
+                                <group string="Fournisseurs">
+                                    <field name="quality_aging_supplier_0_30" readonly="1"/>
+                                    <field name="quality_aging_supplier_31_60" readonly="1"/>
+                                    <field name="quality_aging_supplier_61_90" readonly="1"/>
+                                    <field name="quality_aging_supplier_90_plus" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Tiers &amp; paiements" name="page_payment">
+                            <p class="text-muted mb-1">
+                                Cycle de facturation et règlement sur la période (pièces postées).
+                            </p>
+                            <p class="text-muted small mb-3">
+                                Ces indicateurs mesurent la fiabilité des données et le cycle de
+                                paiement. Ils ne modifient pas Recette · Cumul RH · Dépense · Solde.
+                            </p>
+                            <group string="Q3 — Clients">
+                                <group>
+                                    <field name="payment_customer_invoice_count" readonly="1"/>
+                                    <field name="payment_customer_invoice_amount" readonly="1"/>
+                                    <field name="payment_customer_paid_count" readonly="1"/>
+                                    <field name="payment_customer_paid_amount" readonly="1"/>
+                                    <field name="payment_customer_partial_count" readonly="1"/>
+                                    <field name="payment_customer_partial_amount" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="payment_customer_in_payment_count" readonly="1"/>
+                                    <field name="payment_customer_in_payment_amount" readonly="1"/>
+                                    <field name="payment_customer_not_paid_count" readonly="1"/>
+                                    <field name="payment_customer_not_paid_amount" readonly="1"/>
+                                    <field name="payment_customer_refund_count" readonly="1"/>
+                                    <field name="payment_customer_refund_amount" readonly="1"/>
+                                    <field name="payment_customer_residual" readonly="1" class="fw-bold"/>
+                                </group>
+                            </group>
+                            <div class="mb-3">
+                                <button name="action_open_payment_customer_invoices"
+                                        type="object"
+                                        string="Factures clients période"
+                                        class="btn-link"/>
+                                <button name="action_open_payment_customer_open"
+                                        type="object"
+                                        string="Factures clients ouvertes"
+                                        class="btn-link ms-2"/>
+                            </div>
+                            <group string="Q3 — Fournisseurs">
+                                <group>
+                                    <field name="payment_supplier_invoice_count" readonly="1"/>
+                                    <field name="payment_supplier_invoice_amount" readonly="1"/>
+                                    <field name="payment_supplier_paid_count" readonly="1"/>
+                                    <field name="payment_supplier_paid_amount" readonly="1"/>
+                                    <field name="payment_supplier_partial_count" readonly="1"/>
+                                    <field name="payment_supplier_partial_amount" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="payment_supplier_in_payment_count" readonly="1"/>
+                                    <field name="payment_supplier_in_payment_amount" readonly="1"/>
+                                    <field name="payment_supplier_not_paid_count" readonly="1"/>
+                                    <field name="payment_supplier_not_paid_amount" readonly="1"/>
+                                    <field name="payment_supplier_refund_count" readonly="1"/>
+                                    <field name="payment_supplier_refund_amount" readonly="1"/>
+                                    <field name="payment_supplier_residual" readonly="1" class="fw-bold"/>
+                                </group>
+                            </group>
+                            <div class="mb-3">
+                                <button name="action_open_payment_supplier_invoices"
+                                        type="object"
+                                        string="Factures fournisseurs période"
+                                        class="btn-link"/>
+                                <button name="action_open_payment_supplier_open"
+                                        type="object"
+                                        string="Factures fournisseurs ouvertes"
+                                        class="btn-link ms-2"/>
+                            </div>
+                        </page>
                         <page string="Infos">
                             <p class="text-muted mb-3">
                                 Les recettes d'activité et les financements couvrent-elles
