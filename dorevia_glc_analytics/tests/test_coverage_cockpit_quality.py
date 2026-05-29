@@ -157,4 +157,12 @@ class TestGlcCoverageCockpitQuality(TestGlcCoverageCockpitTreasury):
 
         self.assertTrue(cockpit.treasury_has_data)
         self.assertAlmostEqual(cockpit.treasury_inflow, 900.0)
+        self._create_invoice_one_line(
+            price_unit=100.0,
+            move_type="out_invoice",
+            invoice_date="%s-06-06" % year,
+            tax_ids=[Command.clear()],
+            post=True,
+        )
+        cockpit.action_refresh()
         self.assertGreater(cockpit.quality_analytic_moves_checked, 0)

@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models, _
+from odoo import api, models
 
 from .glc_constants import GLC_EXPENSE_ACCOUNT_TYPES, GLC_INCOME_ACCOUNT_TYPES
 
 
-class GlcQualityMixin(models.AbstractModel):
+class GlcCoverageCockpit(models.TransientModel):
     """Helpers partagés couverture analytique / lettrage / paiement (GQ-6)."""
 
-    _name = "glc.quality.mixin"
-    _description = "Mixin qualité comptable cockpit GLC"
+    _inherit = "glc.coverage.cockpit"
 
     _GLC_QUALITY_MOVE_TYPES = frozenset(
         {"out_invoice", "out_refund", "in_invoice", "in_refund"}

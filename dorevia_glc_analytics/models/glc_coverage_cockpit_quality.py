@@ -3,8 +3,8 @@
 from odoo import _, api, fields, models
 
 
-class GlcCoverageCockpitQuality(models.Model):
-    _inherit = ["glc.coverage.cockpit", "glc.quality.mixin"]
+class GlcCoverageCockpit(models.TransientModel):
+    _inherit = "glc.coverage.cockpit"
 
     # --- Q1 Couverture analytique ---
     quality_analytic_moves_checked = fields.Integer(
@@ -330,14 +330,14 @@ class GlcCoverageCockpitQuality(models.Model):
             if state not in states:
                 state = "not_paid"
             states[state]["count"] += 1
-            states[state]["amount"] += move.amount_total_signed
+            states[state]["amount"] += abs(move.amount_total_signed)
             if move.amount_residual:
-                residual += move.amount_residual_signed
+                residual += abs(move.amount_residual_signed)
         return {
             "invoice_count": len(invoices),
-            "invoice_amount": sum(invoices.mapped("amount_total_signed")),
+            "invoice_amount": sum(abs(move.amount_total_signed) for move in invoices),
             "refund_count": len(refunds),
-            "refund_amount": sum(refunds.mapped("amount_total_signed")),
+            "refund_amount": sum(abs(move.amount_total_signed) for move in refunds),
             "residual": residual,
             **{
                 f"{key}_count": value["count"]
