@@ -10,3 +10,5 @@ from . import glc_employee_cost_line
 from . import glc_salary_allocation
 from . import glc_salary_allocation_line
 from . import glc_coverage_cockpit
+from . import glc_quality_mixin
+from . import glc_coverage_cockpit_quality

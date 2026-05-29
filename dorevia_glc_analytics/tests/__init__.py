@@ -5,3 +5,4 @@ from . import test_analytic_setup
 from . import test_salary_allocation
 from . import test_coverage_cockpit
 from . import test_coverage_cockpit_treasury
+from . import test_coverage_cockpit_quality
