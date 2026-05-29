@@ -2,11 +2,12 @@
 
 ## Statut
 
-**GO MOA** sur cockpit GLC période libre — **R1–R15 automatisé** cible sur **`19.0.4.8.1`** (2026-05-28).  
-Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : **tous les plans analytiques** par défaut (Activités + Financements + autres). Filtre par plan = option UX ultérieure.  
+**GO MOA** — recette ciblée **R17** sur **`19.0.4.9.0`** (2026-05-28) : **GO technique**, réserve visuelle navigateur (contrôle serveur + templates OWL).  
+Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : **tous les plans analytiques** par défaut.  
+Réalignement contrôle de gestion : [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) — **P1/P3/P4 GO recette · P2 partiel**.  
 Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** et **R15-DEP-MISSIONS-REEL** : à jouer côté interface / données réelles.
 
-*(Historique : GO avec réserves Palier 4 `19.0.4.2.5` · UX-GROUPBY `19.0.4.4.2` · Marge d'activité `19.0.4.5.1` · Synthèse graphique `19.0.4.6.1` · source réalisé `19.0.4.7.0` · doctrine classe 6/7 `19.0.4.8.0`.)*
+*(Historique : … · wording Solde `19.0.4.8.9` · finition synthèse `19.0.4.8.10` · libellés axe `19.0.4.8.14` · réalignement métier `19.0.4.9.0`.)*
 
 ## Module
 
@@ -14,11 +15,11 @@ Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** et **R15-DEP-MISSION
 |---|---|
 | Module cockpit | `dorevia_glc_analytics` |
 | Module budget (prérequis) | `dorevia_glc_budget` |
-| Version attendue | `19.0.4.8.2` |
+| Version attendue / installée | **`19.0.4.9.0`** |
 | Palier | 4 — Cockpit GLC |
 | Évolution | période libre `date_from` / `date_to` + regroupement mensuel automatique |
 
-**Références :** [TICKET_PALIER_4BIS.md](../TICKET_PALIER_4BIS.md) · [RECETTE_MANUELLE_PALIER_4.md](../RECETTE_MANUELLE_PALIER_4.md) · [CADRAGE_FINAL_PALIER_4.md](../CADRAGE_FINAL_PALIER_4.md)
+**Références :** [TICKET_PALIER_4BIS.md](../TICKET_PALIER_4BIS.md) · [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) · [RECETTE_MANUELLE_PALIER_4.md](../RECETTE_MANUELLE_PALIER_4.md) · [CADRAGE_FINAL_PALIER_4.md](../CADRAGE_FINAL_PALIER_4.md)
 
 ## Objectif
 
@@ -496,7 +497,7 @@ Le tableau doit toujours correspondre exactement à la période affichée dans l
 | R11-ZERO | Zéros affichés en `—` atténué gris clair | [x] | Réduit le bruit visuel des colonnes peu renseignées ; zéro **non coloré** (pas rouge/vert) |
 | R11-VAR | Écarts négatifs en rouge sobre `#b02a2a`, positifs en vert sobre `#198754` | [x] | Sur sous-totaux mensuels, écarts en gras supplémentaire |
 | R11-PARC | Lecture détaillée entièrement contenue dans l'onglet ; **aucun bouton externe exposé** | [x] | L'action serveur `action_open_detail_grouped` reste disponible côté code mais hors parcours MOA |
-| R11-MONO | En période **mono-mois**, aucun sous-total ni total période n'est affiché | [x] | Le widget ne rend les sous-totaux que si `multiMonth = true` |
+| R11-MONO | En période **mono-mois** : **TOTAL PÉRIODE** affiché, sans sous-total mensuel | [ ] | Révision MOA `19.0.4.8.11` — ligne synthétique conservée en lecture simplifiée |
 
 ### Points documentés MOA
 
@@ -736,9 +737,88 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 ---
 
+## R16 — Wording MOA détail + mode simplifié (`19.0.4.8.5` → `19.0.4.8.6`)
+
+**Objectif :** aligner l'onglet **Détail par axe analytique** sur la grammaire MOA cible et proposer une lecture simplifiée (réel seul) avec option Budget / Écart.
+
+**Formule affichée :** Solde = Recette − Cumul RH − Dépense.
+
+| Ancien libellé | Nouveau libellé |
+|---|---|
+| RECETTES | **RECETTE** |
+| SALAIRES | **CUMUL RH** |
+| DÉPENSES | **DÉPENSE** |
+| MARGE D'ACTIVITÉ | **SOLDE** |
+
+**Texte d'aide :** « Par axe analytique et par mois : recette, cumul RH, dépense et solde. »
+
+**Option utilisateur :** case **« Budget ? »** (préférence mémorisée en `localStorage`).
+
+**Périmètre R16 :** onglet **Détail** + **Synthèse** alignés sur grammaire **Recette · Cumul RH · Dépense · Solde** (`19.0.4.8.9`+).
+
+### Verdict R16
+
+- [x] **GO UX / GO fonctionnel** (2026-05-28, consolidé R17)
+
+---
+
+## R17 — Réalignement contrôle de gestion (`19.0.4.9.0`)
+
+**Objectif :** valider le réalignement métier post-[TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) : filtre axe, contrôle RH, libellés dépenses hors salaires.
+
+**Méthode recette (2026-05-28) :** contrôles serveur Odoo + inspection templates OWL · jeu isolé année **2098** (BAR) · **88 post-tests verts** après upgrade + restart. Contrôle visuel navigateur non réalisé (politique réseau `localhost:18079`).
+
+### Procédure R17
+
+| Référence | Point de contrôle | OK | Observations |
+|---|---|:---:|---|
+| R17-FIL-TITRE | Filtre **Axe analytique = BAR** → titre `… · Bar, Restauration & Cuisine` | [x] | Jeu 2098 · Avril · Initial |
+| R17-FIL-KPI | KPI recalculés BAR uniquement (recette 5 000 · RH 1 200 · dépense 300 · solde 3 500) | [x] | |
+| R17-FIL-DET | Détail : 1 ligne `Bar, Restauration & Cuisine` · code `BAR` en tooltip | [x] | |
+| R17-FIL-PERS | Filtre BAR conservé après changement scénario / période | [x] | |
+| R17-MONO-TOT | Total période visible en mono-mois (`tfoot` sans condition multi-mois) | [x] | Template OWL validé |
+| R17-RH-OK | Contrôle RH **Cohérent** : paie 1 200 = ventilation 1 200 · écart 0 · statut `ok` | [x] | |
+| R17-RH-CHECK | Contrôle RH **À contrôler** : paie 700 · ventilation 0 · écart 700 · statut `check` | [x] | |
+| R17-RH-NA | Contrôle RH **N/A** : paie 0 · ventilation 0 · statut `na` | [x] | Badges success / warning / muted |
+| R17-LBL-DEP | Wording **Dépenses hors salaires** (Charges de structure + champs cockpit) | [x] | |
+| R17-LBL-GRAM | Grammaire **Recette · Cumul RH · Dépense · Solde** (Synthèse + Détail) | [x] | |
+| R17-BUD-HINT | Message discret si pas de budget sur la période | [x] | Synthèse + Détail |
+| R17-BUD-CHECK | Case **Budget ?** · mode Réel / Budget / Écart | [x] | Templates validés |
+| R17-AUTO | Non-régression post-install | [x] | **88 tests · 0 failed · 0 error** (rejeu serveur 2026-05-28) |
+
+### Procédure exécutée — rejeu serveur (2026-05-28)
+
+| Étape | Résultat |
+|---|---|
+| `-u dorevia_glc_analytics` sur `glc-rgl-test-import` | OK |
+| Restart worker Odoo | OK |
+| Version installée confirmée | **`dorevia_glc_analytics` `19.0.4.9.0`** |
+| Module budget (inchangé) | **`dorevia_glc_budget` `19.0.1.0.0`** |
+| Rejeu `post_install` analytics + budget | **88 tests · 0 failed · 0 error(s)** |
+| — dont `dorevia_glc_analytics` | 84 tests |
+| — dont `dorevia_glc_budget` | 14 tests |
+
+**Note logs :** deux erreurs SQL `duplicate key` sur contraintes d'unicité budget / ligne budget — **attendues** (tests de non-régression contraintes). Le résumé Odoo final confirme `0 failed, 0 error(s)`.
+
+**Réserve restante :** contrôle visuel navigateur R17 + compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** — poste MOA local (`Cmd+Shift+R` sur `http://localhost:18079`). Environnement Codex : accès `localhost:18079` bloqué par policy réseau.
+
+- [x] **GO technique** (2026-05-28)
+- [ ] **GO visuel navigateur** *(en attente MOA sur poste local)*
+- [ ] KO
+
+**Réserves maintenues (lots suivants) :**
+
+- Budget partiel : réalisés non budgétés par axe ou cartographie budget multi-axes ;
+- Onglet **Données exclues / à contrôler** non livré (`19.0.4.9.0`) ;
+- **Compte bancaire de référence / bloc trésorerie** — doctrine MOA figée, implémentation Palier 5 ([TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md)).
+
+---
+
 ## Verdict recette (mise à jour)
 
 - [x] **GO** — R1–R14 automatisé OK sur `19.0.4.7.0` (2026-05-28)
+- [x] **GO technique R17** — réalignement métier `19.0.4.9.0` (2026-05-28) · **88 post-tests verts**
+- [ ] GO visuel navigateur R17 (poste MOA)
 - [ ] Compléments manuels R14-CAISSE / R14-OD / R14-645-REEL
 - [ ] NO GO
 
@@ -748,6 +828,10 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 | Réserve | Bloquante | Commentaire |
 |---|---:|---|
+| **Contrôle visuel navigateur R17** | Non *(2026-05-28)* | Recette serveur + templates OK ; validation MOA sur poste local recommandée (`Cmd+Shift+R`). |
+| **Budget multi-axes / réalisé non budgété** | Non *(lot suivant)* | `has_budget_data` + messages ; cartographie budget à étendre — cf. R17 réserves. |
+| **Onglet Données exclues** | Non *(lot suivant)* | §3.5 ticket réalignement — non livré `19.0.4.9.0`. |
+| **Compte bancaire de référence / trésorerie** | Non *(Palier 5)* | Doctrine MOA 2026-05-28 : POV compte courant par défaut ; virements internes visibles en trésorerie, exclus KPI exploitation — cf. [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md). |
 | Mapping budget **`STRUCTURE`** vs **`payroll_budget`** | Non | Ambiguïté KPI budget masse salariale vs frais généraux — hors périmètre recette période libre. |
 | **Rechargement code Python après upgrade** | Non *(procédure connue)* | `docker compose restart odoo` obligatoire après `-u`. |
 | **Hard refresh navigateur après upgrade JS** | Non *(procédure connue)* | `Cmd+Shift+R` requis pour recharger le widget `glc_coverage_detail` (JS + XML + SCSS). |
@@ -768,11 +852,13 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | Date (R12 PERFORMANCE + familles `19.0.4.5.1`) | 2026-05-27 |
 | Date (R13 Synthèse graphique — Marge d'activité `19.0.4.6.1`) | 2026-05-27 |
 | Date (R14 source réalisé — auto `19.0.4.7.0`) | **2026-05-28** |
+| Date (R17 réalignement métier `19.0.4.9.0`) | **2026-05-28** |
 | Exécutant | MOA |
 | Base / environnement | `glc-rgl-test-import` · `http://localhost:18079` |
-| Version module | `dorevia_glc_analytics` **`19.0.4.7.0`** (source réalisé cockpit · refonte I2/I3) |
-| Verdict global | **GO technique** — R1–R14 automatisé OK · **74 post-tests verts** |
-| Merge | **PR #40** — branche `feat/glc-cockpit-source-realise-19.0.4.7.0` |
+| Version module | `dorevia_glc_analytics` **`19.0.4.9.0`** |
+| Verdict global | **GO technique R17** · rejeu serveur 2026-05-28 · **88 post-tests verts** · GO visuel navigateur en attente |
+| Modules installés | `dorevia_glc_analytics` **`19.0.4.9.0`** · `dorevia_glc_budget` **`19.0.1.0.0`** |
+| Référence ticket | [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) |
 | Compléments manuels R14 | **En attente MOA** — R14-CAISSE · R14-OD · R14-645-REEL |
 
 ---
@@ -790,9 +876,9 @@ Cette recette valide :
 **Critères de GO :**
 
 > Le cockpit doit permettre une lecture fiable du réel, du budget et des écarts sur une période choisie par l'utilisateur, avec regroupement mensuel automatique lorsque la période couvre plusieurs mois.  
-> Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs RECETTES | SALAIRES | DÉPENSES | MARGE D'ACTIVITÉ clairement distingués, sans sortie de l'onglet.  
+> Le détail par activité doit afficher une hiérarchie visuelle claire mois → activités → sous-total mensuel → total période, avec 4 blocs **RECETTE | CUMUL RH | DÉPENSE | SOLDE** clairement distingués, sans sortie de l'onglet.  
 > La synthèse graphique doit offrir une lecture instantanée du pilotage (marge d'activité, structure mensuelle, marge par activité) en complément du détail chiffré.
 
-**Statut :** **GO technique** sur `19.0.4.7.0` — R1–R14 automatisé OK · **74 post-tests verts** (2026-05-28) · compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** en attente MOA.
+**Statut :** **GO technique recette R17** (2026-05-28) · **88 post-tests verts** · GO visuel navigateur en attente MOA poste local.
 
-**Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) · [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](../TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md) · [TICKET_COCKPIT_SOURCE_REALISE.md](../TICKET_COCKPIT_SOURCE_REALISE.md) — source réalisé `19.0.4.7.0`.
+**Évolution UX référence :** [TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md](../TICKET_UX_GROUP_BY_DETAIL_COCKPIT.md) · [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](../TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md) · [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) — **`19.0.4.9.0`**.

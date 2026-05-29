@@ -11,7 +11,7 @@
                     <field name="currency_id" invisible="1"/>
                     <field name="alert_status" invisible="1"/>
                     <field name="detail_line_count" invisible="1"/>
-                    <field name="activity_account_id" invisible="1"/>
+                    <field name="has_budget_data" invisible="1"/>
                     <field name="is_refreshed" invisible="1"/>
 
                     <div class="alert alert-danger mb-3 py-2 d-flex flex-nowrap align-items-baseline gap-2"
@@ -47,6 +47,9 @@
                         </group>
                         <group>
                             <field name="budget_scenario" options="{'autosave': true}"/>
+                            <field name="activity_account_id"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   placeholder="Tous les axes"/>
                             <field name="period_range_label" readonly="1"/>
                         </group>
                     </group>
@@ -55,10 +58,13 @@
                         <page string="Synthèse graphique" name="page_synthesis">
                             <p class="text-muted mb-1">
                                 Lecture immédiate de pilotage :
-                                marge d'activité, structure mensuelle et marge par activité.
+                                solde période, structure mensuelle et solde par axe analytique.
                             </p>
                             <p class="text-muted small mb-3">
-                                Marge d'activité = Recettes − Salaires − Dépenses hors salaires.
+                                Solde = Recette − Cumul RH − Dépense.
+                            </p>
+                            <p class="text-muted small mb-3" invisible="has_budget_data">
+                                Aucun budget renseigné sur cette période — les écarts budget ne sont pas significatifs.
                             </p>
                             <div class="alert alert-light border mb-0" role="status"
                                  invisible="detail_line_count">
@@ -76,12 +82,14 @@
                                    invisible="not detail_line_count"/>
                         </page>
                         <page string="Détail par axe analytique" name="page_detail">
-                            <p class="text-muted">
-                                Par axe analytique et par mois : recettes ou financements (classe 7),
-                                salaires, dépenses hors salaires (classe 6) et marge d'activité,
-                                comparés au prévu. Tous les axes analytiques avec mouvement réel
-                                sont listés sans regroupement par plan.
-                                Sous-totaux mensuels et total période calculés côté client.
+                            <p class="text-muted mb-1">
+                                Par axe analytique et par mois : recette, cumul RH, dépense et solde.
+                            </p>
+                            <p class="text-muted small mb-3">
+                                Solde = Recette − Cumul RH − Dépense.
+                            </p>
+                            <p class="text-muted small mb-3" invisible="has_budget_data">
+                                Aucun budget renseigné sur cette période — cocher « Budget ? » n'affichera que des tirets.
                             </p>
                             <field name="detail_line_count" invisible="1"/>
                             <div class="alert alert-light border mb-0" role="status"
@@ -120,7 +128,7 @@
                         </page>
                         <page string="Charges de structure">
                             <p class="text-muted">
-                                Charges de structure = masse salariale + frais généraux.
+                                Charges de structure = cumul RH + dépenses hors salaires.
                                 Lecture réalisé vs prévu et solde après charges de structure.
                             </p>
                             <group>
@@ -147,9 +155,28 @@
                         <page string="Infos">
                             <p class="text-muted mb-3">
                                 Les recettes d'activité et les financements couvrent-elles
-                                les charges de structure, dont les salaires ?
+                                les charges de structure, dont le cumul RH ?
                             </p>
+                            <group string="Contrôle RH (informatif)">
+                                <group>
+                                    <field name="payroll_realized" readonly="1"
+                                           string="Paie comptable (cumul RH réalisé)"/>
+                                    <field name="salary_allocation_total" readonly="1"/>
+                                    <field name="payroll_reconciliation_gap" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="payroll_reconciliation_status" readonly="1"
+                                           widget="badge"
+                                           decoration-success="payroll_reconciliation_status == 'ok'"
+                                           decoration-warning="payroll_reconciliation_status == 'check'"
+                                           decoration-muted="payroll_reconciliation_status == 'na'"/>
+                                </group>
+                            </group>
                             <p class="text-muted mb-0">
+                                Le réalisé cockpit provient de la comptabilité analytique.
+                                Les ventilations Palier 2 servent au contrôle de cohérence.
+                            </p>
+                            <p class="text-muted mb-0 mt-2">
                                 Le cockpit se met à jour automatiquement lorsque vous modifiez
                                 les filtres de lecture.
                             </p>
@@ -199,9 +226,9 @@
                 <field name="payroll_realized" sum="Total masse sal. réelle"/>
                 <field name="payroll_budget" sum="Total masse sal. budgétée"/>
                 <field name="variance_payroll" sum="Total écart masse sal."/>
-                <field name="expense_realized" sum="Total frais gén. réels"/>
-                <field name="expense_budget" sum="Total frais gén. budgétés"/>
-                <field name="variance_expense" sum="Total écart frais gén."/>
+                <field name="expense_realized" sum="Total dépenses réelles"/>
+                <field name="expense_budget" sum="Total dépenses budgétées"/>
+                <field name="variance_expense" sum="Total écart dépenses"/>
             </list>
         </field>
     </record>

@@ -5,7 +5,7 @@ import { registry } from "@web/core/registry";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { formatMonetary } from "@web/views/fields/formatters";
 import { loadJS } from "@web/core/assets";
-import { computePerformanceAmounts } from "./glc_coverage_detail_widget.esm";
+import { computePerformanceAmounts, activityBusinessLabel } from "./glc_coverage_detail_widget.esm";
 
 const NUMERIC_FIELDS = [
     "revenue_realized",
@@ -19,8 +19,9 @@ const NUMERIC_FIELDS = [
 const COLOR_REAL = "#198754";
 const COLOR_BUDGET = "#adb5bd";
 const COLOR_REVENUE = "#3b7ddd";
-const COLOR_PAYROLL = "#f29440";
+const COLOR_PAYROLL = "#d4880f";
 const COLOR_EXPENSE = "#b8bdc5";
+const COLOR_SOLDE_LINE = "#2c2c2c";
 const COLOR_POSITIVE = "#198754";
 const COLOR_NEGATIVE = "#b02a2a";
 const COVERAGE_GREEN = "#198754";
@@ -129,6 +130,39 @@ export class GlcCoverageSynthesisField extends Component {
         return value < 0 ? "o_glc_kpi_negative" : "o_glc_kpi_positive";
     }
 
+    _monthHasBudget(totals) {
+        return (
+            !this.isZero(totals.revenue_budget) ||
+            !this.isZero(totals.payroll_budget) ||
+            !this.isZero(totals.expense_budget)
+        );
+    }
+
+    get hasPeriodBudget() {
+        const agg = this.aggregates;
+        if (!agg.hasLines) {
+            return false;
+        }
+        if (!this.isZero(agg.periodTotals.performance_budget)) {
+            return true;
+        }
+        return agg.months.some((m) => this._monthHasBudget(m.totals));
+    }
+
+    formatBudgetKpi(value) {
+        if (!this.hasPeriodBudget) {
+            return "Non budgété";
+        }
+        return this.formatSignedAmount(value);
+    }
+
+    budgetKpiClass() {
+        if (!this.hasPeriodBudget) {
+            return "o_glc_kpi_muted";
+        }
+        return "o_glc_kpi_neutral";
+    }
+
     _cockpitSalaryCoverageRate() {
         const rate = this.props.record.data.salary_coverage_rate;
         if (rate === false || rate === null || rate === undefined) {
@@ -181,7 +215,7 @@ export class GlcCoverageSynthesisField extends Component {
             }
             this._accumulate(monthsMap.get(monthKey).totals, data);
 
-            const activityLabel = data.activity_label || "—";
+            const activityLabel = activityBusinessLabel(data);
             if (!activitiesMap.has(activityLabel)) {
                 activitiesMap.set(activityLabel, {
                     label: activityLabel,
@@ -247,7 +281,16 @@ export class GlcCoverageSynthesisField extends Component {
         this._renderPerformanceByActivity(agg);
     }
 
-    _commonOptions(currencyTickFn) {
+    _chartTooltipLabel(ctx) {
+        const v = ctx.parsed.y ?? ctx.parsed.x ?? ctx.parsed;
+        const dataset = ctx.dataset || {};
+        if (dataset._signedTooltip) {
+            return `${dataset.label}: ${this.formatSignedAmount(v)}`;
+        }
+        return `${dataset.label}: ${this.formatAmount(v)}`;
+    }
+
+    _commonOptions(currencyTickFn, extra = {}) {
         return {
             responsive: true,
             maintainAspectRatio: false,
@@ -256,10 +299,7 @@ export class GlcCoverageSynthesisField extends Component {
                 legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 } } },
                 tooltip: {
                     callbacks: {
-                        label: (ctx) => {
-                            const v = ctx.parsed.y ?? ctx.parsed.x ?? ctx.parsed;
-                            return `${ctx.dataset.label}: ${this.formatAmount(v)}`;
-                        },
+                        label: (ctx) => this._chartTooltipLabel(ctx),
                     },
                 },
             },
@@ -269,6 +309,7 @@ export class GlcCoverageSynthesisField extends Component {
                     ticks: { callback: currencyTickFn },
                 },
             },
+            ...extra,
         };
     }
 
@@ -284,26 +325,30 @@ export class GlcCoverageSynthesisField extends Component {
         const labels = agg.months.map((m) => m.monthLabel);
         const realData = agg.months.map((m) => m.totals.performance_realized);
         const budgetData = agg.months.map((m) => m.totals.performance_budget);
+        const datasets = [
+            {
+                label: "Solde réel",
+                data: realData,
+                backgroundColor: realData.map((v) =>
+                    v < 0 ? COLOR_NEGATIVE : COLOR_POSITIVE
+                ),
+                borderRadius: 2,
+                _signedTooltip: true,
+            },
+        ];
+        if (this.hasPeriodBudget) {
+            datasets.push({
+                label: "Solde budget",
+                data: budgetData,
+                backgroundColor: COLOR_BUDGET,
+                borderRadius: 2,
+                _signedTooltip: true,
+            });
+        }
         const options = this._commonOptions((v) => this._currencyTick(v));
         this._charts.perf = new window.Chart(canvas, {
             type: "bar",
-            data: {
-                labels,
-                datasets: [
-                    {
-                        label: "Marge réelle",
-                        data: realData,
-                        backgroundColor: COLOR_REAL,
-                        borderRadius: 2,
-                    },
-                    {
-                        label: "Marge budget",
-                        data: budgetData,
-                        backgroundColor: COLOR_BUDGET,
-                        borderRadius: 2,
-                    },
-                ],
-            },
+            data: { labels, datasets },
             options,
         });
     }
@@ -314,19 +359,58 @@ export class GlcCoverageSynthesisField extends Component {
             return;
         }
         const labels = agg.months.map((m) => m.monthLabel);
-        // Convention MOA : salaires et dépenses en valeurs positives de consommation.
         const revenueData = agg.months.map((m) => Math.abs(m.totals.revenue_realized || 0));
         const payrollData = agg.months.map((m) => Math.abs(m.totals.payroll_realized || 0));
         const expenseData = agg.months.map((m) => Math.abs(m.totals.expense_realized || 0));
+        const soldeData = agg.months.map((m) => m.totals.performance_realized || 0);
+        const soldePointColors = soldeData.map((v) =>
+            v < 0 ? COLOR_NEGATIVE : COLOR_POSITIVE
+        );
         const options = this._commonOptions((v) => this._currencyTick(v));
         this._charts.struct = new window.Chart(canvas, {
             type: "bar",
             data: {
                 labels,
                 datasets: [
-                    { label: "Ressources", data: revenueData, backgroundColor: COLOR_REVENUE, borderRadius: 2 },
-                    { label: "Salaires", data: payrollData, backgroundColor: COLOR_PAYROLL, borderRadius: 2 },
-                    { label: "Dépenses", data: expenseData, backgroundColor: COLOR_EXPENSE, borderRadius: 2 },
+                    {
+                        type: "bar",
+                        label: "Recette",
+                        data: revenueData,
+                        backgroundColor: COLOR_REVENUE,
+                        borderRadius: 2,
+                        order: 2,
+                    },
+                    {
+                        type: "bar",
+                        label: "Cumul RH",
+                        data: payrollData,
+                        backgroundColor: COLOR_PAYROLL,
+                        borderRadius: 2,
+                        order: 2,
+                    },
+                    {
+                        type: "bar",
+                        label: "Dépense",
+                        data: expenseData,
+                        backgroundColor: COLOR_EXPENSE,
+                        borderRadius: 2,
+                        order: 2,
+                    },
+                    {
+                        type: "line",
+                        label: "Solde mensuel",
+                        data: soldeData,
+                        borderColor: COLOR_SOLDE_LINE,
+                        backgroundColor: "transparent",
+                        borderWidth: 2.5,
+                        pointRadius: 5,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: soldePointColors,
+                        pointBorderColor: soldePointColors,
+                        tension: 0.15,
+                        order: 1,
+                        _signedTooltip: true,
+                    },
                 ],
             },
             options,
@@ -347,10 +431,11 @@ export class GlcCoverageSynthesisField extends Component {
                 labels,
                 datasets: [
                     {
-                        label: "Marge réelle (cumul période)",
+                        label: "Solde réel (cumul période)",
                         data,
                         backgroundColor: colors,
                         borderRadius: 2,
+                        _signedTooltip: true,
                     },
                 ],
             },
@@ -362,7 +447,10 @@ export class GlcCoverageSynthesisField extends Component {
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            label: (ctx) => this.formatAmount(ctx.parsed.x),
+                            label: (ctx) => {
+                                const v = ctx.parsed.x;
+                                return `${ctx.dataset.label}: ${this.formatSignedAmount(v)}`;
+                            },
                         },
                     },
                 },
@@ -379,13 +467,14 @@ export class GlcCoverageSynthesisField extends Component {
 
 export const glcCoverageSynthesisField = {
     component: GlcCoverageSynthesisField,
-    displayName: "Synthèse graphique cockpit GLC (marge d'activité)",
+    displayName: "Synthèse graphique cockpit GLC (solde période)",
     supportedTypes: ["one2many"],
     relatedFields: () => [
         { name: "line_kind", type: "selection" },
         { name: "month_key", type: "char" },
         { name: "month_label", type: "char" },
         { name: "activity_label", type: "char" },
+        { name: "analytic_code", type: "char" },
         { name: "currency_id", type: "many2one", relation: "res.currency" },
         { name: "revenue_realized", type: "monetary" },
         { name: "revenue_budget", type: "monetary" },

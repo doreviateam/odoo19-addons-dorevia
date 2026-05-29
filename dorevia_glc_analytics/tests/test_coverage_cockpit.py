@@ -555,6 +555,35 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertAlmostEqual(sum(bar_lines.mapped("payroll_realized")), 2000.0)
         self.assertGreater(cockpit.detail_line_count, 0)
 
+    def test_activity_label_business_name_without_code_prefix(self):
+        """MOA — libellé axe = nom métier seul ; code disponible séparément."""
+        year = self.test_year
+        self._create_revenue_on_account(self.bar, 1000.0)
+
+        cockpit = self._create_cockpit(year=year)
+        cockpit.action_refresh()
+
+        bar_line = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+            and line.analytic_account_id == self.bar
+        )[:1]
+        self.assertTrue(bar_line)
+        self.assertEqual(bar_line.activity_label, self.bar.name)
+        self.assertNotIn("[", bar_line.activity_label or "")
+        self.assertEqual(bar_line.analytic_code, self.bar.code)
+
+    def test_strip_analytic_code_prefix_helper(self):
+        """MOA — retrait du préfixe [CODE] sur libellés legacy."""
+        Cockpit = self.env["glc.coverage.cockpit"]
+        self.assertEqual(
+            Cockpit._strip_analytic_code_prefix("[BAR] Bar, Restauration & Cuisine"),
+            "Bar, Restauration & Cuisine",
+        )
+        self.assertEqual(
+            Cockpit._activity_business_label(self.bar),
+            self.bar.name,
+        )
+
     def test_multi_month_detail_activity_only(self):
         """UX-GROUPBY C — backend ne produit que des lignes activity (sous-totaux côté OWL)."""
         year = self._next_test_year()
@@ -775,14 +804,33 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertAlmostEqual(cockpit.resources_realized, 0.0)
         self.assertEqual(cockpit.alert_status, "green")
 
-    def test_refresh_clears_legacy_activity_filter(self):
-        """CA-UX14 — le filtre Activité n'est plus appliqué au recalcul."""
-        cockpit = self._create_cockpit(year=self.test_year, skip_auto_refresh=True)
-        cockpit.with_context(glc_cockpit_auto_refreshing=True).write(
-            {"activity_account_id": self.bar.id}
+    def test_activity_filter_limits_detail_and_totals(self):
+        """Option A — filtre axe analytique conservé et appliqué au recalcul."""
+        year = self._next_test_year()
+        self._create_revenue_on_account(
+            self.bar, 1000.0, invoice_date="%s-03-15" % year
         )
+        self._create_revenue_on_account(
+            self.prestations, 500.0, invoice_date="%s-03-15" % year
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 3, 1),
+            date_to=date(year, 3, 31),
+            skip_auto_refresh=True,
+        )
+        cockpit.write({"activity_account_id": self.bar.id})
         cockpit.action_refresh()
-        self.assertFalse(cockpit.activity_account_id)
+
+        self.assertEqual(cockpit.activity_account_id, self.bar)
+        activity_lines = cockpit.line_ids.filtered(
+            lambda line: line.line_kind == "activity"
+        )
+        self.assertTrue(activity_lines)
+        self.assertTrue(
+            all(line.analytic_account_id == self.bar for line in activity_lines)
+        )
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 1000.0)
+        self.assertAlmostEqual(cockpit.resources_realized, 1000.0)
 
     def test_filter_change_rebuilds_detail_lines(self):
         """R10 — changement de période recalcule les lignes détail."""

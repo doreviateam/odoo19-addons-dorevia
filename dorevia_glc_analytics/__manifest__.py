@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.4.8.4",
+    "version": "19.0.4.9.0",
     "category": "Accounting/Accounting",
-    "summary": "Socle analytique GLC — plans Activités et Financements.",
+    "summary": "Socle analytique GLC — cockpit pilotage d'exploitation.",
     "description": """
 Suivi d'activité GLC
 ====================
@@ -25,15 +25,19 @@ Palier 2 — Ventilation salariale :
 
 * coûts salariés mensuels (`glc.employee.cost.line`) ;
 * ventilations par activité (`glc.salary.allocation`) ;
-* overlay de gestion — pas d'écriture comptable ni analytique paie.
+* overlay de gestion — pas d'écriture comptable ni analytique paie ;
+* rôle **contrôle / comparaison RH** vis-à-vis du cockpit (pas source du réalisé).
 
-Palier 4 — Cockpit couverture des salaires :
+Palier 4 — Cockpit pilotage d'exploitation GLC :
 
-* agrégation réalisé analytique + ventilations Palier 2 + budget Palier 3 ;
-* alertes rouge / orange / vert ;
-* détail Activité × Mois.
+* réalisé = écritures comptables analytiques (classes 6/7, tous axes exploitables) ;
+* budget Palier 3 = comparaison prévisionnelle (périmètre partiel — voir ticket réalignement) ;
+* synthèse graphique + détail par axe analytique (Recette · Cumul RH · Dépense · Solde) ;
+* alertes couverture masse salariale (héritage Palier 4).
 
-Palier 4bis — Finition UX cockpit (wording MOA, présentation GLC).
+Palier 4bis — Finition UX cockpit (wording MOA, tableau de bord).
+
+Doctrine et évolutions : docs/TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md
 
 Les paliers suivants (bénévolat, rapport CA) seront ajoutés progressivement.
 Voir docs/PALIERS.md.

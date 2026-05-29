@@ -45,6 +45,11 @@
     .o_glc_kpi_negative { color: #b02a2a; }
     .o_glc_kpi_warning  { color: #f0a020; }
     .o_glc_kpi_neutral  { color: var(--bs-body-color, #2c2c2c); }
+    .o_glc_kpi_muted {
+        color: var(--bs-secondary-color, #6c757d);
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
 
     // Grille des graphiques : 2 colonnes par ligne (responsive 1 colonne sous 992 px)
     .o_glc_chart_grid {
@@ -75,6 +80,20 @@
         text-transform: uppercase;
         color: var(--bs-secondary-color, #6c757d);
         margin-bottom: 0.5rem;
+
+        &.d-flex {
+            margin-bottom: 0.25rem;
+        }
+    }
+
+    .o_glc_chart_help {
+        font-size: 0.72rem;
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: normal;
+        cursor: help;
+        opacity: 0.45;
+        line-height: 1;
     }
 
     .o_glc_chart_canvas_wrapper {

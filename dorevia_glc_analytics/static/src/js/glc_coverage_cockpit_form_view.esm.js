@@ -10,6 +10,7 @@ const GLC_COCKPIT_FILTER_FIELDS = new Set([
     "date_to",
     "budget_scenario",
     "company_id",
+    "activity_account_id",
 ]);
 
 export class GlcCoverageCockpitFormController extends FormController {
