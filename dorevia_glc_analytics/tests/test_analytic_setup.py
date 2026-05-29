@@ -58,7 +58,12 @@ class TestGlcAnalyticSetup(TransactionCase):
         adhesions = self.env.ref("dorevia_glc_analytics.analytic_account_glc_adhesions")
         self.assertEqual(structure.glc_activity_type, "charge")
         self.assertEqual(bar.glc_activity_type, "mixte")
-        self.assertEqual(adhesions.glc_activity_type, "financement")
+        self.assertEqual(adhesions.glc_activity_type, "recette")
+
+    def test_glc_activity_type_selection_has_three_values(self):
+        field = self.env["account.analytic.account"]._fields["glc_activity_type"]
+        keys = {key for key, _label in field.selection}
+        self.assertEqual(keys, {"charge", "recette", "mixte"})
 
     def test_plan_applicability_non_blocking_palier_0(self):
         """Palier 0 : optional (non bloquant). Mandatory = Palier 1."""

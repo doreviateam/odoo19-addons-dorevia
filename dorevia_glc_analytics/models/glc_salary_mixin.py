@@ -17,7 +17,7 @@ class GlcSalaryMixin(models.AbstractModel):
         activites = self._glc_activites_plan()
         if not account:
             return
-        if account.code in GLC_COCKPIT_FUNDING_CODES or account.glc_activity_type == "financement":
+        if account.code in GLC_COCKPIT_FUNDING_CODES:
             raise ValidationError(
                 _("Les axes financement GLC ne sont pas autorisés en ventilation salariale.")
             )

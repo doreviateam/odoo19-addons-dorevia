@@ -585,12 +585,8 @@ class GlcCoverageCockpit(models.TransientModel):
 
     @api.model
     def _is_funding_analytic_account(self, account):
-        """Compte analytique de financement (axe ressource sur plan unique GLC)."""
-        if not account:
-            return False
-        if account.glc_activity_type == "financement":
-            return True
-        return account.code in GLC_COCKPIT_FUNDING_CODES
+        """Compte analytique de financement (axe ressource — identification par code)."""
+        return bool(account and account.code in GLC_COCKPIT_FUNDING_CODES)
 
     def _cockpit_analytic_accounts(self):
         """Tous les comptes analytiques exploitables cockpit (tous plans par défaut)."""

@@ -13,7 +13,8 @@
 | Nombre d'axes | **11** (7 activités + 4 financements) |
 | Plan `GLC - Financements` | **Archivé** sur bases migrées · **absent** des nouvelles installations |
 | Codes financement | `ADHESIONS` · `DONS` · `SUBVENTIONS` · `RESSOURCES_PROPRES` |
-| Distinction activité / financement | Par **code** et `glc_activity_type`, plus par plan séparé |
+| Distinction activité / financement | Par **code** (`GLC_FUNDING_ANALYTIC_CODES`) |
+| Type GLC (`glc_activity_type`) | **3 valeurs** : `charge` · `recette` · `mixte` |
 
 ---
 
