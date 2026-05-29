@@ -19,12 +19,9 @@ class TestGlcBudget(AccountTestInvoicingCommon):
         )
         cls.env = cls.env(user=cls.env.ref("base.user_admin"))
 
-        plan_ids = [
-            cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites").id,
-            cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_financements").id,
-        ]
+        plan = cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites")
         cls.env["account.analytic.account"].sudo().search(
-            [("plan_id", "in", plan_ids)]
+            [("plan_id", "=", plan.id)]
         ).write({"company_id": cls.env.company.id})
 
         cls.bar = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_bar")

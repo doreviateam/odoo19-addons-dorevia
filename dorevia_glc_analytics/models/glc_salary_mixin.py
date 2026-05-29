@@ -3,7 +3,7 @@
 from odoo import _, models
 from odoo.exceptions import ValidationError
 
-from .glc_constants import GLC_PERCENT_TOLERANCE
+from .glc_constants import GLC_COCKPIT_FUNDING_CODES, GLC_PERCENT_TOLERANCE
 
 
 class GlcSalaryMixin(models.AbstractModel):
@@ -13,17 +13,13 @@ class GlcSalaryMixin(models.AbstractModel):
     def _glc_activites_plan(self):
         return self.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites")
 
-    def _glc_financements_plan(self):
-        return self.env.ref("dorevia_glc_analytics.analytic_plan_glc_financements")
-
     def _glc_check_activity_account(self, account):
         activites = self._glc_activites_plan()
-        financements = self._glc_financements_plan()
         if not account:
             return
-        if account.plan_id == financements:
+        if account.code in GLC_COCKPIT_FUNDING_CODES or account.glc_activity_type == "financement":
             raise ValidationError(
-                _("Les comptes du plan Financements GLC ne sont pas autorisés en ventilation salariale.")
+                _("Les axes financement GLC ne sont pas autorisés en ventilation salariale.")
             )
         if account.plan_id != activites:
             raise ValidationError(

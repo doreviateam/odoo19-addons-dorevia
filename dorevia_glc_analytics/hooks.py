@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-GLC_ACTIVITY_ACCOUNT_NORMALIZATION = {
+"""Hooks install / migration — nomenclature analytique GLC plan unique."""
+
+GLC_ANALYTIC_ACCOUNT_NORMALIZATION = {
     "analytic_account_glc_structure": {
         "name": "Structure & Administration",
         "code": "STRUCTURE",
@@ -50,41 +52,33 @@ GLC_ACTIVITY_ACCOUNT_NORMALIZATION = {
         "glc_display_sequence": 70,
         "glc_report_active": True,
     },
-}
-
-
-GLC_FUNDING_ACCOUNT_NORMALIZATION = {
     "analytic_account_glc_adhesions": {
         "name": "Adhésions",
         "code": "ADHESIONS",
         "glc_activity_type": "financement",
-        "glc_display_sequence": 10,
+        "glc_display_sequence": 80,
         "glc_report_active": True,
-        "plan_xml_id": "analytic_plan_glc_financements",
     },
     "analytic_account_glc_dons": {
         "name": "Dons",
         "code": "DONS",
         "glc_activity_type": "financement",
-        "glc_display_sequence": 20,
+        "glc_display_sequence": 90,
         "glc_report_active": True,
-        "plan_xml_id": "analytic_plan_glc_financements",
     },
     "analytic_account_glc_subventions": {
         "name": "Subventions",
         "code": "SUBVENTIONS",
         "glc_activity_type": "financement",
-        "glc_display_sequence": 30,
+        "glc_display_sequence": 100,
         "glc_report_active": True,
-        "plan_xml_id": "analytic_plan_glc_financements",
     },
     "analytic_account_glc_ressources_propres": {
         "name": "Ressources propres",
         "code": "RESSOURCES_PROPRES",
         "glc_activity_type": "financement",
-        "glc_display_sequence": 40,
+        "glc_display_sequence": 110,
         "glc_report_active": True,
-        "plan_xml_id": "analytic_plan_glc_financements",
     },
 }
 
@@ -104,59 +98,7 @@ def _xml_ref_id(cr, xml_name, model):
     return row[0] if row else None
 
 
-def _restore_glc_financements_plan(cr):
-    plan_id = _xml_ref_id(cr, "analytic_plan_glc_financements", "account.analytic.plan")
-    if not plan_id:
-        return
-    cr.execute(
-        """
-        UPDATE account_analytic_plan
-           SET name = jsonb_build_object(
-               'en_US', 'GLC - Financements',
-               'fr_FR', 'GLC - Financements'
-           ),
-               description = jsonb_build_object(
-                   'en_US', 'Qualification des ressources GLC — d''où viennent les financements.',
-                   'fr_FR', 'Qualification des ressources GLC — d''où viennent les financements.'
-               )
-         WHERE id = %s
-        """,
-        (plan_id,),
-    )
-
-
-def _normalize_glc_funding_accounts(cr):
-    """Aligne les comptes Financements GLC officiels malgré le noupdate XML."""
-    activites_plan_id = _xml_ref_id(cr, "analytic_plan_glc_activites", "account.analytic.plan")
-    for xml_id, values in GLC_FUNDING_ACCOUNT_NORMALIZATION.items():
-        plan_id = _xml_ref_id(cr, values["plan_xml_id"], "account.analytic.plan")
-        if not plan_id:
-            plan_id = activites_plan_id
-        cr.execute(
-            """
-            UPDATE account_analytic_account AS account
-               SET name = jsonb_build_object('en_US', %(name)s::text, 'fr_FR', %(name)s::text),
-                   code = %(code)s,
-                   plan_id = %(plan_id)s,
-                   glc_activity_type = %(glc_activity_type)s,
-                   glc_display_sequence = %(glc_display_sequence)s,
-                   glc_report_active = %(glc_report_active)s,
-                   active = TRUE
-              FROM ir_model_data AS data
-             WHERE data.module = 'dorevia_glc_analytics'
-               AND data.name = %(xml_id)s
-               AND data.model = 'account.analytic.account'
-               AND data.res_id = account.id
-            """,
-            {**values, "xml_id": xml_id, "plan_id": plan_id},
-        )
-
-
-def _normalize_glc_official_analytic_seed(cr):
-    """Restaure la nomenclature officielle Palier 0-5 (y compris après essai plan unique)."""
-    _restore_glc_financements_plan(cr)
-    _normalize_glc_activity_accounts(cr)
-    _normalize_glc_funding_accounts(cr)
+def _rename_module_records(cr):
     """Renomme dorevia_glc_analytique → dorevia_glc_analytics (SQL idempotent)."""
     cr.execute(
         """
@@ -171,7 +113,6 @@ def _normalize_glc_official_analytic_seed(cr):
     new = rows.get("dorevia_glc_analytics")
 
     if old and new and old["id"] != new["id"]:
-        # Doublon après une installation partielle : libérer le nom cible sans DELETE.
         cr.execute(
             """
             UPDATE ir_module_module
@@ -214,14 +155,59 @@ def _normalize_glc_official_analytic_seed(cr):
     )
 
 
-def _normalize_glc_activity_accounts(cr):
-    """Aligne les comptes Activités GLC officiels malgré le noupdate XML."""
-    for xml_id, values in GLC_ACTIVITY_ACCOUNT_NORMALIZATION.items():
+def _archive_glc_financements_plan(cr):
+    """Archive l'ancien plan Financements après consolidation plan unique."""
+    financements_plan_id = _xml_ref_id(cr, "analytic_plan_glc_financements", "account.analytic.plan")
+    if not financements_plan_id:
+        return
+    cr.execute(
+        """
+        UPDATE account_analytic_plan
+           SET name = jsonb_build_object(
+                   'en_US', 'GLC - Financements (archivé)',
+                   'fr_FR', 'GLC - Financements (archivé)'
+               ),
+               description = jsonb_build_object(
+                   'en_US', 'Plan historique — comptes migrés vers GLC - Activités.',
+                   'fr_FR', 'Plan historique — comptes migrés vers GLC - Activités.'
+               )
+         WHERE id = %s
+        """,
+        (financements_plan_id,),
+    )
+
+
+def _migrate_to_single_glc_plan(cr):
+    """Consolide tous les comptes GLC sur le plan unique GLC - Activités."""
+    activites_plan_id = _xml_ref_id(cr, "analytic_plan_glc_activites", "account.analytic.plan")
+    financements_plan_id = _xml_ref_id(cr, "analytic_plan_glc_financements", "account.analytic.plan")
+    if not activites_plan_id:
+        return
+
+    if financements_plan_id and financements_plan_id != activites_plan_id:
+        cr.execute(
+            """
+            UPDATE account_analytic_account
+               SET plan_id = %s
+             WHERE plan_id = %s
+            """,
+            (activites_plan_id, financements_plan_id),
+        )
+        _archive_glc_financements_plan(cr)
+
+
+def _normalize_glc_analytic_accounts(cr):
+    """Aligne les 11 comptes GLC officiels sur le plan unique malgré le noupdate XML."""
+    activites_plan_id = _xml_ref_id(cr, "analytic_plan_glc_activites", "account.analytic.plan")
+    if not activites_plan_id:
+        return
+    for xml_id, values in GLC_ANALYTIC_ACCOUNT_NORMALIZATION.items():
         cr.execute(
             """
             UPDATE account_analytic_account AS account
                SET name = jsonb_build_object('en_US', %(name)s::text, 'fr_FR', %(name)s::text),
                    code = %(code)s,
+                   plan_id = %(plan_id)s,
                    glc_activity_type = %(glc_activity_type)s,
                    glc_display_sequence = %(glc_display_sequence)s,
                    glc_report_active = %(glc_report_active)s,
@@ -232,8 +218,36 @@ def _normalize_glc_activity_accounts(cr):
                AND data.model = 'account.analytic.account'
                AND data.res_id = account.id
             """,
-            {**values, "xml_id": xml_id},
+            {**values, "xml_id": xml_id, "plan_id": activites_plan_id},
         )
+
+
+def _normalize_glc_activites_plan(cr):
+    plan_id = _xml_ref_id(cr, "analytic_plan_glc_activites", "account.analytic.plan")
+    if not plan_id:
+        return
+    cr.execute(
+        """
+        UPDATE account_analytic_plan
+           SET name = jsonb_build_object(
+                   'en_US', 'GLC - Activités',
+                   'fr_FR', 'GLC - Activités'
+               ),
+               description = jsonb_build_object(
+                   'en_US', 'Pilotage GLC — activités, ressources et structure.',
+                   'fr_FR', 'Pilotage GLC — activités, ressources et structure.'
+               )
+         WHERE id = %s
+        """,
+        (plan_id,),
+    )
+
+
+def migrate_glc_analytic_nomenclature(cr):
+    """Plan unique GLC — consolidation + alignement nomenclature officielle."""
+    _migrate_to_single_glc_plan(cr)
+    _normalize_glc_activites_plan(cr)
+    _normalize_glc_analytic_accounts(cr)
 
 
 def pre_init_hook(env):

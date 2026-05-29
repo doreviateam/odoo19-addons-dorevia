@@ -10,7 +10,7 @@
 
     <menuitem
         id="menu_glc_activites"
-        name="Activités GLC"
+        name="Axes analytiques GLC"
         parent="menu_glc_analytique_root"
         action="action_glc_analytic_accounts_activites"
         sequence="10"/>

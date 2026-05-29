@@ -66,40 +66,40 @@
             <field name="glc_report_active" eval="True"/>
         </record>
 
-        <!-- Plan Financements — 4 comptes -->
+        <!-- Axes financement / ressources — plan unique GLC - Activités -->
         <record id="analytic_account_glc_adhesions" model="account.analytic.account">
             <field name="name">Adhésions</field>
             <field name="code">ADHESIONS</field>
-            <field name="plan_id" ref="analytic_plan_glc_financements"/>
+            <field name="plan_id" ref="analytic_plan_glc_activites"/>
             <field name="glc_activity_type">financement</field>
-            <field name="glc_display_sequence">10</field>
+            <field name="glc_display_sequence">80</field>
             <field name="glc_report_active" eval="True"/>
         </record>
 
         <record id="analytic_account_glc_dons" model="account.analytic.account">
             <field name="name">Dons</field>
             <field name="code">DONS</field>
-            <field name="plan_id" ref="analytic_plan_glc_financements"/>
+            <field name="plan_id" ref="analytic_plan_glc_activites"/>
             <field name="glc_activity_type">financement</field>
-            <field name="glc_display_sequence">20</field>
+            <field name="glc_display_sequence">90</field>
             <field name="glc_report_active" eval="True"/>
         </record>
 
         <record id="analytic_account_glc_subventions" model="account.analytic.account">
             <field name="name">Subventions</field>
             <field name="code">SUBVENTIONS</field>
-            <field name="plan_id" ref="analytic_plan_glc_financements"/>
+            <field name="plan_id" ref="analytic_plan_glc_activites"/>
             <field name="glc_activity_type">financement</field>
-            <field name="glc_display_sequence">30</field>
+            <field name="glc_display_sequence">100</field>
             <field name="glc_report_active" eval="True"/>
         </record>
 
         <record id="analytic_account_glc_ressources_propres" model="account.analytic.account">
             <field name="name">Ressources propres</field>
             <field name="code">RESSOURCES_PROPRES</field>
-            <field name="plan_id" ref="analytic_plan_glc_financements"/>
+            <field name="plan_id" ref="analytic_plan_glc_activites"/>
             <field name="glc_activity_type">financement</field>
-            <field name="glc_display_sequence">40</field>
+            <field name="glc_display_sequence">110</field>
             <field name="glc_report_active" eval="True"/>
         </record>
 

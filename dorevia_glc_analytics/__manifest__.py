@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.7.0.2",
+    "version": "19.0.8.0.0",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — cockpit pilotage d'exploitation.",
     "description": """
@@ -10,8 +10,7 @@ Suivi d'activité GLC
 
 Palier 0 — Socle analytique :
 
-* plan **GLC - Activités** (7 comptes pilotables) ;
-* plan **GLC - Financements** (4 sources de ressources) ;
+* plan **GLC - Activités** unique (11 axes : activités + financements) ;
 * champs métier sur les comptes analytiques ;
 * groupes de sécurité de base.
 
