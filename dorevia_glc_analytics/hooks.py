@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-GLC_ACTIVITY_ACCOUNT_NORMALIZATION = {
+GLC_ANALYTIC_ACCOUNT_NORMALIZATION = {
     "analytic_account_glc_structure": {
         "name": "Structure & Administration",
         "code": "STRUCTURE",
@@ -10,14 +10,14 @@ GLC_ACTIVITY_ACCOUNT_NORMALIZATION = {
     },
     "analytic_account_glc_bar": {
         "name": "Bar, Restauration & Cuisine",
-        "code": "BAR",
+        "code": "BAR_REST",
         "glc_activity_type": "mixte",
         "glc_display_sequence": 20,
         "glc_report_active": True,
     },
     "analytic_account_glc_prestations": {
         "name": "Prestations & Animations",
-        "code": "PRESTATIONS",
+        "code": "PRESTA",
         "glc_activity_type": "mixte",
         "glc_display_sequence": 30,
         "glc_report_active": True,
@@ -25,32 +25,175 @@ GLC_ACTIVITY_ACCOUNT_NORMALIZATION = {
     "analytic_account_glc_residences": {
         "name": "Résidences artistiques",
         "code": "RESIDENCES",
-        "glc_activity_type": "charge_subventionnee",
+        "glc_activity_type": "charge",
         "glc_display_sequence": 40,
         "glc_report_active": True,
     },
     "analytic_account_glc_missions": {
         "name": "Déplacements & Missions",
-        "code": "MISSIONS",
+        "code": "DEPL_MIS",
         "glc_activity_type": "charge",
         "glc_display_sequence": 50,
         "glc_report_active": True,
     },
     "analytic_account_glc_privatisations": {
         "name": "Privatisation d'espace",
-        "code": "PRIVATISATIONS",
+        "code": "LOC_PRIV",
         "glc_activity_type": "mixte",
         "glc_display_sequence": 60,
         "glc_report_active": True,
     },
     "analytic_account_glc_location_radio": {
         "name": "Location Radio Grand Lieu",
-        "code": "LOCATION_RADIO",
+        "code": "LOC_RGL",
         "glc_activity_type": "recette",
         "glc_display_sequence": 70,
         "glc_report_active": True,
     },
+    "analytic_account_glc_adhesions": {
+        "name": "Adhésions",
+        "code": "ADHESIONS",
+        "glc_activity_type": "recette",
+        "glc_display_sequence": 80,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_dons": {
+        "name": "Dons",
+        "code": "DONS",
+        "glc_activity_type": "recette",
+        "glc_display_sequence": 90,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_subventions": {
+        "name": "Financement externe",
+        "code": "FIN_EXT",
+        "glc_activity_type": "recette",
+        "glc_display_sequence": 100,
+        "glc_report_active": True,
+    },
+    "analytic_account_glc_ressources_propres": {
+        "name": "Financement interne",
+        "code": "FIN_INT",
+        "glc_activity_type": "recette",
+        "glc_display_sequence": 110,
+        "glc_report_active": True,
+    },
 }
+
+
+def _xml_ref_id(cr, xml_name, model):
+    cr.execute(
+        """
+        SELECT res_id
+          FROM ir_model_data
+         WHERE module = 'dorevia_glc_analytics'
+           AND name = %s
+           AND model = %s
+        """,
+        (xml_name, model),
+    )
+    row = cr.fetchone()
+    return row[0] if row else None
+
+
+def _migrate_glc_activity_type_legacy_values(cr):
+    """Charge subventionnée → charge ; financement → recette."""
+    cr.execute(
+        """
+        UPDATE account_analytic_account
+           SET glc_activity_type = 'charge'
+         WHERE glc_activity_type = 'charge_subventionnee'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE account_analytic_account
+           SET glc_activity_type = 'recette'
+         WHERE glc_activity_type = 'financement'
+        """
+    )
+
+
+def _migrate_glc_analytic_codes(cr):
+    from odoo.addons.dorevia_glc_analytics.models.glc_constants import (
+        GLC_ANALYTIC_CODE_MIGRATION,
+    )
+
+    for old_code, new_code in GLC_ANALYTIC_CODE_MIGRATION.items():
+        if old_code == new_code:
+            continue
+        cr.execute(
+            """
+            UPDATE account_analytic_account
+               SET code = %s
+             WHERE code = %s
+            """,
+            (new_code, old_code),
+        )
+
+
+def _migrate_to_single_glc_plan(cr):
+    """Consolide tous les comptes GLC sur le plan unique GLC - Activités."""
+    activites_plan_id = _xml_ref_id(cr, "analytic_plan_glc_activites", "account.analytic.plan")
+    financements_plan_id = _xml_ref_id(
+        cr, "analytic_plan_glc_financements", "account.analytic.plan"
+    )
+    if not activites_plan_id:
+        return
+
+    if financements_plan_id:
+        cr.execute(
+            """
+            UPDATE account_analytic_account
+               SET plan_id = %s
+             WHERE plan_id = %s
+            """,
+            (activites_plan_id, financements_plan_id),
+        )
+        cr.execute(
+            """
+            UPDATE account_analytic_plan
+               SET name = jsonb_build_object(
+                   'en_US', 'GLC - Financements (archivé)',
+                   'fr_FR', 'GLC - Financements (archivé)'
+               )
+             WHERE id = %s
+            """,
+            (financements_plan_id,),
+        )
+
+
+def _normalize_glc_analytic_accounts(cr):
+    """Aligne les comptes GLC officiels malgré le noupdate XML."""
+    activites_plan_id = _xml_ref_id(cr, "analytic_plan_glc_activites", "account.analytic.plan")
+    for xml_id, values in GLC_ANALYTIC_ACCOUNT_NORMALIZATION.items():
+        cr.execute(
+            """
+            UPDATE account_analytic_account AS account
+               SET name = jsonb_build_object('en_US', %(name)s::text, 'fr_FR', %(name)s::text),
+                   code = %(code)s,
+                   plan_id = %(plan_id)s,
+                   glc_activity_type = %(glc_activity_type)s,
+                   glc_display_sequence = %(glc_display_sequence)s,
+                   glc_report_active = %(glc_report_active)s,
+                   active = TRUE
+              FROM ir_model_data AS data
+             WHERE data.module = 'dorevia_glc_analytics'
+               AND data.name = %(xml_id)s
+               AND data.model = 'account.analytic.account'
+               AND data.res_id = account.id
+            """,
+            {**values, "xml_id": xml_id, "plan_id": activites_plan_id},
+        )
+
+
+# Rétrocompat migrations antérieures
+def _normalize_glc_activity_accounts(cr):
+    _normalize_glc_analytic_accounts(cr)
+
+
+def _normalize_glc_funding_accounts(cr):
+    _normalize_glc_analytic_accounts(cr)
 
 
 def _rename_module_records(cr):
@@ -68,7 +211,6 @@ def _rename_module_records(cr):
     new = rows.get("dorevia_glc_analytics")
 
     if old and new and old["id"] != new["id"]:
-        # Doublon après une installation partielle : libérer le nom cible sans DELETE.
         cr.execute(
             """
             UPDATE ir_module_module
@@ -109,28 +251,6 @@ def _rename_module_records(cr):
         WHERE key LIKE 'dorevia_glc_analytique.%'
         """
     )
-
-
-def _normalize_glc_activity_accounts(cr):
-    """Aligne les comptes Activités GLC officiels malgré le noupdate XML."""
-    for xml_id, values in GLC_ACTIVITY_ACCOUNT_NORMALIZATION.items():
-        cr.execute(
-            """
-            UPDATE account_analytic_account AS account
-               SET name = jsonb_build_object('en_US', %(name)s::text, 'fr_FR', %(name)s::text),
-                   code = %(code)s,
-                   glc_activity_type = %(glc_activity_type)s,
-                   glc_display_sequence = %(glc_display_sequence)s,
-                   glc_report_active = %(glc_report_active)s,
-                   active = TRUE
-              FROM ir_model_data AS data
-             WHERE data.module = 'dorevia_glc_analytics'
-               AND data.name = %(xml_id)s
-               AND data.model = 'account.analytic.account'
-               AND data.res_id = account.id
-            """,
-            {**values, "xml_id": xml_id},
-        )
 
 
 def pre_init_hook(env):

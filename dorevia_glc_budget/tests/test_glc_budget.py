@@ -21,7 +21,6 @@ class TestGlcBudget(AccountTestInvoicingCommon):
 
         plan_ids = [
             cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites").id,
-            cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_financements").id,
         ]
         cls.env["account.analytic.account"].sudo().search(
             [("plan_id", "in", plan_ids)]
@@ -29,7 +28,7 @@ class TestGlcBudget(AccountTestInvoicingCommon):
 
         cls.bar = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_bar")
         cls.structure = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_structure")
-        cls.subventions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_subventions")
+        cls.fin_ext = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_subventions")
         cls.adhesions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_adhesions")
         cls.period = "2026-04-01"
         existing_years = cls.env["glc.budget"].search([]).mapped("year")
@@ -88,13 +87,13 @@ class TestGlcBudget(AccountTestInvoicingCommon):
         budget = self._create_budget()
         self._create_line(budget, line_type="revenue", account=self.bar)
         self._create_line(budget, line_type="expense", account=self.structure)
-        self._create_line(budget, line_type="funding", account=self.subventions)
+        self._create_line(budget, line_type="funding", account=self.fin_ext)
 
     def test_funding_account_refused_on_expense(self):
         """CA5 — compte Financements refusé sur charge."""
         budget = self._create_budget()
         with self.assertRaises(ValidationError):
-            self._create_line(budget, line_type="expense", account=self.subventions)
+            self._create_line(budget, line_type="expense", account=self.fin_ext)
 
     def test_activity_account_refused_on_funding(self):
         """CA6 — compte Activités refusé sur financement."""

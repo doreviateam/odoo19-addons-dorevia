@@ -28,11 +28,8 @@ class GlcBudgetLine(models.Model):
         domain=lambda self: [
             (
                 "plan_id",
-                "in",
-                [
-                    self.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites").id,
-                    self.env.ref("dorevia_glc_analytics.analytic_plan_glc_financements").id,
-                ],
+                "=",
+                self.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites").id,
             ),
             "|",
             ("company_id", "=", False),

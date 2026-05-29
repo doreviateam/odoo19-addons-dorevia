@@ -37,23 +37,12 @@
     </record>
 
     <record id="action_glc_analytic_accounts_activites" model="ir.actions.act_window">
-        <field name="name">Activités GLC</field>
+        <field name="name">Comptes analytiques GLC</field>
         <field name="res_model">account.analytic.account</field>
         <field name="view_mode">list,form</field>
         <field name="domain" eval="[('plan_id', '=', ref('dorevia_glc_analytics.analytic_plan_glc_activites'))]"/>
         <field name="context" eval="{
             'default_plan_id': ref('dorevia_glc_analytics.analytic_plan_glc_activites'),
-            'search_default_active': 1,
-        }"/>
-    </record>
-
-    <record id="action_glc_analytic_accounts_financements" model="ir.actions.act_window">
-        <field name="name">Financements GLC</field>
-        <field name="res_model">account.analytic.account</field>
-        <field name="view_mode">list,form</field>
-        <field name="domain" eval="[('plan_id', '=', ref('dorevia_glc_analytics.analytic_plan_glc_financements'))]"/>
-        <field name="context" eval="{
-            'default_plan_id': ref('dorevia_glc_analytics.analytic_plan_glc_financements'),
             'search_default_active': 1,
         }"/>
     </record>

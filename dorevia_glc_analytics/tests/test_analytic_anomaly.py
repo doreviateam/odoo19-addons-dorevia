@@ -18,14 +18,13 @@ class TestGlcAnalyticAnomaly(AccountTestInvoicingCommon):
 
         plan_ids = [
             cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites").id,
-            cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_financements").id,
         ]
         cls.env["account.analytic.account"].sudo().search(
             [("plan_id", "in", plan_ids)]
         ).write({"company_id": cls.env.company.id})
 
         cls.bar = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_bar")
-        cls.ressources = cls.env.ref(
+        cls.fin_int = cls.env.ref(
             "dorevia_glc_analytics.analytic_account_glc_ressources_propres"
         )
         cls.structure = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_structure")
@@ -100,8 +99,8 @@ class TestGlcAnalyticAnomaly(AccountTestInvoicingCommon):
         )
         self.assertTrue(a2_lines)
 
-    def test_a2_ok_bar_and_ressources_propres(self):
-        """CA4 — BAR + RESSOURCES_PROPRES → pas d'anomalie A2."""
+    def test_a2_ok_bar_and_fin_int(self):
+        """CA4 — BAR_REST + FIN_INT → pas d'anomalie A2."""
         invoice = self._create_invoice_one_line(
             price_unit=150.0,
             move_type="out_invoice",
@@ -110,7 +109,7 @@ class TestGlcAnalyticAnomaly(AccountTestInvoicingCommon):
             post=True,
         )
         self._product_line(invoice).analytic_distribution = self._distribution(
-            self.bar, self.ressources
+            self.bar, self.fin_int
         )
 
         wizard = self._run_wizard()

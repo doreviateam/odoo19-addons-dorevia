@@ -10,17 +10,10 @@
 
     <menuitem
         id="menu_glc_activites"
-        name="Activités GLC"
+        name="Comptes analytiques GLC"
         parent="menu_glc_analytique_root"
         action="action_glc_analytic_accounts_activites"
         sequence="10"/>
-
-    <menuitem
-        id="menu_glc_financements"
-        name="Financements GLC"
-        parent="menu_glc_analytique_root"
-        action="action_glc_analytic_accounts_financements"
-        sequence="20"/>
 
     <menuitem
         id="menu_glc_analytic_anomalies"

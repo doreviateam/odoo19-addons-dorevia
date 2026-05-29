@@ -9,13 +9,11 @@ class AccountAnalyticAccount(models.Model):
     glc_activity_type = fields.Selection(
         selection=[
             ("charge", "Charge"),
-            ("mixte", "Mixte"),
             ("recette", "Recette"),
-            ("charge_subventionnee", "Charge subventionnée"),
-            ("financement", "Financement"),
+            ("mixte", "Mixte"),
         ],
         string="Type GLC",
-        help="Typologie métier pour le pilotage d'activité GLC.",
+        help="Nature de lecture cockpit GLC : charge, recette ou mixte.",
     )
     glc_display_sequence = fields.Integer(
         string="Ordre rapport GLC",

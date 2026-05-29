@@ -24,7 +24,6 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
 
         plan_ids = [
             cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites").id,
-            cls.env.ref("dorevia_glc_analytics.analytic_plan_glc_financements").id,
         ]
         cls.env["account.analytic.account"].sudo().search(
             [("plan_id", "in", plan_ids)]
@@ -36,9 +35,9 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         cls.structure = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_structure")
         cls.missions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_missions")
         cls.residences = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_residences")
-        cls.subventions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_subventions")
+        cls.fin_ext = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_subventions")
         cls.adhesions = cls.env.ref("dorevia_glc_analytics.analytic_account_glc_adhesions")
-        cls.ressources_propres = cls.env.ref(
+        cls.fin_int = cls.env.ref(
             "dorevia_glc_analytics.analytic_account_glc_ressources_propres"
         )
         existing_years = cls.env["glc.budget"].search([]).mapped("year")
@@ -407,7 +406,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             ],
         )
         self._create_revenue_on_account(self.bar, 12000.0, invoice_date=invoice_date)
-        self._create_revenue_on_account(self.subventions, 2000.0, invoice_date=invoice_date)
+        self._create_revenue_on_account(self.fin_ext, 2000.0, invoice_date=invoice_date)
         self._create_payroll_on_account(self.bar, 3000.0, invoice_date=invoice_date)
         self._create_expense_on_account(self.structure, 1500.0, invoice_date=invoice_date)
 
@@ -517,7 +516,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
                 {
                     "period_date": period,
                     "line_type": "funding",
-                    "analytic_account_id": self.subventions.id,
+                    "analytic_account_id": self.fin_ext.id,
                     "amount": 1500.0,
                 },
                 {
@@ -1183,7 +1182,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             lambda line: line.line_kind == "activity"
             and line.analytic_account_id == self.missions
         )
-        self.assertTrue(missions_line, "Une ligne MISSIONS doit exister dans le détail")
+        self.assertTrue(missions_line, "Une ligne DEPL_MIS doit exister dans le détail")
         self.assertAlmostEqual(missions_line.expense_realized, 1552.0)
         self.assertAlmostEqual(missions_line.revenue_realized, 0.0)
         self.assertAlmostEqual(missions_line.payroll_realized, 0.0)
@@ -1365,11 +1364,11 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             cockpit.payroll_realized,
         )
 
-    def test_funding_subventions_surfaces_in_cockpit(self):
-        """R15-FUND-SUB — produit 741xxx + [SUBVENTIONS] → financement SUBVENTIONS."""
+    def test_funding_fin_ext_surfaces_in_cockpit(self):
+        """R15-FUND-SUB — produit 741xxx + [FIN_EXT] → financement externe."""
         year = self._next_test_year()
         self._create_revenue_analytic_line(
-            self.subventions,
+            self.fin_ext,
             12000.0,
             invoice_date="%s-03-15" % year,
             income_code="741100",
@@ -1381,12 +1380,12 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         cockpit.action_refresh()
         self.assertAlmostEqual(cockpit.funding_realized, 12000.0)
         self.assertAlmostEqual(cockpit.activity_revenue_realized, 0.0)
-        subventions_line = cockpit.line_ids.filtered(
+        fin_ext_line = cockpit.line_ids.filtered(
             lambda line: line.line_kind == "activity"
-            and line.analytic_account_id == self.subventions
+            and line.analytic_account_id == self.fin_ext
         )
-        self.assertTrue(subventions_line, "SUBVENTIONS doit apparaître dans le détail")
-        self.assertAlmostEqual(subventions_line.revenue_realized, 12000.0)
+        self.assertTrue(fin_ext_line, "FIN_EXT doit apparaître dans le détail")
+        self.assertAlmostEqual(fin_ext_line.revenue_realized, 12000.0)
 
     def test_funding_adhesions_surfaces_in_cockpit(self):
         """R15-FUND-ADH — produit 756xxx + [ADHESIONS] → financement ADHESIONS."""
@@ -1410,11 +1409,11 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertTrue(adhesions_line)
         self.assertAlmostEqual(adhesions_line.revenue_realized, 850.0)
 
-    def test_funding_ressources_propres_surfaces_in_cockpit(self):
-        """R15-FUND-RP — produit 758xxx + [RESSOURCES_PROPRES] → ressource propre."""
+    def test_funding_fin_int_surfaces_in_cockpit(self):
+        """R15-FUND-RP — produit 758xxx + [FIN_INT] → financement interne."""
         year = self._next_test_year()
         self._create_revenue_analytic_line(
-            self.ressources_propres,
+            self.fin_int,
             3200.0,
             invoice_date="%s-05-10" % year,
             income_code="758100",
@@ -1425,19 +1424,19 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         )
         cockpit.action_refresh()
         self.assertAlmostEqual(cockpit.funding_realized, 3200.0)
-        rp_line = cockpit.line_ids.filtered(
+        fin_int_line = cockpit.line_ids.filtered(
             lambda line: line.line_kind == "activity"
-            and line.analytic_account_id == self.ressources_propres
+            and line.analytic_account_id == self.fin_int
         )
-        self.assertTrue(rp_line)
-        self.assertAlmostEqual(rp_line.revenue_realized, 3200.0)
+        self.assertTrue(fin_int_line)
+        self.assertAlmostEqual(fin_int_line.revenue_realized, 3200.0)
 
-    def test_funding_subventions_on_plan_column_surfaces_in_detail(self):
-        """R15-FUND-PLAN — 741xxx sur x_plan4_id [SUBVENTIONS] comme en production."""
+    def test_funding_fin_ext_on_plan_column_surfaces_in_detail(self):
+        """R15-FUND-PLAN — 741xxx sur x_plan4_id [FIN_EXT] comme en production."""
         year = self._next_test_year()
         income_account = self._get_or_create_income_account("741000")
         self._create_analytic_line_on_plan(
-            self.subventions,
+            self.fin_ext,
             2500.0,
             invoice_date="%s-05-08" % year,
             gl_account=income_account,
@@ -1450,13 +1449,13 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         cockpit.action_refresh()
         self.assertAlmostEqual(cockpit.funding_realized, 2500.0)
         self.assertAlmostEqual(cockpit.resources_realized, 2500.0)
-        subventions_line = cockpit.line_ids.filtered(
+        fin_ext_line = cockpit.line_ids.filtered(
             lambda line: line.line_kind == "activity"
-            and line.analytic_account_id == self.subventions
+            and line.analytic_account_id == self.fin_ext
         )
-        self.assertTrue(subventions_line)
-        self.assertAlmostEqual(subventions_line.revenue_realized, 2500.0)
-        self.assertEqual(subventions_line.analytic_section, "funding")
+        self.assertTrue(fin_ext_line)
+        self.assertAlmostEqual(fin_ext_line.revenue_realized, 2500.0)
+        self.assertEqual(fin_ext_line.analytic_section, "funding")
 
     def test_resources_realized_includes_all_funding_plans(self):
         """R15-FUND-TOTAL — ressources = recettes activité + tous financements (tous plans)."""
@@ -1466,7 +1465,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             self.bar, 5000.0, invoice_date=month_iso, income_code="707000"
         )
         self._create_revenue_analytic_line(
-            self.subventions, 3000.0, invoice_date=month_iso, income_code="741100"
+            self.fin_ext, 3000.0, invoice_date=month_iso, income_code="741100"
         )
         self._create_revenue_analytic_line(
             self.adhesions, 500.0, invoice_date=month_iso, income_code="756100"

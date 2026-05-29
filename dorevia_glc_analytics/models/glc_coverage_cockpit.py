@@ -585,17 +585,9 @@ class GlcCoverageCockpit(models.TransientModel):
 
     @api.model
     def _is_funding_analytic_account(self, account):
-        """Compte analytique de financement (plan Financements GLC ou type financement)."""
+        """Compte analytique de financement (codes ressources GLC sur plan unique)."""
         if not account:
             return False
-        if account.glc_activity_type == "financement":
-            return True
-        plan_financements = self.env.ref(
-            "dorevia_glc_analytics.analytic_plan_glc_financements",
-            raise_if_not_found=False,
-        )
-        if plan_financements and account.plan_id == plan_financements:
-            return True
         return account.code in GLC_COCKPIT_FUNDING_CODES
 
     def _cockpit_analytic_accounts(self):
