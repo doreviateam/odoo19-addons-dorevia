@@ -2,7 +2,7 @@
 
 **Module :** `dorevia_glc_analytics` *(extension cockpit)* · croisement lecture seule `dorevia_cash_guard` *(V2)*  
 **Palier 4 de référence :** **`19.0.4.9.0`** — **gelé** · GO livraison MOA (2026-05-28)  
-**Statut :** **GO cadrage MOA** (2026-05-28) · **implémentation en cours** · Option C + S1 validées  
+**Statut :** **GO complet MOA** (2026-05-29) · lot trésorerie **`19.0.5.0.1`** validé · Option C + S1 livrées  
 **Date ouverture :** 2026-05-28
 
 **Références :** [PALIERS.md](./PALIERS.md) · [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) *(doctrine MOA)* · [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md) · [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) § I5 · [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](./TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) · [Recette période libre](./recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md) · [Recette Palier 5 trésorerie](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)
@@ -126,14 +126,15 @@ Critères candidats *(à valider MOA)* :
 
 | # | Livrable |
 |---|---|
-| P5-1 | Champ `reference_bank_journal_id` sur `glc.coverage.cockpit` |
-| P5-2 | Défaut société = compte courant GLC |
-| P5-3 | Persistance du compte bancaire au refresh |
-| P5-4 | Agrégation flux trésorerie période (entrées / sorties / virements internes) |
-| P5-5 | Onglet ou bloc UI **Trésorerie** dédié |
-| P5-6 | Tests auto TREF-01 à TREF-05 |
-| P5-7 | Non-régression **88 tests** Palier 4 |
-| P5-8 | Recette manuelle Palier 5 | [RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) |
+| P5-1 | Champ `reference_bank_journal_id` sur `glc.coverage.cockpit` | **OK** |
+| P5-2 | Défaut société = compte courant GLC | **OK** |
+| P5-3 | Persistance du compte bancaire au refresh | **OK** |
+| P5-4 | Agrégation flux trésorerie période (entrées / sorties / virements internes) | **OK** |
+| P5-5 | Onglet ou bloc UI **Trésorerie** dédié | **OK** |
+| P5-6 | Tests auto TREF-01 à TREF-05 | **OK** |
+| P5-7 | Non-régression Palier 4 / Budget | **OK** |
+| P5-8 | Recette manuelle Palier 5 | **OK** — [RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) |
+| P5-9 | Nettoyage nomenclature analytique legacy | **OK** — migration `19.0.5.0.1` |
 
 ### Exclus *(hors ce ticket ou lots ultérieurs)*
 
@@ -190,14 +191,15 @@ glc.coverage.cockpit
 
 ## 9. Critères d’acceptation *(implémentation future)*
 
-- [ ] **CA-P5-ISO** — Changement de `reference_bank_journal_id` : KPI exploitation **strictement identiques**
-- [ ] **CA-P5-FIELD** — Champ compte bancaire de référence · défaut compte courant GLC · persistance refresh
-- [ ] **CA-P5-POV** — Entrées / sorties lues depuis le POV du compte observé
-- [ ] **CA-P5-VIR** — Virements internes visibles en trésorerie · exclus KPI exploitation
-- [ ] **CA-P5-UI** — Bloc / onglet Trésorerie **séparé** de Synthèse et Détail
-- [ ] **CA-P5-TEST** — TREF-01 à TREF-05 automatisés
-- [ ] **CA-P5-NR** — **88 tests** Palier 4 · 0 failed · 0 error(s)
-- [ ] **CA-P5-DOC** — Recette Palier 5 + mise à jour PALIERS.md
+- [x] **CA-P5-ISO** — Changement de `reference_bank_journal_id` : KPI exploitation **strictement identiques**
+- [x] **CA-P5-FIELD** — Champ compte bancaire de référence · défaut compte courant GLC · persistance refresh
+- [x] **CA-P5-POV** — Entrées / sorties lues depuis le POV du compte observé
+- [x] **CA-P5-VIR** — Virements internes visibles en trésorerie · exclus KPI exploitation
+- [x] **CA-P5-UI** — Bloc / onglet Trésorerie **séparé** de Synthèse et Détail
+- [x] **CA-P5-TEST** — TREF-01 à TREF-05 automatisés
+- [x] **CA-P5-NR** — post-install **95/95** · 0 failed · 0 error(s)
+- [x] **CA-P5-DOC** — Recette Palier 5 + mise à jour PALIERS.md
+- [x] **CA-P5-LEGACY** — nomenclature Activités GLC legacy nettoyée (`19.0.5.0.1`)
 
 ---
 
@@ -209,7 +211,7 @@ glc.coverage.cockpit
 | **1** | Paramètre société + champ cockpit | PR technique amorce |
 | **2** | Agrégation trésorerie + détection virements | Backend + tests TREF |
 | **3** | UI bloc Trésorerie | OWL / vue formulaire |
-| **4** | Recette + non-régression 88 tests | GO Palier 5 trésorerie |
+| **4** | Recette + non-régression 95 tests | **GO complet MOA Palier 5 trésorerie** |
 
 **Règle de commit :** un commit / PR Palier 5 **ne mélange jamais** modification des agrégats exploitation Palier 4 et code trésorerie sans revue explicite de ce ticket.
 
@@ -220,9 +222,9 @@ glc.coverage.cockpit
 Toute PR Palier 5 doit confirmer :
 
 ```text
-dorevia_glc_analytics : 84 tests · 0 failed
+dorevia_glc_analytics : 93 tests · 0 failed
 dorevia_glc_budget    : 14 tests · 0 failed
-Total                 : 88 tests · 0 failed · 0 error(s)
+Total                 : 95 tests · 0 failed · 0 error(s)
 ```
 
 Les domaines `_revenue_analytic_line_domain`, `_expense_analytic_line_domain`, `_payroll_analytic_line_domain` et les méthodes `_sum_*` exploitation **ne doivent pas** recevoir de filtre `journal_id` ou compte bancaire.
@@ -235,10 +237,28 @@ Les domaines `_revenue_analytic_line_domain`, `_expense_analytic_line_domain`, `
 |---|---|
 | **GO cadrage** | Arbitrages §5 validés · code autorisé · **`19.0.5.0.0`** |
 | **GO technique serveur** | Rejeu auto **95/95** · TREF **7/7** · migration legacy **`19.0.5.0.1`** |
+| **GO complet MOA** | GO technique serveur + recette navigateur §2 à §5 OK |
 | **GO avec réserves** | Cadrage partiel · lot réduit (ex. champ seul, sans UI) |
 | **NO GO** | Doctrine ou architecture à revoir |
 
-**Statut actuel :** **GO technique serveur** — **`19.0.5.0.1`** · rejeu **95/95** + TREF **7/7** · précondition bancaire OK (`Compte Courant GLC`) · réserve legacy **levée**
+**Statut actuel :** **GO complet MOA** — **`19.0.5.0.1`** · rejeu **95/95** + TREF **7/7** · précondition bancaire OK (`Compte Courant GLC`) · recette navigateur §2 à §5 OK · réserve legacy **levée**
+
+### 12.1 Preuve MOA finale (2026-05-29)
+
+**Période observée :** `13 avr. → 31 mai 2026`
+
+| KPI exploitation | Compte Courant GLC | GLC - Livret Bleu | Verdict |
+|---|---:|---:|---|
+| Recette | `7 794,00 €` | `7 794,00 €` | Identique |
+| Cumul RH | `0,00 €` | `0,00 €` | Identique |
+| Dépense | `4 851,51 €` | `4 851,51 €` | Identique |
+| Solde | `2 942,49 €` | `2 942,49 €` | Identique |
+
+| Indicateur trésorerie | Compte Courant GLC | GLC - Livret Bleu | Verdict |
+|---|---:|---:|---|
+| Solde trésorerie période | `-1 627,11 €` | `30 000,00 €` | Recalculé selon le compte observé |
+
+**Invariant confirmé :** le changement de compte bancaire conserve les KPI exploitation et recalcule uniquement l'onglet **Trésorerie**.
 
 ---
 
@@ -252,4 +272,4 @@ Les domaines `_revenue_analytic_line_domain`, `_expense_analytic_line_domain`, `
 
 ---
 
-*Ticket ouvert post-GO livraison Palier 4 `19.0.4.9.0`. Lot trésorerie implémenté `19.0.5.0.0` · migration nomenclature `19.0.5.0.1` — GO technique MOA 2026-05-29 · **95/95**.*
+*Ticket ouvert post-GO livraison Palier 4 `19.0.4.9.0`. Lot trésorerie implémenté `19.0.5.0.0` · migration nomenclature `19.0.5.0.1` — GO complet MOA 2026-05-29 · **95/95** · recette navigateur §2 à §5 OK.*

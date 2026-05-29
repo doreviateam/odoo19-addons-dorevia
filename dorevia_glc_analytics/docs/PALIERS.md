@@ -21,7 +21,7 @@
 | **3** | `dorevia_glc_budget` | Budget prévisionnel mensuel par axe analytique | **Validé MOA** (2026-05-27 · `glc-rgl-test-import`) · [PR #28](https://github.com/doreviateam/odoo19-addons-dorevia/pull/28) |
 | **4** | `dorevia_glc_analytics` (+ budget) | Cockpit pilotage d'exploitation GLC | **GO livraison MOA · gelé** · **`19.0.4.9.0`** · [TICKET réalignement](./TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) |
 | **4bis** | `dorevia_glc_analytics` | Finition UX cockpit + période libre + UX-GROUPBY | **Intégré Palier 4 réaligné** (`19.0.4.9.0`) · [TICKET_PALIER_4BIS.md](./TICKET_PALIER_4BIS.md) |
-| **5** | extensions | Trésorerie · exports · scénarios | **GO technique serveur** · lot trésorerie **`19.0.5.0.1`** (2026-05-29) · **95/95** · [TICKET_PALIER_5](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [Recette P5](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) |
+| **5** | extensions | Trésorerie · exports · scénarios | **GO complet MOA** · lot trésorerie **`19.0.5.0.1`** (2026-05-29) · **95/95** · recette navigateur §2 à §5 OK · [TICKET_PALIER_5](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [Recette P5](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) |
 
 ### Paliers V1.1 reportés (post-cockpit)
 
@@ -155,7 +155,9 @@ Hors périmètre immédiat Palier 4 :
 
 **Ticket cadrage :** [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · **Doctrine :** [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) · **Recette :** [RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)
 
-**Lot trésorerie livré `19.0.5.0.1` (2026-05-29) :** compte bancaire de référence · param société · onglet Trésorerie S1 · tests TREF **7/7** · rejeu cockpit+budget **70/70** · post-install **95/95** · migration nomenclature Activités GLC legacy.
+**Lot trésorerie livré `19.0.5.0.1` (2026-05-29) :** compte bancaire de référence · param société · onglet Trésorerie S1 · tests TREF **7/7** · rejeu cockpit+budget **70/70** · post-install **95/95** · migration nomenclature Activités GLC legacy · recette navigateur §2 à §5 **OK**.
+
+**Preuve MOA finale :** sur `13 avr. → 31 mai 2026`, `Compte Courant GLC` et `GLC - Livret Bleu` conservent les KPI exploitation identiques (Recette `7 794,00 €` · Cumul RH `0,00 €` · Dépense `4 851,51 €` · Solde `2 942,49 €`) tandis que le solde trésorerie change selon le compte observé (`-1 627,11 €` vs `30 000,00 €`).
 
 **Reste Palier 5 (non livré) :** exports Excel/PDF · scénarios budget · projections · commentaires de gestion.
 

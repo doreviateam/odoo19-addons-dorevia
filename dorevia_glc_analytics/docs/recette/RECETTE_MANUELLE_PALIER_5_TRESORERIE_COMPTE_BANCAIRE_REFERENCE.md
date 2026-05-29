@@ -3,7 +3,7 @@
 **Module :** `dorevia_glc_analytics` (extension Palier 5)  
 **Version cible :** **`19.0.5.0.1`**  
 **Prérequis :** Palier 4 réaligné **`19.0.4.9.0`** gelé · `dorevia_glc_budget` installé  
-**Statut document :** **GO technique serveur** — Palier 5 **`19.0.5.0.1`** (2026-05-29) · précondition bancaire OK · **95/95** post-install · TREF **7/7**
+**Statut document :** **GO complet MOA** — Palier 5 **`19.0.5.0.1`** (2026-05-29) · précondition bancaire OK · **95/95** post-install · TREF **7/7** · recette navigateur §2 à §5 OK
 
 **Références :** [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) · [Recette période libre Palier 4](./RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md) · [PALIERS.md](../PALIERS.md)
 
@@ -51,7 +51,7 @@ docker compose restart odoo
 | Version module `dorevia_glc_analytics` | **`19.0.5.0.1`** | [x] | Rejeu confirmé 2026-05-29 |
 | `dorevia_glc_budget` | **`19.0.1.0.0`** | [x] | Inchangé |
 | Worker Odoo redémarré après `-u` | Oui | [x] | |
-| Hard refresh navigateur | `Cmd+Shift+R` | [ ] | Avant recette manuelle § 2–5 |
+| Hard refresh navigateur | `Cmd+Shift+R` | [x] | Recette navigateur § 2–5 validée |
 
 ### 1.2 Société GLC — journal bancaire par défaut
 
@@ -77,10 +77,10 @@ docker compose restart odoo
 
 | Élément | Attendu | OK | Observations |
 |---|---|:---:|---|
-| Période de test choisie | Ex. un mois complet avec mouvements | [ ] | Noter `date_from` / `date_to` |
-| Cockpit ouvert sur cette période | Synthèse + Détail + Trésorerie alimentés ou message « aucune donnée » | [ ] | |
-| Écritures comptables sur compte courant | Encaissements / décaissements sur la période | [ ] | Pour onglet Trésorerie |
-| Écriture virement interne courant ↔ livret *(optionnel)* | Sur la période | [ ] | TREF-03 manuel |
+| Période de test choisie | Ex. un mois complet avec mouvements | [x] | `13 avr. → 31 mai 2026` |
+| Cockpit ouvert sur cette période | Synthèse + Détail + Trésorerie alimentés ou message « aucune donnée » | [x] | Détail + Trésorerie alimentés |
+| Écritures comptables sur compte courant | Encaissements / décaissements sur la période | [x] | Courant : entrées `14 272,07 €` · sorties `15 899,18 €` |
+| Écriture virement interne courant ↔ livret *(optionnel)* | Sur la période | [x] | Couvert auto TREF-03 ; flux navigateur livrets observés |
 
 ---
 
@@ -90,11 +90,11 @@ docker compose restart odoo
 
 | Réf. | Point de contrôle | Attendu | OK | Observations |
 |---|---|---|:---:|---|
-| P5-FIL-VIS | Champ **Compte bancaire de référence** visible | Oui | [ ] | `reference_bank_journal_id` |
-| P5-FIL-DOM | Liste proposée | Journaux **type banque** de la société uniquement | [ ] | Pas de journaux ventes/achats |
-| P5-FIL-DEF | Valeur à l’ouverture | Journal **compte courant** GLC (défaut société) | [ ] | |
-| P5-FIL-512 | Compte 512 affiché | Cohérent avec le journal sélectionné | [ ] | Champ **Compte 512 de référence** |
-| P5-FIL-PERS | Persistance au refresh | Compte sélectionné **conservé** après changement période / scénario / recalcul | [ ] | Même logique que filtre **Axe analytique** |
+| P5-FIL-VIS | Champ **Compte bancaire de référence** visible | Oui | [x] | `reference_bank_journal_id` |
+| P5-FIL-DOM | Liste proposée | Journaux **type banque** de la société uniquement | [x] | `Compte Courant GLC` · `GLC - Livret Bleu` · `GLC - Livret OBNL` |
+| P5-FIL-DEF | Valeur à l’ouverture | Journal **compte courant** GLC (défaut société) | [x] | `Compte Courant GLC` |
+| P5-FIL-512 | Compte 512 affiché | Cohérent avec le journal sélectionné | [x] | Courant `512001 Banque` · Livret Bleu `512004 GLC - Livret Bleu` |
+| P5-FIL-PERS | Persistance au refresh | Compte sélectionné **conservé** après changement période / scénario / recalcul | [x] | Période `13 avr. → 31 mai` conservée |
 
 **Procédure persistance :**
 
@@ -102,6 +102,16 @@ docker compose restart odoo
 2. Modifier la **date de fin** ou le **scénario budgétaire**.
 3. Attendre le recalcul automatique (autosave filtres).
 4. Vérifier que **Compte bancaire de référence** reste sur le livret.
+
+**Résultat MOA navigateur (2026-05-29) :** **OK**.
+
+| Réf. | Résultat observé |
+|---|---|
+| P5-FIL-VIS | Champ visible dans **Filtres de lecture** |
+| P5-FIL-DOM | Journaux disponibles : `Compte Courant GLC`, `GLC - Livret Bleu`, `GLC - Livret OBNL` |
+| P5-FIL-DEF | Valeur d'ouverture : `Compte Courant GLC` |
+| P5-FIL-512 | Courant : `512001 Banque` · Livret Bleu : `512004 GLC - Livret Bleu` |
+| P5-FIL-PERS | Période conservée `13 avr. → 31 mai` après bascule compte |
 
 ---
 
@@ -111,14 +121,14 @@ docker compose restart odoo
 
 ### 3.1 Relevé initial (compte courant)
 
-Période figée : du __________ au __________
+Période figée : du **13 avr.** au **31 mai 2026**
 
 | KPI exploitation | Valeur relevée (compte courant) | Source UI |
 |---|---|---|
-| **Recette** | | Synthèse graphique · KPI ou onglet **Ressources** → Recettes réalisées |
-| **Cumul RH** | | Synthèse · **Charges de structure** → Dont cumul RH (réalisé) |
-| **Dépense** | | Synthèse · **Charges de structure** → Dont dépenses hors salaires (réalisé) |
-| **Solde** | | Synthèse · Solde période *(Recette − Cumul RH − Dépense)* |
+| **Recette** | **7 794,00 €** | Onglet **Détail par axe analytique** · Total période |
+| **Cumul RH** | **0,00 €** | Onglet **Détail par axe analytique** · Total période |
+| **Dépense** | **4 851,51 €** | Onglet **Détail par axe analytique** · Total période |
+| **Solde** | **2 942,49 €** | Onglet **Détail par axe analytique** · Total période |
 
 *(Alternative détaillée : onglet **Détail par axe analytique** — totaux RECETTE | CUMUL RH | DÉPENSE | SOLDE.)*
 
@@ -130,14 +140,14 @@ Période figée : du __________ au __________
 
 | KPI | Valeur après changement | Identique ? | OK |
 |---|---|---|:---:|
-| Recette | | **Oui — obligatoire** | [ ] |
-| Cumul RH | | **Oui — obligatoire** | [ ] |
-| Dépense | | **Oui — obligatoire** | [ ] |
-| Solde | | **Oui — obligatoire** | [ ] |
+| Recette | **7 794,00 €** | **Oui — obligatoire** | [x] |
+| Cumul RH | **0,00 €** | **Oui — obligatoire** | [x] |
+| Dépense | **4 851,51 €** | **Oui — obligatoire** | [x] |
+| Solde | **2 942,49 €** | **Oui — obligatoire** | [x] |
 
 **Verdict section 3 :**
 
-- [ ] **OK** — aucun KPI exploitation modifié
+- [x] **OK** — aucun KPI exploitation modifié
 - [ ] **NO GO** — au moins un KPI exploitation a changé *(bloquant)*
 
 ---
@@ -152,11 +162,11 @@ Texte d’aide attendu : *« Les KPI Recette · Cumul RH · Dépense · Solde ne
 
 | Indicateur trésorerie | Valeur relevée | OK | Observations |
 |---|---|:---:|---|
-| **Entrées trésorerie** | | [ ] | `treasury_inflow` |
-| **Sorties trésorerie** | | [ ] | `treasury_outflow` |
-| **Virements internes (entrées)** | | [ ] | Si virement reçu sur le compte observé |
-| **Virements internes (sorties)** | | [ ] | Si virement émis depuis le compte observé |
-| **Solde trésorerie période** | | [ ] | Entrées − sorties · `treasury_net` |
+| **Entrées trésorerie** | **14 272,07 €** | [x] | `treasury_inflow` |
+| **Sorties trésorerie** | **15 899,18 €** | [x] | `treasury_outflow` |
+| **Virements internes (entrées)** | **0,00 €** | [x] | Si virement reçu sur le compte observé |
+| **Virements internes (sorties)** | **0,00 €** | [x] | Si virement émis depuis le compte observé |
+| **Solde trésorerie période** | **-1 627,11 €** | [x] | Entrées − sorties · `treasury_net` |
 
 Cohérence rapide : comparer avec les écritures **512** du journal courant sur la période (comptabilité → grand livre filtré).
 
@@ -168,13 +178,13 @@ Cohérence rapide : comparer avec les écritures **512** du journal courant sur 
 
 | Contrôle | Attendu | OK | Observations |
 |---|---|:---:|---|
-| Montants trésorerie | **Différents** du compte courant (si mouvements sur le livret) | [ ] | POV compte observé |
-| KPI exploitation (§ 3) | **Identiques** | [ ] | Invariant absolu |
+| Montants trésorerie | **Différents** du compte courant (si mouvements sur le livret) | [x] | `GLC - Livret Bleu` : entrées `30 000,00 €` · sorties `0,00 €` · solde `30 000,00 €` |
+| KPI exploitation (§ 3) | **Identiques** | [x] | Recette `7 794,00 €` · Cumul RH `0,00 €` · Dépense `4 851,51 €` · Solde `2 942,49 €` |
 | Message si pas de mouvement | *« Aucun mouvement trésorerie sur le compte de référence… »* | [ ] | `treasury_has_data = False` |
 
 **Verdict section 4 :**
 
-- [ ] **OK** — trésorerie réactive au compte · exploitation stable
+- [x] **OK** — trésorerie réactive au compte · exploitation stable
 - [ ] **GO avec réserve** — défaut UX sans impact calcul
 - [ ] **NO GO** — trésorerie absente alors que mouvements 512 existent · ou exploitation impactée
 
@@ -186,23 +196,23 @@ Compléter sur **données réelles** ou jeux d’écritures dédiés sur `glc-rg
 
 | ID | Scénario | Préparation | Exploitation attendue | Trésorerie attendue | OK | Observations |
 |---|---|---|---|---|:---:|---|
-| **TREF-01** | Encaissement client | Crédit compte courant + recette analytique (ex. BAR) | **Recette** ↑ | **Entrée** trésorerie compte courant | [ ] | |
-| **TREF-02** | Paiement fournisseur | Débit compte courant + dépense analytique (ex. 626 / STRUCTURE) | **Dépense** ↑ | **Sortie** trésorerie | [ ] | |
-| **TREF-03** | Virement courant → livret | Écriture 512↔512 ou compte 580 | **Aucun** impact Recette · Cumul RH · Dépense · Solde | Visible : **sortie** courant · **entrée** livret | [ ] | Inverser POV pour TREF-03 bis |
-| **TREF-04** | Paie / 645 rapprochée banque | Charge 645 + analytique STRUCTURE + sortie banque | **Cumul RH** ↑ | **Sortie** trésorerie | [ ] | Complément R14-645-REEL |
-| **TREF-05** | Changement compte de référence | Même période · courant puis livret | KPI exploitation **strictement identiques** | Flux **recalculés** selon nouveau POV | [ ] | Preuve formelle invariant |
+| **TREF-01** | Encaissement client | Crédit compte courant + recette analytique (ex. BAR) | **Recette** ↑ | **Entrée** trésorerie compte courant | [x] | Couvert auto |
+| **TREF-02** | Paiement fournisseur | Débit compte courant + dépense analytique (ex. 626 / STRUCTURE) | **Dépense** ↑ | **Sortie** trésorerie | [x] | Couvert auto |
+| **TREF-03** | Virement courant → livret | Écriture 512↔512 ou compte 580 | **Aucun** impact Recette · Cumul RH · Dépense · Solde | Visible : **sortie** courant · **entrée** livret | [x] | Couvert auto |
+| **TREF-04** | Paie / 645 rapprochée banque | Charge 645 + analytique STRUCTURE + sortie banque | **Cumul RH** ↑ | **Sortie** trésorerie | [x] | Couvert auto |
+| **TREF-05** | Changement compte de référence | Même période · courant puis livret | KPI exploitation **strictement identiques** | Flux **recalculés** selon nouveau POV | [x] | Validé auto + navigateur |
 
 ### Grille TREF-05 (détail MOA)
 
 | KPI / indicateur | Compte courant | Livret | Égal exploitation ? |
 |---|---|---|---|
-| Recette | | | [ ] Oui |
-| Cumul RH | | | [ ] Oui |
-| Dépense | | | [ ] Oui |
-| Solde | | | [ ] Oui |
-| Entrées trésorerie | | | N/A *(peut différer)* |
-| Sorties trésorerie | | | N/A |
-| Solde trésorerie période | | | N/A |
+| Recette | **7 794,00 €** | **7 794,00 €** | [x] Oui |
+| Cumul RH | **0,00 €** | **0,00 €** | [x] Oui |
+| Dépense | **4 851,51 €** | **4 851,51 €** | [x] Oui |
+| Solde | **2 942,49 €** | **2 942,49 €** | [x] Oui |
+| Entrées trésorerie | **14 272,07 €** | **30 000,00 €** | N/A *(peut différer)* |
+| Sorties trésorerie | **15 899,18 €** | **0,00 €** | N/A |
+| Solde trésorerie période | **-1 627,11 €** | **30 000,00 €** | N/A |
 
 ---
 
@@ -227,6 +237,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 | Migration nomenclature legacy | OK — `19.0.5.0.1/post-migrate.py` |
 | Post-install global | **95 tests · 0 failed · 0 error(s)** |
 | Rejeu ciblé Palier 5 / TREF | **7/7 OK · 0 failed · 0 error(s)** |
+| Recette navigateur §2 à §5 | **OK** |
 
 **Migration `19.0.5.0.1` — réalignement codes Activités GLC** *(sans recréation de comptes ni déplacement d’écritures)* :
 
@@ -273,11 +284,11 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 
 ### Verdict MOA
 
-- [x] **GO technique serveur** — Palier 5 **`19.0.5.0.1`** *(2026-05-29)* · **95/95**
-- [ ] **GO complet** *(recette navigateur § 2–5 validée)*
+- [ ] **GO technique serveur** — Palier 5 **`19.0.5.0.1`** *(2026-05-29)* · **95/95**
+- [x] **GO complet** *(recette navigateur § 2–5 validée)*
 - [ ] **NO GO**
 
-**Verdict serveur Palier 5 :** **GO technique — réserve legacy levée.**
+**Verdict final Palier 5 :** **GO complet MOA avant PR / merge.**
 
 | Champ | Valeur |
 |---|---|
@@ -291,11 +302,14 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 | Tests cockpit + TREF + budget | **70/70 OK** |
 | Rejeu ciblé TREF | **7/7 OK** |
 | Post-install global | **95/95 OK** |
+| Recette navigateur §2 à §5 | **OK** |
+| Preuve invariant exploitation | Courant = Livret Bleu : Recette `7 794,00 €` · Cumul RH `0,00 €` · Dépense `4 851,51 €` · Solde `2 942,49 €` |
+| Preuve trésorerie POV | Courant `-1 627,11 €` · Livret Bleu `30 000,00 €` |
 
 **Réserves optionnelles (non bloquantes) :**
 
-- Compléments manuels TREF-04 sur données réelles *(R14-645-REEL)* ;
-- Recette navigateur § 2–5 *(invariant exploitation / onglet Trésorerie)* — si validation visuelle MOA souhaitée avant commit.
+- Compléments manuels TREF-04 sur données réelles *(R14-645-REEL)*, déjà couvert côté tests automatisés ;
+- Exports Excel/PDF, scénarios budget, projections et commentaires de gestion restent hors lot trésorerie S1.
 
 ---
 
@@ -307,4 +321,4 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 
 ---
 
-*Recette ouverte post-implémentation Palier 5 `19.0.5.0.1`. Ne pas confondre avec la recette Palier 4 période libre — celle-ci reste valide pour l’exploitation seule.*
+*Recette Palier 5 `19.0.5.0.1` validée MOA le 2026-05-29. Ne pas confondre avec la recette Palier 4 période libre — celle-ci reste valide pour l’exploitation seule.*
