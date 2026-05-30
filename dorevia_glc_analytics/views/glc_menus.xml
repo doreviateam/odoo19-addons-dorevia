@@ -17,33 +17,37 @@
     <delete model="ir.ui.view" id="view_glc_salary_allocation_list"/>
     <delete model="ir.ui.view" id="view_glc_salary_allocation_form"/>
 
+    <record id="account.menu_finance_entries" model="ir.ui.menu">
+        <field name="sequence">5</field>
+    </record>
+
     <menuitem
         id="menu_glc_analytique_root"
         name="Pilotage GLC"
         parent="account.menu_finance"
         groups="dorevia_glc_analytics.group_glc_user"
-        sequence="90"/>
+        sequence="4"/>
 
     <menuitem
-        id="menu_glc_activites"
-        name="Axes analytiques GLC"
+        id="menu_glc_coverage_cockpit"
+        name="Contrôle de gestion"
         parent="menu_glc_analytique_root"
-        action="action_glc_analytic_accounts_activites"
+        action="action_glc_coverage_cockpit"
         sequence="10"/>
 
     <menuitem
+        id="menu_glc_activites"
+        name="Axes analytiques"
+        parent="menu_glc_analytique_root"
+        action="action_glc_analytic_accounts_activites"
+        sequence="20"/>
+
+    <menuitem
         id="menu_glc_analytic_anomalies"
-        name="Anomalies analytiques"
+        name="Audit"
         parent="menu_glc_analytique_root"
         action="action_glc_analytic_anomaly_wizard"
         groups="dorevia_glc_analytics.group_glc_manager"
         sequence="30"/>
-
-    <menuitem
-        id="menu_glc_coverage_cockpit"
-        name="Cockpit couverture des charges de structure"
-        parent="menu_glc_analytique_root"
-        action="action_glc_coverage_cockpit"
-        sequence="65"/>
 
 </odoo>

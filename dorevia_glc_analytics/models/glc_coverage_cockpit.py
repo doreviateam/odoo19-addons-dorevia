@@ -304,7 +304,7 @@ class GlcCoverageCockpit(models.TransientModel):
         cockpit.with_context(glc_cockpit_auto_refreshing=True).action_refresh()
         return {
             "type": "ir.actions.act_window",
-            "name": _("Cockpit couverture des charges de structure"),
+            "name": _("Contrôle de gestion"),
             "res_model": self._name,
             "res_id": cockpit.id,
             "view_mode": "form",

@@ -5,7 +5,7 @@
         <field name="name">glc.analytic.anomaly.wizard.form</field>
         <field name="model">glc.analytic.anomaly.wizard</field>
         <field name="arch" type="xml">
-            <form string="Anomalies analytiques GLC">
+            <form string="Audit">
                 <sheet>
                     <div class="alert alert-warning mb-3" role="alert"
                          invisible="not structure_alert_active">
@@ -76,7 +76,7 @@
     </record>
 
     <record id="action_glc_analytic_anomaly_wizard" model="ir.actions.act_window">
-        <field name="name">Anomalies analytiques GLC</field>
+        <field name="name">Audit</field>
         <field name="res_model">glc.analytic.anomaly.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>

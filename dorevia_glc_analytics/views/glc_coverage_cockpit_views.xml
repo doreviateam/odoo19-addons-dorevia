@@ -5,7 +5,7 @@
         <field name="name">glc.coverage.cockpit.form</field>
         <field name="model">glc.coverage.cockpit</field>
         <field name="arch" type="xml">
-            <form string="Cockpit couverture des charges de structure" create="0" delete="0"
+            <form string="Contrôle de gestion" create="0" delete="0"
                   js_class="glc_coverage_cockpit_form">
                 <sheet>
                     <field name="currency_id" invisible="1"/>
@@ -411,7 +411,7 @@
     <delete model="ir.actions.act_window" id="action_glc_coverage_cockpit"/>
 
     <record id="action_glc_coverage_cockpit" model="ir.actions.server">
-        <field name="name">Cockpit couverture des charges de structure</field>
+        <field name="name">Contrôle de gestion</field>
         <field name="model_id" ref="model_glc_coverage_cockpit"/>
         <field name="state">code</field>
         <field name="code">action = model.action_open_default_cockpit()</field>
