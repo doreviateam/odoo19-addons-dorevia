@@ -178,30 +178,26 @@ class GlcCoverageCockpit(models.TransientModel):
         readonly=True,
         help="Lecture intermédiaire : ressources disponibles / masse salariale.",
     )
-    revenue_eligible_amount = fields.Monetary(
-        string="Ressources éligibles (montant)",
+    revenue_eligible_amount = fields.Integer(
+        string="Ressources éligibles (lignes)",
         readonly=True,
-        currency_field="currency_id",
     )
-    revenue_invoiced_amount = fields.Monetary(
-        string="Ressources facturées (montant)",
+    revenue_invoiced_amount = fields.Integer(
+        string="Ressources facturées (lignes)",
         readonly=True,
-        currency_field="currency_id",
     )
     revenue_invoiced_rate = fields.Float(
         string="Ressources facturées (%)",
         digits=(16, 2),
         readonly=True,
     )
-    expense_eligible_amount = fields.Monetary(
-        string="Dépenses éligibles (montant)",
+    expense_eligible_amount = fields.Integer(
+        string="Dépenses éligibles (lignes)",
         readonly=True,
-        currency_field="currency_id",
     )
-    expense_invoiced_amount = fields.Monetary(
-        string="Dépenses facturées (montant)",
+    expense_invoiced_amount = fields.Integer(
+        string="Dépenses facturées (lignes)",
         readonly=True,
-        currency_field="currency_id",
     )
     expense_invoiced_rate = fields.Float(
         string="Dépenses facturées (%)",
@@ -806,41 +802,100 @@ class GlcCoverageCockpit(models.TransientModel):
             self._expense_analytic_line_domain(date_from, date_to, analytic_accounts)
         )
 
-    def _sum_revenue_invoiced(self, analytic_accounts, date_from, date_to):
+    def _count_lines(self, domain):
+        return self.env["account.analytic.line"].search_count(domain)
+
+    def _count_lines_matching(self, domain, predicate):
+        lines = self.env["account.analytic.line"].search(domain)
+        return sum(1 for line in lines if predicate(line))
+
+    def _count_internal_transfer_revenue_lines(
+        self, analytic_accounts, date_from, date_to
+    ):
+        """Chaque bucket 580 avec entrée = 1 ligne ressource éligible (hors facture)."""
+        self.ensure_one()
         if not analytic_accounts:
-            return 0.0
-        return self._sum_lines_matching(
+            return 0
+        eligible_ids = set(analytic_accounts.ids)
+        count = 0
+        for bucket in self._aggregate_treasury_internal_buckets(date_from, date_to):
+            if bucket["internal_inflow"] < 0.005:
+                continue
+            acc = bucket["analytic_account"]
+            if acc and acc.id in eligible_ids:
+                count += 1
+        return count
+
+    def _count_internal_transfer_expense_lines(
+        self, analytic_accounts, date_from, date_to
+    ):
+        """Chaque bucket 580 avec sortie = 1 ligne dépense éligible (hors facture)."""
+        self.ensure_one()
+        if not analytic_accounts:
+            return 0
+        eligible_ids = set(analytic_accounts.ids)
+        count = 0
+        for bucket in self._aggregate_treasury_internal_buckets(date_from, date_to):
+            if bucket["internal_outflow"] < 0.005:
+                continue
+            acc = bucket["analytic_account"]
+            if acc and acc.id in eligible_ids:
+                count += 1
+        return count
+
+    def _count_revenue_eligible_lines(self, analytic_accounts, date_from, date_to):
+        if not analytic_accounts:
+            return 0
+        return self._count_lines(
+            self._revenue_analytic_line_domain(date_from, date_to, analytic_accounts)
+        ) + self._count_internal_transfer_revenue_lines(
+            analytic_accounts, date_from, date_to
+        )
+
+    def _count_revenue_invoiced_lines(self, analytic_accounts, date_from, date_to):
+        if not analytic_accounts:
+            return 0
+        return self._count_lines_matching(
             self._revenue_analytic_line_domain(date_from, date_to, analytic_accounts),
             self._glc_analytic_line_is_customer_invoice_for_cockpit,
         )
 
-    def _sum_expense_invoiced(self, analytic_accounts, date_from, date_to):
+    def _count_expense_eligible_lines(self, analytic_accounts, date_from, date_to):
         if not analytic_accounts:
-            return 0.0
-        return self._sum_lines_matching(
+            return 0
+        return self._count_lines(
+            self._expense_analytic_line_domain(date_from, date_to, analytic_accounts)
+        ) + self._count_internal_transfer_expense_lines(
+            analytic_accounts, date_from, date_to
+        )
+
+    def _count_expense_invoiced_lines(self, analytic_accounts, date_from, date_to):
+        if not analytic_accounts:
+            return 0
+        return self._count_lines_matching(
             self._expense_analytic_line_domain(date_from, date_to, analytic_accounts),
             self._glc_analytic_line_is_supplier_invoice_for_cockpit,
         )
 
-    def _document_quality_rate(self, invoiced_amount, eligible_amount):
-        if eligible_amount < 0.005:
+    def _document_quality_rate(self, invoiced_count, eligible_count):
+        if eligible_count <= 0:
             return 0.0
-        return (invoiced_amount / eligible_amount) * 100.0
+        return (invoiced_count / eligible_count) * 100.0
 
     def _aggregate_document_quality(self, period_start, period_end):
-        """KPI Synthèse — part des montants ressource / dépense issue d'une facture."""
+        """KPI Synthèse — part des lignes ressource / dépense issue d'une facture."""
         self.ensure_one()
         cockpit_accounts = self._cockpit_analytic_accounts()
-        revenue_eligible = self._sum_revenue_realized(
+        revenue_eligible = self._count_revenue_eligible_lines(
             cockpit_accounts, period_start, period_end
         )
-        revenue_invoiced = self._sum_revenue_invoiced(
+        revenue_invoiced = self._count_revenue_invoiced_lines(
             cockpit_accounts, period_start, period_end
         )
-        expense_eligible = self._sum_expense_realized(
+        expense_eligible = self._count_expense_eligible_lines(
             cockpit_accounts, period_start, period_end
         )
-        expense_invoiced = self._sum_expense_invoiced(
+        expense_invoiced = self._count_expense_invoiced_lines(
             cockpit_accounts, period_start, period_end
         )
         return {

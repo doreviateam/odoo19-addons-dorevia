@@ -122,8 +122,8 @@ class GlcCoverageCockpit(models.TransientModel):
         {"out_invoice", "out_refund", "in_invoice", "in_refund"}
     )
     _GLC_COCKPIT_PAID_PAYMENT_STATES = frozenset({"paid"})
-    _GLC_CUSTOMER_INVOICE_MOVE_TYPE = "out_invoice"
-    _GLC_SUPPLIER_INVOICE_MOVE_TYPE = "in_invoice"
+    _GLC_CUSTOMER_INVOICE_MOVE_TYPES = frozenset({"out_invoice", "out_receipt"})
+    _GLC_SUPPLIER_INVOICE_MOVE_TYPES = frozenset({"in_invoice", "in_receipt"})
 
     @api.model
     def _glc_is_cash_or_bank_account(self, account):
@@ -171,16 +171,16 @@ class GlcCoverageCockpit(models.TransientModel):
 
     @api.model
     def _glc_analytic_line_is_customer_invoice_for_cockpit(self, analytic_line):
-        """Ligne ressource issue d'une facture client (KPI qualité documentaire)."""
+        """Ligne ressource issue d'une facture / reçu client (KPI qualité documentaire)."""
         move_line = analytic_line.move_line_id
         if not move_line:
             return False
-        return move_line.move_id.move_type == self._GLC_CUSTOMER_INVOICE_MOVE_TYPE
+        return move_line.move_id.move_type in self._GLC_CUSTOMER_INVOICE_MOVE_TYPES
 
     @api.model
     def _glc_analytic_line_is_supplier_invoice_for_cockpit(self, analytic_line):
-        """Ligne dépense issue d'une facture fournisseur (KPI qualité documentaire)."""
+        """Ligne dépense issue d'une facture / reçu fournisseur (KPI qualité documentaire)."""
         move_line = analytic_line.move_line_id
         if not move_line:
             return False
-        return move_line.move_id.move_type == self._GLC_SUPPLIER_INVOICE_MOVE_TYPE
+        return move_line.move_id.move_type in self._GLC_SUPPLIER_INVOICE_MOVE_TYPES

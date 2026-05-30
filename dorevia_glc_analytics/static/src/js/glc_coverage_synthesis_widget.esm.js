@@ -97,21 +97,17 @@ export class GlcCoverageSynthesisField extends Component {
         return `${rate.toFixed(0)} %`;
     }
 
-    formatDocumentQualityRate(rate, eligibleAmount) {
-        if (this.isZero(eligibleAmount)) {
+    formatReconcileRate(rate) {
+        if (rate === null || rate === undefined) {
             return "—";
         }
-        if (rate === false || rate === null || rate === undefined) {
-            return "—";
-        }
-        return `${rate.toFixed(0)} %`;
+        const rounded = Math.round(rate * 100) / 100;
+        const text = rounded.toFixed(2).replace(/\.?0+$/, "");
+        return `${text} %`;
     }
 
-    documentQualityClass(rate, eligibleAmount) {
-        if (this.isZero(eligibleAmount)) {
-            return "o_glc_kpi_neutral";
-        }
-        if (rate === false || rate === null || rate === undefined) {
+    reconcileClass(rate) {
+        if (rate === null || rate === undefined) {
             return "o_glc_kpi_neutral";
         }
         if (rate >= 90) {
@@ -201,20 +197,16 @@ export class GlcCoverageSynthesisField extends Component {
         return this.props.record.data.resources_realized || 0;
     }
 
-    get revenueInvoicedRate() {
-        return this.props.record.data.revenue_invoiced_rate;
+    get totalExpensesRealized() {
+        return this.props.record.data.fixed_charges_realized || 0;
     }
 
-    get revenueEligibleAmount() {
-        return this.props.record.data.revenue_eligible_amount || 0;
+    get reconcileRateCustomer() {
+        return this.props.record.data.quality_reconcile_rate_customer;
     }
 
-    get expenseInvoicedRate() {
-        return this.props.record.data.expense_invoiced_rate;
-    }
-
-    get expenseEligibleAmount() {
-        return this.props.record.data.expense_eligible_amount || 0;
+    get reconcileRateSupplier() {
+        return this.props.record.data.quality_reconcile_rate_supplier;
     }
 
     get fundingRealized() {

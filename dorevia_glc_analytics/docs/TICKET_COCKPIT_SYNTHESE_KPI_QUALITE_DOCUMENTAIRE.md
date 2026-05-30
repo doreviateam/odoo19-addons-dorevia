@@ -1,8 +1,8 @@
 # Ticket — Cockpit GLC · KPI qualité documentaire (Synthèse graphique)
 
 **Module :** `dorevia_glc_analytics`  
-**Version cible :** **`19.0.10.0.0`** *(à confirmer à l’implémentation)*  
-**Statut :** **Implémenté** — version **`19.0.10.0.0`**  
+**Version cible :** **`19.0.10.0.2`** *(correction MOA — calcul en nombre de lignes)*  
+**Statut :** **Implémenté** — version **`19.0.10.0.2`**  
 **Prérequis :** cockpit Palier 4 · Synthèse graphique (`glc_coverage_synthesis`) · filtre Payé uniquement **hors périmètre**
 
 **Références :** [TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md](./TICKET_COCKPIT_SYNTHESE_GRAPHIQUE.md) · [TICKET_COCKPIT_DETAIL_PAYE_UNIQUEMENT.md](./TICKET_COCKPIT_DETAIL_PAYE_UNIQUEMENT.md) · [TICKET_COCKPIT_QUALITE_COMPTABLE_ANALYTIQUE_SUIVI_PAIEMENT.md](./TICKET_COCKPIT_QUALITE_COMPTABLE_ANALYTIQUE_SUIVI_PAIEMENT.md) · [RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md](./recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md)
@@ -20,7 +20,7 @@ L’onglet **Synthèse graphique** offre une lecture immédiate de pilotage :
 
 Le cockpit raisonne sur des **lignes comptables / écritures comptables éligibles au pilotage**, pas sur un comptage de factures.
 
-Nous souhaitons ajouter **deux indicateurs de qualité documentaire** mesurant, **en montant**, quelle part des montants **Ressource** et **Dépense** provient d’une écriture de type **facture**.
+Nous souhaitons ajouter **deux indicateurs de qualité documentaire** mesurant, **en nombre de lignes comptables éligibles**, quelle part des lignes **Ressource** et **Dépense** provient d’une écriture de type **facture**.
 
 > **Nommage UX retenu MOA :** **Ressources facturées** · **Dépenses facturées**  
 > *(éviter « taux de facturation » en interface — risque de confusion avec un comptage de documents)*
@@ -31,7 +31,7 @@ Nous souhaitons ajouter **deux indicateurs de qualité documentaire** mesurant, 
 
 Répondre à :
 
-> *Quelle part de mes ressources et de mes dépenses cockpit est documentée par une facture client / fournisseur ?*
+> *Quelle part de mes lignes ressources et de mes lignes dépenses cockpit est documentée par une facture client / fournisseur ?*
 
 Sans modifier les montants, graphiques ou KPI existants.
 
@@ -44,13 +44,13 @@ Sans modifier les montants, graphiques ou KPI existants.
 ```text
 RESSOURCES FACTURÉES
 xx %
-part des ressources issues de factures client
+part des lignes ressources issues de factures client
 ```
 
 ```text
 DÉPENSES FACTURÉES
 xx %
-part des dépenses issues de factures fournisseur
+part des lignes dépenses issues de factures fournisseur
 ```
 
 ### 3.2. Emplacement UI
@@ -101,11 +101,12 @@ Priorité : **calcul juste** + présentation sobre.
 
 ```text
 On ne compte pas les factures.
-On somme les montants des lignes comptables éligibles au cockpit.
-Puis on regarde si l’écriture d’origine est une facture ou non.
+On ne pondère pas par les montants.
+On compte les lignes comptables / écritures comptables éligibles au cockpit.
+Puis on mesure quelle part de ces lignes provient d’une écriture de type facture.
 ```
 
-Une facture multi-lignes analytiques peut alimenter plusieurs axes — **normal**, le cockpit travaille déjà en logique de lignes / montants.
+Une facture multi-lignes analytiques contribue pour **autant de lignes éligibles** qu’elle en génère — **normal**, le cockpit travaille déjà en logique de lignes.
 
 ### 4.2. Distinction Payé vs Facturé
 
@@ -119,7 +120,7 @@ Une écriture bancaire peut être **payée mais non facturée** :
 - reste dans les montants cockpit si éligible ;
 - peut rester en vue Payé uniquement ;
 - **n’alimente pas** le numérateur Ressources / Dépenses facturées ;
-- **diminue** le taux concerné (reste au dénominateur).
+- **diminue** le taux concerné (reste au dénominateur, **1 ligne = 1 unité**, quel que soit le montant).
 
 ### 4.3. Cumul RH
 
@@ -133,41 +134,41 @@ Une écriture bancaire peut être **payée mais non facturée** :
 
 ```text
 Ressources facturées =
-  Σ montants lignes Ressource éligibles cockpit
-  dont move d’origine = facture client
+  nombre de lignes Ressource éligibles cockpit
+  dont move_id.move_type = out_invoice
 /
-  Σ montants lignes Ressource éligibles cockpit
+  nombre total de lignes Ressource éligibles cockpit
 ```
 
 **Numérateur — inclus :**
 
 - lignes analytiques éligibles au domaine **Ressource** du cockpit ;
-- rattachées à une pièce `move_type = out_invoice`.
+- rattachées à une pièce `move_type = out_invoice` *(via `move_line_id.move_id`)*.
 
 **Dénominateur — inclus :**
 
-- **toutes** les lignes Ressource éligibles : factures client, banque, OD, financements sans facture, virements internes 580 qualifiés, etc.
+- **toutes** les lignes Ressource éligibles : factures client, banque, OD, financements sans facture, virements internes 580 qualifiés *(1 bucket 580 entrée = 1 ligne)*, etc.
 
-**Avoir client (`out_refund`) :** **exclu du numérateur** en V1 *(à traiter comme non facturé pour ce KPI ; documenter si MOA souhaite l’inclure ultérieurement)*.
+**Avoir client (`out_refund`) :** **exclu du numérateur** en V1.
 
 ### 5.2. Dépenses facturées
 
 ```text
 Dépenses facturées =
-  Σ montants lignes Dépense éligibles cockpit
-  dont move d’origine = facture fournisseur
+  nombre de lignes Dépense éligibles cockpit
+  dont move_id.move_type = in_invoice
 /
-  Σ montants lignes Dépense éligibles cockpit
+  nombre total de lignes Dépense éligibles cockpit
 ```
 
 **Numérateur — inclus :**
 
 - lignes analytiques domaine **Dépense** (classe 6 hors payroll) ;
-- pièce `move_type = in_invoice`.
+- pièce `move_type` ∈ **`in_invoice`**, **`in_receipt`** *(reçu fournisseur Odoo — tickets / achats courants)*.
 
 **Dénominateur — inclus :**
 
-- toutes les lignes Dépense éligibles : factures fournisseur, banque directe, OD, virements internes sortie, etc.
+- toutes les lignes Dépense éligibles : factures fournisseur, reçus fournisseur, banque directe, OD, virements internes sortie, etc.
 
 **Avoir fournisseur (`in_refund`) :** **exclu du numérateur** en V1.
 
@@ -195,10 +196,10 @@ Dépenses facturées =
 | # | Tâche |
 |---|--------|
 | T1 | Champs calculés sur `glc.coverage.cockpit` *(recommandé)* ou agrégation au `action_refresh()` |
-| T2 | Méthodes `_sum_revenue_invoiced` / `_sum_expense_invoiced` + taux dérivés |
-| T3 | Réutiliser **strictement** les domaines existants : `_revenue_analytic_line_domain`, `_expense_analytic_line_domain`, `_signed_analytic_amount`, `_cockpit_analytic_accounts()` |
-| T4 | Helper `_glc_analytic_line_is_customer_invoice(line)` / `_…_supplier_invoice(line)` dans `glc_quality_mixin.py` *(miroir de la règle payé)* |
-| T5 | Inclure les **montants 580** internes dans le dénominateur Ressource / Dépense *(cohérent avec `revenue_realized` / `expense_realized` détail)* |
+| T2 | Méthodes `_count_revenue_*_lines` / `_count_expense_*_lines` + taux dérivés |
+| T3 | Réutiliser **strictement** les domaines existants : `_revenue_analytic_line_domain`, `_expense_analytic_line_domain`, `_cockpit_analytic_accounts()` |
+| T4 | Helper `_glc_analytic_line_is_customer_invoice(line)` / `_…_supplier_invoice(line)` dans `glc_quality_mixin.py` |
+| T5 | Inclure les **buckets 580** internes dans le dénominateur Ressource / Dépense *(1 bucket entrée/sortie = 1 ligne)* |
 | T6 | Exposer les taux au widget Synthèse *(champs cockpit ou relatedFields)* |
 | T7 | Deux cartes KPI dans `glc_coverage_synthesis_widget.xml` |
 | T8 | Tests auto + recette manuelle |
@@ -206,14 +207,16 @@ Dépenses facturées =
 ### 7.2. Proposition de champs cockpit
 
 ```python
-revenue_invoiced_amount      # numérateur Ressources facturées
-revenue_eligible_amount      # dénominateur (contrôle / debug)
-revenue_invoiced_rate        # % ou False si dénominateur nul
+revenue_invoiced_amount      # numérateur Ressources facturées (nb lignes)
+revenue_eligible_amount      # dénominateur (nb lignes — contrôle / debug)
+revenue_invoiced_rate        # % ou 0 si dénominateur nul
 
-expense_invoiced_amount
-expense_eligible_amount
+expense_invoiced_amount      # numérateur (nb lignes)
+expense_eligible_amount      # dénominateur (nb lignes)
 expense_invoiced_rate
 ```
+
+> Les champs `*_amount` conservent leur nom technique pour compatibilité widget ; ils stockent des **compteurs entiers**, pas des montants.
 
 Le widget lit `revenue_invoiced_rate` / `expense_invoiced_rate` ; affiche `—` si `False` / `None`.
 
@@ -232,31 +235,27 @@ def _line_is_invoiced_expense(self, analytic_line):
         return False
     return move_line.move_id.move_type == "in_invoice"
 
-def _sum_lines_invoiced(self, domain, invoice_checker):
+def _count_lines_invoiced(self, domain, invoice_checker):
     lines = self.env["account.analytic.line"].search(domain)
-    return sum(
-        self._signed_analytic_amount(line)
-        for line in lines
-        if invoice_checker(line)
-    )
+    return sum(1 for line in lines if invoice_checker(line))
 ```
 
 Taux :
 
 ```python
-rate = (numerator / denominator * 100) if denominator else False
+rate = (numerator / denominator * 100) if denominator else 0.0
 ```
 
 **Cohérence dénominateur :**
 
 ```text
-revenue_eligible_amount
-  = Σ lignes domaine ressource (tous axes cockpit)
-  + Σ entrées virement interne 580 (même règle que refresh détail)
+revenue_eligible_amount (lignes)
+  = nb lignes domaine ressource (tous axes cockpit)
+  + nb buckets virement interne 580 entrée qualifiés
 
-expense_eligible_amount
-  = Σ lignes domaine dépense (tous axes cockpit)
-  + Σ sorties virement interne 580
+expense_eligible_amount (lignes)
+  = nb lignes domaine dépense (tous axes cockpit)
+  + nb buckets virement interne 580 sortie qualifiés
 ```
 
 > **Important :** le KPI **Ressources totales** affiché aujourd’hui = `resources_realized` (recettes activité + financements). Le KPI **Ressources facturées** porte sur le périmètre **Ressource colonne détail** (domaine ressource), **pas** sur le libellé carte « Ressources totales » seul. Les financements sans facture **diminuent** le taux — comportement MOA voulu.
@@ -290,7 +289,9 @@ expense_eligible_amount
 | Réf. | Critère | OK |
 |------|---------|:--:|
 | **RT-DOC-01** | Les deux KPI visibles en Synthèse graphique | [ ] |
-| **RT-DOC-02** | Calcul **en montant** sur lignes éligibles, pas en nombre de factures | [ ] |
+| **RT-DOC-02** | Calcul **en nombre de lignes** éligibles, pas en montant ni en nombre de factures | [ ] |
+| **RT-DOC-02b** | Une grosse ligne bancaire ne domine pas le taux à elle seule | [ ] |
+| **RT-DOC-02c** | Facture multi-lignes → autant de lignes éligibles que de lignes comptables | [ ] |
 | **RT-DOC-03** | Facture client → numérateur Ressources facturées | [ ] |
 | **RT-DOC-04** | Ressource sans facture → dénominateur seulement | [ ] |
 | **RT-DOC-05** | Facture fournisseur → numérateur Dépenses facturées | [ ] |
@@ -303,20 +304,20 @@ expense_eligible_amount
 
 ### Jeu de données recette suggéré
 
-| Pièce | Montant | Ressources fact. | Dépenses fact. |
-|-------|--------:|:----------------:|:--------------:|
-| Facture client payée + analytique Bar | 1 000 € | ↑ num. | — |
-| Facture client impayée + analytique Bar | 800 € | ↑ num. | — |
-| Facture fournisseur payée Structure | 400 € | — | ↑ num. |
-| Facture fournisseur impayée Structure | 300 € | — | ↑ num. |
-| OD banque + analytique Missions | 275 € | — | ↓ dénom. seul |
-| VIR_INT entrée 580 | 9 000 € | ↓ dénom. seul | — |
+| Pièce | Lignes éligibles | Ressources fact. | Dépenses fact. |
+|-------|:----------------:|:----------------:|:--------------:|
+| Facture client payée + analytique Bar | 1 | ↑ num. | — |
+| Facture client impayée + analytique Bar | 1 | ↑ num. | — |
+| Facture fournisseur payée Structure | 1 | — | ↑ num. |
+| Facture fournisseur impayée Structure | 1 | — | ↑ num. |
+| OD banque + analytique Missions | 1 | — | ↓ dénom. seul |
+| VIR_INT entrée 580 | 1 | ↓ dénom. seul | — |
 
-Exemple attendu (ordre de grandeur) :
+Exemple attendu (ordre de grandeur, **comptage lignes**) :
 
 ```text
-Ressources facturées ≈ 1 800 / 11 800 ≈ 15 %   (1 000 + 800 sur 1 800 + 9 000 + …)
-Dépenses facturées   ≈   700 /   975 ≈ 72 %   (400 + 300 sur 700 + 275 + …)
+Ressources facturées ≈ 2 / 3 ≈ 67 %   (2 factures client sur 2 factures + 1 VIR_INT)
+Dépenses facturées   ≈ 2 / 3 ≈ 67 %   (2 factures fourn. sur 2 factures + 1 OD banque)
 ```
 
 *(Ajuster selon périmètre exact financements / axes de la période test.)*
@@ -331,7 +332,9 @@ Classe suggérée : `TestGlcCoverageCockpitSynthesisDocumentQuality`
 |------|----------|
 | DOC-01 | Facture client seule → taux ressource = 100 % |
 | DOC-02 | Banque sans facture seule → taux ressource = 0 % |
-| DOC-03 | Mix facture + banque → taux cohérent |
+| DOC-03 | Mix facture + banque → taux = lignes facturées / lignes éligibles |
+| DOC-03b | Grosse ligne banque → taux inchangé vs petite facture (50 % si 1+1 lignes) |
+| DOC-03c | Facture 2 lignes produit → 2 lignes au numérateur et dénominateur |
 | DOC-04 | Facture fournisseur seule → taux dépense = 100 % |
 | DOC-05 | 580 VIR_INT → hors numérateur ressource |
 | DOC-06 | Dénominateur nul → taux `False` / pas de division |
@@ -353,19 +356,19 @@ Je souhaite ajouter deux indicateurs visuels dans l’onglet Synthèse graphique
 
 Attention doctrine : il ne s’agit pas de compter les factures.
 
-Le cockpit raisonne sur des lignes comptables / écritures comptables éligibles au pilotage. Les KPI doivent donc mesurer, en montant, la part des lignes Ressource et Dépense dont l’écriture d’origine est une facture.
+Le cockpit raisonne sur des lignes comptables / écritures comptables éligibles au pilotage. Les KPI doivent mesurer, en **nombre de lignes**, la part des lignes Ressource et Dépense dont l’écriture d’origine est une facture.
 
 Définitions attendues :
 
 Ressources facturées =
-montant des lignes Ressource éligibles au cockpit dont l’écriture d’origine est une facture client
+nombre de lignes Ressource éligibles au cockpit dont l’écriture d’origine est une facture client
 /
-montant total des lignes Ressource éligibles au cockpit
+nombre total de lignes Ressource éligibles au cockpit
 
 Dépenses facturées =
-montant des lignes Dépense éligibles au cockpit dont l’écriture d’origine est une facture fournisseur
+nombre de lignes Dépense éligibles au cockpit dont l’écriture d’origine est une facture fournisseur
 /
-montant total des lignes Dépense éligibles au cockpit
+nombre total de lignes Dépense éligibles au cockpit
 
 Ces indicateurs mesurent la qualité documentaire des écritures, pas le paiement.
 
@@ -392,9 +395,12 @@ Hors périmètre :
 
 Critères de recette :
 - les deux KPI sont visibles ;
-- le calcul est fait en montant sur les lignes comptables éligibles ;
-- les écritures issues de factures alimentent le numérateur ;
+- le calcul est fait en **nombre de lignes comptables éligibles** ;
+- **aucun** calcul pondéré par montant ;
+- **aucun** comptage de factures ;
+- les écritures issues de factures alimentent le numérateur (1 ligne comptable = 1 unité) ;
 - les écritures sans facture restent au dénominateur uniquement ;
+- une grosse ligne bancaire ne doit pas écraser le taux à elle seule ;
 - les écritures bancaires directes et virements internes sont considérés comme non facturés ;
 - aucun impact sur les KPI, graphiques et montants existants.
 
@@ -414,4 +420,4 @@ Ticket détaillé : docs/TICKET_COCKPIT_SYNTHESE_KPI_QUALITE_DOCUMENTAIRE.md
 
 ---
 
-*Demande MOA corrigée — ne pas confondre avec Q3 « Tiers & paiements » (cycle facturation) ni avec le filtre « Payé uniquement » (tableau Détail).*
+*Demande MOA corrigée (2026-05-30) — calcul en **nombre de lignes**, pas en montant. Ne pas confondre avec Q3 « Tiers & paiements » (cycle facturation) ni avec le filtre « Payé uniquement » (tableau Détail).*

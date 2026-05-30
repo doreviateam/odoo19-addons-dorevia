@@ -34,22 +34,28 @@
                         <div class="o_glc_kpi_hint">recette + financements</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Ressources facturées</div>
-                        <div t-att-class="'o_glc_kpi_value ' + documentQualityClass(revenueInvoicedRate, revenueEligibleAmount)"
-                             t-esc="formatDocumentQualityRate(revenueInvoicedRate, revenueEligibleAmount)"/>
-                        <div class="o_glc_kpi_hint">part des ressources issues de factures client</div>
-                    </div>
-                    <div class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Dépenses facturées</div>
-                        <div t-att-class="'o_glc_kpi_value ' + documentQualityClass(expenseInvoicedRate, expenseEligibleAmount)"
-                             t-esc="formatDocumentQualityRate(expenseInvoicedRate, expenseEligibleAmount)"/>
-                        <div class="o_glc_kpi_hint">part des dépenses issues de factures fournisseur</div>
+                        <div class="o_glc_kpi_label">Dépenses totales</div>
+                        <div class="o_glc_kpi_value o_glc_kpi_neutral"
+                             t-esc="formatAmount(totalExpensesRealized)"/>
+                        <div class="o_glc_kpi_hint">cumul RH + dépenses</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
                         <div class="o_glc_kpi_label">Couverture du Cumul RH</div>
                         <div t-att-class="'o_glc_kpi_value ' + coverageClass(agg.salaryCoverageRate)"
                              t-esc="formatCoverageRate(agg.salaryCoverageRate)"/>
                         <div class="o_glc_kpi_hint">ressources / cumul RH × 100</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Taux lettrage clients</div>
+                        <div t-att-class="'o_glc_kpi_value ' + reconcileClass(reconcileRateCustomer)"
+                             t-esc="formatReconcileRate(reconcileRateCustomer)"/>
+                        <div class="o_glc_kpi_hint">stock clients lettré fin période</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Taux lettrage fournisseurs</div>
+                        <div t-att-class="'o_glc_kpi_value ' + reconcileClass(reconcileRateSupplier)"
+                             t-esc="formatReconcileRate(reconcileRateSupplier)"/>
+                        <div class="o_glc_kpi_hint">stock fournisseurs lettré fin période</div>
                     </div>
                 </div>
 

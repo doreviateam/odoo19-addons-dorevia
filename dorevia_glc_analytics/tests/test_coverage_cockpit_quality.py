@@ -192,3 +192,29 @@ class TestGlcCoverageCockpitQuality(TestGlcCoverageCockpitTreasury):
         )
         cockpit.action_refresh()
         self.assertGreater(cockpit.quality_analytic_lines_checked, 0)
+
+    def test_q2_reconcile_rates_exposed_on_cockpit_for_synthesis(self):
+        """Synthèse — les taux lettrage Q2 sont stockés sur le cockpit sans recalcul parallèle."""
+        year = self._next_test_year()
+        self._create_invoice_one_line(
+            price_unit=500.0,
+            move_type="out_invoice",
+            invoice_date="%s-06-10" % year,
+            tax_ids=[Command.clear()],
+            post=True,
+        )
+        cockpit = self._create_cockpit(year=year)
+        cockpit.action_refresh()
+        expected = cockpit._aggregate_quality_reconcile(
+            cockpit.date_from, cockpit.date_to
+        )
+        self.assertAlmostEqual(
+            cockpit.quality_reconcile_rate_customer,
+            expected["quality_reconcile_rate_customer"],
+            places=2,
+        )
+        self.assertAlmostEqual(
+            cockpit.quality_reconcile_rate_supplier,
+            expected["quality_reconcile_rate_supplier"],
+            places=2,
+        )

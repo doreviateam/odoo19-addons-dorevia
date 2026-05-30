@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.10.0.1",
+    "version": "19.0.11.0.2",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — cockpit pilotage d'exploitation.",
     "description": """
