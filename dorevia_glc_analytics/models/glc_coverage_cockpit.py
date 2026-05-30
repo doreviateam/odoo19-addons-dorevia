@@ -177,6 +177,36 @@ class GlcCoverageCockpit(models.TransientModel):
         readonly=True,
         help="Lecture intermédiaire : ressources disponibles / masse salariale.",
     )
+    revenue_eligible_amount = fields.Monetary(
+        string="Ressources éligibles (montant)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    revenue_invoiced_amount = fields.Monetary(
+        string="Ressources facturées (montant)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    revenue_invoiced_rate = fields.Float(
+        string="Ressources facturées (%)",
+        digits=(16, 2),
+        readonly=True,
+    )
+    expense_eligible_amount = fields.Monetary(
+        string="Dépenses éligibles (montant)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    expense_invoiced_amount = fields.Monetary(
+        string="Dépenses facturées (montant)",
+        readonly=True,
+        currency_field="currency_id",
+    )
+    expense_invoiced_rate = fields.Float(
+        string="Dépenses facturées (%)",
+        digits=(16, 2),
+        readonly=True,
+    )
     balance_after_payroll = fields.Monetary(
         string="Solde après masse salariale",
         readonly=True,
@@ -732,6 +762,14 @@ class GlcCoverageCockpit(models.TransientModel):
         lines = self.env["account.analytic.line"].search(domain)
         return sum(self._signed_analytic_amount(line) for line in lines)
 
+    def _sum_lines_matching(self, domain, predicate):
+        lines = self.env["account.analytic.line"].search(domain)
+        return sum(
+            self._signed_analytic_amount(line)
+            for line in lines
+            if predicate(line)
+        )
+
     def _sum_revenue_realized(self, analytic_accounts, date_from, date_to):
         """Σ classe 7 + analytique sur les comptes passés (recettes ou financements)."""
         if not analytic_accounts:
@@ -747,6 +785,56 @@ class GlcCoverageCockpit(models.TransientModel):
         return self._sum_lines(
             self._expense_analytic_line_domain(date_from, date_to, analytic_accounts)
         )
+
+    def _sum_revenue_invoiced(self, analytic_accounts, date_from, date_to):
+        if not analytic_accounts:
+            return 0.0
+        return self._sum_lines_matching(
+            self._revenue_analytic_line_domain(date_from, date_to, analytic_accounts),
+            self._glc_analytic_line_is_customer_invoice_for_cockpit,
+        )
+
+    def _sum_expense_invoiced(self, analytic_accounts, date_from, date_to):
+        if not analytic_accounts:
+            return 0.0
+        return self._sum_lines_matching(
+            self._expense_analytic_line_domain(date_from, date_to, analytic_accounts),
+            self._glc_analytic_line_is_supplier_invoice_for_cockpit,
+        )
+
+    def _document_quality_rate(self, invoiced_amount, eligible_amount):
+        if eligible_amount < 0.005:
+            return 0.0
+        return (invoiced_amount / eligible_amount) * 100.0
+
+    def _aggregate_document_quality(self, period_start, period_end):
+        """KPI Synthèse — part des montants ressource / dépense issue d'une facture."""
+        self.ensure_one()
+        cockpit_accounts = self._cockpit_analytic_accounts()
+        revenue_eligible = self._sum_revenue_realized(
+            cockpit_accounts, period_start, period_end
+        )
+        revenue_invoiced = self._sum_revenue_invoiced(
+            cockpit_accounts, period_start, period_end
+        )
+        expense_eligible = self._sum_expense_realized(
+            cockpit_accounts, period_start, period_end
+        )
+        expense_invoiced = self._sum_expense_invoiced(
+            cockpit_accounts, period_start, period_end
+        )
+        return {
+            "revenue_eligible_amount": revenue_eligible,
+            "revenue_invoiced_amount": revenue_invoiced,
+            "revenue_invoiced_rate": self._document_quality_rate(
+                revenue_invoiced, revenue_eligible
+            ),
+            "expense_eligible_amount": expense_eligible,
+            "expense_invoiced_amount": expense_invoiced,
+            "expense_invoiced_rate": self._document_quality_rate(
+                expense_invoiced, expense_eligible
+            ),
+        }
 
     def _sum_payroll_realized(self, date_from, date_to, activity_account=None):
         """Σ classe 6 payroll + analytique (toutes activités par défaut)."""
@@ -995,6 +1083,7 @@ class GlcCoverageCockpit(models.TransientModel):
         date_from, date_to = self._period_bounds()
         totals = self._aggregate_period(date_from, date_to)
         treasury = self._aggregate_treasury(date_from, date_to)
+        document_quality = self._aggregate_document_quality(date_from, date_to)
 
         salary_coverage_rate = 0.0
         if totals["payroll_realized"]:
@@ -1103,6 +1192,7 @@ class GlcCoverageCockpit(models.TransientModel):
             {
                 **totals,
                 **treasury,
+                **document_quality,
                 "salary_coverage_rate": salary_coverage_rate,
                 "balance_after_payroll": balance_after_payroll,
                 "balance_after_fixed": balance_after_fixed,

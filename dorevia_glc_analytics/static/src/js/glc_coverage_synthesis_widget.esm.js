@@ -97,6 +97,32 @@ export class GlcCoverageSynthesisField extends Component {
         return `${rate.toFixed(0)} %`;
     }
 
+    formatDocumentQualityRate(rate, eligibleAmount) {
+        if (this.isZero(eligibleAmount)) {
+            return "—";
+        }
+        if (rate === false || rate === null || rate === undefined) {
+            return "—";
+        }
+        return `${rate.toFixed(0)} %`;
+    }
+
+    documentQualityClass(rate, eligibleAmount) {
+        if (this.isZero(eligibleAmount)) {
+            return "o_glc_kpi_neutral";
+        }
+        if (rate === false || rate === null || rate === undefined) {
+            return "o_glc_kpi_neutral";
+        }
+        if (rate >= 90) {
+            return "o_glc_kpi_positive";
+        }
+        if (rate >= 60) {
+            return "o_glc_kpi_warning";
+        }
+        return "o_glc_kpi_negative";
+    }
+
     coverageClass(rate) {
         if (rate === null || rate === undefined) {
             return "o_glc_kpi_neutral";
@@ -173,6 +199,22 @@ export class GlcCoverageSynthesisField extends Component {
 
     get resourcesRealized() {
         return this.props.record.data.resources_realized || 0;
+    }
+
+    get revenueInvoicedRate() {
+        return this.props.record.data.revenue_invoiced_rate;
+    }
+
+    get revenueEligibleAmount() {
+        return this.props.record.data.revenue_eligible_amount || 0;
+    }
+
+    get expenseInvoicedRate() {
+        return this.props.record.data.expense_invoiced_rate;
+    }
+
+    get expenseEligibleAmount() {
+        return this.props.record.data.expense_eligible_amount || 0;
     }
 
     get fundingRealized() {

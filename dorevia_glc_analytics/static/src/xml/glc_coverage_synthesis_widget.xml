@@ -34,6 +34,18 @@
                         <div class="o_glc_kpi_hint">recette + financements</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Ressources facturées</div>
+                        <div t-att-class="'o_glc_kpi_value ' + documentQualityClass(revenueInvoicedRate, revenueEligibleAmount)"
+                             t-esc="formatDocumentQualityRate(revenueInvoicedRate, revenueEligibleAmount)"/>
+                        <div class="o_glc_kpi_hint">part des ressources issues de factures client</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Dépenses facturées</div>
+                        <div t-att-class="'o_glc_kpi_value ' + documentQualityClass(expenseInvoicedRate, expenseEligibleAmount)"
+                             t-esc="formatDocumentQualityRate(expenseInvoicedRate, expenseEligibleAmount)"/>
+                        <div class="o_glc_kpi_hint">part des dépenses issues de factures fournisseur</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
                         <div class="o_glc_kpi_label">Couverture du Cumul RH</div>
                         <div t-att-class="'o_glc_kpi_value ' + coverageClass(agg.salaryCoverageRate)"
                              t-esc="formatCoverageRate(agg.salaryCoverageRate)"/>

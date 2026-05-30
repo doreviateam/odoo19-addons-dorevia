@@ -11,7 +11,9 @@
     }
 
     .o_glc_kpi_card {
-        min-width: 180px;
+        min-width: 160px;
+        flex: 1 1 160px;
+        max-width: 100%;
         background-color: #ffffff;
         border: 1px solid var(--bs-border-color, #d6d9de);
         border-radius: 6px;

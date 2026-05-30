@@ -69,6 +69,13 @@
                             <p class="text-muted small mb-3" invisible="has_budget_data">
                                 Aucun budget renseigné sur cette période — les écarts budget ne sont pas significatifs.
                             </p>
+                            <field name="detail_line_count" invisible="1"/>
+                            <field name="revenue_eligible_amount" invisible="1"/>
+                            <field name="revenue_invoiced_amount" invisible="1"/>
+                            <field name="revenue_invoiced_rate" invisible="1"/>
+                            <field name="expense_eligible_amount" invisible="1"/>
+                            <field name="expense_invoiced_amount" invisible="1"/>
+                            <field name="expense_invoiced_rate" invisible="1"/>
                             <div class="alert alert-light border mb-0" role="status"
                                  invisible="detail_line_count">
                                 <p class="mb-2">
@@ -95,6 +102,12 @@
                                 Aucun budget renseigné sur cette période — cocher « Budget ? » n'affichera que des tirets.
                             </p>
                             <field name="detail_line_count" invisible="1"/>
+                            <field name="revenue_eligible_amount" invisible="1"/>
+                            <field name="revenue_invoiced_amount" invisible="1"/>
+                            <field name="revenue_invoiced_rate" invisible="1"/>
+                            <field name="expense_eligible_amount" invisible="1"/>
+                            <field name="expense_invoiced_amount" invisible="1"/>
+                            <field name="expense_invoiced_rate" invisible="1"/>
                             <div class="alert alert-light border mb-0" role="status"
                                  invisible="detail_line_count">
                                 <p class="mb-2">

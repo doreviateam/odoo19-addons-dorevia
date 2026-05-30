@@ -117,3 +117,22 @@ class GlcCoverageCockpit(models.TransientModel):
         if rate >= 95.0:
             return "orange"
         return "red"
+
+    _GLC_CUSTOMER_INVOICE_MOVE_TYPE = "out_invoice"
+    _GLC_SUPPLIER_INVOICE_MOVE_TYPE = "in_invoice"
+
+    @api.model
+    def _glc_analytic_line_is_customer_invoice_for_cockpit(self, analytic_line):
+        """Ligne ressource issue d'une facture client (KPI qualité documentaire)."""
+        move_line = analytic_line.move_line_id
+        if not move_line:
+            return False
+        return move_line.move_id.move_type == self._GLC_CUSTOMER_INVOICE_MOVE_TYPE
+
+    @api.model
+    def _glc_analytic_line_is_supplier_invoice_for_cockpit(self, analytic_line):
+        """Ligne dépense issue d'une facture fournisseur (KPI qualité documentaire)."""
+        move_line = analytic_line.move_line_id
+        if not move_line:
+            return False
+        return move_line.move_id.move_type == self._GLC_SUPPLIER_INVOICE_MOVE_TYPE
