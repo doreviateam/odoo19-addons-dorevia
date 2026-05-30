@@ -97,6 +97,28 @@ export class GlcCoverageSynthesisField extends Component {
         return `${rate.toFixed(0)} %`;
     }
 
+    formatReconcileRate(rate) {
+        if (rate === null || rate === undefined) {
+            return "—";
+        }
+        const rounded = Math.round(rate * 100) / 100;
+        const text = rounded.toFixed(2).replace(/\.?0+$/, "");
+        return `${text} %`;
+    }
+
+    reconcileClass(rate) {
+        if (rate === null || rate === undefined) {
+            return "o_glc_kpi_neutral";
+        }
+        if (rate >= 90) {
+            return "o_glc_kpi_positive";
+        }
+        if (rate >= 60) {
+            return "o_glc_kpi_warning";
+        }
+        return "o_glc_kpi_negative";
+    }
+
     coverageClass(rate) {
         if (rate === null || rate === undefined) {
             return "o_glc_kpi_neutral";
@@ -173,6 +195,18 @@ export class GlcCoverageSynthesisField extends Component {
 
     get resourcesRealized() {
         return this.props.record.data.resources_realized || 0;
+    }
+
+    get totalExpensesRealized() {
+        return this.props.record.data.fixed_charges_realized || 0;
+    }
+
+    get reconcileRateCustomer() {
+        return this.props.record.data.quality_reconcile_rate_customer;
+    }
+
+    get reconcileRateSupplier() {
+        return this.props.record.data.quality_reconcile_rate_supplier;
     }
 
     get fundingRealized() {
@@ -374,7 +408,7 @@ export class GlcCoverageSynthesisField extends Component {
                 datasets: [
                     {
                         type: "bar",
-                        label: "Recette",
+                        label: "Ressource",
                         data: revenueData,
                         backgroundColor: COLOR_REVENUE,
                         borderRadius: 2,

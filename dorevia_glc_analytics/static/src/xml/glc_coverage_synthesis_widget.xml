@@ -34,10 +34,28 @@
                         <div class="o_glc_kpi_hint">recette + financements</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Dépenses totales</div>
+                        <div class="o_glc_kpi_value o_glc_kpi_neutral"
+                             t-esc="formatAmount(totalExpensesRealized)"/>
+                        <div class="o_glc_kpi_hint">cumul RH + dépenses</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
                         <div class="o_glc_kpi_label">Couverture du Cumul RH</div>
                         <div t-att-class="'o_glc_kpi_value ' + coverageClass(agg.salaryCoverageRate)"
                              t-esc="formatCoverageRate(agg.salaryCoverageRate)"/>
                         <div class="o_glc_kpi_hint">ressources / cumul RH × 100</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Taux lettrage clients</div>
+                        <div t-att-class="'o_glc_kpi_value ' + reconcileClass(reconcileRateCustomer)"
+                             t-esc="formatReconcileRate(reconcileRateCustomer)"/>
+                        <div class="o_glc_kpi_hint">stock clients lettré fin période</div>
+                    </div>
+                    <div class="o_glc_kpi_card flex-fill">
+                        <div class="o_glc_kpi_label">Taux lettrage fournisseurs</div>
+                        <div t-att-class="'o_glc_kpi_value ' + reconcileClass(reconcileRateSupplier)"
+                             t-esc="formatReconcileRate(reconcileRateSupplier)"/>
+                        <div class="o_glc_kpi_hint">stock fournisseurs lettré fin période</div>
                     </div>
                 </div>
 
@@ -51,9 +69,9 @@
 
                     <div class="o_glc_chart_block">
                         <h6 class="o_glc_chart_title d-flex align-items-center gap-1 mb-2">
-                            <span>Structure mensuelle — Recette / Cumul RH / Dépense</span>
+                            <span>Structure mensuelle — Ressource / Cumul RH / Dépense</span>
                             <span class="o_glc_chart_help"
-                                  title="Barres : masses mensuelles (Recette, Cumul RH, Dépense). Courbe : solde net du mois (Recette − Cumul RH − Dépense).">
+                                  title="Barres : masses mensuelles (Ressource, Cumul RH, Dépense). Courbe : solde net du mois (Ressource − Cumul RH − Dépense).">
                                 ⓘ
                             </span>
                         </h6>
