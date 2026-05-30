@@ -2,7 +2,12 @@
 
 from odoo import _, api, fields, models
 
-from .glc_constants import GLC_EXPENSE_ACCOUNT_TYPES, GLC_INCOME_ACCOUNT_TYPES
+from .glc_constants import (
+    GLC_EXCLUDED_GL_ACCOUNT_PREFIXES,
+    GLC_EXPENSE_ACCOUNT_TYPES,
+    GLC_INCOME_ACCOUNT_TYPES,
+    GLC_PAYROLL_ACCOUNT_PREFIXES,
+)
 
 
 class GlcCoverageCockpit(models.TransientModel):
@@ -223,7 +228,7 @@ class GlcCoverageCockpit(models.TransientModel):
         currency_field="currency_id",
     )
 
-    def _quality_analytic_controlled_lines(self, date_from, date_to):
+    def _quality_analytic_controlled_domain(self, date_from, date_to):
         self.ensure_one()
         domain = [
             ("company_id", "=", self.company_id.id),
@@ -236,15 +241,40 @@ class GlcCoverageCockpit(models.TransientModel):
                 "in",
                 list(GLC_INCOME_ACCOUNT_TYPES + GLC_EXPENSE_ACCOUNT_TYPES),
             ),
+            "|",
+            ("account_id.code", "=like", "6%"),
+            ("account_id.code", "=like", "7%"),
         ]
-        lines = self.env["account.move.line"].search(domain)
-        return lines.filtered(self._glc_is_coverage_controlled_line)
+        for prefix in (
+            ("512", "53", "580")
+            + GLC_PAYROLL_ACCOUNT_PREFIXES
+            + GLC_EXCLUDED_GL_ACCOUNT_PREFIXES
+        ):
+            domain.append(("account_id.code", "not like", prefix + "%"))
+        return domain
+
+    def _quality_analytic_controlled_lines(self, date_from, date_to):
+        return self.env["account.move.line"].search(
+            self._quality_analytic_controlled_domain(date_from, date_to)
+        )
 
     def _aggregate_quality_analytic(self, date_from, date_to):
         self.ensure_one()
         lines = self._quality_analytic_controlled_lines(date_from, date_to)
         checked = len(lines)
-        covered = len(lines.filtered(self._glc_line_has_analytic_coverage))
+        line_ids_with_analytic = set()
+        if lines:
+            line_ids_with_analytic = set(
+                self.env["account.analytic.line"]
+                .search([("move_line_id", "in", lines.ids)])
+                .mapped("move_line_id")
+                .ids
+            )
+        covered = sum(
+            1
+            for line in lines
+            if line.analytic_distribution or line.id in line_ids_with_analytic
+        )
         to_qualify = checked - covered
         rate = (covered / checked * 100.0) if checked else 100.0
         detail = _(
@@ -324,18 +354,33 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _payment_moves(self, date_from, date_to, move_types):
         self.ensure_one()
-        moves = self.env["account.move"].search(
-            [
-                ("company_id", "=", self.company_id.id),
-                ("state", "=", "posted"),
-                ("move_type", "in", move_types),
-            ]
+        return self.env["account.move"].search(
+            self._payment_moves_domain(date_from, date_to, move_types)
         )
-        return moves.filtered(lambda move: self._glc_move_in_period(move, date_from, date_to))
+
+    def _payment_moves_domain(
+        self, date_from, date_to, move_types, payment_states=None
+    ):
+        self.ensure_one()
+        domain = [
+            ("company_id", "=", self.company_id.id),
+            ("state", "=", "posted"),
+            ("move_type", "in", move_types),
+            "|",
+            "&",
+            ("invoice_date", ">=", date_from),
+            ("invoice_date", "<=", date_to),
+            "&",
+            ("invoice_date", "=", False),
+            "&",
+            ("date", ">=", date_from),
+            ("date", "<=", date_to),
+        ]
+        if payment_states:
+            domain.append(("payment_state", "in", list(payment_states)))
+        return domain
 
     def _aggregate_payment_side(self, date_from, date_to, invoice_type, refund_type):
-        invoices = self._payment_moves(date_from, date_to, [invoice_type])
-        refunds = self._payment_moves(date_from, date_to, [refund_type])
         states = {
             "paid": {"count": 0, "amount": 0.0},
             "partial": {"count": 0, "amount": 0.0},
@@ -343,19 +388,30 @@ class GlcCoverageCockpit(models.TransientModel):
             "not_paid": {"count": 0, "amount": 0.0},
         }
         residual = 0.0
-        for move in invoices:
-            state = move.payment_state
+        invoice_rows = self.env["account.move"]._read_group(
+            self._payment_moves_domain(date_from, date_to, [invoice_type]),
+            ["payment_state"],
+            ["__count", "amount_total_signed:sum", "amount_residual_signed:sum"],
+        )
+        for state, count, amount_total, amount_residual in invoice_rows:
             if state not in states:
                 state = "not_paid"
-            states[state]["count"] += 1
-            states[state]["amount"] += abs(move.amount_total_signed)
-            if move.amount_residual:
-                residual += abs(move.amount_residual_signed)
+            states[state]["count"] += count
+            states[state]["amount"] += abs(amount_total or 0.0)
+            residual += abs(amount_residual or 0.0)
+        refund_rows = self.env["account.move"]._read_group(
+            self._payment_moves_domain(date_from, date_to, [refund_type]),
+            [],
+            ["__count", "amount_total_signed:sum"],
+        )
+        refund_count = refund_amount = 0
+        if refund_rows:
+            refund_count, refund_amount = refund_rows[0]
         return {
-            "invoice_count": len(invoices),
-            "invoice_amount": sum(abs(move.amount_total_signed) for move in invoices),
-            "refund_count": len(refunds),
-            "refund_amount": sum(abs(move.amount_total_signed) for move in refunds),
+            "invoice_count": sum(value["count"] for value in states.values()),
+            "invoice_amount": sum(value["amount"] for value in states.values()),
+            "refund_count": refund_count,
+            "refund_amount": abs(refund_amount or 0.0),
             "residual": residual,
             **{
                 f"{key}_count": value["count"]
@@ -497,15 +553,14 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _payment_move_action(self, title, date_from, date_to, move_types, payment_states=None):
         self.ensure_one()
-        moves = self._payment_moves(date_from, date_to, move_types)
-        if payment_states:
-            moves = moves.filtered(lambda move: move.payment_state in payment_states)
         return {
             "type": "ir.actions.act_window",
             "name": title,
             "res_model": "account.move",
             "view_mode": "list,form",
-            "domain": [("id", "in", moves.ids)],
+            "domain": self._payment_moves_domain(
+                date_from, date_to, move_types, payment_states=payment_states
+            ),
             "context": {"create": False},
             "target": "current",
         }

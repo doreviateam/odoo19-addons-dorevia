@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from calendar import monthrange
+from collections import defaultdict
 from datetime import date
 
 from odoo import _, api, fields, models
@@ -718,6 +719,73 @@ class GlcCoverageCockpit(models.TransientModel):
             domain, self._glc_analytic_line_is_paid_for_cockpit
         )
 
+    def _analytic_account_ids_from_line(self, line, eligible_ids):
+        account_ids = set()
+        for column in self._plan_column_names():
+            account = line[column]
+            if account and account.id in eligible_ids:
+                account_ids.add(account.id)
+        return account_ids
+
+    def _sum_lines_by_account_month(self, domain, analytic_accounts, predicate=None):
+        """Pré-agrège les montants par mois et axe pour éviter les recherches N×M."""
+        result = defaultdict(float)
+        if not analytic_accounts:
+            return result
+        eligible_ids = set(analytic_accounts.ids)
+        lines = self.env["account.analytic.line"].search(domain)
+        for line in lines:
+            if predicate and not predicate(line):
+                continue
+            month_start = date(line.date.year, line.date.month, 1)
+            amount = self._signed_analytic_amount(line)
+            for account_id in self._analytic_account_ids_from_line(line, eligible_ids):
+                result[(month_start, account_id)] += amount
+        return result
+
+    def _period_activity_amount_maps(self, date_from, date_to, cockpit_accounts):
+        return {
+            "revenue_realized": self._sum_lines_by_account_month(
+                self._revenue_analytic_line_domain(
+                    date_from, date_to, cockpit_accounts
+                ),
+                cockpit_accounts,
+            ),
+            "revenue_realized_paid": self._sum_lines_by_account_month(
+                self._revenue_analytic_line_domain(
+                    date_from, date_to, cockpit_accounts
+                ),
+                cockpit_accounts,
+                predicate=self._glc_analytic_line_is_paid_for_cockpit,
+            ),
+            "expense_realized": self._sum_lines_by_account_month(
+                self._expense_analytic_line_domain(
+                    date_from, date_to, cockpit_accounts
+                ),
+                cockpit_accounts,
+            ),
+            "expense_realized_paid": self._sum_lines_by_account_month(
+                self._expense_analytic_line_domain(
+                    date_from, date_to, cockpit_accounts
+                ),
+                cockpit_accounts,
+                predicate=self._glc_analytic_line_is_paid_for_cockpit,
+            ),
+            "payroll_realized": self._sum_lines_by_account_month(
+                self._payroll_analytic_line_domain(
+                    date_from, date_to, cockpit_accounts
+                ),
+                cockpit_accounts,
+            ),
+            "payroll_realized_paid": self._sum_lines_by_account_month(
+                self._payroll_analytic_line_domain(
+                    date_from, date_to, cockpit_accounts
+                ),
+                cockpit_accounts,
+                predicate=self._glc_analytic_line_is_paid_for_cockpit,
+            ),
+        }
+
     def _sum_revenue_realized(self, analytic_accounts, date_from, date_to):
         """Σ classe 7 + analytique sur les comptes passés (recettes ou financements)."""
         if not analytic_accounts:
@@ -1218,32 +1286,34 @@ class GlcCoverageCockpit(models.TransientModel):
 
         line_vals = []
         cockpit_accounts = self._cockpit_analytic_accounts()
+        activity_amount_maps = self._period_activity_amount_maps(
+            date_from, date_to, cockpit_accounts
+        )
         for month_start in self._month_starts_in_period():
             slice_from, slice_to = self._month_slice_bounds(month_start)
             monthly_internal_buckets = self._aggregate_treasury_internal_buckets(
                 slice_from, slice_to
             )
             for account in cockpit_accounts:
-                revenue_realized = self._sum_revenue_realized(
-                    account, slice_from, slice_to
-                )
-                revenue_realized_paid = self._sum_revenue_realized_paid(
-                    account, slice_from, slice_to
-                )
-
-                expense_realized = self._sum_expense_realized(
-                    account, slice_from, slice_to
-                )
-                expense_realized_paid = self._sum_expense_realized_paid(
-                    account, slice_from, slice_to
-                )
-
-                payroll_realized = self._sum_payroll_realized(
-                    slice_from, slice_to, account
-                )
-                payroll_realized_paid = self._sum_payroll_realized_paid(
-                    slice_from, slice_to, account
-                )
+                amount_key = (month_start, account.id)
+                revenue_realized = activity_amount_maps["revenue_realized"][
+                    amount_key
+                ]
+                revenue_realized_paid = activity_amount_maps[
+                    "revenue_realized_paid"
+                ][amount_key]
+                expense_realized = activity_amount_maps["expense_realized"][
+                    amount_key
+                ]
+                expense_realized_paid = activity_amount_maps[
+                    "expense_realized_paid"
+                ][amount_key]
+                payroll_realized = activity_amount_maps["payroll_realized"][
+                    amount_key
+                ]
+                payroll_realized_paid = activity_amount_maps[
+                    "payroll_realized_paid"
+                ][amount_key]
 
                 internal_inflow, internal_outflow = (
                     self._internal_transfer_amounts_for_account(
