@@ -6,6 +6,7 @@ Version manifest initiale lue : `19.0.14.1.0`
 Version après correctif Lot A : `19.0.14.1.1`  
 Version après correctif Lot A suite : `19.0.14.1.2`
 Version après correctif Lot B perf initial : `19.0.14.2.0`
+Version après correctif Lot B suite : `19.0.14.2.1`
 Type d'audit : audit statique expert Odoo, orienté développeur.
 
 ## 1. Verdict synthétique
@@ -484,6 +485,37 @@ Résultat sandbox `glc-rgl-test-import` après upgrade `19.0.14.2.0` :
 - temps recalculs : `1.818s`, `1.838s`, `1.796s` ;
 - meilleur temps : `1.796s` ;
 - temps moyen : `1.817s`.
+
+### 12.1 Addendum correctif Lot B suite — agrégats exploitation / qualité
+
+Objectif : poursuivre la réduction des boucles `mois × axes` et limiter les chargements globaux côté qualité / paiement.
+
+Correctifs livrés :
+
+- pré-agrégation des lignes analytiques par `(mois, axe)` sur toute la période pour le détail cockpit :
+  - recettes ;
+  - recettes payées ;
+  - dépenses ;
+  - dépenses payées ;
+  - cumul RH ;
+  - cumul RH payé ;
+- remplacement des recherches répétées par axe et par mois par des lectures dans ces maps pré-agrégées ;
+- Q1 confiance analytique : domaine SQL plus sélectif dès la recherche `account.move.line` et recherche groupée des `account.analytic.line` liés, au lieu d'un `search_count()` par ligne comptable ;
+- Q3 tiers / paiements : agrégation des factures par `_read_group()` sur `payment_state`, avec domaine de période SQL équivalent à `invoice_date or date` ;
+- actions de drill-down Q3 basées sur un domaine direct, sans préchargement des factures en Python.
+
+Validation sandbox `glc-rgl-test-import` après upgrade `19.0.14.2.1` :
+
+- tests module : `122 tests`, `104 post-tests`, `0 failed`, `0 error(s)` ;
+- post-tests : `58.62s`, `47 443` requêtes ;
+- comparaison indicative avant ce lot : `203.45s`, `84 002` requêtes ;
+- benchmark YTD `2026-01-01` → `2026-05-30` : meilleur `0.194s`, moyen `0.205s` ;
+- benchmark 3 exercices `2024-01-01` → `2026-05-30` : meilleur `0.170s`, moyen `0.175s`.
+
+Points restant à traiter dans un futur lot performance :
+
+- transformer les agrégats analytiques principaux en `_read_group()` lorsque le traitement `abs(line.amount)` et les multi-plans pourront être couverts sans changer la doctrine métier ;
+- benchmarker explicitement un historique de 3 exercices lorsque la volumétrie réelle complète sera disponible.
 
 ## 13. Conclusion
 
