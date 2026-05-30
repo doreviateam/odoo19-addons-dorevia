@@ -15,8 +15,8 @@ Module Odoo 19 CE — **Pilotage analytique associatif** pour GLC (Saint-Aignan-
 
 **Version courante :** `19.0.4.0.0` (Palier 4 cockpit).
 
-**Suite MOA :** Palier 5 — enrichissements cockpit (exports, scénarios, trésorerie) · Palier 3 gelé dans `dorevia_glc_budget`.  
-Voir [cadrage Budget & Cockpit](./docs/CADRAGE_BUDGET_COCKPIT.md) · [ticket Palier 3](./docs/TICKET_PALIER_3.md) · [PALIERS.md](./docs/PALIERS.md).
+**Suite MOA :** Palier 5 — enrichissements cockpit (exports, trésorerie).  
+Voir [PALIERS.md](./docs/PALIERS.md).
 
 ## Renommage module (`19.0.3.1.0`)
 
@@ -51,8 +51,7 @@ Le script `migrations/19.0.3.1.0/pre-migrate.py` reprend la même logique lors d
 | Document | Description |
 |---|---|
 | [Spécification fonctionnelle V1.1](./docs/README.md) | Cahier des charges complet (cible) |
-| [Cadrage Budget & Cockpit](./docs/CADRAGE_BUDGET_COCKPIT.md) | Roadmap post-Palier 2 |
-| [Ticket Palier 3 — Budget](./docs/TICKET_PALIER_3.md) | Module `dorevia_glc_budget` |
+| [Cadrage Budget & Cockpit](./docs/CADRAGE_BUDGET_COCKPIT.md) | Roadmap historique |
 | [Ticket Palier 4 — Cockpit](./docs/TICKET_PALIER_4.md) | Couverture des salaires |
 | [Cadrage final Palier 4](./docs/CADRAGE_FINAL_PALIER_4.md) | Invariants non négociables cockpit (gate MOA) |
 | [Recette manuelle Palier 4](./docs/RECETTE_MANUELLE_PALIER_4.md) | Cockpit couverture des salaires |
