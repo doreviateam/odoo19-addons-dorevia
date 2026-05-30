@@ -372,9 +372,11 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _current_refresh_key(self):
         self.ensure_one()
-        return "%s|%s|%s" % (
+        return "%s|%s|%s|%s|%s" % (
+            self.company_id.id or "",
             self.date_from or "",
             self.date_to or "",
+            self.activity_account_id.id or "",
             self.reference_bank_journal_id.id or "",
         )
 
