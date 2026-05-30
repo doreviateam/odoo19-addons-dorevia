@@ -749,7 +749,7 @@ class GlcCoverageCockpit(models.TransientModel):
         return sum(1 for line in lines if predicate(line))
 
     def _count_internal_transfer_revenue_lines(
-        self, analytic_accounts, date_from, date_to
+        self, analytic_accounts, date_from, date_to, buckets=None
     ):
         """Chaque bucket 580 avec entrée = 1 ligne ressource éligible (hors facture)."""
         self.ensure_one()
@@ -757,7 +757,9 @@ class GlcCoverageCockpit(models.TransientModel):
             return 0
         eligible_ids = set(analytic_accounts.ids)
         count = 0
-        for bucket in self._aggregate_treasury_internal_buckets(date_from, date_to):
+        if buckets is None:
+            buckets = self._aggregate_treasury_internal_buckets(date_from, date_to)
+        for bucket in buckets:
             if bucket["internal_inflow"] < 0.005:
                 continue
             acc = bucket["analytic_account"]
@@ -766,7 +768,7 @@ class GlcCoverageCockpit(models.TransientModel):
         return count
 
     def _count_internal_transfer_expense_lines(
-        self, analytic_accounts, date_from, date_to
+        self, analytic_accounts, date_from, date_to, buckets=None
     ):
         """Chaque bucket 580 avec sortie = 1 ligne dépense éligible (hors facture)."""
         self.ensure_one()
@@ -774,7 +776,9 @@ class GlcCoverageCockpit(models.TransientModel):
             return 0
         eligible_ids = set(analytic_accounts.ids)
         count = 0
-        for bucket in self._aggregate_treasury_internal_buckets(date_from, date_to):
+        if buckets is None:
+            buckets = self._aggregate_treasury_internal_buckets(date_from, date_to)
+        for bucket in buckets:
             if bucket["internal_outflow"] < 0.005:
                 continue
             acc = bucket["analytic_account"]
@@ -782,13 +786,15 @@ class GlcCoverageCockpit(models.TransientModel):
                 count += 1
         return count
 
-    def _count_revenue_eligible_lines(self, analytic_accounts, date_from, date_to):
+    def _count_revenue_eligible_lines(
+        self, analytic_accounts, date_from, date_to, buckets=None
+    ):
         if not analytic_accounts:
             return 0
         return self._count_lines(
             self._revenue_analytic_line_domain(date_from, date_to, analytic_accounts)
         ) + self._count_internal_transfer_revenue_lines(
-            analytic_accounts, date_from, date_to
+            analytic_accounts, date_from, date_to, buckets=buckets
         )
 
     def _count_revenue_invoiced_lines(self, analytic_accounts, date_from, date_to):
@@ -799,13 +805,15 @@ class GlcCoverageCockpit(models.TransientModel):
             self._glc_analytic_line_is_customer_invoice_for_cockpit,
         )
 
-    def _count_expense_eligible_lines(self, analytic_accounts, date_from, date_to):
+    def _count_expense_eligible_lines(
+        self, analytic_accounts, date_from, date_to, buckets=None
+    ):
         if not analytic_accounts:
             return 0
         return self._count_lines(
             self._expense_analytic_line_domain(date_from, date_to, analytic_accounts)
         ) + self._count_internal_transfer_expense_lines(
-            analytic_accounts, date_from, date_to
+            analytic_accounts, date_from, date_to, buckets=buckets
         )
 
     def _count_expense_invoiced_lines(self, analytic_accounts, date_from, date_to):
@@ -821,18 +829,20 @@ class GlcCoverageCockpit(models.TransientModel):
             return 0.0
         return (invoiced_count / eligible_count) * 100.0
 
-    def _aggregate_document_quality(self, period_start, period_end):
+    def _aggregate_document_quality(
+        self, period_start, period_end, internal_buckets=None
+    ):
         """KPI Synthèse — part des lignes ressource / dépense issue d'une facture."""
         self.ensure_one()
         cockpit_accounts = self._cockpit_analytic_accounts()
         revenue_eligible = self._count_revenue_eligible_lines(
-            cockpit_accounts, period_start, period_end
+            cockpit_accounts, period_start, period_end, buckets=internal_buckets
         )
         revenue_invoiced = self._count_revenue_invoiced_lines(
             cockpit_accounts, period_start, period_end
         )
         expense_eligible = self._count_expense_eligible_lines(
-            cockpit_accounts, period_start, period_end
+            cockpit_accounts, period_start, period_end, buckets=internal_buckets
         )
         expense_invoiced = self._count_expense_invoiced_lines(
             cockpit_accounts, period_start, period_end
@@ -926,12 +936,10 @@ class GlcCoverageCockpit(models.TransientModel):
         if distribution:
             account_ids = [int(account_id) for account_id in distribution.keys()]
             accounts |= Account.browse(account_ids).exists()
-        accounts |= self.env["account.analytic.line"].search(
-            [("move_line_id", "=", line.id)]
-        ).mapped("account_id")
         analytic_lines = self.env["account.analytic.line"].search(
             [("move_line_id", "=", line.id)]
         )
+        accounts |= analytic_lines.mapped("account_id")
         for column in self._plan_column_names():
             accounts |= analytic_lines.mapped(column)
         return accounts
@@ -1008,12 +1016,16 @@ class GlcCoverageCockpit(models.TransientModel):
         """Ventile les virements internes par axe analytique et compte 580."""
         return self._aggregate_treasury_internal_buckets(date_from, date_to)
 
-    def _internal_transfer_amounts_for_account(self, account, date_from, date_to):
+    def _internal_transfer_amounts_for_account(
+        self, account, date_from, date_to, buckets=None
+    ):
         """Entrées / sorties virement interne pour un axe sur une tranche de dates."""
         self.ensure_one()
         target_id = account.id if account else 0
         inflow = outflow = 0.0
-        for bucket in self._aggregate_treasury_internal_buckets(date_from, date_to):
+        if buckets is None:
+            buckets = self._aggregate_treasury_internal_buckets(date_from, date_to)
+        for bucket in buckets:
             analytic_account = bucket["analytic_account"]
             if (analytic_account.id or 0) != target_id:
                 continue
@@ -1083,48 +1095,71 @@ class GlcCoverageCockpit(models.TransientModel):
             "treasury_has_data": bool(lines),
         }
 
-    def _sum_internal_transfer_inflow(self, analytic_accounts, date_from, date_to):
+    def _sum_internal_transfer_inflow(
+        self, analytic_accounts, date_from, date_to, buckets=None
+    ):
         """Entrées virement interne 580 qualifiées → recette cockpit."""
         self.ensure_one()
-        total = 0.0
-        for account in analytic_accounts:
-            inflow, _outflow = self._internal_transfer_amounts_for_account(
-                account, date_from, date_to
-            )
-            total += inflow
-        return total
+        if not analytic_accounts:
+            return 0.0
+        eligible_ids = set(analytic_accounts.ids)
+        if buckets is None:
+            buckets = self._aggregate_treasury_internal_buckets(date_from, date_to)
+        return sum(
+            bucket["internal_inflow"]
+            for bucket in buckets
+            if bucket["analytic_account"] and bucket["analytic_account"].id in eligible_ids
+        )
 
-    def _sum_internal_transfer_outflow(self, analytic_accounts, date_from, date_to):
+    def _sum_internal_transfer_outflow(
+        self, analytic_accounts, date_from, date_to, buckets=None
+    ):
         """Sorties virement interne 580 qualifiées → dépense cockpit."""
         self.ensure_one()
-        total = 0.0
-        for account in analytic_accounts:
-            _inflow, outflow = self._internal_transfer_amounts_for_account(
-                account, date_from, date_to
-            )
-            total += outflow
-        return total
+        if not analytic_accounts:
+            return 0.0
+        eligible_ids = set(analytic_accounts.ids)
+        if buckets is None:
+            buckets = self._aggregate_treasury_internal_buckets(date_from, date_to)
+        return sum(
+            bucket["internal_outflow"]
+            for bucket in buckets
+            if bucket["analytic_account"] and bucket["analytic_account"].id in eligible_ids
+        )
 
-    def _aggregate_period(self, period_start, period_end):
+    def _aggregate_period(self, period_start, period_end, internal_buckets=None):
         self.ensure_one()
         cockpit_accounts = self._cockpit_analytic_accounts()
         funding_accounts = self._funding_analytic_accounts()
         activity_revenue_accounts = self._activity_revenue_analytic_accounts()
+        if internal_buckets is None:
+            internal_buckets = self._aggregate_treasury_internal_buckets(
+                period_start, period_end
+            )
 
         activity_revenue_realized = self._sum_revenue_realized(
             activity_revenue_accounts, period_start, period_end
         ) + self._sum_internal_transfer_inflow(
-            activity_revenue_accounts, period_start, period_end
+            activity_revenue_accounts,
+            period_start,
+            period_end,
+            buckets=internal_buckets,
         )
         funding_realized = self._sum_revenue_realized(
             funding_accounts, period_start, period_end
         ) + self._sum_internal_transfer_inflow(
-            funding_accounts, period_start, period_end
+            funding_accounts,
+            period_start,
+            period_end,
+            buckets=internal_buckets,
         )
         general_expenses_realized = self._sum_expense_realized(
             cockpit_accounts, period_start, period_end
         ) + self._sum_internal_transfer_outflow(
-            cockpit_accounts, period_start, period_end
+            cockpit_accounts,
+            period_start,
+            period_end,
+            buckets=internal_buckets,
         )
         payroll_realized = self._sum_payroll_realized(
             period_start,
@@ -1155,12 +1190,17 @@ class GlcCoverageCockpit(models.TransientModel):
         self.line_ids.sudo().with_context(**refresh_ctx).unlink()
         self.treasury_line_ids.sudo().with_context(**refresh_ctx).unlink()
         date_from, date_to = self._period_bounds()
-        totals = self._aggregate_period(date_from, date_to)
-        treasury = self._aggregate_treasury(date_from, date_to)
-        document_quality = self._aggregate_document_quality(date_from, date_to)
-        treasury_internal_lines = self._aggregate_treasury_internal_lines(
+        period_internal_buckets = self._aggregate_treasury_internal_buckets(
             date_from, date_to
         )
+        totals = self._aggregate_period(
+            date_from, date_to, internal_buckets=period_internal_buckets
+        )
+        treasury = self._aggregate_treasury(date_from, date_to)
+        document_quality = self._aggregate_document_quality(
+            date_from, date_to, internal_buckets=period_internal_buckets
+        )
+        treasury_internal_lines = period_internal_buckets
 
         salary_coverage_rate = 0.0
         if totals["payroll_realized"]:
@@ -1180,6 +1220,9 @@ class GlcCoverageCockpit(models.TransientModel):
         cockpit_accounts = self._cockpit_analytic_accounts()
         for month_start in self._month_starts_in_period():
             slice_from, slice_to = self._month_slice_bounds(month_start)
+            monthly_internal_buckets = self._aggregate_treasury_internal_buckets(
+                slice_from, slice_to
+            )
             for account in cockpit_accounts:
                 revenue_realized = self._sum_revenue_realized(
                     account, slice_from, slice_to
@@ -1204,7 +1247,10 @@ class GlcCoverageCockpit(models.TransientModel):
 
                 internal_inflow, internal_outflow = (
                     self._internal_transfer_amounts_for_account(
-                        account, slice_from, slice_to
+                        account,
+                        slice_from,
+                        slice_to,
+                        buckets=monthly_internal_buckets,
                     )
                 )
                 revenue_realized += internal_inflow

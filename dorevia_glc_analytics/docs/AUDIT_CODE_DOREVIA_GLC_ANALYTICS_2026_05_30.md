@@ -5,6 +5,7 @@ Module audité : `dorevia_glc_analytics`
 Version manifest initiale lue : `19.0.14.1.0`  
 Version après correctif Lot A : `19.0.14.1.1`  
 Version après correctif Lot A suite : `19.0.14.1.2`
+Version après correctif Lot B perf initial : `19.0.14.2.0`
 Type d'audit : audit statique expert Odoo, orienté développeur.
 
 ## 1. Verdict synthétique
@@ -450,7 +451,41 @@ Correctifs livrés :
 - **no-op silencieux remplacé** par `AccessError` explicite hors recalcul ;
 - fichier `tests/test_glc_user_access.py` — ouverture, refresh, drill-down, CRUD interdit, profil insuffisant.
 
-## 12. Conclusion
+## 12. Addendum correctif Lot B — performance initiale
+
+Objectif : réduire les recalculs inutiles sans modifier la doctrine KPI.
+
+Correctifs livrés en première passe :
+
+- les buckets de virements internes 580 sont calculés une fois pour la période globale puis réutilisés pour :
+  - les agrégats exploitation période ;
+  - les KPI de qualité documentaire ;
+  - les lignes de trésorerie internes ;
+- les buckets 580 sont calculés une fois par mois, puis réutilisés pour tous les axes du mois dans le détail ;
+- `_sum_internal_transfer_inflow()` et `_sum_internal_transfer_outflow()` agrègent directement les buckets, au lieu de rappeler `_internal_transfer_amounts_for_account()` pour chaque axe ;
+- `_analytic_accounts_from_move_line()` ne recherche plus deux fois les mêmes `account.analytic.line` ;
+- ajout du script `scripts/benchmark_cockpit_refresh.py` pour mesurer le temps de recalcul cockpit sur une période donnée.
+
+Effet attendu : le coût des virements internes passe de plusieurs scans répétés `mois × axes` à un scan par période utile. Les sommes analytiques principales restent à optimiser dans un lot ultérieur via agrégations groupées.
+
+Commande benchmark :
+
+```text
+docker compose exec -T odoo odoo shell -c /etc/odoo/odoo.conf \
+  -d glc-rgl-test-import --no-http \
+  < /Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_glc_analytics/scripts/benchmark_cockpit_refresh.py
+```
+
+Résultat sandbox `glc-rgl-test-import` après upgrade `19.0.14.2.0` :
+
+- période benchmark : `2026-01-01` → `2026-05-30` ;
+- lignes détail activité : `30` ;
+- lignes trésorerie interne : `2` ;
+- temps recalculs : `1.818s`, `1.838s`, `1.796s` ;
+- meilleur temps : `1.796s` ;
+- temps moyen : `1.817s`.
+
+## 13. Conclusion
 
 Le module est mûr fonctionnellement, mais il porte désormais un cockpit central. Il faut donc le traiter comme un composant de pilotage sensible : fiable, rapide, auditable et prévisible.
 
