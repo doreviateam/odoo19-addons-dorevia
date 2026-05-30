@@ -81,7 +81,7 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
 
         return {
             "type": "ir.actions.act_window",
-            "name": _("Anomalies analytiques GLC"),
+            "name": _("Audit"),
             "res_model": "glc.analytic.anomaly.wizard",
             "res_id": self.id,
             "view_mode": "form",

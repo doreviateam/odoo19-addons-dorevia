@@ -52,7 +52,7 @@ class TestGlcAnalyticAnomaly(AccountTestInvoicingCommon):
         )[:1]
 
     def test_menu_anomaly_wizard_exists(self):
-        """CA1 — menu Anomalies analytiques pour Gestionnaire GLC."""
+        """CA1 — menu Audit pour Gestionnaire GLC."""
         menu = self.env.ref("dorevia_glc_analytics.menu_glc_analytic_anomalies")
         action = self.env.ref("dorevia_glc_analytics.action_glc_analytic_anomaly_wizard")
         self.assertEqual(menu.action.id, action.id)

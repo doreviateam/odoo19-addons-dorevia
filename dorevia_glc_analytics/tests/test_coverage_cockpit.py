@@ -250,7 +250,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
 
 
     def test_menu_cockpit_exists(self):
-        """CA1 — menu Cockpit couverture des charges de structure."""
+        """CA1 — menu Contrôle de gestion."""
         menu = self.env.ref("dorevia_glc_analytics.menu_glc_coverage_cockpit")
         action = self.env.ref("dorevia_glc_analytics.action_glc_coverage_cockpit")
         self.assertEqual(menu.action.id, action.id)
