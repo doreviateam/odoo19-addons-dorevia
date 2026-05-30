@@ -4,6 +4,7 @@ Date : 2026-05-30
 Module audité : `dorevia_glc_analytics`  
 Version manifest initiale lue : `19.0.14.1.0`  
 Version après correctif Lot A : `19.0.14.1.1`  
+Version après correctif Lot A suite : `19.0.14.1.2`
 Type d'audit : audit statique expert Odoo, orienté développeur.
 
 ## 1. Verdict synthétique
@@ -432,7 +433,24 @@ dorevia_glc_analytics: 114 tests
 
 Le P1 "tests non importés" est donc corrigé. Le P2 "clé de refresh incomplète" est également corrigé pour le périmètre identifié.
 
-## 11. Conclusion
+## 11. Addendum correctif Lot A suite — droits / ACL
+
+**Décision MOA :** le profil cible **Utilisateur GLC** (`group_glc_user`) doit pouvoir ouvrir et recalculer le **Contrôle de gestion** sans être administrateur. Il inclut :
+
+- `analytic.group_analytic_accounting` ;
+- `account.group_account_readonly` *(lecture `account.move` / `account.move.line` — implicite depuis `19.0.14.1.2`)* ;
+- `analytic.group_analytic_accounting` *(déjà implicite — lecture `account.analytic.line`)*.
+
+Les **drill-down Q1/Q2/Q3** restent soumis aux droits utilisateur sur `account.move` / `account.move.line`. Un profil **analytique seul** (sans lecture comptable) produit des KPI incomplets — comportement documenté et testé.
+
+Correctifs livrés :
+
+- ACL **lecture seule** sur `glc.coverage.cockpit.line` et `glc.coverage.cockpit.treasury.line` ;
+- recalcul cockpit : création/suppression des lignes via **`sudo()`** + contexte `glc_cockpit_auto_refreshing` ;
+- **no-op silencieux remplacé** par `AccessError` explicite hors recalcul ;
+- fichier `tests/test_glc_user_access.py` — ouverture, refresh, drill-down, CRUD interdit, profil insuffisant.
+
+## 12. Conclusion
 
 Le module est mûr fonctionnellement, mais il porte désormais un cockpit central. Il faut donc le traiter comme un composant de pilotage sensible : fiable, rapide, auditable et prévisible.
 

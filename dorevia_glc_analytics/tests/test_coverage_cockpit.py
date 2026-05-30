@@ -5,7 +5,7 @@ from calendar import monthrange
 from datetime import date
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
-from odoo.exceptions import UserError
+from odoo.exceptions import AccessError, UserError
 from odoo.fields import Command, Date
 from odoo.tests import tagged
 
@@ -788,19 +788,17 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         )
         self.assertEqual(cockpit.date_to, date(year, 2, 28))
 
-    def test_client_line_create_without_refresh_context_is_noop(self):
-        """Les créations client orphelines sont ignorées sans erreur."""
-        created = self.env["glc.coverage.cockpit.line"].with_context(
-            glc_cockpit_auto_refreshing=False
-        ).create(
-            [
-                {
-                    "period_date": date(2026, 5, 1),
-                    "activity_label": "Ligne client orpheline",
-                }
-            ]
-        )
-        self.assertFalse(created)
+    def test_client_line_create_without_refresh_context_raises_access_error(self):
+        """Les créations client hors recalcul lèvent une AccessError explicite."""
+        with self.assertRaises(AccessError):
+            self.env["glc.coverage.cockpit.line"].create(
+                [
+                    {
+                        "period_date": date(2026, 5, 1),
+                        "activity_label": "Ligne client orpheline",
+                    }
+                ]
+            )
 
     def test_multi_month_shortened_to_q1_rebuilds_lines(self):
         """R10 cas 1 — multi-mois vers période plus courte."""
