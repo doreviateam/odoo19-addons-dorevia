@@ -7,7 +7,7 @@
 
 **Module :** `dorevia_glc_analytics` (extension Palier 4)  
 **Version cible :** `19.0.4.0.0`  
-**Prérequis :** `dorevia_glc_analytics` + `dorevia_glc_analytics` seuls (Paliers 0–3 gelés MOA)  
+**Prérequis :** `dorevia_glc_analytics` seul (Paliers 0–1 actifs ; Paliers 2–3 retirés — voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md))  
 **Références :** [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) · [TICKET_PALIER_4.md](./TICKET_PALIER_4.md) · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33)
 
 **Statut document :** **Validé MOA** — recette exécutée sur `glc-rgl-test-import` (2026-05-27)

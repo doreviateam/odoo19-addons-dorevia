@@ -1,11 +1,11 @@
 # Recette manuelle — Contrôle de gestion GLC — Période libre
 
-> **Mise à jour doc `19.0.14.0.2`** — Menu **Contrôle de gestion** · réalisé seul · sans budget.  
-> Les sections historiques (budget, versions `19.0.4.x`) restent comme trace de recette.
+> **Mise à jour doc `19.0.14.1.0`** — Menu **Contrôle de gestion** · réalisé seul · sans budget.  
+> Les sections historiques (budget, Palier 2, versions `19.0.4.x`) restent comme trace de recette.
 
 ## Statut
 
-**Actif** — recette d'exploitation **Contrôle de gestion** · version module **`19.0.14.0.2`** minimum.  
+**Actif** — recette d'exploitation **Contrôle de gestion** · version module **`19.0.14.1.0`** minimum.  
 Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : tous les plans analytiques par défaut.  
 Références : [ETAT_MODULE_ACTUEL.md](../ETAT_MODULE_ACTUEL.md) · [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md).
 
@@ -17,7 +17,8 @@ Références : [ETAT_MODULE_ACTUEL.md](../ETAT_MODULE_ACTUEL.md) · [TICKET_COCK
 |---|---|
 | Module cockpit | `dorevia_glc_analytics` |
 | Module | `dorevia_glc_analytics` |
-| Version attendue / installée | **`19.0.14.0.2`** *(min.)* |
+| Version attendue / installée | **`19.0.14.1.0`** *(min.)* |
+| Menu | **Facturation → Pilotage GLC → Contrôle de gestion** |
 | Palier | 4 — Contrôle de gestion |
 | Évolution | période libre `date_from` / `date_to` + regroupement mensuel automatique |
 
@@ -673,7 +674,9 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 ## R14 — Source de vérité du réalisé cockpit (`19.0.4.7.0`)
 
-**Objectif :** valider que le réalisé cockpit agrège les écritures charge/produit + analytique (toutes origines), avec Palier 2 en **contrôle R2** uniquement.
+> **Note `19.0.14.1.0` :** depuis la simplification MOA, le réalisé est **100 % analytique** — Palier 2 retiré. R14-NODOUBLON et mentions « contrôle R2 » sont **historiques** ; voir §13 [TICKET_COCKPIT_SOURCE_REALISE.md](../TICKET_COCKPIT_SOURCE_REALISE.md).
+
+**Objectif :** valider que le réalisé cockpit agrège les écritures charge/produit + analytique (toutes origines).
 
 **Référence :** [TICKET_COCKPIT_SOURCE_REALISE.md](../TICKET_COCKPIT_SOURCE_REALISE.md) · cadrage I2/I3 révisés.
 

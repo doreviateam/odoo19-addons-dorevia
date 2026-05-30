@@ -1,5 +1,7 @@
 # Mémo raffinement — qualité comptable et analytique
 
+> **Addendum `19.0.14.1.0`** — Les KPI qualité (couverture analytique, lettrage, statut paiement) sont **implémentés** dans le Contrôle de gestion (GQ-6, `19.0.7.x` → `19.0.10.x`). Voir [TICKET_COCKPIT_SYNTHESE_KPI_QUALITE_DOCUMENTAIRE.md](./TICKET_COCKPIT_SYNTHESE_KPI_QUALITE_DOCUMENTAIRE.md) et [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 ## 1. Intention
 
 Ce mémo conserve une piste de raffinement à traiter après les paliers cockpit déjà engagés.

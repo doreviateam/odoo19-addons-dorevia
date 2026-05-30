@@ -1,9 +1,10 @@
 # Ticket — Réalignement cockpit GLC / contrôle de gestion
 
-> **Addendum `19.0.14.0.2` (2026-05-30)** — Le corps de ce ticket décrit le GO **`19.0.4.9.0`**. Depuis la simplification MOA :
+> **Addendum `19.0.14.1.0` (2026-05-30)** — Le corps de ce ticket décrit le GO **`19.0.4.9.0`**. Depuis la simplification MOA (`19.0.13` → `19.0.14`) :
 > - menu **Contrôle de gestion** (réalisé seul, sans budget ni overlay RH) ;
 > - Palier 2 et module `dorevia_glc_budget` **retirés** ;
-> - grammaire UI : **Ressources · Cumul RH · Dépenses · Solde**.
+> - grammaire UI : **Ressources · Cumul RH · Dépenses · Solde** ;
+> - sections §3.3 (budget), §3.6 (contrôle RH overlay), §3.7 (module budget) : **obsolètes** — ne plus implémenter.
 > État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
 
 **Module :** `dorevia_glc_analytics`  
@@ -276,7 +277,7 @@ Rejeu serveur `glc-rgl-test-import` :
 
 ## 7. Critères d'acceptation (à décliner par PR)
 
-- [x] CA-DOC — Manifeste + docs + recette alignés sur doctrine réalisé / Palier 2 / budget
+- [x] CA-DOC — Manifeste + docs + recette alignés sur doctrine réalisé (`19.0.14.1.0` — réalisé analytique seul)
 - [x] CA-LBL — « Dépenses hors salaires » en UI à la place de « Frais généraux » là où le calcul est multi-axes
 - [x] CA-BUD — Message « non budgété » / `has_budget_data` si budget absent *(partiel — par axe : lot suivant)*
 - [x] CA-FIL — Option A : filtre **Axe analytique** réimplémenté et conservé au refresh

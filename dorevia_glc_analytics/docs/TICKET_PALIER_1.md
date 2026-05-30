@@ -1,5 +1,7 @@
 # Ticket Palier 1 — Rapport d'anomalies analytiques du mois
 
+> **Addendum `19.0.14.1.0`** — Menu **Audit** (`Facturation → Pilotage GLC → Audit`). Contrôles A1–A2, A4–A6 **actifs**. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics`  
 **Branche cible :** `feat/glc-analytique-palier-1`  
 **Statut :** Cadrage validé MOA / architecture — prêt pour développement  

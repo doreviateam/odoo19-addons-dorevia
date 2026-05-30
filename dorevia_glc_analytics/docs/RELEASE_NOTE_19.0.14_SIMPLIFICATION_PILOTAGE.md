@@ -25,8 +25,8 @@
 | `19.0.12.0.5` | Dernière version avec budget cockpit (non mergée longtemps) |
 | `19.0.13.0.0` | PR #50 — retrait budget UI, Palier 2, financements A3 |
 | `19.0.14.0.0` | PR #51 — retrait `dorevia_glc_budget` |
-| `19.0.14.0.1` | Position menu Pilotage GLC (barre Facturation) |
-| `19.0.14.1.0` | PR #52 — renommage menus · ordre sous-menus |
+| `19.0.14.0.2` | PR #52 — renommage menus · ordre sous-menus · Contrôle de gestion / Audit |
+| `19.0.14.1.0` | PR #53 — alignement documentation module |
 
 ---
 
@@ -44,4 +44,4 @@
 
 Module seul : `/dorevia_glc_analytics` — recette sandbox post-merge (61/62 verts ; échec préexistant nomenclature 11 axes).
 
-Plus de tests `/dorevia_glc_analytics`.
+Plus de tests `/dorevia_glc_budget`.

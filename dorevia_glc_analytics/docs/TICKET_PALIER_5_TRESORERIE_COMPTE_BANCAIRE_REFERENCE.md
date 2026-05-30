@@ -1,5 +1,7 @@
 # Ticket Palier 5 — Trésorerie & compte bancaire de référence
 
+> **Addendum `19.0.14.1.0`** — Trésorerie **active** sur **Contrôle de gestion** (`Facturation → Pilotage GLC`). Palier 4 simplifié (`19.0.14.x`) ; références `19.0.4.9.0` ci-dessous = historique. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics` *(extension cockpit)* · croisement lecture seule `dorevia_cash_guard` *(V2)*  
 **Palier 4 de référence :** **`19.0.4.9.0`** — **gelé** · GO livraison MOA (2026-05-28)  
 **Statut :** **GO complet MOA** (2026-05-29) · lot trésorerie **`19.0.5.0.1`** validé · Option C + S1 livrées  

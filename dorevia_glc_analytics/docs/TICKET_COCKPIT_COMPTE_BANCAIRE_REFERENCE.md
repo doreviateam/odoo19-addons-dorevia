@@ -1,5 +1,7 @@
 # Ticket — Compte bancaire de référence du cockpit GLC
 
+> **Addendum `19.0.14.1.0`** — Doctrine **implémentée** (Palier 5, `19.0.5.x`). Menu **Contrôle de gestion**. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics` (+ croisement `dorevia_cash_guard` en lecture seule)  
 **Version installée (réf.) :** `19.0.4.9.0` *(Palier 4 — exploitation)*  
 **Statut :** **Décision MOA figée** — cadrage / implémentation → [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md)  

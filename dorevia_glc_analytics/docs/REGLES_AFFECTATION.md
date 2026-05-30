@@ -1,5 +1,7 @@
 # Règles d'affectation analytique — GLC
 
+> **Implémentation actuelle :** plan **unique** GLC (11 axes) — voir [ETAT_NOMENCLATURE_ANALYTIQUE.md](./ETAT_NOMENCLATURE_ANALYTIQUE.md) et [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md). La ventilation salariale overlay (Palier 2) n'est **plus** dans le produit ; les écritures de paie suivent la comptabilité analytique standard.
+
 **Projet :** Suivi d'activité GLC  
 **Version :** V1.1  
 **Statut :** Annexe obligatoire à la spécification fonctionnelle  
@@ -33,7 +35,7 @@ Les règles ci-dessous définissent, pour chaque type de pièce comptable, quels
 | Subvention perçue | Optionnel (projet) | **Obligatoire** | Subvention résidence → `RESIDENCES` + `SUBVENTIONS` |
 | Adhésion | Interdit | **Obligatoire** | Cotisation → `ADHESIONS` |
 | Don | Interdit | **Obligatoire** | Don ponctuel → `DONS` |
-| Écriture de paie (631/641…) | Interdit | Interdit | Ventilation via module dédié, pas d'analytique salaire |
+| Écriture de paie (631/641…) | **Obligatoire** sur axe activité | Interdit | Analytique comptable — source **Cumul RH** du Contrôle de gestion |
 | Note de frais / remboursement mission | **Obligatoire** | Interdit | IK mission → `MISSIONS` |
 | Écriture bancaire sans facture | Selon nature | Selon nature | À affecter manuellement avant clôture |
 

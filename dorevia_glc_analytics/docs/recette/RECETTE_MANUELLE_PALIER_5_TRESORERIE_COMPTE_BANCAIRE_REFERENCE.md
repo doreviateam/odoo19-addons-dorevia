@@ -1,8 +1,10 @@
 # Recette manuelle — Palier 5 · Trésorerie & compte bancaire de référence
 
+> **Addendum `19.0.14.1.0`** — Chemin recette : **Facturation → Pilotage GLC → Contrôle de gestion**. Palier 4 simplifié ; trésorerie **active** sur le cockpit actuel. Voir [ETAT_MODULE_ACTUEL.md](../ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics` (extension Palier 5)  
 **Version cible :** **`19.0.5.0.1`**  
-**Prérequis :** Palier 4 réaligné **`19.0.4.9.0`** gelé  
+**Prérequis :** Contrôle de gestion livré (Palier 4 simplifié **`19.0.14.x`**) · version trésorerie **`19.0.5.0.1`**  
 **Statut document :** **GO complet MOA** — Palier 5 **`19.0.5.0.1`** (2026-05-29) · précondition bancaire OK · **95/95** post-install · TREF **7/7** · recette navigateur §2 à §5 OK
 
 **Références :** [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) · [Recette période libre Palier 4](./RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md) · [PALIERS.md](../PALIERS.md)

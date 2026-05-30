@@ -1,5 +1,7 @@
 # Ticket — Cockpit GLC · KPI qualité documentaire (Synthèse graphique)
 
+> **Addendum `19.0.14.1.0`** — Menu **Facturation → Pilotage GLC → Contrôle de gestion**. KPI **Solde budget** et colonnes prévisionnel **retirés** (`19.0.13`). Les KPI qualité documentaire (Ressources facturées / Dépenses facturées) restent **actifs**. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics`  
 **Version cible :** **`19.0.10.0.2`** *(correction MOA — calcul en nombre de lignes)*  
 **Statut :** **Implémenté** — version **`19.0.10.0.2`**  
@@ -13,7 +15,7 @@
 
 L’onglet **Synthèse graphique** offre une lecture immédiate de pilotage :
 
-- Solde réel / Solde budget
+- Solde réel *(Solde budget retiré `19.0.13`)*
 - Ressources totales
 - Couverture du cumul RH
 - Graphiques mensuels et solde par axe analytique

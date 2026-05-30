@@ -98,7 +98,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 | [#50](https://github.com/doreviateam/odoo19-addons-dorevia/pull/50) | `19.0.13.0.0` | Cockpit réalisé seul · retrait budget UI · Palier 2 · règles financement A3 |
 | [#51](https://github.com/doreviateam/odoo19-addons-dorevia/pull/51) | `19.0.14.0.0` | Suppression module `dorevia_glc_budget` |
 | [#52](https://github.com/doreviateam/odoo19-addons-dorevia/pull/52) | `19.0.14.0.2` | Menus MOA · Contrôle de gestion · Audit · ordre barre Facturation |
-| Doc | `19.0.14.1.0` | Alignement documentation module |
+| [#53](https://github.com/doreviateam/odoo19-addons-dorevia/pull/53) | `19.0.14.1.0` | Alignement documentation module (1ère passe) |
 
 Détail : [RELEASE_NOTE_19.0.14_SIMPLIFICATION_PILOTAGE.md](./RELEASE_NOTE_19.0.14_SIMPLIFICATION_PILOTAGE.md)
 
@@ -113,5 +113,8 @@ Détail : [RELEASE_NOTE_19.0.14_SIMPLIFICATION_PILOTAGE.md](./RELEASE_NOTE_19.0.
 | [TICKET_COCKPIT_SOURCE_REALISE.md](./TICKET_COCKPIT_SOURCE_REALISE.md) | Règles agrégation réalisé |
 | [ETAT_NOMENCLATURE_ANALYTIQUE.md](./ETAT_NOMENCLATURE_ANALYTIQUE.md) | Plan analytique unique |
 | [recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md](./recette/RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md) | Recette exploitation Contrôle de gestion |
+| [TICKET_COCKPIT_SYNTHESE_KPI_QUALITE_DOCUMENTAIRE.md](./TICKET_COCKPIT_SYNTHESE_KPI_QUALITE_DOCUMENTAIRE.md) | KPI qualité documentaire (GQ-6) |
+| [recette/RECETTE_MANUELLE_COCKPIT_QUALITE_PAIEMENT.md](./recette/RECETTE_MANUELLE_COCKPIT_QUALITE_PAIEMENT.md) | Recette qualité & paiement |
+| [recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](./recette/RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) | Recette trésorerie Palier 5 |
 
-Documents **Palier 2**, **Palier 3**, **budget/cockpit initial** : conservés comme **archives** — ne décrivent plus le produit installé.
+Documents **Palier 2**, **Palier 3**, **budget/cockpit initial**, tickets **`19.0.4.x`** (UX, synthèse, source réalisé) : conservés comme **archives** — lire l'addendum en tête de fichier et [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md) pour l'état actuel.
