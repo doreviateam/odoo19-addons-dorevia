@@ -13,7 +13,7 @@
 
 Le Palier 4 réaligné est **livré et gelé** en `19.0.4.9.0` :
 
-- grammaire **Recette · Cumul RH · Dépense · Solde** ;
+- grammaire **Ressources · Cumul RH · Dépenses · Solde** ;
 - réalisé d’exploitation = `account.analytic.line` classes **6/7** ;
 - **88 post-tests** verts ;
 - doctrine « compte bancaire de référence » **documentée** ([TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](./TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md)) — **sans impact code**.
@@ -31,7 +31,7 @@ Le Palier 4 réaligné est **livré et gelé** en `19.0.4.9.0` :
 |---|---|---|
 | **Période** (`date_from` / `date_to`) | Fenêtre temporelle commune | — |
 | **Compte bancaire de référence** | Point de vue **trésorerie** | Modifie **uniquement** la lecture trésorerie |
-| **Lecture exploitation** | Recette · Cumul RH · Dépense · Solde | **Inchangée** |
+| **Lecture exploitation** | Ressources · Cumul RH · Dépenses · Solde | **Inchangée** |
 | **Lecture trésorerie** | Entrées · sorties · virements internes · solde période | **Filtrée** selon le compte observé |
 
 ### Triple lecture (rappel doctrine)
@@ -107,7 +107,7 @@ Critères candidats *(à valider MOA)* :
 - compte **580** ;
 - journal ou libellé métier dédié.
 
-**Règle figée :** quel que soit le critère technique retenu, le mouvement est **visible en trésorerie** et **exclu** de Recette · Cumul RH · Dépense · Solde · financements.
+**Règle figée :** quel que soit le critère technique retenu, le mouvement est **visible en trésorerie** et **exclu** de Ressources · Cumul RH · Dépenses · Solde · financements.
 
 ### 5.5 Emplacement UI — bloc séparé
 
@@ -164,7 +164,7 @@ glc.coverage.cockpit
 │
 ├── Lecture EXPLOITATION (Palier 4 — gelée)
 │   └── account.analytic.line · classes 6/7
-│       → Recette · Cumul RH · Dépense · Solde
+│       → Ressources · Cumul RH · Dépenses · Solde
 │       → INDÉPENDANT du compte bancaire de référence
 │
 └── Lecture TRÉSORERIE (Palier 5 — nouveau)
@@ -223,7 +223,7 @@ Toute PR Palier 5 doit confirmer :
 
 ```text
 dorevia_glc_analytics : 93 tests · 0 failed
-dorevia_glc_budget    : 14 tests · 0 failed
+*(budget module retiré)*
 Total                 : 95 tests · 0 failed · 0 error(s)
 ```
 

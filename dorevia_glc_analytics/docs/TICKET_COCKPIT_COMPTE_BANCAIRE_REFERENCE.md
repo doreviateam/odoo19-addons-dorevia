@@ -58,7 +58,7 @@ Un **virement interne** (ex. compte courant → livret, ou compte courant → co
   - marge d’activité (solde d’exploitation) ;
   - financement économique.
 
-Même règle pour les autres flux **I5** déjà exclus de l’exploitation (emprunt `164`, reprise de solde, etc.) : visibles en trésorerie si impactent le compte de référence, **jamais** dans Recette · Cumul RH · Dépense · Solde.
+Même règle pour les autres flux **I5** déjà exclus de l’exploitation (emprunt `164`, reprise de solde, etc.) : visibles en trésorerie si impactent le compte de référence, **jamais** dans Ressources · Cumul RH · Dépenses · Solde.
 
 ---
 
@@ -66,7 +66,7 @@ Même règle pour les autres flux **I5** déjà exclus de l’exploitation (empr
 
 | Sujet | Palier 4 actuel | Après implémentation ticket |
 |---|---|---|
-| KPI Recette · Cumul RH · Dépense · Solde | Source : `account.analytic.line` classes **6/7** | **Inchangé** |
+| KPI Ressources · Cumul RH · Dépenses · Solde | Source : `account.analytic.line` classes **6/7** | **Inchangé** |
 | Exclusion 512/53/411/401/164 | Domaines analytiques | **Inchangé** pour l’exploitation |
 | Champ compte bancaire sur cockpit | **Absent** | À ajouter (`journal_id` ou compte 512 de référence) |
 | Bloc trésorerie / soldes | **Hors scope** Palier 4 | Nouveau bloc Palier 5 |
@@ -133,7 +133,7 @@ Règle métier figée MOA : **quelle que soit la détection technique**, le mouv
 
 - [ ] CA-TREF-FIELD — Champ compte bancaire de référence sur cockpit, défaut compte courant GLC
 - [ ] CA-TREF-POV — Entrée/sortie lues depuis le POV du compte sélectionné
-- [ ] CA-TREF-VIR — Virement interne visible en trésorerie, exclu de Recette · Cumul RH · Dépense · Solde · financements
+- [ ] CA-TREF-VIR — Virement interne visible en trésorerie, exclu de Ressources · Cumul RH · Dépenses · Solde · financements
 - [ ] CA-TREF-ISO — KPI exploitation Palier 4 **inchangés** quand le compte de référence change
 - [ ] CA-TREF-DOC — Cadrage + recette mis à jour
 - [ ] CA-TREF-TEST — Tests auto scénarios TREF-01 à TREF-05

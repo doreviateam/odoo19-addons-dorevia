@@ -1,5 +1,10 @@
 # Recette manuelle — dorevia_glc_analytics · Palier 2
 
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
+
 **Module :** `dorevia_glc_analytics`  
 **Version cible :** `19.0.3.0.0` (Palier 2)  
 **Rôle testeur :** Gestionnaire GLC / MOA  
@@ -42,9 +47,9 @@ Version : 19.0.3.0.0
 
 | Pas | Action | Contrôles | OK | Observations |
 |---|---|---|---|---|
-| P2.1 | Menu **Coûts salariés mensuels** | Accès Gestionnaire GLC | ☑ | |
+| P2.1 | Menu ***(retiré — coûts salariés)*** | Accès Gestionnaire GLC | ☑ | |
 | P2.2 | Créer coût mensuel salarié test | `hourly_cost` OK | ☑ | 3000 / 150 = 20,00 |
-| P2.3 | Menu **Ventilations salariales** | Formulaire + lignes | ☑ | |
+| P2.3 | Menu ***(retiré — ventilations)*** | Formulaire + lignes | ☑ | |
 | P2.4 | Ventilation T2 (100 % · 3 activités) | État `validated` | ☑ | |
 | P2.5 | Ventilation T3b (60 % à validation) | Validation bloquée | ☑ | |
 | P2.5bis | Ventilation T3 partielle en brouillon | Enregistrement OK | ☑ | |
@@ -104,8 +109,8 @@ Warning Odoo domaine multi-société activity_account_id : non bloquant.
 | Mise à jour module Docker (`19.0.3.0.0`) | OK |
 | Redémarrage Odoo | OK |
 | Tests automatisés (`/dorevia_glc_analytics`) | **25 post-tests, 0 échec, 0 erreur** |
-| Menu **Coûts salariés mensuels** | OK |
-| Menu **Ventilations salariales** | OK |
+| Menu ***(retiré — coûts salariés)*** | OK |
+| Menu ***(retiré — ventilations)*** | OK |
 | Coût horaire `3000 / 150` | 20,00 OK |
 | Ventilation `percent` 100 % (3 activités) | Validée OK |
 | Ventilation `percent` partielle brouillon | OK |

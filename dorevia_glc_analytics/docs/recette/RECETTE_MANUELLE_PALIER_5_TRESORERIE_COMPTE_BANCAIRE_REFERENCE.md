@@ -2,7 +2,7 @@
 
 **Module :** `dorevia_glc_analytics` (extension Palier 5)  
 **Version cible :** **`19.0.5.0.1`**  
-**Prérequis :** Palier 4 réaligné **`19.0.4.9.0`** gelé · `dorevia_glc_budget` installé  
+**Prérequis :** Palier 4 réaligné **`19.0.4.9.0`** gelé  
 **Statut document :** **GO complet MOA** — Palier 5 **`19.0.5.0.1`** (2026-05-29) · précondition bancaire OK · **95/95** post-install · TREF **7/7** · recette navigateur §2 à §5 OK
 
 **Références :** [TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md](../TICKET_COCKPIT_COMPTE_BANCAIRE_REFERENCE.md) · [Recette période libre Palier 4](./RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md) · [PALIERS.md](../PALIERS.md)
@@ -12,7 +12,7 @@
 ## Invariant à prouver
 
 > **Un cockpit = période + compte bancaire de référence + lecture trésorerie séparée.**  
-> **Les KPI d’exploitation (Recette · Cumul RH · Dépense · Solde) ne changent jamais quand on change de compte bancaire.**
+> **Les KPI d’exploitation (Ressources · Cumul RH · Dépenses · Solde) ne changent jamais quand on change de compte bancaire.**
 
 | Couche | Rôle |
 |---|---|
@@ -27,7 +27,7 @@
 ```text
 URL  : http://localhost:18079
 Base : glc-rgl-test-import
-Menu : Comptabilité → Pilotage GLC → Cockpit couverture des charges de structure
+Menu : Facturation → Pilotage GLC → Contrôle de gestion
 ```
 
 *(Libellé technique ; équivalent MOA « Cockpit GLC »)*
@@ -49,7 +49,7 @@ docker compose restart odoo
 | Contrôle | Attendu | OK | Observations |
 |---|---|:---:|---|
 | Version module `dorevia_glc_analytics` | **`19.0.5.0.1`** | [x] | Rejeu confirmé 2026-05-29 |
-| `dorevia_glc_budget` | **`19.0.1.0.0`** | [x] | Inchangé |
+| *(budget retiré)* | — | [x] | Inchangé |
 | Worker Odoo redémarré après `-u` | Oui | [x] | |
 | Hard refresh navigateur | `Cmd+Shift+R` | [x] | Recette navigateur § 2–5 validée |
 
@@ -156,7 +156,7 @@ Période figée : du **13 avr.** au **31 mai 2026**
 
 **Onglet :** **Trésorerie** (bloc séparé de Synthèse et Détail).
 
-Texte d’aide attendu : *« Les KPI Recette · Cumul RH · Dépense · Solde ne dépendent pas du compte bancaire sélectionné. »*
+Texte d’aide attendu : *« Les KPI Ressources · Cumul RH · Dépenses · Solde ne dépendent pas du compte bancaire sélectionné. »*
 
 ### 4.1 Compte courant sélectionné
 
@@ -198,7 +198,7 @@ Compléter sur **données réelles** ou jeux d’écritures dédiés sur `glc-rg
 |---|---|---|---|---|:---:|---|
 | **TREF-01** | Encaissement client | Crédit compte courant + recette analytique (ex. BAR) | **Recette** ↑ | **Entrée** trésorerie compte courant | [x] | Couvert auto |
 | **TREF-02** | Paiement fournisseur | Débit compte courant + dépense analytique (ex. 626 / STRUCTURE) | **Dépense** ↑ | **Sortie** trésorerie | [x] | Couvert auto |
-| **TREF-03** | Virement courant → livret | Écriture 512↔512 ou compte 580 | **Aucun** impact Recette · Cumul RH · Dépense · Solde | Visible : **sortie** courant · **entrée** livret | [x] | Couvert auto |
+| **TREF-03** | Virement courant → livret | Écriture 512↔512 ou compte 580 | **Aucun** impact Ressources · Cumul RH · Dépenses · Solde | Visible : **sortie** courant · **entrée** livret | [x] | Couvert auto |
 | **TREF-04** | Paie / 645 rapprochée banque | Charge 645 + analytique STRUCTURE + sortie banque | **Cumul RH** ↑ | **Sortie** trésorerie | [x] | Couvert auto |
 | **TREF-05** | Changement compte de référence | Même période · courant puis livret | KPI exploitation **strictement identiques** | Flux **recalculés** selon nouveau POV | [x] | Validé auto + navigateur |
 
@@ -220,7 +220,7 @@ Compléter sur **données réelles** ou jeux d’écritures dédiés sur `glc-rg
 
 ```bash
 docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
-  -d glc-rgl-test-import -u dorevia_glc_analytics,dorevia_glc_budget \
+  -d glc-rgl-test-import -u dorevia_glc_analytics \
   --test-enable --test-tags post_install \
   --stop-after-init --no-http
 ```
@@ -233,7 +233,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 | Restart worker Odoo | OK |
 | Précondition bancaire société | OK — **`Compte Courant GLC`** |
 | Version `dorevia_glc_analytics` | **`19.0.5.0.1`** |
-| Version `dorevia_glc_budget` | **`19.0.1.0.0`** |
+| Budget module | **Retiré** |
 | Migration nomenclature legacy | OK — `19.0.5.0.1/post-migrate.py` |
 | Post-install global | **95 tests · 0 failed · 0 error(s)** |
 | Rejeu ciblé Palier 5 / TREF | **7/7 OK · 0 failed · 0 error(s)** |
@@ -280,7 +280,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 | **GO** | 70 tests cockpit/TREF/budget verts **et** recette manuelle § 2–5 confirme l’invariant · **95/95** |
 | **GO technique serveur** | Rejeu auto complet **95/95** · préconditions § 1 OK · recette navigateur § 2–5 optionnelle |
 | **GO avec réserve** | Calculs OK · défaut UX onglet Trésorerie sans impact métier |
-| **NO GO** | Changement de compte bancaire modifie Recette · Cumul RH · Dépense · Solde **ou** virement interne compté en exploitation |
+| **NO GO** | Changement de compte bancaire modifie Ressources · Cumul RH · Dépenses · Solde **ou** virement interne compté en exploitation |
 
 ### Verdict MOA
 
@@ -294,7 +294,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 |---|---|
 | Date rejeu serveur | **2026-05-29** (recette terminée) |
 | Exécutant | MOA |
-| Version testée | **`19.0.5.0.1`** · `dorevia_glc_budget` **`19.0.1.0.0`** |
+| Version testée | **`19.0.5.0.1`** |
 | Base | `glc-rgl-test-import` |
 | Société | **`My Company`** |
 | Journal société (défaut cockpit) | **`Compte Courant GLC`** |
@@ -315,7 +315,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 
 ## 8. Séquence de lecture cockpit (post-Palier 5)
 
-1. **Exploitation** — Synthèse / Détail : Recette · Cumul RH · Dépense · Solde *(indépendant du compte bancaire)* ;
+1. **Exploitation** — Synthèse / Détail : Ressources · Cumul RH · Dépenses · Solde *(indépendant du compte bancaire)* ;
 2. **Trésorerie** — onglet dédié : entrées / sorties / virements / solde période *(selon compte bancaire de référence)* ;
 3. **Contrôle RH** — onglet Infos *(Palier 4 — inchangé)*.
 

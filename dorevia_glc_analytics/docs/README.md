@@ -1,4 +1,7 @@
 # Spécification fonctionnelle V1 — Suivi d’activité GLC
+> **Implémentation actuelle :** [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md) · version **`19.0.14.1.0`**.  
+> V1.1 = cahier des charges cible ; budget, ventilation salariale et bénévolat ne sont pas dans le produit installé.
+
 
 **Projet :** Suivi d’activité GLC  
 **Version :** V1.1  
@@ -8,6 +11,7 @@
 
 **Annexes :**
 
+- [État actuel du module](./ETAT_MODULE_ACTUEL.md)
 - [Recette manuelle Palier 0](./RECETTE_MANUELLE_PALIER_0.md)
 - [Découpage en paliers](./PALIERS.md)
 - [Règles d’affectation analytique](./REGLES_AFFECTATION.md)

@@ -30,9 +30,9 @@ Adapter l'URL si l'instance de recette diffère.
 
 | Menu | Rôle |
 |---|---|
-| **Comptabilité → Pilotage GLC → Activités GLC** | Liste des 7 comptes du plan Activités |
-| **Comptabilité → Pilotage GLC → Financements GLC** | Liste des 4 comptes du plan Financements |
-| **Comptabilité → Configuration → Plans analytiques** | Vérification des plans et applicabilités Odoo 19 |
+| **Facturation → Pilotage GLC → Activités GLC** | Liste des 7 comptes du plan Activités |
+| **Facturation → Pilotage GLC → Axes analytiques** (filtre financements) | Liste des 4 comptes du plan Financements |
+| **Facturation → Configuration → Plans analytiques** | Vérification des plans et applicabilités Odoo 19 |
 | **Comptabilité → Fournisseurs / Clients → Factures** | Test distribution analytique sur pièces |
 | **Paramètres → Utilisateurs** | Attribution des groupes GLC |
 
@@ -93,16 +93,16 @@ Exécuter **dans l'ordre**. Pour chaque pas : **Action** → **Contrôles** → 
 
 | Pas | Action | Contrôles | OK | Observations |
 |---|---|---|---|---|
-| P0.3 | Ouvrir **Comptabilité → Pilotage GLC** | Sous-menus **Activités GLC** et **Financements GLC** visibles | ☐ | |
+| P0.3 | Ouvrir **Facturation → Pilotage GLC** | Sous-menus **Activités GLC** et **Financements GLC** visibles | ☐ | |
 | P0.4 | Ouvrir **Activités GLC** | **7** comptes listés | ☐ | |
-| P0.5 | Ouvrir **Financements GLC** | **4** comptes listés | ☐ | |
+| P0.5 | Filtrer axes financement dans **Axes analytiques** | **4** comptes listés | ☐ | |
 
 ### 3. Nomenclature — codes et plans
 
 | Pas | Action | Contrôles | OK | Observations |
 |---|---|---|---|---|
 | P0.6 | Dans **Activités GLC**, vérifier les codes | Présents : `STRUCTURE`, `BAR`, `PRESTATIONS`, `RESIDENCES`, `MISSIONS`, `PRIVATISATIONS`, `LOCATION_RADIO` | ☐ | |
-| P0.7 | Dans **Financements GLC**, vérifier les codes | Présents : `ADHESIONS`, `DONS`, `SUBVENTIONS`, `RESSOURCES_PROPRES` | ☐ | |
+| P0.7 | Dans **Axes analytiques**, vérifier les codes financement | Présents : `ADHESIONS`, `DONS`, `SUBVENTIONS`, `RESSOURCES_PROPRES` | ☐ | |
 | P0.8 | **Configuration → Plans analytiques** | Plans **GLC - Activités** et **GLC - Financements** existent | ☐ | |
 | P0.9 | Ouvrir le plan **GLC - Activités** | 7 comptes rattachés ; description cohérente | ☐ | |
 | P0.10 | Ouvrir le plan **GLC - Financements** | 4 comptes rattachés ; description cohérente | ☐ | |
@@ -125,7 +125,7 @@ Pas de modèle « Activité » parallèle — source de vérité = compte analyt
 | P0.11 | Ouvrir le compte **BAR** (Activités GLC) | Onglet **Pilotage GLC** visible | ☐ | |
 | P0.12 | Vérifier les **3 premiers champs** Palier 0 | **Type GLC** = Mixte ; **Ordre rapport GLC** renseigné ; **Actif rapport GLC** coché | ☐ | |
 | P0.13 | Saisir un **Commentaire de pilotage** (`glc_pilotage_comment`) test, enregistrer | 4ᵉ champ Palier 0 ; commentaire persisté après rechargement fiche | ☐ | |
-| P0.14 | Ouvrir **ADHESIONS** (Financements GLC) | **Type GLC** = Financement | ☐ | |
+| P0.14 | Ouvrir **ADHESIONS** (Axes analytiques) | **Type GLC** = Financement | ☐ | |
 
 ### 5. Applicabilités Odoo 19 (non bloquantes)
 

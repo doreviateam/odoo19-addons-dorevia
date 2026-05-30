@@ -1,8 +1,10 @@
-# Recette manuelle — Cockpit · Qualité comptable, analytique & suivi paiement
+# Recette manuelle — Contrôle de gestion · Qualité comptable, analytique & suivi paiement
 
-**Module :** `dorevia_glc_analytics` (extension cockpit — lot qualité / paiement)  
-**Version testée sandbox :** **`19.0.7.0.2`**  
-**Prérequis :** Palier 4 réaligné **`19.0.4.9.0`** gelé · Palier 5 trésorerie **`19.0.5.0.1`** GO complet MOA · `dorevia_glc_budget` installé  
+> **Doc alignée `19.0.14.1.0`** — menu **Contrôle de gestion**. Résultats recette GQ-6 (`19.0.7.0.2`) conservés comme preuve.
+
+**Module :** `dorevia_glc_analytics` (extension Contrôle de gestion — lot qualité / paiement)  
+**Version testée sandbox :** **`19.0.7.0.2`** *(min. **`19.0.14.1.0`** pour menus actuels)*  
+**Prérequis :** Contrôle de gestion · Palier 5 trésorerie **`19.0.5.0.1`** GO complet MOA  
 **Statut document :** **GO PR GQ-6** (2026-05-29) — recette serveur + navigateur MOA validées
 
 **Références :** [TICKET_COCKPIT_QUALITE_COMPTABLE_ANALYTIQUE_SUIVI_PAIEMENT.md](../TICKET_COCKPIT_QUALITE_COMPTABLE_ANALYTIQUE_SUIVI_PAIEMENT.md) · [MEMO_RAFFINEMENT_QUALITE_COMPTABLE_ANALYTIQUE.md](../MEMO_RAFFINEMENT_QUALITE_COMPTABLE_ANALYTIQUE.md) · [Recette Palier 5 trésorerie](./RECETTE_MANUELLE_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md) · [Recette période libre Palier 4](./RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md) · [PALIERS.md](../PALIERS.md)
@@ -11,18 +13,18 @@
 
 ## Invariants à prouver
 
-> **Recette · Cumul RH · Dépense · Solde ne doivent jamais être recalculés, corrigés ou filtrés par les statuts de paiement, le lettrage ou la couverture analytique.**
+> **Ressources · Cumul RH · Dépenses · Solde ne doivent jamais être recalculés, corrigés ou filtrés par les statuts de paiement, le lettrage ou la couverture analytique.**
 
 | Couche cockpit | Rôle | Peut modifier exploitation ? |
 |---|---|:---:|
-| **Exploitation** | Recette · Cumul RH · Dépense · Solde | — *(référence gelée)* |
+| **Exploitation** | Ressources · Cumul RH · Dépenses · Solde | — *(référence gelée)* |
 | **Trésorerie** | Flux compte bancaire de référence | **Non** |
 | **Contrôles qualité** | Couverture analytique · lettrage | **Non** |
 | **Tiers & paiements** | Cycle facturation / règlement | **Non** |
 
 Texte d’aide attendu sur les nouveaux onglets :
 
-> *« Ces indicateurs mesurent la fiabilité des données et le cycle de paiement. Ils ne modifient pas Recette · Cumul RH · Dépense · Solde. »*
+> *« Ces indicateurs mesurent la fiabilité des données et le cycle de paiement. Ils ne modifient pas Ressources · Cumul RH · Dépenses · Solde. »*
 
 ---
 
@@ -31,7 +33,7 @@ Texte d’aide attendu sur les nouveaux onglets :
 ```text
 URL  : http://localhost:18079
 Base : glc-rgl-test-import
-Menu : Comptabilité → Pilotage GLC → Cockpit couverture des charges de structure
+Menu : Facturation → Pilotage GLC → Contrôle de gestion
 ```
 
 **Onglets attendus post-livraison :**
@@ -151,7 +153,7 @@ Compte bancaire de référence : **`Compte Courant GLC`**
 
 | Réf. | Scénario | Attendu | OK |
 |---|---|---|:---:|
-| **QP-TREF-01** | KPI exploitation inchangés au changement de compte bancaire *(reprise Palier 5)* | Recette · Cumul RH · Dépense · Solde identiques | [ ] |
+| **QP-TREF-01** | KPI exploitation inchangés au changement de compte bancaire *(reprise Palier 5)* | Ressources · Cumul RH · Dépenses · Solde identiques | [ ] |
 | **QP-TREF-02** | Montants trésorerie réactifs au compte bancaire | Courant ≠ livret si mouvements | [ ] |
 
 ---
@@ -302,7 +304,7 @@ Sur **une facture client de référence** (noter n° __________ ) :
 
 ```bash
 docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
-  -d glc-rgl-test-import -u dorevia_glc_analytics,dorevia_glc_budget \
+  -d glc-rgl-test-import -u dorevia_glc_analytics \
   --test-enable --test-tags post_install \
   --stop-after-init --no-http
 ```
@@ -340,7 +342,7 @@ Tous les points suivants :
 
 Un seul item suffit :
 
-- [ ] KPI **Recette · Cumul RH · Dépense · Solde** modifiés par qualité / paiement / lettrage
+- [ ] KPI **Ressources · Cumul RH · Dépenses · Solde** modifiés par qualité / paiement / lettrage
 - [ ] Onglet **Trésorerie** Palier 5 régressé sans cause période / compte bancaire
 - [ ] Facture **payée** comptée dans reste à encaisser / payer
 - [ ] Facture **impayée** absente des montants ouverts
@@ -379,7 +381,7 @@ Recette serveur et navigateur validées. Q1 reformulé **Confiance analytique** 
 
 ## 11. Séquence de lecture cockpit *(post-livraison)*
 
-1. **Synthèse / Détail** — exploitation *(Recette · Cumul RH · Dépense · Solde)*
+1. **Synthèse / Détail** — exploitation *(Ressources · Cumul RH · Dépenses · Solde)*
 2. **Trésorerie** — flux compte bancaire de référence
 3. **Contrôles qualité** — fiabilité analytique et lettrage
 4. **Tiers & paiements** — cycle facturation / règlement
@@ -426,7 +428,7 @@ Note sandbox : la base était restée en nomenclature WIP `19.0.6.0.0` (`BAR_RES
 | `_aggregate_treasury()` inchangé | **OK** | idem |
 | Onglet **Contrôles qualité** | **OK** | présent dans la vue form |
 | Onglet **Tiers & paiements** | **OK** | présent dans la vue form |
-| Texte d'aide MOA | **OK** | « Ils ne modifient pas Recette · Cumul RH · Dépense · Solde » |
+| Texte d'aide MOA | **OK** | « Ils ne modifient pas Ressources · Cumul RH · Dépenses · Solde » |
 | Q1/Q2/Q3 alimentés | **OK** | champs calculés au refresh · 0 si période vide |
 | Tests qualité / paiement | **OK** | 9/9 |
 | Non-régression Palier 4 + 5 | **OK** | inclus dans 104/104 |
@@ -449,7 +451,7 @@ Période : `13 avr. 2026 → 31 mai 2026` · journal **Compte Courant GLC**
 | Étape | Attendu | OK | Observations |
 |---|---|:---:|---|
 | Ouvrir `http://localhost:18079` | Odoo accessible | [x] | |
-| Menu cockpit | Comptabilité → Pilotage GLC → Cockpit couverture des charges de structure | [x] | |
+| Menu cockpit | Facturation → Pilotage GLC → Contrôle de gestion | [x] | |
 | Hard refresh | `Cmd+Shift+R` | [x] | |
 | Onglet **Contrôles qualité** | Présent · lisible | [x] | Q1 Confiance analytique · Q2 lettrage |
 | Onglet **Tiers & paiements** | Présent · lisible | [x] | Q3 suivi paiement |
@@ -457,7 +459,7 @@ Période : `13 avr. 2026 → 31 mai 2026` · journal **Compte Courant GLC**
 | Wording Q1 | Confiance analytique · lignes comptables | [x] | Pas de « factures » / « pièces » dans le bloc Q1 |
 | Détail Q1 | Phrase synthèse une ligne | [x] | `36 lignes comptables contrôlées · 36 couvertes analytiquement · 0 à qualifier` |
 | Drill-down Q1 | Lignes à qualifier · Écritures concernées | [x] | |
-| KPI exploitation avant navigation | Recette · Cumul RH · Dépense · Solde notés | [x] | Voir §12.7 |
+| KPI exploitation avant navigation | Ressources · Cumul RH · Dépenses · Solde notés | [x] | Voir §12.7 |
 | Navigation qualité / paiement | Aucun impact exploitation | [x] | |
 | KPI exploitation après navigation | Identiques aux valeurs initiales | [x] | |
 | Bascule journal Livret Bleu | Trésorerie recalculée · exploitation inchangée | [x] | Trésorerie `30 000,00 €` |
@@ -480,7 +482,7 @@ Journal bancaire : `Compte Courant GLC`
 | Contrôle | Résultat |
 |---|---|
 | Version module | **`19.0.7.0.2`** |
-| Menu cockpit | **OK** — `Cockpit couverture des charges de structure` |
+| Menu cockpit | **OK** — `Contrôle de gestion` |
 | Vue form cockpit | **OK** |
 | Onglet **Contrôles qualité** | **OK** — présent dans la vue |
 | Onglet **Tiers & paiements** | **OK** — présent dans la vue |

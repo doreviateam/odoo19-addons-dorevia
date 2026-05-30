@@ -1,5 +1,10 @@
 # Release note — Jalon GLC Paliers 0–4
 
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
+
 **Date de jalon :** 2026-05-27  
 **Base de recette :** `glc-rgl-test-import`  
 **Verdict MOA :** **Jalon Paliers 0–4 terminé proprement** — socle stable, gelé
@@ -21,7 +26,7 @@ Cockpit soutenabilité  → couverture salaires, frais généraux, alertes rouge
 
 > Est-ce que les recettes d'activité et les financements couvrent les salaires, puis les frais généraux ?
 
-Menu cockpit : **Comptabilité → Pilotage GLC → Cockpit couverture des salaires**
+Menu cockpit : **Facturation → Pilotage GLC → Contrôle de gestion**
 
 ---
 
@@ -30,7 +35,7 @@ Menu cockpit : **Comptabilité → Pilotage GLC → Cockpit couverture des salai
 | Module | Version | Paliers | Statut MOA |
 |---|---|---|---|
 | `dorevia_glc_analytics` | **`19.0.4.0.0`** | 0, 1, 2, **4** | **Validé MOA · gelé** |
-| `dorevia_glc_budget` | **`19.0.1.0.0`** | 3 | **Validé MOA · gelé** |
+| *(budget retiré)* | — | 3 | **Validé MOA · gelé** |
 
 ### Contenu par palier
 
@@ -40,7 +45,7 @@ Menu cockpit : **Comptabilité → Pilotage GLC → Cockpit couverture des salai
 | **1** | `dorevia_glc_analytics` | Assistant anomalies analytiques (A1–A6), règles financement A3 |
 | **2** | `dorevia_glc_analytics` | Coûts salariés, ventilations `percent` / `hours`, overlay sans écriture comptable |
 | **3** | `dorevia_glc_budget` | Budget prévisionnel mensuel par axe (`initial` / `revised` / `landing`) |
-| **4** | `dorevia_glc_analytics` | Cockpit couverture des salaires, KPI, alertes, détail Activité × Mois |
+| **4** | `dorevia_glc_analytics` | Contrôle de gestion, KPI, alertes, détail Activité × Mois |
 
 ---
 
@@ -92,15 +97,15 @@ Base : `glc-rgl-test-import`
 
 ```bash
 docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
-  -d glc-rgl-test-import -u dorevia_glc_analytics,dorevia_glc_budget \
-  --test-enable --test-tags=/dorevia_glc_analytics,/dorevia_glc_budget \
+  -d glc-rgl-test-import -u dorevia_glc_analytics \
+  --test-enable --test-tags=/dorevia_glc_analytics \
   --stop-after-init --no-http
 ```
 
 | Suite | Résultat jalon |
 |---|---|
 | `/dorevia_glc_analytics` | **42 tests, 0 échec** |
-| `/dorevia_glc_budget` | **14 tests, 0 échec** |
+| `/dorevia_glc_analytics` | **14 tests, 0 échec** |
 | **Total** | **46 post-tests, vert** |
 
 ---
@@ -112,7 +117,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 | Warning multi-société | Domaine `glc.salary.allocation.line.activity_account_id` — warning Odoo connu au chargement des vues | **Non bloquant** — recette P2 et P4 OK |
 | RH historique pré-bascule | Mois antérieurs à la bascule Palier 2 : règle MOA à confirmer si lecture historique `account.analytic.line` requise | Hors V1 cockpit (post-bascule = ventilations) |
 | Budget RH sur STRUCTURE | Le prévisionnel RH peut être saisi sur l'axe STRUCTURE en recette Palier 3 — séparation RH / frais généraux en budget à discipliner en saisie MOA | Variance budget cockpit, pas d'erreur technique |
-| Pas d'écriture auto | Ventilations salariales et budgets restent des **overlays de gestion** — aucune génération comptable/analytique à la validation | Doctrine voulue |
+| Pas d'écriture auto | *(retiré — ventilations)* et budgets restent des **overlays de gestion** — aucune génération comptable/analytique à la validation | Doctrine voulue |
 | OCA Budget | Non retenu — module GLC dédié | Hors périmètre |
 
 ---
@@ -142,7 +147,7 @@ Palier 5 **en pause courte** — à cadrer ultérieurement :
 ```bash
 # Mise à jour modules jalon
 docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
-  -d <base> -u dorevia_glc_analytics,dorevia_glc_budget \
+  -d <base> -u dorevia_glc_analytics \
   --stop-after-init --no-http
 
 docker compose restart odoo

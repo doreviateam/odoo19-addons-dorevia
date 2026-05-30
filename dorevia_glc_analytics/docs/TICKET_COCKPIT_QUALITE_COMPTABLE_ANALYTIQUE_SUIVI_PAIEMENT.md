@@ -39,7 +39,7 @@ Le Palier 5 a ajouté une **lecture trésorerie séparée** (compte bancaire de 
 
 | Couche | Source | Rôle | Impact changement compte bancaire |
 |---|---|---|---|
-| **Exploitation** | `account.analytic.line` classes 6/7 | Recette · Cumul RH · Dépense · Solde | **Aucun** *(gelé Palier 4)* |
+| **Exploitation** | `account.analytic.line` classes 6/7 | Ressources · Cumul RH · Dépenses · Solde | **Aucun** *(gelé Palier 4)* |
 | **Trésorerie** | `account.move.line` compte 512 de référence | Entrées · sorties · virements · solde période | **Filtré** par journal bancaire |
 | **Suivi paiement** | `account.move` / lignes tiers 401·411 | Facturé · payé · partiel · ouvert · reste dû | **Indépendant** du compte bancaire cockpit |
 | **Qualité comptable** | `account.move` / `account.move.line` | Couverture analytique · lettrage tiers | **Indépendant** du compte bancaire cockpit |
@@ -259,7 +259,7 @@ Synthèse · Détail · Trésorerie · Contrôles qualité · Tiers & paiements 
 
 Texte d’aide obligatoire *(comme onglet Trésorerie)* :
 
-> *« Ces indicateurs mesurent la fiabilité des données et le cycle de paiement. Ils ne modifient pas Recette · Cumul RH · Dépense · Solde. »*
+> *« Ces indicateurs mesurent la fiabilité des données et le cycle de paiement. Ils ne modifient pas Ressources · Cumul RH · Dépenses · Solde. »*
 
 **Option C en fallback** si MOA juge le cockpit trop dense : menu dédié avec **même transient** `glc.coverage.cockpit` et mêmes filtres.
 
@@ -353,7 +353,7 @@ Invariant test obligatoire :
 
 ### 12.1 Invariant global
 
-- [ ] **CA-INV-01** — Recette · Cumul RH · Dépense · Solde **strictement identiques** avant/après livraison lot qualité
+- [ ] **CA-INV-01** — Ressources · Cumul RH · Dépenses · Solde **strictement identiques** avant/après livraison lot qualité
 - [ ] **CA-INV-02** — Onglet Trésorerie Palier 5 **non régressé**
 - [ ] **CA-INV-03** — Aucun domaine `_revenue_analytic_line_domain` / `_expense_*` / `_payroll_*` modifié
 

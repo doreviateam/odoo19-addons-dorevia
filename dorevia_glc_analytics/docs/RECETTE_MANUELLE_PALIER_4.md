@@ -1,8 +1,13 @@
-# Recette manuelle — Cockpit couverture des salaires · Palier 4
+# Recette manuelle — Contrôle de gestion · Palier 4
+
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
 
 **Module :** `dorevia_glc_analytics` (extension Palier 4)  
 **Version cible :** `19.0.4.0.0`  
-**Prérequis :** `dorevia_glc_analytics` + `dorevia_glc_budget` installés (Paliers 0–3 gelés MOA)  
+**Prérequis :** `dorevia_glc_analytics` + `dorevia_glc_analytics` seuls (Paliers 0–3 gelés MOA)  
 **Références :** [CADRAGE_FINAL_PALIER_4.md](./CADRAGE_FINAL_PALIER_4.md) · [TICKET_PALIER_4.md](./TICKET_PALIER_4.md) · [PR #33](https://github.com/doreviateam/odoo19-addons-dorevia/pull/33)
 
 **Statut document :** **Validé MOA** — recette exécutée sur `glc-rgl-test-import` (2026-05-27)
@@ -15,7 +20,7 @@
 URL  : http://localhost:18079
 Base : glc-rgl-test-import
 Branche : feat/glc-cockpit-palier-4 (PR #33 — non mergée)
-Menu : Comptabilité → Pilotage GLC → Cockpit couverture des salaires
+Menu : Facturation → Pilotage GLC → Contrôle de gestion
 ```
 
 ---
@@ -36,7 +41,7 @@ docker compose restart odoo
 
 | Pas | Action | Contrôle attendu | OK | Observations |
 |---|---|---|---|---|
-| P4.1 | Menu **Cockpit couverture des salaires** | Accès Utilisateur GLC | ☑ | |
+| P4.1 | Menu **Contrôle de gestion** | Accès Utilisateur GLC | ☑ | |
 | P4.2 | Filtres société / année / mois / activité / scénario budget | Filtres opérationnels | ☑ | |
 | P4.3 | **Actualiser** — KPI ressources / masse salariale / frais généraux | Montants cohérents | ☑ | |
 | P4.4 | Bandeau alerte | Rouge / orange / vert cohérents | ☑ | |
@@ -61,15 +66,15 @@ docker compose restart odoo
 
 ```bash
 docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
-  -d glc-rgl-test-import -u dorevia_glc_analytics,dorevia_glc_budget \
-  --test-enable --test-tags=/dorevia_glc_analytics,/dorevia_glc_budget \
+  -d glc-rgl-test-import -u dorevia_glc_analytics \
+  --test-enable --test-tags=/dorevia_glc_analytics \
   --stop-after-init --no-http
 ```
 
 | Résultat attendu | Résultat recette |
 |---|---|
 | Tests `/dorevia_glc_analytics` (dont cockpit) | **42 post-tests, 0 échec, 0 erreur** |
-| Tests `/dorevia_glc_budget` | **14 post-tests, 0 échec, 0 erreur** |
+| Tests `/dorevia_glc_analytics` | **14 post-tests, 0 échec, 0 erreur** |
 | **Total** | **46 post-tests, vert** |
 
 ---

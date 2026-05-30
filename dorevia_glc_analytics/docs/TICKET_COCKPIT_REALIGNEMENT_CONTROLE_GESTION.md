@@ -1,6 +1,12 @@
 # Ticket — Réalignement cockpit GLC / contrôle de gestion
 
-**Module :** `dorevia_glc_analytics` (+ `dorevia_glc_budget` pour le prévisionnel)  
+> **Addendum `19.0.14.0.2` (2026-05-30)** — Le corps de ce ticket décrit le GO **`19.0.4.9.0`**. Depuis la simplification MOA :
+> - menu **Contrôle de gestion** (réalisé seul, sans budget ni overlay RH) ;
+> - Palier 2 et module `dorevia_glc_budget` **retirés** ;
+> - grammaire UI : **Ressources · Cumul RH · Dépenses · Solde**.
+> État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+**Module :** `dorevia_glc_analytics`  
 **Version installée (réf.) :** `19.0.4.9.0`  
 **Statut :** **GO livraison MOA** — Palier 4 réaligné **gelé** · **`19.0.4.9.0`** (2026-05-28) · branche poussée · **88 post-tests verts** · prochaine séquence : cadrage Palier 5 avant code  
 **Date :** 2026-05-28
@@ -40,7 +46,7 @@ Question centrale devenue :
 | **Réalisé cockpit** | Comptabilité analytique issue des écritures (principalement classes **6 / 7**), tous axes analytiques exploitables |
 | **Ventilations RH Palier 2** | **Contrôle / comparaison / justification** — **ne fabriquent pas** le réalisé cockpit (anti double comptage) |
 | **Budget Palier 3** | Prévisionnel — périmètre partiel documenté (voir §4) |
-| **Grammaire UI MOA** | Recette · Cumul RH · Dépense · Solde |
+| **Grammaire UI MOA** | Ressources · Cumul RH · Dépenses · Solde |
 
 Formule solde :
 
@@ -221,7 +227,7 @@ Ensuite : qualité des données (§3.5), budget enrichi (§3.7).
 
 | Point validé | Statut |
 |---|---|
-| Grammaire Recette · Cumul RH · Dépense · Solde | OK |
+| Grammaire Ressources · Cumul RH · Dépenses · Solde | OK |
 | Libellés « Dépenses hors salaires » | OK |
 | Filtre Axe analytique conservé au refresh | OK |
 | Titre dynamique selon axe filtré | OK |

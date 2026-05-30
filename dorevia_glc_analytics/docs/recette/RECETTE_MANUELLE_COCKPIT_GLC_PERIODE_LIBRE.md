@@ -1,22 +1,24 @@
-# Recette manuelle — Cockpit GLC — Période libre
+# Recette manuelle — Contrôle de gestion GLC — Période libre
+
+> **Mise à jour doc `19.0.14.0.2`** — Menu **Contrôle de gestion** · réalisé seul · sans budget.  
+> Les sections historiques (budget, versions `19.0.4.x`) restent comme trace de recette.
 
 ## Statut
 
-**GO livraison MOA** — Palier 4 réaligné **gelé** · **`19.0.4.9.0`** (2026-05-28) · **88 post-tests verts** · branche poussée.  
-Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : **tous les plans analytiques** par défaut.  
-Réalignement contrôle de gestion : [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) — **GO livraison**.  
-Compléments manuels **R14-CAISSE / R14-OD / R14-645-REEL** : non bloquants · à jouer sur données réelles.
+**Actif** — recette d'exploitation **Contrôle de gestion** · version module **`19.0.14.0.2`** minimum.  
+Doctrine **date + montant + GL classe 6/7 + analytique exploitable** : tous les plans analytiques par défaut.  
+Références : [ETAT_MODULE_ACTUEL.md](../ETAT_MODULE_ACTUEL.md) · [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md).
 
-*(Historique : … · wording Solde `19.0.4.8.9` · finition synthèse `19.0.4.8.10` · libellés axe `19.0.4.8.14` · réalignement métier `19.0.4.9.0`.)*
+*(Historique GO MOA : Palier 4 réaligné gelé `19.0.4.9.0` — 2026-05-28.)*
 
 ## Module
 
 | Élément | Valeur |
 |---|---|
 | Module cockpit | `dorevia_glc_analytics` |
-| Module budget (prérequis) | `dorevia_glc_budget` |
-| Version attendue / installée | **`19.0.4.9.0`** |
-| Palier | 4 — Cockpit GLC |
+| Module | `dorevia_glc_analytics` |
+| Version attendue / installée | **`19.0.14.0.2`** *(min.)* |
+| Palier | 4 — Contrôle de gestion |
 | Évolution | période libre `date_from` / `date_to` + regroupement mensuel automatique |
 
 **Références :** [TICKET_PALIER_4BIS.md](../TICKET_PALIER_4BIS.md) · [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) · [RECETTE_MANUELLE_PALIER_4.md](../RECETTE_MANUELLE_PALIER_4.md) · [CADRAGE_FINAL_PALIER_4.md](../CADRAGE_FINAL_PALIER_4.md)
@@ -52,7 +54,7 @@ docker compose restart odoo
 
 - Accès au menu :
 
-`Comptabilité → Pilotage GLC → Cockpit couverture des charges de structure`
+`Facturation → Pilotage GLC → Contrôle de gestion`
 
 *(libellé technique ; équivalent MOA « Cockpit GLC »)*
 
@@ -565,7 +567,7 @@ Complément MOA post-validation UX `19.0.4.4.2` :
 
 ```bash
 docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
-  -d glc-rgl-test-import -u dorevia_glc_analytics,dorevia_glc_budget \
+  -d glc-rgl-test-import -u dorevia_glc_analytics \
   --test-enable --test-tags post_install \
   --stop-after-init --no-http
 ```
@@ -573,7 +575,7 @@ docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf \
 | Résultat attendu | Résultat recette `19.0.4.7.0` (2026-05-28) |
 |---|---|
 | Tests `dorevia_glc_analytics` | **70 tests** — **0 failed, 0 error** |
-| Tests `dorevia_glc_budget` | **14 tests** — **0 failed, 0 error** |
+| Tests module *(budget retiré)* | **14 tests** — **0 failed, 0 error** |
 | **Total** | **74 post-tests** — **GO technique MOA** |
 
 Tests source réalisé R14 :
@@ -754,7 +756,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 
 **Option utilisateur :** case **« Budget ? »** (préférence mémorisée en `localStorage`).
 
-**Périmètre R16 :** onglet **Détail** + **Synthèse** alignés sur grammaire **Recette · Cumul RH · Dépense · Solde** (`19.0.4.8.9`+).
+**Périmètre R16 :** onglet **Détail** + **Synthèse** alignés sur grammaire **Ressources · Cumul RH · Dépenses · Solde** (`19.0.4.8.9`+).
 
 ### Verdict R16
 
@@ -781,7 +783,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | R17-RH-CHECK | Contrôle RH **À contrôler** : paie 700 · ventilation 0 · écart 700 · statut `check` | [x] | |
 | R17-RH-NA | Contrôle RH **N/A** : paie 0 · ventilation 0 · statut `na` | [x] | Badges success / warning / muted |
 | R17-LBL-DEP | Wording **Dépenses hors salaires** (Charges de structure + champs cockpit) | [x] | |
-| R17-LBL-GRAM | Grammaire **Recette · Cumul RH · Dépense · Solde** (Synthèse + Détail) | [x] | |
+| R17-LBL-GRAM | Grammaire **Ressources · Cumul RH · Dépenses · Solde** (Synthèse + Détail) | [x] | |
 | R17-BUD-HINT | Message discret si pas de budget sur la période | [x] | Synthèse + Détail |
 | R17-BUD-CHECK | Case **Budget ?** · mode Réel / Budget / Écart | [x] | Templates validés |
 | R17-AUTO | Non-régression post-install | [x] | **88 tests · 0 failed · 0 error** (rejeu serveur 2026-05-28) |
@@ -793,10 +795,10 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | `-u dorevia_glc_analytics` sur `glc-rgl-test-import` | OK |
 | Restart worker Odoo | OK |
 | Version installée confirmée | **`dorevia_glc_analytics` `19.0.4.9.0`** |
-| Module budget (inchangé) | **`dorevia_glc_budget` `19.0.1.0.0`** |
+| Budget Palier 3 | **Retiré** `19.0.14.0.0` |
 | Rejeu `post_install` analytics + budget | **88 tests · 0 failed · 0 error(s)** |
 | — dont `dorevia_glc_analytics` | 84 tests |
-| — dont `dorevia_glc_budget` | 14 tests |
+| — | — |
 
 **Note logs :** deux erreurs SQL `duplicate key` sur contraintes d'unicité budget / ligne budget — **attendues** (tests de non-régression contraintes). Le résumé Odoo final confirme `0 failed, 0 error(s)`.
 
@@ -855,7 +857,7 @@ Création du **premier onglet** du cockpit GLC : lecture immédiate de pilotage 
 | Version module | `dorevia_glc_analytics` **`19.0.4.9.0`** |
 | Verdict global | **GO livraison MOA** · Palier 4 réaligné gelé **`19.0.4.9.0`** · **88 post-tests verts** |
 | Date verdict livraison | **2026-05-28** |
-| Modules installés | `dorevia_glc_analytics` **`19.0.4.9.0`** · `dorevia_glc_budget` **`19.0.1.0.0`** |
+| Modules installés | `dorevia_glc_analytics` **`19.0.4.9.0`** |
 | Référence ticket | [TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md](../TICKET_COCKPIT_REALIGNEMENT_CONTROLE_GESTION.md) |
 | Compléments manuels R14 | **En attente MOA** — R14-CAISSE · R14-OD · R14-645-REEL |
 

@@ -1,5 +1,10 @@
 # Ticket Palier 2 — Ventilation salariale mensuelle
 
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
+
 **Module :** `dorevia_glc_analytics`  
 **Branche cible :** `feat/glc-analytique-palier-2`  
 **Version cible :** `19.0.3.0.0`  
@@ -186,14 +191,14 @@ Montant activité = heures activité × coût horaire
 
 | Écran | Description |
 |---|---|
-| **Coûts salariés mensuels** | Liste / formulaire `glc.employee.cost.line` |
-| **Ventilations salariales** | Liste / formulaire `glc.salary.allocation` + lignes inline |
+| ***(retiré — coûts salariés)*** | Liste / formulaire `glc.employee.cost.line` |
+| ***(retiré — ventilations)*** | Liste / formulaire `glc.salary.allocation` + lignes inline |
 | **Synthèse mois** | Bandeau : total ventilé vs masse comptable paie |
 
-**Menus proposés** (sous `Comptabilité → Pilotage GLC`) :
+**Menus proposés** (sous `Facturation → Pilotage GLC`) :
 
-- `Coûts salariés mensuels`
-- `Ventilations salariales`
+- `*(retiré — coûts salariés)*`
+- `*(retiré — ventilations)*`
 
 **Groupe :** Gestionnaire GLC (CRUD) · Utilisateur GLC (lecture seule, option MOA).
 
@@ -257,7 +262,7 @@ Aucune modification du wizard anomalies Palier 1 dans ce ticket, sauf documentat
 - Intégration `hr_payroll` / bulletins / **import paie automatique**
 - **Timesheets salariés** (`hr_timesheet` ou équivalent) — hors Palier 2
 - Registre bénévole (reporté post-cockpit — cf. [PALIERS.md](./PALIERS.md))
-- Cockpit couverture des salaires (Palier 4)
+- Contrôle de gestion (Palier 4)
 - Rapport CA / coût complet affiché (Palier 4 — consomme les données Palier 2)
 - Clôture analytique mensuelle (reportée post-cockpit)
 - Reclassement rétroactif massif des écritures paie historiques

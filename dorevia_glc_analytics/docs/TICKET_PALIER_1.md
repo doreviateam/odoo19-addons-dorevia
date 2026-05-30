@@ -43,8 +43,8 @@ Wizard `glc.analytic.anomaly.wizard` :
 | `include_posted` | Écritures validées (défaut : oui) |
 | `include_draft` | Brouillons (défaut : non) |
 
-**Nom fonctionnel :** Anomalies analytiques GLC  
-**Menu :** `Comptabilité → Pilotage GLC → Anomalies analytiques`  
+**Nom fonctionnel :** Audit analytique GLC  
+**Menu :** `Facturation → Pilotage GLC → Audit`  
 **Groupe :** Gestionnaire GLC (lecture) ; génération réservée Gestionnaire GLC
 
 Action : bouton **Analyser** → liste `glc.analytic.anomaly.line` (transient).
@@ -220,7 +220,7 @@ Palier 1 **non bloquant** par défaut :
 
 | ID | Critère |
 |---|---|
-| CA1 | Menu `Anomalies analytiques` visible pour Gestionnaire GLC |
+| CA1 | Menu `Audit` visible pour Gestionnaire GLC |
 | CA2 | Facture fournisseur sans activité → anomalie A1 |
 | CA3 | Facture client sans double axe → anomalie A2 |
 | CA4 | Facture client `BAR` + `RESSOURCES_PROPRES` → **pas** d'anomalie A2 |

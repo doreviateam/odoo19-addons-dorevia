@@ -15,7 +15,7 @@ Deux lectures complémentaires sur le tableau **Détail par axe analytique** :
 ## UI
 
 - Case **« Payé uniquement »** à côté de **« Budget ? »** (persistée en `localStorage`).
-- Recalcule **Ressource · Cumul RH · Dépense · Solde**, sous-totaux mensuels et total période (même règle sur toutes les lignes — correctif `19.0.9.0.1`).
+- Recalcule **Ressources · Cumul RH · Dépenses · Solde**, sous-totaux mensuels et total période (même règle sur toutes les lignes — correctif `19.0.9.0.1`).
 - **Recharger le cockpit** après mise à jour module pour alimenter les champs `*_paid` en base.
 - **Budget** inchangé ; écarts recalculés sur la base des montants payés si les deux cases sont cochées.
 

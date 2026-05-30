@@ -1,4 +1,6 @@
-# Recette manuelle — dorevia_glc_analytics · Palier 1
+# Recette manuelle — dorevia_glc_analytics · Palier 1 (Audit)
+
+> **Menu actuel :** Facturation → Pilotage GLC → **Audit** (`19.0.14.1.0`).
 
 **Module :** `dorevia_glc_analytics`  
 **Version cible :** `19.0.2.0.0` (Palier 1)  
@@ -31,7 +33,7 @@ Version : 19.0.2.0.0
 |---|---|---|
 | A1 | Palier 0 installé et menus Pilotage GLC visibles | ☑ |
 | A2 | Utilisateur **Gestionnaire GLC** | ☑ |
-| A3 | Menu **Anomalies analytiques** présent | ☑ |
+| A3 | Menu **Audit** présent | ☑ |
 | A4 | Paramètre date de bascule renseigné (si test A5) | ☑ |
 
 ---
@@ -53,7 +55,7 @@ Version : 19.0.2.0.0
 
 | Pas | Action | Contrôles | OK | Observations |
 |---|---|---|---|---|
-| P1.1 | Ouvrir **Pilotage GLC → Anomalies analytiques** | Wizard période affiché | ☑ | |
+| P1.1 | Ouvrir **Pilotage GLC → Audit** | Wizard période affiché | ☑ | |
 | P1.2 | Période = mois courant, validées uniquement | Options cochées par défaut cohérentes | ☑ | Mai 2026 |
 | P1.3 | Cliquer **Analyser** | Liste anomalies générée sans erreur | ☑ | 22 anomalies |
 | P1.4 | Vérifier T1 (fournisseur sans activité) | Anomalie A1 présente | ☑ | |
@@ -99,7 +101,7 @@ Version : 19.0.2.0.0
 ```text
 Recette exécutée sur glc-rgl-test-import (http://localhost:18079).
 Module 19.0.2.0.0 · redémarrage Odoo OK · tests auto : 17/17.
-Assistant Anomalies analytiques opérationnel · analyse mai 2026 : 22 anomalies.
+Assistant Audit opérationnel · analyse mai 2026 : 22 anomalies.
 T1 A1 · T2 A2 · T3 sans faux positif A2 · T4 A4 · T5 A5 · T6 bandeau STRUCTURE 100 %.
 Ouverture pièce depuis anomalie OK · validation sans analytique acceptée (CA7).
 Applicabilités optional conservées — pas de mandatory activé.
@@ -114,7 +116,7 @@ Applicabilités optional conservées — pas de mandatory activé.
 | Mise à jour module Docker (`19.0.2.0.0`) | OK |
 | Redémarrage Odoo | OK |
 | Tests automatisés (`/dorevia_glc_analytics`) | **17 post-tests, 0 échec, 0 erreur** |
-| Menu **Anomalies analytiques** | OK |
+| Menu **Audit** | OK |
 | Analyse wizard période mai 2026 | OK — 22 anomalies |
 | T1 fournisseur sans activité | A1 détectée |
 | T2 client sans analytique | A2 détectée |
@@ -142,10 +144,10 @@ Applicabilités optional conservées — pas de mandatory activé.
 
 - Palier 1 **validé MOA** — assistant anomalies prêt pour usage courant.
 - Décision MOA à planifier : maintien `optional` vs durcissement progressif `mandatory` (post-recette, hors Palier 1).
-- Prochain ticket : **Palier 2** — ventilation salariale.
+- Palier 2 retiré — voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
 
 ## Après validation Palier 1
 
 1. Décision MOA : maintien `optional` vs durcissement progressif `mandatory`.
-2. Cadrage **Palier 2** — ventilation salariale.
+2. *(Palier 2 retiré — doc archive uniquement.)*
 3. Ne pas confondre avec clôture analytique (Palier 5).

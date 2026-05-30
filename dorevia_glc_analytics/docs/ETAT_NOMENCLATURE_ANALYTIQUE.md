@@ -1,6 +1,6 @@
 # État nomenclature analytique GLC
 
-**Version module :** `19.0.8.0.0`  
+**Version module :** `19.0.14.0.2`  
 **Date :** 2026-05-29
 
 ---
@@ -42,10 +42,10 @@ docker compose restart odoo
 
 ## Vérification UI attendue
 
-- **Comptabilité → Configuration → Plans analytiques** : un plan actif **`GLC - Activités`** avec 11 comptes.
+- **Facturation → Configuration → Plans analytiques** : un plan actif **`GLC - Activités`** avec 11 comptes.
 - Plan **`GLC - Financements (archivé)`** peut subsister en lecture seule sur bases migrées — sans comptes rattachés.
-- Menu **Pilotage GLC → Axes analytiques GLC** : les 11 axes.
-- Menu **Financements GLC** : filtre les 4 axes ressources sur le plan unique.
+- Menu **Pilotage GLC → Axes analytiques** : les 11 axes.
+- Les 4 axes financement sont visibles dans **Axes analytiques** (plan unique).
 
 ---
 

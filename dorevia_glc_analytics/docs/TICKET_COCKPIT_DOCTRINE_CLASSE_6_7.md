@@ -1,5 +1,9 @@
 # Ticket — Doctrine cockpit GLC : classe 6/7 + analytique exploitable
 
+> Addendum `19.0.14` : pas de prévisionnel cockpit. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+> 
+
 **Module :** `dorevia_glc_analytics`
 **Branche :** `feat/glc-cockpit-doctrine-classe-6-7-19.0.4.8.0`
 **Version cible :** `19.0.4.8.2`
