@@ -8,6 +8,7 @@ Version après correctif Lot A suite : `19.0.14.1.2`
 Version après correctif Lot B perf initial : `19.0.14.2.0`
 Version après correctif Lot B suite : `19.0.14.2.1`
 Version après correctif Lot C périmètre analytique : `19.0.14.3.0`
+Version après correctif Lot D UX / sémantique : `19.0.14.4.0`
 Type d'audit : audit statique expert Odoo, orienté développeur.
 
 ## 1. Verdict synthétique
@@ -229,6 +230,8 @@ Les champs suivants sont des `Integer`, mais gardent un suffixe `amount` :
 
 Le libellé UI précise maintenant "lignes", mais le nom technique reste ambigu.
 
+Statut Lot D : **corrigé en `19.0.14.4.0`**. Les champs explicites `*_line_count` sont ajoutés et utilisés par les vues. Les anciens champs `*_amount` restent alimentés comme alias transitoires pour compatibilité.
+
 Demande développeur :
 
 - renommer techniquement vers `*_line_count` lors d'un prochain lot contrôlé ;
@@ -239,6 +242,8 @@ Demande développeur :
 La vue l'indique : "Q2 — Lettrage tiers (stock à fin période)". Le code calcule bien les lignes jusqu'à `date_to`, sans borne `date_from`.
 
 C'est pertinent pour un taux de lettrage, mais il faut éviter l'ambiguïté avec les autres KPI du cockpit, majoritairement bornés `date_from/date_to`.
+
+Statut Lot D : **corrigé en `19.0.14.4.0`**. La vue rappelle explicitement que les lignes antérieures à la période restent prises en compte si elles sont ouvertes à la date de fin.
 
 Demande développeur :
 
@@ -254,6 +259,8 @@ Le mode "Payé uniquement" est stocké dans `localStorage` avec la clé :
 La clé n'est pas segmentée par base, société, utilisateur ou environnement.
 
 Impact limité, mais possible surprise si le même navigateur navigue entre sandbox, prod, plusieurs sociétés ou plusieurs utilisateurs.
+
+Statut Lot D : **corrigé en `19.0.14.4.0`**. La clé active est segmentée par base, utilisateur et société : `glc_cockpit_detail_paid_only:<db>:<uid>:<company_id>`. L'ancienne clé reste lue uniquement comme valeur initiale de migration.
 
 Demande développeur :
 
@@ -365,10 +372,16 @@ Priorité : haute avant exploitation avec historique important.
 
 Objectif : verrouiller ce que le cockpit lit.
 
-À faire :
+Statut : **réalisé en `19.0.14.3.0`** pour le périmètre cockpit.
+
+Traité :
 
 - décider "plan GLC uniquement" ou "tous plans sauf exclusions" ;
 - tester le comportement avec un compte analytique non GLC ;
+- documenter le périmètre plan GLC officiel.
+
+Reste hors Lot C :
+
 - documenter les codes exclus et les comptes legacy ;
 - stabiliser la stratégie migration nomenclature.
 
@@ -378,11 +391,16 @@ Priorité : moyenne à haute.
 
 Objectif : réduire les ambiguïtés pour la MOA.
 
-À faire :
+Statut : **réalisé en `19.0.14.4.0`** pour les points principaux.
+
+Traité :
 
 - renommer techniquement les champs `*_amount` qui sont des compteurs ;
 - renforcer l'aide Q2 "stock à fin période" ;
 - segmenter la préférence navigateur "Payé uniquement" ;
+
+Reste hors Lot D :
+
 - vérifier le retour responsive de la phrase Q1 avec `text-nowrap`.
 
 Priorité : moyenne.
@@ -542,6 +560,27 @@ Validation sandbox `glc-rgl-test-import` après upgrade `19.0.14.3.0` :
 
 - tests module : `123 tests`, `105 post-tests`, `0 failed`, `0 error(s)` ;
 - benchmark YTD `2026-01-01` → `2026-05-30` : meilleur `0.189s`, moyen `0.196s`.
+
+### 12.3 Addendum correctif Lot D — UX / sémantique
+
+Objectif : fermer les dettes P3 sans modifier les KPI métier.
+
+Correctifs livrés :
+
+- nouveaux champs de qualité documentaire :
+  - `revenue_eligible_line_count` ;
+  - `revenue_invoiced_line_count` ;
+  - `expense_eligible_line_count` ;
+  - `expense_invoiced_line_count` ;
+- les anciens champs `*_amount` restent alimentés comme alias transitoires ;
+- les vues utilisent les champs `*_line_count` ;
+- la préférence navigateur `Payé uniquement` est segmentée par base, utilisateur et société ;
+- l'onglet Q2 précise que le lettrage est un stock à date de fin, pas un flux borné à la période.
+
+Validation sandbox `glc-rgl-test-import` après upgrade `19.0.14.4.0` :
+
+- tests module : `123 tests`, `105 post-tests`, `0 failed`, `0 error(s)` ;
+- benchmark YTD `2026-01-01` → `2026-05-30` : meilleur `0.160s`, moyen `0.166s`.
 
 ## 13. Conclusion
 

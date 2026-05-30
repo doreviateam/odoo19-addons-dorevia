@@ -130,26 +130,46 @@ class GlcCoverageCockpit(models.TransientModel):
         readonly=True,
         help="Lecture intermédiaire : ressources / cumul RH.",
     )
-    revenue_eligible_amount = fields.Integer(
+    revenue_eligible_line_count = fields.Integer(
         string="Ressources éligibles (lignes)",
         readonly=True,
     )
-    revenue_invoiced_amount = fields.Integer(
+    revenue_invoiced_line_count = fields.Integer(
         string="Ressources facturées (lignes)",
         readonly=True,
+    )
+    revenue_eligible_amount = fields.Integer(
+        string="Ressources éligibles (lignes, alias)",
+        readonly=True,
+        help="Alias transitoire : utiliser revenue_eligible_line_count.",
+    )
+    revenue_invoiced_amount = fields.Integer(
+        string="Ressources facturées (lignes, alias)",
+        readonly=True,
+        help="Alias transitoire : utiliser revenue_invoiced_line_count.",
     )
     revenue_invoiced_rate = fields.Float(
         string="Ressources facturées (%)",
         digits=(16, 2),
         readonly=True,
     )
-    expense_eligible_amount = fields.Integer(
+    expense_eligible_line_count = fields.Integer(
         string="Dépenses éligibles (lignes)",
         readonly=True,
     )
-    expense_invoiced_amount = fields.Integer(
+    expense_invoiced_line_count = fields.Integer(
         string="Dépenses facturées (lignes)",
         readonly=True,
+    )
+    expense_eligible_amount = fields.Integer(
+        string="Dépenses éligibles (lignes, alias)",
+        readonly=True,
+        help="Alias transitoire : utiliser expense_eligible_line_count.",
+    )
+    expense_invoiced_amount = fields.Integer(
+        string="Dépenses facturées (lignes, alias)",
+        readonly=True,
+        help="Alias transitoire : utiliser expense_invoiced_line_count.",
     )
     expense_invoiced_rate = fields.Float(
         string="Dépenses facturées (%)",
@@ -928,11 +948,15 @@ class GlcCoverageCockpit(models.TransientModel):
             cockpit_accounts, period_start, period_end
         )
         return {
+            "revenue_eligible_line_count": revenue_eligible,
+            "revenue_invoiced_line_count": revenue_invoiced,
             "revenue_eligible_amount": revenue_eligible,
             "revenue_invoiced_amount": revenue_invoiced,
             "revenue_invoiced_rate": self._document_quality_rate(
                 revenue_invoiced, revenue_eligible
             ),
+            "expense_eligible_line_count": expense_eligible,
+            "expense_invoiced_line_count": expense_invoiced,
             "expense_eligible_amount": expense_eligible,
             "expense_invoiced_amount": expense_invoiced,
             "expense_invoiced_rate": self._document_quality_rate(

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.14.3.0",
+    "version": "19.0.14.4.0",
     "category": "Accounting/Accounting",
     "summary": "Pilotage GLC — contrôle de gestion sur réalisé analytique.",
     "description": """

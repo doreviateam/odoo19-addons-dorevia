@@ -2,6 +2,7 @@
 
 import { Component, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
+import { session } from "@web/session";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { formatMonetary } from "@web/views/fields/formatters";
 
@@ -106,8 +107,36 @@ export class GlcCoverageDetailField extends Component {
     setup() {
         this.families = DETAIL_FAMILIES;
         this.state = useState({
-            showPaidOnly: localStorage.getItem(STORAGE_KEY_PAID_ONLY) === "1",
+            showPaidOnly: this._initialPaidOnlyState(),
         });
+    }
+
+    get storageCompanyId() {
+        const company = this.props.record.data.company_id;
+        if (!company) {
+            return "no_company";
+        }
+        if (Array.isArray(company)) {
+            return company[0] || "no_company";
+        }
+        if (typeof company === "object" && company !== null) {
+            return company.id || "no_company";
+        }
+        return company;
+    }
+
+    get paidOnlyStorageKey() {
+        const db = session.db || "no_db";
+        const uid = session.uid || "no_uid";
+        return `${STORAGE_KEY_PAID_ONLY}:${db}:${uid}:${this.storageCompanyId}`;
+    }
+
+    _initialPaidOnlyState() {
+        const scopedValue = localStorage.getItem(this.paidOnlyStorageKey);
+        if (scopedValue !== null) {
+            return scopedValue === "1";
+        }
+        return localStorage.getItem(STORAGE_KEY_PAID_ONLY) === "1";
     }
 
     get currencyId() {
@@ -131,7 +160,7 @@ export class GlcCoverageDetailField extends Component {
     togglePaidOnly(ev) {
         this.state.showPaidOnly = ev.target.checked;
         localStorage.setItem(
-            STORAGE_KEY_PAID_ONLY,
+            this.paidOnlyStorageKey,
             this.state.showPaidOnly ? "1" : "0"
         );
     }

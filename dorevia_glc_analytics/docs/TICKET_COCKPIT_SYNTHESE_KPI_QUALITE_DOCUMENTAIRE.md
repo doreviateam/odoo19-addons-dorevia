@@ -209,16 +209,16 @@ Dépenses facturées =
 ### 7.2. Proposition de champs cockpit
 
 ```python
-revenue_invoiced_amount      # numérateur Ressources facturées (nb lignes)
-revenue_eligible_amount      # dénominateur (nb lignes — contrôle / debug)
+revenue_invoiced_line_count  # numérateur Ressources facturées (nb lignes)
+revenue_eligible_line_count  # dénominateur (nb lignes — contrôle / debug)
 revenue_invoiced_rate        # % ou 0 si dénominateur nul
 
-expense_invoiced_amount      # numérateur (nb lignes)
-expense_eligible_amount      # dénominateur (nb lignes)
+expense_invoiced_line_count  # numérateur (nb lignes)
+expense_eligible_line_count  # dénominateur (nb lignes)
 expense_invoiced_rate
 ```
 
-> Les champs `*_amount` conservent leur nom technique pour compatibilité widget ; ils stockent des **compteurs entiers**, pas des montants.
+> Depuis `19.0.14.4.0`, les champs explicites `*_line_count` sont la référence. Les anciens champs `*_amount` restent alimentés comme alias transitoires pour compatibilité.
 
 Le widget lit `revenue_invoiced_rate` / `expense_invoiced_rate` ; affiche `—` si `False` / `None`.
 
@@ -251,11 +251,11 @@ rate = (numerator / denominator * 100) if denominator else 0.0
 **Cohérence dénominateur :**
 
 ```text
-revenue_eligible_amount (lignes)
+revenue_eligible_line_count (lignes)
   = nb lignes domaine ressource (tous axes cockpit)
   + nb buckets virement interne 580 entrée qualifiés
 
-expense_eligible_amount (lignes)
+expense_eligible_line_count (lignes)
   = nb lignes domaine dépense (tous axes cockpit)
   + nb buckets virement interne 580 sortie qualifiés
 ```
