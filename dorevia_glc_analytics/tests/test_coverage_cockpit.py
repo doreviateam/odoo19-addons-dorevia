@@ -79,6 +79,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         date_to=None,
         year=None,
         month="6",
+        activity_account_id=None,
         skip_auto_refresh=False,
     ):
         if date_from is None or date_to is None:
@@ -93,6 +94,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
                 "company_id": self.env.company.id,
                 "date_from": date_from,
                 "date_to": date_to,
+                "activity_account_id": activity_account_id,
             }
         )
 
@@ -695,6 +697,25 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertFalse(april_lines_after)
         self.assertAlmostEqual(sum(january_lines.mapped("revenue_realized")), 1000.0)
         self.assertEqual(cockpit.refresh_key, cockpit._current_refresh_key())
+
+    def test_refresh_key_tracks_company_and_activity_filters(self):
+        """Audit Lot A — la clé de refresh couvre tous les filtres de lecture."""
+        cockpit = self._create_cockpit(
+            date_from=date(self.test_year, 3, 1),
+            date_to=date(self.test_year, 3, 31),
+            activity_account_id=self.bar.id,
+            skip_auto_refresh=True,
+        )
+        key = cockpit._current_refresh_key()
+        expected = "%s|%s|%s|%s|%s" % (
+            cockpit.company_id.id,
+            cockpit.date_from,
+            cockpit.date_to,
+            cockpit.activity_account_id.id,
+            cockpit.reference_bank_journal_id.id or "",
+        )
+
+        self.assertEqual(key, expected)
 
     def test_write_ignores_client_line_ids_commands(self):
         """R10 — le save client ne doit pas recréer des lignes sans cockpit_id."""

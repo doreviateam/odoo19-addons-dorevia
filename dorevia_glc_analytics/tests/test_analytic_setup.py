@@ -22,7 +22,7 @@ class TestGlcAnalyticSetup(TransactionCase):
     def test_all_glc_accounts_on_single_plan(self):
         plan = self.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites")
         accounts = self.env["account.analytic.account"].search([("plan_id", "=", plan.id)])
-        self.assertEqual(len(accounts), 11)
+        self.assertEqual(len(accounts), 12)
         codes = set(accounts.mapped("code"))
         self.assertEqual(
             codes,
@@ -38,6 +38,7 @@ class TestGlcAnalyticSetup(TransactionCase):
                 "DONS",
                 "SUBVENTIONS",
                 "RESSOURCES_PROPRES",
+                "VIR_INT",
             },
         )
 
