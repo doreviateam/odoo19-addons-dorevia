@@ -1,5 +1,7 @@
 # Ticket — Filtre « Payé uniquement » · tableau détail cockpit
 
+> **Addendum `19.0.14.1.0`** — **Contrôle de gestion** · onglet Détail. Filtre **actif**. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics` · version **`19.0.9.0.1`**  
 **Statut :** **GO complet MOA** · serveur OK · validation visuelle OK
 

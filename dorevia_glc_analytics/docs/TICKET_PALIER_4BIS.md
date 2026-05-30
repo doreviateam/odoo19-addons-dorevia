@@ -1,5 +1,7 @@
 # Ticket Palier 4bis — Finition UX cockpit
 
+> **Addendum `19.0.14.1.0`** — Livraisons UX **`19.0.4.4.2`** et suivantes **intégrées** ; renommage final **Contrôle de gestion** (`19.0.14.0.2`). Références budget / `dorevia_glc_budget` ci-dessous : **historiques**. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics` *(extension)*  
 **Branches :** `feat/glc-palier-4bis-cockpit-ux` (P4bis période libre) · `feat/glc-cockpit-detail-groupby` (UX-GROUPBY)  
 **Version livrée :** `19.0.4.4.2`  

@@ -1,8 +1,10 @@
 # Ticket de cadrage — Source de vérité du réalisé cockpit GLC
 
-> Addendum `19.0.14` : réalisé seul via analytique — budget et ventilations retirés. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
-
-> 
+> **Addendum `19.0.14.1.0` (2026-05-30)** — Ce ticket documente le cadrage et la livraison **`19.0.4.7.0`**. Depuis la simplification MOA :
+> - **source unique** du réalisé : `account.analytic.line` (classes 6/7 + financements) ;
+> - **Cumul RH** = comptes paie 631/633/641/645 via analytique — **plus** de `glc.salary.allocation` ;
+> - budget et ventilations Palier 2 **retirés** (`19.0.13` / `19.0.14`).
+> État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md). Les sections 2–12 ci-dessous conservent la **trace historique** du cadrage.
 
 **Module :** `dorevia_glc_analytics`  
 **Branche :** `feat/glc-cockpit-source-realise-19.0.4.7.0`  
@@ -283,6 +285,23 @@ Réalisé cockpit (toutes familles) =
 
 ---
 
+---
+
+## 13. État actuel `19.0.14.1.0`
+
+| Famille UI | Source code actuelle |
+|---|---|
+| **Ressources** | `account.analytic.line` — revenus + axes financements |
+| **Cumul RH** | `account.analytic.line` — charges paie 631/633/641/645 |
+| **Dépenses** | `account.analytic.line` — charges hors paie |
+| **Solde** | `Ressources − Cumul RH − Dépenses` |
+
+- Méthode `_sum_payroll_realized` : agrège depuis **analytique paie**, pas depuis ventilations.
+- Palier 2 (`glc.salary.allocation`) et module budget : **supprimés** — sections A3, 6.3 et R14-NODOUBLON ci-dessus sont **historiques**.
+- Menu recette : **Facturation → Pilotage GLC → Contrôle de gestion**.
+
+---
+
 *Ticket de cadrage rédigé MOA — 2026-05-28.  
 Révélateur : cas 645200 + [STRUCTURE] rapprochement bancaire sans facture.  
-Suite : cockpit GLC validé UX `19.0.4.6.1` (PR #36).*
+Suite : simplification pilotage `19.0.14` — [RELEASE_NOTE_19.0.14_SIMPLIFICATION_PILOTAGE.md](./RELEASE_NOTE_19.0.14_SIMPLIFICATION_PILOTAGE.md).*

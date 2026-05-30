@@ -1,5 +1,7 @@
 # Ticket UX — Détail par activité avec sous-totaux mensuels
 
+> **Addendum `19.0.14.1.0`** — Composant OWL `glc_coverage_detail` **conservé** dans **Contrôle de gestion**. Colonnes budget retirées. Chemin recette : **Facturation → Pilotage GLC → Contrôle de gestion**. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics`  
 **Branche :** `feat/glc-cockpit-detail-groupby`  
 **Version livrée :** `19.0.4.4.2`  

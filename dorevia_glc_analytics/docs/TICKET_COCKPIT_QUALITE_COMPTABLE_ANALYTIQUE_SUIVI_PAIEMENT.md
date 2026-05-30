@@ -1,5 +1,7 @@
 # Ticket — Cockpit · Qualité comptable, analytique & suivi paiement
 
+> **Addendum `19.0.14.1.0`** — Menu **Contrôle de gestion**. Fonctionnalités GQ-6 **actives** (KPI qualité, suivi paiement). Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics` *(extension cockpit)*  
 **Version testée sandbox :** **`19.0.7.0.2`** · lot trésorerie Palier 5 **GO complet MOA**  
 **Statut :** **GO PR GQ-6** (2026-05-29) — recette serveur + navigateur MOA validées · PR ouverte vers `main`  

@@ -1,5 +1,7 @@
 # Ticket de cadrage — Cockpit GLC · Onglet 1 « Synthèse graphique »
 
+> **Addendum `19.0.14.1.0`** — Menu **Contrôle de gestion**. KPI et graphes **budget / écart prévu-réalisé retirés** (`19.0.13`). Lecture actuelle : réalisé seul (Ressources · Cumul RH · Dépenses · Solde / Marge d'activité). Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Module :** `dorevia_glc_analytics`  
 **Branche :** `feat/glc-cockpit-synthese-graphique`  
 **Version cible :** `19.0.4.6.1` (implémentation + wording MOA Marge d'activité)  
