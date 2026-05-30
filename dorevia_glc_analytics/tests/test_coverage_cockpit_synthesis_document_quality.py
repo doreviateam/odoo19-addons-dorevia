@@ -26,6 +26,8 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         self._create_revenue_on_account(self.bar, 500.0, invoice_date=invoice_date)
         self._create_revenue_on_account(self.bar, 300.0, invoice_date=invoice_date)
         cockpit = self._cockpit_june(year)
+        self.assertEqual(cockpit.revenue_eligible_line_count, 2)
+        self.assertEqual(cockpit.revenue_invoiced_line_count, 2)
         self.assertEqual(cockpit.revenue_eligible_amount, 2)
         self.assertEqual(cockpit.revenue_invoiced_amount, 2)
         self.assertAlmostEqual(cockpit.revenue_invoiced_rate, 100.0)
@@ -63,8 +65,8 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         )
         move.action_post()
         cockpit = self._cockpit_june(year)
-        self.assertEqual(cockpit.revenue_eligible_amount, 1)
-        self.assertEqual(cockpit.revenue_invoiced_amount, 0)
+        self.assertEqual(cockpit.revenue_eligible_line_count, 1)
+        self.assertEqual(cockpit.revenue_invoiced_line_count, 0)
         self.assertAlmostEqual(cockpit.revenue_invoiced_rate, 0.0)
 
     def test_doc_03_revenue_invoiced_rate_mixed_invoice_and_bank_by_line_count(self):
@@ -106,8 +108,8 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         )
         move.action_post()
         cockpit = self._cockpit_june(year)
-        self.assertEqual(cockpit.revenue_eligible_amount, 2)
-        self.assertEqual(cockpit.revenue_invoiced_amount, 1)
+        self.assertEqual(cockpit.revenue_eligible_line_count, 2)
+        self.assertEqual(cockpit.revenue_invoiced_line_count, 1)
         self.assertAlmostEqual(cockpit.revenue_invoiced_rate, 50.0)
 
     def test_doc_03b_large_bank_line_does_not_dominate_rate(self):
@@ -148,8 +150,8 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         )
         move.action_post()
         cockpit = self._cockpit_june(year)
-        self.assertEqual(cockpit.revenue_eligible_amount, 2)
-        self.assertEqual(cockpit.revenue_invoiced_amount, 1)
+        self.assertEqual(cockpit.revenue_eligible_line_count, 2)
+        self.assertEqual(cockpit.revenue_invoiced_line_count, 1)
         self.assertAlmostEqual(cockpit.revenue_invoiced_rate, 50.0)
 
     def test_doc_03c_multi_line_invoice_counts_each_eligible_line(self):
@@ -193,8 +195,8 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         )
         invoice.action_post()
         cockpit = self._cockpit_june(year)
-        self.assertEqual(cockpit.revenue_eligible_amount, 2)
-        self.assertEqual(cockpit.revenue_invoiced_amount, 2)
+        self.assertEqual(cockpit.revenue_eligible_line_count, 2)
+        self.assertEqual(cockpit.revenue_invoiced_line_count, 2)
         self.assertAlmostEqual(cockpit.revenue_invoiced_rate, 100.0)
 
     def test_doc_04_expense_invoiced_rate_full_when_only_supplier_invoices(self):
@@ -204,8 +206,8 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         self._create_expense_on_account(self.structure, 250.0, invoice_date=invoice_date)
         self._create_expense_on_account(self.structure, 150.0, invoice_date=invoice_date)
         cockpit = self._cockpit_june(year)
-        self.assertEqual(cockpit.expense_eligible_amount, 2)
-        self.assertEqual(cockpit.expense_invoiced_amount, 2)
+        self.assertEqual(cockpit.expense_eligible_line_count, 2)
+        self.assertEqual(cockpit.expense_invoiced_line_count, 2)
         self.assertAlmostEqual(cockpit.expense_invoiced_rate, 100.0)
 
     def test_doc_05_bank_expense_not_invoiced_numerator(self):
@@ -241,8 +243,8 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         )
         move.action_post()
         cockpit = self._cockpit_june(year)
-        self.assertEqual(cockpit.expense_eligible_amount, 1)
-        self.assertEqual(cockpit.expense_invoiced_amount, 0)
+        self.assertEqual(cockpit.expense_eligible_line_count, 1)
+        self.assertEqual(cockpit.expense_invoiced_line_count, 0)
         self.assertAlmostEqual(cockpit.expense_invoiced_rate, 0.0)
 
     def test_doc_05b_internal_transfer_counts_in_denominator_only(self):
@@ -262,17 +264,17 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         )
         cockpit = self._create_treasury_cockpit(year)
         cockpit.action_refresh()
-        self.assertEqual(cockpit.revenue_invoiced_amount, 1)
-        self.assertEqual(cockpit.revenue_eligible_amount, 2)
+        self.assertEqual(cockpit.revenue_invoiced_line_count, 1)
+        self.assertEqual(cockpit.revenue_eligible_line_count, 2)
         self.assertAlmostEqual(cockpit.revenue_invoiced_rate, 50.0)
 
     def test_doc_06_zero_eligible_amounts_when_no_data(self):
         """DOC-06 / RT-DOC-09 — dénominateur nul : compteurs et taux à 0."""
         year = self._next_test_year()
         cockpit = self._cockpit_june(year)
-        self.assertEqual(cockpit.revenue_eligible_amount, 0)
+        self.assertEqual(cockpit.revenue_eligible_line_count, 0)
         self.assertAlmostEqual(cockpit.revenue_invoiced_rate, 0.0)
-        self.assertEqual(cockpit.expense_eligible_amount, 0)
+        self.assertEqual(cockpit.expense_eligible_line_count, 0)
         self.assertAlmostEqual(cockpit.expense_invoiced_rate, 0.0)
 
     def test_doc_inv_01_document_quality_does_not_change_exploitation_kpis(self):
@@ -304,7 +306,7 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         self.assertAlmostEqual(
             cockpit.salary_coverage_rate, expected["salary_coverage_rate"]
         )
-        self.assertGreater(cockpit.revenue_invoiced_amount, 0)
+        self.assertGreater(cockpit.revenue_invoiced_line_count, 0)
 
     def test_rt_doc_payroll_excluded_from_expense_invoiced_rate(self):
         """RT-DOC — Cumul RH hors périmètre : facture 645 n'impacte pas dépenses facturées."""
@@ -336,8 +338,8 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         invoice.action_post()
         cockpit = self._cockpit_june(year)
         self.assertAlmostEqual(cockpit.payroll_realized, 520.0)
-        self.assertEqual(cockpit.expense_eligible_amount, 0)
-        self.assertEqual(cockpit.expense_invoiced_amount, 0)
+        self.assertEqual(cockpit.expense_eligible_line_count, 0)
+        self.assertEqual(cockpit.expense_invoiced_line_count, 0)
 
     def test_doc_07_supplier_receipt_in_receipt_counts_as_invoiced(self):
         """DOC-07 — reçu fournisseur Odoo (in_receipt) compte au numérateur."""
@@ -368,6 +370,6 @@ class TestGlcCoverageCockpitSynthesisDocumentQuality(TestGlcCoverageCockpitTreas
         )
         receipt.action_post()
         cockpit = self._cockpit_june(year)
-        self.assertEqual(cockpit.expense_eligible_amount, 1)
-        self.assertEqual(cockpit.expense_invoiced_amount, 1)
+        self.assertEqual(cockpit.expense_eligible_line_count, 1)
+        self.assertEqual(cockpit.expense_invoiced_line_count, 1)
         self.assertAlmostEqual(cockpit.expense_invoiced_rate, 100.0)
