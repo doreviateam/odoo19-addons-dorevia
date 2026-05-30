@@ -7,6 +7,7 @@ Version après correctif Lot A : `19.0.14.1.1`
 Version après correctif Lot A suite : `19.0.14.1.2`
 Version après correctif Lot B perf initial : `19.0.14.2.0`
 Version après correctif Lot B suite : `19.0.14.2.1`
+Version après correctif Lot C périmètre analytique : `19.0.14.3.0`
 Type d'audit : audit statique expert Odoo, orienté développeur.
 
 ## 1. Verdict synthétique
@@ -189,6 +190,8 @@ Demande développeur :
 `_cockpit_analytic_accounts()` récupère tous les comptes analytiques de la société ou globaux, hors codes exclus.
 
 Ce choix permet d'englober des axes hors plan unique si nécessaire, mais il peut aussi faire remonter des comptes analytiques non GLC si la base contient d'autres usages analytiques.
+
+Statut Lot C : **corrigé en `19.0.14.3.0`**. Le cockpit est désormais borné au plan analytique officiel `GLC - Activités`, qui porte les activités, ressources, financements et virements internes du plan unique GLC.
 
 Demande développeur :
 
@@ -516,6 +519,29 @@ Points restant à traiter dans un futur lot performance :
 
 - transformer les agrégats analytiques principaux en `_read_group()` lorsque le traitement `abs(line.amount)` et les multi-plans pourront être couverts sans changer la doctrine métier ;
 - benchmarker explicitement un historique de 3 exercices lorsque la volumétrie réelle complète sera disponible.
+
+### 12.2 Addendum correctif Lot C — périmètre analytique officiel
+
+Objectif : fermer la dette P2 sur le périmètre analytique du cockpit.
+
+Décision implémentée :
+
+- le cockpit lit uniquement les comptes analytiques du plan officiel `GLC - Activités` ;
+- ce plan unique contient les activités opérationnelles, les axes de ressources / financements et `VIR_INT` ;
+- les comptes analytiques non-GLC, même rattachés à la société et porteurs d'écritures classe 6/7, ne doivent pas alimenter les KPI ni le détail ;
+- le filtre `activity_account_id` reste limité au même plan GLC ;
+- le filtrage ne s'appuie pas sur `glc_report_active`, afin de ne pas exclure `VIR_INT` des contrôles de trésorerie / virement interne.
+
+Correctifs livrés :
+
+- ajout de `_cockpit_analytic_plan()` ;
+- `_cockpit_analytic_accounts()` applique désormais `plan_id = analytic_plan_glc_activites` ;
+- test `test_non_glc_analytic_plan_is_excluded_from_cockpit` : une ligne analytique sur un plan externe ne remonte pas dans le cockpit.
+
+Validation sandbox `glc-rgl-test-import` après upgrade `19.0.14.3.0` :
+
+- tests module : `123 tests`, `105 post-tests`, `0 failed`, `0 error(s)` ;
+- benchmark YTD `2026-01-01` → `2026-05-30` : meilleur `0.189s`, moyen `0.196s`.
 
 ## 13. Conclusion
 

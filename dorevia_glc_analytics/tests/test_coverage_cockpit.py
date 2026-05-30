@@ -1284,8 +1284,8 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertAlmostEqual(subventions_line.revenue_realized, 2500.0)
         self.assertEqual(subventions_line.analytic_section, "funding")
 
-    def test_resources_realized_includes_all_funding_plans(self):
-        """R15-FUND-TOTAL — ressources = recettes activité + tous financements (tous plans)."""
+    def test_resources_realized_includes_all_funding_axes(self):
+        """R15-FUND-TOTAL — ressources = recettes activité + financements GLC."""
         year = self._next_test_year()
         month_iso = "%s-06-15" % year
         self._create_revenue_analytic_line(
@@ -1305,3 +1305,44 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertAlmostEqual(cockpit.activity_revenue_realized, 5000.0)
         self.assertAlmostEqual(cockpit.funding_realized, 3500.0)
         self.assertAlmostEqual(cockpit.resources_realized, 8500.0)
+
+    def test_non_glc_analytic_plan_is_excluded_from_cockpit(self):
+        """LOT-C — un axe analytique hors plan GLC ne pollue pas le cockpit."""
+        year = self._next_test_year()
+        external_plan = self.env["account.analytic.plan"].create(
+            {
+                "name": "Plan externe hors GLC",
+                "default_applicability": "optional",
+            }
+        )
+        external_axis = self.env["account.analytic.account"].create(
+            {
+                "name": "Projet externe",
+                "code": "EXT_PROJECT",
+                "plan_id": external_plan.id,
+                "company_id": self.env.company.id,
+            }
+        )
+        self._create_revenue_analytic_line(
+            self.bar, 500.0, invoice_date="%s-07-15" % year, income_code="707000"
+        )
+        self._create_analytic_line_on_plan(
+            external_axis,
+            9000.0,
+            invoice_date="%s-07-15" % year,
+            gl_account=self._get_or_create_income_account("707900"),
+            account_type="income",
+        )
+        cockpit = self._create_cockpit(
+            date_from=date(year, 7, 1),
+            date_to=date(year, 7, 31),
+        )
+        cockpit.action_refresh()
+        self.assertNotIn(external_axis, cockpit._cockpit_analytic_accounts())
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 500.0)
+        self.assertAlmostEqual(cockpit.resources_realized, 500.0)
+        self.assertFalse(
+            cockpit.line_ids.filtered(
+                lambda line: line.analytic_account_id == external_axis
+            )
+        )
