@@ -561,13 +561,25 @@ class GlcCoverageCockpit(models.TransientModel):
         """Compte analytique de financement (axe ressource — identification par code)."""
         return bool(account and account.code in GLC_COCKPIT_FUNDING_CODES)
 
+    def _cockpit_analytic_plan(self):
+        return self.env.ref(
+            "dorevia_glc_analytics.analytic_plan_glc_activites",
+            raise_if_not_found=False,
+        )
+
     def _cockpit_analytic_accounts(self):
-        """Tous les comptes analytiques exploitables cockpit (tous plans par défaut)."""
+        """Comptes analytiques exploitables cockpit sur le plan GLC officiel."""
         self.ensure_one()
         if self.activity_account_id:
             return self.activity_account_id
+        plan = self._cockpit_analytic_plan()
+        if not plan:
+            return self.env["account.analytic.account"]
         excluded = self._excluded_analytic_accounts()
-        domain = [("company_id", "in", [False, self.company_id.id])]
+        domain = [
+            ("plan_id", "=", plan.id),
+            ("company_id", "in", [False, self.company_id.id]),
+        ]
         if excluded:
             domain.append(("id", "not in", excluded.ids))
         return self.env["account.analytic.account"].search(domain)
@@ -581,7 +593,7 @@ class GlcCoverageCockpit(models.TransientModel):
         return self._cockpit_analytic_accounts() - self._funding_analytic_accounts()
 
     def _activity_accounts(self):
-        """Alias rétrocompat — périmètre élargi à tous les plans analytiques."""
+        """Alias rétrocompat — périmètre du plan analytique GLC officiel."""
         return self._cockpit_analytic_accounts()
 
     def _excluded_analytic_accounts(self):
