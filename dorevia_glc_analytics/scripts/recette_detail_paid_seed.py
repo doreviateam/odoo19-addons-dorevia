@@ -184,7 +184,10 @@ def _vir_int_inflow(amount, move_date, bank_journal, bank_account):
 
 
 # --- exécution ---
-year = max(env["glc.budget"].search([]).mapped("year") + [2050]) + 1
+cockpit_years = [
+    d.year for d in env["glc.coverage.cockpit"].search([]).mapped("date_from") if d
+]
+year = max(cockpit_years + [2050]) + 1
 move_date = date(year, 6, 18)
 invoice_date = move_date.isoformat()
 
