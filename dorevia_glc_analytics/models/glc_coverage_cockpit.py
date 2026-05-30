@@ -15,6 +15,7 @@ from .glc_constants import (
     GLC_EXCLUDED_GL_ACCOUNT_PREFIXES,
     GLC_EXPENSE_ACCOUNT_TYPES,
     GLC_INCOME_ACCOUNT_TYPES,
+    GLC_INTERNAL_TRANSFER_GL_PREFIXES,
     GLC_LEGACY_ANALYTIC_CODES,
     GLC_PAYROLL_ACCOUNT_PREFIXES,
 )
@@ -240,6 +241,12 @@ class GlcCoverageCockpit(models.TransientModel):
     )
     treasury_has_data = fields.Boolean(
         string="Mouvements trésorerie sur la période",
+        readonly=True,
+    )
+    treasury_line_ids = fields.One2many(
+        "glc.coverage.cockpit.treasury.line",
+        "cockpit_id",
+        string="Virements internes par axe",
         readonly=True,
     )
 
@@ -732,6 +739,15 @@ class GlcCoverageCockpit(models.TransientModel):
         lines = self.env["account.analytic.line"].search(domain)
         return sum(self._signed_analytic_amount(line) for line in lines)
 
+    def _sum_lines_paid(self, domain):
+        """Σ lignes analytiques dont la pièce source est considérée payée."""
+        lines = self.env["account.analytic.line"].search(domain)
+        return sum(
+            self._signed_analytic_amount(line)
+            for line in lines
+            if self._glc_analytic_line_is_paid_for_cockpit(line)
+        )
+
     def _sum_revenue_realized(self, analytic_accounts, date_from, date_to):
         """Σ classe 7 + analytique sur les comptes passés (recettes ou financements)."""
         if not analytic_accounts:
@@ -740,11 +756,25 @@ class GlcCoverageCockpit(models.TransientModel):
             self._revenue_analytic_line_domain(date_from, date_to, analytic_accounts)
         )
 
+    def _sum_revenue_realized_paid(self, analytic_accounts, date_from, date_to):
+        if not analytic_accounts:
+            return 0.0
+        return self._sum_lines_paid(
+            self._revenue_analytic_line_domain(date_from, date_to, analytic_accounts)
+        )
+
     def _sum_expense_realized(self, analytic_accounts, date_from, date_to):
         """Σ classe 6 hors payroll + analytique sur les comptes passés (dépenses)."""
         if not analytic_accounts:
             return 0.0
         return self._sum_lines(
+            self._expense_analytic_line_domain(date_from, date_to, analytic_accounts)
+        )
+
+    def _sum_expense_realized_paid(self, analytic_accounts, date_from, date_to):
+        if not analytic_accounts:
+            return 0.0
+        return self._sum_lines_paid(
             self._expense_analytic_line_domain(date_from, date_to, analytic_accounts)
         )
 
@@ -757,6 +787,17 @@ class GlcCoverageCockpit(models.TransientModel):
         if not analytic_accounts:
             return 0.0
         return self._sum_lines(
+            self._payroll_analytic_line_domain(date_from, date_to, analytic_accounts)
+        )
+
+    def _sum_payroll_realized_paid(self, date_from, date_to, activity_account=None):
+        if activity_account:
+            analytic_accounts = activity_account
+        else:
+            analytic_accounts = self._cockpit_analytic_accounts()
+        if not analytic_accounts:
+            return 0.0
+        return self._sum_lines_paid(
             self._payroll_analytic_line_domain(date_from, date_to, analytic_accounts)
         )
 
@@ -850,10 +891,119 @@ class GlcCoverageCockpit(models.TransientModel):
             return True
         return (account.code or "").startswith("53")
 
+    @api.model
+    def _is_internal_transfer_gl_account(self, account):
+        code = account.code or ""
+        return any(code.startswith(prefix) for prefix in GLC_INTERNAL_TRANSFER_GL_PREFIXES)
+
+    @api.model
+    def _analytic_accounts_from_move_line(self, line):
+        """Comptes analytiques portés par une ligne comptable (distribution ou AAL)."""
+        Account = self.env["account.analytic.account"]
+        accounts = Account
+        distribution = line.analytic_distribution or {}
+        if distribution:
+            account_ids = [int(account_id) for account_id in distribution.keys()]
+            accounts |= Account.browse(account_ids).exists()
+        accounts |= self.env["account.analytic.line"].search(
+            [("move_line_id", "=", line.id)]
+        ).mapped("account_id")
+        analytic_lines = self.env["account.analytic.line"].search(
+            [("move_line_id", "=", line.id)]
+        )
+        for column in self._plan_column_names():
+            accounts |= analytic_lines.mapped(column)
+        return accounts
+
+    def _internal_transfer_qualifications_weighted(self, move):
+        """Qualifications (axe analytique, compte 580, poids) d'un virement interne."""
+        self.ensure_one()
+        items = []
+        transfer_lines = move.line_ids.filtered(
+            lambda line: self._is_internal_transfer_gl_account(line.account_id)
+        )
+        for line in transfer_lines:
+            transfer_code = line.account_id.code or "580"
+            distribution = line.analytic_distribution or {}
+            if distribution:
+                total = sum(distribution.values()) or 100.0
+                for account_id, percent in distribution.items():
+                    account = self.env["account.analytic.account"].browse(
+                        int(account_id)
+                    ).exists()
+                    if account:
+                        items.append((account, transfer_code, percent / total))
+                continue
+            accounts = self._analytic_accounts_from_move_line(line)
+            if accounts:
+                weight = 1.0 / len(accounts)
+                for account in accounts:
+                    items.append((account, transfer_code, weight))
+        return items
+
+    def _aggregate_treasury_internal_buckets(self, date_from, date_to):
+        """Ventile les virements internes par axe analytique, compte 580 et période."""
+        self.ensure_one()
+        buckets = {}
+        if not self._resolve_reference_bank_account():
+            return []
+        bank_lines = self.env["account.move.line"].search(
+            self._treasury_move_line_domain(date_from, date_to)
+        )
+        for bank_line in bank_lines:
+            if not self._is_internal_transfer_move(bank_line.move_id):
+                continue
+            qualifications = self._internal_transfer_qualifications_weighted(
+                bank_line.move_id
+            )
+            if not qualifications:
+                transfer_code = "580"
+                transfer_lines = bank_line.move_id.line_ids.filtered(
+                    lambda line: self._is_internal_transfer_gl_account(line.account_id)
+                )
+                if transfer_lines:
+                    transfer_code = transfer_lines[0].account_id.code or "580"
+                qualifications = [
+                    (self.env["account.analytic.account"], transfer_code, 1.0)
+                ]
+            for analytic_account, transfer_code, weight in qualifications:
+                key = (analytic_account.id or 0, transfer_code)
+                bucket = buckets.setdefault(
+                    key,
+                    {
+                        "analytic_account": analytic_account,
+                        "transfer_gl_account_code": transfer_code,
+                        "internal_inflow": 0.0,
+                        "internal_outflow": 0.0,
+                    },
+                )
+                if bank_line.debit:
+                    bucket["internal_inflow"] += bank_line.debit * weight
+                if bank_line.credit:
+                    bucket["internal_outflow"] += bank_line.credit * weight
+        return list(buckets.values())
+
+    def _aggregate_treasury_internal_lines(self, date_from, date_to):
+        """Ventile les virements internes par axe analytique et compte 580."""
+        return self._aggregate_treasury_internal_buckets(date_from, date_to)
+
+    def _internal_transfer_amounts_for_account(self, account, date_from, date_to):
+        """Entrées / sorties virement interne pour un axe sur une tranche de dates."""
+        self.ensure_one()
+        target_id = account.id if account else 0
+        inflow = outflow = 0.0
+        for bucket in self._aggregate_treasury_internal_buckets(date_from, date_to):
+            analytic_account = bucket["analytic_account"]
+            if (analytic_account.id or 0) != target_id:
+                continue
+            inflow += bucket["internal_inflow"]
+            outflow += bucket["internal_outflow"]
+        return inflow, outflow
+
     def _is_internal_transfer_move(self, move):
         """Virement interne : trésorerie ↔ trésorerie ou compte 580."""
         if any(
-            (line.account_id.code or "").startswith("580")
+            self._is_internal_transfer_gl_account(line.account_id)
             for line in move.line_ids
         ):
             return True
@@ -912,6 +1062,28 @@ class GlcCoverageCockpit(models.TransientModel):
             "treasury_has_data": bool(lines),
         }
 
+    def _sum_internal_transfer_inflow(self, analytic_accounts, date_from, date_to):
+        """Entrées virement interne 580 qualifiées → recette cockpit."""
+        self.ensure_one()
+        total = 0.0
+        for account in analytic_accounts:
+            inflow, _outflow = self._internal_transfer_amounts_for_account(
+                account, date_from, date_to
+            )
+            total += inflow
+        return total
+
+    def _sum_internal_transfer_outflow(self, analytic_accounts, date_from, date_to):
+        """Sorties virement interne 580 qualifiées → dépense cockpit."""
+        self.ensure_one()
+        total = 0.0
+        for account in analytic_accounts:
+            _inflow, outflow = self._internal_transfer_amounts_for_account(
+                account, date_from, date_to
+            )
+            total += outflow
+        return total
+
     def _aggregate_period(self, period_start, period_end):
         self.ensure_one()
         cockpit_accounts = self._cockpit_analytic_accounts()
@@ -929,11 +1101,17 @@ class GlcCoverageCockpit(models.TransientModel):
 
         activity_revenue_realized = self._sum_revenue_realized(
             activity_revenue_accounts, period_start, period_end
+        ) + self._sum_internal_transfer_inflow(
+            activity_revenue_accounts, period_start, period_end
         )
         funding_realized = self._sum_revenue_realized(
             funding_accounts, period_start, period_end
+        ) + self._sum_internal_transfer_inflow(
+            funding_accounts, period_start, period_end
         )
         general_expenses_realized = self._sum_expense_realized(
+            cockpit_accounts, period_start, period_end
+        ) + self._sum_internal_transfer_outflow(
             cockpit_accounts, period_start, period_end
         )
         payroll_realized = self._sum_payroll_realized(
@@ -991,10 +1169,15 @@ class GlcCoverageCockpit(models.TransientModel):
     def _action_refresh_single(self):
         self.ensure_one()
         self._ensure_budget_module()
-        self.line_ids.with_context(glc_cockpit_auto_refreshing=True).unlink()
+        refresh_ctx = {"glc_cockpit_auto_refreshing": True}
+        self.line_ids.with_context(**refresh_ctx).unlink()
+        self.treasury_line_ids.with_context(**refresh_ctx).unlink()
         date_from, date_to = self._period_bounds()
         totals = self._aggregate_period(date_from, date_to)
         treasury = self._aggregate_treasury(date_from, date_to)
+        treasury_internal_lines = self._aggregate_treasury_internal_lines(
+            date_from, date_to
+        )
 
         salary_coverage_rate = 0.0
         if totals["payroll_realized"]:
@@ -1035,6 +1218,9 @@ class GlcCoverageCockpit(models.TransientModel):
                 revenue_realized = self._sum_revenue_realized(
                     account, slice_from, slice_to
                 )
+                revenue_realized_paid = self._sum_revenue_realized_paid(
+                    account, slice_from, slice_to
+                )
                 if self._is_funding_analytic_account(account):
                     revenue_budget = self._sum_budget(
                         month_start, month_end, account, "funding"
@@ -1049,6 +1235,9 @@ class GlcCoverageCockpit(models.TransientModel):
                 expense_realized = self._sum_expense_realized(
                     account, slice_from, slice_to
                 )
+                expense_realized_paid = self._sum_expense_realized_paid(
+                    account, slice_from, slice_to
+                )
                 if account.code == GLC_COCKPIT_GENERAL_EXPENSE_CODE:
                     expense_budget = self._sum_budget(
                         month_start, month_end, account, "expense"
@@ -1059,12 +1248,25 @@ class GlcCoverageCockpit(models.TransientModel):
                 payroll_realized = self._sum_payroll_realized(
                     slice_from, slice_to, account
                 )
+                payroll_realized_paid = self._sum_payroll_realized_paid(
+                    slice_from, slice_to, account
+                )
                 if account.code in GLC_COCKPIT_PAYROLL_BUDGET_CODES:
                     payroll_budget = self._sum_budget(
                         month_start, month_end, account, "expense"
                     )
                 else:
                     payroll_budget = 0.0
+
+                internal_inflow, internal_outflow = (
+                    self._internal_transfer_amounts_for_account(
+                        account, slice_from, slice_to
+                    )
+                )
+                revenue_realized += internal_inflow
+                expense_realized += internal_outflow
+                revenue_realized_paid += internal_inflow
+                expense_realized_paid += internal_outflow
 
                 if not any(
                     (
@@ -1074,16 +1276,22 @@ class GlcCoverageCockpit(models.TransientModel):
                         expense_budget,
                         payroll_realized,
                         payroll_budget,
+                        revenue_realized_paid,
+                        expense_realized_paid,
+                        payroll_realized_paid,
                     )
                 ):
                     continue
 
                 line_amounts = {
                     "revenue_realized": revenue_realized,
+                    "revenue_realized_paid": revenue_realized_paid,
                     "revenue_budget": revenue_budget,
                     "expense_realized": expense_realized,
+                    "expense_realized_paid": expense_realized_paid,
                     "expense_budget": expense_budget,
                     "payroll_realized": payroll_realized,
+                    "payroll_realized_paid": payroll_realized_paid,
                     "payroll_budget": payroll_budget,
                 }
                 line_vals.append(
@@ -1095,11 +1303,31 @@ class GlcCoverageCockpit(models.TransientModel):
                 )
 
         if line_vals:
-            self.env["glc.coverage.cockpit.line"].with_context(
-                glc_cockpit_auto_refreshing=True
-            ).create(line_vals)
+            self.env["glc.coverage.cockpit.line"].with_context(**refresh_ctx).create(
+                line_vals
+            )
 
-        self.with_context(glc_cockpit_auto_refreshing=True).write(
+        treasury_line_vals = []
+        for bucket in treasury_internal_lines:
+            analytic_account = bucket["analytic_account"]
+            treasury_line_vals.append(
+                {
+                    "cockpit_id": self.id,
+                    "analytic_account_id": analytic_account.id or False,
+                    "activity_label": analytic_account
+                    and self._activity_business_label(analytic_account)
+                    or _("Non qualifié"),
+                    "transfer_gl_account_code": bucket["transfer_gl_account_code"],
+                    "internal_inflow": bucket["internal_inflow"],
+                    "internal_outflow": bucket["internal_outflow"],
+                }
+            )
+        if treasury_line_vals:
+            self.env["glc.coverage.cockpit.treasury.line"].with_context(
+                **refresh_ctx
+            ).create(treasury_line_vals)
+
+        self.with_context(**refresh_ctx).write(
             {
                 **totals,
                 **treasury,
@@ -1194,10 +1422,13 @@ class GlcCoverageCockpit(models.TransientModel):
             "analytic_account_id": account.id,
             "activity_label": self._activity_business_label(account),
             "revenue_realized": amounts["revenue_realized"],
+            "revenue_realized_paid": amounts.get("revenue_realized_paid", 0.0),
             "revenue_budget": amounts["revenue_budget"],
             "expense_realized": amounts["expense_realized"],
+            "expense_realized_paid": amounts.get("expense_realized_paid", 0.0),
             "expense_budget": amounts["expense_budget"],
             "payroll_realized": amounts["payroll_realized"],
+            "payroll_realized_paid": amounts.get("payroll_realized_paid", 0.0),
             "payroll_budget": amounts["payroll_budget"],
             "variance_revenue": amounts["revenue_realized"] - amounts["revenue_budget"],
             "variance_payroll": amounts["payroll_realized"] - amounts["payroll_budget"],
@@ -1281,15 +1512,23 @@ class GlcCoverageCockpitLine(models.TransientModel):
         readonly=True,
     )
     revenue_realized = fields.Monetary(
-        string="Recette réelle",
+        string="Ressource réelle",
+        currency_field="currency_id",
+    )
+    revenue_realized_paid = fields.Monetary(
+        string="Ressource payée",
         currency_field="currency_id",
     )
     revenue_budget = fields.Monetary(
-        string="Recette budget",
+        string="Ressource budget",
         currency_field="currency_id",
     )
     expense_realized = fields.Monetary(
         string="Dépense réelle",
+        currency_field="currency_id",
+    )
+    expense_realized_paid = fields.Monetary(
+        string="Dépense payée",
         currency_field="currency_id",
     )
     expense_budget = fields.Monetary(
@@ -1300,12 +1539,16 @@ class GlcCoverageCockpitLine(models.TransientModel):
         string="Cumul RH réel",
         currency_field="currency_id",
     )
+    payroll_realized_paid = fields.Monetary(
+        string="Cumul RH payé",
+        currency_field="currency_id",
+    )
     payroll_budget = fields.Monetary(
         string="Cumul RH budget",
         currency_field="currency_id",
     )
     variance_revenue = fields.Monetary(
-        string="Écart recette",
+        string="Écart ressource",
         currency_field="currency_id",
     )
     variance_payroll = fields.Monetary(
@@ -1376,6 +1619,68 @@ class GlcCoverageCockpitLine(models.TransientModel):
                 else:
                     vals["analytic_section"] = "activity"
             cleaned_vals_list.append(vals)
+        if not cleaned_vals_list:
+            return self.browse()
+        return super().create(cleaned_vals_list)
+
+    def write(self, vals):
+        if not self.env.context.get("glc_cockpit_auto_refreshing"):
+            return True
+        return super().write(vals)
+
+    def unlink(self):
+        if not self.env.context.get("glc_cockpit_auto_refreshing"):
+            return True
+        return super().unlink()
+
+
+class GlcCoverageCockpitTreasuryLine(models.TransientModel):
+    _name = "glc.coverage.cockpit.treasury.line"
+    _description = "Virement interne cockpit GLC par axe analytique"
+    _order = "activity_label, transfer_gl_account_code, id"
+    _rec_name = "activity_label"
+
+    cockpit_id = fields.Many2one(
+        "glc.coverage.cockpit",
+        required=True,
+        ondelete="cascade",
+    )
+    analytic_account_id = fields.Many2one(
+        "account.analytic.account",
+        string="Axe analytique",
+    )
+    analytic_code = fields.Char(
+        string="Code analytique",
+        related="analytic_account_id.code",
+        readonly=True,
+    )
+    activity_label = fields.Char(string="Qualification métier", required=True)
+    transfer_gl_account_code = fields.Char(
+        string="Compte comptable",
+        required=True,
+        help="Compte de virement interne (ex. 580001).",
+    )
+    currency_id = fields.Many2one(
+        related="cockpit_id.currency_id",
+        store=True,
+        readonly=True,
+    )
+    internal_inflow = fields.Monetary(
+        string="Entrée virement interne",
+        currency_field="currency_id",
+    )
+    internal_outflow = fields.Monetary(
+        string="Sortie virement interne",
+        currency_field="currency_id",
+    )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        if not self.env.context.get("glc_cockpit_auto_refreshing"):
+            return self.browse()
+        cleaned_vals_list = [
+            vals for vals in vals_list if vals.get("cockpit_id")
+        ]
         if not cleaned_vals_list:
             return self.browse()
         return super().create(cleaned_vals_list)

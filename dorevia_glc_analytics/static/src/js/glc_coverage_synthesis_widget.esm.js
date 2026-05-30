@@ -374,7 +374,7 @@ export class GlcCoverageSynthesisField extends Component {
                 datasets: [
                     {
                         type: "bar",
-                        label: "Recette",
+                        label: "Ressource",
                         data: revenueData,
                         backgroundColor: COLOR_REVENUE,
                         borderRadius: 2,

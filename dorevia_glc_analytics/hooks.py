@@ -80,6 +80,13 @@ GLC_ANALYTIC_ACCOUNT_NORMALIZATION = {
         "glc_display_sequence": 110,
         "glc_report_active": True,
     },
+    "analytic_account_glc_vir_int": {
+        "name": "Virement interne",
+        "code": "VIR_INT",
+        "glc_activity_type": "mixte",
+        "glc_display_sequence": 120,
+        "glc_report_active": False,
+    },
 }
 
 
@@ -197,7 +204,7 @@ def _migrate_to_single_glc_plan(cr):
 
 
 def _normalize_glc_analytic_accounts(cr):
-    """Aligne les 11 comptes GLC officiels sur le plan unique malgré le noupdate XML."""
+    """Aligne les comptes GLC officiels sur le plan unique malgré le noupdate XML."""
     activites_plan_id = _xml_ref_id(cr, "analytic_plan_glc_activites", "account.analytic.plan")
     if not activites_plan_id:
         return

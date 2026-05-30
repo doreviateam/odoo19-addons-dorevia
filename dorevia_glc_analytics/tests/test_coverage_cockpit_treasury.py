@@ -151,6 +151,78 @@ class TestGlcCoverageCockpitTreasury(TestGlcCoverageCockpit):
         move.action_post()
         return move
 
+    def _get_or_create_transfer_account(self, code="580001"):
+        account = self.env["account.account"].search(
+            [
+                ("company_ids", "in", self.env.company.id),
+                ("code", "=", code),
+            ],
+            limit=1,
+        )
+        if not account:
+            account = self.env["account.account"].create(
+                {
+                    "name": "Transfert de liquidités test",
+                    "code": code,
+                    "account_type": "asset_current",
+                }
+            )
+        return account
+
+    def _get_or_create_vir_int_account(self):
+        account = self.env["account.analytic.account"].search(
+            [
+                ("code", "=", "VIR_INT"),
+                ("company_id", "in", [False, self.env.company.id]),
+            ],
+            limit=1,
+        )
+        if account:
+            return account
+        plan = self.env.ref("dorevia_glc_analytics.analytic_plan_glc_activites")
+        return self.env["account.analytic.account"].create(
+            {
+                "name": "Virement interne",
+                "code": "VIR_INT",
+                "plan_id": plan.id,
+                "glc_activity_type": "mixte",
+            }
+        )
+
+    def _create_internal_transfer_via_580(
+        self,
+        bank_journal,
+        bank_account,
+        transfer_account,
+        vir_int_account,
+        amount,
+        move_date,
+        outflow=True,
+    ):
+        amount = abs(amount)
+        transfer_line = {
+            "account_id": transfer_account.id,
+            "analytic_distribution": {str(vir_int_account.id): 100},
+        }
+        bank_line = {"account_id": bank_account.id}
+        if outflow:
+            transfer_line.update({"debit": amount, "credit": 0.0})
+            bank_line.update({"debit": 0.0, "credit": amount})
+        else:
+            transfer_line.update({"debit": 0.0, "credit": amount})
+            bank_line.update({"debit": amount, "credit": 0.0})
+        move = self.env["account.move"].create(
+            {
+                "move_type": "entry",
+                "date": move_date,
+                "journal_id": bank_journal.id,
+                "company_id": self.env.company.id,
+                "line_ids": [(0, 0, transfer_line), (0, 0, bank_line)],
+            }
+        )
+        move.action_post()
+        return move
+
     def _create_treasury_cockpit(self, year, month=6, bank_journal=None, skip_auto_refresh=False):
         date_from, date_to = self._month_bounds(year, month)
         env = self.env["glc.coverage.cockpit"]
@@ -240,6 +312,67 @@ class TestGlcCoverageCockpitTreasury(TestGlcCoverageCockpit):
         self.assertAlmostEqual(cockpit_b.treasury_inflow, 500.0)
         self.assertAlmostEqual(cockpit_b.treasury_internal_inflow, 500.0)
         self.assertAlmostEqual(cockpit_b.activity_revenue_realized, 0.0)
+
+    def test_tref06_internal_transfer_580_with_vir_int_analytic(self):
+        """TREF-06 — 580001 + axe analytique : sortie → dépense, entrée → recette."""
+        year = self._next_test_year()
+        move_date = date(year, 6, 11)
+        transfer_account = self._get_or_create_transfer_account()
+        vir_int = self._get_or_create_vir_int_account()
+        self._create_internal_transfer_via_580(
+            self.bank_journal,
+            self.bank_account,
+            transfer_account,
+            vir_int,
+            750.0,
+            move_date,
+            outflow=True,
+        )
+        cockpit = self._create_treasury_cockpit(year)
+        cockpit.action_refresh()
+
+        self.assertAlmostEqual(cockpit.activity_revenue_realized, 0.0)
+        self.assertAlmostEqual(cockpit.payroll_realized, 0.0)
+        self.assertAlmostEqual(cockpit.general_expenses_realized, 750.0)
+        self.assertAlmostEqual(cockpit.treasury_outflow, 750.0)
+        self.assertAlmostEqual(cockpit.treasury_internal_outflow, 750.0)
+        self.assertEqual(len(cockpit.treasury_line_ids), 1)
+
+        detail_lines = cockpit.line_ids.filtered(
+            lambda line: line.analytic_account_id == vir_int
+            and line.month_key == "%04d-%02d" % (year, 6)
+        )
+        self.assertEqual(len(detail_lines), 1)
+        self.assertAlmostEqual(detail_lines.revenue_realized, 0.0)
+        self.assertAlmostEqual(detail_lines.expense_realized, 750.0)
+
+    def test_tref07_internal_transfer_inflow_on_funding_axis(self):
+        """TREF-07 — entrée 580 qualifiée financement → recette cockpit."""
+        year = self._next_test_year()
+        move_date = date(year, 6, 18)
+        transfer_account = self._get_or_create_transfer_account()
+        funding = self.env.ref("dorevia_glc_analytics.analytic_account_glc_ressources_propres")
+        self._create_internal_transfer_via_580(
+            self.bank_journal,
+            self.bank_account,
+            transfer_account,
+            funding,
+            9000.0,
+            move_date,
+            outflow=False,
+        )
+        cockpit = self._create_treasury_cockpit(year)
+        cockpit.action_refresh()
+
+        self.assertAlmostEqual(cockpit.funding_realized, 9000.0)
+        self.assertAlmostEqual(cockpit.resources_realized, 9000.0)
+        detail_lines = cockpit.line_ids.filtered(
+            lambda line: line.analytic_account_id == funding
+            and line.month_key == "%04d-%02d" % (year, 6)
+        )
+        self.assertEqual(len(detail_lines), 1)
+        self.assertAlmostEqual(detail_lines.revenue_realized, 9000.0)
+        self.assertAlmostEqual(detail_lines.expense_realized, 0.0)
 
     def test_tref04_payroll_outflow(self):
         """TREF-04 — paie 645 + sortie trésorerie."""

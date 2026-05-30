@@ -117,3 +117,58 @@ class GlcCoverageCockpit(models.TransientModel):
         if rate >= 95.0:
             return "orange"
         return "red"
+
+    _GLC_INVOICE_MOVE_TYPES = frozenset(
+        {"out_invoice", "out_refund", "in_invoice", "in_refund"}
+    )
+    _GLC_COCKPIT_PAID_PAYMENT_STATES = frozenset({"paid"})
+
+    @api.model
+    def _glc_is_cash_or_bank_account(self, account):
+        """Compte trésorerie / virement interne (512, 53, 580)."""
+        if not account:
+            return False
+        code = account.code or ""
+        if code.startswith(("512", "53", "580")):
+            return True
+        return account.account_type == "asset_cash"
+
+    @api.model
+    def _glc_move_line_has_bank_reconciliation(self, move_line):
+        """Vrai si la ligne est lettrée avec un compte banque / caisse."""
+        partials = move_line.matched_debit_ids | move_line.matched_credit_ids
+        for partial in partials:
+            counterpart = (
+                partial.debit_move_id
+                if partial.debit_move_id != move_line
+                else partial.credit_move_id
+            )
+            if self._glc_is_cash_or_bank_account(counterpart.account_id):
+                return True
+        return False
+
+    @api.model
+    def _glc_analytic_line_is_paid_for_cockpit(self, analytic_line):
+        """Règle vue « Payé uniquement » du tableau détail cockpit.
+
+        - Factures clients / fournisseurs : ``payment_state = paid`` uniquement.
+        - Écritures banque (512/53/580) ou lettrées banque : considérées payées.
+        - Lignes analytiques sans ``move_line_id`` : exclues (source non traçable).
+        - Virements internes 580 : traités à part (toujours payés).
+        """
+        move_line = analytic_line.move_line_id
+        if not move_line:
+            return False
+        move = move_line.move_id
+        if move.move_type in self._GLC_INVOICE_MOVE_TYPES:
+            return move.payment_state in self._GLC_COCKPIT_PAID_PAYMENT_STATES
+        if self._glc_is_cash_or_bank_account(move_line.account_id):
+            return True
+        if any(
+            self._glc_is_cash_or_bank_account(line.account_id)
+            for line in move.line_ids
+        ):
+            return True
+        if self._glc_move_line_has_bank_reconciliation(move_line):
+            return True
+        return False

@@ -35,6 +35,7 @@ export class GlcCoverageCockpitFormController extends FormController {
             return true;
         }
         delete changes.line_ids;
+        delete changes.treasury_line_ids;
         for (const fieldName of Object.keys(changes)) {
             if (!GLC_COCKPIT_FILTER_FIELDS.has(fieldName)) {
                 delete changes[fieldName];
