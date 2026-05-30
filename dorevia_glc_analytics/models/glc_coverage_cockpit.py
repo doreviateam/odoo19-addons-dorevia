@@ -290,9 +290,15 @@ class GlcCoverageCockpit(models.TransientModel):
 
     @api.model
     def _default_date_range(self, reference=None):
+        """3 derniers mois calendaires incluant le mois courant, fin = aujourd'hui."""
         today = reference or fields.Date.context_today(self)
-        date_from = date(today.year, today.month, 1)
-        date_to = date(today.year, today.month, monthrange(today.year, today.month)[1])
+        month = today.month - 2
+        year = today.year
+        if month <= 0:
+            month += 12
+            year -= 1
+        date_from = date(year, month, 1)
+        date_to = today
         return date_from, date_to
 
     @api.model
@@ -307,15 +313,21 @@ class GlcCoverageCockpit(models.TransientModel):
         }
 
     @api.model
-    def _domain_for_open_values(self, values):
-        domain = []
-        for field_name in (
+    def _domain_for_open_values(self, values, include_dates=True):
+        field_names = [
             "company_id",
-            "date_from",
-            "date_to",
             "activity_account_id",
             "reference_bank_journal_id",
-        ):
+        ]
+        if include_dates:
+            field_names = [
+                "company_id",
+                "date_from",
+                "date_to",
+                *field_names[1:],
+            ]
+        domain = []
+        for field_name in field_names:
             value = values[field_name]
             if field_name in ("activity_account_id", "reference_bank_journal_id") and not value:
                 domain.append((field_name, "=", False))
@@ -325,13 +337,22 @@ class GlcCoverageCockpit(models.TransientModel):
 
     @api.model
     def action_open_default_cockpit(self):
+        date_from, date_to = self._default_date_range()
         values = self._default_open_values()
         cockpit = self.search(
-            self._domain_for_open_values(values),
+            self._domain_for_open_values(values, include_dates=False),
             limit=1,
             order="id desc",
         )
-        if not cockpit:
+        if cockpit:
+            updates = {}
+            if cockpit.date_from != date_from:
+                updates["date_from"] = date_from
+            if cockpit.date_to != date_to:
+                updates["date_to"] = date_to
+            if updates:
+                cockpit.write(updates)
+        else:
             cockpit = self.create(values)
         cockpit.with_context(glc_cockpit_auto_refreshing=True).action_refresh()
         return {
@@ -474,12 +495,21 @@ class GlcCoverageCockpit(models.TransientModel):
     def _format_short_date(self, value):
         return "%s %s" % (value.day, self._SHORT_MONTHS[value.month])
 
+    @api.model
+    def _format_period_date(self, value):
+        month = self._LONG_MONTHS[value.month].lower()
+        return "%(day)s %(month)s %(year)s" % {
+            "day": value.day,
+            "month": month,
+            "year": value.year,
+        }
+
     @api.depends("date_from", "date_to")
     def _compute_period_labels(self):
         for cockpit in self:
             if cockpit.date_from and cockpit.date_to:
-                start = cockpit._format_short_date(cockpit.date_from)
-                end = cockpit._format_short_date(cockpit.date_to)
+                start = cockpit._format_period_date(cockpit.date_from)
+                end = cockpit._format_period_date(cockpit.date_to)
                 cockpit.period_range_label = _("%(start)s → %(end)s", start=start, end=end)
             else:
                 cockpit.period_range_label = False

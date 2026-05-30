@@ -258,6 +258,14 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertEqual(menu.action.id, action.id)
         self.assertEqual(action.state, "code")
 
+    def _expected_default_date_from(self, today):
+        month = today.month - 2
+        year = today.year
+        if month <= 0:
+            month += 12
+            year -= 1
+        return date(year, month, 1)
+
     def test_action_open_default_cockpit(self):
         """CA-UX10 — ouverture directe avec filtres par défaut et recalcul auto."""
         today = Date.context_today(self.env["glc.coverage.cockpit"])
@@ -266,17 +274,27 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertEqual(action["res_model"], "glc.coverage.cockpit")
         cockpit = self.env["glc.coverage.cockpit"].browse(action["res_id"])
         self.assertEqual(cockpit.company_id, self.env.company)
-        self.assertEqual(cockpit.date_from, date(today.year, today.month, 1))
-        self.assertEqual(
-            cockpit.date_to,
-            date(today.year, today.month, monthrange(today.year, today.month)[1]),
-        )
+        self.assertEqual(cockpit.date_to, today)
+        self.assertEqual(cockpit.date_from, self._expected_default_date_from(today))
         self.assertFalse(cockpit.activity_account_id)
         self.assertTrue(cockpit.is_refreshed)
         self.assertIn("Cockpit GLC ·", cockpit.display_title)
         self.assertNotIn("Toutes activités", cockpit.display_title)
         action2 = self.env["glc.coverage.cockpit"].action_open_default_cockpit()
         self.assertEqual(action2["res_id"], action["res_id"])
+
+    def test_action_open_default_cockpit_resets_stale_period(self):
+        """À l'ouverture menu, les 3 derniers mois (fin aujourd'hui) sont réappliqués."""
+        today = Date.context_today(self.env["glc.coverage.cockpit"])
+        year = self._next_test_year()
+        cockpit = self._create_cockpit(
+            date_from=date(year, 1, 1),
+            date_to=date(year, 1, 31),
+        )
+        action = self.env["glc.coverage.cockpit"].action_open_default_cockpit()
+        self.assertEqual(action["res_id"], cockpit.id)
+        self.assertEqual(cockpit.date_to, today)
+        self.assertEqual(cockpit.date_from, self._expected_default_date_from(today))
 
     def test_action_open_detail_grouped(self):
         """UX-G1 — ouverture d'une vraie vue liste avec group_by natif."""

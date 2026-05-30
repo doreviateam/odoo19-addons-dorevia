@@ -89,6 +89,9 @@ export class GlcCoverageSynthesisField extends Component {
         if (rate === null || rate === undefined) {
             return "—";
         }
+        if (rate > 100) {
+            return "> 100 %";
+        }
         return `${rate.toFixed(0)} %`;
     }
 
@@ -114,17 +117,18 @@ export class GlcCoverageSynthesisField extends Component {
         return "o_glc_kpi_negative";
     }
 
-    coverageClass(rate) {
-        if (rate === null || rate === undefined) {
-            return "o_glc_kpi_neutral";
-        }
-        if (rate >= 100) {
+    alertCoverageClass() {
+        const status = this.props.record.data.alert_status;
+        if (status === "green") {
             return "o_glc_kpi_positive";
         }
-        if (rate >= 80) {
+        if (status === "orange") {
             return "o_glc_kpi_warning";
         }
-        return "o_glc_kpi_negative";
+        if (status === "red") {
+            return "o_glc_kpi_negative";
+        }
+        return "o_glc_kpi_neutral";
     }
 
     signedClass(value) {

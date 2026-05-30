@@ -6,6 +6,7 @@
         <field name="model">glc.coverage.cockpit</field>
         <field name="arch" type="xml">
             <form string="Contrôle de gestion" create="0" delete="0"
+                  class="o_glc_coverage_cockpit_form"
                   js_class="glc_coverage_cockpit_form">
                 <sheet>
                     <field name="currency_id" invisible="1"/>
@@ -38,32 +39,27 @@
                         </h1>
                     </div>
 
-                    <group string="Filtres de lecture">
+                    <group>
                         <group>
                             <field name="company_id" groups="base.group_multi_company"/>
-                            <field name="date_from"/>
-                            <field name="date_to"/>
-                        </group>
-                        <group>
-                            <field name="activity_account_id"
-                                   options="{'no_create': True, 'no_open': True}"
-                                   placeholder="Tous les axes"/>
-                            <field name="reference_bank_journal_id"
-                                   options="{'no_create': True, 'no_open': True}"/>
-                            <field name="reference_bank_account_id" readonly="1"/>
-                            <field name="period_range_label" readonly="1"/>
+                            <label for="date_from" string="Période" class="d-none"/>
+                            <div class="o_row glc_cockpit_period_row">
+                                <i class="fa fa-calendar glc_cockpit_period_icon oe_edit_only"
+                                   aria-label="Période" title="Période"/>
+                                <span class="glc_cockpit_period_date_box">
+                                    <field name="date_from" nolabel="1" class="oe_inline"/>
+                                </span>
+                                <i class="fa fa-long-arrow-right mx-2 oe_edit_only"
+                                   aria-label="au" title="au"/>
+                                <span class="glc_cockpit_period_date_box">
+                                    <field name="date_to" nolabel="1" class="oe_inline"/>
+                                </span>
+                            </div>
                         </group>
                     </group>
 
                     <notebook>
-                        <page string="Synthèse graphique" name="page_synthesis">
-                            <p class="text-muted mb-1">
-                                Lecture immédiate de pilotage :
-                                solde, structure mensuelle et solde par axe analytique.
-                            </p>
-                            <p class="text-muted small mb-3">
-                                Solde = Ressources − Cumul RH − Dépenses.
-                            </p>
+                        <page string="Tableau de bord" name="page_synthesis">
                             <field name="detail_line_count" invisible="1"/>
                             <field name="resources_realized" invisible="1"/>
                             <field name="fixed_charges_realized" invisible="1"/>
@@ -77,7 +73,7 @@
                                 </p>
                                 <p class="mb-0">
                                     Vérifiez la période et les filtres pour afficher
-                                    la synthèse graphique.
+                                    le tableau de bord.
                                 </p>
                             </div>
                             <field name="line_ids" nolabel="1" readonly="1"
@@ -85,20 +81,9 @@
                                    invisible="not detail_line_count"/>
                         </page>
                         <page string="Détail par axe analytique" name="page_detail">
-                            <p class="text-muted mb-1">
-                                Par axe analytique et par mois : ressources, cumul RH, dépenses et solde.
-                            </p>
-                            <p class="text-muted small mb-3">
-                                Solde = Ressources − Cumul RH − Dépenses.
-                                Les virements internes 580 qualifiés analytiquement
-                                alimentent les ressources (entrée) ou les dépenses (sortie).
-                            </p>
-                            <p class="text-muted small mb-3">
-                                Coche « Payé uniquement » pour n'afficher que les montants
-                                effectivement encaissés ou réglés (factures au statut payé,
-                                écritures banque ou lettrées banque). Rechargez le cockpit
-                                après mise à jour du module pour recalculer ces montants.
-                            </p>
+                            <field name="activity_account_id" invisible="1"/>
+                            <field name="reference_bank_journal_id" invisible="1"/>
+                            <field name="reference_bank_account_id" invisible="1"/>
                             <field name="detail_line_count" invisible="1"/>
                             <field name="revenue_eligible_line_count" invisible="1"/>
                             <field name="revenue_invoiced_line_count" invisible="1"/>
@@ -113,7 +98,7 @@
                                     et ces filtres.
                                 </p>
                                 <p class="mb-0">
-                                    Consultez les onglets Ressources et Charges de structure
+                                    Consultez l'onglet Charges de structure
                                     pour le résumé de couverture.
                                 </p>
                             </div>
@@ -137,7 +122,7 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="Ressources">
+                        <page string="Ressources" invisible="1">
                             <p class="text-muted">
                                 Total des ressources réalisées sur la période
                                 (recettes d'activité et autres entrées classe 7 qualifiées).
@@ -167,6 +152,11 @@
                             </group>
                         </page>
                         <page string="Trésorerie" name="page_treasury">
+                            <group string="Compte bancaire de référence">
+                                <field name="reference_bank_journal_id"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                                <field name="reference_bank_account_id" readonly="1"/>
+                            </group>
                             <p class="text-muted mb-1">
                                 Lecture trésorerie depuis le compte bancaire de référence
                                 (point de vue distinct de l'exploitation).
@@ -352,7 +342,7 @@
                                         class="btn-link ms-2"/>
                             </div>
                         </page>
-                        <page string="Infos">
+                        <page string="Infos" invisible="1">
                             <p class="text-muted mb-3">
                                 Les ressources couvrent-elles
                                 les charges de structure, dont le cumul RH ?
@@ -361,8 +351,11 @@
                                 Le réalisé cockpit provient de la comptabilité analytique.
                             </p>
                             <p class="text-muted mb-0 mt-2">
+                                Modifiez la période analysée sous le titre du cockpit.
+                                Les filtres avancés (axe, compte bancaire) se trouvent dans
+                                l'onglet Détail par axe analytique.
                                 Le cockpit se met à jour automatiquement lorsque vous modifiez
-                                les filtres de lecture.
+                                ces filtres.
                             </p>
                         </page>
                     </notebook>

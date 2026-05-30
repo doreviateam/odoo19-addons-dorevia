@@ -4,7 +4,17 @@
     <t t-name="dorevia_glc_analytics.GlcCoverageDetail">
         <div class="o_glc_coverage_detail">
             <t t-if="groupedData.hasLines">
-                <div class="o_glc_detail_toolbar d-flex justify-content-end gap-3 mb-2">
+                <div class="o_glc_detail_toolbar d-flex justify-content-end align-items-center gap-3 mb-2">
+                    <label t-if="groupedData.multiMonth"
+                           class="o_glc_month_order_control small mb-0 d-flex align-items-center gap-1">
+                        <span>Mois</span>
+                        <select class="form-select form-select-sm o_glc_month_order_select"
+                                t-att-value="state.monthOrder"
+                                t-on-change="onMonthOrderChange">
+                            <option value="desc">Plus récent d'abord</option>
+                            <option value="asc">Plus ancien d'abord</option>
+                        </select>
+                    </label>
                     <label class="form-check-label small mb-0">
                         <input type="checkbox"
                                class="form-check-input me-1"
