@@ -4,7 +4,14 @@
     <t t-name="dorevia_glc_analytics.GlcCoverageDetail">
         <div class="o_glc_coverage_detail">
             <t t-if="groupedData.hasLines">
-                <div class="o_glc_detail_toolbar d-flex justify-content-end mb-2">
+                <div class="o_glc_detail_toolbar d-flex justify-content-end gap-3 mb-2">
+                    <label class="form-check-label small mb-0">
+                        <input type="checkbox"
+                               class="form-check-input me-1"
+                               t-att-checked="state.showPaidOnly"
+                               t-on-change="togglePaidOnly"/>
+                        Payé uniquement
+                    </label>
                     <label class="form-check-label small mb-0">
                         <input type="checkbox"
                                class="form-check-input me-1"

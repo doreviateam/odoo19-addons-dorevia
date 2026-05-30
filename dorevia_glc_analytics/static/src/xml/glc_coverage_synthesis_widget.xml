@@ -63,9 +63,9 @@
 
                     <div class="o_glc_chart_block">
                         <h6 class="o_glc_chart_title d-flex align-items-center gap-1 mb-2">
-                            <span>Structure mensuelle — Recette / Cumul RH / Dépense</span>
+                            <span>Structure mensuelle — Ressource / Cumul RH / Dépense</span>
                             <span class="o_glc_chart_help"
-                                  title="Barres : masses mensuelles (Recette, Cumul RH, Dépense). Courbe : solde net du mois (Recette − Cumul RH − Dépense).">
+                                  title="Barres : masses mensuelles (Ressource, Cumul RH, Dépense). Courbe : solde net du mois (Ressource − Cumul RH − Dépense).">
                                 ⓘ
                             </span>
                         </h6>

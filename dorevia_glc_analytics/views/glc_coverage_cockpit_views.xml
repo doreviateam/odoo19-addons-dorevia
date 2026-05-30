@@ -64,7 +64,7 @@
                                 solde période, structure mensuelle et solde par axe analytique.
                             </p>
                             <p class="text-muted small mb-3">
-                                Solde = Recette − Cumul RH − Dépense.
+                                Solde = Ressource − Cumul RH − Dépense.
                             </p>
                             <p class="text-muted small mb-3" invisible="has_budget_data">
                                 Aucun budget renseigné sur cette période — les écarts budget ne sont pas significatifs.
@@ -93,10 +93,18 @@
                         </page>
                         <page string="Détail par axe analytique" name="page_detail">
                             <p class="text-muted mb-1">
-                                Par axe analytique et par mois : recette, cumul RH, dépense et solde.
+                                Par axe analytique et par mois : ressource, cumul RH, dépense et solde.
                             </p>
                             <p class="text-muted small mb-3">
-                                Solde = Recette − Cumul RH − Dépense.
+                                Solde = Ressource − Cumul RH − Dépense.
+                                Les virements internes 580 qualifiés analytiquement
+                                alimentent la ressource (entrée) ou la dépense (sortie).
+                            </p>
+                            <p class="text-muted small mb-3">
+                                Coche « Payé uniquement » pour n'afficher que les montants
+                                effectivement encaissés ou réglés (factures au statut payé,
+                                écritures banque ou lettrées banque). Rechargez le cockpit
+                                après mise à jour du module pour recalculer ces montants.
                             </p>
                             <p class="text-muted small mb-3" invisible="has_budget_data">
                                 Aucun budget renseigné sur cette période — cocher « Budget ? » n'affichera que des tirets.
@@ -121,7 +129,31 @@
                             </div>
                             <field name="line_ids" nolabel="1" readonly="1"
                                    widget="glc_coverage_detail"
-                                   invisible="not detail_line_count"/>
+                                   invisible="not detail_line_count">
+                                <list create="0" delete="0" edit="0">
+                                    <field name="line_kind" column_invisible="1"/>
+                                    <field name="month_key" column_invisible="1"/>
+                                    <field name="month_label" column_invisible="1"/>
+                                    <field name="activity_label" column_invisible="1"/>
+                                    <field name="analytic_code" column_invisible="1"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="revenue_realized" column_invisible="1"/>
+                                    <field name="revenue_realized_paid" column_invisible="1"/>
+                                    <field name="revenue_budget" column_invisible="1"/>
+                                    <field name="variance_revenue" column_invisible="1"/>
+                                    <field name="payroll_realized" column_invisible="1"/>
+                                    <field name="payroll_realized_paid" column_invisible="1"/>
+                                    <field name="payroll_budget" column_invisible="1"/>
+                                    <field name="variance_payroll" column_invisible="1"/>
+                                    <field name="expense_realized" column_invisible="1"/>
+                                    <field name="expense_realized_paid" column_invisible="1"/>
+                                    <field name="expense_budget" column_invisible="1"/>
+                                    <field name="variance_expense" column_invisible="1"/>
+                                    <field name="performance_realized" column_invisible="1"/>
+                                    <field name="performance_budget" column_invisible="1"/>
+                                    <field name="variance_performance" column_invisible="1"/>
+                                </list>
+                            </field>
                         </page>
                         <page string="Ressources">
                             <p class="text-muted">
@@ -174,7 +206,7 @@
                                 (point de vue distinct de l'exploitation).
                             </p>
                             <p class="text-muted small mb-3">
-                                Les KPI Recette · Cumul RH · Dépense · Solde ne dépendent
+                                Les KPI Ressource · Cumul RH · Dépense · Solde ne dépendent
                                 pas du compte bancaire sélectionné.
                             </p>
                             <p class="text-muted small mb-3" invisible="treasury_has_data">
@@ -194,6 +226,24 @@
                             <group string="Solde trésorerie" invisible="not treasury_has_data">
                                 <field name="treasury_net" readonly="1" class="fw-bold"/>
                             </group>
+                            <group string="Virements internes par axe analytique"
+                                   invisible="not treasury_line_ids">
+                                <field name="treasury_line_ids" nolabel="1" readonly="1"
+                                       colspan="2">
+                                    <list create="0" delete="0" edit="0"
+                                          default_order="activity_label">
+                                        <field name="currency_id" column_invisible="1"/>
+                                        <field name="analytic_code" string="Code"/>
+                                        <field name="activity_label" string="Axe analytique"/>
+                                        <field name="transfer_gl_account_code"
+                                               string="Compte comptable"/>
+                                        <field name="internal_inflow"
+                                               sum="Total entrées internes"/>
+                                        <field name="internal_outflow"
+                                               sum="Total sorties internes"/>
+                                    </list>
+                                </field>
+                            </group>
                             <field name="treasury_has_data" invisible="1"/>
                         </page>
                         <page string="Contrôles qualité" name="page_quality">
@@ -202,7 +252,7 @@
                             </p>
                             <p class="text-muted small mb-3">
                                 Ces indicateurs mesurent la fiabilité des données et le cycle de
-                                paiement. Ils ne modifient pas Recette · Cumul RH · Dépense · Solde.
+                                paiement. Ils ne modifient pas Ressource · Cumul RH · Dépense · Solde.
                             </p>
                             <group string="Q1 — Confiance analytique">
                                 <group>
@@ -271,7 +321,7 @@
                             </p>
                             <p class="text-muted small mb-3">
                                 Ces indicateurs mesurent la fiabilité des données et le cycle de
-                                paiement. Ils ne modifient pas Recette · Cumul RH · Dépense · Solde.
+                                paiement. Ils ne modifient pas Ressource · Cumul RH · Dépense · Solde.
                             </p>
                             <group string="Q3 — Clients">
                                 <group>
@@ -400,9 +450,9 @@
                 <field name="currency_id" column_invisible="1"/>
                 <field name="period_date" string="Mois" optional="hide"/>
                 <field name="activity_label" string="Activité"/>
-                <field name="revenue_realized" sum="Total recettes réelles"/>
-                <field name="revenue_budget" sum="Total recettes budgétées"/>
-                <field name="variance_revenue" sum="Total écart recettes"/>
+                <field name="revenue_realized" sum="Total ressources réelles"/>
+                <field name="revenue_budget" sum="Total ressources budgétées"/>
+                <field name="variance_revenue" sum="Total écart ressources"/>
                 <field name="payroll_realized" sum="Total masse sal. réelle"/>
                 <field name="payroll_budget" sum="Total masse sal. budgétée"/>
                 <field name="variance_payroll" sum="Total écart masse sal."/>

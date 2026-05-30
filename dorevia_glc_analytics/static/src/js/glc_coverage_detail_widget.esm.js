@@ -6,6 +6,7 @@ import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { formatMonetary } from "@web/views/fields/formatters";
 
 const STORAGE_KEY = "glc_cockpit_detail_show_budget_variance";
+const STORAGE_KEY_PAID_ONLY = "glc_cockpit_detail_paid_only";
 
 const NUMERIC_FIELDS = [
     "revenue_realized",
@@ -21,7 +22,7 @@ const NUMERIC_FIELDS = [
 
 export const DETAIL_FAMILIES = [
     {
-        label: "Recette",
+        label: "Ressource",
         cssStart: "o_glc_family_recettes",
         cssEnd: "o_glc_family_recettes_end",
         realizedKey: "revenue_realized",
@@ -57,6 +58,28 @@ export const DETAIL_FAMILIES = [
         valueType: "performance",
     },
 ];
+
+export function applyPaidDisplayMode(data, paidOnly) {
+    if (!paidOnly) {
+        return {
+            ...data,
+            ...computePerformanceAmounts(data),
+        };
+    }
+    const mapped = {
+        ...data,
+        revenue_realized: data.revenue_realized_paid || 0,
+        payroll_realized: data.payroll_realized_paid || 0,
+        expense_realized: data.expense_realized_paid || 0,
+    };
+    mapped.variance_revenue = mapped.revenue_realized - (data.revenue_budget || 0);
+    mapped.variance_payroll = mapped.payroll_realized - (data.payroll_budget || 0);
+    mapped.variance_expense = mapped.expense_realized - (data.expense_budget || 0);
+    return {
+        ...mapped,
+        ...computePerformanceAmounts(mapped),
+    };
+}
 
 export function computePerformanceAmounts(data) {
     const performance_realized =
@@ -111,6 +134,8 @@ export class GlcCoverageDetailField extends Component {
         this.state = useState({
             showBudgetVariance:
                 localStorage.getItem(STORAGE_KEY) === "1",
+            showPaidOnly:
+                localStorage.getItem(STORAGE_KEY_PAID_ONLY) === "1",
         });
     }
 
@@ -137,6 +162,14 @@ export class GlcCoverageDetailField extends Component {
         localStorage.setItem(
             STORAGE_KEY,
             this.state.showBudgetVariance ? "1" : "0"
+        );
+    }
+
+    togglePaidOnly(ev) {
+        this.state.showPaidOnly = ev.target.checked;
+        localStorage.setItem(
+            STORAGE_KEY_PAID_ONLY,
+            this.state.showPaidOnly ? "1" : "0"
         );
     }
 
@@ -262,8 +295,9 @@ export class GlcCoverageDetailField extends Component {
 
     _normalizeActivityRow(data) {
         const businessLabel = activityBusinessLabel(data);
+        const displayData = applyPaidDisplayMode(data, this.state.showPaidOnly);
         return {
-            ...this._withPerformance(data),
+            ...displayData,
             activity_label: businessLabel,
         };
     }
@@ -287,8 +321,9 @@ export class GlcCoverageDetailField extends Component {
                 });
             }
             const month = map.get(key);
-            month.lines.push({ id: r.id, ...this._normalizeActivityRow(data) });
-            this._accumulate(month.totals, data);
+            const rowData = this._normalizeActivityRow(data);
+            month.lines.push({ id: r.id, ...rowData });
+            this._accumulate(month.totals, rowData);
         }
         const months = [...map.values()].sort((a, b) =>
             a.monthKey.localeCompare(b.monthKey)
@@ -323,12 +358,15 @@ export const glcCoverageDetailField = {
         { name: "analytic_code", type: "char" },
         { name: "currency_id", type: "many2one", relation: "res.currency" },
         { name: "revenue_realized", type: "monetary" },
+        { name: "revenue_realized_paid", type: "monetary" },
         { name: "revenue_budget", type: "monetary" },
         { name: "variance_revenue", type: "monetary" },
         { name: "payroll_realized", type: "monetary" },
+        { name: "payroll_realized_paid", type: "monetary" },
         { name: "payroll_budget", type: "monetary" },
         { name: "variance_payroll", type: "monetary" },
         { name: "expense_realized", type: "monetary" },
+        { name: "expense_realized_paid", type: "monetary" },
         { name: "expense_budget", type: "monetary" },
         { name: "variance_expense", type: "monetary" },
         { name: "performance_realized", type: "monetary" },

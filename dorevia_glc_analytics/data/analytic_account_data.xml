@@ -103,5 +103,14 @@
             <field name="glc_report_active" eval="True"/>
         </record>
 
+        <record id="analytic_account_glc_vir_int" model="account.analytic.account">
+            <field name="name">Virement interne</field>
+            <field name="code">VIR_INT</field>
+            <field name="plan_id" ref="analytic_plan_glc_activites"/>
+            <field name="glc_activity_type">mixte</field>
+            <field name="glc_display_sequence">120</field>
+            <field name="glc_report_active" eval="False"/>
+        </record>
+
     </data>
 </odoo>
