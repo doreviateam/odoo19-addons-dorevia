@@ -25,10 +25,6 @@
                         </span>
                     </div>
                     <div class="alert alert-secondary mb-3" role="alert"
-                         invisible="a3_enabled">
-                        <field name="a3_info_message" nolabel="1" readonly="1"/>
-                    </div>
-                    <div class="alert alert-secondary mb-3" role="alert"
                          invisible="a5_enabled">
                         <field name="a5_info_message" nolabel="1" readonly="1"/>
                     </div>
@@ -47,12 +43,10 @@
                     <group string="Compteurs par contrôle" invisible="not line_count">
                         <field name="count_a1" readonly="1"/>
                         <field name="count_a2" readonly="1"/>
-                        <field name="count_a3" readonly="1"/>
                         <field name="count_a4" readonly="1"/>
                         <field name="count_a5" readonly="1"/>
                     </group>
                     <field name="structure_alert_active" invisible="1"/>
-                    <field name="a3_enabled" invisible="1"/>
                     <field name="a5_enabled" invisible="1"/>
                     <notebook invisible="not line_ids">
                         <page string="Anomalies détectées">

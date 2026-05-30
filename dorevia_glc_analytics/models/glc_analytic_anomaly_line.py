@@ -28,7 +28,6 @@ class GlcAnalyticAnomalyLine(models.TransientModel):
             ("a2_revenue_no_activity", "A2 — Recette sans activité"),
             ("a2_revenue_no_funding", "A2 — Recette sans financement"),
             ("a2_revenue_incomplete", "A2 — Recette incomplète"),
-            ("a3_funding_missing", "A3 — Financement manquant"),
             ("a4_payroll_analytic", "A4 — Paie avec analytique"),
             ("a5_legacy_account", "A5 — Ancien compte analytique"),
         ],

@@ -7,34 +7,19 @@
             <t t-if="agg.hasLines">
                 <div class="o_glc_kpi_row d-flex flex-wrap gap-3 mb-4">
                     <div class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Solde réel</div>
+                        <div class="o_glc_kpi_label">Solde</div>
                         <div t-att-class="'o_glc_kpi_value ' + signedClass(agg.periodTotals.performance_realized)"
                              t-esc="formatSignedAmount(agg.periodTotals.performance_realized)"/>
-                        <div class="o_glc_kpi_hint">solde période</div>
+                        <div class="o_glc_kpi_hint">Ressources − Cumul RH − Dépenses</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Solde budget</div>
-                        <div t-att-class="'o_glc_kpi_value ' + budgetKpiClass()"
-                             t-esc="formatBudgetKpi(agg.periodTotals.performance_budget)"/>
-                        <div class="o_glc_kpi_hint">
-                            <t t-if="hasPeriodBudget">prévu sur la période</t>
-                            <t t-else="">aucun budget sur la période</t>
-                        </div>
-                    </div>
-                    <div t-if="hasPeriodBudget" class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Écart de solde</div>
-                        <div t-att-class="'o_glc_kpi_value ' + signedClass(agg.periodTotals.variance_performance)"
-                             t-esc="formatSignedAmount(agg.periodTotals.variance_performance)"/>
-                        <div class="o_glc_kpi_hint">réel − budget</div>
-                    </div>
-                    <div class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Ressources totales</div>
+                        <div class="o_glc_kpi_label">Ressources</div>
                         <div class="o_glc_kpi_value o_glc_kpi_positive"
                              t-esc="formatAmount(resourcesRealized)"/>
-                        <div class="o_glc_kpi_hint">recette + financements</div>
+                        <div class="o_glc_kpi_hint">total réalisé période</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Dépenses totales</div>
+                        <div class="o_glc_kpi_label">Charges de structure</div>
                         <div class="o_glc_kpi_value o_glc_kpi_neutral"
                              t-esc="formatAmount(totalExpensesRealized)"/>
                         <div class="o_glc_kpi_hint">cumul RH + dépenses</div>
@@ -61,7 +46,7 @@
 
                 <div class="o_glc_chart_grid">
                     <div class="o_glc_chart_block">
-                        <h6 class="o_glc_chart_title">Solde mensuel — réel vs budget</h6>
+                        <h6 class="o_glc_chart_title">Solde mensuel</h6>
                         <div class="o_glc_chart_canvas_wrapper">
                             <canvas t-ref="perfChart"/>
                         </div>
@@ -69,9 +54,9 @@
 
                     <div class="o_glc_chart_block">
                         <h6 class="o_glc_chart_title d-flex align-items-center gap-1 mb-2">
-                            <span>Structure mensuelle — Ressource / Cumul RH / Dépense</span>
+                            <span>Structure mensuelle — Ressources / Cumul RH / Dépenses</span>
                             <span class="o_glc_chart_help"
-                                  title="Barres : masses mensuelles (Ressource, Cumul RH, Dépense). Courbe : solde net du mois (Ressource − Cumul RH − Dépense).">
+                                  title="Barres : masses mensuelles. Courbe : solde du mois (Ressources − Cumul RH − Dépenses).">
                                 ⓘ
                             </span>
                         </h6>

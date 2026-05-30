@@ -8,7 +8,6 @@ from odoo.exceptions import UserError
 from .glc_constants import (
     GLC_EXPENSE_ACCOUNT_TYPES,
     GLC_FUNDING_ANALYTIC_CODES,
-    GLC_FUNDING_MESSAGES,
     GLC_INCOME_ACCOUNT_TYPES,
     GLC_LEGACY_ANALYTIC_CODES,
     GLC_PAYROLL_ACCOUNT_PREFIXES,
@@ -45,13 +44,10 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
     )
     structure_alert_active = fields.Boolean(readonly=True)
     structure_alert_message = fields.Char(readonly=True)
-    a3_enabled = fields.Boolean(readonly=True)
-    a3_info_message = fields.Char(readonly=True)
     a5_enabled = fields.Boolean(readonly=True)
     a5_info_message = fields.Char(readonly=True)
     count_a1 = fields.Integer(readonly=True)
     count_a2 = fields.Integer(readonly=True)
-    count_a3 = fields.Integer(readonly=True)
     count_a4 = fields.Integer(readonly=True)
     count_a5 = fields.Integer(readonly=True)
 
@@ -98,13 +94,10 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
                 "structure_weight_pct": 0.0,
                 "structure_alert_active": False,
                 "structure_alert_message": False,
-                "a3_enabled": False,
-                "a3_info_message": False,
                 "a5_enabled": False,
                 "a5_info_message": False,
                 "count_a1": 0,
                 "count_a2": 0,
-                "count_a3": 0,
                 "count_a4": 0,
                 "count_a5": 0,
             }
@@ -113,19 +106,7 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
     def _update_control_status(self):
         icp = self.env["ir.config_parameter"].sudo()
         cutover = icp.get_param("dorevia_glc_analytics.cutover_date")
-        funding_rules = self.env["glc.account.funding.rule"].search_count(
-            [("company_id", "=", self.company_id.id), ("active", "=", True)]
-        )
         vals = {
-            "a3_enabled": bool(funding_rules),
-            "a3_info_message": (
-                False
-                if funding_rules
-                else _(
-                    "Contrôle A3 inactif : aucun mapping explicite "
-                    "(glc.account.funding.rule). Paramétrez les règles ou report Palier 1.1."
-                )
-            ),
             "a5_enabled": bool(cutover),
             "a5_info_message": (
                 False
@@ -147,7 +128,6 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
                         lambda line: line.anomaly_type.startswith("a2_revenue")
                     )
                 ),
-                "count_a3": len(lines.filtered(lambda line: line.anomaly_type == "a3_funding_missing")),
                 "count_a4": len(lines.filtered(lambda line: line.anomaly_type == "a4_payroll_analytic")),
                 "count_a5": len(lines.filtered(lambda line: line.anomaly_type == "a5_legacy_account")),
             }
@@ -229,7 +209,6 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
 
         anomalies.extend(self._check_a1(line, activity_accounts, common))
         anomalies.extend(self._check_a2(line, activity_accounts, funding_accounts, common))
-        anomalies.extend(self._check_a3(line, funding_accounts, common))
         anomalies.extend(self._check_a4(line, distribution, common))
         anomalies.extend(
             self._check_a5(line, distribution, common)
@@ -254,22 +233,10 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
             }
         ]
 
-    def _funding_rule_for_line(self, line):
-        return self.env["glc.account.funding.rule"].search(
-            [
-                ("company_id", "=", self.company_id.id),
-                ("account_id", "=", line.account_id.id),
-                ("active", "=", True),
-            ],
-            limit=1,
-        )
-
     def _check_a2(self, line, activity_accounts, funding_accounts, common):
         if line.move_id.move_type not in ("out_invoice", "out_refund"):
             return []
         if line.account_id.account_type not in GLC_INCOME_ACCOUNT_TYPES:
-            return []
-        if self._funding_rule_for_line(line):
             return []
 
         has_activity = bool(activity_accounts)
@@ -306,31 +273,6 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
                 "message": _("Recette sans financement GLC"),
                 "recommendation": _(
                     "Affecter un axe financement GLC (ex. RESSOURCES_PROPRES)."
-                ),
-            }
-        ]
-
-    def _check_a3(self, line, funding_accounts, common):
-        rule = self._funding_rule_for_line(line)
-        if not rule:
-            return []
-        if line.move_id.move_type not in ("out_invoice", "out_refund"):
-            return []
-        if line.account_id.account_type not in GLC_INCOME_ACCOUNT_TYPES:
-            return []
-
-        expected = rule.funding_analytic_account_id
-        if expected and expected in funding_accounts:
-            return []
-
-        return [
-            {
-                **common,
-                "anomaly_type": "a3_funding_missing",
-                "message": _(GLC_FUNDING_MESSAGES.get(rule.funding_code, "Financement GLC manquant")),
-                "recommendation": _(
-                    "Affecter le compte analytique %(account)s sur la ligne.",
-                    account=expected.display_name if expected else rule.funding_code,
                 ),
             }
         ]

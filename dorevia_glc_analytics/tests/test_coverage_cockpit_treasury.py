@@ -232,7 +232,6 @@ class TestGlcCoverageCockpitTreasury(TestGlcCoverageCockpit):
             "company_id": self.env.company.id,
             "date_from": date_from,
             "date_to": date_to,
-            "budget_scenario": "initial",
             "reference_bank_journal_id": (bank_journal or self.bank_journal).id,
         }
         return env.create(values)
@@ -465,7 +464,6 @@ class TestGlcCoverageCockpitTreasury(TestGlcCoverageCockpit):
                 "company_id": self.env.company.id,
                 "date_from": date(self.test_year, 1, 1),
                 "date_to": date(self.test_year, 1, 31),
-                "budget_scenario": "initial",
             }
         )
         self.assertEqual(

@@ -27,18 +27,6 @@ GLC_INCOME_ACCOUNT_TYPES = (
     "income_other",
 )
 
-GLC_FUNDING_CODES = (
-    "ADHESIONS",
-    "DONS",
-    "SUBVENTIONS",
-)
-
-GLC_FUNDING_MESSAGES = {
-    "ADHESIONS": "Adhésion sans financement ADHESIONS",
-    "DONS": "Don sans financement DONS",
-    "SUBVENTIONS": "Subvention sans financement SUBVENTIONS",
-}
-
 GLC_PERCENT_TOLERANCE = 0.01
 
 # Palier 4 — cockpit couverture des salaires

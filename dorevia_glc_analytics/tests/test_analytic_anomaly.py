@@ -187,49 +187,6 @@ class TestGlcAnalyticAnomaly(AccountTestInvoicingCommon):
         self.assertTrue(a5_lines)
         self.assertTrue(wizard.a5_enabled)
 
-    def test_a3_inactive_without_mapping(self):
-        """A3 désactivé sans mapping explicite."""
-        wizard = self._run_wizard()
-        self.assertFalse(wizard.a3_enabled)
-        self.assertTrue(wizard.a3_info_message)
-        self.assertFalse(
-            wizard.line_ids.filtered(
-                lambda anomaly: anomaly.anomaly_type == "a3_funding_missing"
-            )
-        )
-
-    def test_a3_with_explicit_mapping(self):
-        """A3 actif uniquement avec glc.account.funding.rule."""
-        invoice = self._create_invoice_one_line(
-            price_unit=50.0,
-            move_type="out_invoice",
-            invoice_date="2026-05-15",
-            tax_ids=[Command.clear()],
-            post=False,
-        )
-        line = self._product_line(invoice)
-        self.env["glc.account.funding.rule"].create(
-            {
-                "company_id": self.env.company.id,
-                "account_id": line.account_id.id,
-                "funding_code": "ADHESIONS",
-            }
-        )
-        line.analytic_distribution = False
-        invoice.action_post()
-
-        wizard = self._run_wizard()
-        self.assertTrue(wizard.a3_enabled)
-        a3_lines = wizard.line_ids.filtered(
-            lambda anomaly: anomaly.anomaly_type == "a3_funding_missing"
-        )
-        self.assertTrue(a3_lines)
-        a2_lines = wizard.line_ids.filtered(
-            lambda anomaly: anomaly.anomaly_type.startswith("a2_revenue")
-            and anomaly.move_id == invoice
-        )
-        self.assertFalse(a2_lines)
-
     def test_non_blocking_invoice_validation(self):
         """CA7 — validation facture toujours possible."""
         bill = self._create_invoice_one_line(

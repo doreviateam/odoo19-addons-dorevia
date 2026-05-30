@@ -8,7 +8,6 @@ import { registry } from "@web/core/registry";
 const GLC_COCKPIT_FILTER_FIELDS = new Set([
     "date_from",
     "date_to",
-    "budget_scenario",
     "company_id",
     "activity_account_id",
     "reference_bank_journal_id",

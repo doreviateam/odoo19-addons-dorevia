@@ -12,34 +12,14 @@
                                t-on-change="togglePaidOnly"/>
                         Payé uniquement
                     </label>
-                    <label class="form-check-label small mb-0">
-                        <input type="checkbox"
-                               class="form-check-input me-1"
-                               t-att-checked="state.showBudgetVariance"
-                               t-on-change="toggleBudgetVariance"/>
-                        Budget ?
-                    </label>
                 </div>
                 <table class="o_list_table o_glc_detail_table table table-sm table-hover mb-0 align-middle">
                     <thead class="o_glc_detail_thead">
                         <tr class="o_glc_family_row small text-muted">
-                            <th t-att-rowspan="state.showBudgetVariance ? 2 : 1"
-                                class="o_glc_col_activity align-bottom">Axe analytique</th>
+                            <th class="o_glc_col_activity align-bottom">Axe analytique</th>
                             <t t-foreach="families" t-as="family" t-key="family.label">
-                                <th t-if="state.showBudgetVariance"
-                                    colspan="3"
-                                    t-att-class="'text-center ' + family.cssStart + ' ' + family.cssEnd"
+                                <th t-att-class="'text-end ' + family.cssStart + ' ' + family.cssEnd"
                                     t-esc="family.label"/>
-                                <th t-else=""
-                                    t-att-class="'text-end ' + family.cssStart + ' ' + family.cssEnd"
-                                    t-esc="family.label"/>
-                            </t>
-                        </tr>
-                        <tr t-if="state.showBudgetVariance" class="o_glc_subheader_row small text-muted">
-                            <t t-foreach="families" t-as="family" t-key="family.label + '_sub'">
-                                <th t-att-class="'text-end ' + family.cssStart">Réel</th>
-                                <th class="text-end">Budget</th>
-                                <th t-att-class="'text-end ' + family.cssEnd">Écart</th>
                             </t>
                         </tr>
                     </thead>
@@ -54,14 +34,8 @@
                                         t-att-title="activityTooltip(line)"
                                         t-esc="activityDisplayLabel(line)"/>
                                     <t t-foreach="families" t-as="family" t-key="family.label + '_line'">
-                                        <td t-att-class="cellClass(family, 'realized', line)"
+                                        <td t-att-class="cellClass(family, line)"
                                             t-esc="formatAmount(line[family.realizedKey])"/>
-                                        <td t-if="state.showBudgetVariance"
-                                            t-att-class="cellClass(family, 'budget', line)"
-                                            t-esc="formatAmount(line[family.budgetKey])"/>
-                                        <td t-if="state.showBudgetVariance"
-                                            t-att-class="cellClass(family, 'variance', line)"
-                                            t-esc="formatAmount(line[family.varianceKey])"/>
                                     </t>
                                 </tr>
                             </t>
@@ -70,14 +44,8 @@
                                     Sous-total <t t-esc="month.monthLabel"/>
                                 </td>
                                 <t t-foreach="families" t-as="family" t-key="family.label + '_subtotal'">
-                                    <td t-att-class="cellClass(family, 'realized', month.totals, true)"
+                                    <td t-att-class="cellClass(family, month.totals, true)"
                                         t-esc="formatAmount(month.totals[family.realizedKey])"/>
-                                    <td t-if="state.showBudgetVariance"
-                                        t-att-class="cellClass(family, 'budget', month.totals, true)"
-                                        t-esc="formatAmount(month.totals[family.budgetKey])"/>
-                                    <td t-if="state.showBudgetVariance"
-                                        t-att-class="cellClass(family, 'variance', month.totals, true)"
-                                        t-esc="formatAmount(month.totals[family.varianceKey])"/>
                                 </t>
                             </tr>
                         </t>
@@ -86,14 +54,8 @@
                         <tr class="o_glc_period_total_row">
                             <td class="o_glc_period_total_label">Total période</td>
                             <t t-foreach="families" t-as="family" t-key="family.label + '_period'">
-                                <td t-att-class="cellClass(family, 'realized', groupedData.periodTotals, true)"
+                                <td t-att-class="cellClass(family, groupedData.periodTotals, true)"
                                     t-esc="formatAmount(groupedData.periodTotals[family.realizedKey])"/>
-                                <td t-if="state.showBudgetVariance"
-                                    t-att-class="cellClass(family, 'budget', groupedData.periodTotals, true)"
-                                    t-esc="formatAmount(groupedData.periodTotals[family.budgetKey])"/>
-                                <td t-if="state.showBudgetVariance"
-                                    t-att-class="cellClass(family, 'variance', groupedData.periodTotals, true)"
-                                    t-esc="formatAmount(groupedData.periodTotals[family.varianceKey])"/>
                             </t>
                         </tr>
                     </tfoot>

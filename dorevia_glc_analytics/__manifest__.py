@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.11.0.2",
+    "version": "19.0.13.0.0",
     "category": "Accounting/Accounting",
     "summary": "Socle analytique GLC — cockpit pilotage d'exploitation.",
     "description": """
@@ -16,22 +16,13 @@ Palier 0 — Socle analytique :
 
 Palier 1 — Contrôles non bloquants :
 
-* assistant **Anomalies analytiques GLC** (contrôles A1–A6) ;
-* mapping explicite pour le contrôle A3 ;
+* assistant **Anomalies analytiques GLC** (contrôles A1–A2, A4–A6) ;
 * synthèse poids STRUCTURE (bandeau, pas ligne à ligne).
-
-Palier 2 — Ventilation salariale :
-
-* coûts salariés mensuels (`glc.employee.cost.line`) ;
-* ventilations par activité (`glc.salary.allocation`) ;
-* overlay de gestion — pas d'écriture comptable ni analytique paie ;
-* rôle **contrôle / comparaison RH** vis-à-vis du cockpit (pas source du réalisé).
 
 Palier 4 — Cockpit pilotage d'exploitation GLC :
 
 * réalisé = écritures comptables analytiques (classes 6/7, tous axes exploitables) ;
-* budget Palier 3 = comparaison prévisionnelle (périmètre partiel — voir ticket réalignement) ;
-* synthèse graphique + détail par axe analytique (Recette · Cumul RH · Dépense · Solde) ;
+* synthèse graphique + détail par axe analytique (Ressources · Cumul RH · Dépenses · Solde) ;
 * alertes couverture masse salariale (héritage Palier 4).
 
 Palier 4bis — Finition UX cockpit (wording MOA, tableau de bord).
@@ -51,7 +42,6 @@ Voir docs/PALIERS.md.
         "web",
         "account",
         "analytic",
-        "hr",
     ],
     "data": [
         "security/glc_security.xml",
@@ -61,10 +51,7 @@ Voir docs/PALIERS.md.
         "data/ir_config_parameter_data.xml",
         "data/glc_coverage_cockpit_cron.xml",
         "views/account_analytic_account_views.xml",
-        "views/glc_account_funding_rule_views.xml",
         "views/glc_analytic_anomaly_views.xml",
-        "views/glc_employee_cost_line_views.xml",
-        "views/glc_salary_allocation_views.xml",
         "views/res_company_views.xml",
         "views/glc_coverage_cockpit_views.xml",
         "views/glc_menus.xml",
