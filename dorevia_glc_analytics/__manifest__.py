@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.14.4.0",
+    "version": "19.0.15.0.0",
     "category": "Accounting/Accounting",
     "summary": "Pilotage GLC — contrôle de gestion sur réalisé analytique.",
     "description": """
@@ -20,7 +20,7 @@ Socle :
 * trésorerie cockpit (compte bancaire de référence) ;
 * qualité comptable & suivi paiement (GQ-6).
 
-Documentation à jour : docs/ETAT_MODULE_ACTUEL.md · docs/PALIERS.md
+Documentation à jour : docs/LIVRAISON_MOA.md · docs/ETAT_MODULE_ACTUEL.md
 """,
     "author": "Dorevia",
     "license": "LGPL-3",
@@ -54,6 +54,7 @@ Documentation à jour : docs/ETAT_MODULE_ACTUEL.md · docs/PALIERS.md
             "dorevia_glc_analytics/static/src/xml/glc_coverage_synthesis_widget.xml",
             "dorevia_glc_analytics/static/src/scss/glc_coverage_detail_widget.scss",
             "dorevia_glc_analytics/static/src/scss/glc_coverage_synthesis_widget.scss",
+            "dorevia_glc_analytics/static/src/scss/glc_cockpit_form.scss",
         ],
     },
 }

@@ -26,18 +26,18 @@
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
                         <div class="o_glc_kpi_label">Couverture du Cumul RH</div>
-                        <div t-att-class="'o_glc_kpi_value ' + coverageClass(agg.salaryCoverageRate)"
+                        <div t-att-class="'o_glc_kpi_value ' + alertCoverageClass()"
                              t-esc="formatCoverageRate(agg.salaryCoverageRate)"/>
                         <div class="o_glc_kpi_hint">ressources / cumul RH × 100</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Taux lettrage clients</div>
+                        <div class="o_glc_kpi_label">Lettrage clients</div>
                         <div t-att-class="'o_glc_kpi_value ' + reconcileClass(reconcileRateCustomer)"
                              t-esc="formatReconcileRate(reconcileRateCustomer)"/>
                         <div class="o_glc_kpi_hint">stock clients lettré fin période</div>
                     </div>
                     <div class="o_glc_kpi_card flex-fill">
-                        <div class="o_glc_kpi_label">Taux lettrage fournisseurs</div>
+                        <div class="o_glc_kpi_label">Lettrage fournisseurs</div>
                         <div t-att-class="'o_glc_kpi_value ' + reconcileClass(reconcileRateSupplier)"
                              t-esc="formatReconcileRate(reconcileRateSupplier)"/>
                         <div class="o_glc_kpi_hint">stock fournisseurs lettré fin période</div>

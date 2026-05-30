@@ -7,6 +7,7 @@ import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { formatMonetary } from "@web/views/fields/formatters";
 
 const STORAGE_KEY_PAID_ONLY = "glc_cockpit_detail_paid_only";
+const STORAGE_KEY_MONTH_ORDER = "glc_cockpit_detail_month_order";
 
 const NUMERIC_FIELDS = [
     "revenue_realized",
@@ -108,6 +109,7 @@ export class GlcCoverageDetailField extends Component {
         this.families = DETAIL_FAMILIES;
         this.state = useState({
             showPaidOnly: this._initialPaidOnlyState(),
+            monthOrder: this._initialMonthOrderState(),
         });
     }
 
@@ -123,6 +125,20 @@ export class GlcCoverageDetailField extends Component {
             return company.id || "no_company";
         }
         return company;
+    }
+
+    get monthOrderStorageKey() {
+        const db = session.db || "no_db";
+        const uid = session.uid || "no_uid";
+        return `${STORAGE_KEY_MONTH_ORDER}:${db}:${uid}:${this.storageCompanyId}`;
+    }
+
+    _initialMonthOrderState() {
+        const scopedValue = localStorage.getItem(this.monthOrderStorageKey);
+        if (scopedValue === "asc" || scopedValue === "desc") {
+            return scopedValue;
+        }
+        return "desc";
     }
 
     get paidOnlyStorageKey() {
@@ -163,6 +179,12 @@ export class GlcCoverageDetailField extends Component {
             this.paidOnlyStorageKey,
             this.state.showPaidOnly ? "1" : "0"
         );
+    }
+
+    onMonthOrderChange(ev) {
+        const value = ev.target.value;
+        this.state.monthOrder = value === "asc" ? "asc" : "desc";
+        localStorage.setItem(this.monthOrderStorageKey, this.state.monthOrder);
     }
 
     isZero(value) {
@@ -274,8 +296,9 @@ export class GlcCoverageDetailField extends Component {
             month.lines.push({ id: r.id, ...rowData });
             this._accumulate(month.totals, rowData);
         }
-        const months = [...map.values()].sort((a, b) =>
-            a.monthKey.localeCompare(b.monthKey)
+        const monthSortFactor = this.state.monthOrder === "asc" ? 1 : -1;
+        const months = [...map.values()].sort(
+            (a, b) => monthSortFactor * a.monthKey.localeCompare(b.monthKey)
         );
         const periodTotals = this._emptyTotals();
         for (const m of months) {

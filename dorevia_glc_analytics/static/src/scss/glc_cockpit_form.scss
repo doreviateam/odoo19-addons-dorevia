@@ -1,0 +1,49 @@
+// Période cockpit — champs date compacts sur une ligne.
+// Le widget daterange Odoo impose width:100% inline (impossible à surcharger) :
+// on utilise le datepicker natif dans des boîtes à largeur fixe.
+.o_glc_coverage_cockpit_form {
+    .glc_cockpit_period_icon {
+        color: #6c757d;
+        font-size: 1rem;
+        line-height: 1;
+        flex: 0 0 auto;
+    }
+
+    .glc_cockpit_period_row {
+        display: inline-flex !important;
+        align-items: center;
+        flex-wrap: nowrap;
+        width: fit-content !important;
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .glc_cockpit_period_date_box {
+        display: inline-block;
+        width: 6.5rem;
+        flex: 0 0 6.5rem;
+        vertical-align: middle;
+
+        .o_field_widget {
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .o_input,
+        input.o_input {
+            width: 100% !important;
+            max-width: 100%;
+            box-sizing: border-box;
+            padding-inline: 0.35rem;
+        }
+    }
+
+    .o_wrap_field:has(.glc_cockpit_period_row) {
+        width: auto;
+
+        .o_cell.o_wrap_input {
+            width: auto !important;
+            max-width: fit-content;
+        }
+    }
+}

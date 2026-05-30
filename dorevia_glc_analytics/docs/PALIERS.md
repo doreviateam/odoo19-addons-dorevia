@@ -1,8 +1,8 @@
 # Découpage en paliers — GLC Analytics
 
-**Version module de référence :** **`19.0.14.1.0`**  
-**État actuel :** [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md)  
-**Release simplification :** [RELEASE_NOTE_19.0.14_SIMPLIFICATION_PILOTAGE.md](./RELEASE_NOTE_19.0.14_SIMPLIFICATION_PILOTAGE.md)
+**Version module de référence :** **`19.0.15.0.0`** — **livraison MOA**  
+**État actuel :** [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md) · [LIVRAISON_MOA.md](./LIVRAISON_MOA.md)  
+**Release livraison :** [RELEASE_NOTE_19.0.15.0.0.md](./RELEASE_NOTE_19.0.15.0.0.md)
 
 > La [spec V1.1](./README.md) reste le document cible long terme.  
 > Le produit installé a été **simplifié en mai 2026** : réalisé analytique seul, sans overlay budget ni ventilation salariale.
@@ -17,8 +17,8 @@
 | **1** | `dorevia_glc_analytics` | Audit analytique (A1–A2, A4–A6) | **Actif** — menu **Audit** |
 | **2** | `dorevia_glc_analytics` | Ventilation salariale overlay | **Retiré** `19.0.13.0.0` · [archive](./TICKET_PALIER_2.md) |
 | **3** | ~~`dorevia_glc_budget`~~ | Budget prévisionnel mensuel | **Retiré** `19.0.14.0.0` · [archive](./TICKET_PALIER_3.md) |
-| **4** | `dorevia_glc_analytics` | Contrôle de gestion (ex cockpit) | **Actif** — réalisé seul |
-| **4bis** | `dorevia_glc_analytics` | UX cockpit · période libre · group_by | **Intégré** |
+| **4** | `dorevia_glc_analytics` | Contrôle de gestion (ex cockpit) | **Livré MOA** `19.0.15.0.0` |
+| **4bis** | `dorevia_glc_analytics` | UX cockpit · période libre · group_by | **Livré** |
 | **5** | `dorevia_glc_analytics` | Trésorerie · compte bancaire référence | **Actif** `19.0.5.0.1+` |
 | **5bis** | `dorevia_glc_analytics` | Qualité comptable · suivi paiement (GQ-6) | **Actif** `19.0.7.0.2+` |
 | **5ter** | `dorevia_glc_analytics` | Plan analytique unique (11 axes) | **Actif** `19.0.8.0.0+` |
@@ -66,7 +66,7 @@ Documentation conservée : [TICKET_PALIER_3.md](./TICKET_PALIER_3.md)
 
 ## Palier 4 — Contrôle de gestion
 
-**Statut :** actif · menu **Contrôle de gestion**
+**Statut :** **livré MOA** · `19.0.15.0.0` · menu **Contrôle de gestion**
 
 ### Doctrine
 
