@@ -9,19 +9,14 @@ import { computePerformanceAmounts, activityBusinessLabel } from "./glc_coverage
 
 const NUMERIC_FIELDS = [
     "revenue_realized",
-    "revenue_budget",
     "payroll_realized",
-    "payroll_budget",
     "expense_realized",
-    "expense_budget",
 ];
 
-const COLOR_REAL = "#198754";
-const COLOR_BUDGET = "#adb5bd";
 const COLOR_REVENUE = "#3b7ddd";
 const COLOR_PAYROLL = "#d4880f";
 const COLOR_EXPENSE = "#b8bdc5";
-const COLOR_SOLDE_LINE = "#2c2c2c";
+const COLOR_MARGE_LINE = "#2c2c2c";
 const COLOR_POSITIVE = "#198754";
 const COLOR_NEGATIVE = "#b02a2a";
 const COVERAGE_GREEN = "#198754";
@@ -132,57 +127,11 @@ export class GlcCoverageSynthesisField extends Component {
         return "o_glc_kpi_negative";
     }
 
-    coverageColor(rate) {
-        if (rate === null || rate === undefined) {
-            return COLOR_BUDGET;
-        }
-        if (rate >= 100) {
-            return COVERAGE_GREEN;
-        }
-        if (rate >= 80) {
-            return COVERAGE_ORANGE;
-        }
-        return COVERAGE_RED;
-    }
-
     signedClass(value) {
         if (this.isZero(value)) {
             return "o_glc_kpi_neutral";
         }
         return value < 0 ? "o_glc_kpi_negative" : "o_glc_kpi_positive";
-    }
-
-    _monthHasBudget(totals) {
-        return (
-            !this.isZero(totals.revenue_budget) ||
-            !this.isZero(totals.payroll_budget) ||
-            !this.isZero(totals.expense_budget)
-        );
-    }
-
-    get hasPeriodBudget() {
-        const agg = this.aggregates;
-        if (!agg.hasLines) {
-            return false;
-        }
-        if (!this.isZero(agg.periodTotals.performance_budget)) {
-            return true;
-        }
-        return agg.months.some((m) => this._monthHasBudget(m.totals));
-    }
-
-    formatBudgetKpi(value) {
-        if (!this.hasPeriodBudget) {
-            return "Non budgété";
-        }
-        return this.formatSignedAmount(value);
-    }
-
-    budgetKpiClass() {
-        if (!this.hasPeriodBudget) {
-            return "o_glc_kpi_muted";
-        }
-        return "o_glc_kpi_neutral";
     }
 
     _cockpitSalaryCoverageRate() {
@@ -207,10 +156,6 @@ export class GlcCoverageSynthesisField extends Component {
 
     get reconcileRateSupplier() {
         return this.props.record.data.quality_reconcile_rate_supplier;
-    }
-
-    get fundingRealized() {
-        return this.props.record.data.funding_realized || 0;
     }
 
     _emptyTotals() {
@@ -358,10 +303,9 @@ export class GlcCoverageSynthesisField extends Component {
         }
         const labels = agg.months.map((m) => m.monthLabel);
         const realData = agg.months.map((m) => m.totals.performance_realized);
-        const budgetData = agg.months.map((m) => m.totals.performance_budget);
         const datasets = [
             {
-                label: "Solde réel",
+                label: "Solde",
                 data: realData,
                 backgroundColor: realData.map((v) =>
                     v < 0 ? COLOR_NEGATIVE : COLOR_POSITIVE
@@ -370,15 +314,6 @@ export class GlcCoverageSynthesisField extends Component {
                 _signedTooltip: true,
             },
         ];
-        if (this.hasPeriodBudget) {
-            datasets.push({
-                label: "Solde budget",
-                data: budgetData,
-                backgroundColor: COLOR_BUDGET,
-                borderRadius: 2,
-                _signedTooltip: true,
-            });
-        }
         const options = this._commonOptions((v) => this._currencyTick(v));
         this._charts.perf = new window.Chart(canvas, {
             type: "bar",
@@ -396,8 +331,8 @@ export class GlcCoverageSynthesisField extends Component {
         const revenueData = agg.months.map((m) => Math.abs(m.totals.revenue_realized || 0));
         const payrollData = agg.months.map((m) => Math.abs(m.totals.payroll_realized || 0));
         const expenseData = agg.months.map((m) => Math.abs(m.totals.expense_realized || 0));
-        const soldeData = agg.months.map((m) => m.totals.performance_realized || 0);
-        const soldePointColors = soldeData.map((v) =>
+        const margeData = agg.months.map((m) => m.totals.performance_realized || 0);
+        const margePointColors = margeData.map((v) =>
             v < 0 ? COLOR_NEGATIVE : COLOR_POSITIVE
         );
         const options = this._commonOptions((v) => this._currencyTick(v));
@@ -408,7 +343,7 @@ export class GlcCoverageSynthesisField extends Component {
                 datasets: [
                     {
                         type: "bar",
-                        label: "Ressource",
+                        label: "Ressources",
                         data: revenueData,
                         backgroundColor: COLOR_REVENUE,
                         borderRadius: 2,
@@ -424,7 +359,7 @@ export class GlcCoverageSynthesisField extends Component {
                     },
                     {
                         type: "bar",
-                        label: "Dépense",
+                        label: "Dépenses",
                         data: expenseData,
                         backgroundColor: COLOR_EXPENSE,
                         borderRadius: 2,
@@ -433,14 +368,14 @@ export class GlcCoverageSynthesisField extends Component {
                     {
                         type: "line",
                         label: "Solde mensuel",
-                        data: soldeData,
-                        borderColor: COLOR_SOLDE_LINE,
+                        data: margeData,
+                        borderColor: COLOR_MARGE_LINE,
                         backgroundColor: "transparent",
                         borderWidth: 2.5,
                         pointRadius: 5,
                         pointHoverRadius: 6,
-                        pointBackgroundColor: soldePointColors,
-                        pointBorderColor: soldePointColors,
+                        pointBackgroundColor: margePointColors,
+                        pointBorderColor: margePointColors,
                         tension: 0.15,
                         order: 1,
                         _signedTooltip: true,
@@ -465,7 +400,7 @@ export class GlcCoverageSynthesisField extends Component {
                 labels,
                 datasets: [
                     {
-                        label: "Solde réel (cumul période)",
+                        label: "Solde (cumul période)",
                         data,
                         backgroundColor: colors,
                         borderRadius: 2,
@@ -511,14 +446,9 @@ export const glcCoverageSynthesisField = {
         { name: "analytic_code", type: "char" },
         { name: "currency_id", type: "many2one", relation: "res.currency" },
         { name: "revenue_realized", type: "monetary" },
-        { name: "revenue_budget", type: "monetary" },
         { name: "payroll_realized", type: "monetary" },
-        { name: "payroll_budget", type: "monetary" },
         { name: "expense_realized", type: "monetary" },
-        { name: "expense_budget", type: "monetary" },
         { name: "performance_realized", type: "monetary" },
-        { name: "performance_budget", type: "monetary" },
-        { name: "variance_performance", type: "monetary" },
     ],
 };
 

@@ -7,10 +7,7 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 from .glc_constants import (
-    GLC_COCKPIT_ACTIVITY_REVENUE_CODES,
     GLC_COCKPIT_FUNDING_CODES,
-    GLC_COCKPIT_GENERAL_EXPENSE_CODE,
-    GLC_COCKPIT_PAYROLL_BUDGET_CODES,
     GLC_COCKPIT_SALARY_EXCLUDED_ANALYTIC_CODES,
     GLC_EXCLUDED_GL_ACCOUNT_PREFIXES,
     GLC_EXPENSE_ACCOUNT_TYPES,
@@ -53,16 +50,6 @@ class GlcCoverageCockpit(models.TransientModel):
             ("company_id", "in", self.env.companies.ids),
         ],
     )
-    budget_scenario = fields.Selection(
-        string="Scénario budgétaire",
-        selection=[
-            ("initial", "Initial"),
-            ("revised", "Révisé"),
-            ("landing", "Atterrissage"),
-        ],
-        required=True,
-        default="initial",
-    )
     reference_bank_journal_id = fields.Many2one(
         "account.journal",
         string="Compte bancaire de référence",
@@ -94,89 +81,42 @@ class GlcCoverageCockpit(models.TransientModel):
     )
 
     activity_revenue_realized = fields.Monetary(
-        string="Recettes réalisées",
+        string="Recettes d'activité",
         readonly=True,
         currency_field="currency_id",
     )
     funding_realized = fields.Monetary(
-        string="Financements réalisés",
+        string="Financements",
         readonly=True,
         currency_field="currency_id",
     )
     resources_realized = fields.Monetary(
-        string="Ressources disponibles (réalisé)",
+        string="Ressources",
         readonly=True,
         currency_field="currency_id",
     )
     payroll_realized = fields.Monetary(
-        string="Dont cumul RH (réalisé)",
+        string="Cumul RH",
         readonly=True,
         currency_field="currency_id",
     )
     general_expenses_realized = fields.Monetary(
-        string="Dont dépenses hors salaires (réalisé)",
+        string="Dépenses",
         readonly=True,
         currency_field="currency_id",
     )
     fixed_charges_realized = fields.Monetary(
-        string="Charges de structure (réalisé)",
+        string="Charges de structure",
         readonly=True,
         currency_field="currency_id",
-        help="Cumul RH + dépenses hors salaires.",
-    )
-
-    activity_revenue_budget = fields.Monetary(
-        string="Recettes prévues",
-        readonly=True,
-        currency_field="currency_id",
-    )
-    funding_budget = fields.Monetary(
-        string="Financements prévus",
-        readonly=True,
-        currency_field="currency_id",
-    )
-    resources_budget = fields.Monetary(
-        string="Ressources disponibles (prévu)",
-        readonly=True,
-        currency_field="currency_id",
-    )
-    payroll_budget = fields.Monetary(
-        string="Dont cumul RH (prévu)",
-        readonly=True,
-        currency_field="currency_id",
-    )
-    general_expenses_budget = fields.Monetary(
-        string="Dont dépenses hors salaires (prévu)",
-        readonly=True,
-        currency_field="currency_id",
-    )
-
-    salary_allocation_total = fields.Monetary(
-        string="Ventilation RH validée (période)",
-        readonly=True,
-        currency_field="currency_id",
-        help="Somme des ventilations Palier 2 validées ou verrouillées — contrôle, pas source du réalisé cockpit.",
-    )
-    payroll_reconciliation_gap = fields.Monetary(
-        string="Écart paie comptable / ventilation RH",
-        readonly=True,
-        currency_field="currency_id",
-    )
-    payroll_reconciliation_status = fields.Selection(
-        string="Statut contrôle RH",
-        selection=[
-            ("ok", "Cohérent"),
-            ("check", "À contrôler"),
-            ("na", "Non applicable"),
-        ],
-        readonly=True,
+        help="Cumul RH + dépenses.",
     )
 
     salary_coverage_rate = fields.Float(
         string="Couverture masse salariale (%)",
         digits=(16, 2),
         readonly=True,
-        help="Lecture intermédiaire : ressources disponibles / masse salariale.",
+        help="Lecture intermédiaire : ressources / cumul RH.",
     )
     revenue_eligible_amount = fields.Integer(
         string="Ressources éligibles (lignes)",
@@ -205,7 +145,7 @@ class GlcCoverageCockpit(models.TransientModel):
         readonly=True,
     )
     balance_after_payroll = fields.Monetary(
-        string="Solde après masse salariale",
+        string="Solde après cumul RH",
         readonly=True,
         currency_field="currency_id",
     )
@@ -234,11 +174,6 @@ class GlcCoverageCockpit(models.TransientModel):
     detail_line_count = fields.Integer(
         string="Nombre de lignes détail",
         compute="_compute_detail_line_count",
-    )
-    has_budget_data = fields.Boolean(
-        string="Budget disponible sur la période",
-        readonly=True,
-        help="Vrai si au moins une ligne budget existe sur le périmètre cockpit.",
     )
     treasury_inflow = fields.Monetary(
         string="Entrées trésorerie",
@@ -282,7 +217,6 @@ class GlcCoverageCockpit(models.TransientModel):
             "date_from",
             "date_to",
             "activity_account_id",
-            "budget_scenario",
             "reference_bank_journal_id",
         }
     )
@@ -336,7 +270,6 @@ class GlcCoverageCockpit(models.TransientModel):
             "company_id": self.env.company.id,
             "date_from": date_from,
             "date_to": date_to,
-            "budget_scenario": "initial",
             "activity_account_id": False,
             "reference_bank_journal_id": self._default_reference_bank_journal_id(),
         }
@@ -348,7 +281,6 @@ class GlcCoverageCockpit(models.TransientModel):
             "company_id",
             "date_from",
             "date_to",
-            "budget_scenario",
             "activity_account_id",
             "reference_bank_journal_id",
         ):
@@ -440,10 +372,9 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _current_refresh_key(self):
         self.ensure_one()
-        return "%s|%s|%s|%s" % (
+        return "%s|%s|%s" % (
             self.date_from or "",
             self.date_to or "",
-            self.budget_scenario or "",
             self.reference_bank_journal_id.id or "",
         )
 
@@ -519,16 +450,12 @@ class GlcCoverageCockpit(models.TransientModel):
             else:
                 cockpit.period_range_label = False
 
-    @api.depends("date_from", "date_to", "budget_scenario", "activity_account_id")
+    @api.depends("date_from", "date_to", "activity_account_id")
     def _compute_display_title(self):
-        scenario_labels = dict(self._fields["budget_scenario"].selection)
         for cockpit in self:
             if not cockpit.date_from or not cockpit.date_to:
                 cockpit.display_title = _("Cockpit GLC")
                 continue
-            scenario = scenario_labels.get(
-                cockpit.budget_scenario, cockpit.budget_scenario
-            )
             if cockpit._is_full_single_calendar_month():
                 period = cockpit._LONG_MONTHS[cockpit.date_from.month]
             else:
@@ -536,10 +463,9 @@ class GlcCoverageCockpit(models.TransientModel):
                 end = cockpit._format_short_date(cockpit.date_to)
                 period = _("%(start)s → %(end)s", start=start, end=end)
             title = _(
-                "Cockpit GLC · %(year)s · %(period)s · %(scenario)s",
+                "Cockpit GLC · %(year)s · %(period)s",
                 year=cockpit.date_from.year,
                 period=period,
-                scenario=scenario,
             )
             if cockpit.activity_account_id:
                 axis = self._activity_business_label(cockpit.activity_account_id)
@@ -941,38 +867,6 @@ class GlcCoverageCockpit(models.TransientModel):
             self._payroll_analytic_line_domain(date_from, date_to, analytic_accounts)
         )
 
-    def _ensure_budget_module(self):
-        if "glc.budget.line" not in self.env:
-            raise UserError(
-                _(
-                    "Le module dorevia_glc_budget doit être installé pour utiliser le cockpit Palier 4."
-                )
-            )
-
-    def _budget_lines(self, date_from=None, date_to=None, analytic_accounts=None, line_type=None):
-        self._ensure_budget_module()
-        period_start, period_end = self._period_bounds()
-        date_from = date_from or period_start
-        date_to = date_to or period_end
-        month_period_from = date(date_from.year, date_from.month, 1)
-        month_period_to = date(date_to.year, date_to.month, 1)
-        domain = [
-            ("company_id", "=", self.company_id.id),
-            ("scenario", "=", self.budget_scenario),
-            ("budget_id.state", "in", ("validated", "archived")),
-            ("period_date", ">=", month_period_from),
-            ("period_date", "<=", month_period_to),
-        ]
-        if analytic_accounts:
-            domain.append(("analytic_account_id", "in", analytic_accounts.ids))
-        if line_type:
-            domain.append(("line_type", "=", line_type))
-        return self.env["glc.budget.line"].search(domain)
-
-    def _sum_budget(self, date_from, date_to, analytic_accounts, line_type):
-        lines = self._budget_lines(date_from, date_to, analytic_accounts, line_type)
-        return sum(lines.mapped("amount"))
-
     @api.model
     def _compute_alert_status(self, resources, payroll, general_expenses):
         if resources < payroll:
@@ -996,32 +890,6 @@ class GlcCoverageCockpit(models.TransientModel):
                 "Les ressources couvrent les charges de structure."
             ),
         )
-
-    def _sum_salary_allocation_validated(self, date_from, date_to):
-        """Somme ventilations Palier 2 validées — contrôle RH, pas réalisé cockpit."""
-        self.ensure_one()
-        Allocation = self.env["glc.salary.allocation"]
-        month_starts = [
-            month_start
-            for month_start in self._month_starts_in_period()
-            if date_from <= month_start <= date_to
-        ]
-        if not month_starts:
-            return 0.0
-        domain = [
-            ("company_id", "=", self.company_id.id),
-            ("state", "in", ("validated", "locked")),
-            ("period_date", "in", month_starts),
-        ]
-        allocations = Allocation.search(domain)
-        if not allocations:
-            return 0.0
-        lines = allocations.mapped("line_ids")
-        if self.activity_account_id:
-            lines = lines.filtered(
-                lambda line: line.activity_account_id == self.activity_account_id
-            )
-        return sum(lines.mapped("amount"))
 
     @api.model
     def _is_cash_account(self, account):
@@ -1229,15 +1097,6 @@ class GlcCoverageCockpit(models.TransientModel):
         cockpit_accounts = self._cockpit_analytic_accounts()
         funding_accounts = self._funding_analytic_accounts()
         activity_revenue_accounts = self._activity_revenue_analytic_accounts()
-        revenue_budget_accounts = self._analytic_accounts_by_codes(
-            GLC_COCKPIT_ACTIVITY_REVENUE_CODES
-        )
-        general_budget_accounts = self._analytic_accounts_by_codes(
-            (GLC_COCKPIT_GENERAL_EXPENSE_CODE,)
-        )
-        payroll_budget_accounts = self._analytic_accounts_by_codes(
-            GLC_COCKPIT_PAYROLL_BUDGET_CODES
-        )
 
         activity_revenue_realized = self._sum_revenue_realized(
             activity_revenue_accounts, period_start, period_end
@@ -1260,31 +1119,8 @@ class GlcCoverageCockpit(models.TransientModel):
             self.activity_account_id,
         )
 
-        activity_revenue_budget = self._sum_budget(
-            period_start, period_end, revenue_budget_accounts, "revenue"
-        )
-        funding_budget = self._sum_budget(
-            period_start, period_end, funding_accounts, "funding"
-        )
-        general_expenses_budget = self._sum_budget(
-            period_start, period_end, general_budget_accounts, "expense"
-        )
-        payroll_budget = self._sum_budget(
-            period_start, period_end, payroll_budget_accounts, "expense"
-        )
-
         resources_realized = activity_revenue_realized + funding_realized
-        resources_budget = activity_revenue_budget + funding_budget
         fixed_charges_realized = payroll_realized + general_expenses_realized
-        has_budget_data = any(
-            abs(value) >= 0.005
-            for value in (
-                activity_revenue_budget,
-                funding_budget,
-                general_expenses_budget,
-                payroll_budget,
-            )
-        )
 
         return {
             "activity_revenue_realized": activity_revenue_realized,
@@ -1293,12 +1129,6 @@ class GlcCoverageCockpit(models.TransientModel):
             "payroll_realized": payroll_realized,
             "general_expenses_realized": general_expenses_realized,
             "fixed_charges_realized": fixed_charges_realized,
-            "activity_revenue_budget": activity_revenue_budget,
-            "funding_budget": funding_budget,
-            "resources_budget": resources_budget,
-            "payroll_budget": payroll_budget,
-            "general_expenses_budget": general_expenses_budget,
-            "has_budget_data": has_budget_data,
         }
 
     def action_refresh(self):
@@ -1308,7 +1138,6 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _action_refresh_single(self):
         self.ensure_one()
-        self._ensure_budget_module()
         refresh_ctx = {"glc_cockpit_auto_refreshing": True}
         self.line_ids.with_context(**refresh_ctx).unlink()
         self.treasury_line_ids.with_context(**refresh_ctx).unlink()
@@ -1328,18 +1157,6 @@ class GlcCoverageCockpit(models.TransientModel):
 
         balance_after_payroll = totals["resources_realized"] - totals["payroll_realized"]
         balance_after_fixed = balance_after_payroll - totals["general_expenses_realized"]
-        salary_allocation_total = self._sum_salary_allocation_validated(
-            date_from, date_to
-        )
-        payroll_reconciliation_gap = (
-            totals["payroll_realized"] - salary_allocation_total
-        )
-        if not totals["payroll_realized"] and not salary_allocation_total:
-            payroll_reconciliation_status = "na"
-        elif abs(payroll_reconciliation_gap) < 0.005:
-            payroll_reconciliation_status = "ok"
-        else:
-            payroll_reconciliation_status = "check"
         alert_status, alert_message = self._compute_alert_status(
             totals["resources_realized"],
             totals["payroll_realized"],
@@ -1350,11 +1167,6 @@ class GlcCoverageCockpit(models.TransientModel):
         cockpit_accounts = self._cockpit_analytic_accounts()
         for month_start in self._month_starts_in_period():
             slice_from, slice_to = self._month_slice_bounds(month_start)
-            month_end = date(
-                month_start.year,
-                month_start.month,
-                monthrange(month_start.year, month_start.month)[1],
-            )
             for account in cockpit_accounts:
                 revenue_realized = self._sum_revenue_realized(
                     account, slice_from, slice_to
@@ -1362,16 +1174,6 @@ class GlcCoverageCockpit(models.TransientModel):
                 revenue_realized_paid = self._sum_revenue_realized_paid(
                     account, slice_from, slice_to
                 )
-                if self._is_funding_analytic_account(account):
-                    revenue_budget = self._sum_budget(
-                        month_start, month_end, account, "funding"
-                    )
-                elif account.code in GLC_COCKPIT_ACTIVITY_REVENUE_CODES:
-                    revenue_budget = self._sum_budget(
-                        month_start, month_end, account, "revenue"
-                    )
-                else:
-                    revenue_budget = 0.0
 
                 expense_realized = self._sum_expense_realized(
                     account, slice_from, slice_to
@@ -1379,12 +1181,6 @@ class GlcCoverageCockpit(models.TransientModel):
                 expense_realized_paid = self._sum_expense_realized_paid(
                     account, slice_from, slice_to
                 )
-                if account.code == GLC_COCKPIT_GENERAL_EXPENSE_CODE:
-                    expense_budget = self._sum_budget(
-                        month_start, month_end, account, "expense"
-                    )
-                else:
-                    expense_budget = 0.0
 
                 payroll_realized = self._sum_payroll_realized(
                     slice_from, slice_to, account
@@ -1392,12 +1188,6 @@ class GlcCoverageCockpit(models.TransientModel):
                 payroll_realized_paid = self._sum_payroll_realized_paid(
                     slice_from, slice_to, account
                 )
-                if account.code in GLC_COCKPIT_PAYROLL_BUDGET_CODES:
-                    payroll_budget = self._sum_budget(
-                        month_start, month_end, account, "expense"
-                    )
-                else:
-                    payroll_budget = 0.0
 
                 internal_inflow, internal_outflow = (
                     self._internal_transfer_amounts_for_account(
@@ -1412,11 +1202,8 @@ class GlcCoverageCockpit(models.TransientModel):
                 if not any(
                     (
                         revenue_realized,
-                        revenue_budget,
                         expense_realized,
-                        expense_budget,
                         payroll_realized,
-                        payroll_budget,
                         revenue_realized_paid,
                         expense_realized_paid,
                         payroll_realized_paid,
@@ -1427,13 +1214,10 @@ class GlcCoverageCockpit(models.TransientModel):
                 line_amounts = {
                     "revenue_realized": revenue_realized,
                     "revenue_realized_paid": revenue_realized_paid,
-                    "revenue_budget": revenue_budget,
                     "expense_realized": expense_realized,
                     "expense_realized_paid": expense_realized_paid,
-                    "expense_budget": expense_budget,
                     "payroll_realized": payroll_realized,
                     "payroll_realized_paid": payroll_realized_paid,
-                    "payroll_budget": payroll_budget,
                 }
                 line_vals.append(
                     self._prepare_activity_line_vals(
@@ -1476,9 +1260,6 @@ class GlcCoverageCockpit(models.TransientModel):
                 "salary_coverage_rate": salary_coverage_rate,
                 "balance_after_payroll": balance_after_payroll,
                 "balance_after_fixed": balance_after_fixed,
-                "salary_allocation_total": salary_allocation_total,
-                "payroll_reconciliation_gap": payroll_reconciliation_gap,
-                "payroll_reconciliation_status": payroll_reconciliation_status,
                 "alert_status": alert_status,
                 "alert_message": alert_message,
                 "is_refreshed": True,
@@ -1493,22 +1274,16 @@ class GlcCoverageCockpit(models.TransientModel):
         return {
             "has_amounts": False,
             "revenue_realized": 0.0,
-            "revenue_budget": 0.0,
             "expense_realized": 0.0,
-            "expense_budget": 0.0,
             "payroll_realized": 0.0,
-            "payroll_budget": 0.0,
         }
 
     @api.model
     def _accumulate_line_amounts(self, target, source):
         for key in (
             "revenue_realized",
-            "revenue_budget",
             "expense_realized",
-            "expense_budget",
             "payroll_realized",
-            "payroll_budget",
         ):
             target[key] += source[key]
         target["has_amounts"] = True
@@ -1565,16 +1340,10 @@ class GlcCoverageCockpit(models.TransientModel):
             "activity_label": self._activity_business_label(account),
             "revenue_realized": amounts["revenue_realized"],
             "revenue_realized_paid": amounts.get("revenue_realized_paid", 0.0),
-            "revenue_budget": amounts["revenue_budget"],
             "expense_realized": amounts["expense_realized"],
             "expense_realized_paid": amounts.get("expense_realized_paid", 0.0),
-            "expense_budget": amounts["expense_budget"],
             "payroll_realized": amounts["payroll_realized"],
             "payroll_realized_paid": amounts.get("payroll_realized_paid", 0.0),
-            "payroll_budget": amounts["payroll_budget"],
-            "variance_revenue": amounts["revenue_realized"] - amounts["revenue_budget"],
-            "variance_payroll": amounts["payroll_realized"] - amounts["payroll_budget"],
-            "variance_expense": amounts["expense_realized"] - amounts["expense_budget"],
         }
 
     def _prepare_total_line_vals(self, period_date, line_kind, amounts, label):
@@ -1593,14 +1362,8 @@ class GlcCoverageCockpit(models.TransientModel):
             "month_label": month_label,
             "activity_label": label,
             "revenue_realized": amounts["revenue_realized"],
-            "revenue_budget": amounts["revenue_budget"],
             "expense_realized": amounts["expense_realized"],
-            "expense_budget": amounts["expense_budget"],
             "payroll_realized": amounts["payroll_realized"],
-            "payroll_budget": amounts["payroll_budget"],
-            "variance_revenue": amounts["revenue_realized"] - amounts["revenue_budget"],
-            "variance_payroll": amounts["payroll_realized"] - amounts["payroll_budget"],
-            "variance_expense": amounts["expense_realized"] - amounts["expense_budget"],
         }
 
 
@@ -1654,76 +1417,39 @@ class GlcCoverageCockpitLine(models.TransientModel):
         readonly=True,
     )
     revenue_realized = fields.Monetary(
-        string="Ressource réelle",
+        string="Ressources",
         currency_field="currency_id",
     )
     revenue_realized_paid = fields.Monetary(
-        string="Ressource payée",
-        currency_field="currency_id",
-    )
-    revenue_budget = fields.Monetary(
-        string="Ressource budget",
+        string="Ressources (payé)",
         currency_field="currency_id",
     )
     expense_realized = fields.Monetary(
-        string="Dépense réelle",
+        string="Dépenses",
         currency_field="currency_id",
     )
     expense_realized_paid = fields.Monetary(
-        string="Dépense payée",
-        currency_field="currency_id",
-    )
-    expense_budget = fields.Monetary(
-        string="Dépense budget",
+        string="Dépenses (payé)",
         currency_field="currency_id",
     )
     payroll_realized = fields.Monetary(
-        string="Cumul RH réel",
+        string="Cumul RH",
         currency_field="currency_id",
     )
     payroll_realized_paid = fields.Monetary(
-        string="Cumul RH payé",
-        currency_field="currency_id",
-    )
-    payroll_budget = fields.Monetary(
-        string="Cumul RH budget",
-        currency_field="currency_id",
-    )
-    variance_revenue = fields.Monetary(
-        string="Écart ressource",
-        currency_field="currency_id",
-    )
-    variance_payroll = fields.Monetary(
-        string="Écart cumul RH",
-        currency_field="currency_id",
-    )
-    variance_expense = fields.Monetary(
-        string="Écart dépense",
+        string="Cumul RH (payé)",
         currency_field="currency_id",
     )
     performance_realized = fields.Monetary(
-        string="Performance réel",
-        currency_field="currency_id",
-        compute="_compute_performance",
-    )
-    performance_budget = fields.Monetary(
-        string="Performance budget",
-        currency_field="currency_id",
-        compute="_compute_performance",
-    )
-    variance_performance = fields.Monetary(
-        string="Écart performance",
+        string="Solde",
         currency_field="currency_id",
         compute="_compute_performance",
     )
 
     @api.depends(
         "revenue_realized",
-        "revenue_budget",
         "payroll_realized",
-        "payroll_budget",
         "expense_realized",
-        "expense_budget",
     )
     def _compute_performance(self):
         for line in self:
@@ -1731,14 +1457,6 @@ class GlcCoverageCockpitLine(models.TransientModel):
                 line.revenue_realized
                 - line.payroll_realized
                 - line.expense_realized
-            )
-            line.performance_budget = (
-                line.revenue_budget
-                - line.payroll_budget
-                - line.expense_budget
-            )
-            line.variance_performance = (
-                line.performance_realized - line.performance_budget
             )
 
     @api.model_create_multi

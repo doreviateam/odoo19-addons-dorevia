@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <delete model="ir.ui.menu" id="menu_glc_funding_rules"/>
+    <delete model="ir.actions.act_window" id="action_glc_account_funding_rule"/>
+    <delete model="ir.ui.view" id="view_glc_account_funding_rule_list"/>
+    <delete model="ir.ui.view" id="view_glc_account_funding_rule_form"/>
+    <delete model="ir.ui.menu" id="menu_glc_financements"/>
+    <delete model="ir.actions.act_window" id="action_glc_analytic_accounts_financements"/>
+
+    <delete model="ir.ui.menu" id="menu_glc_employee_cost_lines"/>
+    <delete model="ir.actions.act_window" id="action_glc_employee_cost_line"/>
+    <delete model="ir.ui.view" id="view_glc_employee_cost_line_list"/>
+    <delete model="ir.ui.view" id="view_glc_employee_cost_line_form"/>
+    <delete model="ir.ui.menu" id="menu_glc_salary_allocations"/>
+    <delete model="ir.actions.act_window" id="action_glc_salary_allocation"/>
+    <delete model="ir.ui.view" id="view_glc_salary_allocation_list"/>
+    <delete model="ir.ui.view" id="view_glc_salary_allocation_form"/>
+
     <menuitem
         id="menu_glc_analytique_root"
         name="Pilotage GLC"
@@ -16,43 +32,12 @@
         sequence="10"/>
 
     <menuitem
-        id="menu_glc_financements"
-        name="Financements GLC"
-        parent="menu_glc_analytique_root"
-        action="action_glc_analytic_accounts_financements"
-        sequence="20"/>
-
-    <menuitem
         id="menu_glc_analytic_anomalies"
         name="Anomalies analytiques"
         parent="menu_glc_analytique_root"
         action="action_glc_analytic_anomaly_wizard"
         groups="dorevia_glc_analytics.group_glc_manager"
         sequence="30"/>
-
-    <menuitem
-        id="menu_glc_funding_rules"
-        name="Règles financement (A3)"
-        parent="menu_glc_analytique_root"
-        action="action_glc_account_funding_rule"
-        groups="dorevia_glc_analytics.group_glc_manager"
-        sequence="40"/>
-
-    <menuitem
-        id="menu_glc_employee_cost_lines"
-        name="Coûts salariés mensuels"
-        parent="menu_glc_analytique_root"
-        action="action_glc_employee_cost_line"
-        groups="dorevia_glc_analytics.group_glc_manager"
-        sequence="50"/>
-
-    <menuitem
-        id="menu_glc_salary_allocations"
-        name="Ventilations salariales"
-        parent="menu_glc_analytique_root"
-        action="action_glc_salary_allocation"
-        groups="dorevia_glc_analytics.group_glc_manager"
-        sequence="60"/>
 
     <menuitem
         id="menu_glc_coverage_cockpit"

@@ -38,18 +38,10 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         cls.ressources_propres = cls.env.ref(
             "dorevia_glc_analytics.analytic_account_glc_ressources_propres"
         )
-        existing_years = cls.env["glc.budget"].search([]).mapped("year")
-        cls.test_year = max(y for y in existing_years + [2050] if y < 2100) + 1
+        cls.test_year = 2051
+        cls._year_counter = itertools.count(cls.test_year + 1)
         cls.period = "%s-06-01" % cls.test_year
         cls.invoice_date = "%s-06-15" % cls.test_year
-        cls.employee = cls.env["hr.employee"].create(
-            {
-                "name": "Salarié cockpit GLC",
-                "company_id": cls.env.company.id,
-            }
-        )
-        existing_years = cls.env["glc.budget"].search([]).mapped("year")
-        cls._year_counter = itertools.count(max(existing_years + [cls.test_year]) + 1)
 
     def _next_test_year(self):
         year = next(self._year_counter)
@@ -101,25 +93,8 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
                 "company_id": self.env.company.id,
                 "date_from": date_from,
                 "date_to": date_to,
-                "budget_scenario": "initial",
             }
         )
-
-    def _create_validated_budget(self, year, lines):
-        budget = self.env["glc.budget"].create(
-            {
-                "name": "Budget cockpit %s" % year,
-                "year": year,
-                "scenario": "initial",
-                "company_id": self.env.company.id,
-            }
-        )
-        for line_vals in lines:
-            self.env["glc.budget.line"].create(
-                {"budget_id": budget.id, **line_vals},
-            )
-        budget.action_validate()
-        return budget
 
     def _create_revenue_on_account(self, account, amount, invoice_date=None):
         invoice_date = invoice_date or self.invoice_date
@@ -273,36 +248,6 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             account_type="income",
         )
 
-    def _create_validated_allocation(self, amount=3000.0, bar_percent=100.0, employee=None, period_date=None):
-        employee = employee or self.employee
-        period_date = period_date or self.period
-        cost_line = self.env["glc.employee.cost.line"].create(
-            {
-                "company_id": self.env.company.id,
-                "employee_id": employee.id,
-                "period_date": period_date,
-                "cost_amount": amount,
-                "reference_hours": 151.67,
-            }
-        )
-        allocation = self.env["glc.salary.allocation"].create(
-            {
-                "company_id": self.env.company.id,
-                "employee_id": employee.id,
-                "period_date": period_date,
-                "employee_cost_line_id": cost_line.id,
-                "method": "percent",
-            }
-        )
-        self.env["glc.salary.allocation.line"].create(
-            {
-                "allocation_id": allocation.id,
-                "activity_account_id": self.bar.id,
-                "percent": bar_percent,
-            }
-        )
-        allocation.action_validate()
-        return allocation
 
     def test_menu_cockpit_exists(self):
         """CA1 — menu Cockpit couverture des charges de structure."""
@@ -324,7 +269,6 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             cockpit.date_to,
             date(today.year, today.month, monthrange(today.year, today.month)[1]),
         )
-        self.assertEqual(cockpit.budget_scenario, "initial")
         self.assertFalse(cockpit.activity_account_id)
         self.assertTrue(cockpit.is_refreshed)
         self.assertIn("Cockpit GLC ·", cockpit.display_title)
@@ -390,19 +334,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
     def test_alert_green_when_resources_cover_fixed_charges(self):
         """CA6 — alerte verte si ressources ≥ salaires + frais généraux."""
         year = self._next_test_year()
-        period = "%s-06-01" % year
         invoice_date = "%s-06-15" % year
-        self._create_validated_budget(
-            year,
-            [
-                {
-                    "period_date": period,
-                    "line_type": "revenue",
-                    "analytic_account_id": self.bar.id,
-                    "amount": 10000.0,
-                },
-            ],
-        )
         self._create_revenue_on_account(self.bar, 12000.0, invoice_date=invoice_date)
         self._create_revenue_on_account(self.subventions, 2000.0, invoice_date=invoice_date)
         self._create_payroll_on_account(self.bar, 3000.0, invoice_date=invoice_date)
@@ -460,79 +392,15 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             cockpit.payroll_realized + cockpit.general_expenses_realized,
         )
 
-    def test_payroll_from_analytic_lines_not_allocations(self):
-        """R14 — masse salariale lue depuis compta analytique, pas Palier 2."""
+    def test_payroll_from_analytic_lines(self):
+        """R14 — masse salariale lue depuis compta analytique."""
         year = self.test_year
-        draft_employee = self.env["hr.employee"].create(
-            {"name": "Salarié brouillon cockpit", "company_id": self.env.company.id}
-        )
-        draft_allocation = self.env["glc.salary.allocation"].create(
-            {
-                "company_id": self.env.company.id,
-                "employee_id": draft_employee.id,
-                "period_date": self.period,
-                "employee_cost_line_id": self.env["glc.employee.cost.line"].create(
-                    {
-                        "company_id": self.env.company.id,
-                        "employee_id": draft_employee.id,
-                        "period_date": self.period,
-                        "cost_amount": 9000.0,
-                        "reference_hours": 151.67,
-                    }
-                ).id,
-                "method": "percent",
-            }
-        )
-        self.env["glc.salary.allocation.line"].create(
-            {
-                "allocation_id": draft_allocation.id,
-                "activity_account_id": self.bar.id,
-                "percent": 100.0,
-            }
-        )
-        self._create_validated_allocation(amount=2500.0)
         self._create_payroll_on_account(self.bar, 1800.0)
 
         cockpit = self._create_cockpit(year=year)
         cockpit.action_refresh()
 
         self.assertAlmostEqual(cockpit.payroll_realized, 1800.0)
-
-    def test_budget_aggregation_from_glc_budget_line(self):
-        """CA1 — prévisionnel lu depuis glc.budget.line validé."""
-        year = self._next_test_year()
-        period = "%s-06-01" % year
-        self._create_validated_budget(
-            year,
-            [
-                {
-                    "period_date": period,
-                    "line_type": "revenue",
-                    "analytic_account_id": self.bar.id,
-                    "amount": 5000.0,
-                },
-                {
-                    "period_date": period,
-                    "line_type": "funding",
-                    "analytic_account_id": self.subventions.id,
-                    "amount": 1500.0,
-                },
-                {
-                    "period_date": period,
-                    "line_type": "expense",
-                    "analytic_account_id": self.structure.id,
-                    "amount": 800.0,
-                },
-            ],
-        )
-
-        cockpit = self._create_cockpit(year=year)
-        cockpit.action_refresh()
-
-        self.assertAlmostEqual(cockpit.activity_revenue_budget, 5000.0)
-        self.assertAlmostEqual(cockpit.funding_budget, 1500.0)
-        self.assertAlmostEqual(cockpit.resources_budget, 6500.0)
-        self.assertAlmostEqual(cockpit.general_expenses_budget, 800.0)
 
     def test_detail_lines_activity_by_month(self):
         """CA — détail Activité × Mois."""
@@ -657,7 +525,7 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         self.assertAlmostEqual(cockpit.activity_revenue_realized, 3000.0)
 
     def test_activity_line_performance_formula(self):
-        """Performance activité = recettes - salaires - frais (réel, budget, écart)."""
+        """Solde = ressources − cumul RH − dépenses."""
         year = self._next_test_year()
         self._create_revenue_on_account(
             self.bar, 5000.0, invoice_date="%s-06-15" % year
@@ -683,16 +551,6 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             bar_line.revenue_realized
             - bar_line.payroll_realized
             - bar_line.expense_realized,
-        )
-        self.assertAlmostEqual(
-            bar_line.performance_budget,
-            bar_line.revenue_budget
-            - bar_line.payroll_budget
-            - bar_line.expense_budget,
-        )
-        self.assertAlmostEqual(
-            bar_line.variance_performance,
-            bar_line.performance_realized - bar_line.performance_budget,
         )
 
     def test_multi_month_performance_sums_from_activity_lines(self):
@@ -745,34 +603,6 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
             and line.analytic_account_id == self.bar
         )
         self.assertAlmostEqual(bar_line.revenue_realized, 1500.0)
-
-    def test_partial_period_includes_full_month_budget(self):
-        """P4 / R4 — budget V1 : mois touché = mois budgétaire complet."""
-        year = self._next_test_year()
-        self._create_validated_budget(
-            year,
-            [
-                {
-                    "period_date": "%s-03-01" % year,
-                    "line_type": "revenue",
-                    "analytic_account_id": self.bar.id,
-                    "amount": 3000.0,
-                },
-                {
-                    "period_date": "%s-04-01" % year,
-                    "line_type": "revenue",
-                    "analytic_account_id": self.bar.id,
-                    "amount": 4000.0,
-                },
-            ],
-        )
-        cockpit = self._create_cockpit(
-            date_from=date(year, 3, 15),
-            date_to=date(year, 4, 30),
-        )
-        cockpit.action_refresh()
-
-        self.assertAlmostEqual(cockpit.activity_revenue_budget, 7000.0)
 
     def test_single_full_month_title_uses_month_name(self):
         """P4 — titre mensuel complet conservé."""
@@ -1081,26 +911,6 @@ class TestGlcCoverageCockpit(AccountTestInvoicingCommon):
         )
         cockpit.action_refresh()
         self.assertAlmostEqual(cockpit.general_expenses_realized, 420.0)
-
-    def test_no_double_count_payroll_allocation_and_analytic(self):
-        """R14-NODOUBLON — Palier 2 ne suralimente pas le réalisé cockpit."""
-        year = self._next_test_year()
-        period = "%s-09-01" % year
-        self._create_validated_allocation(
-            amount=2500.0,
-            period_date=period,
-        )
-        self._create_payroll_on_account(
-            self.bar,
-            1500.0,
-            invoice_date="%s-09-15" % year,
-        )
-        cockpit = self._create_cockpit(
-            date_from=date(year, 9, 1),
-            date_to=date(year, 9, 30),
-        )
-        cockpit.action_refresh()
-        self.assertAlmostEqual(cockpit.payroll_realized, 1500.0)
 
     def test_excluded_treasury_512_not_in_cockpit(self):
         """R14-EXCL-512 — trésorerie exclue du réalisé cockpit."""

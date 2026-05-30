@@ -1,13 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_glc_anomaly_wizard_manager,glc.analytic.anomaly.wizard manager,model_glc_analytic_anomaly_wizard,dorevia_glc_analytics.group_glc_manager,1,1,1,1
 access_glc_anomaly_line_manager,glc.analytic.anomaly.line manager,model_glc_analytic_anomaly_line,dorevia_glc_analytics.group_glc_manager,1,1,1,1
-access_glc_funding_rule_manager,glc.account.funding.rule manager,model_glc_account_funding_rule,dorevia_glc_analytics.group_glc_manager,1,1,1,1
-access_glc_employee_cost_line_user,glc.employee.cost.line user,model_glc_employee_cost_line,dorevia_glc_analytics.group_glc_user,1,0,0,0
-access_glc_employee_cost_line_manager,glc.employee.cost.line manager,model_glc_employee_cost_line,dorevia_glc_analytics.group_glc_manager,1,1,1,1
-access_glc_salary_allocation_user,glc.salary.allocation user,model_glc_salary_allocation,dorevia_glc_analytics.group_glc_user,1,0,0,0
-access_glc_salary_allocation_manager,glc.salary.allocation manager,model_glc_salary_allocation,dorevia_glc_analytics.group_glc_manager,1,1,1,1
-access_glc_salary_allocation_line_user,glc.salary.allocation.line user,model_glc_salary_allocation_line,dorevia_glc_analytics.group_glc_user,1,0,0,0
-access_glc_salary_allocation_line_manager,glc.salary.allocation.line manager,model_glc_salary_allocation_line,dorevia_glc_analytics.group_glc_manager,1,1,1,1
 access_glc_coverage_cockpit_user,glc.coverage.cockpit user,model_glc_coverage_cockpit,dorevia_glc_analytics.group_glc_user,1,1,1,1
 access_glc_coverage_cockpit_manager,glc.coverage.cockpit manager,model_glc_coverage_cockpit,dorevia_glc_analytics.group_glc_manager,1,1,1,1
 access_glc_coverage_cockpit_line_user,glc.coverage.cockpit.line user,model_glc_coverage_cockpit_line,dorevia_glc_analytics.group_glc_user,1,1,1,1

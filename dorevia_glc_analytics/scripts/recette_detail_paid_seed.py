@@ -213,7 +213,6 @@ cockpit = env["glc.coverage.cockpit"].create(
         "company_id": env.company.id,
         "date_from": date(year, 6, 1),
         "date_to": date(year, 6, 30),
-        "budget_scenario": "initial",
         "reference_bank_journal_id": bank_journal.id,
     }
 )

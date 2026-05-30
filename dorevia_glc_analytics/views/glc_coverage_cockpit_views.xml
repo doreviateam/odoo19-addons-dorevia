@@ -11,7 +11,6 @@
                     <field name="currency_id" invisible="1"/>
                     <field name="alert_status" invisible="1"/>
                     <field name="detail_line_count" invisible="1"/>
-                    <field name="has_budget_data" invisible="1"/>
                     <field name="is_refreshed" invisible="1"/>
 
                     <div class="alert alert-danger mb-3 py-2 d-flex flex-nowrap align-items-baseline gap-2"
@@ -46,7 +45,6 @@
                             <field name="date_to"/>
                         </group>
                         <group>
-                            <field name="budget_scenario" options="{'autosave': true}"/>
                             <field name="activity_account_id"
                                    options="{'no_create': True, 'no_open': True}"
                                    placeholder="Tous les axes"/>
@@ -61,13 +59,10 @@
                         <page string="Synthèse graphique" name="page_synthesis">
                             <p class="text-muted mb-1">
                                 Lecture immédiate de pilotage :
-                                solde période, structure mensuelle et solde par axe analytique.
+                                solde, structure mensuelle et solde par axe analytique.
                             </p>
                             <p class="text-muted small mb-3">
-                                Solde = Ressource − Cumul RH − Dépense.
-                            </p>
-                            <p class="text-muted small mb-3" invisible="has_budget_data">
-                                Aucun budget renseigné sur cette période — les écarts budget ne sont pas significatifs.
+                                Solde = Ressources − Cumul RH − Dépenses.
                             </p>
                             <field name="detail_line_count" invisible="1"/>
                             <field name="resources_realized" invisible="1"/>
@@ -81,7 +76,7 @@
                                     et ces filtres.
                                 </p>
                                 <p class="mb-0">
-                                    Vérifiez la période et le scénario budgétaire pour afficher
+                                    Vérifiez la période et les filtres pour afficher
                                     la synthèse graphique.
                                 </p>
                             </div>
@@ -91,21 +86,18 @@
                         </page>
                         <page string="Détail par axe analytique" name="page_detail">
                             <p class="text-muted mb-1">
-                                Par axe analytique et par mois : ressource, cumul RH, dépense et solde.
+                                Par axe analytique et par mois : ressources, cumul RH, dépenses et solde.
                             </p>
                             <p class="text-muted small mb-3">
-                                Solde = Ressource − Cumul RH − Dépense.
+                                Solde = Ressources − Cumul RH − Dépenses.
                                 Les virements internes 580 qualifiés analytiquement
-                                alimentent la ressource (entrée) ou la dépense (sortie).
+                                alimentent les ressources (entrée) ou les dépenses (sortie).
                             </p>
                             <p class="text-muted small mb-3">
                                 Coche « Payé uniquement » pour n'afficher que les montants
                                 effectivement encaissés ou réglés (factures au statut payé,
                                 écritures banque ou lettrées banque). Rechargez le cockpit
                                 après mise à jour du module pour recalculer ces montants.
-                            </p>
-                            <p class="text-muted small mb-3" invisible="has_budget_data">
-                                Aucun budget renseigné sur cette période — cocher « Budget ? » n'affichera que des tirets.
                             </p>
                             <field name="detail_line_count" invisible="1"/>
                             <field name="revenue_eligible_amount" invisible="1"/>
@@ -137,58 +129,34 @@
                                     <field name="currency_id" column_invisible="1"/>
                                     <field name="revenue_realized" column_invisible="1"/>
                                     <field name="revenue_realized_paid" column_invisible="1"/>
-                                    <field name="revenue_budget" column_invisible="1"/>
-                                    <field name="variance_revenue" column_invisible="1"/>
                                     <field name="payroll_realized" column_invisible="1"/>
                                     <field name="payroll_realized_paid" column_invisible="1"/>
-                                    <field name="payroll_budget" column_invisible="1"/>
-                                    <field name="variance_payroll" column_invisible="1"/>
                                     <field name="expense_realized" column_invisible="1"/>
                                     <field name="expense_realized_paid" column_invisible="1"/>
-                                    <field name="expense_budget" column_invisible="1"/>
-                                    <field name="variance_expense" column_invisible="1"/>
                                     <field name="performance_realized" column_invisible="1"/>
-                                    <field name="performance_budget" column_invisible="1"/>
-                                    <field name="variance_performance" column_invisible="1"/>
                                 </list>
                             </field>
                         </page>
                         <page string="Ressources">
                             <p class="text-muted">
-                                Ressources disponibles = recettes d'activité + financements.
+                                Total des ressources réalisées sur la période
+                                (recettes d'activité et autres entrées classe 7 qualifiées).
                             </p>
-                            <group>
-                                <group string="Réalisé">
-                                    <field name="activity_revenue_realized" readonly="1"/>
-                                    <field name="funding_realized" readonly="1"/>
-                                    <field name="resources_realized" readonly="1"
-                                           class="fw-bold"/>
-                                </group>
-                                <group string="Prévu">
-                                    <field name="activity_revenue_budget" readonly="1"/>
-                                    <field name="funding_budget" readonly="1"/>
-                                    <field name="resources_budget" readonly="1"
-                                           class="fw-bold"/>
-                                </group>
+                            <group string="Réalisé">
+                                <field name="resources_realized" readonly="1"
+                                       class="fw-bold"/>
                             </group>
                         </page>
                         <page string="Charges de structure">
                             <p class="text-muted">
-                                Charges de structure = cumul RH + dépenses hors salaires.
-                                Lecture réalisé vs prévu et solde après charges de structure.
+                                Charges de structure = cumul RH + dépenses.
                             </p>
-                            <group>
-                                <group string="Réalisé">
-                                    <field name="payroll_realized" readonly="1"/>
-                                    <field name="general_expenses_realized" readonly="1"/>
-                                    <field name="fixed_charges_realized" readonly="1"
-                                           class="fw-bold"/>
-                                </group>
-                                <group string="Prévu">
-                                    <field name="payroll_budget" readonly="1"/>
-                                    <field name="general_expenses_budget" readonly="1"/>
-                                    <field name="salary_coverage_rate" readonly="1"/>
-                                </group>
+                            <group string="Réalisé">
+                                <field name="payroll_realized" readonly="1"/>
+                                <field name="general_expenses_realized" readonly="1"/>
+                                <field name="fixed_charges_realized" readonly="1"
+                                       class="fw-bold"/>
+                                <field name="salary_coverage_rate" readonly="1"/>
                             </group>
                             <group string="Solde de structure">
                                 <group>
@@ -382,27 +350,11 @@
                         </page>
                         <page string="Infos">
                             <p class="text-muted mb-3">
-                                Les recettes d'activité et les financements couvrent-elles
+                                Les ressources couvrent-elles
                                 les charges de structure, dont le cumul RH ?
                             </p>
-                            <group string="Contrôle RH (informatif)">
-                                <group>
-                                    <field name="payroll_realized" readonly="1"
-                                           string="Paie comptable (cumul RH réalisé)"/>
-                                    <field name="salary_allocation_total" readonly="1"/>
-                                    <field name="payroll_reconciliation_gap" readonly="1"/>
-                                </group>
-                                <group>
-                                    <field name="payroll_reconciliation_status" readonly="1"
-                                           widget="badge"
-                                           decoration-success="payroll_reconciliation_status == 'ok'"
-                                           decoration-warning="payroll_reconciliation_status == 'check'"
-                                           decoration-muted="payroll_reconciliation_status == 'na'"/>
-                                </group>
-                            </group>
                             <p class="text-muted mb-0">
                                 Le réalisé cockpit provient de la comptabilité analytique.
-                                Les ventilations Palier 2 servent au contrôle de cohérence.
                             </p>
                             <p class="text-muted mb-0 mt-2">
                                 Le cockpit se met à jour automatiquement lorsque vous modifiez
@@ -448,15 +400,10 @@
                 <field name="currency_id" column_invisible="1"/>
                 <field name="period_date" string="Mois" optional="hide"/>
                 <field name="activity_label" string="Activité"/>
-                <field name="revenue_realized" sum="Total ressources réelles"/>
-                <field name="revenue_budget" sum="Total ressources budgétées"/>
-                <field name="variance_revenue" sum="Total écart ressources"/>
-                <field name="payroll_realized" sum="Total masse sal. réelle"/>
-                <field name="payroll_budget" sum="Total masse sal. budgétée"/>
-                <field name="variance_payroll" sum="Total écart masse sal."/>
-                <field name="expense_realized" sum="Total dépenses réelles"/>
-                <field name="expense_budget" sum="Total dépenses budgétées"/>
-                <field name="variance_expense" sum="Total écart dépenses"/>
+                <field name="revenue_realized" string="Ressources" sum="Total ressources"/>
+                <field name="payroll_realized" string="Cumul RH" sum="Total cumul RH"/>
+                <field name="expense_realized" string="Dépenses" sum="Total dépenses"/>
+                <field name="performance_realized" string="Solde" sum="Total solde"/>
             </list>
         </field>
     </record>
