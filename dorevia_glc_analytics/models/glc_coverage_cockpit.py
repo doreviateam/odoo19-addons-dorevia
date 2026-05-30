@@ -4,9 +4,10 @@ from calendar import monthrange
 from datetime import date
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import AccessError, UserError
 
 from .glc_constants import (
+    GLC_COCKPIT_AUTO_REFRESH_CTX,
     GLC_COCKPIT_FUNDING_CODES,
     GLC_COCKPIT_SALARY_EXCLUDED_ANALYTIC_CODES,
     GLC_EXCLUDED_GL_ACCOUNT_PREFIXES,
@@ -16,6 +17,16 @@ from .glc_constants import (
     GLC_LEGACY_ANALYTIC_CODES,
     GLC_PAYROLL_ACCOUNT_PREFIXES,
 )
+
+
+def _glc_cockpit_require_auto_refresh(env):
+    if not env.context.get(GLC_COCKPIT_AUTO_REFRESH_CTX):
+        raise AccessError(
+            _(
+                "Les lignes calculées du contrôle de gestion ne peuvent être "
+                "modifiées que lors du recalcul automatique."
+            )
+        )
 
 
 class GlcCoverageCockpit(models.TransientModel):
@@ -1140,9 +1151,9 @@ class GlcCoverageCockpit(models.TransientModel):
 
     def _action_refresh_single(self):
         self.ensure_one()
-        refresh_ctx = {"glc_cockpit_auto_refreshing": True}
-        self.line_ids.with_context(**refresh_ctx).unlink()
-        self.treasury_line_ids.with_context(**refresh_ctx).unlink()
+        refresh_ctx = {GLC_COCKPIT_AUTO_REFRESH_CTX: True}
+        self.line_ids.sudo().with_context(**refresh_ctx).unlink()
+        self.treasury_line_ids.sudo().with_context(**refresh_ctx).unlink()
         date_from, date_to = self._period_bounds()
         totals = self._aggregate_period(date_from, date_to)
         treasury = self._aggregate_treasury(date_from, date_to)
@@ -1230,9 +1241,9 @@ class GlcCoverageCockpit(models.TransientModel):
                 )
 
         if line_vals:
-            self.env["glc.coverage.cockpit.line"].with_context(**refresh_ctx).create(
-                line_vals
-            )
+            self.env["glc.coverage.cockpit.line"].sudo().with_context(
+                **refresh_ctx
+            ).create(line_vals)
 
         treasury_line_vals = []
         for bucket in treasury_internal_lines:
@@ -1250,7 +1261,7 @@ class GlcCoverageCockpit(models.TransientModel):
                 }
             )
         if treasury_line_vals:
-            self.env["glc.coverage.cockpit.treasury.line"].with_context(
+            self.env["glc.coverage.cockpit.treasury.line"].sudo().with_context(
                 **refresh_ctx
             ).create(treasury_line_vals)
 
@@ -1463,8 +1474,7 @@ class GlcCoverageCockpitLine(models.TransientModel):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if not self.env.context.get("glc_cockpit_auto_refreshing"):
-            return self.browse()
+        _glc_cockpit_require_auto_refresh(self.env)
         cockpit_model = self.env["glc.coverage.cockpit"]
         cleaned_vals_list = []
         for vals in vals_list:
@@ -1486,13 +1496,11 @@ class GlcCoverageCockpitLine(models.TransientModel):
         return super().create(cleaned_vals_list)
 
     def write(self, vals):
-        if not self.env.context.get("glc_cockpit_auto_refreshing"):
-            return True
+        _glc_cockpit_require_auto_refresh(self.env)
         return super().write(vals)
 
     def unlink(self):
-        if not self.env.context.get("glc_cockpit_auto_refreshing"):
-            return True
+        _glc_cockpit_require_auto_refresh(self.env)
         return super().unlink()
 
 
@@ -1538,8 +1546,7 @@ class GlcCoverageCockpitTreasuryLine(models.TransientModel):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if not self.env.context.get("glc_cockpit_auto_refreshing"):
-            return self.browse()
+        _glc_cockpit_require_auto_refresh(self.env)
         cleaned_vals_list = [
             vals for vals in vals_list if vals.get("cockpit_id")
         ]
@@ -1548,11 +1555,9 @@ class GlcCoverageCockpitTreasuryLine(models.TransientModel):
         return super().create(cleaned_vals_list)
 
     def write(self, vals):
-        if not self.env.context.get("glc_cockpit_auto_refreshing"):
-            return True
+        _glc_cockpit_require_auto_refresh(self.env)
         return super().write(vals)
 
     def unlink(self):
-        if not self.env.context.get("glc_cockpit_auto_refreshing"):
-            return True
+        _glc_cockpit_require_auto_refresh(self.env)
         return super().unlink()
