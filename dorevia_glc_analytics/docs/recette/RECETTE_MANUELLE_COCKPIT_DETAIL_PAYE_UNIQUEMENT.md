@@ -1,8 +1,10 @@
-# Recette manuelle — Cockpit · Filtre « Payé uniquement » (tableau détail)
+# Recette manuelle — Contrôle de gestion · Filtre « Payé uniquement » (tableau détail)
+
+> **Doc alignée `19.0.14.1.0`** — menu **Contrôle de gestion**. Sections historiques conservées.
 
 **Module :** `dorevia_glc_analytics`  
-**Version testée :** **`19.0.9.0.1`**  
-**Prérequis :** Palier 4 cockpit · Palier 5 trésorerie · `dorevia_glc_budget` installé  
+**Version testée :** **`19.0.9.0.1`** *(min. **`19.0.14.1.0`** pour menus actuels)*  
+**Prérequis :** Contrôle de gestion · Palier 5 trésorerie  
 **Statut document :** **GO complet MOA** — serveur OK · validation visuelle MOA OK
 
 **Références :** [TICKET_COCKPIT_DETAIL_PAYE_UNIQUEMENT.md](../TICKET_COCKPIT_DETAIL_PAYE_UNIQUEMENT.md) · [Recette période libre Palier 4](./RECETTE_MANUELLE_COCKPIT_GLC_PERIODE_LIBRE.md) · [Recette qualité / paiement](./RECETTE_MANUELLE_COCKPIT_QUALITE_PAIEMENT.md)
@@ -15,7 +17,7 @@ Prouver **indépendamment** de l’observation visuelle sur données historiques
 
 - restitue la vue **engagée / comptable** lorsqu’il est décoché ;
 - n’affiche que les montants **payés / encaissés / réconciliés** lorsqu’il est coché ;
-- recalcule **Ressource · Cumul RH · Dépense · Solde**, sous-totaux mensuels et total période ;
+- recalcule **Ressources · Cumul RH · Dépenses · Solde**, sous-totaux mensuels et total période ;
 - filtre le **Cumul RH** selon le rapprochement réel (pas par construction) ;
 - ne régresse pas le filtre **Budget ?**.
 
@@ -28,7 +30,7 @@ Prouver **indépendamment** de l’observation visuelle sur données historiques
 ```text
 URL  : http://localhost:18079
 Base : glc-rgl-test-import
-Menu : Comptabilité → Pilotage GLC → Cockpit couverture des charges de structure
+Menu : Facturation → Pilotage GLC → Contrôle de gestion
 Onglet : Détail par axe analytique
 ```
 
@@ -125,7 +127,7 @@ Vue payée     — Ressource 10 100 € · RH 520 € · Dépense 705 € · Sol
 | 1 | Ouvrir le cockpit sur la période test (juin). |
 | 2 | Onglet **Détail par axe analytique**. |
 | 3 | **Décocher** « Payé uniquement ». |
-| 4 | Relever par axe et sous-total mensuel : Ressource · Cumul RH · Dépense · Solde. |
+| 4 | Relever par axe et sous-total mensuel : Ressources · Cumul RH · Dépenses · Solde. |
 
 **Résultat attendu**
 

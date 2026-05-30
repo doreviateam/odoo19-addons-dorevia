@@ -1,5 +1,7 @@
 # Matrice de migration analytique — GLC
 
+> **Note `19.0.14.1.0` :** plan **unique** 11 axes sur `main` · ventilation salariale Palier 2 **retirée** — voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
 **Projet :** Suivi d'activité GLC  
 **Version :** V1.1  
 **Statut :** Document de travail — **à valider en Phase 0**  

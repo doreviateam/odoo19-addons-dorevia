@@ -1,5 +1,10 @@
 # Audit GLC Analytics / Budget — avant Palier 4
 
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
+
 **Date :** 2026-05-27  
 **Base de recette :** `glc-rgl-test-import`  
 **Base technique de vérification :** `glc-audit-paliers-0-3`  
@@ -41,8 +46,8 @@ Points vérifiés :
 - Assistant d'anomalies fonctionnel : A1 à A5 en lignes, A6 en synthèse STRUCTURE.
 - A3 activable par mapping explicite `glc.account.funding.rule`.
 - A5 dépend bien du paramètre `dorevia_glc_analytics.cutover_date`.
-- Coûts salariés mensuels utilisables via `glc.employee.cost.line`.
-- Ventilations salariales `percent` et `hours` validables.
+- *(retiré — coûts salariés)* utilisables via `glc.employee.cost.line`.
+- *(retiré — ventilations)* `percent` et `hours` validables.
 - Refus des comptes du plan Financements en ventilation salariale.
 - Validation des ventilations sans génération d'écriture comptable.
 - Validation des ventilations sans création d'écriture analytique directe dans le modèle Palier 2.
@@ -137,7 +142,7 @@ Les vues sont simples et adaptées :
 - Listes et formulaires lisibles.
 - Statusbar sur ventilations et budgets.
 - Boutons de workflow visibles selon état.
-- Menus `Pilotage GLC`, `Anomalies analytiques`, `Coûts salariés mensuels`, `Ventilations salariales`, `Budgets prévisionnels`, `Lignes budgétaires`.
+- Menus `Pilotage GLC`, `Anomalies analytiques`, `*(retiré — coûts salariés)*`, `*(retiré — ventilations)*`, `*(retiré — budgets)*`, `*(retiré — lignes budget)*`.
 
 Réserve mineure : vérifier côté MOA les libellés des scénarios `Initial`, `Révisé`, `Atterrissage` par rapport aux termes `initial`, `revised`, `landing`.
 
@@ -222,7 +227,7 @@ Les données ambiguës avant cockpit sont :
 
 - RH / Personnel historique présent ou non dans `account.analytic.line`.
 - Écritures comptables de paie sur comptes `631`, `633`, `641`, `645`.
-- Ventilations salariales Palier 2, qui sont un overlay de gestion et non des écritures analytiques.
+- *(retiré — ventilations)* Palier 2, qui sont un overlay de gestion et non des écritures analytiques.
 - Flux bilan et flux non opérationnels à exclure du cockpit.
 
 ### 6.3 Point RH / Personnel

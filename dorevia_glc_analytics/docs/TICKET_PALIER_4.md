@@ -1,4 +1,9 @@
-# Ticket Palier 4 — Cockpit couverture des salaires
+# Ticket Palier 4 — Contrôle de gestion
+
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
 
 **Module principal :** `dorevia_glc_analytics` *(extension)*  
 **Dépendance :** `dorevia_glc_budget` (Palier 3)  

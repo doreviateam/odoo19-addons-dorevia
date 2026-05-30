@@ -1,5 +1,10 @@
 # Cadrage — Budget prévisionnel & Cockpit de soutenabilité GLC
 
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
+
 **Date :** 2026-05-27  
 **Contexte :** suite Palier 2 validé MOA · module socle `dorevia_glc_analytics` · base recette `glc-rgl-test-import`
 
@@ -110,7 +115,7 @@ Ne **pas** alimenter le plan **Activités GLC** :
 - reprise de solde ;
 - compte de transfert bancaire.
 
-Ces flux impactent la trésorerie (lecture compte bancaire de référence), pas les KPI d’exploitation Recette · Cumul RH · Dépense · Solde.
+Ces flux impactent la trésorerie (lecture compte bancaire de référence), pas les KPI d’exploitation Ressources · Cumul RH · Dépenses · Solde.
 
 ---
 
@@ -119,7 +124,7 @@ Ces flux impactent la trésorerie (lecture compte bancaire de référence), pas 
 | Palier | Module | Objectif |
 |---|---|---|
 | **3** | `dorevia_glc_budget` | Budget prévisionnel mensuel simple par axe analytique |
-| **4** | `dorevia_glc_analytics` (+ extension cockpit) | Cockpit couverture des salaires : réalisé vs budget vs alertes |
+| **4** | `dorevia_glc_analytics` (+ extension cockpit) | Contrôle de gestion : réalisé vs budget vs alertes |
 | **5** | enrichissements | Graphiques, exports, scénarios, commentaires, trésorerie |
 
 > **Ne pas démarrer par OCA Budget.** Module léger dédié GLC.

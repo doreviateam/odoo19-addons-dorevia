@@ -292,7 +292,7 @@ class GlcAnalyticAnomalyWizard(models.TransientModel):
                 "anomaly_type": "a4_payroll_analytic",
                 "message": _("Écriture de paie avec analytique directe interdite"),
                 "recommendation": _(
-                    "Retirer l'analytique ; la ventilation salariale est prévue au Palier 2."
+                    "Retirer l'analytique sur les comptes de paie ; le cumul RH est lu depuis la comptabilité analytique."
                 ),
             }
         ]

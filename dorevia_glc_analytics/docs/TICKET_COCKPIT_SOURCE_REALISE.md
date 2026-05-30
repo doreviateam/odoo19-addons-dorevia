@@ -1,5 +1,9 @@
 # Ticket de cadrage — Source de vérité du réalisé cockpit GLC
 
+> Addendum `19.0.14` : réalisé seul via analytique — budget et ventilations retirés. Voir [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+> 
+
 **Module :** `dorevia_glc_analytics`  
 **Branche :** `feat/glc-cockpit-source-realise-19.0.4.7.0`  
 **Version cible :** `19.0.4.7.0`  

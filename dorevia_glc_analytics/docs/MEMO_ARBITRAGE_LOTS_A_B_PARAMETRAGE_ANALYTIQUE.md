@@ -1,6 +1,10 @@
 # Mémo d'arbitrage MOA — Lots A / B · Paramétrage analytique GLC
 
-**Module :** `dorevia_glc_analytics` (+ impact `dorevia_glc_budget`)  
+> Note : document d'arbitrage **2026-05-29** — état module actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+> 
+
+**Module :** `dorevia_glc_analytics`   
 **Référence installée (`main`) :** **`19.0.5.0.1`** — Palier 5 trésorerie GO complet MOA · cadrage GQ docs mergé (PR #43)  
 **Travail WIP isolé :** branche `wip/glc-analytic-parametrage-type-glc-plan-unique` · commit `03c8736`  
 **Date arbitrage :** 2026-05-29  

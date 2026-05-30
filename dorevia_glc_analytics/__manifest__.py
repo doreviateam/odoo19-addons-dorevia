@@ -1,40 +1,26 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Dorevia GLC Analytics",
-    "version": "19.0.14.0.2",
+    "version": "19.0.14.1.0",
     "category": "Accounting/Accounting",
-    "summary": "Socle analytique GLC — cockpit pilotage d'exploitation.",
+    "summary": "Pilotage GLC — contrôle de gestion sur réalisé analytique.",
     "description": """
 Suivi d'activité GLC
 ====================
 
-Palier 0 — Socle analytique :
+Navigation : Facturation → Pilotage GLC
 
-* plan **GLC - Activités** unique (11 axes : activités + financements) ;
-* champs métier sur les comptes analytiques ;
-* groupes de sécurité de base.
+* **Contrôle de gestion** — réalisé comptable (Ressources · Cumul RH · Dépenses · Solde) ;
+* **Axes analytiques** — paramétrage plan GLC (11 axes) ;
+* **Audit** — contrôles analytiques A1–A2, A4–A6.
 
-Palier 1 — Contrôles non bloquants :
+Socle :
 
-* assistant **Anomalies analytiques GLC** (contrôles A1–A2, A4–A6) ;
-* synthèse poids STRUCTURE (bandeau, pas ligne à ligne).
+* plan **GLC - Activités** unique ;
+* trésorerie cockpit (compte bancaire de référence) ;
+* qualité comptable & suivi paiement (GQ-6).
 
-Palier 4 — Cockpit pilotage d'exploitation GLC :
-
-* réalisé = écritures comptables analytiques (classes 6/7, tous axes exploitables) ;
-* synthèse graphique + détail par axe analytique (Ressources · Cumul RH · Dépenses · Solde) ;
-* alertes couverture masse salariale (héritage Palier 4).
-
-Palier 4bis — Finition UX cockpit (wording MOA, tableau de bord).
-
-Palier 5 — Trésorerie cockpit (compte bancaire de référence, lecture séparée).
-
-Lot GQ-6 — Qualité comptable & suivi paiement (onglets Contrôles qualité · Tiers & paiements).
-
-Doctrine et évolutions : docs/TICKET_PALIER_5_TRESORERIE_COMPTE_BANCAIRE_REFERENCE.md
-
-Les paliers suivants (bénévolat, rapport CA) seront ajoutés progressivement.
-Voir docs/PALIERS.md.
+Documentation à jour : docs/ETAT_MODULE_ACTUEL.md · docs/PALIERS.md
 """,
     "author": "Dorevia",
     "license": "LGPL-3",

@@ -1,5 +1,10 @@
 # Ticket Palier 3 — Budget prévisionnel GLC (`dorevia_glc_budget`)
 
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
+
 **Module :** `dorevia_glc_budget` *(nouveau module — séparé de `dorevia_glc_analytics`)*  
 **Branche cible :** `feat/glc-budget-palier-3`  
 **Version cible :** `19.0.1.0.0`  
@@ -148,12 +153,12 @@ Ligne budgétaire mensuelle.
 | Écran | Description |
 |---|---|
 | **Budgets GLC** | Liste / formulaire `glc.budget` |
-| **Lignes budgétaires** | Onglet inline ou vue liste filtrée par budget |
+| ***(retiré — lignes budget)*** | Onglet inline ou vue liste filtrée par budget |
 | **Filtres** | Année · scénario · société · mois · type · axe analytique |
 
-**Menus proposés** (sous `Comptabilité → Pilotage GLC` ou racine dédiée « Budget GLC ») :
+**Menus proposés** (sous `Facturation → Pilotage GLC` ou racine dédiée « Budget GLC ») :
 
-- `Budgets prévisionnels`
+- `*(retiré — budgets)*`
 
 **Groupe :** Gestionnaire GLC (CRUD) · Utilisateur GLC (lecture seule, option MOA).
 
@@ -205,7 +210,7 @@ Le Palier 3 **prépare les données** ; il n’implémente **pas** le cockpit.
 
 ## 10. Hors périmètre Palier 3
 
-- Cockpit couverture des salaires (Palier 4)
+- Contrôle de gestion (Palier 4)
 - Croisement réalisé / budget / alertes
 - Graphiques avancés, export Excel / PDF
 - Comparaison scénarios multiples côte à côte

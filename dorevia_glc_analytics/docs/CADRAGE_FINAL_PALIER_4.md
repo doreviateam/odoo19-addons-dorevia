@@ -1,4 +1,9 @@
-# Cadrage final Palier 4 — Cockpit couverture des salaires
+# Cadrage final Palier 4 — Contrôle de gestion
+
+
+> **Document historique** — ne décrit plus le produit installé depuis **`19.0.13.0.0`** / **`19.0.14.0.0`**. État actuel : [ETAT_MODULE_ACTUEL.md](./ETAT_MODULE_ACTUEL.md).
+
+---
 
 **Date :** 2026-05-27 · **réalignement MOA** 2026-05-28  
 **Statut :** **GO livraison MOA** — Palier 4 réaligné **gelé** · **`19.0.4.9.0`** · invariants I1–I7 + réalignement contrôle de gestion  
@@ -104,7 +109,7 @@ Les ventilations Palier 2 validées **ne sont plus agrégées** dans `payroll_re
 
 ### I5 — Exclusion des flux bilan / trésorerie *(KPI exploitation)*
 
-Le cockpit lit l’**exploitation** (Recette · Cumul RH · Dépense · Solde), pas la trésorerie ni le bilan, pour ces KPI.
+Le cockpit lit l’**exploitation** (Ressources · Cumul RH · Dépenses · Solde), pas la trésorerie ni le bilan, pour ces KPI.
 
 Flux **exclus** du réalisé cockpit d’exploitation (doctrine [CADRAGE_BUDGET_COCKPIT.md](./CADRAGE_BUDGET_COCKPIT.md)) :
 
