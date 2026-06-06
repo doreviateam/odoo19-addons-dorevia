@@ -1,0 +1,20 @@
+C-Kreyol Marketone — maquette must stay aligned with Odoo premium already shipped.
+
+Visual line: Artisanal Terroir, premium fine grocery, warm and restrained — NOT generic marketplace green, NOT tropical/exotic clichés, NOT luxury catalog.
+
+Color chain (use these hex values, flat fills only, no decorative gradients):
+- body #FFFFFF
+- cards/sidebar #FFFDF8 / #F3EDE5
+- product tile image zone #FDFCFA
+- text #2A1F18
+- terracotta accent #C4715A (price, primary commerce emphasis)
+- sage #5A8A6E (subtle borders/accents)
+- borders #E2D4BC
+
+Typography: EB Garamond for headings, Hanken Grotesk for UI/body.
+
+Product doctrine unchanged: "Le produit d'abord. Le récit ensuite. Le savoir en prolongement."
+
+When iterating HTML prototypes, preserve shop patterns validated in Odoo: full-bleed product photos, warm shadows, conversion-first tiles, light culture strip, 8–14px radius cards.
+
+Do not revert to green-forward accent palette from early piste 1 unless explicitly asked for a separate exploratory fork.

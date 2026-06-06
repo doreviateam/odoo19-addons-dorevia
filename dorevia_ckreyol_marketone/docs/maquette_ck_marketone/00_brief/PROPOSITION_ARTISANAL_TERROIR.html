@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Proposition — Artisanal Terroir · C-Kreyol Marketone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --body: #ffffff;
+      --card: #fffdf8;
+      --card-body: #fdf9f0;
+      --img: #fdfcfa;
+      --sidebar: #f3ede5;
+      --text: #2a1f18;
+      --muted: #54433c;
+      --terra: #c4715a;
+      --sauge: #5a8a6e;
+      --border: #e2d4bc;
+      --chip: #f2e3d2;
+      --shadow: 0 12px 28px rgba(42, 31, 24, 0.08);
+      --shadow-hover: 0 14px 32px rgba(42, 31, 24, 0.1);
+      --serif: "EB Garamond", Georgia, serif;
+      --sans: "Hanken Grotesk", system-ui, sans-serif;
+      --radius-card: 14px;
+      --radius-ui: 8px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: var(--body);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .doc {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sauge);
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.05;
+      margin: 0 0 16px;
+      max-width: 14ch;
+    }
+    .tagline {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 52ch;
+      margin-bottom: 40px;
+    }
+    h2 {
+      font-family: var(--serif);
+      font-size: 1.75rem;
+      margin: 48px 0 16px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    h3 { font-family: var(--serif); font-size: 1.2rem; margin: 0 0 8px; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* —— DEMO SITE STRIP —— */
+    .demo {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: var(--card);
+    }
+    .demo-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 14px 20px;
+      background: color-mix(in srgb, var(--card) 94%, transparent);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-ui);
+      background: var(--sauge);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .demo-nav {
+      display: flex;
+      gap: 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .demo-nav b { color: var(--text); font-weight: 700; }
+    .demo-search {
+      flex: 1;
+      min-width: 160px;
+      max-width: 280px;
+      margin-left: auto;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-ui);
+      background: var(--body);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .demo-hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      padding: 36px 28px;
+      background: var(--body);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 720px) { .demo-hero { grid-template-columns: 1fr; } }
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sauge);
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+      line-height: 1.08;
+      margin: 0 0 14px;
+    }
+    .hero-lead { color: var(--muted); margin-bottom: 22px; font-size: 15px; }
+    .btns { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn-p {
+      background: var(--terra);
+      color: #fff;
+      border: 0;
+      padding: 12px 20px;
+      border-radius: var(--radius-ui);
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .btn-s {
+      background: var(--body);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 12px 20px;
+      border-radius: var(--radius-ui);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .hero-aside {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .entry {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-ui);
+      padding: 14px;
+      background: var(--card-body);
+      min-height: 100px;
+    }
+    .entry small { display: block; color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    .demo-shop {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0;
+      background: var(--body);
+    }
+    @media (max-width: 720px) { .demo-shop { grid-template-columns: 1fr; } }
+    .demo-sidebar {
+      padding: 18px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .demo-sidebar strong { display: block; margin-bottom: 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .demo-main { padding: 20px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .chip {
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--body);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .chip.on { border-color: var(--sauge); color: var(--sauge); background: #fff; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px) { .cards { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .cards { grid-template-columns: 1fr; } }
+    .tile {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--card-body);
+      box-shadow: 0 10px 24px rgba(42, 31, 24, 0.06);
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+    .tile:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(90, 138, 110, 0.35);
+    }
+    .tile-img {
+      aspect-ratio: 1;
+      background: var(--img);
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .tile-img::after {
+      content: "";
+      position: absolute;
+      inset: 12%;
+      background: linear-gradient(145deg, #e8ddd0 0%, #f5ebe0 100%);
+      border-radius: 4px;
+      opacity: 0.5;
+    }
+    .wish {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-ui);
+      border: 1px solid var(--border);
+      background: rgba(255, 253, 248, 0.92);
+      font-size: 14px;
+      display: grid;
+      place-items: center;
+    }
+    .tile-body { padding: 14px 14px 16px; }
+    .meta { font-size: 11px; font-weight: 800; color: var(--sauge); }
+    .tile h3 {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      margin: 6px 0 0;
+      line-height: 1.25;
+    }
+    .tile-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .voir { font-size: 12px; font-weight: 800; color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+    .price { font-weight: 800; color: var(--terra); font-size: 15px; }
+
+    .swatch-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .sw {
+      width: 80px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .sw i {
+      display: block;
+      height: 48px;
+      border-radius: var(--radius-ui);
+      border: 1px solid rgba(42, 31, 24, 0.1);
+      margin-bottom: 6px;
+    }
+    .type-specimen {
+      padding: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+    }
+    .type-specimen .serif-sample {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .type-specimen .sans-sample {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .principles {
+      display: grid;
+      gap: 10px;
+    }
+    .principles li {
+      padding: 12px 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-ui);
+      list-style: none;
+      font-size: 14px;
+    }
+    .principles ul { margin: 0; padding: 0; }
+    .note {
+      margin-top: 32px;
+      padding: 16px 18px;
+      background: var(--card-body);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-ui);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .note a { color: var(--terra); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <!-- PROMPT OD — copier pour Open Design
+  Design direction: Artisanal Terroir for C-Kreyol Marketone.
+  Premium fine grocery from Creole-speaking territories. Product-first.
+  Colors flat only: #FFFFFF body, #FFFDF8 cards, #FDFCFA tile image, #F3EDE5 sidebar,
+  #2A1F18 text, #C4715A terracotta CTA+price, #5A8A6E sage labels, #E2D4BC borders.
+  Fonts: EB Garamond headings, Hanken Grotesk UI. Card radius 14px, UI 8px.
+  Warm shadows rgba(42,31,24,0.07-0.10). No green marketplace accent. No tropical clichés.
+  Full prototype: header, hero with 4 entries, shop sidebar+3 tiles with Voir+price+wishlist,
+  light culture strip. French copy. Match structure of existing OD index.html if iterating.
+  -->
+
+  <div class="doc">
+    <span class="badge">Proposition design · 2026</span>
+    <h1>Artisanal Terroir</h1>
+    <p class="tagline">
+      Épicerie fine créolophone : le produit en premier plan, la chaleur par la matière
+      (terracotta, sauge, crème), l’élégance par la retenue — aligné sur la boutique Odoo déjà en prod.
+    </p>
+
+    <section class="demo" aria-label="Aperçu direction">
+      <header class="demo-header">
+        <div class="logo"><span class="logo-mark">CK</span> C-Kreyol</div>
+        <nav class="demo-nav" aria-label="Navigation">
+          <b>Boutique</b><span>Culture</span><span>Savoirs</span>
+        </nav>
+        <div class="demo-search">Rechercher produit, origine…</div>
+      </header>
+
+      <div class="demo-hero">
+        <div>
+          <div class="eyebrow">Marketone · territoires créolophones</div>
+          <h2 class="hero-title">Acheter juste, comprendre l’origine.</h2>
+          <p class="hero-lead">Le produit d’abord. Le récit ensuite. Le savoir en prolongement.</p>
+          <div class="btns">
+            <button type="button" class="btn-p">Explorer la boutique</button>
+            <button type="button" class="btn-s">Découvrir les origines</button>
+          </div>
+        </div>
+        <div class="hero-aside">
+          <div class="entry"><strong>Épicerie</strong><small>Confitures, cafés, épices</small></div>
+          <div class="entry"><strong>Maison</strong><small>Soins, senteurs</small></div>
+          <div class="entry"><strong>Origines</strong><small>Réunion, Antilles, Haïti</small></div>
+          <div class="entry"><strong>Usages</strong><small>Recettes & gestes</small></div>
+        </div>
+      </div>
+
+      <div class="demo-shop">
+        <aside class="demo-sidebar">
+          <strong>Filtres</strong>
+          Catégories<br />Collections<br />Origines
+        </aside>
+        <div class="demo-main">
+          <div class="chips">
+            <span class="chip on">Incontournables</span>
+            <span class="chip">Épicerie</span>
+            <span class="chip">Réunion</span>
+          </div>
+          <div class="cards">
+            <article class="tile">
+              <div class="tile-img"><span class="wish" aria-hidden="true">♡</span></div>
+              <div class="tile-body">
+                <div class="meta">Réunion · Fruit</div>
+                <h3>Confiture goyavier</h3>
+                <div class="tile-foot">
+                  <span class="voir">Voir</span>
+                  <span class="price">8,90 €</span>
+                </div>
+              </div>
+            </article>
+            <article class="tile">
+              <div class="tile-img"><span class="wish">♡</span></div>
+              <div class="tile-body">
+                <div class="meta">Réunion · Café</div>
+                <h3>Bourbon Pointu</h3>
+                <div class="tile-foot">
+                  <span class="voir">Voir</span>
+                  <span class="price">18,50 €</span>
+                </div>
+              </div>
+            </article>
+            <article class="tile">
+              <div class="tile-img"><span class="wish">♡</span></div>
+              <div class="tile-body">
+                <div class="meta">Guadeloupe</div>
+                <h3>Épices colombo</h3>
+                <div class="tile-foot">
+                  <span class="voir">Voir</span>
+                  <span class="price">6,40 €</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <h2>Palette</h2>
+    <div class="swatch-row">
+      <div class="sw"><i style="background:#fff"></i>#FFFFFF</div>
+      <div class="sw"><i style="background:#fffdf8"></i>#FFFDF8</div>
+      <div class="sw"><i style="background:#fdfcfa"></i>#FDFCFA</div>
+      <div class="sw"><i style="background:#f3ede5"></i>#F3EDE5</div>
+      <div class="sw"><i style="background:#c4715a"></i>#C4715A</div>
+      <div class="sw"><i style="background:#5a8a6e"></i>#5A8A6E</div>
+      <div class="sw"><i style="background:#e2d4bc"></i>#E2D4BC</div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px">
+      <div class="type-specimen">
+        <div class="serif-sample">Épicerie créole tenue</div>
+        <div class="sans-sample">Hanken Grotesk — navigation, filtres, prix, UI</div>
+      </div>
+      <ul class="principles">
+        <li><strong>1.</strong> Photo produit plein cadre — pas de flottant sur fond saturé</li>
+        <li><strong>2.</strong> Ombre chaude légère + hover −2px sur tuile</li>
+        <li><strong>3.</strong> Culture : bandeau discret, pas magazine sur /shop</li>
+        <li><strong>4.</strong> Radius carte 14px · contrôles 8px</li>
+        <li><strong>5.</strong> Compatible preview in-place & chips MOA</li>
+      </ul>
+    </div>
+
+    <p class="note">
+      Document : <a href="./PROPOSITION_DESIGN_ARTISANAL_TERROIR.md">PROPOSITION_DESIGN_ARTISANAL_TERROIR.md</a> ·
+      Comparatif : <a href="./APERCU_PREMIUM_COMPARATIF.html">APERCU_PREMIUM_COMPARATIF.html</a> ·
+      Pour Open Design : copier le bloc <code>PROMPT OD</code> en tête du fichier source (affichage code).
+    </p>
+  </div>
+</body>
+</html>

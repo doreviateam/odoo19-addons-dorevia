@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CK Marketone — Aperçu premium Odoo vs piste 1 OD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;700&family=Hanken+Grotesk:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Hanken Grotesk", system-ui, sans-serif;
+      background: #f5f0ea;
+      color: #2a1f18;
+      line-height: 1.45;
+      padding: 28px 20px 48px;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+    h1 {
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+    .lead { color: #54433c; max-width: 720px; margin-bottom: 28px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+    .panel {
+      border: 1px solid #e2d4bc;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(42, 31, 24, 0.08);
+    }
+    .panel-head {
+      padding: 14px 18px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      letter-spacing: 0.02em;
+    }
+    .panel-head.odoo { background: #fffdf8; border-bottom: 2px solid #c4715a; }
+    .panel-head.od { background: #eef8f1; border-bottom: 2px solid #2f6f4e; color: #204d37; }
+    .panel-body { padding: 18px; }
+    .swatches { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    .sw {
+      width: 72px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #54433c;
+    }
+    .sw i {
+      display: block;
+      height: 44px;
+      border-radius: 8px;
+      border: 1px solid rgba(42, 31, 24, 0.12);
+      margin-bottom: 6px;
+    }
+    .mini-shop {
+      border: 1px solid var(--border, #e2d4bc);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--card, #fffdf8);
+      box-shadow: var(--shadow, 0 10px 24px rgba(42, 31, 24, 0.07));
+    }
+    .mini-shop .img {
+      aspect-ratio: 1;
+      background: var(--img, #fdfcfa);
+      border-bottom: 1px solid var(--border, #e2d4bc);
+    }
+    .mini-shop .body { padding: 12px 14px 14px; }
+    .mini-shop .meta { font-size: 11px; font-weight: 700; color: var(--accent-label, #5a8a6e); }
+    .mini-shop h3 {
+      margin: 6px 0 4px;
+      font-family: var(--display, "EB Garamond", serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .mini-shop .foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .price { font-weight: 800; color: var(--price, #c4715a); }
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-weight: 800;
+      font-size: 12px;
+      color: #fff;
+      background: var(--cta, #c4715a);
+    }
+    .od .mini-shop {
+      --border: oklch(88% 0.014 82);
+      --card: oklch(100% 0 0);
+      --img: linear-gradient(145deg, oklch(82% 0.06 52), oklch(96% 0.028 78));
+      --accent-label: oklch(49% 0.105 154);
+      --price: oklch(22% 0.035 65);
+      --cta: oklch(38% 0.1 154);
+      --shadow: 0 18px 50px color-mix(in oklch, oklch(22% 0.035 65) 10%, transparent);
+      --display: "Avenir Next", system-ui, sans-serif;
+    }
+    .od .mini-shop h3 { font-family: var(--display); letter-spacing: -0.02em; }
+    .od .btn { background: var(--cta); }
+    .links {
+      margin-top: 24px;
+      padding: 16px 18px;
+      background: #fffdf8;
+      border: 1px solid #e2d4bc;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    .links a { color: #884523; font-weight: 700; }
+    .tag {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .tag.prod { background: #eef5e9; color: #5a8a6e; }
+    .tag.explore { background: #eef8f1; color: #2f6f4e; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>C-Kreyol Marketone — deux lignes visuelles</h1>
+    <p class="lead">
+      À gauche : <strong>premium Odoo</strong> (MOA · ce que tu veux garder).
+      À droite : <strong>piste 1 Open Design</strong> actuelle (structure utile, couleurs à remplacer via M-05).
+    </p>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="panel-head odoo">Cible prod — Artisanal Terroir premium</div>
+        <div class="panel-body">
+          <div class="swatches">
+            <div class="sw"><i style="background:#ffffff"></i>body</div>
+            <div class="sw"><i style="background:#fffdf8"></i>carte</div>
+            <div class="sw"><i style="background:#fdfcfa"></i>photo</div>
+            <div class="sw"><i style="background:#c4715a"></i>terracotta</div>
+            <div class="sw"><i style="background:#5a8a6e"></i>sauge</div>
+            <div class="sw"><i style="background:#e2d4bc"></i>bordure</div>
+          </div>
+          <article class="mini-shop">
+            <div class="img"></div>
+            <div class="body">
+              <div class="meta">Réunion · Épicerie</div>
+              <h3>Confiture goyavier</h3>
+              <div class="foot">
+                <span class="price">8,90 €</span>
+                <button class="btn" type="button">+</button>
+              </div>
+            </div>
+          </article>
+          <span class="tag prod">Référence M-05 · EB Garamond + Hanken</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head od">Exploration — Piste 1 OD (vert OKLCH)</div>
+        <div class="panel-body od">
+          <div class="swatches">
+            <div class="sw"><i style="background:oklch(98% 0.01 92)"></i>fond</div>
+            <div class="sw"><i style="background:oklch(100% 0 0)"></i>surface</div>
+            <div class="sw"><i style="background:linear-gradient(145deg, oklch(82% 0.06 52), oklch(96% 0.028 78))"></i>tuile</div>
+            <div class="sw"><i style="background:oklch(49% 0.105 154)"></i>accent</div>
+            <div class="sw"><i style="background:oklch(58% 0.13 42)"></i>second</div>
+            <div class="sw"><i style="background:oklch(88% 0.014 82)"></i>bordure</div>
+          </div>
+          <article class="mini-shop">
+            <div class="img"></div>
+            <div class="body">
+              <div class="meta">Réunion · Épicerie</div>
+              <h3>Confiture goyavier</h3>
+              <div class="foot">
+                <span class="price">8,90 €</span>
+                <button class="btn" type="button">+</button>
+              </div>
+            </div>
+          </article>
+          <span class="tag explore">Archive structure · pas référence couleur prod</span>
+        </div>
+      </section>
+    </div>
+
+    <div class="links">
+      <strong>Ouvrir les prototypes complets :</strong><br />
+      · Maquette piste 1 (export) :
+      <a href="../04_exports_open_design/piste_1_marche_creole_contemporain/index.html">index.html piste 1</a><br />
+      · Open Design (source) :
+      <a href="file:///Users/doreviateam/open-design/.od/projects/44de8203-38b0-4405-af76-2f09c97c5f02/index.html">index.html projet OD</a><br />
+      · Boutique Odoo locale (si sandbox) : <code>http://localhost:18079/shop</code><br /><br />
+      <strong>Prochaine étape :</strong> run <code>M-05</code> → dossier <code>piste_1bis_artisanal_terroir/</code>
+      (prompt : <code>03_prompts/PROMPT_M05_PREMIUM_ODOO.md</code>)
+    </div>
+  </div>
+</body>
+</html>

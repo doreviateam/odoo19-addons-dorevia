@@ -1,0 +1,26 @@
+{
+  "kind": "critique-panel",
+  "score": 4,
+  "axes": {
+    "philosophy": {
+      "score": 4,
+      "notes": "La direction marche creole contemporain reste product-first, chaleureuse et sobre, sans exotisme generique ni fond decoratif dominant."
+    },
+    "hierarchy": {
+      "score": 4,
+      "notes": "Le parcours place l'identite, les categories, la grille boutique, le detail produit puis le panier dans une priorite claire."
+    },
+    "execution": {
+      "score": 4,
+      "notes": "Les cartes ont des dimensions stables, les rayons de composants restent sobres, les breakpoints mobile et tablette redistribuent les grilles."
+    },
+    "specificity": {
+      "score": 4,
+      "notes": "La copie, les produits, les origines et les modules correspondent au brief C-Kreyol Marketone."
+    },
+    "restraint": {
+      "score": 4,
+      "notes": "Les accents sont limites aux actions, labels d'origine, surfaces produit et micro-signaux; la Culture reste en appui."
+    }
+  }
+}
