@@ -142,33 +142,21 @@ class TestMarketoneLot5CartCheckout(HttpCase):
         order = self._create_cart_order()
         self._bind_public_cart(order)
         response = self._open_checkout_flow()
-        text = response.text
-        for forbidden in (
-            r"marketone_mode=",
-            r"ckr_mode=",
-            r"/promotions",
-            r"/kits",
-        ):
-            self.assertIsNone(
-                re.search(forbidden, text),
-                f"Lien porte catalogue interdit sur checkout : {forbidden}",
-            )
+        from odoo.addons.dorevia_ckreyol_marketone.tests.marketone_gate_helpers import (
+            assert_catalog_gate_policy_lot6_front,
+        )
+
+        assert_catalog_gate_policy_lot6_front(self, response.text)
 
     def test_cart_no_catalog_gates(self):
         order = self._create_cart_order()
         self._bind_public_cart(order)
         response = self.url_open("/shop/cart")
-        text = response.text
-        for forbidden in (
-            r"marketone_mode=",
-            r"ckr_mode=",
-            r"/promotions",
-            r"/kits",
-        ):
-            self.assertIsNone(
-                re.search(forbidden, text),
-                f"Lien porte catalogue interdit sur panier : {forbidden}",
-            )
+        from odoo.addons.dorevia_ckreyol_marketone.tests.marketone_gate_helpers import (
+            assert_catalog_gate_policy_lot6_front,
+        )
+
+        assert_catalog_gate_policy_lot6_front(self, response.text)
 
     def test_home_unchanged_after_cart_flow(self):
         order = self._create_cart_order()

@@ -52,6 +52,16 @@ header#top.marketone-chrome {
         }
     }
 
+    .marketone-header-gate--promo .nav-link {
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-primary;
+    }
+
+    .marketone-header-gate--pack .nav-link {
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-primary;
+    }
+
     .navbar {
         padding-block: $marketone-space-sm;
     }
