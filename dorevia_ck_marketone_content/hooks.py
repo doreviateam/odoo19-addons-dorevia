@@ -7,6 +7,25 @@ Module optionnel : ``dorevia_ck_theme`` reste un thème générique sans ce cont
 import re
 from xml.sax.saxutils import escape
 
+from .legal_pages import (
+    FOOTER_CONTACT_LINK_MARKER,
+    FOOTER_LEGAL_LINK_HTML,
+    FOOTER_PRIVACY_LINK_HTML,
+    FOOTER_TERMS_LINK_HTML,
+    LEGAL_PAGE_ARCH,
+    LEGAL_PAGE_NAME,
+    LEGAL_PAGE_URL,
+    LEGAL_PAGE_VIEW_KEY,
+    PRIVACY_PAGE_ARCH,
+    PRIVACY_PAGE_NAME,
+    PRIVACY_PAGE_URL,
+    PRIVACY_PAGE_VIEW_KEY,
+    TERMS_PAGE_ARCH,
+    TERMS_PAGE_NAME,
+    TERMS_PAGE_URL,
+    TERMS_PAGE_VIEW_KEY,
+)
+
 EPICERIE_CATEGORY_NAME = 'Épicerie créole'
 EPICERIE_CATEGORY_DESCRIPTION = (
     '<p>Savons artisanaux, confitures, crackers et galettes de manioc — '
@@ -537,6 +556,98 @@ def bootstrap_a_propos_page(env):
     )
 
 
+def bootstrap_mentions_legales_page(env):
+    """Crée ou met à jour la page CMS /legal (lot go-live public · idempotent)."""
+    return _bootstrap_cms_page(
+        env,
+        page_url=LEGAL_PAGE_URL,
+        view_key=LEGAL_PAGE_VIEW_KEY,
+        view_name='Mentions légales CK',
+        page_name=LEGAL_PAGE_NAME,
+        arch=LEGAL_PAGE_ARCH,
+    )
+
+
+def bootstrap_privacy_page(env):
+    """Crée ou met à jour la page CMS /privacy (RGPD · idempotent)."""
+    return _bootstrap_cms_page(
+        env,
+        page_url=PRIVACY_PAGE_URL,
+        view_key=PRIVACY_PAGE_VIEW_KEY,
+        view_name='Confidentialité CK',
+        page_name=PRIVACY_PAGE_NAME,
+        arch=PRIVACY_PAGE_ARCH,
+    )
+
+
+def bootstrap_terms_page(env):
+    """Crée ou met à jour la page CMS /terms (CGV · idempotent)."""
+    return _bootstrap_cms_page(
+        env,
+        page_url=TERMS_PAGE_URL,
+        view_key=TERMS_PAGE_VIEW_KEY,
+        view_name='CGV CK',
+        page_name=TERMS_PAGE_NAME,
+        arch=TERMS_PAGE_ARCH,
+    )
+
+
+def _insert_footer_link_after(arch, marker, link_html):
+    """Insère link_html après marker si link_html href absent."""
+    href_match = link_html.split('href="', 1)[1].split('"', 1)[0] if 'href="' in link_html else ''
+    if href_match and href_match in arch:
+        return arch
+    if marker in arch:
+        return arch.replace(marker, marker + '\n                                ' + link_html, 1)
+    return arch
+
+
+def bootstrap_footer_legal_links(env):
+    """Liens footer Mentions légales · Confidentialité · CGV (idempotent)."""
+    website = env['website'].search([], limit=1)
+    if not website:
+        return False
+
+    View = env['ir.ui.view'].sudo()
+    footer = View.search([
+        ('key', '=', 'website.footer_custom'),
+        ('website_id', '=', website.id),
+    ], limit=1)
+    if not footer:
+        footer = View.search([('key', '=', 'website.footer_custom')], limit=1)
+    if not footer:
+        return False
+
+    arch = footer.arch_db or footer.arch or ''
+    if isinstance(arch, dict):
+        arch = next(iter(arch.values()), '')
+
+    original = arch
+    arch = _insert_footer_link_after(arch, FOOTER_CONTACT_LINK_MARKER, FOOTER_LEGAL_LINK_HTML)
+    arch = _insert_footer_link_after(arch, FOOTER_LEGAL_LINK_HTML, FOOTER_PRIVACY_LINK_HTML)
+    if FOOTER_LEGAL_LINK_HTML not in arch and 'href="/legal"' not in arch:
+        arch = _insert_footer_link_after(arch, FOOTER_CONTACT_LINK_MARKER, FOOTER_PRIVACY_LINK_HTML)
+    arch = _insert_footer_link_after(arch, FOOTER_PRIVACY_LINK_HTML, FOOTER_TERMS_LINK_HTML)
+    if 'href="/terms' not in arch:
+        if FOOTER_PRIVACY_LINK_HTML in arch:
+            arch = _insert_footer_link_after(arch, FOOTER_PRIVACY_LINK_HTML, FOOTER_TERMS_LINK_HTML)
+        elif FOOTER_LEGAL_LINK_HTML in arch:
+            arch = _insert_footer_link_after(arch, FOOTER_LEGAL_LINK_HTML, FOOTER_TERMS_LINK_HTML)
+        else:
+            arch = _insert_footer_link_after(arch, FOOTER_CONTACT_LINK_MARKER, FOOTER_TERMS_LINK_HTML)
+
+    if arch == original:
+        return True
+
+    footer.write({'arch': arch})
+    return True
+
+
+def bootstrap_footer_legal_link(env):
+    """Alias rétrocompat — délègue à bootstrap_footer_legal_links."""
+    return bootstrap_footer_legal_links(env)
+
+
 def bootstrap_professionnels_page(env):
     """Crée ou met à jour la page CMS /professionnels (Phase 5 + dual M9 · idempotent)."""
     return _bootstrap_cms_page(
@@ -823,6 +934,10 @@ def bootstrap_all_marketone_content(env):
     bootstrap_a_propos_page(env)
     bootstrap_producer_page(env)
     bootstrap_recipes_page(env)
+    bootstrap_mentions_legales_page(env)
+    bootstrap_privacy_page(env)
+    bootstrap_terms_page(env)
+    bootstrap_footer_legal_links(env)
 
 
 def post_init_hook(env):
