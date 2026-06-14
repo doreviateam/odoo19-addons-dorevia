@@ -7,8 +7,8 @@
 | **ADR** | [ADR-034](../../cadrage/DECISIONS.md#adr-034--arbitrage-architecture-cadrage2-socle-odoo-natif) |
 | **Base** | `ckr-marketone-01` |
 | **URL shop** | http://localhost:18079/shop |
-| **Version module** | `19.0.17.0.0` |
-| **Statut recette** | **GO clôture MOA** — P1–P8 · N1–N3 · R1–R4 signés le 2026-06-08 |
+| **Version module** | `19.0.19.0.1` |
+| **Statut recette** | **Clôturée — GO navigateur MOA** (2026-06-14) · voir [`RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md`](./RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md) |
 
 ---
 
@@ -61,6 +61,16 @@ docker exec -i sandbox-odoo19-odoo-1 odoo shell -d ckr-marketone-01 --no-http \
 | N1–N3 | Header Promotions présent · aucun `/kits` · pas de chip porte dans filtre actif | **OK** |
 | R1–R4 | `/shop`, facettes, images, panier/checkout smoke contrôlés | **OK** |
 
+## Arbitrages MOA — recette navigateur 2026-06-14
+
+| Sujet | Décision |
+|-------|----------|
+| **P4 / P6** | Acceptés **non rejoués** — manipulations BO couvertes 2026-06-08 |
+| **N2** | Cohabitation chips Promotions + Kits · **OK release 6.3** |
+| **Clôture** | [`RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md`](./RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md) |
+
+---
+
 ## En-tête obligatoire (ADR-034)
 
 **ADR-034 :** [`ARBITRAGE_ARCHITECTURE_CADRAGE2.md`](../../cadrage2/ARBITRAGE_ARCHITECTURE_CADRAGE2.md)
@@ -104,7 +114,7 @@ docker exec -i sandbox-odoo19-odoo-1 odoo shell -d ckr-marketone-01 --no-http \
 | # | Scénario | Action | Attendu | MOA |
 |---|----------|--------|---------|-----|
 | **N1** | Chip Promotions | Header site depuis `/shop` | Lien **Promotions** → `/promotions` | ☑ |
-| **N2** | Pas de chip Kits | Header site | **Aucun** lien `/kits` exposé | ☑ |
+| **N2** | Cohabitation chips *(arbitrage MOA 2026-06-14)* | Header site | Chips **Promotions** + **Kits & Coffrets** cohabitants · **OK release 6.3** *(critère « pas de chip Kits » obsolète post-merge 6.3b)* | ☑ |
 | **N3** | Chips filtres | Filtre sidebar + porte promo | **Pas** de chip porte dans barre filtres actifs (UX-1 G10) | ☑ |
 
 ---
