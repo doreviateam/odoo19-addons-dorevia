@@ -83,7 +83,7 @@
               inherit_id="dorevia_ckreyol_marketone.marketone_products_categories_primary_list"
               name="Marketone: collections après catégories (sidebar desktop)"
               priority="33">
-        <xpath expr="//div[contains(@class, 'marketone-shop-categories-accordion')]" position="after">
+        <xpath expr="//div[hasclass('marketone-shop-categories-accordion')]" position="after">
             <t t-if="not isOffcanvas">
                 <t t-call="dorevia_ckreyol_marketone.marketone_shop_collections_accordion"/>
             </t>
