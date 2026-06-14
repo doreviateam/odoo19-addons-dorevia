@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>C-Kreyol — Accueil · Maquette V1.2.x Lot 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ck-maquette.css" />
+</head>
+<body>
+
+  <div class="maquette-note">
+    <strong>Maquette V1.2.x · Lots 1–3+</strong> — Accueil ·
+    <a href="shop.html" style="color:#fb923c">Shop</a> ·
+    <a href="categorie.html" style="color:#fb923c">Catégorie</a> ·
+    <a href="fiche-produit.html" style="color:#fb923c">Fiche produit</a> ·
+    <a href="professionnels.html" style="color:#fb923c">Professionnels</a> · Odoo en pause
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo">C-<span>Kreyol</span></a>
+      <nav class="nav-main" aria-label="Navigation principale">
+        <a href="shop.html">Boutique</a>
+        <a href="categorie.html">Catégories</a>
+        <a href="professionnels.html">Professionnels</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-box" role="search">
+          <span aria-hidden="true">⌕</span>
+          <input type="search" placeholder="Rechercher…" aria-label="Rechercher un produit" />
+        </div>
+        <button class="icon-btn burger" type="button" id="burgerOpen" aria-label="Menu" aria-expanded="false">☰</button>
+        <a href="/shop/cart" class="icon-btn" aria-label="Panier" title="Route Odoo : /shop/cart">
+          🛒
+          <span class="cart-badge">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menu mobile">
+    <h2>Menu</h2>
+    <a href="shop.html">Boutique</a>
+    <a href="categorie.html">Catégories</a>
+    <a href="professionnels.html">Professionnels</a>
+  </nav>
+
+  <main id="accueil">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="kicker">Boutique créole · Livraison France &amp; Europe</p>
+          <h1 id="hero-title">Les saveurs créoles, prêtes à commander.</h1>
+          <p class="hero-lead">Épicerie, boissons, coffrets et bien-être — prix visibles, producteurs sélectionnés dans les territoires créolophones, achat en confiance.</p>
+          <div class="hero-cta">
+            <a href="shop.html" class="btn btn-primary">Voir la boutique</a>
+            <a href="professionnels.html" class="btn btn-secondary">Espace professionnel</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" alt="Sélection de produits créoles — épicerie et condiments" width="800" height="500" loading="eager" />
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-bar" aria-label="Preuves de confiance">
+      <div class="wrap trust-grid">
+        <div class="trust-item">
+          <span class="trust-icon" aria-hidden="true">🚚</span>
+          <div><h3>Livraison France &amp; Europe</h3><p>Expédition suivie · délais annoncés avant paiement</p></div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon" aria-hidden="true">🔒</span>
+          <div><h3>Paiement sécurisé</h3><p>CB et moyens standards · parcours checkout natif</p></div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon" aria-hidden="true">🌿</span>
+          <div><h3>Producteurs sélectionnés</h3><p>Agro-transformés · Réunion · Antilles · territoires créolophones</p></div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon" aria-hidden="true">💬</span>
+          <div><h3>Service client</h3><p>Équipe joignable · conditions Pro sur qualification</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="produits" aria-labelledby="featured-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2 id="featured-title">Nos coups de cœur</h2>
+            <p>Sélection CK · prix TTC · origine et famille visibles</p>
+          </div>
+          <a href="shop.html" class="btn btn-secondary" style="padding:8px 14px;font-size:13px">Toute la boutique →</a>
+        </div>
+        <div class="product-grid">
+          <article class="product-card">
+            <a href="fiche-produit.html" class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80')">
+              <span class="badge badge-heart badge-float">Coup de cœur</span>
+            </a>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Réunion</span><span class="chip-cat">Épicerie</span></div>
+              <h3><a href="fiche-produit.html">Confiture goyavier</a></h3>
+            </div>
+            <div class="product-card-foot"><span class="price">8,90 €</span><a href="fiche-produit.html" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=600&q=80')">
+              <span class="badge badge-new badge-float">Nouveau</span>
+            </div>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Guadeloupe</span><span class="chip-cat">Snacks</span></div>
+              <h3>Manio Crackers sucré</h3>
+            </div>
+            <div class="product-card-foot"><span class="price">4,20 €</span><a href="/shop/manio-crackers-sucre-124" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=600&q=80')"></div>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Guadeloupe</span><span class="chip-cat">Snacks</span></div>
+              <h3>Manio Crackers salé</h3>
+            </div>
+            <div class="product-card-foot"><span class="price">4,20 €</span><a href="/shop/manio-crackers-sale-125" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80')"></div>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Martinique</span><span class="chip-cat">Épicerie</span></div>
+              <h3>Galettes de manioc</h3>
+            </div>
+            <div class="product-card-foot"><span class="price">5,50 €</span><a href="/shop/galettes-manioc-126" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600&q=80')"></div>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Martinique</span><span class="chip-cat">Condiments</span></div>
+              <h3>Épices colombo</h3>
+            </div>
+            <div class="product-card-foot"><span class="price">6,40 €</span><a href="/shop/epices-colombo-127" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=600&q=80')"></div>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Martinique</span><span class="chip-cat">Bien-être</span></div>
+              <h3>Savon vétiver</h3>
+            </div>
+            <div class="product-card-foot"><span class="price">7,90 €</span><a href="/shop/savon-vetiver-128" class="card-cta">Voir</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0" id="univers" aria-labelledby="cat-title">
+      <div class="wrap">
+        <div class="section-head"><h2 id="cat-title">Acheter par univers</h2></div>
+        <div class="cat-grid">
+          <a href="categorie.html" class="cat-card">
+            <h3>Épicerie créole</h3>
+            <p>Confitures, farines, condiments et bases cuisine créole.</p>
+            <span class="cat-link">Explorer →</span>
+            <span class="route-hint">/shop/category/epicerie-creole-1</span>
+          </a>
+          <a href="shop.html" class="cat-card">
+            <h3>Maison &amp; bien-être</h3>
+            <p>Savons, soins et produits maison issus des terroirs créoles.</p>
+            <span class="cat-link">Explorer →</span>
+            <span class="route-hint">/shop/category/maison-bien-etre-2</span>
+          </a>
+          <a href="shop.html" class="cat-card">
+            <h3>Packs &amp; découvertes</h3>
+            <p>Coffrets cadeaux et sélections première commande.</p>
+            <span class="cat-link">Explorer →</span>
+            <span class="route-hint">/shop/category/packs-decouvertes-3</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section packs-strip" aria-labelledby="packs-title">
+      <div class="wrap packs-inner">
+        <div>
+          <h2 id="packs-title" style="font-family:var(--font-display);font-size:22px;margin:0 0 8px">Coffrets découverte</h2>
+          <p style="margin:0;font-size:14px;color:var(--ck-text-muted);max-width:40ch">Idéal première commande ou cadeau — un produit = une ligne panier, livraison suivie.</p>
+        </div>
+        <div class="pack-highlight">
+          <div class="pack-visual" style="background-image:url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&q=80')" aria-hidden="true"></div>
+          <div style="flex:1">
+            <span class="badge badge-pack" style="margin-bottom:8px">Pack</span>
+            <h3 style="margin:0 0 4px;font-size:16px">Coffret découverte créole</h3>
+            <p style="margin:0 0 10px;font-size:13px;color:var(--ck-text-muted)">Assortiment épicerie · sirop · épices — sélection CK</p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <span class="price">29,90 €</span>
+              <a href="/shop/coffret-decouverte-creole-129" class="card-cta">Découvrir</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dual-engage-section" id="espace-pro" aria-label="Professionnels et lettre d'information">
+      <div class="wrap">
+        <div class="dual-engage">
+          <div class="dual-engage-pro">
+            <h2>Vous êtes professionnel ?</h2>
+            <p>Épicerie, boutique créole, restaurant, hôtel, traiteur, distributeur… CK étudie votre demande et vous oriente vers une sélection adaptée.</p>
+            <a href="professionnels.html" class="btn-engage-pro">✉ Faire une demande professionnelle</a>
+          </div>
+          <div class="dual-engage-news">
+            <h2>Recevez les nouveautés créoles</h2>
+            <p class="news-lead">Produits, recettes, producteurs, idées d’usage et sélections CK — une relation continue, sans sur-promesse.</p>
+            <form class="news-form-row" action="#" method="post" onsubmit="return false" aria-label="Inscription newsletter">
+              <label for="news-email-home" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden">Adresse e-mail</label>
+              <input type="email" id="news-email-home" name="email" placeholder="Votre adresse e-mail" required />
+              <button type="submit" class="btn-news">S’inscrire</button>
+            </form>
+            <p class="news-note">Sélections et nouveautés CK, en cadence mesurée. Désinscription possible à tout moment.</p>
+          </div>
+        </div>
+        <span class="route-hint" style="display:block;margin-top:10px;font-size:11px;color:var(--ck-text-muted)">Inspiration réf. visuelle · maquette complémentaire · Odoo : snippet CMS + mass mailing = réserve</span>
+      </div>
+    </section>
+
+    <section class="editorial" aria-labelledby="edito-title">
+      <div class="wrap editorial-inner">
+        <h2 id="edito-title">C-Kreyol, la boutique des saveurs créoles</h2>
+        <p>CK met en ligne une sélection d’agro-produits transformés dans les territoires créolophones. Notre mission : rendre l’achat simple, les prix lisibles et la provenance compréhensible — pour les particuliers comme pour les professionnels qualifiés.</p>
+        <p>Chaque fiche produit raconte l’origine, l’usage et le producteur. <a href="a-propos.html" style="font-weight:700;color:var(--ck-primary)">Notre démarche →</a> · <a href="fiche-producteur.html" style="font-weight:700;color:var(--ck-primary)">Fiche producteur type →</a> · <a href="recettes.html" style="font-weight:700;color:var(--ck-primary)">Recettes &amp; savoirs →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid-ext">
+        <div>
+          <div class="footer-brand">C-<span>Kreyol</span></div>
+          <p style="margin:0;line-height:1.5">Boutique en ligne de produits créoles — agro-transformation, épicerie et découvertes.</p>
+        </div>
+        <div>
+          <h4>Boutique</h4>
+          <ul>
+            <li><a href="shop.html">Tous les produits</a></li>
+            <li><a href="categorie.html">Épicerie créole</a></li>
+            <li><a href="fiche-produit.html">Exemple fiche produit</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Découvrir</h4>
+          <ul>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="fiche-producteur.html">Fiche producteur</a></li>
+            <li><a href="recettes.html">Recettes &amp; savoirs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>CK</h4>
+          <ul>
+            <li><a href="professionnels.html">Professionnels</a></li>
+            <li><a href="index.html">Accueil</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 C-Kreyol · Maquette V1.2.x Lots 1–3+</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('burgerOpen');
+      var panel = document.getElementById('navMobile');
+      var overlay = document.getElementById('navOverlay');
+      if (!toggle || !panel || !overlay) return;
+      function setOpen(show) {
+        panel.classList.toggle('open', show);
+        overlay.classList.toggle('open', show);
+        toggle.setAttribute('aria-expanded', show);
+      }
+      toggle.addEventListener('click', function () { setOpen(!panel.classList.contains('open')); });
+      overlay.addEventListener('click', function () { setOpen(false); });
+      panel.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () { setOpen(false); });
+      });
+    })();
+  </script>
+</body>
+</html>

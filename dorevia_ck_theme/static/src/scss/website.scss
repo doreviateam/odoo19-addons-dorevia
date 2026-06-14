@@ -1,0 +1,178 @@
+// Layout global, header, footer, snippets Pro — ticket 01
+//
+// Typo Fraunces + DM Sans : hors bundle SCSS Odoo (arbitrage prod / self-host).
+// @import url(...) dans web.assets_frontend casse la compilation du bundle
+// (URL tronquée avant @charset → CSS quasi entier ignoré par le navigateur).
+
+.ck-theme {
+    font-family: $ck-font-ui;
+    font-size: $ck-text-base;
+    line-height: $ck-line-height-body;
+    color: $ck-text;
+    background-color: $ck-bg;
+}
+
+.ck-theme h1,
+.ck-theme h2,
+.ck-theme h3,
+.ck-theme .ck-section-title,
+.ck-theme .ck-hero__title {
+    font-family: $ck-font-display;
+    font-weight: $ck-font-weight-display;
+    line-height: $ck-line-height-heading;
+    color: $ck-text;
+}
+
+// Conteneur max 1200px (complète .container Bootstrap)
+.ck-theme #wrapwrap .container,
+.ck-theme .ck-container {
+    max-width: $ck-container-max;
+    padding-left: $ck-gutter-mobile;
+    padding-right: $ck-gutter-mobile;
+
+    @media (min-width: 768px) {
+        padding-left: $ck-gutter-desktop;
+        padding-right: $ck-gutter-desktop;
+    }
+}
+
+// --- Snippets accueil --------------------------------------------------------
+.ck-hero {
+    background-color: $ck-bg-soft;
+}
+
+.ck-hero__title {
+    font-size: $ck-text-hero-mobile;
+
+    @media (min-width: 992px) {
+        font-size: $ck-text-3xl;
+    }
+}
+
+.ck-category-links {
+    .ck-pill {
+        display: inline-block;
+        padding: $ck-space-2 $ck-space-4;
+        margin: $ck-space-1;
+        border-radius: $ck-radius-sm;
+        background-color: $ck-surface;
+        border: 1px solid $ck-border;
+        color: $ck-text;
+        text-decoration: none;
+        font-size: $ck-text-sm;
+        font-weight: $ck-font-weight-semibold;
+
+        &:hover {
+            border-color: $ck-primary;
+            color: $ck-primary;
+        }
+    }
+}
+
+.ck-reassurance {
+    .ck-reassurance__item {
+        padding: $ck-space-5;
+        background: $ck-surface;
+        border-radius: $ck-radius-lg;
+        box-shadow: $ck-shadow-card;
+        height: 100%;
+    }
+}
+
+// Produits vedettes home — grille SSR stable (Q1 · layout shift)
+.ck-featured-products__grid {
+    overflow-x: clip;
+
+    .ck-featured-products__ssr {
+        .row {
+            align-items: stretch;
+        }
+
+        > .row > [class*="col-"] {
+            display: flex;
+            align-items: stretch;
+        }
+
+        .oe_product_cart {
+            // Désactive le lazy layout natif Odoo (content-visibility: auto → sauts au scroll)
+            content-visibility: visible !important;
+            contain: layout style !important;
+            transform: none !important;
+            transition: none !important;
+            height: 100%;
+            width: 100%;
+
+            &::before {
+                display: none !important;
+            }
+
+            &:hover,
+            &:has(:focus-visible) {
+                z-index: auto !important;
+                transform: none !important;
+                box-shadow: var(--o-wsale-card-shadow, none) !important;
+
+                .oe_product_image,
+                .o_wsale_product_information {
+                    transform: none !important;
+                    transition: none !important;
+                }
+            }
+
+            .oe_product_image {
+                width: 100% !important;
+                min-width: 0 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            .oe_product_image_link {
+                aspect-ratio: 1 / 1;
+                max-height: none;
+            }
+
+            .oe_product_image_img,
+            .oe_product_image_img_secondary {
+                transform: none !important;
+                transition: none !important;
+            }
+
+            .o_wsale_product_information_text {
+                min-height: 3.5rem;
+            }
+
+            .o_wsale_product_btn,
+            .o_wsale_product_btn_primary {
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+            }
+        }
+    }
+}
+
+// --- Snippets shop / pro -------------------------------------------------------
+.ck-shop-intro__note {
+    font-size: $ck-text-sm;
+    font-style: italic;
+    color: $ck-text-muted;
+}
+
+.ck-pro-banner {
+    background-color: $ck-bg-soft;
+    border-radius: $ck-radius-lg;
+    padding: $ck-space-6;
+}
+
+.ck-pro-block {
+    padding: $ck-space-6;
+    background: $ck-surface;
+    border-radius: $ck-radius-lg;
+    border: 1px solid $ck-border;
+    height: 100%;
+}
+
+.ck-footnote {
+    font-size: $ck-text-xs;
+    color: $ck-text-muted;
+}

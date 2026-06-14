@@ -1,0 +1,281 @@
+// Header / menu / branding CK — Phase 10 · A1 reprise visuelle maquette
+
+.ck-theme header#top.ck-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background-color: rgba($ck-surface, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid $ck-border;
+    box-shadow: none;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-family: "DM Sans", $ck-font-ui;
+
+    .navbar,
+    .o_main_nav {
+        --bs-navbar-padding-y: 0.375rem;
+        min-height: 3.75rem;
+    }
+
+    // Logo typographique — maquette artifact .logo
+    .navbar-brand.ck-header__brand-link,
+    .navbar-brand.logo {
+        margin-right: $ck-space-4;
+        padding-top: $ck-space-1;
+        padding-bottom: $ck-space-1;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            .ck-header__brand {
+                color: $ck-text;
+            }
+
+            .ck-header__brand-accent {
+                color: $ck-primary-hover;
+            }
+        }
+
+        img,
+        span[role="img"] {
+            display: none !important;
+        }
+    }
+
+    .ck-header__brand {
+        display: inline-block;
+        font-family: "Fraunces", $ck-font-display;
+        font-weight: 700;
+        font-size: 1.25rem;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: $ck-text;
+        white-space: nowrap;
+    }
+
+    .ck-header__brand-accent {
+        color: $ck-primary;
+    }
+
+    // Desktop — densité · hiérarchie · nav centrée (maquette .header-inner)
+    @media (min-width: 992px) {
+        .navbar.d-none.d-lg-block {
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+
+        #o_main_nav.container-fluid {
+            display: flex;
+            align-items: center;
+            gap: $ck-space-4;
+            max-width: $ck-container-max;
+            margin-inline: auto;
+            padding-inline: $ck-gutter-desktop;
+        }
+
+        #top_menu.top_menu {
+            flex: 1 1 auto;
+            justify-content: center;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        .navbar-nav.align-items-center.gap-2 {
+            margin-left: auto;
+            padding-left: 0 !important;
+        }
+    }
+
+    .navbar-nav {
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .navbar-nav > .nav-item > .nav-link,
+    .navbar-nav > .nav-item > .dropdown-toggle.nav-link {
+        font-family: "DM Sans", $ck-font-ui;
+        font-size: $ck-text-sm;
+        font-weight: $ck-font-weight-semibold;
+        color: $ck-text-muted;
+        padding: 0.5rem 0.75rem;
+        border-radius: $ck-radius-md;
+        transition: color 0.15s ease, background-color 0.15s ease;
+
+        &:hover,
+        &:focus-visible {
+            color: $ck-text;
+            background-color: $ck-bg-soft;
+        }
+    }
+
+    .navbar-nav > .nav-item.show > .nav-link,
+    .navbar-nav > .nav-item.show > .dropdown-toggle.nav-link {
+        color: $ck-text;
+        background-color: $ck-bg-soft;
+    }
+
+    .o_mega_menu,
+    .dropdown-menu {
+        border: 1px solid $ck-border;
+        border-radius: $ck-radius-lg;
+        box-shadow: $ck-shadow-card-hover;
+        background-color: $ck-surface;
+        padding: $ck-space-5;
+        margin-top: $ck-space-2;
+    }
+
+    .o_mega_menu {
+        .nav-link,
+        a {
+            color: $ck-text;
+            border-radius: $ck-radius-sm;
+            padding: 0.45rem 0.65rem;
+            font-family: "DM Sans", $ck-font-ui;
+            font-size: $ck-text-sm;
+
+            &:hover,
+            &:focus-visible {
+                color: $ck-primary;
+                background-color: rgba($ck-primary, 0.06);
+            }
+        }
+
+        h5,
+        .h5,
+        .dropdown-header {
+            font-family: "Fraunces", $ck-font-display;
+            font-size: $ck-text-xs;
+            font-weight: $ck-font-weight-display;
+            color: $ck-text-muted;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    }
+
+    .navbar-toggler,
+    button[data-bs-toggle="offcanvas"] {
+        border: 1px solid $ck-border;
+        border-radius: $ck-radius-md;
+        background-color: $ck-bg-soft;
+        padding: 0.55rem 0.65rem;
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+
+        &:focus {
+            box-shadow: 0 0 0 0.15rem rgba($ck-primary, 0.2);
+        }
+
+        .navbar-toggler-icon {
+            width: 1.15rem;
+            height: 1.15rem;
+        }
+    }
+
+    .o_header_mobile_buttons_wrap,
+    .navbar-nav.align-items-center {
+        gap: $ck-space-2;
+    }
+
+    .btn.rounded-circle,
+    .o_navlink_background,
+    .o_navlink_background_hover {
+        border: 1px solid $ck-border !important;
+        background-color: $ck-bg-soft !important;
+        color: $ck-text !important;
+        width: 2.375rem;
+        height: 2.375rem;
+
+        &:hover,
+        &:focus-visible {
+            color: $ck-primary !important;
+            border-color: rgba($ck-primary, 0.35) !important;
+            background-color: rgba($ck-primary, 0.06) !important;
+        }
+    }
+
+    .my_cart_quantity.badge,
+    .my_wish_quantity.badge {
+        background-color: $ck-primary !important;
+    }
+}
+
+// Mobile — offcanvas CK · cohérence branding
+@media (max-width: 991.98px) {
+    .ck-theme {
+        overflow-x: clip;
+    }
+
+    .ck-theme #wrapwrap {
+        overflow-x: clip;
+        max-width: 100%;
+    }
+
+    .ck-theme header#top.ck-header {
+        .o_header_mobile.d-block.d-lg-none {
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+
+        .o_main_nav.container {
+            min-height: 3.75rem;
+            padding-inline: $ck-gutter-mobile;
+        }
+
+        .navbar-brand.logo,
+        .navbar-brand.ck-header__brand-link {
+            margin-right: $ck-space-3;
+        }
+
+        .ck-header__brand {
+            font-size: 1.125rem;
+        }
+    }
+
+    .ck-theme .offcanvas,
+    .ck-theme #top_menu_collapse_mobile.offcanvas {
+        background-color: $ck-surface;
+        border-left: 1px solid $ck-border;
+        box-shadow: -8px 0 32px rgba($ck-text, 0.12);
+        font-family: "DM Sans", $ck-font-ui;
+
+        .offcanvas-header,
+        .offcanvas-title {
+            font-family: "Fraunces", $ck-font-display;
+            font-size: $ck-text-xs;
+            font-weight: $ck-font-weight-display;
+            color: $ck-text-muted;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-link,
+        .dropdown-toggle {
+            min-height: 2.75rem;
+            display: flex;
+            align-items: center;
+            font-size: $ck-text-base;
+            font-weight: $ck-font-weight-semibold;
+            color: $ck-text;
+            border-radius: $ck-radius-sm;
+            border-bottom: 1px solid rgba($ck-border, 0.65);
+
+            &:hover,
+            &:focus-visible {
+                color: $ck-primary;
+                background-color: rgba($ck-primary, 0.06);
+            }
+        }
+
+        .o_mega_menu {
+            position: static !important;
+            transform: none !important;
+            box-shadow: none;
+            border: 0;
+            padding: 0 0 $ck-space-3 $ck-space-3;
+            background: transparent;
+        }
+    }
+}

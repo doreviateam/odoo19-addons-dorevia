@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ck_snippet_groups" inherit_id="website.snippets" name="CK Snippet Groups">
+        <xpath expr="//snippets[@id='snippet_groups']/*[last()]" position="after">
+            <t t-snippet="website.s_snippet_group"
+               string="CK Marketone"
+               snippet-group="ck_marketone"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_cover.svg"/>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_ck_shop_intro" name="CK Intro boutique">
+        <section class="s_ck_shop_intro ck-shop-intro pt32 pb16" data-snippet="s_ck_shop_intro">
+            <div class="container o_editable">
+                <h1 class="ck-section-title h2 mb-2">Boutique C-Kreyol</h1>
+                <p class="mb-2">Agro-transformation créole, épicerie fine et bien-être.</p>
+                <p class="ck-shop-intro__note mb-0">
+                    Les prix affichés correspondent au canal B2C CK (visiteur non identifié).
+                </p>
+            </div>
+        </section>
+    </template>
+</odoo>

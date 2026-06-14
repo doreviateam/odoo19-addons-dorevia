@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_ck_reassurance" name="CK Réassurance">
+        <section class="s_ck_reassurance ck-reassurance pt48 pb48" data-snippet="s_ck_reassurance">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3 o_editable">
+                        <div class="ck-reassurance__item text-center">
+                            <span class="fa fa-leaf fa-2x text-success mb-3" aria-hidden="true"/>
+                            <h3 class="h6">Sélection créole</h3>
+                            <p class="small text-muted mb-0">Producteurs et transformateurs identifiés.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 o_editable">
+                        <div class="ck-reassurance__item text-center">
+                            <span class="fa fa-truck fa-2x text-success mb-3" aria-hidden="true"/>
+                            <h3 class="h6">Livraison soignée</h3>
+                            <p class="small text-muted mb-0">Expédition France métropolitaine.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 o_editable">
+                        <div class="ck-reassurance__item text-center">
+                            <span class="fa fa-lock fa-2x text-success mb-3" aria-hidden="true"/>
+                            <h3 class="h6">Paiement sécurisé</h3>
+                            <p class="small text-muted mb-0">Checkout Odoo standard.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 o_editable">
+                        <div class="ck-reassurance__item text-center">
+                            <span class="fa fa-handshake-o fa-2x text-success mb-3" aria-hidden="true"/>
+                            <h3 class="h6">Espace pro</h3>
+                            <p class="small text-muted mb-0">Producteurs et distributeurs — <a href="/professionnels">nous contacter</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

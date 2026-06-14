@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Espace professionnel — C-Kreyol · Maquette V1.2.x Lot 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ck-maquette.css" />
+</head>
+<body>
+
+  <div class="maquette-note">
+    <strong>Maquette V1.2.x · Lot 1.1</strong> — Page Professionnels ·
+    <a href="index.html" style="color:#fb923c">Accueil</a> ·
+    <a href="fiche-produit.html" style="color:#fb923c">Fiche produit</a> ·
+    Odoo composé (référence) · maquette = cible UX enrichie
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo">C-<span>Kreyol</span></a>
+      <nav class="nav-main" aria-label="Navigation principale">
+        <a href="shop.html">Boutique</a>
+        <a href="categorie.html">Catégories</a>
+        <a href="professionnels.html" class="active">Professionnels</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-box" role="search">
+          <span aria-hidden="true">⌕</span>
+          <input type="search" placeholder="Rechercher…" aria-label="Rechercher un produit" />
+        </div>
+        <button class="icon-btn burger" type="button" id="burgerOpen" aria-label="Menu" aria-expanded="false">☰</button>
+        <a href="/shop/cart" class="icon-btn" aria-label="Panier">🛒<span class="cart-badge">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menu mobile">
+    <h2>Menu</h2>
+    <a href="shop.html">Boutique</a>
+    <a href="categorie.html">Catégories</a>
+    <a href="professionnels.html">Professionnels</a>
+  </nav>
+
+  <main>
+    <section class="pro-page-hero">
+      <div class="wrap">
+        <p class="kicker">Double cible CK · qualification commerciale</p>
+        <h1>Espace professionnel</h1>
+        <p class="lead">CK accompagne les producteurs créoles et les distributeurs en Europe. Les prix affichés sur la boutique sont publics B2C — les conditions professionnelles sont étudiées au cas par cas, après qualification de votre demande.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <a href="#producteurs" class="btn btn-primary">Je suis producteur</a>
+          <a href="#distributeurs" class="btn btn-secondary">Je suis distributeur</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="dual-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="dual-title">Deux parcours, une même exigence CK</h2>
+          <p>Pas de portail B2B · pas de commande pro en ligne · qualification via formulaire CRM</p>
+        </div>
+        <div class="dual-target">
+          <article class="target-card" id="producteurs">
+            <h2>Producteurs &amp; transformateurs</h2>
+            <p>Vous transformez des produits créoles et souhaitez les distribuer via CK en Europe ?</p>
+            <ul>
+              <li>Agro-transformation · épicerie · boissons · bien-être cohérent CK</li>
+              <li>Traçabilité et capacité de production régulière</li>
+              <li>Étiquetage conforme export UE</li>
+              <li>Échange avec l’équipe sourcing CK</li>
+            </ul>
+            <a href="#ck-pro-form" class="btn btn-pro">Proposer vos produits</a>
+            <span class="arbitrage-tag">Classe V1 prioritaire · s_features Odoo · déjà composé instance</span>
+          </article>
+          <article class="target-card" id="distributeurs">
+            <h2>Boutiques, CHR &amp; distributeurs</h2>
+            <p>Vous revendez ou servez des produits créoles et cherchez un partenaire logistique fiable ?</p>
+            <ul>
+              <li>Épiceries fines · restaurants · hôtels · revendeurs spécialisés</li>
+              <li>Brick &amp; mortar et points de vente sélectionnés</li>
+              <li>Conditions tarifaires et volumes sur étude</li>
+              <li>Livraison France &amp; Europe — pas de marketplace ouverte</li>
+            </ul>
+            <a href="#ck-pro-form" class="btn btn-pro">Demander un contact pro</a>
+            <span class="arbitrage-tag">Classe V1 prioritaire · double cible maquette = référence UX</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;background:var(--ck-bg-soft);border-block:1px solid var(--ck-border)" aria-labelledby="process-title">
+      <div class="wrap" style="padding-block:36px">
+        <div class="section-head" style="justify-content:center;text-align:center;margin-bottom:24px">
+          <div>
+            <h2 id="process-title">Comment ça se passe ?</h2>
+            <p>Qualification · pas de commande immédiate</p>
+          </div>
+        </div>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="process-num">1</div>
+            <h3>Vous qualifiez votre demande</h3>
+            <p>Formulaire court : activité, territoire, volumes ou références produit.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-num">2</div>
+            <h3>L’équipe CK vous recontacte</h3>
+            <p>Échange téléphonique ou visio — étude de faisabilité commerciale et logistique.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-num">3</div>
+            <h3>Conditions sur mesure</h3>
+            <p>Tarifs pro, cadencier et logistique définis en back-office — hors checkout en ligne.</p>
+          </div>
+        </div>
+        <span class="arbitrage-tag" style="text-align:center;margin-top:20px">Classe V1 possible — étapes process · contenu CMS texte · pas de workflow Odoo custom</span>
+      </div>
+    </section>
+
+    <section class="trust-bar" aria-label="Réassurance professionnelle">
+      <div class="wrap trust-grid">
+        <div class="trust-item">
+          <span class="trust-icon" aria-hidden="true">📦</span>
+          <div><h3>Logistique Europe</h3><p>Expédition suivie · partenaires transport éprouvés</p></div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon" aria-hidden="true">🤝</span>
+          <div><h3>Relation directe</h3><p>Interlocuteur CK dédié après qualification</p></div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon" aria-hidden="true">🌿</span>
+          <div><h3>Sélection produits</h3><p>Agro-transformés · origines traçables</p></div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon" aria-hidden="true">🏪</span>
+          <div><h3>Réseau distributeurs</h3><p>Points de vente et CHR en développement</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="form-title">
+      <div class="wrap">
+        <div class="form-mock" id="ck-pro-form">
+          <h2 id="form-title">Qualifiez votre demande</h2>
+          <p class="form-note">Maquette — en Odoo : formulaire natif <code>website_crm</code> → <code>crm.lead</code>. Aucune soumission réelle ici.</p>
+          <form action="#" method="post" onsubmit="return false">
+            <div class="form-row-grid">
+              <div class="form-row">
+                <label for="pro-name">Nom / Société *</label>
+                <input type="text" id="pro-name" name="name" placeholder="Ex. Atelier Les Hauts Goyaviers" required />
+              </div>
+              <div class="form-row">
+                <label for="pro-email">E-mail *</label>
+                <input type="email" id="pro-email" name="email" placeholder="contact@exemple.fr" required />
+              </div>
+            </div>
+            <div class="form-row-grid">
+              <div class="form-row">
+                <label for="pro-phone">Téléphone</label>
+                <input type="tel" id="pro-phone" name="phone" placeholder="+33 …" />
+              </div>
+              <div class="form-row">
+                <label for="pro-type">Vous êtes *</label>
+                <select id="pro-type" name="type" required>
+                  <option value="">Choisir…</option>
+                  <option>Producteur / transformateur</option>
+                  <option>Boutique / revendeur</option>
+                  <option>Restaurant / hôtel / CHR</option>
+                  <option>Distributeur / grossiste</option>
+                  <option>Autre professionnel</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="pro-desc">Votre demande *</label>
+              <textarea id="pro-desc" name="description" placeholder="Décrivez votre activité, vos produits ou vos besoins logistiques…" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-pro btn-block">Envoyer ma demande</button>
+          </form>
+          <span class="arbitrage-tag">Classe V1 prioritaire · s_website_form · champ description = qualification · Odoo instance ✅</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0" aria-labelledby="note-qualif">
+      <div class="wrap">
+        <div class="info-panel" style="background:var(--ck-bg-soft)">
+          <h3 id="note-qualif">Note importante</h3>
+          <p>Cette page ne permet pas de passer commande en ligne au tarif professionnel. Les prix publics B2C restent visibles sur la boutique. Toute relation commerciale B2B est ouverte après étude de votre dossier par l’équipe CK.</p>
+          <p style="margin-bottom:0">Vous êtes particulier ? <a href="index.html" style="font-weight:700;color:var(--ck-primary)">Retour à la boutique →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dual-engage-section" aria-label="Professionnels et lettre d'information">
+      <div class="wrap">
+        <div class="dual-engage dual-engage-compact">
+          <div class="dual-engage-pro">
+            <h2>Vous êtes professionnel ?</h2>
+            <p>Épicerie, boutique créole, restaurant, hôtel, traiteur, distributeur… CK étudie votre demande et vous oriente vers une sélection adaptée.</p>
+            <a href="#ck-pro-form" class="btn-engage-pro">✉ Faire une demande professionnelle</a>
+          </div>
+          <div class="dual-engage-news">
+            <h2>Recevez les nouveautés créoles</h2>
+            <p class="news-lead">Produits, recettes, producteurs, idées d’usage et sélections CK.</p>
+            <form class="news-form-row" action="#" method="post" onsubmit="return false">
+              <input type="email" placeholder="Votre adresse e-mail" aria-label="E-mail newsletter" required />
+              <button type="submit" class="btn-news">S’inscrire</button>
+            </form>
+            <p class="news-note">Sélections CK en cadence mesurée · désinscription à tout moment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid-ext">
+        <div>
+          <div class="footer-brand">C-<span>Kreyol</span></div>
+          <p style="margin:0;line-height:1.5">Boutique en ligne de produits créoles — agro-transformation, épicerie et découvertes.</p>
+        </div>
+        <div>
+          <h4>Boutique</h4>
+          <ul>
+            <li><a href="shop.html">Tous les produits</a></li>
+            <li><a href="fiche-produit.html">Exemple fiche produit</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Découvrir</h4>
+          <ul>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="fiche-producteur.html">Fiche producteur</a></li>
+            <li><a href="recettes.html">Recettes &amp; savoirs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>CK</h4>
+          <ul>
+            <li><a href="professionnels.html">Professionnels</a></li>
+            <li><a href="index.html">Accueil</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 C-Kreyol · Espace Pro Lot 1</span>
+        <span>Route Odoo : /professionnels</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('burgerOpen');
+      var panel = document.getElementById('navMobile');
+      var overlay = document.getElementById('navOverlay');
+      if (!toggle || !panel || !overlay) return;
+      function setOpen(show) {
+        panel.classList.toggle('open', show);
+        overlay.classList.toggle('open', show);
+        toggle.setAttribute('aria-expanded', show);
+      }
+      toggle.addEventListener('click', function () { setOpen(!panel.classList.contains('open')); });
+      overlay.addEventListener('click', function () { setOpen(false); });
+      panel.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () { setOpen(false); });
+      });
+    })();
+  </script>
+</body>
+</html>

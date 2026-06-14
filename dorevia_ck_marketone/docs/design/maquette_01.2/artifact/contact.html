@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — C-Kreyol · Maquette V1.2.x Lot 3+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ck-maquette.css" />
+</head>
+<body>
+
+  <div class="maquette-note">
+    <strong>Maquette V1.2.x · Lot 3+</strong> — Contact ·
+    <a href="professionnels.html" style="color:#fb923c">Espace Pro</a> · Formulaire mock · Odoo en pause
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo">C-<span>Kreyol</span></a>
+      <nav class="nav-main" aria-label="Navigation principale">
+        <a href="shop.html">Boutique</a>
+        <a href="categorie.html">Catégories</a>
+        <a href="professionnels.html">Professionnels</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-box" role="search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Rechercher…" aria-label="Rechercher" /></div>
+        <button class="icon-btn burger" type="button" id="burgerOpen" aria-label="Menu" aria-expanded="false">☰</button>
+        <a href="/shop/cart" class="icon-btn" aria-label="Panier">🛒<span class="cart-badge">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menu mobile">
+    <h2>Menu</h2>
+    <a href="shop.html">Boutique</a>
+    <a href="categorie.html">Catégories</a>
+    <a href="professionnels.html">Professionnels</a>
+  </nav>
+
+  <main class="content-page">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane"><a href="index.html">Accueil</a><span>/</span> Contact</nav>
+
+      <header class="page-hero">
+        <p class="kicker">Une question · un besoin · une orientation</p>
+        <h1>Nous contacter</h1>
+        <p class="lead">Question produit, demande générale ou orientation vers l’équipe CK — choisissez le parcours adapté. Les demandes professionnelles passent par l’espace Pro dédié.</p>
+        <span class="route-hint">Route Odoo cible : /contactus · formulaire website natif</span>
+      </header>
+
+      <div class="contact-options">
+        <article class="contact-option">
+          <h2>Question produit</h2>
+          <p>Origine, usage, conservation, disponibilité — notre équipe vous répond sur le catalogue B2C.</p>
+          <a href="#contact-form">Poser une question →</a>
+        </article>
+        <article class="contact-option">
+          <h2>Contact général</h2>
+          <p>Service client, suivi de commande, information boutique — formulaire ci-dessous.</p>
+          <a href="#contact-form">Écrire à CK →</a>
+        </article>
+        <article class="contact-option">
+          <h2>Partenaire / commercial</h2>
+          <p>Producteur, distributeur, volume pro — qualification via l’espace Pro (CRM), pas ce formulaire.</p>
+          <a href="professionnels.html">Espace professionnel →</a>
+        </article>
+        <article class="contact-option">
+          <h2>Proposer un producteur</h2>
+          <p>Suggérer un transformateur ou fournisseur créole — première prise de contact via le formulaire, orientation Pro si pertinent.</p>
+          <a href="#contact-form">Proposer un partenaire →</a>
+        </article>
+      </div>
+
+      <div class="form-mock" id="contact-form">
+        <h2>Formulaire de contact</h2>
+        <p class="form-note">Maquette — en Odoo : page contact native <code>/contactus</code> · pas de soumission réelle ici.</p>
+        <form action="#" method="post" onsubmit="return false">
+          <div class="form-row-grid">
+            <div class="form-row">
+              <label for="c-name">Nom *</label>
+              <input type="text" id="c-name" name="name" required placeholder="Votre nom" />
+            </div>
+            <div class="form-row">
+              <label for="c-email">E-mail *</label>
+              <input type="email" id="c-email" name="email" required placeholder="vous@exemple.fr" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="c-subject">Sujet *</label>
+            <select id="c-subject" name="subject" required>
+              <option value="">Choisir…</option>
+              <option>Question sur un produit</option>
+              <option>Suivi de commande</option>
+              <option>Livraison</option>
+              <option>Proposition producteur / fournisseur</option>
+              <option>Autre demande</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="c-msg">Message *</label>
+            <textarea id="c-msg" name="message" required placeholder="Votre message…"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Envoyer</button>
+        </form>
+      </div>
+
+      <div class="trust-bar" style="margin-top:28px;border-radius:var(--radius-lg);border:1px solid var(--ck-border)" aria-label="Réassurance">
+        <div class="wrap trust-grid" style="width:100%">
+          <div class="trust-item"><span class="trust-icon">💬</span><div><h3>Réponse sous 48 h ouvrées</h3><p>Objectif service client CK</p></div></div>
+          <div class="trust-item"><span class="trust-icon">🚚</span><div><h3>Livraison suivie</h3><p>France &amp; Europe</p></div></div>
+          <div class="trust-item"><span class="trust-icon">🔒</span><div><h3>Données protégées</h3><p>Usage contact uniquement</p></div></div>
+          <div class="trust-item"><span class="trust-icon">🤝</span><div><h3>Demande Pro</h3><p><a href="professionnels.html" style="color:var(--ck-primary);font-weight:600">Espace Pro →</a></p></div></div>
+        </div>
+      </div>
+
+      <section class="dual-engage-section" style="padding-top:32px;padding-bottom:0" aria-label="Professionnels et lettre d'information">
+        <div class="dual-engage dual-engage-compact">
+          <div class="dual-engage-pro">
+            <h2>Vous êtes professionnel ?</h2>
+            <p>Épicerie, boutique créole, restaurant, hôtel, traiteur, distributeur… CK étudie votre demande et vous oriente vers une sélection adaptée.</p>
+            <a href="professionnels.html" class="btn-engage-pro">✉ Faire une demande professionnelle</a>
+          </div>
+          <div class="dual-engage-news">
+            <h2>Recevez les nouveautés créoles</h2>
+            <p class="news-lead">Produits, recettes, producteurs, idées d’usage et sélections CK.</p>
+            <form class="news-form-row" action="#" method="post" onsubmit="return false">
+              <input type="email" placeholder="Votre adresse e-mail" aria-label="E-mail newsletter" required />
+              <button type="submit" class="btn-news">S’inscrire</button>
+            </form>
+            <p class="news-note">Sélections CK en cadence mesurée · désinscription à tout moment.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid-ext">
+        <div>
+          <div class="footer-brand">C-<span>Kreyol</span></div>
+          <p style="margin:0;line-height:1.5">Boutique en ligne de produits créoles — agro-transformation, épicerie et découvertes.</p>
+        </div>
+        <div>
+          <h4>Boutique</h4>
+          <ul>
+            <li><a href="shop.html">Tous les produits</a></li>
+            <li><a href="categorie.html">Épicerie créole</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Découvrir</h4>
+          <ul>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="fiche-producteur.html">Fiche producteur</a></li>
+            <li><a href="recettes.html">Recettes &amp; savoirs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>CK</h4>
+          <ul>
+            <li><a href="professionnels.html">Professionnels</a></li>
+            <li><a href="index.html">Accueil</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 C-Kreyol · Maquette Lot 3+ · /contactus</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('burgerOpen');
+      var panel = document.getElementById('navMobile');
+      var overlay = document.getElementById('navOverlay');
+      if (!toggle || !panel || !overlay) return;
+      function setOpen(show) {
+        panel.classList.toggle('open', show);
+        overlay.classList.toggle('open', show);
+        toggle.setAttribute('aria-expanded', show);
+      }
+      toggle.addEventListener('click', function () { setOpen(!panel.classList.contains('open')); });
+      overlay.addEventListener('click', function () { setOpen(false); });
+      panel.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', function () { setOpen(false); }); });
+    })();
+  </script>
+</body>
+</html>

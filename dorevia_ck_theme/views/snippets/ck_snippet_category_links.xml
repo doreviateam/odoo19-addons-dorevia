@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_ck_category_links" name="CK Liens univers">
+        <section class="s_ck_category_links ck-category-links pt32 pb32" data-snippet="s_ck_category_links">
+            <div class="container text-center o_editable">
+                <h2 class="ck-section-title h4 mb-4">Nos univers</h2>
+                <div class="d-flex flex-wrap justify-content-center">
+                    <a href="/shop" class="ck-pill">Épicerie</a>
+                    <a href="/shop" class="ck-pill">Boissons</a>
+                    <a href="/shop" class="ck-pill">Maison &amp; bien-être</a>
+                    <a href="/shop" class="ck-pill">Idées cadeaux</a>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

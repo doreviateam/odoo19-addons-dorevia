@@ -1,0 +1,74 @@
+// Boutique /shop et fiche produit — styles légers sur templates natifs
+
+.ck-shop-page {
+    background-color: $ck-bg;
+}
+
+// Tuiles produit — styles sur grilles website_sale natives
+.ck-shop-page {
+    .oe_product {
+        border-radius: $ck-radius-lg;
+        box-shadow: $ck-shadow-card;
+        border: 1px solid $ck-border;
+        background: $ck-surface;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+            box-shadow: $ck-shadow-card-hover;
+            transform: translateY(-2px);
+        }
+    }
+
+    .oe_product_image {
+        background-color: $ck-image-zone;
+        border-radius: $ck-radius-lg $ck-radius-lg 0 0;
+    }
+
+    .product_price,
+    .oe_price {
+        color: $ck-price;
+        font-weight: $ck-font-weight-price;
+        font-size: $ck-text-lg;
+    }
+}
+
+// Chips origine / catégorie (fiche produit — xpath minimal)
+.ck-product-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $ck-space-2;
+    margin-bottom: $ck-space-4;
+
+    .ck-chip {
+        display: inline-block;
+        padding: $ck-space-1 $ck-space-3;
+        font-size: $ck-text-xs;
+        border-radius: $ck-radius-sm;
+        background-color: $ck-secondary-soft;
+        color: $ck-secondary;
+        font-weight: $ck-font-weight-semibold;
+        text-decoration: none;
+    }
+}
+
+.ck-product-page {
+    background-color: $ck-bg;
+
+    .ck-product-enrich h3 {
+        font-size: $ck-text-lg;
+        margin-bottom: $ck-space-2;
+    }
+}
+
+// Sidebar catégories — layout visuel (comportement natif product.public.category)
+.ck-shop-sidebar {
+    background-color: $ck-bg-soft;
+    border-radius: $ck-radius-lg;
+    padding: $ck-space-4;
+}
+
+@media (max-width: 767.98px) {
+    .ck-shop-sidebar {
+        margin-bottom: $ck-space-5;
+    }
+}

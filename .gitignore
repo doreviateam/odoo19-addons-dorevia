@@ -25,3 +25,12 @@ pro_website_base/
 pure_root_oils_extension/
 
 Zedocs/*
+
+# CK maquette V1.2.x — exclusions A7 (Chantier A)
+dorevia_ck_marketone/docs/design/maquette_01.2/scripts/node_modules/
+dorevia_ck_marketone/docs/design/maquette_01.2/scripts/package-lock.json
+dorevia_ck_marketone/docs/design/maquette_01.2/rapport/**/*.pdf
+dorevia_ck_marketone/docs/design/maquette_01.2/rapport/captures/
+dorevia_ck_marketone/docs/design/maquette_01.2/rapport/captures_sections/
+dorevia_ck_marketone/docs/design/maquette_01.2/rapport/a1_visuelle_*/
+dorevia_ck_marketone/docs/design/maquette_01.2/rapport/phase10_transversale_*/

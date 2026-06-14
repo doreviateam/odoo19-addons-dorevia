@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_ck_pro_banner" name="CK Bandeau professionnel">
+        <section class="s_ck_pro_banner ck-pro-banner pt32 pb32" data-snippet="s_ck_pro_banner">
+            <div class="container">
+                <div class="ck-pro-banner__inner d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 o_editable">
+                    <div>
+                        <h2 class="h5 mb-1">Vous êtes professionnel ?</h2>
+                        <p class="mb-0 text-muted">Producteur, transformateur ou distributeur — parlons de votre projet.</p>
+                    </div>
+                    <a href="/professionnels" class="btn ck-btn-pro">Espace professionnel</a>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>
