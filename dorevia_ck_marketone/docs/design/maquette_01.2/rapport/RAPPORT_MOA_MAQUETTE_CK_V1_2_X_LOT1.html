@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rapport MOA — Maquette CK V1.2.x Lot 1.1</title>
+  <style>
+    @page { size: A4; margin: 13mm 12mm; }
+    * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #201915;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10.2pt;
+      line-height: 1.48;
+    }
+    .sheet { page-break-after: always; padding: 4mm 0 8mm; }
+    .sheet:last-child { page-break-after: auto; }
+    .cover {
+      min-height: 247mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #fff8f1;
+      border-top: 7px solid #8f3f5f;
+      padding: 18mm 14mm 14mm;
+    }
+    .eyebrow {
+      color: #8f3f5f;
+      font-weight: 700;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin: 0 0 10px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 28pt;
+      line-height: 1.06;
+      color: #201915;
+    }
+    h1 span { color: #8f3f5f; }
+    .subtitle {
+      margin: 0 0 20px;
+      max-width: 150mm;
+      color: #5d534c;
+      font-size: 13pt;
+      line-height: 1.36;
+    }
+    .verdict {
+      display: inline-block;
+      width: fit-content;
+      padding: 8px 13px;
+      border-radius: 5px;
+      background: #2d6b4f;
+      color: #fff;
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 18px;
+    }
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .cover-card {
+      border: 1px solid #e4d7ca;
+      background: #fff;
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .cover-card strong { display: block; margin-bottom: 3px; color: #201915; }
+    .cover-card span { color: #5d534c; font-size: 9.3pt; }
+    h2 {
+      margin: 0 0 10px;
+      color: #8f3f5f;
+      font-size: 15pt;
+      line-height: 1.18;
+    }
+    h3 {
+      margin: 15px 0 7px;
+      color: #201915;
+      font-size: 11pt;
+      line-height: 1.24;
+    }
+    p { margin: 0 0 9px; }
+    .lead { font-size: 11.2pt; color: #342d28; line-height: 1.45; }
+    .callout {
+      margin: 10px 0 13px;
+      padding: 10px 12px;
+      border-left: 4px solid #8f3f5f;
+      background: #f6efe8;
+      border-radius: 5px;
+    }
+    .decision {
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid #cfe1d7;
+      background: #f1f8f4;
+      border-radius: 6px;
+    }
+    .decision strong { color: #2d6b4f; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 9px 0 13px;
+      font-size: 9pt;
+    }
+    th, td {
+      border: 1px solid #ddd3ca;
+      padding: 6px 7px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f3ece4;
+      color: #201915;
+      font-weight: 700;
+    }
+    .ok { color: #2d6b4f; font-weight: 700; }
+    .reserve { color: #a15c13; font-weight: 700; }
+    .pause { color: #65584f; font-weight: 700; }
+    .small { color: #665c55; font-size: 8.8pt; }
+    code {
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: #f3ece4;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 8.2pt;
+    }
+    ul {
+      margin: 0 0 10px;
+      padding-left: 18px;
+    }
+    li { margin-bottom: 4px; }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+      margin: 9px 0 12px;
+    }
+    .panel {
+      border: 1px solid #e2d8ce;
+      border-radius: 6px;
+      padding: 10px 11px;
+      background: #fff;
+    }
+    .panel h3 { margin-top: 0; color: #8f3f5f; }
+    .page-note {
+      border-left: 3px solid #8f3f5f;
+      padding-left: 10px;
+      margin-bottom: 11px;
+    }
+    figure { margin: 0; }
+    figure img {
+      width: 100%;
+      display: block;
+      height: auto;
+      border: 1px solid #d7cec5;
+      border-radius: 4px;
+    }
+    figure.mobile img {
+      width: 42%;
+      min-width: 138px;
+      max-width: 198px;
+      margin: 0 auto;
+    }
+    .footer-note {
+      margin-top: 14px;
+      padding-top: 9px;
+      border-top: 1px solid #e4d7ca;
+      color: #756a62;
+      font-size: 8.4pt;
+    }
+  </style>
+</head>
+<body>
+  <section class="sheet cover">
+    <div>
+      <p class="eyebrow">Rapport MOA · Maquette V1.2.x · Lot 1.1</p>
+      <p class="verdict">OK MAQUETTE CK V1.2.x LOT 1</p>
+      <h1>C-<span>Kreyol</span><br/>Boutique élégante</h1>
+      <p class="subtitle">Rapport d’arbitrage après recette QA : ce que le Lot 1 valide, ce qui reste à décider, et pourquoi la suite recommandée est le Lot 2 maquette avant reprise Odoo.</p>
+      <div class="cover-grid">
+        <div class="cover-card"><strong>Périmètre validé</strong><span>Accueil enrichie · fiche produit type · page Professionnels</span></div>
+        <div class="cover-card"><strong>Décision de méthode</strong><span>Odoo reste en pause ; la maquette sert de terrain d’arbitrage.</span></div>
+        <div class="cover-card"><strong>Contrôle QA</strong><span>Desktop 1280 px · mobile 390 px · visuels 10/10 OK · aucun overflow.</span></div>
+        <div class="cover-card"><strong>Prochaine décision</strong><span>GO Lot 2 : Shop et catégorie / collection type.</span></div>
+      </div>
+    </div>
+    <div class="small">
+      Projet : <code>dorevia_ck_marketone</code><br/>
+      Références : <code>recette_qa_maquette_v1_2_x.md</code> · <code>CADRAGE_MAQUETTE_CK_V1_2_X.md</code> · <code>LIVRAISON_V1_2_X_LOT1.md</code><br/>
+      Date : 2026-06-13 · Preview : <code>http://127.0.0.1:8766/</code>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <h2>1. Lecture MOA</h2>
+    <p class="lead">Le Lot 1 est réussi parce qu’il sort CK d’une simple vitrine premium et l’installe dans une logique de vente élégante : les produits sont visibles, les prix existent, la fiche donne envie d’acheter, et le parcours professionnel reste qualifié sans ouvrir un portail B2B complexe.</p>
+    <div class="decision">
+      <strong>Verdict proposé :</strong> valider le Lot 1 comme socle de direction commerciale et UX. Ne pas reprendre Odoo immédiatement sur toute la home : il manque encore le comportement catalogue, les catégories et la page shop pour arbitrer correctement la traduction.
+    </div>
+    <h3>Ce que le Lot 1 prouve</h3>
+    <table>
+      <thead><tr><th>Preuve</th><th>Lecture MOA</th><th>Statut</th></tr></thead>
+      <tbody>
+        <tr><td>Accueil marchande</td><td>La home peut être élégante sans être contemplative : promesse, preuves, produits, prix et entrée Pro apparaissent vite.</td><td class="ok">OK</td></tr>
+        <tr><td>Fiche produit enrichie</td><td>CK peut vendre autre chose qu’un nom + prix : origine, usage, conservation, producteur et B2B donnent de la valeur.</td><td class="ok">OK</td></tr>
+        <tr><td>Professionnels</td><td>La cible Pro est lisible, mais maîtrisée : qualification CRM, pas de prix pro publics, pas de portail B2B V1.</td><td class="ok">OK</td></tr>
+        <tr><td>Mobile</td><td>Le parcours reste lisible en 390 px ; la direction ne repose pas uniquement sur un rendu desktop.</td><td class="ok">OK</td></tr>
+      </tbody>
+    </table>
+    <h3>Ce que le Lot 1 ne décide pas encore</h3>
+    <ul>
+      <li>La forme finale du catalogue <code>/shop</code> et des filtres.</li>
+      <li>La structure d’une catégorie / collection : origine, usage, prix, niveau éditorial.</li>
+      <li>Le mapping définitif des routes Odoo et des produits réels.</li>
+      <li>La validation opérationnelle des promesses logistiques.</li>
+    </ul>
+  </section>
+
+  <section class="sheet">
+    <h2>2. Arbitrage recommandé</h2>
+    <div class="callout">
+      Recommandation QA : lancer le <strong>Lot 2 maquette</strong> avant reprise Odoo globale. Le Lot 1 valide la direction, mais il ne suffit pas encore à figer la traduction catalogue.
+    </div>
+    <table>
+      <thead><tr><th>Option</th><th>Avantage</th><th>Risque</th><th>Position QA</th></tr></thead>
+      <tbody>
+        <tr><td>GO Lot 2 maquette</td><td>Complète la vision marchande avec shop + catégorie avant de coder/composer trop tôt.</td><td>Décale un peu la reprise Odoo.</td><td class="ok">Recommandé</td></tr>
+        <tr><td>Reprise Odoo ciblée Lot 1</td><td>Permet de traduire la home, la fiche type et Pro par blocs maîtrisés.</td><td>Risque d’itérer Odoo avant arbitrage catalogue complet.</td><td class="reserve">Possible mais prématuré</td></tr>
+        <tr><td>Reprise Odoo complète</td><td>Accélère la matérialisation instance.</td><td>Risque élevé de refaire le travail après Lot 2.</td><td class="pause">À éviter maintenant</td></tr>
+      </tbody>
+    </table>
+    <h3>Décision attendue MOA</h3>
+    <table>
+      <thead><tr><th>Décision</th><th>Formulation proposée</th></tr></thead>
+      <tbody>
+        <tr><td>Valider Lot 1</td><td class="ok">Lot 1.1 validé comme direction CK V1.2.x.</td></tr>
+        <tr><td>Prioriser la suite</td><td class="ok">GO Lot 2 maquette : Shop + catégorie / collection type.</td></tr>
+        <tr><td>Maintenir la pause Odoo</td><td>Odoo reste en pause sauf corrections conservatoires : liens sans 404, page Pro existante, header.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sheet">
+    <h2>3. Synthèse par page</h2>
+    <div class="page-note">
+      <strong>Accueil enrichie.</strong> La page donne rapidement un signal boutique : produits, prix, preuves et entrée Pro. Elle corrige la tentation d’une home trop institutionnelle.
+    </div>
+    <div class="page-note">
+      <strong>Fiche produit type.</strong> C’est le meilleur apport du lot : elle montre comment vendre avec élégance, par la valeur d’usage et l’origine, sans tomber dans un discours premium abstrait.
+    </div>
+    <div class="page-note">
+      <strong>Professionnels.</strong> La page clarifie les deux cibles, producteurs et distributeurs, tout en cadrant une V1 réaliste : formulaire de qualification, pas de commande pro en ligne.
+    </div>
+    <table>
+      <thead><tr><th>Page</th><th>Statut</th><th>À conserver pour la traduction</th><th>À arbitrer</th></tr></thead>
+      <tbody>
+        <tr><td>Accueil</td><td class="ok">OK</td><td>Hero court · réassurance · produits visibles · coffret · signal Pro.</td><td>Routes shop/catégories et produits réels.</td></tr>
+        <tr><td>Fiche produit</td><td class="ok">OK</td><td>Origine · usage · conservation · CTA achat · bandeau Pro.</td><td>Bloc producteur dédié, recette, associations et cross-sell.</td></tr>
+        <tr><td>Professionnels</td><td class="ok">OK</td><td>Double cible · process qualification · formulaire CRM.</td><td>Niveau de preuve logistique et engagements commerciaux.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sheet">
+    <h2>4. QA et réserves</h2>
+    <h3>Contrôles Lot 1.1</h3>
+    <table>
+      <thead><tr><th>Point contrôlé</th><th>Résultat</th></tr></thead>
+      <tbody>
+        <tr><td>Image fiche produit</td><td class="ok">OK — image chargée desktop et mobile.</td></tr>
+        <tr><td>Visuels maquette</td><td class="ok">OK — 10/10 URLs contrôlées en HTTP 200.</td></tr>
+        <tr><td>Tags d’arbitrage</td><td class="ok">OK — HTML conservé, tags masqués au rendu.</td></tr>
+        <tr><td>Mobile 390 px</td><td class="ok">OK — accueil, fiche et Pro sans overflow horizontal.</td></tr>
+        <tr><td>Desktop 1280 px</td><td class="ok">OK — accueil, fiche et Pro sans overflow horizontal.</td></tr>
+      </tbody>
+    </table>
+    <h3>Réserves non bloquantes à garder visibles</h3>
+    <table>
+      <thead><tr><th>Réserve</th><th>Pourquoi elle reste ouverte</th><th>Moment de décision</th></tr></thead>
+      <tbody>
+        <tr><td>Routes Odoo</td><td><code>/shop</code>, catégories, produits et mentions doivent être mappés côté instance.</td><td>Traduction Odoo</td></tr>
+        <tr><td>Promesses logistiques</td><td>Livraison, délais et service client doivent rester tenables opérationnellement.</td><td>Avant mise en ligne</td></tr>
+        <tr><td>Producteur / fournisseur</td><td>La fiche enrichie est bonne, mais une fiche fournisseur dédiée n’est pas acquise en V1.</td><td>Arbitrage V1 possible / différé</td></tr>
+        <tr><td>Shop et catégorie</td><td>Non livrés dans le Lot 1, alors qu’ils conditionnent la vraie expérience d’achat.</td><td>Lot 2</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sheet">
+    <h2>5. Plan de suite</h2>
+    <table>
+      <thead><tr><th>Étape</th><th>Statut</th><th>Commentaire</th></tr></thead>
+      <tbody>
+        <tr><td>Lot 1.1 maquette</td><td class="ok">Validé QA</td><td>Accueil · fiche produit · professionnels.</td></tr>
+        <tr><td>Arbitrage MOA Lot 1</td><td>À acter</td><td>Valider le lot comme socle de direction.</td></tr>
+        <tr><td>Lot 2 maquette</td><td class="ok">Recommandé</td><td>Shop · catégorie / collection type · logique de filtres.</td></tr>
+        <tr><td>Reprise Odoo</td><td class="pause">En pause</td><td>À reprendre après arbitrage Lot 2, sauf corrections conservatoires.</td></tr>
+      </tbody>
+    </table>
+    <div class="decision">
+      <strong>Phrase de clôture proposée :</strong> “Nous validons le Lot 1.1 comme direction de vente élégante CK. Nous demandons le Lot 2 maquette pour finaliser l’expérience catalogue avant traduction Odoo globale.”
+    </div>
+  </section>
+
+  <section class="sheet">
+    <h2>Annexe A — Accueil desktop</h2>
+    <figure><img src="captures/accueil-desktop.png" alt="Accueil enrichie desktop" /></figure>
+  </section>
+  <section class="sheet">
+    <h2>Annexe B — Accueil mobile 390 px</h2>
+    <figure class="mobile"><img src="captures/accueil-mobile.png" alt="Accueil enrichie mobile" /></figure>
+  </section>
+  <section class="sheet">
+    <h2>Annexe C — Fiche produit desktop</h2>
+    <figure><img src="captures/fiche-produit-desktop.png" alt="Fiche produit desktop" /></figure>
+  </section>
+  <section class="sheet">
+    <h2>Annexe D — Fiche produit mobile 390 px</h2>
+    <figure class="mobile"><img src="captures/fiche-produit-mobile.png" alt="Fiche produit mobile" /></figure>
+  </section>
+  <section class="sheet">
+    <h2>Annexe E — Professionnels desktop</h2>
+    <figure><img src="captures/professionnels-desktop.png" alt="Professionnels desktop" /></figure>
+  </section>
+  <section class="sheet">
+    <h2>Annexe F — Professionnels mobile 390 px</h2>
+    <figure class="mobile"><img src="captures/professionnels-mobile.png" alt="Professionnels mobile" /></figure>
+    <p class="footer-note">
+      Rapport repris après QA Lot 1.1 · sources : recette, cadrage et livraison Dev · C-Kreyol / Dorevia · 2026-06-13.
+    </p>
+  </section>
+</body>
+</html>

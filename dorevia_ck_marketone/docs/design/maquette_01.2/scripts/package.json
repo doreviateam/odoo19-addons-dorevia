@@ -1,0 +1,11 @@
+{
+  "name": "ck-maquette-rapport",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "rapport-lot1": "node generate_rapport_lot1_pdf.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}
