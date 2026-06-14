@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Odoo 19 : le body expose t-att-class="body_classname" (web.layout),
+        pas un attribut class statique. On chaîne ck-theme comme website_sale.
+    -->
+    <template id="layout_ck_theme" inherit_id="website.layout" name="CK Theme layout" priority="20">
+        <xpath expr="//body" position="before">
+            <t t-set="body_classname" t-value="((body_classname or '') + ' ck-theme').strip()"/>
+        </xpath>
+    </template>
+</odoo>

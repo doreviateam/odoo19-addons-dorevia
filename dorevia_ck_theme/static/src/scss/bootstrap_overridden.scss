@@ -1,0 +1,51 @@
+// Boutons et composants Bootstrap — overrides ticket 01
+
+.btn-primary {
+    background-color: $ck-primary;
+    border-color: $ck-primary;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $ck-primary-hover;
+        border-color: $ck-primary-hover;
+    }
+}
+
+.btn-secondary {
+    background-color: $ck-secondary;
+    border-color: $ck-secondary;
+    color: $ck-surface;
+}
+
+.btn-outline-primary {
+    color: $ck-primary;
+    border-color: $ck-primary;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $ck-primary;
+        border-color: $ck-primary;
+        color: $ck-surface;
+    }
+}
+
+.ck-btn-pro {
+    background-color: $ck-pro;
+    border-color: $ck-pro;
+    color: $ck-surface;
+
+    &:hover,
+    &:focus {
+        background-color: $ck-pro-hover;
+        border-color: $ck-pro-hover;
+        color: $ck-surface;
+    }
+}
+
+.card {
+    border-radius: $ck-radius-lg;
+    box-shadow: $ck-shadow-card;
+    border-color: $ck-border;
+}

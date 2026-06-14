@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_ck_shop_pro_signal" name="CK Shop signal Pro">
+        <section class="s_text_block ck-shop-pro-signal pt32 pb48 o_colored_level" data-snippet="s_text_block" data-name="CK Shop signal Pro">
+            <div class="container text-center o_editable">
+                <p class="mb-3">Vous achetez pour votre établissement ?</p>
+                <a href="/professionnels" class="btn btn-outline-primary rounded-pill">Espace professionnel CK</a>
+            </div>
+        </section>
+    </template>
+</odoo>

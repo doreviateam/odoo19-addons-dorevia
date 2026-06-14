@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Héritages QWeb minimaux — ne pas recréer les templates website_sale -->
+
+    <template id="products_ck_theme" inherit_id="website_sale.products" name="CK Shop listing">
+        <xpath expr="//div[@id='wrap']" position="attributes">
+            <attribute name="class" add="ck-shop-page" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="product_ck_theme" inherit_id="website_sale.product" name="CK Product page">
+        <xpath expr="//div[@id='wrap']" position="attributes">
+            <attribute name="class" add="ck-product-page" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='product_details']" position="before">
+            <div class="ck-product-chips o_editable"/>
+        </xpath>
+    </template>
+</odoo>

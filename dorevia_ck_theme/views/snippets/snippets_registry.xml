@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ck_snippets_registry" inherit_id="website.snippets" name="CK Snippets Registry">
+        <xpath expr="//snippets[@id='snippet_structure']/*[last()]" position="after">
+            <t t-snippet="dorevia_ck_theme.s_ck_hero"
+               string="CK Hero"
+               group="ck_marketone"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_cover.svg"/>
+            <t t-snippet="dorevia_ck_theme.s_ck_category_links"
+               string="CK Liens univers"
+               group="ck_marketone"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_three_columns.svg"/>
+            <t t-snippet="dorevia_ck_theme.s_ck_featured_products"
+               string="CK Produits vedettes"
+               group="ck_marketone"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_product_list.svg"/>
+            <t t-snippet="dorevia_ck_theme.s_ck_reassurance"
+               string="CK Réassurance"
+               group="ck_marketone"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_features.svg"/>
+            <t t-snippet="dorevia_ck_theme.s_ck_shop_intro"
+               string="CK Intro boutique"
+               group="ck_marketone"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_text_block.svg"/>
+            <t t-snippet="dorevia_ck_theme.s_ck_pro_banner"
+               string="CK Bandeau pro"
+               group="ck_marketone"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_call_to_action.svg"/>
+        </xpath>
+    </template>
+</odoo>

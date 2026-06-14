@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Squelette vedettes : sur instance, privilégier le snippet natif
+        « Dynamic Products » en complément ou remplacement du placeholder.
+    -->
+    <template id="s_ck_featured_products" name="CK Produits vedettes">
+        <section class="s_ck_featured_products ck-featured-products pt48 pb48" data-snippet="s_ck_featured_products">
+            <div class="container">
+                <h2 class="ck-section-title h3 mb-4 o_editable">Produits vedettes</h2>
+                <div class="oe_structure oe_empty" id="ck_featured_products_structure"/>
+            </div>
+        </section>
+    </template>
+</odoo>
