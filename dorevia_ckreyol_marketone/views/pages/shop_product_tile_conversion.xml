@@ -11,8 +11,7 @@
         <!-- Wishlist overlay — coin supérieur droit (standard Odoo o_add_wishlist, toggle UX-4). -->
         <xpath expr="//div[contains(@t-attf-class, 'oe_product_image')]" position="inside">
             <div class="marketone-shop-card-wishlist-wrap">
-                <t t-nocache="The wishlist depends on the user and must not be shared with other users."
-                   t-nocache-product_template_id="product.id">
+                <t>
                     <t t-set="in_wish" t-value="product._is_in_wishlist()"/>
                     <t t-set="product_variant_id"
                        t-value="product._get_first_possible_variant_id()"/>

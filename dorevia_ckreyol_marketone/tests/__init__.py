@@ -6,6 +6,9 @@ from . import test_marketone_lot4_product
 from . import test_marketone_lot5_cart_checkout
 from . import test_marketone_lot6_1_featured
 from . import test_marketone_lot6_2_origin
+from . import test_marketone_lot6_3a_promo
+from . import test_marketone_lot6_3b_pack
+from . import test_marketone_seo_portes_shop
 from . import test_marketone_shop_sidebar_categories
 from . import test_marketone_collection_lot_a
 from . import test_marketone_shop_sidebar_collections
@@ -18,4 +21,5 @@ from . import test_marketone_culture_v2
 from . import test_marketone_origin_reunion_dedup
 from . import test_marketone_shop_sidebar_ux2
 from . import test_marketone_shop_tile_image
+from . import test_marketone_product_form_bo
 from . import test_marketone_smoke

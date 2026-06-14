@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
-"""Tuile commerce /shop — image dérivée (V1.5 lite · doctrine image v2)."""
+"""Dérivé média catalogue — image normalisée (doctrine image v2)."""
 
 from odoo import api, fields, models
 
 # Doctrine v2 — DOCTRINE_IMAGE_V2.md
 SHOP_TILE_STATUS = [
     ("none", "Aucune"),
-    ("validated_grid", "Validée grille /shop"),
-    ("validated_storage", "Validée stockage (non affichée)"),
+    ("validated_grid", "Validée pour affichage catalogue"),
+    ("validated_storage", "Validée — stockage uniquement"),
     ("validated_reserve", "Validée avec réserve"),
     ("pending_review", "En revue"),
     ("needs_review_source", "Source à revoir"),
     ("rejected", "Rejetée"),
     # Legacy pilote P7/P8 — équivalent validated_storage (non affiché).
-    ("validated", "Validée (legacy pilote)"),
+    ("validated", "Validée (historique pilote)"),
 ]
 
 CONFIG_KEY_SHOP_TILE_ENABLED = "marketone.shop_tile_enabled"
@@ -26,28 +26,27 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     image_shop_tile = fields.Image(
-        string="Tuile /shop",
+        string="Vignette catalogue normalisée",
         max_width=1024,
         max_height=1024,
         attachment=True,
-        help="Image dérivée normalisée pour la grille /shop uniquement. "
-        "Ne remplace pas image_1920.",
+        help="Dérivé média pour la grille boutique. Ne remplace pas l'image produit principale.",
     )
     shop_tile_status = fields.Selection(
         selection=SHOP_TILE_STATUS,
-        string="Statut tuile /shop",
+        string="Statut média catalogue",
         default="none",
     )
     shop_tile_recipe_version = fields.Char(
-        string="Recette tuile",
-        help="Version recette CLI, ex. ck_shop_tile_v1.1",
+        string="Version recette pipeline",
+        help="Version recette pipeline, ex. ck_shop_tile_v1.1",
     )
-    shop_tile_processed_at = fields.Datetime(string="Tuile traitée le")
+    shop_tile_processed_at = fields.Datetime(string="Traité le")
     shop_tile_source_run = fields.Char(
-        string="Run source CLI",
+        string="Identifiant run batch",
         help="Identifiant run batch, ex. pilote_20260520",
     )
-    shop_tile_moa_note = fields.Char(string="Note MOA tuile")
+    shop_tile_moa_note = fields.Char(string="Note qualité visuelle")
 
     @api.model
     def _marketone_shop_tile_feature_enabled(self):

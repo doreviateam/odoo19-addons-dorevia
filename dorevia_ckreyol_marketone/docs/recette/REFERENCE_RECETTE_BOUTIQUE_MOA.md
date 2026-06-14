@@ -61,9 +61,17 @@
 En tête de chaque nouvelle recette manuelle boutique, ajouter :
 
 ```markdown
+**ADR-034 :** [ARBITRAGE_ARCHITECTURE_CADRAGE2.md](../cadrage2/ARBITRAGE_ARCHITECTURE_CADRAGE2.md)
+
+**Fonctionnalité Odoo native préservée :** [matrice §5 — ex. Panier · Wishlist · Catégories]
+
+**Mécanisme Odoo concerné :** [ex. website_sale · website_sale_wishlist · product.public.category]
+
 **Régression obligatoire :** [REFERENCE_RECETTE_BOUTIQUE_MOA.md](./REFERENCE_RECETTE_BOUTIQUE_MOA.md)
 Sections à rejouer : B__ · B__ · …
 ```
+
+Voir aussi [`REPRISE_LOTS_FRONT_CADRAGE2.md`](../cadrage2/REPRISE_LOTS_FRONT_CADRAGE2.md).
 
 ### Matrice — sections à rejouer selon le ticket
 

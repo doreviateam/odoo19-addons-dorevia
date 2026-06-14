@@ -12,4 +12,24 @@
                   href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&amp;family=Hanken+Grotesk:wght@400;500;600&amp;display=swap"/>
         </xpath>
     </template>
+
+    <!-- SEO portes /shop — MOA D1–D6 · ADR-036 -->
+    <template id="marketone_seo_portes_shop"
+              inherit_id="website.layout"
+              name="Marketone: SEO portes shop"
+              priority="50">
+        <xpath expr="//t[@t-set='no_index']" position="replace">
+            <t t-set="no_index" t-value="
+                (main_object and 'website_indexed' in main_object and not main_object.sudo().website_indexed)
+                or (website.domain and not website._is_indexable_url(request.httprequest.url_root))
+                or (pager and isinstance(pager, dict) and pager.get('page', {}).get('num', 1) != 1)
+                or request.website.marketone_shop_seo_noindex()
+            "/>
+        </xpath>
+        <xpath expr="//meta[@name='robots'][@content='noindex']" position="replace">
+            <meta t-if="no_index"
+                  name="robots"
+                  t-att-content="request.website.marketone_shop_robots_content()"/>
+        </xpath>
+    </template>
 </odoo>

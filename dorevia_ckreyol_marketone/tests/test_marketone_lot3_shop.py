@@ -77,18 +77,11 @@ class TestMarketoneLot3Shop(HttpCase):
 
     def test_shop_no_catalog_gates(self):
         response = self.url_open("/shop")
-        text = response.text
-        # Alias portes uniquement (pas les slugs catégorie /shop/category/incontournables-*).
-        gate_href = r"""href=['"]/(?:promotions|kits|incontournables|origines)(?:['"?]|$)"""
-        for forbidden in (
-            r"marketone_mode=",
-            r"ckr_mode=",
-            gate_href,
-        ):
-            self.assertIsNone(
-                re.search(forbidden, text),
-                f"Lien porte catalogue interdit sur /shop : {forbidden}",
-            )
+        from odoo.addons.dorevia_ckreyol_marketone.tests.marketone_gate_helpers import (
+            assert_catalog_gate_policy_lot6_front,
+        )
+
+        assert_catalog_gate_policy_lot6_front(self, response.text)
 
     def test_shop_website_sale_controls_present(self):
         response = self.url_open("/shop")

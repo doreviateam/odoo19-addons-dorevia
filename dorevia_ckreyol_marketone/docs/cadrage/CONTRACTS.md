@@ -41,7 +41,9 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 | `marketone_mode` | `featured` (libellé : Incontournables) | **Figé Lot 6.1** |
 | `marketone_mode` | `origin` (libellé : Origines) | **Figé Lot 6.2** |
 | `marketone_origin` | slug profil origine (répétable, OU) | **Figé Lot 6.2** |
-| `marketone_mode` | `promo`, `pack`, `collection` | Lots 6.3+ |
+| `marketone_mode` | `promo` (libellé : Promotions) | **Figé Lot 6.3a** — livré `19.0.17.0.0` |
+| `marketone_mode` | `pack` (libellé : Kits & Coffrets) | **Figé Lot 6.3b** — livré `19.0.18.0.0` |
+| `marketone_mode` | `collection` | Lot 6.x collections |
 | `marketone_collection` | slug collection | Lot 6.x collections |
 
 ```text
@@ -50,6 +52,8 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 /shop?marketone_mode=origin                      # canonique porte Origines (Lot 6.2)
 /shop?marketone_mode=origin&marketone_origin=<slug>   # facette origine (OU si plusieurs)
 /origines                                        # alias 301 → /shop?marketone_mode=origin
+/shop?marketone_mode=promo                       # canonique Promotions (Lot 6.3a)
+/promotions                                      # alias 301 → ci-dessus
 ```
 
 > **Interdit** : paramètre legacy `ckr_origin` — préfixe `marketone_*` uniquement (C11.2).
@@ -138,6 +142,53 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 **Référence** : [`cadrage/TAXONOMIE_CATALOGUE.md`](./TAXONOMIE_CATALOGUE.md) · [`cadrage/MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md`](./MAPPING_CATEGORIES_PRINCIPALES_RECETTE.md).
 
 **Statut** : **GO MOA** — doctrine ; **pas d’implémentation** hors ticket.
+
+### C3.D — Porte Promotions (Lot 6.3a — figé cadrage GO MOA 2026-06-08)
+
+| Élément | Règle |
+|---------|-------|
+| ADR | [ADR-034](../cadrage/DECISIONS.md#adr-034--arbitrage-architecture-cadrage2-socle-odoo-natif) |
+| Doctrine | **Odoo exécute. Marketone habille et oriente.** |
+| Mode URL | `marketone_mode=promo` |
+| Libellé MOA | **Promotions** |
+| Entrée alias | `GET /promotions` → **301** → `/shop?marketone_mode=promo` |
+| Source produits | `product.pricelist.item` **actifs**, **strictement réducteurs**, sur la **pricelist courante du visiteur** |
+| Résolveur | `product.pricelist._marketone_get_promo_template_ids(website, pricelist)` (nom indicatif) |
+| Temporalité | Item actif à `now` (`date_start` / `date_end` ouvertes ou englobantes) |
+| Réduction | Rejet items neutres / mark-ups (`percent_price=0`, `fixed_price >= list_price`, etc.) |
+| `applied_on` | `0_product_variant` · `1_product` · `2_product_category` · `3_global` |
+| Promo globale (`3_global`) | Si item global actif strictement réducteur → **catalogue complet** sans filtre produit supplémentaire (retour `None`) |
+| État vide | Aucun item éligible → grille vide + message sobre — **pas** 404 · **pas** 500 |
+| Pricelist courante | Chaîne : paramètre explicite → `website._get_and_cache_current_pricelist()` → fallback `partner.property_product_pricelist` — **M7** |
+| Prix affichés | **Natif** `website_sale` — Marketone **ne recalcule pas** |
+| Présentation | Titre **Promotions** · intro courte · lien « Tous les produits » → `/shop` |
+| Chip header | Lien **Promotions** → `/promotions` — **amendement MOA M5** à C2.4 (chip porte autorisé pour Promotions uniquement) |
+| Chip Kits | **Autorisé** Lot 6.3b — lien `/kits` → 301 |
+| Chips filtres actifs | **Pas** de chip porte dans la barre filtres (UX-1 G10) |
+| SEO | `canonical` / `noindex` : **documenter** ; hors implémentation Lot 6.3a |
+| Coupons / loyalty | **Hors scope** 6.3a — extension future via ticket + ADR |
+| Interdit | Champ promo custom · modèle `marketone.promo.*` · calcul remise Python/JS front · moteur promo parallèle |
+
+**Statut** : C3.D **GO MOA clôturé** — livré `19.0.17.0.0` (2026-06-08) · [`RECEPTION_MOA_LOT6_3A_PROMO.md`](../cadrage2/RECEPTION_MOA_LOT6_3A_PROMO.md) · P7 S/O mono-pricelist recette.
+
+### C3.E — Porte Kits & Coffrets (Lot 6.3b — figé cadrage GO MOA 2026-06-08)
+
+| Élément | Règle |
+|---------|-------|
+| ADR | ADR-034 · **ADR-035** · ADR-005 |
+| Mode URL | `marketone_mode=pack` |
+| Libellé MOA | **Kits & Coffrets** — « Pack » = terme technique/interne uniquement |
+| Entrée alias | `GET /kits` → **301** → `/shop?marketone_mode=pack` |
+| Source produits | `product.template.pack_ok = True` — module **`product_pack`** (OCA) |
+| Filtre porte | **`pack_ok=True` uniquement** — pas la catégorie « Kits & Coffrets » seule |
+| Dépendance manifest | **`product_pack`** activé · **`sale_product_pack` hors v1** |
+| Chip header | **Kits & Coffrets** → `/kits` |
+| Prix / composants | Résolution **native** `product_pack` · affichage fiche **natif OCA** — **aucun widget Marketone** |
+| Panier v1 | Produit pack = **1 ligne** `website_sale` standard |
+| Interdit | Liste composants codée en dur · `marketone.pack.*` · moteur pack parallèle |
+| Réserve MOA | Explosion composants vente/stock/préparation/facturation = **hors v1** — [`TICKET_MARKETONE_SALE_PRODUCT_PACK_OCA_PORT.md`](../tickets/maintenance/TICKET_MARKETONE_SALE_PRODUCT_PACK_OCA_PORT.md) |
+
+**Statut** : C3.E **GO MOA clôturé** — livré `19.0.18.0.0` (2026-06-08) · [`RECEPTION_MOA_LOT6_3B_PACK.md`](../cadrage2/RECEPTION_MOA_LOT6_3B_PACK.md) · réserves `sale_product_pack` / explosion composants hors v1 maintenues.
 
 ### C8 — Univers Culture — page territoire v1 (cadrage GO avec réserves 2026-05-18)
 
@@ -259,8 +310,9 @@ Ce fichier est la **source de vérité fonctionnelle** du module. Le manifeste O
 |----|-------|
 | C9.1 | Les URLs avec paramètres Marketone whitelistés participent au canonical maîtrisé (extension `website`). |
 | C9.2 | Pas de duplication indexable shop / alias sans redirection 301. |
+| C9.3 | Politique détaillée portes livrées : [`CADRAGE_SEO_PORTES_SHOP.md`](../cadrage2/CADRAGE_SEO_PORTES_SHOP.md) — exécution ticket [`TICKET_MARKETONE_SEO_PORTES_SHOP.md`](../tickets/boutique/TICKET_MARKETONE_SEO_PORTES_SHOP.md). |
 
-**Statut** : Lot 6 pour paramètres filtres ; Lot 1 peut poser l’extension `website` vide.
+**Statut** : **implémenté** · décision MOA [`DECISION_MOA_SEO_PORTES_SHOP.md`](../cadrage2/DECISION_MOA_SEO_PORTES_SHOP.md) · ADR-036.
 
 ---
 

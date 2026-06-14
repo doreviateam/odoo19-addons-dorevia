@@ -38,6 +38,8 @@ Ce dossier regroupe la documentation Marketone par usage, pour éviter le dossie
 | [`cadrage/ARCHITECTURE.md`](./cadrage/ARCHITECTURE.md) | Architecture cible |
 | [`cadrage/CONTRACTS.md`](./cadrage/CONTRACTS.md) | Contrats fonctionnels |
 | [`cadrage/DECISIONS.md`](./cadrage/DECISIONS.md) | ADR et arbitrages datés |
+| [`cadrage/DECISIONS.md#adr-034--arbitrage-architecture-cadrage2-socle-odoo-natif`](./cadrage/DECISIONS.md#adr-034--arbitrage-architecture-cadrage2-socle-odoo-natif) | **ADR-034** — socle Odoo natif · Blog/Forum hors depends · reprise front |
+| [`cadrage2/`](./cadrage2/) | Recadrage BO + arbitrage architecture cadrage2 |
 | [`cadrage/TAXONOMIE_CATALOGUE.md`](./cadrage/TAXONOMIE_CATALOGUE.md) | Catégories e-commerce Odoo : principale + secondaires (ADR-029) |
 | [`cadrage/DECISIONS.md#adr-030--collection-commerciale-marketone`](./cadrage/DECISIONS.md#adr-030--collection-commerciale-marketone) | Collection commerciale — **ADR-030 validé MOA** |
 | Collections Lot A (BO) | [`tickets/TICKET_MARKETONE_COLLECTION_LOT_A.md`](./tickets/boutique/TICKET_MARKETONE_COLLECTION_LOT_A.md) | **Clôturé GO MOA** — `19.0.11.0.0` (2026-05-19) |

@@ -82,17 +82,4 @@
               action="action_marketone_shop_collection"
               sequence="96"
               groups="website.group_website_designer"/>
-
-    <record id="product_template_form_marketone_collections" model="ir.ui.view">
-        <field name="name">product.template.form.marketone.collections</field>
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_form_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='public_categ_ids']" position="after">
-                <field name="marketone_collection_ids"
-                       widget="many2many_tags"
-                       string="Collections commerciales"/>
-            </xpath>
-        </field>
-    </record>
 </odoo>

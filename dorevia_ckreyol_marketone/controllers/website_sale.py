@@ -12,8 +12,17 @@ from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 MARKETONE_MODE_FEATURED = "featured"
 MARKETONE_MODE_ORIGIN = "origin"
+MARKETONE_MODE_PROMO = "promo"
+MARKETONE_MODE_PACK = "pack"
 MARKETONE_MODE_PRIORITY = ("pack", "promo", "featured", "origin", "collection")
-MARKETONE_IMPLEMENTED_MODES = frozenset({MARKETONE_MODE_FEATURED, MARKETONE_MODE_ORIGIN})
+MARKETONE_IMPLEMENTED_MODES = frozenset(
+    {
+        MARKETONE_MODE_FEATURED,
+        MARKETONE_MODE_ORIGIN,
+        MARKETONE_MODE_PROMO,
+        MARKETONE_MODE_PACK,
+    }
+)
 
 MARKETONE_FEATURED_PARAM = "dorevia_ckreyol_marketone.featured_public_category_id"
 MARKETONE_ORIGIN_PARAM = "marketone_origin"
@@ -22,6 +31,24 @@ MARKETONE_COLLECTION_PARAM = "marketone_collection"
 
 MARKETONE_FEATURED_CANONICAL_QUERY = "/shop?marketone_mode=featured"
 MARKETONE_ORIGIN_CANONICAL_QUERY = "/shop?marketone_mode=origin"
+MARKETONE_PROMO_CANONICAL_QUERY = "/shop?marketone_mode=promo"
+MARKETONE_PACK_CANONICAL_QUERY = "/shop?marketone_mode=pack"
+
+MARKETONE_CANONICAL_PATH = "/shop"
+MARKETONE_MODE_PARAM = "marketone_mode"
+
+MARKETONE_SEO_NOISE_QUERY_KEYS = frozenset(
+    {
+        "search",
+        "order",
+        "page",
+        "min_price",
+        "max_price",
+        "attribute_values",
+        MARKETONE_CATEGORY_PARAM,
+        MARKETONE_COLLECTION_PARAM,
+    }
+)
 
 
 class MarketoneRedirectBareShop(Exception):
@@ -39,6 +66,13 @@ def _marketone_mode_values(mapping):
             values.extend(raw)
         else:
             values.append(raw)
+    if not values and request and getattr(request, "params", None):
+        raw = request.params.get("marketone_mode")
+        if raw:
+            if isinstance(raw, (list, tuple)):
+                values.extend(raw)
+            else:
+                values.append(raw)
     out = []
     seen = set()
     for item in values:
@@ -67,6 +101,13 @@ def _marketone_read_origin_slugs(mapping):
             values.extend(raw)
         else:
             values.append(raw)
+    if not values and request and getattr(request, "params", None):
+        raw = request.params.get(MARKETONE_ORIGIN_PARAM)
+        if raw:
+            if isinstance(raw, (list, tuple)):
+                values.extend(raw)
+            else:
+                values.append(raw)
     out = []
     seen = set()
     for item in values:
@@ -217,9 +258,39 @@ def _marketone_resolve_origin_profiles(mapping):
     return (profiles, True, not profiles)
 
 
+def _marketone_resolve_promo_template_ids():
+    """Ids templates promo — pricelist courante visiteur (C3.D)."""
+    website = request.website if request else None
+    return (
+        request.env["product.pricelist"]
+        .sudo()
+        ._marketone_get_promo_template_ids(website=website)
+    )
+
+
+def _marketone_apply_pack_mode_options(options):
+    """Filtre porte Kits & Coffrets — ``pack_ok`` uniquement (C3.E)."""
+    options["marketone_pack_only"] = True
+
+
+def _marketone_apply_promo_mode_options(options):
+    """Injecte le filtre promo depuis ``product.pricelist.item``."""
+    promo_ids = _marketone_resolve_promo_template_ids()
+    options["marketone_promo_only"] = True
+    if promo_ids is None:
+        options["marketone_promo_global"] = True
+    elif not promo_ids:
+        options["marketone_promo_empty"] = True
+    else:
+        options["marketone_promo_template_ids"] = list(promo_ids)
+
+
 def _marketone_apply_mode_options(options, mapping):
-    """Injecte les options featured / origin selon le mode effectif unique."""
+    """Injecte les options featured / origin / promo / pack selon le mode effectif unique."""
     mode = _marketone_effective_mode(mapping)
+    if mode == MARKETONE_MODE_PACK:
+        _marketone_apply_pack_mode_options(options)
+        return
     if mode == MARKETONE_MODE_FEATURED:
         category_rec = _marketone_resolve_featured_public_category(request.env)
         options["marketone_featured_only"] = True
@@ -227,6 +298,10 @@ def _marketone_apply_mode_options(options, mapping):
             options["marketone_featured_category_id"] = category_rec.id
         else:
             options["marketone_featured_category_invalid"] = True
+        return
+
+    if mode == MARKETONE_MODE_PROMO:
+        _marketone_apply_promo_mode_options(options)
         return
 
     if mode != MARKETONE_MODE_ORIGIN:
@@ -262,6 +337,69 @@ def _marketone_canonical_collection_slugs(mapping):
     if not requested or not collections:
         return []
     return list(collections.mapped("slug"))
+
+
+def _marketone_is_shop_canonical_path(path):
+    """``/shop`` ou ``/<lang>/shop`` — routage website multilingue."""
+    return bool(path) and path.endswith(MARKETONE_CANONICAL_PATH)
+
+
+def _marketone_canonical_origin_slugs_for_seo(mapping=None):
+    """Slugs origine publiés triés — canonical T3 MOA D3."""
+    slugs = _marketone_read_origin_slugs(mapping)
+    if not slugs:
+        return []
+    website = request.website if request else None
+    profiles = (
+        request.env["marketone.shop.origin"]
+        .sudo()
+        ._marketone_resolve_published_slugs(slugs, website=website)
+    )
+    return sorted(set(profiles.mapped("slug")))
+
+
+def _marketone_seo_canonical_query_pairs(mapping=None):
+    """Paires query whitelist pour ``rel=canonical`` portes MOA D2–D6."""
+    mode = _marketone_effective_mode(mapping)
+    if not mode:
+        return []
+    params = [(MARKETONE_MODE_PARAM, mode)]
+    if mode == MARKETONE_MODE_ORIGIN:
+        origin_slugs = _marketone_canonical_origin_slugs_for_seo(mapping)
+        if len(origin_slugs) == 1:
+            params.append((MARKETONE_ORIGIN_PARAM, origin_slugs[0]))
+    return params
+
+
+def _marketone_query_has_seo_noise():
+    """Params T4/T5 exclus du canonical (MOA D4 · D5 option C)."""
+    if not request or not getattr(request, "httprequest", None):
+        return False
+    args = request.httprequest.args
+    for key in MARKETONE_SEO_NOISE_QUERY_KEYS:
+        for val in args.getlist(key):
+            if val not in (None, "", False):
+                return True
+    return False
+
+
+def _marketone_shop_seo_noindex(mapping=None):
+    """``noindex,follow`` sur porte active + bruit ou multi-origine (MOA D4)."""
+    if not request or not getattr(request, "httprequest", None):
+        return False
+    if not _marketone_is_shop_canonical_path(request.httprequest.path or ""):
+        return False
+    if mapping is None:
+        mapping = dict(request.httprequest.args)
+    mode = _marketone_effective_mode(mapping)
+    if not mode:
+        return False
+    if mode == MARKETONE_MODE_ORIGIN:
+        raw_slugs = _marketone_read_origin_slugs(mapping)
+        resolved = _marketone_canonical_origin_slugs_for_seo(mapping)
+        if len(raw_slugs) > 1 or len(resolved) > 1:
+            return True
+    return _marketone_query_has_seo_noise()
 
 
 def _marketone_attrib_values_to_query_list(attrib_values):
@@ -466,6 +604,8 @@ class WebsiteSaleMarketone(WebsiteSale):
                 domain = Domain.AND([domain, Domain([("id", "=", 0)])])
 
         mode = _marketone_effective_mode(mapping)
+        if mode == MARKETONE_MODE_PACK:
+            return Domain.AND([domain, Domain([("pack_ok", "=", True)])])
         if mode == MARKETONE_MODE_FEATURED:
             category_rec = _marketone_resolve_featured_public_category(request.env)
             if not category_rec:
@@ -475,6 +615,15 @@ class WebsiteSaleMarketone(WebsiteSale):
                     domain,
                     Domain([("public_categ_ids", "in", [category_rec.id])]),
                 ]
+            )
+        if mode == MARKETONE_MODE_PROMO:
+            promo_ids = _marketone_resolve_promo_template_ids()
+            if promo_ids is None:
+                return domain
+            if not promo_ids:
+                return Domain.AND([domain, Domain([("id", "=", 0)])])
+            return Domain.AND(
+                [domain, Domain([("id", "in", list(promo_ids))])]
             )
         if mode != MARKETONE_MODE_ORIGIN:
             return domain
@@ -926,6 +1075,20 @@ class WebsiteSaleMarketone(WebsiteSale):
                     0
                 ]._marketone_culture_url()
 
+        result["marketone_promo_mode"] = mode == MARKETONE_MODE_PROMO
+        result["marketone_promo_empty"] = False
+        if result["marketone_promo_mode"]:
+            promo_ids = _marketone_resolve_promo_template_ids()
+            if promo_ids == set():
+                result["marketone_promo_empty"] = True
+            else:
+                result["marketone_promo_empty"] = not search_count
+
+        result["marketone_pack_mode"] = mode == MARKETONE_MODE_PACK
+        result["marketone_pack_empty"] = False
+        if result["marketone_pack_mode"]:
+            result["marketone_pack_empty"] = not search_count
+
         chips = self._marketone_enrich_chip_counts(
             values, kwargs, self._marketone_build_active_filter_chips(values, kwargs)
         )
@@ -977,6 +1140,26 @@ class WebsiteSaleMarketone(WebsiteSale):
     )
     def marketone_origines_redirect(self, **kwargs):
         return request.redirect(MARKETONE_ORIGIN_CANONICAL_QUERY, code=301)
+
+    @route(
+        "/promotions",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def marketone_promotions_redirect(self, **kwargs):
+        return request.redirect(MARKETONE_PROMO_CANONICAL_QUERY, code=301)
+
+    @route(
+        "/kits",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def marketone_kits_redirect(self, **kwargs):
+        return request.redirect(MARKETONE_PACK_CANONICAL_QUERY, code=301)
 
     @route(
         "/shop/product/preview/<int:product_template_id>",

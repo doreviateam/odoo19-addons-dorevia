@@ -569,6 +569,63 @@
 
 ---
 
+## ADR-034 — Arbitrage architecture cadrage2 (socle Odoo natif)
+
+| | |
+|---|---|
+| **Date** | 2026-06-08 |
+| **Statut** | **Acceptée MOA** |
+| **Contexte** | Lot BO `19.0.16.0.0` clôturé GO avec réserves · reprise lots front gelés conditionnée à une doctrine explicite Blog/Forum + compatibilité eCommerce Odoo. |
+| **Document source** | [`ARBITRAGE_ARCHITECTURE_CADRAGE2.md`](../cadrage2/ARBITRAGE_ARCHITECTURE_CADRAGE2.md) |
+| **Doctrine** | **« Odoo exécute. Marketone habille et oriente. »** |
+| **D1** | `website_blog` **n'est pas** requis au socle CK Marketone. Culture = pages `/culture/<slug>` · Savoirs = modèle dédié (ADR Culture / Savoirs). |
+| **D2** | `website_forum` **n'est pas** requis au socle CK Marketone. |
+| **D3** | Toute personnalisation front reste **compatible** avec le natif Odoo (règles F1–F9 du document d'arbitrage). |
+| **D4** | La **matrice §5** du document d'arbitrage = **liste de préservation explicite** des fonctionnalités Odoo eCommerce (référence recette boutique). |
+| **D5** | Reprise des lots front gelés **autorisée**, lot par lot, après validation de cette doctrine. |
+| **Conséquences** | Marketone **ne remplace pas** `website_sale` · héritage QWeb / extension contrôleur uniquement · **aucun** tunnel checkout custom · **aucun** moteur panier, prix, promo, paiement ou livraison parallèle · lots **promo / pack** futurs = **pricelist / promotions Odoo** · `website_blog` / `website_forum` **hors** `depends` Marketone sauf ticket MOA + ADR dédiés. |
+| **Dépendances socle figées** | `portal`, `website`, `website_sale`, `website_sale_wishlist` (wishlist validée MOA UX-4). |
+| **Recette lots front** | Chaque ticket doit inclure une ligne **« Fonctionnalité Odoo native préservée »** — voir [`REPRISE_LOTS_FRONT_CADRAGE2.md`](../cadrage2/REPRISE_LOTS_FRONT_CADRAGE2.md). |
+| **Contrats** | Renforce C1 ([`CONTRACTS.md`](./CONTRACTS.md)) · complète ADR-002, ADR-005. |
+
+---
+
+## ADR-035 — Activation `product_pack` (Lot 6.3b Kits & Coffrets)
+
+| | |
+|---|---|
+| **Date** | 2026-06-08 |
+| **Statut** | **Acceptée MOA avec réserves** |
+| **Contexte** | Lot 6.3a Promo clôturé GO MOA `19.0.17.0.0` · cadrage 6.3b GO MOA — [`DECISION_MOA_LOT6_3B_KITS_COFFRETS.md`](../cadrage2/DECISION_MOA_LOT6_3B_KITS_COFFRETS.md) |
+| **Document source** | [`TICKET_LOT6_3B_PORTE_KITS_COFFRETS.md`](../cadrage2/TICKET_LOT6_3B_PORTE_KITS_COFFRETS.md) · contrat **C3.E** |
+| **Décision** | Ajouter **`product_pack`** (OCA `19.0.1.0.2`) aux `depends` de `dorevia_ckreyol_marketone`. |
+| **K2** | **`sale_product_pack` hors depends Lot 6.3b v1** — report [`TICKET_MARKETONE_SALE_PRODUCT_PACK_OCA_PORT.md`](../tickets/maintenance/TICKET_MARKETONE_SALE_PRODUCT_PACK_OCA_PORT.md). |
+| **Amendement ADR-005** | `product_pack` = **activée Lot 6.3b** · `sale_product_pack` reste optionnelle non activée. |
+| **Conséquences** | `pack_ok` BO · porte `/shop?marketone_mode=pack` · alias `/kits` · chip **Kits & Coffrets** · filtre **`pack_ok=True` uniquement** · composants fiche = **natif OCA** · panier = **1 ligne pack** `website_sale` standard v1. |
+| **Réserve MOA** | v1 **sans** explosion composants vente/stock/préparation/facturation — hors `sale_product_pack` installable. |
+| **Amendement Phase B** (2026-06-08) | Pilote autorisé : pack **7** en `detailed` + chaîne OCA plateforme sandbox/recette — [`DECISION_MOA_PHASE_B_SALE_PRODUCT_PACK.md`](../cadrage2/DECISION_MOA_PHASE_B_SALE_PRODUCT_PACK.md). Pack **8** reste `non_detailed`. Lot 6.3b front **non rouvert**. |
+| **Arbitrage post-recette** (2026-06-08) | **Pilote 7 maintenu** · **NON généralisation catalogue** · **NO GO prod** — [`ARBITRAGE_MOA_POST_PHASE_B_SALE_PRODUCT_PACK.md`](../cadrage2/ARBITRAGE_MOA_POST_PHASE_B_SALE_PRODUCT_PACK.md) |
+| **Pilote contrôlé** (2026-06-08) | **Clôturé** — observation exécutée — [`CADRE_OBSERVATION_PILOTE_PACK7_SALE_PRODUCT_PACK.md`](../cadrage2/CADRE_OBSERVATION_PILOTE_PACK7_SALE_PRODUCT_PACK.md) |
+| **Doctrine pack CK** (2026-06-08) | **Pack = article** · **`non_detailed` cible** · pack **8** référence métier · **`sale_product_pack` veille technique** · **NO GO activation CK** — [`DECISION_MOA_DOCTRINE_PACK_ARTICLE_NON_DETAILED.md`](../cadrage2/DECISION_MOA_DOCTRINE_PACK_ARTICLE_NON_DETAILED.md) |
+| **Interdit** | Filtre porte = catégorie « Kits & Coffrets » seule · `marketone.pack.*` · liste composants hardcodée · widget composants Marketone · moteur prix pack Marketone. |
+| **Non-régression** | Portes 6.1 · 6.2 · 6.3a · sidebar · panier/checkout — ADR-034 inchangé. |
+| **Ticket exécution** | [`TICKET_MARKETONE_LOT6_3B_PORTE_PACK_EXEC.md`](../tickets/lots/TICKET_MARKETONE_LOT6_3B_PORTE_PACK_EXEC.md) — **GO cadrage MOA · exécution autorisée**. |
+
+---
+
+## ADR-036 — SEO portes `/shop` D1–D6
+
+| Champ | Valeur |
+|-------|--------|
+| **Date** | 2026-06-08 |
+| **Statut** | **Accepté MOA** |
+| **Document source** | [`DECISION_MOA_SEO_PORTES_SHOP.md`](../cadrage2/DECISION_MOA_SEO_PORTES_SHOP.md) · CONTRACTS **C9** |
+| **Décision** | Alias **301** non indexés · portes **T2/T3** indexables avec canonical self · filtres/pagination sur porte **noindex,follow** + canonical T2/T3 · `/shop` nu indexable |
+| **Implémentation** | `models/website.py` · helpers `controllers/website_sale.py` · layout `views/layout/website_layout.xml` · tests `dorevia_marketone_seo_portes_shop` |
+| **Hors périmètre** | Panier · checkout · prix · promo · pack · moteur catalogue · refonte UX · sitemap custom v1 |
+
+---
+
 ## Décisions en attente (à trancher avant Lots 6.3+)
 
 | Sujet | Options | Décideur |
@@ -576,9 +633,10 @@
 | Contrainte catégories e-commerce | Principale obligatoire · max 4 publiques · distinction principale/secondaire — **ticket dédié** | MOA (post mapping BO) |
 | Marquage catégorie principale vs secondaire | Convention BO seule vs champ produit / ordre — **hors scope sans ticket** | MOA (ticket dédié) |
 | Modèle `marketone.shop.collection` | **ADR-030 validé** — ticket Lot A ; D1–D3 · D6 hors Lot A | MOA — [`TICKET_MARKETONE_COLLECTION_LOT_A`](../tickets/boutique/TICKET_MARKETONE_COLLECTION_LOT_A.md) |
-| Alias HTTP legacy | `/kits`, `/promotions`, etc. en 301 | MOA SEO — Lot 6.2+ |
-| `product_pack` | Dépendance optionnelle pour porte Kits | MOA |
-| SEO `canonical` / `noindex` | Politique indexation URLs portes | MOA SEO |
+| Alias HTTP legacy | `/kits`, `/promotions`, etc. en 301 | MOA SEO — [`TICKET_MARKETONE_SEO_PORTES_SHOP.md`](../tickets/boutique/TICKET_MARKETONE_SEO_PORTES_SHOP.md) |
+| ~~`product_pack`~~ | **Tranché** — ADR-035 · Lot 6.3b clôturé GO MOA | ✓ |
+| ~~`sale_product_pack`~~ | **Tranché MOA** — doctrine **`non_detailed`** · veille technique — [`DECISION_MOA_DOCTRINE_PACK_ARTICLE_NON_DETAILED.md`](../cadrage2/DECISION_MOA_DOCTRINE_PACK_ARTICLE_NON_DETAILED.md) | ✓ |
+| ~~SEO `canonical` / `noindex`~~ | **Tranché MOA** — ADR-036 · [`DECISION_MOA_SEO_PORTES_SHOP.md`](../cadrage2/DECISION_MOA_SEO_PORTES_SHOP.md) | ✓ |
 
 ---
 

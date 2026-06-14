@@ -90,13 +90,8 @@ class TestMarketoneLot4Product(HttpCase):
         audit_text = text
         if origins_block:
             audit_text = text[: origins_block.start()] + text[origins_block.end() :]
-        for forbidden in (
-            r"marketone_mode=",
-            r"ckr_mode=",
-            r"/promotions",
-            r"/kits",
-        ):
-            self.assertIsNone(
-                re.search(forbidden, audit_text),
-                f"Lien porte catalogue interdit sur fiche : {forbidden}",
-            )
+        from odoo.addons.dorevia_ckreyol_marketone.tests.marketone_gate_helpers import (
+            assert_catalog_gate_policy_lot6_front,
+        )
+
+        assert_catalog_gate_policy_lot6_front(self, audit_text)

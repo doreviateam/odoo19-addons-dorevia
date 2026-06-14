@@ -42,4 +42,18 @@
             </a>
         </xpath>
     </template>
+
+    <template id="marketone_header_promotions_gate"
+              inherit_id="website.layout"
+              name="Marketone: chip header Promotions"
+              priority="96">
+        <xpath expr="//header[@id='top']//ul[hasclass('navbar-nav')][1]" position="inside">
+            <li class="nav-item marketone-header-gate marketone-header-gate--promo">
+                <a class="nav-link" href="/promotions">Promotions</a>
+            </li>
+            <li class="nav-item marketone-header-gate marketone-header-gate--pack">
+                <a class="nav-link" href="/kits">Kits &amp; Coffrets</a>
+            </li>
+        </xpath>
+    </template>
 </odoo>

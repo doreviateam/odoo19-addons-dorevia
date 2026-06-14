@@ -16,7 +16,7 @@
         <!-- Compteur à gauche de la ligne principale (avant le champ recherche). -->
         <xpath expr="//div[contains(@t-attf-class, 'o_wsale_products_header_search_form_container')]" position="before">
             <div class="marketone-shop-grid-meta">
-                <p t-if="not marketone_featured_mode and not marketone_origin_mode"
+                <p t-if="not marketone_featured_mode and not marketone_origin_mode and not marketone_promo_mode and not marketone_pack_mode"
                    id="products_grid_content_title"
                    class="marketone-shop-grid-result mb-0"
                    t-out="marketone_shop_grid_title"/>
