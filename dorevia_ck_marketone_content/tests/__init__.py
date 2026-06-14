@@ -16,3 +16,5 @@ from . import test_ck_phase9_hooks
 from . import test_ck_mentions_legales_compose
 from . import test_ck_home_lot2_compose
 from . import test_ck_home_lot2_hooks
+from . import test_ck_home_lot3_compose
+from . import test_ck_home_lot3_hooks
