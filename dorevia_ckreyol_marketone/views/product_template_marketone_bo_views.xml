@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Odoo 19 — masquer les champs eCommerce dupliqués (réaffichés dans Publication site). -->
+    <record id="product_template_form_view_marketone_bo_hide_ecommerce_dup" model="ir.ui.view">
+        <field name="name">product.template.form.marketone.bo.hide.ecommerce.dup</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="website_sale.product_template_form_view"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='extra_info']//field[@name='is_published']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='extra_info']//field[@name='website_sequence']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='extra_info']//field[@name='public_categ_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='extra_info']//field[@name='website_ribbon_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='extra_info']//field[@name='website_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='ecom_description']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_form_view_marketone_bo" model="ir.ui.view">
+        <field name="name">product.template.form.marketone.bo</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="website_sale.product_template_form_view"/>
+        <field name="priority">25</field>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Publication site"
+                      name="marketone_bo_publication"
+                      invisible="not sale_ok">
+                    <group>
+                        <group string="Visibilité boutique">
+                            <field name="is_published" widget="boolean_toggle"/>
+                            <field name="website_id"
+                                   options="{'no_create': True}"
+                                   groups="website.group_multi_website"
+                                   placeholder="Tous les sites"/>
+                        </group>
+                        <group string="Classement catalogue">
+                            <field name="public_categ_ids"
+                                   widget="many2many_tags"
+                                   string="Catégories eCommerce"
+                                   placeholder="Catégories eCommerce…"/>
+                            <field name="website_sequence" groups="base.group_no_one"/>
+                            <field name="website_ribbon_id"
+                                   options="{'no_quick_create': True}"/>
+                        </group>
+                    </group>
+                    <group string="Description boutique" colspan="2" name="marketone_bo_ecom_description">
+                        <field name="description_ecommerce"
+                               nolabel="1"
+                               colspan="2"
+                               placeholder="Description formatée pour la page produit sur le site…"/>
+                    </group>
+                </page>
+
+                <page string="Catalogue CK"
+                      name="marketone_bo_catalogue"
+                      invisible="not sale_ok">
+                    <group>
+                        <field name="marketone_collection_ids"
+                               widget="many2many_tags"
+                               string="Collections commerciales"
+                               placeholder="Rattachement merchandising CK…"/>
+                    </group>
+                    <div class="alert alert-info mb-0" role="alert">
+                        Les <strong>origines</strong> sont gérées via l'attribut
+                        « Origines » (onglet <em>Attributs &amp; variantes</em>).
+                        Les profils éditoriaux associés se configurent dans
+                        <em>Site web → Configuration → Origines (porte shop)</em>.
+                    </div>
+                </page>
+
+                <page string="Qualité image / contenu"
+                      name="marketone_bo_media_quality"
+                      invisible="not sale_ok">
+                    <group>
+                        <group string="Vignette catalogue normalisée">
+                            <field name="image_shop_tile"
+                                   widget="image"
+                                   class="oe_avatar"
+                                   options="{'zoom': true}"/>
+                            <field name="shop_tile_status"/>
+                        </group>
+                        <group string="Gouvernance MOA">
+                            <field name="shop_tile_moa_note"
+                                   placeholder="Note qualité visuelle…"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">
+                        Si aucune vignette normalisée n'est validée pour l'affichage
+                        catalogue, le site utilise l'<strong>image produit principale</strong>.
+                    </div>
+                </page>
+
+                <page string="Technique"
+                      name="marketone_bo_technical"
+                      invisible="not sale_ok"
+                      groups="base.group_no_one">
+                    <group string="Traçabilité pipeline média">
+                        <field name="shop_tile_recipe_version" readonly="1"/>
+                        <field name="shop_tile_processed_at" readonly="1"/>
+                        <field name="shop_tile_source_run" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

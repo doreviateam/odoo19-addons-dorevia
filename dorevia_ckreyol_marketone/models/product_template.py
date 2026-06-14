@@ -82,6 +82,15 @@ class ProductTemplate(models.Model):
                     [("attribute_line_ids.value_ids", "in", list(value_ids))]
                 )
 
+        if options.get("marketone_promo_only"):
+            if options.get("marketone_promo_empty"):
+                base_domain.append(_MARKETONE_EMPTY_DOMAIN)
+            elif template_ids := options.get("marketone_promo_template_ids"):
+                base_domain.append([("id", "in", list(template_ids))])
+
+        if options.get("marketone_pack_only"):
+            base_domain.append([("pack_ok", "=", True)])
+
         if options.get("marketone_category_invalid"):
             base_domain.append(_MARKETONE_EMPTY_DOMAIN)
         elif category_ids := options.get("marketone_public_category_ids"):
