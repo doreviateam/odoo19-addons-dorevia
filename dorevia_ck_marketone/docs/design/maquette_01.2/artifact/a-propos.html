@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>À propos — C-Kreyol · Maquette V1.2.x Lot 3+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ck-maquette.css" />
+</head>
+<body>
+
+  <div class="maquette-note">
+    <strong>Maquette V1.2.x · Lot 3+</strong> — À propos ·
+    <a href="recettes.html" style="color:#fb923c">Recettes</a> ·
+    <a href="contact.html" style="color:#fb923c">Contact</a> · Odoo en pause
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo">C-<span>Kreyol</span></a>
+      <nav class="nav-main" aria-label="Navigation principale">
+        <a href="shop.html">Boutique</a>
+        <a href="categorie.html">Catégories</a>
+        <a href="professionnels.html">Professionnels</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-box" role="search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Rechercher…" aria-label="Rechercher" /></div>
+        <button class="icon-btn burger" type="button" id="burgerOpen" aria-label="Menu" aria-expanded="false">☰</button>
+        <a href="/shop/cart" class="icon-btn" aria-label="Panier">🛒<span class="cart-badge">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menu mobile">
+    <h2>Menu</h2>
+    <a href="shop.html">Boutique</a>
+    <a href="categorie.html">Catégories</a>
+    <a href="professionnels.html">Professionnels</a>
+  </nav>
+
+  <main class="content-page">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane"><a href="index.html">Accueil</a><span>/</span> À propos</nav>
+
+      <header class="page-hero">
+        <p class="kicker">Démarche C-Kreyol</p>
+        <h1>Comprendre, acheter et faire confiance aux produits créoles.</h1>
+        <p class="lead">CK est une boutique en ligne qui relie les territoires créolophones aux clients en France et en Europe — avec une sélection exigeante, une logistique lisible et un respect des producteurs.</p>
+        <span class="route-hint">Route Odoo cible : /a-propos · page CMS</span>
+      </header>
+
+      <div class="about-grid">
+        <article class="about-card">
+          <h2>Notre mission</h2>
+          <p>Rendre l’achat de produits créoles simple, désirable et compréhensible. CK ne se contente pas de lister des références : chaque produit doit avoir un sens — origine, usage, transformation — pour le particulier comme pour le professionnel qualifié.</p>
+        </article>
+        <article class="about-card">
+          <h2>Notre sélection</h2>
+          <p>Agro-transformation, épicerie, condiments, boissons et bien-être cohérent avec l’univers CK. Nous privilégions la traçabilité, la régularité de qualité et des partenaires capables de servir le marché européen.</p>
+        </article>
+        <article class="about-card">
+          <h2>Producteurs &amp; fournisseurs</h2>
+          <p>CK construit des relations durables avec des transformateurs et producteurs créoles. Nous valorisons le travail local, la transmission des savoir-faire et un échange équitable — sans promettre un modèle marketplace ouvert. <a href="fiche-producteur.html" style="font-weight:700;color:var(--ck-primary)">Exemple : fiche producteur type →</a></p>
+        </article>
+        <article class="about-card">
+          <h2>Logistique &amp; confiance</h2>
+          <p>Expédition suivie vers la France et l’Europe, délais annoncés avant paiement, emballage adapté aux produits alimentaires. Les conditions professionnelles sont étudiées au cas par cas, hors checkout en ligne.</p>
+        </article>
+      </div>
+
+      <div class="values-row" aria-label="Engagements CK">
+        <div class="value-item"><strong>🌍 Pont créole / Europe</strong><span>Des territoires créolophones vers les clients européens, sans exoticisme générique.</span></div>
+        <div class="value-item"><strong>🌿 Origines lisibles</strong><span>Réunion, Antilles, territoires partenaires — visibles sur chaque fiche.</span></div>
+        <div class="value-item"><strong>🤝 Relation directe</strong><span>Service client joignable · qualification Pro · pas de portail opaque.</span></div>
+      </div>
+
+      <div class="pro-signal-mini">
+        <span>Vous êtes producteur, transformateur ou distributeur ? L’espace Pro permet de qualifier votre demande.</span>
+        <a href="professionnels.html">Espace professionnel →</a>
+      </div>
+
+      <p style="margin-top:24px;font-size:14px;color:var(--ck-text-muted)">
+        Découvrir nos produits : <a href="shop.html" style="font-weight:700;color:var(--ck-primary)">Boutique →</a>
+        · <a href="fiche-producteur.html" style="font-weight:700;color:var(--ck-primary)">Fiche producteur type →</a>
+        · Usages et recettes : <a href="recettes.html" style="font-weight:700;color:var(--ck-primary)">Recettes &amp; savoirs →</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid-ext">
+        <div>
+          <div class="footer-brand">C-<span>Kreyol</span></div>
+          <p style="margin:0;line-height:1.5">Boutique en ligne de produits créoles — agro-transformation, épicerie et découvertes.</p>
+        </div>
+        <div>
+          <h4>Boutique</h4>
+          <ul>
+            <li><a href="shop.html">Tous les produits</a></li>
+            <li><a href="categorie.html">Épicerie créole</a></li>
+            <li><a href="fiche-produit.html">Fiche produit type</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Découvrir</h4>
+          <ul>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="fiche-producteur.html">Fiche producteur</a></li>
+            <li><a href="recettes.html">Recettes &amp; savoirs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>CK</h4>
+          <ul>
+            <li><a href="professionnels.html">Professionnels</a></li>
+            <li><a href="index.html">Accueil</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 C-Kreyol · Maquette Lot 3+ · /a-propos</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('burgerOpen');
+      var panel = document.getElementById('navMobile');
+      var overlay = document.getElementById('navOverlay');
+      if (!toggle || !panel || !overlay) return;
+      function setOpen(show) {
+        panel.classList.toggle('open', show);
+        overlay.classList.toggle('open', show);
+        toggle.setAttribute('aria-expanded', show);
+      }
+      toggle.addEventListener('click', function () { setOpen(!panel.classList.contains('open')); });
+      overlay.addEventListener('click', function () { setOpen(false); });
+      panel.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', function () { setOpen(false); }); });
+    })();
+  </script>
+</body>
+</html>

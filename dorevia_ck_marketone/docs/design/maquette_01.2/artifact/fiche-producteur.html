@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atelier Les Hauts Goyaviers — C-Kreyol · Maquette V1.2.x Lot 3+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ck-maquette.css" />
+</head>
+<body>
+
+  <div class="maquette-note">
+    <strong>Maquette V1.2.x · Lot 3+</strong> — Fiche producteur type ·
+    <a href="fiche-produit.html" style="color:#fb923c">Fiche produit liée</a> ·
+    <a href="a-propos.html" style="color:#fb923c">À propos</a> ·
+    Pas d’annuaire partenaire · Odoo en pause
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo">C-<span>Kreyol</span></a>
+      <nav class="nav-main" aria-label="Navigation principale">
+        <a href="shop.html">Boutique</a>
+        <a href="categorie.html">Catégories</a>
+        <a href="professionnels.html">Professionnels</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-box" role="search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Rechercher…" aria-label="Rechercher" /></div>
+        <button class="icon-btn burger" type="button" id="burgerOpen" aria-label="Menu" aria-expanded="false">☰</button>
+        <a href="/shop/cart" class="icon-btn" aria-label="Panier">🛒<span class="cart-badge">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menu mobile">
+    <h2>Menu</h2>
+    <a href="shop.html">Boutique</a>
+    <a href="categorie.html">Catégories</a>
+    <a href="professionnels.html">Professionnels</a>
+  </nav>
+
+  <main class="producer-page">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane">
+        <a href="index.html">Accueil</a><span>/</span>
+        <a href="a-propos.html">À propos</a><span>/</span>
+        Atelier Les Hauts Goyaviers
+      </nav>
+
+      <!-- 7.1 Hero producteur -->
+      <header class="producer-hero">
+        <div class="producer-hero-visual" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&q=80')" role="img" aria-label="Verger et atelier de transformation — La Réunion"></div>
+        <div class="producer-hero-body">
+          <div class="producer-hero-meta">
+            <span class="chip-origin">La Réunion</span>
+            <span class="chip-cat">Agro-transformation</span>
+          </div>
+          <h1>Atelier Les Hauts Goyaviers</h1>
+          <p class="producer-tagline">Trois générations de transformateurs — goyaviers de pleine terre, confitures artisanales et circuits courts entre verger et atelier.</p>
+          <div class="producer-hero-cta">
+            <a href="#produits" class="btn btn-primary">Voir les produits</a>
+            <a href="professionnels.html" class="btn btn-secondary">Demande professionnelle</a>
+          </div>
+          <span class="route-hint">Route Odoo cible : /producteur/atelier-hauts-goyaviers · fiche CMS ou champ fournisseur = réserve</span>
+        </div>
+      </header>
+
+      <!-- 7.2 Présentation éditoriale -->
+      <section class="producer-section" aria-labelledby="pres-title">
+        <h2 id="pres-title" class="section-title">Qui est ce producteur ?</h2>
+        <div class="producer-story">
+          <div class="producer-story-text">
+            <p>Fondé à Saint-Pierre, au sud de La Réunion, l’Atelier Les Hauts Goyaviers est une structure familiale d’agriculteurs-transformateurs. Depuis trois générations, la famille cultive des goyaviers en pleine terre et transforme les récoltes dans un atelier attenant aux vergers.</p>
+            <p><strong>Savoir-faire :</strong> confitures artisanales, cuisson lente, fruits triés à la main, traçabilité lot par lot.<br />
+            <strong>Type de production :</strong> petite série · transformation locale · pas de marketplace ouverte.<br />
+            <strong>Lien territoire :</strong> microclimat du sud réunionnais, goyavier de pleine terre, circuit court verger → atelier.</p>
+            <p>CK met en avant ce partenaire parce qu’il incarne ce que la boutique cherche : une origine lisible, une qualité constante et une histoire que le client peut comprendre avant d’acheter.</p>
+          </div>
+          <aside class="producer-story-aside">
+            <h3>En bref</h3>
+            <ul class="producer-facts">
+              <li><strong>Localisation</strong> Saint-Pierre, La Réunion</li>
+              <li><strong>Activité</strong> Confitures · gelées · fruits transformés</li>
+              <li><strong>Relation CK</strong> Partenaire sélectionné depuis 2023</li>
+              <li><strong>Disponibilité</strong> Catalogue B2C · volumes pro sur qualification</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 7.3 Critères de sélection CK -->
+      <section class="producer-section" aria-labelledby="select-title">
+        <h2 id="select-title" class="section-title">Pourquoi CK sélectionne ce producteur</h2>
+        <div class="selection-criteria">
+          <div class="criteria-item"><span class="criteria-icon">✓</span><div><strong>Qualité constante</strong><span>Texture, goût et régularité lot par lot contrôlés avant mise en ligne.</span></div></div>
+          <div class="criteria-item"><span class="criteria-icon">✓</span><div><strong>Origine traçable</strong><span>Réunion · vergers identifiés · transformation locale documentée.</span></div></div>
+          <div class="criteria-item"><span class="criteria-icon">✓</span><div><strong>Cohérence produit</strong><span>Univers épicerie sucrée CK · formats adaptés au marché européen.</span></div></div>
+          <div class="criteria-item"><span class="criteria-icon">✓</span><div><strong>Potentiel commercial</strong><span>Produits désirables · storytelling clair · demande client récurrente.</span></div></div>
+          <div class="criteria-item"><span class="criteria-icon">✓</span><div><strong>Capacité d’approvisionnement</strong><span>Volumes stables pour le B2C · étude cas par cas pour le B2B.</span></div></div>
+          <div class="criteria-item"><span class="criteria-icon">✓</span><div><strong>Compatibilité CK</strong><span>Respect des standards logistiques · emballage · délais annoncés.</span></div></div>
+        </div>
+        <span class="arbitrage-tag">Classe V1 possible — critères en texte CMS · pas de scoring automatique Odoo V1</span>
+      </section>
+
+      <!-- 7.4 Produits proposés -->
+      <section class="producer-section" id="produits" aria-labelledby="prod-title">
+        <div class="section-head-row">
+          <h2 id="prod-title" class="section-title" style="margin:0">Produits proposés</h2>
+          <a href="categorie.html" class="editorial-link">Voir la collection Épicerie créole →</a>
+        </div>
+        <p class="section-lead">Référence visuelle des produits disponibles via CK — lien direct producteur → découverte → achat.</p>
+        <div class="product-grid-dense producer-products">
+          <article class="product-card">
+            <a href="fiche-produit.html" class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80')"><span class="badge badge-heart badge-float">Incontournable</span></a>
+            <div class="product-card-body"><div class="product-meta"><span class="chip-origin">Réunion</span><span class="chip-cat">Confitures</span></div><h3><a href="fiche-produit.html">Confiture goyavier</a></h3></div>
+            <div class="product-card-foot"><span class="price">8,90 €</span><a href="fiche-produit.html" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80')"><span class="badge badge-new badge-float">Découverte</span></div>
+            <div class="product-card-body"><div class="product-meta"><span class="chip-origin">Réunion</span><span class="chip-cat">Confitures</span></div><h3>Confiture passion</h3></div>
+            <div class="product-card-foot"><span class="price">9,20 €</span><a href="/shop/confiture-passion-131" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80')"></div>
+            <div class="product-card-body"><div class="product-meta"><span class="chip-origin">Réunion</span><span class="chip-cat">Confitures</span></div><h3>Gelée chouchou</h3></div>
+            <div class="product-card-foot"><span class="price">8,50 €</span><a href="/shop/gelee-chouchou-132" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&q=80')"><span class="badge badge-pack badge-float">Pack</span></div>
+            <div class="product-card-body"><div class="product-meta"><span class="chip-origin">Réunion</span><span class="chip-cat">Packs</span></div><h3>Triptyque confitures réunionnaises</h3></div>
+            <div class="product-card-foot"><span class="price">24,90 €</span><a href="/shop/triptyque-confitures-133" class="card-cta">Voir</a></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 7.5 Sélection CK -->
+      <section class="producer-section" aria-labelledby="focus-title">
+        <h2 id="focus-title" class="section-title">Sélection CK — produits emblématiques</h2>
+        <div class="producer-focus-grid">
+          <article class="producer-focus-card">
+            <div class="producer-focus-media" style="background-image:url('https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800&q=80')"></div>
+            <div class="producer-focus-body">
+              <span class="badge badge-heart">Incontournable CK</span>
+              <h3>Confiture goyavier</h3>
+              <p>Le produit signature de l’atelier — goyavier de pleine terre, notes florales et acidulées. CK le met en avant pour son équilibre saveur/texture et sa régularité de production.</p>
+              <p><strong>Usage :</strong> petit-déjeuner · tartines · yaourts · accords fromages frais.<br />
+              <strong>Moment :</strong> quotidien · coffrets cadeaux · découverte créole.</p>
+              <a href="fiche-produit.html" class="editorial-link">Voir la fiche produit →</a>
+            </div>
+          </article>
+          <article class="producer-focus-card">
+            <div class="producer-focus-media" style="background-image:url('https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&q=80')"></div>
+            <div class="producer-focus-body">
+              <span class="badge badge-new">Découverte</span>
+              <h3>Confiture passion</h3>
+              <p>Alternative parfumée pour élargir le panier — fruit tropical intense, texture onctueuse. Sélectionnée pour compléter la gamme goyavier sans diluer l’identité de l’atelier.</p>
+              <p><strong>Usage :</strong> desserts · glaces · cocktails sans alcool.<br />
+              <span class="badge badge-pro" style="margin-top:8px">Pour les pros</span> — volumes étudiés après qualification.</p>
+              <a href="/shop/confiture-passion-131" class="editorial-link">Découvrir →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 7.6 Usage / conseil -->
+      <section class="producer-section" aria-labelledby="usage-title">
+        <h2 id="usage-title" class="section-title">Usages &amp; conseils</h2>
+        <div class="producer-usage-grid">
+          <div class="recipe-card">
+            <h3>Idée recette · Clafoutis goyavier</h3>
+            <ol class="recipe-steps">
+              <li>Mélanger 3 œufs, 80 g de sucre et 80 g de farine.</li>
+              <li>Ajouter 25 cl de lait et 2 c. à soupe de confiture goyavier.</li>
+              <li>Versez dans un moule beurré · four 180 °C · 35 min.</li>
+            </ol>
+            <a href="recettes.html" class="editorial-link">Plus de recettes &amp; savoirs →</a>
+          </div>
+          <div class="info-panel">
+            <h3>Associations CK</h3>
+            <p>Les confitures de l’atelier s’accordent avec les galettes de manioc, les épices colombo en toucher sucré-salé, ou un fromage frais en fin de repas.</p>
+            <p><strong>Moment de consommation :</strong> petit-déjeuner · goûter · cadeau · table festive légère.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7.7 Signal logistique CK -->
+      <section class="producer-section" aria-labelledby="log-title">
+        <h2 id="log-title" class="section-title">Ce que CK garantit</h2>
+        <div class="producer-logistics">
+          <p>CK ne se contente pas de relayer un catalogue : nous <strong>sélectionnons</strong>, <strong>rendons disponibles</strong> et <strong>organisons l’accès</strong> de ces produits au marché européen — avec des conditions annoncées avant paiement pour le B2C.</p>
+          <ul class="producer-logistics-list">
+            <li>Sélection et mise en ligne des références compatibles avec l’expérience CK</li>
+            <li>Expédition suivie France &amp; Europe · délais annoncés sur la boutique</li>
+            <li>Service client pour questions produit · renvoi vers <a href="contact.html">Contact</a></li>
+            <li>Demandes professionnelles qualifiées via l’<a href="professionnels.html">espace Pro</a> — pas de tarifs B2B automatiques</li>
+          </ul>
+        </div>
+        <span class="arbitrage-tag">Classe V1 prioritaire — réassurance logistique · distinction B2C/B2B · pas de portail producteur</span>
+      </section>
+
+      <!-- 7.8 CTA de sortie -->
+      <section class="producer-cta-row" aria-label="Actions">
+        <a href="shop.html" class="btn btn-primary">Découvrir tous les produits</a>
+        <a href="categorie.html" class="btn btn-secondary">Voir la collection Épicerie créole</a>
+        <a href="professionnels.html" class="btn btn-secondary">Demande professionnelle</a>
+        <a href="contact.html" class="btn btn-secondary">Proposer un producteur / devenir fournisseur</a>
+      </section>
+
+      <div class="category-usage" style="margin-top:24px">
+        <strong>Réserve maquette :</strong> pas d’annuaire partenaires · pas de portail producteur · pas de fiches auto-générées depuis Odoo fournisseur — arbitrage MOA requis pour V1.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid-ext">
+        <div>
+          <div class="footer-brand">C-<span>Kreyol</span></div>
+          <p style="margin:0;line-height:1.5">Boutique en ligne de produits créoles — agro-transformation, épicerie et découvertes.</p>
+        </div>
+        <div>
+          <h4>Boutique</h4>
+          <ul>
+            <li><a href="shop.html">Tous les produits</a></li>
+            <li><a href="categorie.html">Épicerie créole</a></li>
+            <li><a href="fiche-produit.html">Confiture goyavier</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Découvrir</h4>
+          <ul>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="fiche-producteur.html">Fiche producteur type</a></li>
+            <li><a href="recettes.html">Recettes &amp; savoirs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>CK</h4>
+          <ul>
+            <li><a href="professionnels.html">Professionnels</a></li>
+            <li><a href="index.html">Accueil</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 C-Kreyol · Maquette Lot 3+ · /producteur/atelier-hauts-goyaviers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('burgerOpen');
+      var panel = document.getElementById('navMobile');
+      var overlay = document.getElementById('navOverlay');
+      if (!toggle || !panel || !overlay) return;
+      function setOpen(show) {
+        panel.classList.toggle('open', show);
+        overlay.classList.toggle('open', show);
+        toggle.setAttribute('aria-expanded', show);
+      }
+      toggle.addEventListener('click', function () { setOpen(!panel.classList.contains('open')); });
+      overlay.addEventListener('click', function () { setOpen(false); });
+      panel.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', function () { setOpen(false); }); });
+    })();
+  </script>
+</body>
+</html>

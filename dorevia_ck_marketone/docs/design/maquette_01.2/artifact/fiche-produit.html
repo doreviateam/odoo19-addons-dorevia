@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Confiture goyavier — C-Kreyol · Maquette V1.2.x Lot 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ck-maquette.css" />
+</head>
+<body>
+
+  <div class="maquette-note">
+    <strong>Maquette V1.2.x · Lot 1.1</strong> — Fiche produit type ·
+    <a href="index.html" style="color:#fb923c">Accueil</a> ·
+    <a href="professionnels.html" style="color:#fb923c">Professionnels</a> ·
+    Route Odoo cible : <code>/shop/confiture-goyavier-123</code>
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo">C-<span>Kreyol</span></a>
+      <nav class="nav-main" aria-label="Navigation principale">
+        <a href="shop.html">Boutique</a>
+        <a href="categorie.html">Catégories</a>
+        <a href="professionnels.html">Professionnels</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-box" role="search">
+          <span aria-hidden="true">⌕</span>
+          <input type="search" placeholder="Rechercher…" aria-label="Rechercher un produit" />
+        </div>
+        <button class="icon-btn burger" type="button" id="burgerOpen" aria-label="Menu" aria-expanded="false">☰</button>
+        <a href="/shop/cart" class="icon-btn" aria-label="Panier">🛒<span class="cart-badge">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menu mobile">
+    <h2>Menu</h2>
+    <a href="shop.html">Boutique</a>
+    <a href="categorie.html">Catégories</a>
+    <a href="professionnels.html">Professionnels</a>
+  </nav>
+
+  <main class="product-page">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane">
+        <a href="index.html">Accueil</a><span>/</span>
+        <a href="shop.html">Boutique</a><span>/</span>
+        <a href="categorie.html">Épicerie créole</a><span>/</span>
+        Confiture goyavier
+      </nav>
+
+      <div class="product-layout" style="margin-top:20px">
+        <div class="product-gallery">
+          <div class="product-gallery-main">
+            <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800&q=80" alt="Pot de confiture goyavier — C-Kreyol" width="800" height="800" />
+          </div>
+        </div>
+
+        <div class="product-buy">
+          <div class="product-meta-row">
+            <span class="chip-origin">Réunion</span>
+            <span class="chip-cat">Épicerie sucrée</span>
+            <span class="badge badge-heart">Coup de cœur CK</span>
+          </div>
+          <h1>Confiture goyavier</h1>
+          <p class="product-buy-lead">Confiture artisanale, goyavier de pleine terre — texture fondante, notes florales et acidulées. Idéale au petit-déjeuner ou en accompagnement fromage.</p>
+          <div class="product-price-row">
+            <span class="price price-lg">8,90 €</span>
+            <span class="product-price-note">TTC · 250 g · prix public B2C</span>
+          </div>
+          <div class="qty-row">
+            <div class="qty-input" aria-label="Quantité">
+              <button type="button" aria-label="Diminuer">−</button>
+              <input type="text" value="1" readonly aria-label="Quantité" />
+              <button type="button" aria-label="Augmenter">+</button>
+            </div>
+            <a href="/shop/cart" class="btn btn-primary" style="flex:1;min-width:160px">Ajouter au panier</a>
+          </div>
+          <a href="/shop/cart" class="btn btn-secondary btn-block">Acheter maintenant</a>
+          <div class="product-trust-mini">
+            <span>🚚 Livraison France &amp; Europe</span>
+            <span>🔒 Paiement sécurisé</span>
+            <span>🌿 Producteur sélectionné CK</span>
+            <span>📦 Expédition sous 48–72 h</span>
+          </div>
+          <span class="arbitrage-tag">Traduction : fiche produit native Odoo + champs description / attributs · classe V1 prioritaire</span>
+        </div>
+      </div>
+
+      <section class="section" aria-labelledby="enrich-title">
+        <div class="enrich-tabs" role="tablist" aria-label="Informations produit">
+          <span class="enrich-tab active">Origine &amp; usage</span>
+          <span class="enrich-tab">Producteur</span>
+          <span class="enrich-tab">Conservation</span>
+        </div>
+        <h2 id="enrich-title" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden">Détails produit</h2>
+        <div class="enrich-grid">
+          <div class="info-panel">
+            <h3>Origine &amp; terroir</h3>
+            <p>Fabriquée à la Réunion à partir de goyaviers cultivés en pleine terre, dans le sud de l’île. Récolte manuelle, transformation locale — circuit court entre verger et atelier.</p>
+            <p><strong>Saveur :</strong> florale, légèrement acidulée, finale douce.<br />
+            <strong>Texture :</strong> fondante, morceaux de fruit visibles.<br />
+            <strong>Usage :</strong> tartines, yaourts, pâtisseries, accords fromages frais.</p>
+          </div>
+          <div class="info-panel">
+            <h3>Le producteur</h3>
+            <div class="producer-card">
+              <div class="producer-avatar" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=200&q=80')" aria-hidden="true"></div>
+              <div>
+                <p><strong>Atelier Les Hauts Goyaviers</strong> — Saint-Pierre, La Réunion. Famille d’agriculteurs-transformateurs depuis trois générations. CK sélectionne ce partenaire pour la régularité de qualité et la traçabilité lot par lot.</p>
+                <a href="fiche-producteur.html" style="font-size:13px;font-weight:700;color:var(--ck-primary)">Voir la fiche producteur →</a>
+              </div>
+            </div>
+            <span class="arbitrage-tag">Classe V1 possible — bloc producteur CMS ou champ fournisseur · réserve si pas de fiche fournisseur Odoo</span>
+          </div>
+          <div class="info-panel">
+            <h3>Conservation</h3>
+            <p>Avant ouverture : conserver au frais, à l’abri de la lumière. Après ouverture : réfrigérer et consommer sous 3 semaines. Sans conservateurs ajoutés au-delà du sucre et de l’acidité naturelle du fruit.</p>
+          </div>
+          <div class="info-panel">
+            <h3>Associations CK</h3>
+            <p>À associer avec :</p>
+            <div class="assoc-grid">
+              <a href="/shop/galettes-manioc-126" class="assoc-item">Galettes de manioc<span><strong>5,50 €</strong></span></a>
+              <a href="/shop/epices-colombo-127" class="assoc-item">Épices colombo<span><strong>6,40 €</strong></span></a>
+              <a href="/shop/coffret-decouverte-creole-129" class="assoc-item">Coffret découverte<span><strong>29,90 €</strong></span></a>
+            </div>
+            <span class="arbitrage-tag">Classe V1 différée — produits alternatifs Odoo · optionnel Lot 2</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" style="padding-top:0" aria-labelledby="recipe-title">
+        <div class="recipe-card">
+          <p class="kicker">Idée recette CK</p>
+          <h3 id="recipe-title">Clafoutis créole au goyavier</h3>
+          <ol class="recipe-steps">
+            <li>Beurrer un plat · disposer une couche de confiture goyavier au fond.</li>
+            <li>Préparer une pâte clafoutis classique (œufs, lait, farine, sucre).</li>
+            <li>Enfourner 35 min à 180 °C — servir tiède, touche vanille ou rhum arrangé.</li>
+          </ol>
+          <span class="arbitrage-tag">Classe V1 différée — contenu éditorial CMS / blog · pas obligatoire fiche Odoo V1</span>
+        </div>
+      </section>
+
+      <section class="pro-strip" aria-labelledby="pro-signal">
+        <div class="wrap pro-strip-inner">
+          <div>
+            <h2 id="pro-signal" style="font-family:var(--font-display);font-size:18px;margin:0 0 6px">Professionnels — conditions sur demande</h2>
+            <p>Revendeurs, CHR, distributeurs : tarifs et logistique étudiés après qualification. Pas de commande B2B en ligne sur cette fiche.</p>
+          </div>
+          <a href="professionnels.html" class="btn btn-secondary">Demander un contact pro</a>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="related-title">
+        <div class="section-head">
+          <h2 id="related-title">Vous aimerez aussi</h2>
+        </div>
+        <div class="product-grid">
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80')"></div>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Martinique</span><span class="chip-cat">Épicerie</span></div>
+              <h3>Galettes de manioc</h3>
+            </div>
+            <div class="product-card-foot"><span class="price">5,50 €</span><a href="/shop/galettes-manioc-126" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600&q=80')"></div>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Martinique</span><span class="chip-cat">Condiments</span></div>
+              <h3>Épices colombo</h3>
+            </div>
+            <div class="product-card-foot"><span class="price">6,40 €</span><a href="/shop/epices-colombo-127" class="card-cta">Voir</a></div>
+          </article>
+          <article class="product-card">
+            <div class="product-card-media" style="background-image:url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&q=80')"></div>
+            <div class="product-card-body">
+              <div class="product-meta"><span class="chip-origin">Sélection CK</span><span class="chip-cat">Pack</span></div>
+              <h3>Coffret découverte créole</h3>
+            </div>
+            <div class="product-card-foot"><span class="price">29,90 €</span><a href="/shop/coffret-decouverte-creole-129" class="card-cta">Voir</a></div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid-ext">
+        <div>
+          <div class="footer-brand">C-<span>Kreyol</span></div>
+          <p style="margin:0;line-height:1.5">Boutique en ligne de produits créoles — agro-transformation, épicerie et découvertes.</p>
+        </div>
+        <div>
+          <h4>Boutique</h4>
+          <ul>
+            <li><a href="shop.html">Tous les produits</a></li>
+            <li><a href="categorie.html">Épicerie créole</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Découvrir</h4>
+          <ul>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="fiche-producteur.html">Fiche producteur</a></li>
+            <li><a href="recettes.html">Recettes &amp; savoirs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>CK</h4>
+          <ul>
+            <li><a href="professionnels.html">Professionnels</a></li>
+            <li><a href="index.html">Accueil</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 C-Kreyol · Fiche produit type Lot 1</span>
+        <span>Route Odoo : /shop/confiture-goyavier-123</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('burgerOpen');
+      var panel = document.getElementById('navMobile');
+      var overlay = document.getElementById('navOverlay');
+      if (!toggle || !panel || !overlay) return;
+      function setOpen(show) {
+        panel.classList.toggle('open', show);
+        overlay.classList.toggle('open', show);
+        toggle.setAttribute('aria-expanded', show);
+      }
+      toggle.addEventListener('click', function () { setOpen(!panel.classList.contains('open')); });
+      overlay.addEventListener('click', function () { setOpen(false); });
+      panel.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () { setOpen(false); });
+      });
+    })();
+  </script>
+</body>
+</html>
