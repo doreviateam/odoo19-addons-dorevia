@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_shop_pack_intro"
+              inherit_id="website_sale.products"
+              name="Marketone: porte Kits &amp; Coffrets"
+              priority="21">
+        <xpath expr="//h1[hasclass('o_wsale_shop_title')]" position="attributes">
+            <attribute name="t-if">not category and not search and not marketone_featured_mode and not marketone_origin_mode and not marketone_promo_mode and not marketone_pack_mode</attribute>
+        </xpath>
+        <xpath expr="//header[@id='o_wsale_products_header']" position="before">
+            <section t-if="marketone_pack_mode"
+                     class="marketone-shop-pack-intro"
+                     aria-labelledby="marketone-pack-title">
+                <h1 id="marketone-pack-title"
+                    class="marketone-shop-pack-title o_wsale_products_shop_title">
+                    Kits &amp; Coffrets
+                </h1>
+                <p class="marketone-shop-pack-lead">
+                    Découvrez nos kits et coffrets gourmands — les prix affichés
+                    sont calculés par Odoo.
+                </p>
+                <p t-if="marketone_pack_empty"
+                   class="marketone-shop-pack-empty"
+                   role="status">
+                    Aucun kit ou coffret n'est disponible pour le moment.
+                </p>
+                <p class="marketone-shop-pack-back-wrap">
+                    <a href="/shop" class="marketone-shop-pack-back">
+                        Tous les produits
+                    </a>
+                </p>
+            </section>
+        </xpath>
+    </template>
+</odoo>
