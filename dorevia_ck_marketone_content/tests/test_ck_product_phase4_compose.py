@@ -1,0 +1,86 @@
+# -*- coding: utf-8 -*-
+"""Tests HTTP Phase 4 — fiche produit portable (dorevia_ck_theme)."""
+
+import re
+
+from odoo.tests import tagged
+from odoo.tests.common import HttpCase
+
+from odoo.addons.dorevia_ck_marketone_content.hooks import bootstrap_published_products
+
+
+@tagged('post_install', '-at_install', 'dorevia_ck_theme_phase4')
+class TestCkProductPhase4Compose(HttpCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        bootstrap_published_products(cls.env)
+        cls.product = cls.env['product.template'].search(
+            [('is_published', '=', True), ('sale_ok', '=', True)],
+            limit=1,
+        )
+        if not cls.product:
+            cls.product = cls.env['product.template'].create({
+                'name': 'CK Theme Phase 4 Recette',
+                'type': 'consu',
+                'list_price': 9.9,
+                'sale_ok': True,
+                'is_published': True,
+            })
+            bootstrap_published_products(cls.env)
+        cat = cls.env['product.public.category'].search([('name', 'ilike', 'épicerie')], limit=1)
+        if cat:
+            cls.product.write({'public_categ_ids': [(4, cat.id)]})
+
+    def test_module_product_compose_view_installed(self):
+        view = self.env['ir.ui.view'].search([
+            ('key', '=', 'dorevia_ck_theme.product_ck_compose'),
+        ], limit=1)
+        self.assertTrue(view, 'Vue portable Phase 4 absente — -u dorevia_ck_theme requis.')
+
+    def test_product_page_http_200(self):
+        url = self.product.website_url
+        self.assertTrue(url)
+        self.assertEqual(self.url_open(url).status_code, 200)
+
+    def test_product_page_native_purchase_block(self):
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-page', html)
+        self.assertIn('id="add_to_cart"', html)
+        self.assertIn('o_wsale_product_page', html)
+        self.assertRegex(html, r'product_price|o_wsale_product_details_content_section_price')
+
+    def test_product_page_phase4_compose(self):
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-pro-signal', html)
+        self.assertIn('href="/professionnels"', html)
+
+    def test_product_description_when_bootstrapped(self):
+        if 'Confiture' not in (self.product.name or ''):
+            self.product.write({'name': 'Confiture de goyave'})
+            bootstrap_published_products(self.env)
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-enrich', html)
+
+    def test_product_category_chips_when_assigned(self):
+        if not self.product.public_categ_ids:
+            self.skipTest('Produit sans catégorie e-commerce.')
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-chip', html)
+
+    def test_cart_page_http_200(self):
+        self.assertEqual(self.url_open('/shop/cart').status_code, 200)
+
+    def test_shop_phase3_intact(self):
+        html = self.url_open('/shop').text
+        self.assertIn('s_ck_shop_intro', html)
+
+    def test_home_no_product_pro_signal(self):
+        html = self.url_open('/').text
+        self.assertNotIn('ck-product-pro-signal', html)
+        self.assertIn('ck-featured-products__grid--stable', html)
+
+    def test_no_producer_link_without_cms_target(self):
+        html = self.url_open(self.product.website_url).text
+        self.assertNotIn('fiche-producteur', html)
+        self.assertNotIn('/producteur/', html)
