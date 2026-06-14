@@ -1,0 +1,45 @@
+// Lot 6.3a — porte Promotions (sous .marketone-shop uniquement).
+
+.marketone-shop {
+    .marketone-shop-promo-intro {
+        margin-bottom: $marketone-space-md;
+        padding: 0.85rem 1.15rem $marketone-space-sm;
+        border-radius: $marketone-radius-md;
+        border: 1px solid $ck-border-soft;
+        border-left: 2px solid $marketone-primary;
+        background-color: $ck-bg-cream;
+        box-shadow: 0 2px 10px rgba($ck-shadow, 0.04);
+    }
+
+    .marketone-shop-promo-title {
+        margin-bottom: $marketone-space-xs;
+    }
+
+    .marketone-shop-promo-lead {
+        max-width: 42rem;
+        margin-bottom: $marketone-space-sm;
+        font-size: $marketone-body;
+        line-height: 1.55;
+        color: rgba($ck-text, 0.78);
+    }
+
+    .marketone-shop-promo-empty {
+        margin-bottom: $marketone-space-sm;
+        font-size: $marketone-body;
+        color: rgba($ck-text, 0.72);
+    }
+
+    .marketone-shop-promo-back {
+        font-family: $marketone-font-body;
+        font-weight: $marketone-weight-semibold;
+        color: $marketone-primary;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: $marketone-primary-container;
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+        }
+    }
+}

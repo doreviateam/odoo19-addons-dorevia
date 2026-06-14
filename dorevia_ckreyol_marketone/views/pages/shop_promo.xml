@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marketone_shop_promo_intro"
+              inherit_id="website_sale.products"
+              name="Marketone: porte Promotions"
+              priority="20">
+        <xpath expr="//h1[hasclass('o_wsale_shop_title')]" position="attributes">
+            <attribute name="t-if">not category and not search and not marketone_featured_mode and not marketone_origin_mode and not marketone_promo_mode and not marketone_pack_mode</attribute>
+        </xpath>
+        <xpath expr="//header[@id='o_wsale_products_header']" position="before">
+            <section t-if="marketone_promo_mode"
+                     class="marketone-shop-promo-intro"
+                     aria-labelledby="marketone-promo-title">
+                <h1 id="marketone-promo-title"
+                    class="marketone-shop-promo-title o_wsale_products_shop_title">
+                    Promotions
+                </h1>
+                <p class="marketone-shop-promo-lead">
+                    Découvrez les produits bénéficiant d'une remise sur votre liste
+                    de prix — les prix affichés sont calculés par Odoo.
+                </p>
+                <p t-if="marketone_promo_empty"
+                   class="marketone-shop-promo-empty"
+                   role="status">
+                    Aucune promotion n'est active pour le moment sur votre liste de prix.
+                </p>
+                <p class="marketone-shop-promo-back-wrap">
+                    <a href="/shop" class="marketone-shop-promo-back">
+                        Tous les produits
+                    </a>
+                </p>
+            </section>
+        </xpath>
+    </template>
+</odoo>
