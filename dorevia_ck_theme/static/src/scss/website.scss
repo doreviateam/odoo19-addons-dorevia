@@ -41,6 +41,54 @@
     background-color: $ck-bg-soft;
 }
 
+// V1 Hero home — rapprochement maquette (compact · 60/40 · visuel borné)
+.ck-hero.ck-hero--marketone-v1 {
+    background-color: $ck-surface;
+    border-bottom: 1px solid $ck-border;
+    padding-top: 1.75rem;
+    padding-bottom: 1.5rem;
+
+    .ck-hero__kicker {
+        font-size: $ck-text-xs;
+        letter-spacing: 0.04em;
+    }
+
+    .ck-hero__title {
+        font-size: clamp(1.5rem, 4vw, 2.125rem);
+        line-height: 1.15;
+    }
+
+    .ck-hero__lead {
+        font-size: 0.9375rem;
+        max-width: 42ch;
+    }
+
+    .ck-hero__visual {
+        position: relative;
+        width: 100%;
+        height: 220px;
+        border: 1px solid $ck-border;
+        border-radius: $ck-radius-lg;
+        overflow: hidden;
+        background-color: $ck-image-zone;
+
+        @media (max-width: 767.98px) {
+            height: 160px;
+        }
+    }
+
+    .ck-hero__visual-media {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .ck-hero__visual--editorial {
+        background: linear-gradient(135deg, $ck-bg-soft 0%, $ck-image-zone 100%);
+    }
+}
+
 .ck-hero__title {
     font-size: $ck-text-hero-mobile;
 

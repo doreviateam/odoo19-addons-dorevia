@@ -931,6 +931,9 @@ def bootstrap_all_marketone_content(env):
     bootstrap_newsletter_mailing_list(env)
     bootstrap_epicerie_category(env)
     bootstrap_published_products(env)
+    from .home_hero import bootstrap_home_hero
+
+    bootstrap_home_hero(env)
     bootstrap_home_featured_products(env)
     bootstrap_home_discovery_pack(env)
     from .home_dual_engage import bootstrap_home_dual_engage
