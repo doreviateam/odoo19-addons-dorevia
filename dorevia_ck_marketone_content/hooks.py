@@ -7,6 +7,7 @@ Module optionnel : ``dorevia_ck_theme`` reste un thème générique sans ce cont
 import re
 from xml.sax.saxutils import escape
 
+from .catalog_manioc_variants import bootstrap_catalog_vedettes_products
 from .home_discovery_pack import bootstrap_home_discovery_pack
 from .home_featured import bootstrap_home_featured_products
 from .legal_pages import (
@@ -931,6 +932,7 @@ def bootstrap_all_marketone_content(env):
     bootstrap_newsletter_mailing_list(env)
     bootstrap_epicerie_category(env)
     bootstrap_published_products(env)
+    bootstrap_catalog_vedettes_products(env)
     from .home_hero import bootstrap_home_hero
 
     bootstrap_home_hero(env)

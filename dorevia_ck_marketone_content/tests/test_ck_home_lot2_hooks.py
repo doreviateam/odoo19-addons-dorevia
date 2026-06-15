@@ -37,13 +37,14 @@ class TestCkHomeLot2Hooks(TransactionCase):
 
     def test_card_fragment_validation(self):
         valid = (
-            '<a href="/shop/demo-1">'
-            '<span class="oe_product_image_img" style="background-image: url(/web/image/product.product/1/image_512);"/>'
-            '<span class="oe_currency_value">12.00</span></a>'
+            '<article class="ck-product-card product-card">'
+            '<a class="product-card-media" style="background-image:url(\'/web/image/product.template/1/image_512\')">'
+            '</a><div class="product-card-foot"><span class="price">12,00 €</span>'
+            '<a href="/shop/demo-1" class="card-cta">Voir</a></div></article>'
         )
         self.assertTrue(card_fragment_is_valid(valid))
-        self.assertFalse(card_fragment_is_valid(valid.replace('oe_currency_value', '')))
-        self.assertFalse(card_fragment_is_valid(valid.replace('/web/image/product.product/', '/web/image/website.s_cover_default_image')))
+        self.assertFalse(card_fragment_is_valid(valid.replace('class="price"', '')))
+        self.assertFalse(card_fragment_is_valid(valid.replace('/web/image/product.template/', '/web/image/website.s_cover_default_image')))
 
     def test_get_ready_variants_requires_images(self):
         variants = get_ready_featured_variants(self.env)
@@ -65,9 +66,10 @@ class TestCkHomeLot2Hooks(TransactionCase):
         self.assertTrue(bootstrap_home_featured_products(self.env))
         arch = self._homepage_arch()
         self.assertIn('ck-featured-products__grid--stable', arch)
-        self.assertIn('Produits vedettes', arch)
+        self.assertIn('Nos coups de cœur', arch)
+        self.assertIn('Toute la boutique', arch)
         self.assertNotIn('s_dynamic_snippet_products', arch)
-        self.assertGreaterEqual(arch.count('o_carousel_product_card'), MIN_FEATURED_PRODUCTS)
+        self.assertGreaterEqual(arch.count('ck-product-card'), MIN_FEATURED_PRODUCTS)
         self.assertGreaterEqual(len(__import__('re').findall(r'href="/shop/[^"]+"', arch)), MIN_FEATURED_PRODUCTS)
 
     def test_bootstrap_idempotent(self):

@@ -310,75 +310,182 @@
     }
 }
 
-// Produits vedettes home — grille SSR stable (Q1 · layout shift)
-.ck-featured-products__grid {
-    overflow-x: clip;
+// Produits vedettes home — maquette V1.2 « Nos coups de cœur »
+.ck-featured-products.ck-featured-products--maquette {
+    .ck-featured-products__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: $ck-space-3;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
 
-    .ck-featured-products__ssr {
-        .row {
-            align-items: stretch;
+    .ck-featured-products__title {
+        font-family: $ck-font-display;
+        font-size: $ck-text-xl;
+        font-weight: $ck-font-weight-display;
+        margin: 0;
+    }
+
+    .ck-featured-products__subtitle {
+        margin-top: 2px;
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+    }
+
+    .ck-featured-products__shop-cta {
+        padding: 8px 14px;
+        font-size: 13px;
+        border-radius: $ck-radius-md;
+        border: 1px solid $ck-border;
+        background: $ck-surface;
+        color: $ck-text;
+        font-weight: $ck-font-weight-semibold;
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover {
+            background: $ck-bg-soft;
+            color: $ck-text;
+        }
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+
+        @media (max-width: 1023.98px) {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        > .row > [class*="col-"] {
-            display: flex;
-            align-items: stretch;
+        @media (max-width: 479.98px) {
+            grid-template-columns: 1fr;
         }
+    }
 
-        .oe_product_cart {
-            // Désactive le lazy layout natif Odoo (content-visibility: auto → sauts au scroll)
-            content-visibility: visible !important;
-            contain: layout style !important;
-            transform: none !important;
-            transition: none !important;
-            height: 100%;
-            width: 100%;
+    .ck-product-card.product-card {
+        background: $ck-surface;
+        border: 1px solid $ck-border;
+        border-radius: $ck-radius-lg;
+        overflow: hidden;
+        box-shadow: $ck-shadow-card;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+        display: flex;
+        flex-direction: column;
 
-            &::before {
-                display: none !important;
-            }
+        &:hover {
+            box-shadow: $ck-shadow-card-hover;
+            transform: translateY(-2px);
+        }
+    }
 
-            &:hover,
-            &:has(:focus-visible) {
-                z-index: auto !important;
-                transform: none !important;
-                box-shadow: var(--o-wsale-card-shadow, none) !important;
+    .product-card-media,
+    .ck-product-card__media {
+        display: block;
+        aspect-ratio: 1 / 1;
+        background: $ck-image-zone center / cover no-repeat;
+        position: relative;
+        text-decoration: none;
+    }
 
-                .oe_product_image,
-                .o_wsale_product_information {
-                    transform: none !important;
-                    transition: none !important;
-                }
-            }
+    .product-card-body {
+        padding: 12px 14px;
+        flex: 1;
+    }
 
-            .oe_product_image {
-                width: 100% !important;
-                min-width: 0 !important;
-                transform: none !important;
-                transition: none !important;
-            }
+    .product-meta {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 4px;
+        align-items: center;
+    }
 
-            .oe_product_image_link {
-                aspect-ratio: 1 / 1;
-                max-height: none;
-            }
+    .chip-origin {
+        background: $ck-secondary-soft;
+        color: $ck-secondary;
+        padding: 2px 7px;
+        border-radius: $ck-radius-sm;
+        font-weight: $ck-font-weight-semibold;
+        font-size: 11px;
+    }
 
-            .oe_product_image_img,
-            .oe_product_image_img_secondary {
-                transform: none !important;
-                transition: none !important;
-            }
+    .chip-cat {
+        color: $ck-text-muted;
+        font-size: 11px;
+    }
 
-            .o_wsale_product_information_text {
-                min-height: 3.5rem;
-            }
+    .ck-product-card h3 {
+        font-size: 14px;
+        font-weight: $ck-font-weight-semibold;
+        margin: 0;
+        line-height: 1.3;
 
-            .o_wsale_product_btn,
-            .o_wsale_product_btn_primary {
-                opacity: 1 !important;
-                visibility: visible !important;
-                transform: none !important;
+        a {
+            color: inherit;
+            text-decoration: none;
+
+            &:hover {
+                color: $ck-primary;
             }
         }
+    }
+
+    .product-card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-top: 1px solid $ck-border;
+    }
+
+    .price {
+        font-size: $ck-text-base;
+        font-weight: $ck-font-weight-price;
+        color: $ck-price;
+    }
+
+    .card-cta {
+        padding: 5px 12px;
+        border-radius: $ck-radius-md;
+        font-size: 12px;
+        font-weight: $ck-font-weight-semibold;
+        color: $ck-primary;
+        border: 1px solid $ck-primary;
+        background: $ck-surface;
+        text-decoration: none;
+
+        &:hover {
+            background: $ck-primary;
+            color: $ck-surface;
+        }
+    }
+
+    .badge {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: $ck-radius-sm;
+        display: inline-block;
+    }
+
+    .badge-new {
+        background: $ck-badge-new;
+        color: #1a1a1a;
+    }
+
+    .badge-heart {
+        background: $ck-primary;
+        color: $ck-surface;
+    }
+
+    .badge-float {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1;
     }
 }
 
