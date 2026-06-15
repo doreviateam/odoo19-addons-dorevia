@@ -1,21 +1,42 @@
-// Boutons et composants Bootstrap — overrides ticket 01
+// Boutons et composants Bootstrap — overrides ticket 01 (alignés maquette V1)
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 11px 20px;
+    border-radius: $ck-radius-md;
+    font-weight: 600;
+    font-size: 14px;
+}
 
 .btn-primary {
-    background-color: $ck-primary;
-    border-color: $ck-primary;
+    background-color: $ck-primary !important;
+    border-color: $ck-primary !important;
+    color: $ck-surface !important;
 
     &:hover,
     &:focus,
     &:active {
-        background-color: $ck-primary-hover;
-        border-color: $ck-primary-hover;
+        background-color: $ck-primary-hover !important;
+        border-color: $ck-primary-hover !important;
+        color: $ck-surface !important;
     }
 }
 
 .btn-secondary {
-    background-color: $ck-secondary;
-    border-color: $ck-secondary;
-    color: $ck-surface;
+    background-color: $ck-surface !important;
+    border-color: $ck-border !important;
+    color: $ck-text !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $ck-bg-soft !important;
+        border-color: $ck-border !important;
+        color: $ck-text !important;
+    }
 }
 
 .btn-outline-primary {

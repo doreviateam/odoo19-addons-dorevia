@@ -73,7 +73,8 @@ class TestCkHomeLot5Compose(HttpCase):
         self.assertIn(f'href="{EDITORIAL_LINK_PRODUCER}"', chunk)
         self.assertIn(f'href="{EDITORIAL_LINK_RECIPES}"', chunk)
         self.assertIn(EDITORIAL_LINK_PRODUCER_LABEL, chunk)
-        self.assertIn(EDITORIAL_LINK_RECIPES_TEXT, chunk)
+        self.assertIn('Recettes', chunk)
+        self.assertIn('savoirs →', chunk)
 
     def test_home_no_technical_leaks_in_editorial(self):
         html = self.url_open('/').text
