@@ -52,3 +52,23 @@ class TestCkThemeTechnical(TransactionCase):
         self.assertIn('data-bs-pause="hover"', snippet_xml)
         self.assertIn('data-oe-protected="false"', snippet_xml)
         self.assertNotIn('ck_hero_carousel_option', manifest_source)
+
+    def test_ck_reassurance_trust_bar_snippet(self):
+        """Garde-fou Section 2 : trust-bar maquette sur s_ck_reassurance home."""
+        module_path = get_module_path('dorevia_ck_theme')
+        with open(
+            os.path.join(module_path, 'views/snippets/ck_snippet_reassurance.xml'),
+            encoding='utf-8',
+        ) as handle:
+            snippet_xml = handle.read()
+        scss_path = os.path.join(module_path, 'static/src/scss/website.scss')
+        with open(scss_path, encoding='utf-8') as handle:
+            scss_source = handle.read()
+        self.assertIn('ck-reassurance--trust-bar', snippet_xml)
+        self.assertIn('ck-reassurance__grid', snippet_xml)
+        self.assertIn('Livraison France &amp; Europe', snippet_xml)
+        self.assertIn('CK vous accompagne', snippet_xml)
+        self.assertIn('Paiement en ligne simple et protégé', snippet_xml)
+        self.assertNotIn('parcours checkout natif', snippet_xml)
+        self.assertNotIn('conditions Pro sur qualification', snippet_xml)
+        self.assertIn('.ck-reassurance--trust-bar', scss_source)

@@ -24,3 +24,5 @@ from . import test_ck_home_lot4_compose
 from . import test_ck_home_lot4_hooks
 from . import test_ck_home_lot5_compose
 from . import test_ck_home_lot5_hooks
+from . import test_ck_home_section2_trust_bar_compose
+from . import test_ck_home_section2_trust_bar_hooks
