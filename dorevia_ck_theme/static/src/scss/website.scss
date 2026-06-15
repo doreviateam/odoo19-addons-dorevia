@@ -36,44 +36,136 @@
     }
 }
 
+// Hero V1 — largeur maquette .wrap (1200px utiles, sans gutter Bootstrap)
+.ck-theme #wrapwrap .ck-hero.ck-hero--marketone-v1 > .container {
+    width: calc(100% - 32px);
+    max-width: $ck-container-max;
+    margin-inline: auto;
+    padding-left: 0;
+    padding-right: 0;
+
+    @media (max-width: 767.98px) {
+        width: calc(100% - 24px);
+    }
+}
+
 // --- Snippets accueil --------------------------------------------------------
 .ck-hero {
     background-color: $ck-bg-soft;
 }
 
-// V1 Hero home — rapprochement maquette (compact · 60/40 · visuel borné)
+// V1 Hero home — grille maquette 1.2fr / 0.8fr · rythme éditorial
 .ck-hero.ck-hero--marketone-v1 {
     background-color: $ck-surface;
     border-bottom: 1px solid $ck-border;
-    padding-top: 1.75rem;
-    padding-bottom: 1.5rem;
+    padding: 28px 0 24px;
+
+    @media (max-width: 767.98px) {
+        padding: 20px 0 16px;
+    }
+
+    > .container {
+        width: calc(100% - 32px);
+        max-width: $ck-container-max;
+        margin-inline: auto;
+        padding-left: 0;
+        padding-right: 0;
+
+        @media (max-width: 767.98px) {
+            width: calc(100% - 24px);
+        }
+    }
+
+    .ck-hero__grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 28px;
+        align-items: center;
+
+        @media (max-width: 767.98px) {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+    }
+
+    .ck-hero__content {
+        min-width: 0;
+        overflow: visible;
+    }
+
+    .ck-hero__visual-col {
+        min-width: 0;
+        display: flex;
+        justify-content: flex-end;
+        position: relative;
+        z-index: 1;
+
+        @media (max-width: 767.98px) {
+            justify-content: stretch;
+        }
+    }
 
     .ck-hero__kicker {
-        font-size: $ck-text-xs;
-        letter-spacing: 0.04em;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $ck-secondary;
+        margin: 0 0 8px;
     }
 
     .ck-hero__title {
-        font-size: clamp(1.5rem, 4vw, 2.125rem);
+        font-family: $ck-font-display;
+        font-weight: 700;
+        font-size: clamp(24px, 4vw, 34px);
         line-height: 1.15;
+        margin: 0 0 10px;
+        max-width: 100%;
+
+        @media (min-width: 768px) {
+            // 34px déborde de ~25px vs maquette (métriques Fraunces/Odoo) — 32px tient en 703px
+            font-size: 32px;
+        }
     }
 
     .ck-hero__lead {
-        font-size: 0.9375rem;
+        color: $ck-text-muted;
+        font-size: 15px;
+        line-height: 1.5;
+        margin: 0 0 16px;
         max-width: 42ch;
     }
 
+    .ck-hero__cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .btn-primary {
+            background-color: $ck-primary;
+            border-color: $ck-primary;
+            color: $ck-surface;
+        }
+
+        .btn-secondary {
+            background-color: $ck-surface;
+            border: 1px solid $ck-border;
+            color: $ck-text;
+        }
+    }
+
     .ck-hero__visual {
-        position: relative;
         width: 100%;
+        max-width: 100%;
         height: 220px;
-        border: 1px solid $ck-border;
         border-radius: $ck-radius-lg;
         overflow: hidden;
+        border: 1px solid $ck-border;
         background-color: $ck-image-zone;
 
         @media (max-width: 767.98px) {
             height: 160px;
+            aspect-ratio: 2 / 1;
         }
     }
 
@@ -89,7 +181,7 @@
     }
 }
 
-.ck-hero__title {
+.ck-hero:not(.ck-hero--marketone-v1) .ck-hero__title {
     font-size: $ck-text-hero-mobile;
 
     @media (min-width: 992px) {

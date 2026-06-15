@@ -67,11 +67,10 @@ class TestCkHomeLot1Compose(HttpCase):
         html = self.url_open('/').text
         chunk = self._hero_chunk(html)
         self.assertIn('ck-hero__visual', chunk)
+        self.assertIn('ck-hero__grid', chunk)
         self.assertNotIn('ratio-16x10', chunk)
-        self.assertTrue(
-            'ck-hero__visual-media' in chunk
-            or 'ck-hero__visual--editorial' in chunk
-        )
+        self.assertIn('ck_hero_home_v1', chunk)
+        self.assertIn('ck-hero__visual-media', chunk)
 
     def test_home_lot2_to_lot5_non_regression(self):
         html = self.url_open('/').text

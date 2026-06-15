@@ -14,6 +14,8 @@ HERO_LEAD = (
 HERO_CTA_SHOP_LABEL = 'Voir la boutique'
 HERO_CTA_PRO_LABEL = 'Espace professionnel'
 HERO_VISUAL_ALT = 'Sélection de produits créoles — épicerie et condiments'
+HERO_VISUAL_STATIC = '/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg'
+HERO_VISUAL_STATIC_MARKER = 'ck_hero_home_v1'
 
 _COVER_DEFAULT_MARKERS = (
     'website.s_cover_default_image',
@@ -27,59 +29,40 @@ def _arch_as_string(arch):
     return arch or ''
 
 
-def get_hero_visual_product(env):
-    """Produit publié avec image BO pour visuel Hero — sinon placeholder éditorial."""
-    Product = env['product.template'].sudo()
-    domain = [
-        ('is_published', '=', True),
-        ('website_published', '=', True),
-        ('sale_ok', '=', True),
-        ('image_1920', '!=', False),
-    ]
-    return Product.search(domain, limit=1, order='website_sequence asc, id asc')
-
-
-def _hero_visual_html(env):
-    product = get_hero_visual_product(env)
-    if product and product.image_1920:
-        alt = escape(HERO_VISUAL_ALT)
-        return (
-            f'<div class="ck-hero__visual rounded overflow-hidden border">'
-            f'<img src="/web/image/product.template/{product.id}/image_512" '
-            f'class="ck-hero__visual-media" alt="{alt}" loading="eager" '
-            f'width="800" height="500"/>'
-            f'</div>'
-        )
+def _hero_visual_html():
+    """Visuel hero recette — asset statique aligné maquette (pas image BO test)."""
+    alt = escape(HERO_VISUAL_ALT)
     return (
-        '<div class="ck-hero__visual ck-hero__visual--editorial rounded overflow-hidden border '
-        'd-flex align-items-center justify-content-center">'
-        '<span class="fa fa-shopping-basket fa-3x text-muted" aria-hidden="true"></span>'
-        '</div>'
+        f'<div class="ck-hero__visual">'
+        f'<img src="{HERO_VISUAL_STATIC}" '
+        f'class="ck-hero__visual-media" alt="{alt}" loading="eager" '
+        f'width="800" height="500"/>'
+        f'</div>'
     )
 
 
 def build_home_hero_arch(env):
-    """Hero compact maquette V1 · kicker · dual CTA · visuel produit BO ou placeholder."""
+    """Hero compact maquette V1 · kicker · dual CTA · visuel statique recette."""
     kicker = escape(HERO_KICKER)
     title = escape(HERO_TITLE)
     lead = escape(HERO_LEAD)
     cta_shop = escape(HERO_CTA_SHOP_LABEL)
     cta_pro = escape(HERO_CTA_PRO_LABEL)
-    visual = _hero_visual_html(env)
+    visual = _hero_visual_html()
     return f"""
 <section class="s_ck_hero ck-hero {HERO_VARIANT_MARKER} o_colored_level" data-snippet="s_ck_hero" data-name="{HERO_DATA_NAME}">
     <div class="container">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-7 o_colored_level">
-                <p class="ck-hero__kicker small text-uppercase fw-semibold text-muted mb-2">{kicker}</p>
-                <h1 class="ck-hero__title mb-3">{title}</h1>
-                <p class="ck-hero__lead text-muted mb-4">{lead}</p>
-                <div class="d-flex flex-wrap gap-2 ck-hero__cta">
+        <div class="ck-hero__grid">
+            <div class="ck-hero__content o_colored_level">
+                <p class="ck-hero__kicker">{kicker}</p>
+                <h1 class="ck-hero__title">{title}</h1>
+                <p class="ck-hero__lead">{lead}</p>
+                <div class="ck-hero__cta">
                     <a href="/shop" class="btn btn-primary">{cta_shop}</a>
                     <a href="/professionnels" class="btn btn-secondary">{cta_pro}</a>
                 </div>
             </div>
-            <div class="col-lg-5 o_colored_level">
+            <div class="ck-hero__visual-col o_colored_level">
                 {visual}
             </div>
         </div>
@@ -116,7 +99,7 @@ def _patch_homepage_hero_arch(arch, hero_arch):
 
 
 def hero_home_arch_is_valid(arch):
-    """Recette Lot 1 : wording maquette · dual CTA · pas de cover Odoo générique."""
+    """Recette Lot 1 : wording maquette · dual CTA · visuel statique maquette."""
     if HERO_VARIANT_MARKER not in arch:
         return False
     chunk_start = arch.find(HERO_VARIANT_MARKER)
@@ -130,6 +113,9 @@ def hero_home_arch_is_valid(arch):
         'href="/professionnels"' in chunk,
         HERO_CTA_PRO_LABEL in chunk,
         'ck-hero__visual' in chunk,
+        'ck-hero__grid' in chunk,
+        HERO_VISUAL_STATIC_MARKER in chunk,
+        'ck-hero__visual-media' in chunk,
     ]
     if not all(checks):
         return False
@@ -138,7 +124,7 @@ def hero_home_arch_is_valid(arch):
         return False
     if 'ratio-16x10' in chunk:
         return False
-    if 'ck-hero__visual-media' not in chunk and 'ck-hero__visual--editorial' not in chunk:
+    if '/web/image/product.template/' in chunk:
         return False
     hero_pos = arch.find(HERO_VARIANT_MARKER)
     featured_pos = arch.find('ck-featured-products')

@@ -38,10 +38,9 @@ class TestCkHomeLot1Hooks(TransactionCase):
         self.assertIn('href="/professionnels"', arch)
         self.assertIn(HERO_CTA_PRO_LABEL, arch)
         self.assertNotIn('website.s_cover_default_image', arch)
-        self.assertNotIn('ratio-16x10', arch)
-        self.assertTrue(
-            'ck-hero__visual-media' in arch or 'ck-hero__visual--editorial' in arch
-        )
+        self.assertIn('ck-hero__grid', arch)
+        self.assertIn('ck_hero_home_v1', arch)
+        self.assertIn('ck-hero__visual-media', arch)
 
     def test_bootstrap_replaces_hero(self):
         self.assertTrue(bootstrap_home_hero(self.env))
