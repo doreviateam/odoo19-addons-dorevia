@@ -11,11 +11,14 @@ from odoo.addons.dorevia_ck_marketone_content.home_editorial import (
     bootstrap_home_editorial,
 )
 from odoo.addons.dorevia_ck_marketone_content.home_hero import (
+    HERO_CAROUSEL_INTERVAL_MS,
+    HERO_CAROUSEL_MARKER,
     HERO_CTA_PRO_LABEL,
     HERO_CTA_SHOP_LABEL,
     HERO_KICKER,
     HERO_TITLE,
     HERO_VARIANT_MARKER,
+    HERO_VISUAL_MAX_SLIDES,
     bootstrap_home_hero,
 )
 from odoo.addons.dorevia_ck_marketone_content.hooks import (
@@ -38,7 +41,7 @@ class TestCkHomeLot1Compose(HttpCase):
     def _hero_chunk(self, html):
         start = html.find(HERO_VARIANT_MARKER)
         self.assertGreater(start, 0)
-        return html[start:start + 6000]
+        return html[start:start + 8000]
 
     def test_home_hero_block_present(self):
         html = self.url_open('/').text
@@ -69,8 +72,21 @@ class TestCkHomeLot1Compose(HttpCase):
         self.assertIn('ck-hero__visual', chunk)
         self.assertIn('ck-hero__grid', chunk)
         self.assertNotIn('ratio-16x10', chunk)
+        self.assertIn(HERO_CAROUSEL_MARKER, chunk)
         self.assertIn('ck_hero_home_v1', chunk)
         self.assertIn('ck-hero__visual-media', chunk)
+        self.assertGreaterEqual(chunk.count('carousel-item'), 1)
+        self.assertLessEqual(chunk.count('carousel-item'), HERO_VISUAL_MAX_SLIDES)
+
+    def test_home_hero_carousel_image_only(self):
+        html = self.url_open('/').text
+        chunk = self._hero_chunk(html)
+        content_part = chunk.split('ck-hero__visual-col', 1)[0]
+        self.assertNotIn('data-bs-ride="carousel"', content_part)
+        self.assertNotIn('carousel slide', content_part)
+        visual_part = chunk.split('ck-hero__visual-col', 1)[-1]
+        self.assertIn('data-bs-ride="carousel"', visual_part)
+        self.assertIn(f'data-bs-interval="{HERO_CAROUSEL_INTERVAL_MS}"', visual_part)
 
     def test_home_lot2_to_lot5_non_regression(self):
         html = self.url_open('/').text

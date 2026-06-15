@@ -162,10 +162,45 @@
         overflow: hidden;
         border: 1px solid $ck-border;
         background-color: $ck-image-zone;
+        position: relative;
 
         @media (max-width: 767.98px) {
             height: 160px;
             aspect-ratio: 2 / 1;
+        }
+    }
+
+    .ck-hero__visual-carousel {
+        height: 100%;
+        background: transparent;
+
+        .carousel-inner,
+        .carousel-item {
+            height: 100%;
+            background: transparent;
+            border: none;
+        }
+
+        .carousel-indicators.ck-hero__visual-indicators {
+            margin-bottom: 0.5rem;
+
+            [data-bs-target] {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                margin: 0 3px;
+                opacity: 0.45;
+                background-color: $ck-surface;
+                border: none;
+            }
+
+            .active {
+                opacity: 0.9;
+            }
+        }
+
+        &:not(.ck-hero__visual-carousel--multi) .carousel-indicators {
+            display: none;
         }
     }
 

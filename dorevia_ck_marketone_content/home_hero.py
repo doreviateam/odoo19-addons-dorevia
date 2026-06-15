@@ -14,8 +14,25 @@ HERO_LEAD = (
 HERO_CTA_SHOP_LABEL = 'Voir la boutique'
 HERO_CTA_PRO_LABEL = 'Espace professionnel'
 HERO_VISUAL_ALT = 'Sélection de produits créoles — épicerie et condiments'
-HERO_VISUAL_STATIC = '/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg'
+HERO_CAROUSEL_ID = 'ckHeroVisualCarousel'
+HERO_CAROUSEL_MARKER = 'ck-hero__visual-carousel'
+HERO_CAROUSEL_INTERVAL_MS = 25000
 HERO_VISUAL_STATIC_MARKER = 'ck_hero_home_v1'
+HERO_VISUAL_MAX_SLIDES = 3
+HERO_VISUAL_IMAGES = (
+    {
+        'src': '/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg',
+        'alt': HERO_VISUAL_ALT,
+    },
+    {
+        'src': '/dorevia_ck_marketone_content/static/img/ck_hero_home_v2.jpg',
+        'alt': 'Cuisine créole — plats et saveurs des îles',
+    },
+    {
+        'src': '/dorevia_ck_marketone_content/static/img/ck_hero_home_v3.jpg',
+        'alt': 'Produits frais et épicerie fine créole',
+    },
+)
 
 _COVER_DEFAULT_MARKERS = (
     'website.s_cover_default_image',
@@ -29,20 +46,56 @@ def _arch_as_string(arch):
     return arch or ''
 
 
-def _hero_visual_html():
-    """Visuel hero recette — asset statique aligné maquette (pas image BO test)."""
-    alt = escape(HERO_VISUAL_ALT)
+def _hero_visual_slide_html(index, src, alt, *, active=False):
+    active_class = ' active' if active else ''
     return (
-        f'<div class="ck-hero__visual">'
-        f'<img src="{HERO_VISUAL_STATIC}" '
-        f'class="ck-hero__visual-media" alt="{alt}" loading="eager" '
+        f'<div class="carousel-item{active_class}" data-name="Visuel hero {index + 1}">'
+        f'<img src="{src}" class="ck-hero__visual-media d-block w-100" '
+        f'alt="{escape(alt)}" loading="{"eager" if active else "lazy"}" '
         f'width="800" height="500"/>'
         f'</div>'
     )
 
 
+def _hero_visual_indicator_html(index, *, active=False):
+    active_attrs = ' class="active" aria-current="true"' if active else ''
+    return (
+        f'<button type="button" data-bs-target="#{HERO_CAROUSEL_ID}" '
+        f'data-bs-slide-to="{index}"{active_attrs} '
+        f'aria-label="Visuel {index + 1}"></button>'
+    )
+
+
+def _hero_visual_html():
+    """Carrousel image-only dans le cadre visuel hero — max 3 visuels · dégradation 1 slide."""
+    slides = HERO_VISUAL_IMAGES[:HERO_VISUAL_MAX_SLIDES]
+    indicators = ''.join(
+        _hero_visual_indicator_html(i, active=(i == 0))
+        for i in range(len(slides))
+    )
+    items = ''.join(
+        _hero_visual_slide_html(i, slide['src'], slide['alt'], active=(i == 0))
+        for i, slide in enumerate(slides)
+    )
+    ride_attrs = (
+        f' data-oe-protected="false" data-bs-ride="carousel" data-bs-interval="{HERO_CAROUSEL_INTERVAL_MS}" data-bs-pause="hover"'
+        if len(slides) > 1
+        else ''
+    )
+    multi_class = ' ck-hero__visual-carousel--multi' if len(slides) > 1 else ''
+    return (
+        f'<div class="ck-hero__visual">'
+        f'<div id="{HERO_CAROUSEL_ID}" '
+        f'class="carousel slide {HERO_CAROUSEL_MARKER}{multi_class}"{ride_attrs}>'
+        f'<div class="carousel-indicators ck-hero__visual-indicators">{indicators}</div>'
+        f'<div class="carousel-inner">{items}</div>'
+        f'</div>'
+        f'</div>'
+    )
+
+
 def build_home_hero_arch(env):
-    """Hero compact maquette V1 · kicker · dual CTA · visuel statique recette."""
+    """Hero compact maquette V1 · kicker · dual CTA · carrousel visuel image-only."""
     kicker = escape(HERO_KICKER)
     title = escape(HERO_TITLE)
     lead = escape(HERO_LEAD)
@@ -99,11 +152,14 @@ def _patch_homepage_hero_arch(arch, hero_arch):
 
 
 def hero_home_arch_is_valid(arch):
-    """Recette Lot 1 : wording maquette · dual CTA · visuel statique maquette."""
+    """Recette Lot 1 : wording maquette · dual CTA · carrousel image-only dans cadre visuel."""
     if HERO_VARIANT_MARKER not in arch:
         return False
     chunk_start = arch.find(HERO_VARIANT_MARKER)
-    chunk = arch[chunk_start:chunk_start + 5000]
+    chunk = arch[chunk_start:chunk_start + 8000]
+    visual_col_start = chunk.find('ck-hero__visual-col')
+    visual_chunk = chunk[visual_col_start:visual_col_start + 4000] if visual_col_start >= 0 else ''
+    slide_count = visual_chunk.count('carousel-item')
     checks = [
         HERO_TITLE in chunk,
         escape(HERO_KICKER) in chunk,
@@ -114,17 +170,23 @@ def hero_home_arch_is_valid(arch):
         HERO_CTA_PRO_LABEL in chunk,
         'ck-hero__visual' in chunk,
         'ck-hero__grid' in chunk,
+        HERO_CAROUSEL_MARKER in chunk,
         HERO_VISUAL_STATIC_MARKER in chunk,
         'ck-hero__visual-media' in chunk,
+        slide_count >= 1,
+        slide_count <= HERO_VISUAL_MAX_SLIDES,
     ]
     if not all(checks):
+        return False
+    content_chunk = chunk.split('ck-hero__visual-col', 1)[0]
+    if 'data-bs-ride="carousel"' in content_chunk:
         return False
     lowered = chunk.lower()
     if any(marker in lowered for marker in _COVER_DEFAULT_MARKERS):
         return False
     if 'ratio-16x10' in chunk:
         return False
-    if '/web/image/product.template/' in chunk:
+    if '/web/image/product.template/' in visual_chunk:
         return False
     hero_pos = arch.find(HERO_VARIANT_MARKER)
     featured_pos = arch.find('ck-featured-products')

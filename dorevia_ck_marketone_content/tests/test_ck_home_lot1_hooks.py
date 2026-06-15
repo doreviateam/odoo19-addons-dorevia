@@ -7,11 +7,14 @@ from odoo.tests.common import TransactionCase
 from xml.sax.saxutils import escape
 
 from odoo.addons.dorevia_ck_marketone_content.home_hero import (
+    HERO_CAROUSEL_INTERVAL_MS,
+    HERO_CAROUSEL_MARKER,
     HERO_CTA_PRO_LABEL,
     HERO_CTA_SHOP_LABEL,
     HERO_KICKER,
     HERO_TITLE,
     HERO_VARIANT_MARKER,
+    HERO_VISUAL_MAX_SLIDES,
     bootstrap_home_hero,
     build_home_hero_arch,
     hero_home_arch_is_valid,
@@ -39,8 +42,14 @@ class TestCkHomeLot1Hooks(TransactionCase):
         self.assertIn(HERO_CTA_PRO_LABEL, arch)
         self.assertNotIn('website.s_cover_default_image', arch)
         self.assertIn('ck-hero__grid', arch)
+        self.assertIn(HERO_CAROUSEL_MARKER, arch)
+        self.assertIn(f'data-bs-interval="{HERO_CAROUSEL_INTERVAL_MS}"', arch)
         self.assertIn('ck_hero_home_v1', arch)
         self.assertIn('ck-hero__visual-media', arch)
+        self.assertGreaterEqual(arch.count('carousel-item'), 1)
+        self.assertLessEqual(arch.count('carousel-item'), HERO_VISUAL_MAX_SLIDES)
+        content_part = arch.split('ck-hero__visual-col', 1)[0]
+        self.assertNotIn('data-bs-ride="carousel"', content_part)
 
     def test_bootstrap_replaces_hero(self):
         self.assertTrue(bootstrap_home_hero(self.env))
