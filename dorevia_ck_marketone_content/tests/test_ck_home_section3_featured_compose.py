@@ -2,14 +2,19 @@
 """Tests HTTP Section 3 — vedettes home · cartes maquette CK."""
 
 import re
+import unittest
 
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase
 
+from odoo.addons.dorevia_ck_marketone_content.catalog_manioc_variants import (
+    bootstrap_catalog_vedettes_products,
+)
 from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     FEATURED_CARD_MARKER,
     FEATURED_TITLE,
     MIN_FEATURED_PRODUCTS,
+    get_ready_featured_variants,
 )
 from odoo.addons.dorevia_ck_marketone_content.home_hero import bootstrap_home_hero
 from odoo.addons.dorevia_ck_marketone_content.home_reassurance import (
@@ -33,13 +38,14 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        products = cls.env['product.template'].search([
-            ('is_published', '=', True),
-            ('website_published', '=', True),
-        ], limit=MIN_FEATURED_PRODUCTS)
-        if len(products) < MIN_FEATURED_PRODUCTS:
-            cls.skipTest('Catalogue insuffisant pour Section 3 vedettes.')
-        products.write({'image_1920': _TINY_PNG})
+        bootstrap_catalog_vedettes_products(cls.env)
+        variants = get_ready_featured_variants(cls.env)
+        if len(variants) < MIN_FEATURED_PRODUCTS:
+            raise unittest.SkipTest('Catalogue insuffisant pour Section 3 vedettes.')
+        for variant in variants:
+            variant.write({'image_1920': _TINY_PNG})
+            if variant.product_tmpl_id:
+                variant.product_tmpl_id.write({'image_1920': _TINY_PNG})
         bootstrap_home_hero(cls.env)
         bootstrap_home_reassurance(cls.env)
         bootstrap_home_featured_products(cls.env)

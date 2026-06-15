@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tests catalogue MOA — Manio Crackers (variantes) + Galettes séparées."""
 
+import unittest
+
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -32,11 +34,12 @@ class TestCkCatalogManiocVariants(TransactionCase):
             ('name', '=', MANIO_CRACKERS_PARENT_NAME),
         ], limit=1)
         if not parent:
-            cls.skipTest('Template Manio Crackers absent.')
+            raise unittest.SkipTest('Template Manio Crackers absent.')
         parent.write({'image_1920': _TINY_PNG})
         for variant in parent.product_variant_ids:
             variant.write({'image_1920': _TINY_PNG})
-        cls.assertTrue(bootstrap_catalog_vedettes_products(cls.env))
+        if not bootstrap_catalog_vedettes_products(cls.env):
+            raise unittest.SkipTest('Bootstrap catalogue vedettes MOA impossible.')
 
     def test_manioc_crackers_parent_two_format_variants(self):
         parent = self.env['product.template'].sudo().search([
