@@ -934,8 +934,10 @@ def bootstrap_all_marketone_content(env):
     bootstrap_home_featured_products(env)
     bootstrap_home_discovery_pack(env)
     from .home_dual_engage import bootstrap_home_dual_engage
+    from .home_editorial import bootstrap_home_editorial
 
     bootstrap_home_dual_engage(env)
+    bootstrap_home_editorial(env)
     bootstrap_professionnels_page(env)
     bootstrap_contactus_page(env)
     bootstrap_a_propos_page(env)

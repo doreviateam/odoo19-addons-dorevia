@@ -20,3 +20,5 @@ from . import test_ck_home_lot3_compose
 from . import test_ck_home_lot3_hooks
 from . import test_ck_home_lot4_compose
 from . import test_ck_home_lot4_hooks
+from . import test_ck_home_lot5_compose
+from . import test_ck_home_lot5_hooks
