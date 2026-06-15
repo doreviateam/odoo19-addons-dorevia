@@ -72,3 +72,18 @@ class TestCkThemeTechnical(TransactionCase):
         self.assertNotIn('parcours checkout natif', snippet_xml)
         self.assertNotIn('conditions Pro sur qualification', snippet_xml)
         self.assertIn('.ck-reassurance--trust-bar', scss_source)
+
+    def test_ck_featured_grid_media_visible_scss(self):
+        """Garde-fou Section 3 : cartes maquette vedettes home."""
+        module_path = get_module_path('dorevia_ck_theme')
+        snippet_path = os.path.join(module_path, 'views/snippets/ck_snippet_featured_products.xml')
+        scss_path = os.path.join(module_path, 'static/src/scss/website.scss')
+        with open(snippet_path, encoding='utf-8') as handle:
+            snippet_xml = handle.read()
+        with open(scss_path, encoding='utf-8') as handle:
+            scss_source = handle.read()
+        self.assertIn('Nos coups de cœur', snippet_xml)
+        self.assertIn('Toute la boutique', snippet_xml)
+        self.assertIn('.ck-featured-products--maquette', scss_source)
+        self.assertIn('.ck-product-card.product-card', scss_source)
+        self.assertIn('.card-cta', scss_source)

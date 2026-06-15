@@ -33,7 +33,8 @@ class TestCkHomeLot2Compose(HttpCase):
         grid_start = html.find('ck-featured-products__grid--stable')
         self.assertGreater(grid_start, 0)
         grid_chunk = html[grid_start:grid_start + 120000]
-        self.assertIn('Produits vedettes', html)
+        self.assertIn('Nos coups de cœur', html)
+        self.assertIn('Toute la boutique', html)
         self.assertNotIn('s_dynamic_snippet_products', grid_chunk)
         self.assertNotIn('website.s_cover_default_image', grid_chunk)
 
@@ -42,7 +43,7 @@ class TestCkHomeLot2Compose(HttpCase):
         grid_start = html.find('ck-featured-products__grid--stable')
         self.assertGreater(grid_start, 0)
         grid_chunk = html[grid_start:grid_start + 120000]
-        cards = grid_chunk.count('o_carousel_product_card')
+        cards = grid_chunk.count('ck-product-card')
         self.assertGreaterEqual(cards, MIN_FEATURED_PRODUCTS)
 
     def test_home_featured_product_links_200(self):
@@ -58,11 +59,12 @@ class TestCkHomeLot2Compose(HttpCase):
         html = self.url_open('/').text
         grid_start = html.find('ck-featured-products__grid--stable')
         grid_chunk = html[grid_start:grid_start + 120000]
-        self.assertGreaterEqual(grid_chunk.count('oe_currency_value'), MIN_FEATURED_PRODUCTS)
+        self.assertGreaterEqual(grid_chunk.count('class="price"'), MIN_FEATURED_PRODUCTS)
         self.assertGreaterEqual(
-            len(re.findall(r'background-image:\s*url\(/web/image/product\.', grid_chunk)),
+            len(re.findall(r"background-image:\s*url\(['\"]?/web/image/product\.template/", grid_chunk)),
             MIN_FEATURED_PRODUCTS,
         )
+        self.assertGreaterEqual(grid_chunk.count('class="card-cta"'), MIN_FEATURED_PRODUCTS)
 
     def test_home_no_carousel_in_featured(self):
         html = self.url_open('/').text
