@@ -33,7 +33,7 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
 
         bootstrap_epicerie_category(cls.env)
         Category = cls.env['product.public.category'].sudo()
-        for name in ('Épicerie créole', 'Maison & bien-être', 'Artisanat'):
+        for name in ('Épicerie', 'Maison & bien-être', 'Artisanat'):
             if not Category.search([('name', '=', name)], limit=1):
                 Category.create({'name': name})
         bootstrap_epicerie_category(cls.env)
@@ -96,8 +96,9 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
     def test_category_links_use_bo_slugs(self):
         arch = build_home_univers_arch(self.env)
         epicerie = self.env['product.public.category'].sudo().search([
-            ('name', '=', 'Épicerie créole'),
+            ('name', 'in', ('Épicerie créole', 'Épicerie')),
         ], limit=1)
         self.assertTrue(epicerie)
         slug = self.env['ir.http'].sudo()._slug(epicerie)
         self.assertIn(f'/shop/category/{slug}', arch)
+        self.assertNotIn('href="/shop"', arch.split('ck-univers-card--epicerie')[1].split('ck-univers-card--')[0])

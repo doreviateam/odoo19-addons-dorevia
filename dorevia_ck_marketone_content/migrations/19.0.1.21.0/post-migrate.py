@@ -7,8 +7,15 @@ def migrate(cr, version):
 
     env = api.Environment(cr, SUPERUSER_ID, {})
     from odoo.addons.dorevia_ck_marketone_content.home_univers import bootstrap_home_univers
+    from odoo.addons.dorevia_ck_marketone_content.home_discovery_pack import (
+        bootstrap_home_discovery_pack,
+    )
 
     if not bootstrap_home_univers(env):
         raise RuntimeError(
             'CK univers migration 21.0: bootstrap_home_univers a échoué'
+        )
+    if not bootstrap_home_discovery_pack(env):
+        raise RuntimeError(
+            'CK univers migration 21.0: bootstrap_home_discovery_pack a échoué'
         )

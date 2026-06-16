@@ -10,7 +10,7 @@ UNIVERS_INTRO = 'Trois univers pour entrer dans la boutique en un clic.'
 _UNIVERS_CARD_SPECS = (
     {
         'code': 'epicerie',
-        'category_name': 'Épicerie créole',
+        'category_names': ('Épicerie créole', 'Épicerie'),
         'title': 'Épicerie créole',
         'description': 'Farines, confitures, condiments et douceurs à découvrir.',
         'cta': "Voir l'épicerie",
@@ -18,7 +18,7 @@ _UNIVERS_CARD_SPECS = (
     },
     {
         'code': 'soin',
-        'category_name': 'Maison & bien-être',
+        'category_names': ('Maison & bien-être',),
         'title': 'Soin & bien-être',
         'description': 'Savons, soins et produits bien-être pour le corps et le quotidien.',
         'cta': 'Découvrir les soins',
@@ -26,7 +26,7 @@ _UNIVERS_CARD_SPECS = (
     },
     {
         'code': 'artisanat',
-        'category_name': 'Artisanat',
+        'category_names': ('Artisanat',),
         'title': 'Artisanat & culture',
         'description': 'Objets, créations et supports culturels à découvrir ou offrir.',
         'cta': "Explorer l'artisanat",
@@ -47,12 +47,20 @@ def _category_shop_url(env, category):
     return f'/shop/category/{slug}'
 
 
+def _find_univers_category(Category, spec):
+    for name in spec.get('category_names', ()):
+        category = Category.search([('name', '=', name)], limit=1)
+        if category:
+            return category
+    return Category.browse()
+
+
 def _resolve_univers_cards(env):
     """Retourne les 3 cards avec URL catégorie BO (fallback /shop si absente)."""
     Category = env['product.public.category'].sudo()
     cards = []
     for spec in _UNIVERS_CARD_SPECS:
-        category = Category.search([('name', '=', spec['category_name'])], limit=1)
+        category = _find_univers_category(Category, spec)
         cards.append({
             **spec,
             'href': _category_shop_url(env, category),
@@ -198,6 +206,12 @@ def univers_arch_is_valid(arch):
     return True
 
 
+def _univers_arch_matches_bo(env, arch):
+    if not univers_arch_is_valid(arch):
+        return False
+    return all(card['href'] in arch for card in _resolve_univers_cards(env))
+
+
 def bootstrap_home_univers(env):
     """Section 4 home — injecte la grille 3 univers visuels après Coups de cœur."""
     if not env.is_superuser():
@@ -218,7 +232,10 @@ def bootstrap_home_univers(env):
     if not arch.strip():
         return False
 
-    if univers_arch_is_valid(arch) and 'data-snippet="s_ck_category_links"' not in arch:
+    if _univers_arch_matches_bo(env, arch) and 'data-snippet="s_ck_category_links"' not in arch:
+        from .home_discovery_pack import bootstrap_home_discovery_pack
+
+        bootstrap_home_discovery_pack(env)
         return True
 
     univers_arch = build_home_univers_arch(env)
@@ -232,4 +249,9 @@ def bootstrap_home_univers(env):
         return univers_arch_is_valid(arch)
 
     view.write({'arch_db': new_arch})
+    if not univers_arch_is_valid(new_arch):
+        return False
+    from .home_discovery_pack import bootstrap_home_discovery_pack
+
+    bootstrap_home_discovery_pack(env)
     return univers_arch_is_valid(new_arch)
