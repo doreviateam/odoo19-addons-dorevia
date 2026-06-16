@@ -248,6 +248,10 @@
 .ck-univers-cards {
     background-color: $ck-bg;
 
+    .ck-univers-cards__head {
+        text-align: left;
+    }
+
     .ck-univers-cards__title {
         font-family: $ck-font-display;
         color: $ck-text;
@@ -257,7 +261,7 @@
         color: $ck-text-muted;
         font-size: $ck-text-sm;
         max-width: 42ch;
-        margin-inline: auto;
+        margin-inline: 0;
     }
 
     .ck-univers-cards__grid {

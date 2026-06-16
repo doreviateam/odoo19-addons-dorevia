@@ -99,7 +99,7 @@ def build_home_univers_arch(env):
     return f"""
 <section class="s_ck_univers_cards {UNIVERS_SECTION_MARKER} pt40 pb48 o_colored_level" data-snippet="s_ck_univers_cards" data-name="{UNIVERS_DATA_NAME}">
     <div class="container">
-        <div class="ck-univers-cards__head text-center mb-4">
+        <div class="ck-univers-cards__head mb-4">
             <h2 id="univers-title" class="ck-univers-cards__title h3 mb-2 o_editable">{title}</h2>
             <p class="ck-univers-cards__intro mb-0 o_editable">{intro}</p>
         </div>
@@ -216,6 +216,8 @@ def _univers_arch_matches_bo(env, arch):
     if 'ck-univers-card__img' not in arch:
         return False
     if f'?v={UNIVERS_IMAGES_VERSION}' not in arch:
+        return False
+    if 'ck-univers-cards__head text-center' in arch:
         return False
     return all(card['href'] in arch for card in _resolve_univers_cards(env))
 
