@@ -7,7 +7,7 @@
 | **Focus** | Section 3 « Nos coups de cœur » — V1.1 card + polish front + curation BO |
 | **Instance** | `dorevia_ck_marketone_01` — http://localhost:18079/?db=dorevia_ck_marketone_01 |
 | **Maquette** | [`artifact/index.html`](./artifact/index.html) (section `#produits`) |
-| **Modules** | `dorevia_ck_marketone_content` ≥ **`19.0.1.20.0`** · `dorevia_ck_theme` |
+| **Modules** | `dorevia_ck_marketone_content` ≥ **`19.0.1.20.6`** · `dorevia_ck_theme` |
 | **Recette visuelle** | **[`RECETTE_VISUELLE_SECTION3_V1_1.md`](./RECETTE_VISUELLE_SECTION3_V1_1.md)** ← **document à exécuter** |
 | **Architecture** | [`NOTE_ARCHITECTURE_SECTION3_VEDETTES_V1.md`](./NOTE_ARCHITECTURE_SECTION3_VEDETTES_V1.md) |
 
@@ -150,4 +150,17 @@ docker exec sandbox-odoo19-odoo-1 bash -c \
 
 ---
 
-*Onboarding QA Section 3 — révision 2026-06-16 · `content` ≥ `19.0.1.20.0` · recette visuelle V1.1.*
+## 11. PV — recette manuelle « Unités card home » (`20.6`)
+
+| Champ | Valeur |
+|-------|--------|
+| **Date** | 2026-06-16 |
+| **Instance** | `dorevia_ck_marketone_01` |
+| **Module** | `dorevia_ck_marketone_content` **19.0.1.20.6** |
+| **Verdict** | **GO** |
+
+**PV** : Recette manuelle QA « Unités card home » effectuée sur `dorevia_ck_marketone_01` : **GO**. Le menu **Site web → Configuration → Unités card home** est visible et la liste s'ouvre correctement. Le seed attendu est présent : g, kg, ml, cl, l, pièce. Une unité de test « sachet » a été créée avec succès puis vérifiée comme sélectionnable dans le champ **Unité de quantité nette** sur la fiche produit Confiture de goyave, bloc **Quantité commerciale** de l'onglet eCommerce. Le nettoyage a été réalisé en fin de recette : l'unité de test « sachet » a été archivée pour ne pas polluer la base.
+
+---
+
+*Onboarding QA Section 3 — révision 2026-06-16 · `content` ≥ `19.0.1.20.6` · PV recette manuelle unités card home §11.*

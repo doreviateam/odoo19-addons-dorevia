@@ -63,5 +63,5 @@
               parent="website.menu_website_configuration"
               action="ck_card_uom_action"
               sequence="46"
-              groups="sales_team.group_sale_manager"/>
+              groups="sales_team.group_sale_manager,website.group_website_designer"/>
 </odoo>

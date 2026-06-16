@@ -5,8 +5,8 @@
 | **Projet** | `dorevia_ck_marketone` |
 | **Section** | Home V1 — Section 3 |
 | **Instance recette** | `dorevia_ck_marketone_01` — http://localhost:18079 |
-| **Statut doc** | **Révision 2026-06-16** — alignée sur `dorevia_ck_marketone_content` **≥ `19.0.1.18.4`** |
-| **Code** | `home_featured.py` · `product_template.py` · `product_public_category.py` · `catalog_manioc_variants.py` · `website.scss` |
+| **Statut doc** | **Révision 2026-06-16** — alignée sur `dorevia_ck_marketone_content` **≥ `19.0.1.20.6`** |
+| **Code** | `home_featured.py` · `product_template.py` · `ck_card_uom.py` · `product_public_category.py` · `ir_http.py` · `catalog_manioc_variants.py` · `website.scss` |
 
 ---
 
@@ -49,6 +49,19 @@ Le badge (haut à droite) vient du **ruban e-commerce** du produit (`website_rib
 - Autre ruban → couleurs définies sur le ruban en BO
 
 Ruban CK livré en données : `ribbon_coups_de_coeur` (Confiture de goyave amorcée en migration).
+
+### Quantité nette et prix de référence (card V1.1)
+
+Sous le titre, la card peut afficher une ligne commerciale (ex. `320 g · 18,13 €/kg`) :
+
+| Champ BO (onglet eCommerce) | Rôle |
+|-----------------------------|------|
+| **Quantité nette** | Valeur affichée (ex. `320`) |
+| **Unité de quantité nette** | Liste `dorevia.ck.card.uom` (ex. `g`) |
+| **Afficher le prix au kg / litre** | Active le calcul prix de référence |
+| **Unité du prix de référence** | Dénominateur (ex. `kg`) |
+
+**Décision MOA** : ces unités ne sont **pas** les unités Inventaire (`uom.uom`) — voir §6. La liste se gère dans **Site web → Configuration → Unités card home**.
 
 ### Plan B si la catégorie est vide
 
@@ -164,11 +177,11 @@ Les deux déclenchent la reconstruction de la home.
 |------|-----------|
 | Média | `image_512` variante / template / sœur |
 | **Badge** (haut droite) | `website_ribbon_id` → `product.ribbon` |
-| Chip origine | Attribut « Origine » ou heuristique nom |
-| Chip famille | 1ère catégorie e-commerce (hors vedettes) |
+| Étiquettes sous le titre | `product_tag_ids` (ex. `Guadeloupe · Épicerie`) — source unique BO |
+| Ligne commerciale | `ck_net_quantity` + `ck_net_quantity_uom_id` · prix de référence optionnel (ex. `320 g · 18,13 €/kg`) |
 | Titre | Libellé variante (§3) |
 | Prix | `_get_combination_info` (figé dans le HTML au bootstrap) |
-| CTA « Voir » | URL variante |
+| CTA « Voir le produit » | URL variante · card cliquable |
 
 **Prix** : calculés au moment de la reconstruction HTML — alignés sur le BO **après** refresh, pas à chaque visite.
 
@@ -194,7 +207,54 @@ Le snippet `s_ck_featured_products` reste un **squelette vide** ; le contenu est
 
 ---
 
-## 6. Historique livraisons (migrations clés)
+## 6. Décision MOA — unités card home (pas Inventaire / `uom.uom`)
+
+**Décision actée MOA — 2026-06-16** : les quantités nettes et prix de référence affichés sur les cards home **ne réutilisent pas** les unités Inventaire (`Inventaire → Configuration → Unités de mesure`, modèle `uom.uom`). Ils passent par un modèle dédié **`dorevia.ck.card.uom`**.
+
+### Pourquoi ce choix
+
+| Critère | Inventaire `uom.uom` | `dorevia.ck.card.uom` (retenu) |
+|---------|----------------------|--------------------------------|
+| **Rôle** | Unité opérationnelle : stock, vente, facturation, BOM | Libellé **commercial** sur la card home |
+| **Exemple** | Produit vendu à l'**unité** | Card affiche **320 g** (contenu net) |
+| **Qui configure** | Logistique / stock | Équipe **Site web / eCommerce** |
+| **Impact d'une modification** | Peut impacter stock, achats, prix unitaire | Limité à l'affichage Section 3 |
+| **Périmètre module** | Dépendance Stock | Reste dans `website_sale` (pas de couplage stock) |
+
+En pratique, la quantité nette card et l'unité de vente sont **deux informations distinctes** : une confiture peut se vendre à l'unité tout en affichant `320 g` sur la home.
+
+### Modèle retenu
+
+| Élément | Détail |
+|---------|--------|
+| Modèle | `dorevia.ck.card.uom` |
+| Champs produit | `ck_net_quantity` · `ck_net_quantity_uom_id` · `ck_reference_price_uom_id` · `ck_show_reference_price` |
+| Jeu initial | g, kg, ml, cl, l, pièce (seed `ck_card_uom_data.xml`) |
+| Calcul prix/kg ou €/l | `family` (masse / volume / pièce) + `ratio` vers kg ou l (`home_featured.py`) |
+| Règle pièce | Pas de prix de référence · pluriel `pièces` si quantité > 1 |
+
+### Configuration BO
+
+| Action | Chemin |
+|--------|--------|
+| Gérer la liste des unités | **Site web → Configuration → Unités card home** |
+| Renseigner sur un produit vedette | Fiche produit → onglet eCommerce → **Quantité commerciale** |
+| Droits menu + CRUD unités | Responsable des ventes **ou** Éditeur du site web (`19.0.1.20.6`) |
+
+> La fiche produit **ne permet pas** de créer une unité à la volée (`no_create` sur les Many2one) : la liste est maîtrisée au menu dédié.
+
+### Quand réviser vers `uom.uom` ?
+
+Uniquement si la MOA décide explicitement que :
+- la quantité nette card = **toujours** l'unité de vente / le conditionnement réel ;
+- une **seule** source de vérité doit couvrir stock, vente et affichage home ;
+- l'équipe eCommerce assume la gouvernance des UoM Inventaire.
+
+Hors périmètre V1.1 — lot ultérieur si arbitrage MOA.
+
+---
+
+## 7. Historique livraisons (migrations clés)
 
 | Version | Apport |
 |---------|--------|
@@ -204,10 +264,14 @@ Le snippet `s_ck_featured_products` reste un **squelette vide** ; le contenu est
 | `19.0.1.18.2` | Fusion catégories doublons · remplacement section sans doublon |
 | `19.0.1.18.3` | Badges via `website_ribbon_id` · ruban « Coup de cœur » |
 | `19.0.1.18.4` | Refresh home depuis **fiche catégorie** e-commerce |
+| `19.0.1.19.0` | Card V1.1 : étiquettes `product_tag_ids` · quantité nette · prix de référence · CTA « Voir le produit » |
+| `19.0.1.20.4` | Rebuild home fiable (étiquettes SQL · `ir_http` GET `/`) · recette QA GO |
+| `19.0.1.20.5` | Unités paramétrables `dorevia.ck.card.uom` (remplace Selection codées en dur) |
+| `19.0.1.20.6` | Menu unités visible aux **Éditeurs du site web** (en plus des Responsables ventes) |
 
 ---
 
-## 7. Critères de recette Section 3
+## 8. Critères de recette Section 3
 
 | # | Contrôle |
 |---|----------|
@@ -218,13 +282,15 @@ Le snippet `s_ck_featured_products` reste un **squelette vide** ; le contenu est
 | 5 | Galettes = template séparé (si en catégorie) |
 | 6 | Badge = ruban produit · position haut droite · absent si pas de ruban |
 | 7 | Images hauteur stable · prix = BO (après refresh) |
-| 8 | CTA « Voir » → bonne fiche / variante |
-| 9 | `/shop` inchangé · mobile 390 · desktop 1280 |
-| 10 | Non-régression S1 Hero · S2 trust-bar |
+| 8 | CTA « Voir le produit » → bonne fiche / variante |
+| 9 | Étiquettes `product_tag_ids` visibles sous le titre (ex. `Guadeloupe · Épicerie`) |
+| 10 | Ligne commerciale `320 g` · prix de référence `18,13 €/kg` si renseigné |
+| 11 | `/shop` inchangé · mobile 390 · desktop 1280 |
+| 12 | Non-régression S1 Hero · S2 trust-bar |
 
 ---
 
-## 8. Points ouverts / dette MOA
+## 9. Points ouverts / dette MOA
 
 | Sujet | État |
 |-------|------|
@@ -237,17 +303,25 @@ Le snippet `s_ck_featured_products` reste un **squelette vide** ; le contenu est
 | Ordre vedettes indépendant de `/shop` | ❌ Même `website_sequence` |
 | N cartes paramétrable | ❌ 8 / 5 figés |
 | Vue BO liste curation dédiée | ❌ Absente |
-| Chips origine/famille 100 % BO | ❌ Heuristiques démo subsistent |
+| Étiquettes card via `product_tag_ids` | ✅ Livré `19.0` |
+| Quantité nette + prix de référence card | ✅ Livré `19.0` |
+| Unités card paramétrables (`dorevia.ck.card.uom`) | ✅ Livré `20.5` · décision MOA §6 · **recette manuelle QA GO** `20.6` |
+| Réutiliser `uom.uom` Inventaire | ❌ **Rejeté MOA** §6 — lot ultérieur si arbitrage |
+| Chips origine/famille 100 % BO | ❌ Heuristiques démo subsistent (remplacées par `product_tag_ids` sur les cards curatées) |
 
 ---
 
-## 9. Références Dev
+## 10. Références Dev
 
 | Fichier | Rôle |
 |---------|------|
 | `home_featured.py` | Sélection · cartes · bootstrap |
-| `models/product_template.py` | Refresh au write produit |
+| `models/product_template.py` | Champs card V1.1 · refresh au write produit |
+| `models/ck_card_uom.py` | Modèle unités commerciales card home |
+| `models/ir_http.py` | Rebuild home si arch périmée (GET `/`) |
 | `models/product_public_category.py` | Refresh au write catégorie vedettes |
+| `views/ck_card_uom_views.xml` | Menu **Unités card home** |
+| `data/ck_card_uom_data.xml` | Seed g, kg, ml, cl, l, pièce |
 | `data/ck_public_category_coups_de_coeur.xml` | Catégorie xmlid |
 | `data/ck_product_ribbon_coups_de_coeur.xml` | Ruban « Coup de cœur » |
 | `catalog_manioc_variants.py` | Alignement catalogue Manio / Galettes |
@@ -268,9 +342,11 @@ Tags : `dorevia_ck_marketone_home_section3` · `dorevia_ck_marketone_home_sectio
 **Docs liées** :
 
 - `SPEC_SECTION3_VEDETTES_CURATION_BO_V1.md` — spec curation + matrice livraison
+- `SPEC_DEV_CARD_PRODUIT_COUPS_DE_COEUR_V1_1.md` — spec card V1.1 (quantité nette · prix de référence)
+- `RECETTE_VISUELLE_SECTION3_V1_1.md` — PV recette visuelle QA GO
 - `ONBOARDING_QA_SECTION3_PR73_V1.md` — checklist QA Section 3 (mise à jour post-#73)
 - `DECISION_MOA_SECTION3_PR73_CURATION_REPORTEE_V1.md` — historique arbitrage 2026-06-15
 
 ---
 
-*Note d'architecture Section 3 — révision 2026-06-16 · `content` ≥ `19.0.1.18.4`.*
+*Note d'architecture Section 3 — révision 2026-06-16 · `content` ≥ `19.0.1.20.6` · décision MOA unités card home §6.*
