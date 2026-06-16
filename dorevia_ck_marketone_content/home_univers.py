@@ -7,7 +7,7 @@ UNIVERS_DATA_NAME = 'CK Acheter par univers'
 UNIVERS_TITLE = 'Acheter par univers'
 UNIVERS_INTRO = 'Trois univers pour entrer dans la boutique en un clic.'
 # Bump à chaque remplacement visuel — invalide le cache navigateur (max-age 7j sur /static/)
-UNIVERS_IMAGES_VERSION = '3'
+UNIVERS_IMAGES_VERSION = '4'
 
 _UNIVERS_CARD_SPECS = (
     {
