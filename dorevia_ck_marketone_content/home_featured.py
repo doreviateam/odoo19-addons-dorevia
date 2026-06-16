@@ -16,6 +16,10 @@ FEATURED_CARD_MARKER = 'ck-product-card'
 FEATURED_TITLE = 'Nos coups de cœur'
 FEATURED_SUBTITLE = 'Sélection CK · prix TTC · origine et famille visibles'
 FEATURED_SHOP_CTA = 'Toute la boutique →'
+FEATURED_CARD_CTA = 'Voir le produit'
+FEATURED_CATEGORY_NAME = 'Coups de cœur'  # curation BO des vedettes (catégorie e-commerce dédiée)
+FEATURED_CATEGORY_XMLID = 'dorevia_ck_marketone_content.public_categ_coups_de_coeur'
+FEATURED_CURATED_MAX = 8
 
 _DEMO_ORIGIN_BY_NAME_FRAGMENT = (
     ('goyav', 'Réunion'),
@@ -72,6 +76,7 @@ _CARD_IMAGE_RE = re.compile(
 )
 _CARD_PRICE_RE = re.compile(r'class="price"')
 _CARD_LINK_RE = re.compile(r'class="card-cta"')
+_CARD_CTA_TEXT_RE = re.compile(re.escape(FEATURED_CARD_CTA))
 
 FEATURED_TITLE_SECTION = ''  # rétro-compat tests import — section unique désormais
 
@@ -179,6 +184,82 @@ def get_ready_featured_variants(env, *, min_count=MIN_FEATURED_PRODUCTS, max_cou
     return variants[:max_count]
 
 
+def _merge_duplicate_featured_categories(env, canonical):
+    """Fusionne les doublons « Coups de cœur » vers la catégorie xmlid canonique."""
+    Category = env['product.public.category'].sudo()
+    dupes = Category.search([
+        ('name', '=', FEATURED_CATEGORY_NAME),
+        ('id', '!=', canonical.id),
+    ])
+    if not dupes:
+        return canonical
+    Template = env['product.template'].sudo()
+    for dupe in dupes:
+        for tmpl in Template.search([('public_categ_ids', 'in', dupe.ids)]):
+            cmds = [(3, dupe.id)]
+            if canonical not in tmpl.public_categ_ids:
+                cmds.append((4, canonical.id))
+            tmpl.write({'public_categ_ids': cmds})
+        dupe.unlink()
+    return canonical
+
+
+def _ensure_featured_category(env):
+    """Catégorie e-commerce 'Coups de cœur' — support de la curation BO (créée si absente)."""
+    category = env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
+    if category:
+        return _merge_duplicate_featured_categories(env, category.sudo())
+    Category = env['product.public.category'].sudo()
+    category = Category.search([('name', '=', FEATURED_CATEGORY_NAME)], limit=1)
+    if not category:
+        category = Category.create({'name': FEATURED_CATEGORY_NAME})
+    module, name = FEATURED_CATEGORY_XMLID.split('.', 1)
+    existing = env['ir.model.data'].sudo().search([
+        ('module', '=', module),
+        ('name', '=', name),
+    ], limit=1)
+    if not existing:
+        env['ir.model.data'].sudo().create({
+            'module': module,
+            'name': name,
+            'model': category._name,
+            'res_id': category.id,
+            'noupdate': True,
+        })
+    return _merge_duplicate_featured_categories(env, category.sudo())
+
+
+def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
+    """Vedettes curatées en BO : produits publiés rangés dans 'Coups de cœur', ordre website_sequence.
+
+    Renvoie un recordset vide si la catégorie n'existe pas ou ne contient aucun produit
+    publié — le bootstrap retombe alors sur la sélection automatique (comportement #73).
+    """
+    category = env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
+    if not category:
+        return env['product.product'].browse()
+    category = category.sudo()
+    templates = env['product.template'].sudo().search([
+        ('public_categ_ids', 'in', category.ids),
+        ('is_published', '=', True),
+        ('website_published', '=', True),
+        ('sale_ok', '=', True),
+    ], order='website_sequence asc, id asc')
+
+    variants = env['product.product'].browse()
+    for template in templates:
+        candidates = template.product_variant_ids.filtered(
+            lambda v: v.is_published and v.sale_ok and _variant_has_valid_image(v)
+        ).sorted(key=lambda v: v.id)
+        if not candidates:
+            continue
+        cap = _template_featured_variant_cap(template)
+        variants |= candidates[:cap]
+        if len(variants) >= max_count:
+            break
+    return variants[:max_count]
+
+
 def _get_featured_origin_label(template):
     for line in template.attribute_line_ids:
         attr_name = (line.attribute_id.name or '').lower()
@@ -242,44 +323,172 @@ def _get_featured_image_url(variant):
     template = variant.product_tmpl_id
     if variant.image_1920 or variant.image_512:
         return f'/web/image/product.product/{variant.id}/image_512'
+    if template.image_1920 or template.image_512:
+        return f'/web/image/product.template/{template.id}/image_512'
+    for sibling in template.product_variant_ids:
+        if sibling.image_1920 or sibling.image_512:
+            return f'/web/image/product.product/{sibling.id}/image_512'
     return f'/web/image/product.template/{template.id}/image_512'
 
 
-def _get_featured_price_label(env, website, variant):
+def _get_featured_price_amount(env, website, variant):
     template = variant.product_tmpl_id
     with _with_website_request(env, website):
         info = template._get_combination_info(product_id=variant.id, add_qty=1.0)
-    price = info.get('price_reduce') or info.get('price') or template.list_price
+    return info.get('price_reduce') or info.get('price') or template.list_price
+
+
+def _get_featured_price_label(env, website, variant):
+    price = _get_featured_price_amount(env, website, variant)
     return format_amount(env, price, website.currency_id)
 
 
-def _get_featured_badge_html(index):
-    if index == 0:
-        return '<span class="badge badge-heart badge-float">Coup de cœur</span>'
-    if index == 1:
-        return '<span class="badge badge-new badge-float">Nouveau</span>'
-    return ''
+def _normalize_label_token(value):
+    return (value or '').strip().lower().replace('œ', 'oe')
 
 
-def build_featured_product_card_html(env, website, variant, index):
-    """Carte produit maquette V1.2 — variante explicite si template multi-variantes."""
+def _is_excluded_featured_label(name):
+    normalized = _normalize_label_token(name)
+    if not normalized:
+        return True
+    excluded = {
+        _normalize_label_token(FEATURED_CATEGORY_NAME),
+        'coups de coeur',
+    }
+    return normalized in excluded or 'coups de coeur' in normalized
+
+
+def _get_featured_labels_line(template):
+    """Ligne descriptive client — étiquettes BO, jamais la catégorie Coups de cœur."""
+    labels = template.ck_featured_label_ids.sorted(key=lambda label: (label.sequence, label.name or ''))
+    parts = []
+    for label in labels:
+        name = (label.name or '').strip()
+        if name and not _is_excluded_featured_label(name):
+            parts.append(name)
+    return ' · '.join(parts)
+
+
+def _format_featured_quantity_value(quantity):
+    if quantity == int(quantity):
+        return str(int(quantity))
+    text = f'{quantity:.2f}'.rstrip('0').rstrip('.')
+    return text.replace('.', ',')
+
+
+def _format_featured_net_quantity(quantity, uom):
+    if not quantity or quantity <= 0 or not uom:
+        return ''
+    qty_text = _format_featured_quantity_value(quantity)
+    if uom == 'unit':
+        unit_label = 'pièce' if quantity == 1 else 'pièces'
+        return f'{qty_text} {unit_label}'
+    return f'{qty_text} {uom}'
+
+
+def _compute_featured_reference_unit_price(price, quantity, net_uom, ref_uom):
+    if price is None or price <= 0 or not quantity or quantity <= 0:
+        return None
+    if net_uom == 'unit' or not net_uom or not ref_uom:
+        return None
+    if ref_uom == 'kg':
+        if net_uom == 'g':
+            divisor = quantity / 1000.0
+        elif net_uom == 'kg':
+            divisor = quantity
+        else:
+            return None
+    elif ref_uom == 'l':
+        if net_uom == 'ml':
+            divisor = quantity / 1000.0
+        elif net_uom == 'cl':
+            divisor = quantity / 100.0
+        elif net_uom == 'l':
+            divisor = quantity
+        else:
+            return None
+    else:
+        return None
+    if divisor <= 0:
+        return None
+    return price / divisor
+
+
+def _format_featured_reference_price(env, website, price, template):
+    if not template.ck_show_reference_price:
+        return ''
+    ref_uom = template.ck_reference_price_uom
+    unit_price = _compute_featured_reference_unit_price(
+        price,
+        template.ck_net_quantity,
+        template.ck_net_quantity_uom,
+        ref_uom,
+    )
+    if unit_price is None:
+        return ''
+    amount = format_amount(env, unit_price, website.currency_id)
+    return f'{amount}/{ref_uom}'
+
+
+def _get_featured_commercial_line(env, website, variant):
+    template = variant.product_tmpl_id
+    qty_part = _format_featured_net_quantity(template.ck_net_quantity, template.ck_net_quantity_uom)
+    if not qty_part:
+        return ''
+    price = _get_featured_price_amount(env, website, variant)
+    ref_part = _format_featured_reference_price(env, website, price, template)
+    if ref_part:
+        return f'{qty_part} · {ref_part}'
+    return qty_part
+
+
+def _featured_ribbon_badge_class(ribbon):
+    """Classes maquette CK pour les libellés ruban courants."""
+    name = (ribbon.name or '').lower()
+    if 'nouveau' in name or 'new' in name:
+        return 'badge-new'
+    if any(token in name for token in ('coup', 'cœur', 'coeur', 'vente', 'sale', 'promo')):
+        return 'badge-heart'
+    return 'badge-ribbon'
+
+
+def _get_featured_badge_html(variant):
+    """Badge carte = ruban e-commerce BO (`website_ribbon_id` sur le template)."""
+    ribbon = variant.product_tmpl_id.website_ribbon_id
+    if not ribbon:
+        return ''
+    label = escape(ribbon.name or '')
+    css_class = _featured_ribbon_badge_class(ribbon)
+    if css_class == 'badge-ribbon':
+        styles = []
+        if ribbon.bg_color:
+            styles.append(f'background-color:{ribbon.bg_color}')
+        if ribbon.text_color:
+            styles.append(f'color:{ribbon.text_color}')
+        style_attr = f' style="{"; ".join(styles)}"' if styles else ''
+    else:
+        style_attr = ''
+    return f'<span class="badge {css_class} badge-float"{style_attr}>{label}</span>'
+
+
+def build_featured_product_card_html(env, website, variant):
+    """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence."""
     template = variant.product_tmpl_id
     name = escape(_get_featured_display_name(variant))
     href = escape(variant.website_url or template.website_url or '/shop')
     image_url = _get_featured_image_url(variant)
     price_label = escape(_get_featured_price_label(env, website, variant))
-    origin = escape(_get_featured_origin_label(template))
-    category = escape(_get_featured_category_label(template))
-    badge_html = _get_featured_badge_html(index)
+    labels_line = escape(_get_featured_labels_line(template))
+    commercial_line = escape(_get_featured_commercial_line(env, website, variant))
+    badge_html = _get_featured_badge_html(variant)
 
-    meta_parts = []
-    if origin:
-        meta_parts.append(f'<span class="chip-origin">{origin}</span>')
-    if category:
-        meta_parts.append(f'<span class="chip-cat">{category}</span>')
-    meta_block = (
-        f'<div class="product-meta">{"".join(meta_parts)}</div>'
-        if meta_parts else ''
+    labels_block = (
+        f'<p class="product-card-labels">{labels_line}</p>'
+        if labels_line else ''
+    )
+    commercial_block = (
+        f'<span class="reference-price">{commercial_line}</span>'
+        if commercial_line else ''
     )
 
     return f"""
@@ -288,18 +497,21 @@ def build_featured_product_card_html(env, website, variant, index):
         {badge_html}
     </a>
     <div class="product-card-body">
-        {meta_block}
         <h3><a href="{href}">{name}</a></h3>
+        {labels_block}
     </div>
     <div class="product-card-foot">
-        <span class="price">{price_label}</span>
-        <a href="{href}" class="card-cta">Voir</a>
+        <div class="product-card-pricing">
+            <span class="price">{price_label}</span>
+            {commercial_block}
+        </div>
+        <a href="{href}" class="card-cta">{FEATURED_CARD_CTA}</a>
     </div>
 </article>""".strip()
 
 
 def card_fragment_is_valid(fragment):
-    """Carte SSR maquette : image template, prix, CTA Voir — pas de placeholder."""
+    """Carte SSR maquette : image template, prix, CTA Voir le produit — pas de placeholder."""
     if not fragment or FEATURED_CARD_MARKER not in fragment:
         return False
     lowered = fragment.lower()
@@ -311,14 +523,16 @@ def card_fragment_is_valid(fragment):
         return False
     if not _CARD_LINK_RE.search(fragment):
         return False
+    if not _CARD_CTA_TEXT_RE.search(fragment):
+        return False
     return True
 
 
 def render_ck_featured_cards(env, website, variants):
     """Pré-rendu serveur des cartes maquette (pas Dynamic Products / oe_product_cart)."""
     cards = []
-    for index, variant in enumerate(variants):
-        card = build_featured_product_card_html(env, website, variant, index)
+    for variant in variants:
+        card = build_featured_product_card_html(env, website, variant)
         if card_fragment_is_valid(card):
             cards.append(card)
     return cards
@@ -349,19 +563,20 @@ def build_featured_ssr_arch(card_fragments):
 """.strip()
 
 
-def _find_featured_block_bounds(arch):
-    marker = arch.find('data-snippet="s_ck_featured_products"')
-    start = arch.rfind('<section', 0, marker) if marker >= 0 else -1
-    if start < 0:
-        start = arch.find(f'<section class="s_ck_featured_products {FEATURED_SECTION_MARKER}')
-    end = -1
-    if start >= 0:
-        end = arch.find('<section class="s_ck_category_links', start)
-        if end < 0:
-            end_marker = arch.find('data-snippet="s_ck_category_links"', start)
-            if end_marker >= 0:
-                end = arch.rfind('<section', start, end_marker)
-    return start, end
+def _remove_all_featured_sections(arch):
+    """Retire toute section vedettes injectée (évite les doublons après re-bootstrap)."""
+    while True:
+        marker = arch.find('data-snippet="s_ck_featured_products"')
+        if marker < 0:
+            break
+        start = arch.rfind('<section', 0, marker)
+        if start < 0:
+            break
+        close = arch.find('</section>', marker)
+        if close < 0:
+            break
+        arch = arch[:start] + arch[close + len('</section>'):]
+    return arch
 
 
 def _find_featured_insertion_index(arch):
@@ -370,25 +585,35 @@ def _find_featured_insertion_index(arch):
         marker = arch.find('data-snippet="s_ck_category_links"')
         if marker >= 0:
             insert_at = arch.rfind('<section', 0, marker)
+    if insert_at >= 0:
+        return insert_at
+    # Repli si la section catégories est absente : insérer juste après la trust-bar
+    # (réassurance), sinon après le hero — pour conserver l'ordre maquette.
+    for anchor in ('data-snippet="s_ck_reassurance"', 'ck-reassurance--trust-bar',
+                   'data-snippet="s_ck_hero"', 'id="hero-title"'):
+        pos = arch.find(anchor)
+        if pos >= 0:
+            end = arch.find('</section>', pos)
+            if end >= 0:
+                return end + len('</section>')
     return insert_at
 
 
 def _patch_homepage_featured_arch(arch, featured_arch):
-    start, end = _find_featured_block_bounds(arch)
-    if start >= 0 and end >= 0:
-        if featured_arch:
-            new_arch = arch[:start] + featured_arch + '\n' + arch[end:]
-        else:
-            new_arch = arch[:start] + arch[end:]
-        return new_arch, True
+    cleaned = _remove_all_featured_sections(arch)
+    if not featured_arch:
+        return cleaned, cleaned != arch
 
-    insert_at = _find_featured_insertion_index(arch)
+    insert_at = _find_featured_insertion_index(cleaned)
     if insert_at < 0:
         return arch, False
-    if featured_arch:
-        new_arch = arch[:insert_at] + featured_arch + '\n' + arch[insert_at:]
-        return new_arch, True
-    return arch, True
+    new_arch = cleaned[:insert_at] + featured_arch + '\n' + cleaned[insert_at:]
+    return new_arch, True
+
+
+def refresh_home_featured_products(env):
+    """Rafraîchit la section vedettes depuis le BO (produit ou catégorie)."""
+    return bootstrap_home_featured_products(env)
 
 
 def bootstrap_home_featured_products(env):
@@ -409,12 +634,18 @@ def bootstrap_home_featured_products(env):
     if not arch.strip():
         return False
 
-    variants = get_ready_featured_variants(env)
+    _ensure_featured_category(env)
+    variants = get_curated_featured_variants(env)
+    curated = bool(variants)
+    if not curated:
+        variants = get_ready_featured_variants(env)  # repli : sélection automatique (#73)
     featured_arch = ''
     if variants:
         cards = render_ck_featured_cards(env, website, variants)
-        if len(cards) >= MIN_FEATURED_PRODUCTS:
-            featured_arch = build_featured_ssr_arch(cards[:MIN_FEATURED_PRODUCTS])
+        min_cards = 1 if curated else MIN_FEATURED_PRODUCTS
+        if len(cards) >= min_cards:
+            limit = len(cards) if curated else MIN_FEATURED_PRODUCTS
+            featured_arch = build_featured_ssr_arch(cards[:limit])
 
     new_arch, patched = _patch_homepage_featured_arch(arch, featured_arch)
     if not patched or new_arch == arch:

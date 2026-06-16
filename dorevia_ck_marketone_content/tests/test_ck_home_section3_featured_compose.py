@@ -14,6 +14,7 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     FEATURED_CARD_MARKER,
     FEATURED_TITLE,
     MIN_FEATURED_PRODUCTS,
+    get_curated_featured_variants,
     get_ready_featured_variants,
 )
 from odoo.addons.dorevia_ck_marketone_content.home_hero import bootstrap_home_hero
@@ -39,8 +40,11 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
     def setUpClass(cls):
         super().setUpClass()
         bootstrap_catalog_vedettes_products(cls.env)
-        variants = get_ready_featured_variants(cls.env)
-        if len(variants) < MIN_FEATURED_PRODUCTS:
+        curated_variants = get_curated_featured_variants(cls.env)
+        fallback_variants = get_ready_featured_variants(cls.env)
+        variants = curated_variants or fallback_variants
+        cls.expected_featured_cards = len(curated_variants) or MIN_FEATURED_PRODUCTS
+        if len(variants) < cls.expected_featured_cards:
             raise unittest.SkipTest('Catalogue insuffisant pour Section 3 vedettes.')
         for variant in variants:
             variant.write({'image_1920': _TINY_PNG})
@@ -68,10 +72,11 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
 
     def test_home_featured_maquette_cards(self):
         grid_chunk = self._featured_grid_chunk(self.url_open('/').text)
-        self.assertGreaterEqual(grid_chunk.count(FEATURED_CARD_MARKER), MIN_FEATURED_PRODUCTS)
-        self.assertGreaterEqual(len(_CARD_MEDIA_RE.findall(grid_chunk)), MIN_FEATURED_PRODUCTS)
-        self.assertGreaterEqual(grid_chunk.count('class="card-cta"'), MIN_FEATURED_PRODUCTS)
-        self.assertGreaterEqual(grid_chunk.count('class="price"'), MIN_FEATURED_PRODUCTS)
+        expected = self.expected_featured_cards
+        self.assertGreaterEqual(grid_chunk.count(FEATURED_CARD_MARKER), expected)
+        self.assertGreaterEqual(len(_CARD_MEDIA_RE.findall(grid_chunk)), expected)
+        self.assertGreaterEqual(grid_chunk.count('class="card-cta"'), expected)
+        self.assertGreaterEqual(grid_chunk.count('class="price"'), expected)
         self.assertNotIn('o_carousel_product_card', grid_chunk)
 
     def test_home_featured_lot2_contract_intact(self):

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ck_product_label_user,dorevia.ck.product.label.user,model_dorevia_ck_product_label,base.group_user,1,0,0,0
+access_ck_product_label_sale,dorevia.ck.product.label.sale,model_dorevia_ck_product_label,sales_team.group_sale_salesman,1,1,1,0
+access_ck_product_label_manager,dorevia.ck.product.label.manager,model_dorevia_ck_product_label,sales_team.group_sale_manager,1,1,1,1
