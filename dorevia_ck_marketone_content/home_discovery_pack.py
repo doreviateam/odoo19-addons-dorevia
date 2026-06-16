@@ -143,6 +143,11 @@ def _find_discovery_pack_bounds(arch):
 
 
 def _find_discovery_pack_insertion_index(arch):
+    from .home_univers import find_univers_section_end_index
+
+    univers_end = find_univers_section_end_index(arch)
+    if univers_end >= 0:
+        return univers_end
     cat_end = arch.find('class="s_ck_category_links')
     if cat_end < 0:
         cat_end = arch.find('data-snippet="s_ck_category_links"')
@@ -204,6 +209,9 @@ def bootstrap_home_discovery_pack(env):
     discovery_arch = build_discovery_pack_arch(env)
     if not discovery_arch:
         return False
+
+    if discovery_pack_arch_is_valid(arch):
+        return True
 
     new_arch, patched = _patch_homepage_discovery_pack_arch(arch, discovery_arch)
     if not patched or new_arch == arch:

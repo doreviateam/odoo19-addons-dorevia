@@ -39,13 +39,15 @@ class TestCkHomeLot3Compose(HttpCase):
         self.assertNotIn('website.s_cover_default_image', chunk)
         self.assertNotIn('s_cover_default', chunk)
 
-    def test_home_discovery_order_after_categories(self):
+    def test_home_discovery_order_after_univers(self):
         html = self.url_open('/').text
-        cat_pos = html.find('s_ck_category_links')
+        univers_pos = html.find('ck-univers-cards')
+        if univers_pos < 0:
+            univers_pos = html.find('s_ck_category_links')
         pack_pos = html.find(DISCOVERY_PACK_SECTION_MARKER)
         dual_pos = html.find('ck-dual-engage')
-        self.assertGreater(cat_pos, 0)
-        self.assertGreater(pack_pos, cat_pos)
+        self.assertGreater(univers_pos, 0)
+        self.assertGreater(pack_pos, univers_pos)
         self.assertGreater(dual_pos, pack_pos)
 
     def test_home_discovery_horizontal_layout(self):

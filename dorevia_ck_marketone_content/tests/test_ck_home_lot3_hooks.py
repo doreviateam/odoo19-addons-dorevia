@@ -34,13 +34,18 @@ class TestCkHomeLot3Hooks(TransactionCase):
         self.assertNotIn('website.s_cover_default_image', arch)
 
     def test_bootstrap_injects_discovery_block(self):
+        from odoo.addons.dorevia_ck_marketone_content.home_univers import bootstrap_home_univers
+
+        bootstrap_home_univers(self.env)
         self.assertTrue(bootstrap_home_discovery_pack(self.env))
         arch = self._homepage_arch()
         self.assertTrue(discovery_pack_arch_is_valid(arch))
-        cat_pos = arch.find('s_ck_category_links')
+        univers_pos = arch.find('ck-univers-cards')
+        if univers_pos < 0:
+            univers_pos = arch.find('s_ck_category_links')
         pack_pos = arch.find(DISCOVERY_PACK_SECTION_MARKER)
         dual_pos = arch.find('ck-dual-engage')
-        self.assertGreater(pack_pos, cat_pos)
+        self.assertGreater(pack_pos, univers_pos)
         self.assertGreater(dual_pos, pack_pos)
 
     def test_bootstrap_idempotent(self):

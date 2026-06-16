@@ -244,6 +244,109 @@
     }
 }
 
+// Home S4 — Acheter par univers · navigation catalogue visuelle (3 cards)
+.ck-univers-cards {
+    background-color: $ck-bg;
+
+    .ck-univers-cards__title {
+        font-family: $ck-font-display;
+        color: $ck-text;
+    }
+
+    .ck-univers-cards__intro {
+        color: $ck-text-muted;
+        font-size: $ck-text-sm;
+        max-width: 42ch;
+        margin-inline: auto;
+    }
+
+    .ck-univers-cards__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: $ck-space-4;
+
+        @media (max-width: 991.98px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 767.98px) {
+            grid-template-columns: 1fr;
+            gap: $ck-space-3;
+        }
+    }
+
+    .ck-univers-card {
+        position: relative;
+        display: block;
+        border-radius: $ck-radius-lg;
+        overflow: hidden;
+        min-height: 220px;
+        text-decoration: none;
+        color: #fff;
+        border: 1px solid $ck-border;
+        box-shadow: $ck-shadow-card;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: $ck-shadow-card-hover;
+            color: #fff;
+            text-decoration: none;
+
+            .ck-univers-card__media {
+                transform: scale(1.03);
+            }
+        }
+    }
+
+    .ck-univers-card__media {
+        position: absolute;
+        inset: 0;
+        background: $ck-image-zone center / cover no-repeat;
+        transition: transform 0.35s ease;
+        transform-origin: center center;
+    }
+
+    .ck-univers-card__overlay {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: 220px;
+        padding: $ck-space-5;
+        background: linear-gradient(
+            180deg,
+            rgba(28, 25, 23, 0.05) 0%,
+            rgba(28, 25, 23, 0.55) 55%,
+            rgba(28, 25, 23, 0.78) 100%
+        );
+    }
+
+    .ck-univers-card__title {
+        font-family: $ck-font-display;
+        font-size: 1.125rem;
+        font-weight: $ck-font-weight-semibold;
+        margin: 0 0 6px;
+        line-height: 1.25;
+    }
+
+    .ck-univers-card__desc {
+        margin: 0 0 10px;
+        font-size: $ck-text-sm;
+        line-height: 1.4;
+        color: rgba(255, 255, 255, 0.92);
+    }
+
+    .ck-univers-card__cta {
+        font-size: $ck-text-sm;
+        font-weight: $ck-font-weight-semibold;
+        color: #fff;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
 .ck-reassurance:not(.ck-reassurance--trust-bar) {
     .ck-reassurance__item {
         padding: $ck-space-5;
