@@ -484,39 +484,29 @@ def _format_featured_quantity_value(quantity):
     return text.replace('.', ',')
 
 
-def _format_featured_net_quantity(quantity, uom):
-    if not quantity or quantity <= 0 or not uom:
+def _format_featured_net_quantity(quantity, net_uom):
+    if not quantity or quantity <= 0 or not net_uom:
         return ''
     qty_text = _format_featured_quantity_value(quantity)
-    if uom == 'unit':
-        unit_label = 'pièce' if quantity == 1 else 'pièces'
+    if net_uom.family == 'unit':
+        unit_label = net_uom.name or 'pièce'
+        if quantity != 1 and unit_label == 'pièce':
+            unit_label = 'pièces'
         return f'{qty_text} {unit_label}'
-    return f'{qty_text} {uom}'
+    label = (net_uom.name or net_uom.code or '').strip()
+    return f'{qty_text} {label}' if label else qty_text
 
 
 def _compute_featured_reference_unit_price(price, quantity, net_uom, ref_uom):
     if price is None or price <= 0 or not quantity or quantity <= 0:
         return None
-    if net_uom == 'unit' or not net_uom or not ref_uom:
+    if not net_uom or not ref_uom:
         return None
-    if ref_uom == 'kg':
-        if net_uom == 'g':
-            divisor = quantity / 1000.0
-        elif net_uom == 'kg':
-            divisor = quantity
-        else:
-            return None
-    elif ref_uom == 'l':
-        if net_uom == 'ml':
-            divisor = quantity / 1000.0
-        elif net_uom == 'cl':
-            divisor = quantity / 100.0
-        elif net_uom == 'l':
-            divisor = quantity
-        else:
-            return None
-    else:
+    if net_uom.family == 'unit' or net_uom.family != ref_uom.family:
         return None
+    if net_uom.ratio <= 0 or ref_uom.ratio <= 0:
+        return None
+    divisor = quantity * net_uom.ratio
     if divisor <= 0:
         return None
     return price / divisor
@@ -525,22 +515,29 @@ def _compute_featured_reference_unit_price(price, quantity, net_uom, ref_uom):
 def _format_featured_reference_price(env, website, price, template):
     if not template.ck_show_reference_price:
         return ''
-    ref_uom = template.ck_reference_price_uom
+    ref_uom = template.ck_reference_price_uom_id
+    net_uom = template.ck_net_quantity_uom_id
+    if not ref_uom or not net_uom:
+        return ''
     unit_price = _compute_featured_reference_unit_price(
         price,
         template.ck_net_quantity,
-        template.ck_net_quantity_uom,
+        net_uom,
         ref_uom,
     )
     if unit_price is None:
         return ''
     amount = format_amount(env, unit_price, website.currency_id)
-    return f'{amount}/{ref_uom}'
+    ref_label = (ref_uom.name or ref_uom.code or '').strip()
+    return f'{amount}/{ref_label}' if ref_label else amount
 
 
 def _get_featured_commercial_line(env, website, variant):
     template = variant.product_tmpl_id
-    qty_part = _format_featured_net_quantity(template.ck_net_quantity, template.ck_net_quantity_uom)
+    qty_part = _format_featured_net_quantity(
+        template.ck_net_quantity,
+        template.ck_net_quantity_uom_id,
+    )
     if not qty_part:
         return ''
     price = _get_featured_price_amount(env, website, variant)

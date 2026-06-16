@@ -34,9 +34,11 @@
                     </group>
                     <group string="Quantité commerciale" name="ck_featured_card_quantity">
                         <field name="ck_net_quantity" placeholder="ex. 320"/>
-                        <field name="ck_net_quantity_uom"/>
+                        <field name="ck_net_quantity_uom_id"
+                               options="{'no_create': True, 'no_open': True}"/>
                         <field name="ck_show_reference_price"/>
-                        <field name="ck_reference_price_uom"/>
+                        <field name="ck_reference_price_uom_id"
+                               options="{'no_create': True, 'no_open': True}"/>
                     </group>
                 </group>
             </xpath>

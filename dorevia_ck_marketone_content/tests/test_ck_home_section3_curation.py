@@ -40,6 +40,9 @@ class TestCkHomeSection3Curation(TransactionCase):
         base.update(vals)
         return self.env['product.template'].sudo().create(base)
 
+    def _card_uom(self, code):
+        return self.env.ref(f'dorevia_ck_marketone_content.ck_card_uom_{code}')
+
     def test_category_is_created(self):
         category = _ensure_featured_category(self.env)
         self.assertTrue(category)
@@ -237,8 +240,8 @@ class TestCkHomeSection3Curation(TransactionCase):
             'CK Vedette Prix Ref',
             list_price=5.8,
             ck_net_quantity=320,
-            ck_net_quantity_uom='g',
-            ck_reference_price_uom='kg',
+            ck_net_quantity_uom_id=self._card_uom('g').id,
+            ck_reference_price_uom_id=self._card_uom('kg').id,
             ck_show_reference_price=True,
         )
         website = self.env['website'].search([], limit=1)
@@ -251,6 +254,36 @@ class TestCkHomeSection3Curation(TransactionCase):
         card = build_featured_product_card_html(self.env, website, variant)
         self.assertIn('reference-price', card)
         self.assertIn('320 g', card)
+
+    def test_card_reference_price_uses_configurable_uom(self):
+        custom_net = self.env['dorevia.ck.card.uom'].sudo().create({
+            'name': 'gramme',
+            'code': 'gramme_test',
+            'family': 'mass',
+            'ratio': 0.001,
+            'use_for_net_quantity': True,
+        })
+        custom_ref = self.env['dorevia.ck.card.uom'].sudo().create({
+            'name': 'kilo',
+            'code': 'kilo_test',
+            'family': 'mass',
+            'ratio': 1.0,
+            'use_for_reference_price': True,
+        })
+        product = self._make_product(
+            'CK Vedette UOM Config',
+            list_price=10.0,
+            ck_net_quantity=500,
+            ck_net_quantity_uom_id=custom_net.id,
+            ck_reference_price_uom_id=custom_ref.id,
+            ck_show_reference_price=True,
+        )
+        website = self.env['website'].search([], limit=1)
+        variant = product.product_variant_id
+        commercial = _get_featured_commercial_line(self.env, website, variant)
+        self.assertIn('500 gramme', commercial)
+        self.assertIn('/kilo', commercial)
+        self.assertIn('20,00', commercial)
 
     def test_card_without_net_quantity_hides_commercial_line(self):
         product = self._make_product('CK Vedette Sans Qte')
@@ -291,7 +324,7 @@ class TestCkHomeSection3Curation(TransactionCase):
         product.write({
             'product_tag_ids': [(4, tag.id)],
             'ck_net_quantity': 250,
-            'ck_net_quantity_uom': 'g',
+            'ck_net_quantity_uom_id': self._card_uom('g').id,
         })
         page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
         arch = page.view_id.arch_db or ''
