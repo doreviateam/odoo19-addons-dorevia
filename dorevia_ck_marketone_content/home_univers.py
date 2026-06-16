@@ -6,6 +6,8 @@ UNIVERS_SECTION_MARKER = 'ck-univers-cards'
 UNIVERS_DATA_NAME = 'CK Acheter par univers'
 UNIVERS_TITLE = 'Acheter par univers'
 UNIVERS_INTRO = 'Trois univers pour entrer dans la boutique en un clic.'
+# Bump à chaque remplacement visuel — invalide le cache navigateur (max-age 7j sur /static/)
+UNIVERS_IMAGES_VERSION = '3'
 
 _UNIVERS_CARD_SPECS = (
     {
@@ -73,7 +75,7 @@ def _build_univers_card_html(card):
     description = escape(card['description'])
     cta = escape(card['cta'])
     href = escape(card['href'])
-    image = escape(card['image'])
+    image = escape(f"{card['image']}?v={UNIVERS_IMAGES_VERSION}")
     return f"""
             <a href="{href}" class="ck-univers-card ck-univers-card--{escape(card['code'])}">
                 <div class="ck-univers-card__media">
@@ -212,6 +214,8 @@ def _univers_arch_matches_bo(env, arch):
     if not univers_arch_is_valid(arch):
         return False
     if 'ck-univers-card__img' not in arch:
+        return False
+    if f'?v={UNIVERS_IMAGES_VERSION}' not in arch:
         return False
     return all(card['href'] in arch for card in _resolve_univers_cards(env))
 

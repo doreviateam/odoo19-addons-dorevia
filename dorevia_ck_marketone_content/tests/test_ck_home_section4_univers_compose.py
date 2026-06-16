@@ -71,6 +71,7 @@ class TestCkHomeSection4UniversCompose(HttpCase):
         self.assertIn('ck_univers_epicerie.jpg', chunk)
         self.assertIn('ck_univers_soin.jpg', chunk)
         self.assertIn('ck_univers_artisanat.jpg', chunk)
+        self.assertIn('?v=', chunk)
 
     def test_home_section3_non_regression(self):
         html = self.url_open('/').text
