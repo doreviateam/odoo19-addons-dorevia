@@ -282,8 +282,8 @@
         overflow: hidden;
         min-height: 280px;
         text-decoration: none;
-        color: $ck-text;
-        border: 1px solid $ck-border;
+        color: #fff;
+        border: 1px solid rgba(28, 25, 23, 0.1);
         box-shadow: $ck-shadow-card;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
 
@@ -294,7 +294,7 @@
         &:hover {
             transform: translateY(-2px);
             box-shadow: $ck-shadow-card-hover;
-            color: $ck-text;
+            color: #fff;
             text-decoration: none;
 
             .ck-univers-card__img {
@@ -302,9 +302,9 @@
             }
 
             .ck-univers-card__cta {
-                background-color: $ck-primary-hover;
-                border-color: $ck-primary-hover;
-                box-shadow: 0 4px 14px rgba(216, 67, 21, 0.28);
+                background-color: #fff;
+                color: $ck-primary-hover;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.24);
             }
         }
     }
@@ -334,13 +334,20 @@
         justify-content: flex-end;
         min-height: 280px;
         padding: $ck-space-5;
-        background: linear-gradient(
-            180deg,
-            rgba(255, 251, 247, 0) 0%,
-            rgba(255, 251, 247, 0.08) 38%,
-            rgba(255, 251, 247, 0.72) 68%,
-            rgba(255, 251, 247, 0.94) 100%
-        );
+        // Overlay chaud/sombre modéré — photo visible en haut, lisibilité en bas (brief MOA initial)
+        background:
+            linear-gradient(
+                180deg,
+                rgba(28, 25, 23, 0) 0%,
+                rgba(28, 25, 23, 0.1) 40%,
+                rgba(45, 32, 28, 0.55) 70%,
+                rgba(28, 25, 23, 0.72) 100%
+            ),
+            linear-gradient(
+                135deg,
+                rgba(216, 67, 21, 0.14) 0%,
+                rgba(28, 25, 23, 0) 55%
+            );
 
         @media (max-width: 767.98px) {
             min-height: 240px;
@@ -354,14 +361,16 @@
         font-weight: $ck-font-weight-semibold;
         margin: 0 0 8px;
         line-height: 1.2;
-        color: $ck-text;
+        color: #fff;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
     }
 
     .ck-univers-card__desc {
         margin: 0 0 14px;
         font-size: $ck-text-sm;
         line-height: 1.45;
-        color: $ck-text-muted;
+        color: rgba(255, 255, 255, 0.94);
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
         max-width: 36ch;
     }
 
@@ -374,12 +383,12 @@
         font-size: $ck-text-sm;
         font-weight: $ck-font-weight-semibold;
         line-height: 1;
-        color: #fff;
-        background-color: $ck-primary;
-        border: 1px solid $ck-primary;
+        color: $ck-primary;
+        background-color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.95);
         text-decoration: none;
-        box-shadow: 0 2px 10px rgba(216, 67, 21, 0.22);
-        transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     }
 }
 
