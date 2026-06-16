@@ -188,30 +188,49 @@ class TestCkHomeSection3Curation(TransactionCase):
         self.assertNotIn('CK Vedette Cap 09', names)
 
     def test_card_labels_are_joined_and_exclude_coups_de_coeur(self):
-        reunion = self.env['dorevia.ck.product.label'].sudo().create({
-            'name': 'Réunion',
+        guadeloupe = self.env['product.tag'].sudo().create({
+            'name': 'Guadeloupe',
             'sequence': 10,
         })
-        epicerie = self.env['dorevia.ck.product.label'].sudo().create({
+        epicerie = self.env['product.tag'].sudo().create({
             'name': 'Épicerie',
             'sequence': 20,
         })
-        excluded = self.env['dorevia.ck.product.label'].sudo().create({
+        excluded = self.env['product.tag'].sudo().create({
             'name': FEATURED_CATEGORY_NAME,
             'sequence': 5,
         })
         product = self._make_product(
             'CK Vedette Labels',
-            ck_featured_label_ids=[(6, 0, [reunion.id, epicerie.id, excluded.id])],
+            product_tag_ids=[(6, 0, [guadeloupe.id, epicerie.id, excluded.id])],
         )
         line = _get_featured_labels_line(product)
-        self.assertEqual(line, 'Réunion · Épicerie')
+        self.assertEqual(line, 'Guadeloupe · Épicerie')
 
         website = self.env['website'].search([], limit=1)
         card = build_featured_product_card_html(self.env, website, product.product_variant_id)
         self.assertIn('product-card-labels', card)
-        self.assertIn('Réunion · Épicerie', card)
+        self.assertIn('Guadeloupe · Épicerie', card)
         self.assertNotIn(FEATURED_CATEGORY_NAME, card)
+
+    def test_card_labels_use_variant_additional_product_tags(self):
+        category = _ensure_featured_category(self.env)
+        martinique = self.env['product.tag'].sudo().create({
+            'name': 'Martinique',
+            'sequence': 15,
+        })
+        product = self._make_product(
+            'CK Vedette Tags Variante',
+            public_categ_ids=[(4, category.id)],
+        )
+        variant = product.product_variant_id
+        variant.write({'additional_product_tag_ids': [(4, martinique.id)]})
+        line = _get_featured_labels_line(product, variant)
+        self.assertEqual(line, 'Martinique')
+
+        website = self.env['website'].search([], limit=1)
+        card = build_featured_product_card_html(self.env, website, variant)
+        self.assertIn('Martinique', card)
 
     def test_card_net_quantity_and_reference_price(self):
         product = self._make_product(
@@ -244,7 +263,22 @@ class TestCkHomeSection3Curation(TransactionCase):
         website = self.env['website'].search([], limit=1)
         card = build_featured_product_card_html(self.env, website, product.product_variant_id)
         self.assertIn(FEATURED_CARD_CTA, card)
+        self.assertIn('ck-product-card__cover', card)
         self.assertNotIn('>Voir</a>', card)
+
+    def test_product_tags_write_refreshes_home_arch(self):
+        category = _ensure_featured_category(self.env)
+        tag = self.env['product.tag'].sudo().create({'name': 'Martinique'})
+        product = self._make_product(
+            'CK Vedette Tag Refresh',
+            public_categ_ids=[(4, category.id)],
+        )
+        bootstrap_home_featured_products(self.env)
+        product.write({'product_tag_ids': [(4, tag.id)]})
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        arch = page.view_id.arch_db or ''
+        self.assertIn('Martinique', arch)
+        self.assertIn('product-card-labels', arch)
 
     def test_featured_card_fields_refresh_home_arch(self):
         category = _ensure_featured_category(self.env)
@@ -253,9 +287,9 @@ class TestCkHomeSection3Curation(TransactionCase):
             public_categ_ids=[(4, category.id)],
         )
         bootstrap_home_featured_products(self.env)
-        label = self.env['dorevia.ck.product.label'].sudo().create({'name': 'Martinique'})
+        tag = self.env['product.tag'].sudo().create({'name': 'Martinique'})
         product.write({
-            'ck_featured_label_ids': [(4, label.id)],
+            'product_tag_ids': [(4, tag.id)],
             'ck_net_quantity': 250,
             'ck_net_quantity_uom': 'g',
         })
@@ -263,3 +297,32 @@ class TestCkHomeSection3Curation(TransactionCase):
         arch = page.view_id.arch_db or ''
         self.assertIn('Martinique', arch)
         self.assertIn('250 g', arch)
+
+    def test_bootstrap_refreshes_stale_arch_without_product_labels(self):
+        category = _ensure_featured_category(self.env)
+        guadeloupe = self.env['product.tag'].sudo().create({
+            'name': 'Guadeloupe',
+            'sequence': 10,
+        })
+        epicerie = self.env['product.tag'].sudo().create({
+            'name': 'Épicerie',
+            'sequence': 20,
+        })
+        product = self._make_product(
+            'CK Vedette Stale Labels',
+            public_categ_ids=[(4, category.id)],
+            product_tag_ids=[(6, 0, [guadeloupe.id, epicerie.id])],
+        )
+        bootstrap_home_featured_products(self.env)
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        view = page.view_id.sudo()
+        arch = view.arch_db or ''
+        self.assertIn('product-card-labels', arch)
+
+        stale_arch = arch.replace('product-card-labels', 'product-card-labels-stale')
+        view.write({'arch_db': stale_arch})
+        bootstrap_home_featured_products(self.env)
+        arch = view.arch_db or ''
+        self.assertIn('product-card-labels', arch)
+        self.assertIn('Guadeloupe · Épicerie', arch)
+        self.assertNotIn('product-card-labels-stale', arch)

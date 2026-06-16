@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models
+import logging
+
+from odoo import api, fields, models, tools
+
+_logger = logging.getLogger(__name__)
 
 
 FEATURED_REFRESH_FIELDS = {
@@ -12,7 +16,7 @@ FEATURED_REFRESH_FIELDS = {
     'list_price',
     'image_1920',
     'image_512',
-    'ck_featured_label_ids',
+    'product_tag_ids',
     'ck_net_quantity',
     'ck_net_quantity_uom',
     'ck_reference_price_uom',
@@ -37,14 +41,6 @@ CK_REFERENCE_PRICE_UOM_SELECTION = [
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    ck_featured_label_ids = fields.Many2many(
-        'dorevia.ck.product.label',
-        'product_template_ck_featured_label_rel',
-        'product_tmpl_id',
-        'label_id',
-        string='Étiquettes visibles sur la card',
-        help='Affichées sous le nom du produit sur la card home (ex. Réunion · Épicerie).',
-    )
     ck_net_quantity = fields.Float(
         string='Quantité nette',
         default=None,
@@ -76,3 +72,28 @@ class ProductTemplate(models.Model):
         if FEATURED_REFRESH_FIELDS.intersection(vals):
             self._ck_refresh_home_featured_products()
         return result
+
+    def _register_hook(self):
+        super()._register_hook()
+        if tools.config.get('test_enable') or tools.config.get('test_tags'):
+            return
+        self._ck_sync_home_featured_labels_on_startup()
+
+    @api.model
+    def _ck_sync_home_featured_labels_on_startup(self):
+        """Reconstruit la home si des étiquettes BO manquent des cards SSR (arch périmée)."""
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _featured_arch_missing_product_labels,
+            bootstrap_home_featured_products,
+            get_curated_featured_variants,
+        )
+
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        if not page or not page.view_id:
+            return
+        arch = page.view_id.arch_db or ''
+        variants = get_curated_featured_variants(self.env)
+        if not _featured_arch_missing_product_labels(self.env, arch, variants):
+            return
+        if bootstrap_home_featured_products(self.env):
+            _logger.info('CK Section 3 : home reconstruite (étiquettes produit manquantes).')

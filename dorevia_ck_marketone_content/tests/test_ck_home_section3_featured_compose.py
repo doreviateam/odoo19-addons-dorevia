@@ -14,6 +14,9 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     FEATURED_CARD_MARKER,
     FEATURED_TITLE,
     MIN_FEATURED_PRODUCTS,
+    _ensure_featured_category,
+    _get_featured_labels_line,
+    bootstrap_home_featured_products,
     get_curated_featured_variants,
     get_ready_featured_variants,
 )
@@ -63,6 +66,7 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         html = self.url_open('/').text
         self.assertIn(FEATURED_TITLE, html)
         self.assertIn('Sélection CK', html)
+        self.assertIn('savoir-faire créole', html)
         self.assertIn('Toute la boutique', html)
         self.assertIn('ck-featured-products--maquette', html)
 
@@ -78,6 +82,67 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         self.assertGreaterEqual(grid_chunk.count('class="card-cta"'), expected)
         self.assertGreaterEqual(grid_chunk.count('class="price"'), expected)
         self.assertNotIn('o_carousel_product_card', grid_chunk)
+
+    def test_home_featured_card_shows_product_tags_line(self):
+        """Étiquettes produit BO visibles sous le nom sur la card home."""
+        curated = get_curated_featured_variants(self.env)
+        if not curated:
+            raise unittest.SkipTest('Aucune vedette curatée pour le test étiquettes.')
+        tagged_template = curated[0].product_tmpl_id.sudo()
+        guadeloupe = self.env['product.tag'].sudo().create({
+            'name': 'Guadeloupe',
+            'sequence': 10,
+        })
+        epicerie = self.env['product.tag'].sudo().create({
+            'name': 'Épicerie',
+            'sequence': 20,
+        })
+        tagged_template.write({
+            'product_tag_ids': [(6, 0, [guadeloupe.id, epicerie.id])],
+        })
+        labels_line = _get_featured_labels_line(tagged_template)
+        self.assertEqual(labels_line, 'Guadeloupe · Épicerie')
+        grid_chunk = self._featured_grid_chunk(self.url_open('/').text)
+        self.assertIn('product-card-labels', grid_chunk)
+        self.assertIn('Guadeloupe · Épicerie', grid_chunk)
+
+    def test_home_http_rebuilds_stale_arch_without_product_labels(self):
+        """GET / reconstruit la home si les étiquettes produit manquent (arch périmée)."""
+        import re
+
+        category = _ensure_featured_category(self.env)
+        guadeloupe = self.env['product.tag'].sudo().create({
+            'name': 'Guadeloupe',
+            'sequence': 10,
+        })
+        epicerie = self.env['product.tag'].sudo().create({
+            'name': 'Épicerie',
+            'sequence': 20,
+        })
+        self.env['product.template'].sudo().create({
+            'name': 'CK Vedette HTTP Labels',
+            'list_price': 4.5,
+            'is_published': True,
+            'website_published': True,
+            'sale_ok': True,
+            'public_categ_ids': [(4, category.id)],
+            'product_tag_ids': [(6, 0, [guadeloupe.id, epicerie.id])],
+            'image_1920': _TINY_PNG,
+        })
+        bootstrap_home_featured_products(self.env)
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        view = page.view_id.sudo()
+        stale_arch = re.sub(
+            r'<p class="product-card-labels">[^<]*</p>\s*',
+            '',
+            view.arch_db or '',
+        )
+        view.write({'arch_db': stale_arch})
+        self.assertNotIn('<p class="product-card-labels">', view.arch_db or '')
+
+        grid_chunk = self._featured_grid_chunk(self.url_open('/').text)
+        self.assertIn('product-card-labels', grid_chunk)
+        self.assertIn('Guadeloupe · Épicerie', grid_chunk)
 
     def test_home_featured_lot2_contract_intact(self):
         grid_chunk = self._featured_grid_chunk(self.url_open('/').text)

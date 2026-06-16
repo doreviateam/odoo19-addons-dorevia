@@ -27,25 +27,10 @@
                         <field name="product_tag_ids"
                                widget="many2many_tags"
                                string="Étiquettes produit"
-                               context="{'product_template_id': id}"/>
+                               context="{'product_template_id': id}"
+                               placeholder="Guadeloupe, Épicerie…"
+                               help="Affichées sous le nom du produit sur la card home (ex. Guadeloupe · Épicerie)."/>
                         <field name="website_sequence" groups="base.group_no_one"/>
-                    </group>
-                    <div class="alert alert-secondary mb-2 mt-2" role="alert" colspan="2">
-                        <strong>Card home — Nos coups de cœur</strong>
-                        <p class="mb-0">
-                            Champs utilisés uniquement pour la card affichée sur la page d'accueil,
-                            section « Nos coups de cœur ».
-                        </p>
-                    </div>
-                    <group string="Affichage card" name="ck_featured_card_display">
-                        <field name="ck_featured_label_ids"
-                               widget="many2many_tags"
-                               string="Étiquettes visibles sur la card"
-                               placeholder="Réunion, Épicerie…"
-                               options="{'no_create_edit': False}"/>
-                        <div class="text-muted" colspan="2">
-                            Affichées sous le nom du produit sur la card (ex. Réunion · Épicerie).
-                        </div>
                     </group>
                     <group string="Quantité commerciale" name="ck_featured_card_quantity">
                         <field name="ck_net_quantity" placeholder="ex. 320"/>

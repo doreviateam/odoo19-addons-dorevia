@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Home Lot 2 / Section 3 — Produits vedettes SSR maquette CK (cartes dédiées)."""
 import contextlib
+import json
 import re
 from unittest.mock import MagicMock, Mock, patch
 from xml.sax.saxutils import escape
@@ -14,7 +15,7 @@ FEATURED_SECTION_MARKER = 'ck-featured-products'
 FEATURED_GRID_MARKER = 'ck-featured-products__grid--stable'
 FEATURED_CARD_MARKER = 'ck-product-card'
 FEATURED_TITLE = 'Nos coups de cœur'
-FEATURED_SUBTITLE = 'Sélection CK · prix TTC · origine et famille visibles'
+FEATURED_SUBTITLE = 'Sélection CK · origine, goût et savoir-faire créole'
 FEATURED_SHOP_CTA = 'Toute la boutique →'
 FEATURED_CARD_CTA = 'Voir le produit'
 FEATURED_CATEGORY_NAME = 'Coups de cœur'  # curation BO des vedettes (catégorie e-commerce dédiée)
@@ -76,7 +77,11 @@ _CARD_IMAGE_RE = re.compile(
 )
 _CARD_PRICE_RE = re.compile(r'class="price"')
 _CARD_LINK_RE = re.compile(r'class="card-cta"')
+_CARD_COVER_RE = re.compile(r'ck-product-card__cover')
 _CARD_CTA_TEXT_RE = re.compile(re.escape(FEATURED_CARD_CTA))
+_FEATURED_LABELS_BLOCK_RE = re.compile(
+    r'<p class="product-card-labels">[^<]+</p>',
+)
 
 FEATURED_TITLE_SECTION = ''  # rétro-compat tests import — section unique désormais
 
@@ -245,12 +250,14 @@ def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
         ('website_published', '=', True),
         ('sale_ok', '=', True),
     ], order='website_sequence asc, id asc')
-
+    templates.mapped('product_tag_ids')
     variants = env['product.product'].browse()
     for template in templates:
         candidates = template.product_variant_ids.filtered(
             lambda v: v.is_published and v.sale_ok and _variant_has_valid_image(v)
         ).sorted(key=lambda v: v.id)
+        if candidates:
+            candidates.mapped('additional_product_tag_ids')
         if not candidates:
             continue
         cap = _template_featured_variant_cap(template)
@@ -358,15 +365,116 @@ def _is_excluded_featured_label(name):
     return normalized in excluded or 'coups de coeur' in normalized
 
 
-def _get_featured_labels_line(template):
-    """Ligne descriptive client — étiquettes BO, jamais la catégorie Coups de cœur."""
-    labels = template.ck_featured_label_ids.sorted(key=lambda label: (label.sequence, label.name or ''))
+def _tag_display_name(name_value):
+    if isinstance(name_value, dict):
+        for key in ('fr_FR', 'en_US'):
+            label = (name_value.get(key) or '').strip()
+            if label:
+                return label
+        for label in name_value.values():
+            text = (label or '').strip()
+            if text:
+                return text
+        return ''
+    if isinstance(name_value, str):
+        stripped = name_value.strip()
+        if stripped.startswith('{'):
+            try:
+                return _tag_display_name(json.loads(stripped))
+            except json.JSONDecodeError:
+                return stripped
+        return stripped
+    return (name_value or '').strip()
+
+
+def _featured_label_parts_from_tags(tags):
     parts = []
-    for label in labels:
-        name = (label.name or '').strip()
+    for tag in tags:
+        name = _tag_display_name(tag.name)
         if name and not _is_excluded_featured_label(name):
             parts.append(name)
+    return parts
+
+
+def _featured_label_parts_from_sql(cr, template_id, variant_id=None):
+    """Lecture SQL directe — template + variante (product_tag_ids + additional_product_tag_ids)."""
+    if variant_id:
+        cr.execute(
+            """
+            SELECT pt.sequence, pt.name, pt.id
+              FROM product_tag pt
+             WHERE pt.id IN (
+                    SELECT product_tag_id
+                      FROM product_tag_product_template_rel
+                     WHERE product_template_id = %s
+                    UNION
+                    SELECT product_tag_id
+                      FROM product_tag_product_product_rel
+                     WHERE product_product_id = %s
+                   )
+             ORDER BY pt.sequence, pt.id
+            """,
+            (template_id, variant_id),
+        )
+    else:
+        cr.execute(
+            """
+            SELECT pt.sequence, pt.name, pt.id
+              FROM product_tag pt
+              JOIN product_tag_product_template_rel rel
+                ON rel.product_tag_id = pt.id
+             WHERE rel.product_template_id = %s
+             ORDER BY pt.sequence, pt.id
+            """,
+            (template_id,),
+        )
+    parts = []
+    seen = set()
+    for _sequence, raw_name, tag_id in cr.fetchall():
+        if tag_id in seen:
+            continue
+        seen.add(tag_id)
+        name = _tag_display_name(raw_name)
+        if name and not _is_excluded_featured_label(name):
+            parts.append(name)
+    return parts
+
+
+def _featured_tags_for_card(template, variant=None):
+    """Union ORM template + étiquettes variante, tri maquette."""
+    template = template.sudo()
+    variant = (variant or template.product_variant_ids[:1]).sudo()
+    tags = template.product_tag_ids
+    if variant:
+        tags = tags | variant.additional_product_tag_ids
+    return tags.sorted(key=lambda tag: (tag.sequence, tag.id))
+
+
+def _get_featured_labels_line(template, variant=None):
+    """Ligne descriptive client — product_tag_ids (+ variante), jamais « Coups de cœur »."""
+    template = template.sudo()
+    variant = (variant or template.product_variant_ids[:1]).sudo()
+    variant_id = variant.id if variant else None
+    parts = _featured_label_parts_from_sql(template.env.cr, template.id, variant_id)
+    if not parts:
+        parts = _featured_label_parts_from_tags(_featured_tags_for_card(template, variant))
     return ' · '.join(parts)
+
+
+def _featured_arch_missing_product_labels(env, arch, variants):
+    """True si des vedettes ont des étiquettes BO mais l'arch home ne les affiche pas."""
+    if FEATURED_SECTION_MARKER not in (arch or ''):
+        return False
+    templates = variants.mapped('product_tmpl_id').sudo()
+    for variant in variants:
+        line = _get_featured_labels_line(variant.product_tmpl_id, variant)
+        if not line:
+            continue
+        if not _FEATURED_LABELS_BLOCK_RE.search(arch):
+            return True
+        if line not in arch:
+            return True
+    return False
 
 
 def _format_featured_quantity_value(quantity):
@@ -474,13 +582,15 @@ def _get_featured_badge_html(variant):
 def build_featured_product_card_html(env, website, variant):
     """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence."""
     template = variant.product_tmpl_id
-    name = escape(_get_featured_display_name(variant))
+    display_name = _get_featured_display_name(variant)
     href = escape(variant.website_url or template.website_url or '/shop')
     image_url = _get_featured_image_url(variant)
     price_label = escape(_get_featured_price_label(env, website, variant))
-    labels_line = escape(_get_featured_labels_line(template))
+    labels_line = escape(_get_featured_labels_line(template, variant))
     commercial_line = escape(_get_featured_commercial_line(env, website, variant))
     badge_html = _get_featured_badge_html(variant)
+    card_title = escape(display_name)
+    card_aria = escape(f'{FEATURED_CARD_CTA} : {display_name}')
 
     labels_block = (
         f'<p class="product-card-labels">{labels_line}</p>'
@@ -492,12 +602,13 @@ def build_featured_product_card_html(env, website, variant):
     )
 
     return f"""
-<article class="{FEATURED_CARD_MARKER} product-card">
-    <a href="{href}" class="product-card-media ck-product-card__media" style="background-image:url('{image_url}')">
+<article class="{FEATURED_CARD_MARKER} product-card ck-product-card--interactive">
+    <a href="{href}" class="ck-product-card__cover" aria-label="{card_aria}"></a>
+    <div class="product-card-media ck-product-card__media" style="background-image:url('{image_url}')">
         {badge_html}
-    </a>
+    </div>
     <div class="product-card-body">
-        <h3><a href="{href}">{name}</a></h3>
+        <h3 class="product-card-title">{card_title}</h3>
         {labels_block}
     </div>
     <div class="product-card-foot">
@@ -522,6 +633,8 @@ def card_fragment_is_valid(fragment):
     if not _CARD_PRICE_RE.search(fragment):
         return False
     if not _CARD_LINK_RE.search(fragment):
+        return False
+    if not _CARD_COVER_RE.search(fragment):
         return False
     if not _CARD_CTA_TEXT_RE.search(fragment):
         return False
@@ -549,7 +662,7 @@ def build_featured_ssr_arch(card_fragments):
 <section class="s_ck_featured_products {FEATURED_SECTION_MARKER} ck-featured-products--maquette pt48 pb48 o_colored_level" data-snippet="s_ck_featured_products" data-name="Produits vedettes">
     <div class="container">
         <div class="ck-featured-products__head">
-            <div>
+            <div class="ck-featured-products__head-text">
                 <h2 id="featured-title" class="ck-featured-products__title h3 mb-0 o_editable">{FEATURED_TITLE}</h2>
                 <p class="ck-featured-products__subtitle mb-0 o_editable">{FEATURED_SUBTITLE}</p>
             </div>
@@ -618,6 +731,8 @@ def refresh_home_featured_products(env):
 
 def bootstrap_home_featured_products(env):
     """Lot 2 home — injecte la grille SSR vedettes maquette ou masque si BO insuffisant."""
+    if not env.is_superuser():
+        env = env(su=True)
     website = env['website'].search([], limit=1)
     if not website:
         return False
@@ -648,7 +763,12 @@ def bootstrap_home_featured_products(env):
             featured_arch = build_featured_ssr_arch(cards[:limit])
 
     new_arch, patched = _patch_homepage_featured_arch(arch, featured_arch)
-    if not patched or new_arch == arch:
+    stale_labels = _featured_arch_missing_product_labels(env, arch, variants)
+    if not patched and not stale_labels:
+        return False
+    if not featured_arch:
+        return patched
+    if new_arch == arch and not stale_labels:
         return patched
 
     view.write({'arch_db': new_arch})
