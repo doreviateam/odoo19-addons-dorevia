@@ -18,24 +18,10 @@ FEATURED_REFRESH_FIELDS = {
     'image_512',
     'product_tag_ids',
     'ck_net_quantity',
-    'ck_net_quantity_uom',
-    'ck_reference_price_uom',
+    'ck_net_quantity_uom_id',
+    'ck_reference_price_uom_id',
     'ck_show_reference_price',
 }
-
-CK_NET_QUANTITY_UOM_SELECTION = [
-    ('g', 'g'),
-    ('kg', 'kg'),
-    ('ml', 'ml'),
-    ('cl', 'cl'),
-    ('l', 'l'),
-    ('unit', 'pièce'),
-]
-
-CK_REFERENCE_PRICE_UOM_SELECTION = [
-    ('kg', 'kg'),
-    ('l', 'l'),
-]
 
 
 class ProductTemplate(models.Model):
@@ -46,13 +32,17 @@ class ProductTemplate(models.Model):
         default=None,
         help='Quantité nette affichée sur la card home (ex. 320 g). Laisser vide si non applicable.',
     )
-    ck_net_quantity_uom = fields.Selection(
-        selection=CK_NET_QUANTITY_UOM_SELECTION,
+    ck_net_quantity_uom_id = fields.Many2one(
+        comodel_name='dorevia.ck.card.uom',
         string='Unité de quantité nette',
+        domain="[('use_for_net_quantity', '=', True), ('active', '=', True)]",
+        ondelete='restrict',
     )
-    ck_reference_price_uom = fields.Selection(
-        selection=CK_REFERENCE_PRICE_UOM_SELECTION,
+    ck_reference_price_uom_id = fields.Many2one(
+        comodel_name='dorevia.ck.card.uom',
         string='Unité du prix de référence',
+        domain="[('use_for_reference_price', '=', True), ('active', '=', True)]",
+        ondelete='restrict',
     )
     ck_show_reference_price = fields.Boolean(
         string='Afficher le prix au kg / litre',

@@ -20,6 +20,8 @@ class IrHttp(models.AbstractModel):
         """Reconstruit la section vedettes si l'arch home est périmée (étiquettes manquantes)."""
         if not request:
             return
+        if not cls._ck_path_can_be_homepage():
+            return
         env = request.env
         try:
             website = env['website'].get_current_website()
@@ -48,9 +50,24 @@ class IrHttp(models.AbstractModel):
             page.view_id.invalidate_recordset(['arch_db'])
 
     @staticmethod
+    def _ck_path_can_be_homepage():
+        httprequest = getattr(request, 'httprequest', None)
+        if not httprequest:
+            return False
+        path = (httprequest.path or '/').split('?')[0].rstrip('/') or '/'
+        if path == '/':
+            return True
+        if path.startswith(('/odoo', '/web')):
+            return False
+        return path.count('/') == 1
+
+    @staticmethod
     def _ck_request_is_homepage(env, website):
         path = (request.httprequest.path or '/').split('?')[0].rstrip('/') or '/'
-        homepage = (website.homepage_url or '/').split('?')[0].rstrip('/') or '/'
+        try:
+            homepage = (website.homepage_url or '/').split('?')[0].rstrip('/') or '/'
+        except Exception:
+            return False
         if path == homepage:
             return True
         if homepage != '/' or path.count('/') != 1:

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ck_card_uom_g" model="dorevia.ck.card.uom">
+        <field name="name">g</field>
+        <field name="code">g</field>
+        <field name="sequence">10</field>
+        <field name="family">mass</field>
+        <field name="ratio">0.001</field>
+        <field name="use_for_net_quantity" eval="True"/>
+        <field name="use_for_reference_price" eval="False"/>
+    </record>
+    <record id="ck_card_uom_kg" model="dorevia.ck.card.uom">
+        <field name="name">kg</field>
+        <field name="code">kg</field>
+        <field name="sequence">20</field>
+        <field name="family">mass</field>
+        <field name="ratio">1</field>
+        <field name="use_for_net_quantity" eval="True"/>
+        <field name="use_for_reference_price" eval="True"/>
+    </record>
+    <record id="ck_card_uom_ml" model="dorevia.ck.card.uom">
+        <field name="name">ml</field>
+        <field name="code">ml</field>
+        <field name="sequence">30</field>
+        <field name="family">volume</field>
+        <field name="ratio">0.001</field>
+        <field name="use_for_net_quantity" eval="True"/>
+        <field name="use_for_reference_price" eval="False"/>
+    </record>
+    <record id="ck_card_uom_cl" model="dorevia.ck.card.uom">
+        <field name="name">cl</field>
+        <field name="code">cl</field>
+        <field name="sequence">40</field>
+        <field name="family">volume</field>
+        <field name="ratio">0.01</field>
+        <field name="use_for_net_quantity" eval="True"/>
+        <field name="use_for_reference_price" eval="False"/>
+    </record>
+    <record id="ck_card_uom_l" model="dorevia.ck.card.uom">
+        <field name="name">l</field>
+        <field name="code">l</field>
+        <field name="sequence">50</field>
+        <field name="family">volume</field>
+        <field name="ratio">1</field>
+        <field name="use_for_net_quantity" eval="True"/>
+        <field name="use_for_reference_price" eval="True"/>
+    </record>
+    <record id="ck_card_uom_unit" model="dorevia.ck.card.uom">
+        <field name="name">pièce</field>
+        <field name="code">unit</field>
+        <field name="sequence">60</field>
+        <field name="family">unit</field>
+        <field name="ratio">1</field>
+        <field name="use_for_net_quantity" eval="True"/>
+        <field name="use_for_reference_price" eval="False"/>
+    </record>
+</odoo>
