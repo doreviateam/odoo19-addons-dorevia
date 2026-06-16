@@ -1,0 +1,168 @@
+{
+  "captures": [
+    {
+      "label": "1280",
+      "width": 1280,
+      "height": 800,
+      "sectionPath": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/recette_section3_post_merge/section3_odoo_1280.png"
+    },
+    {
+      "label": "390",
+      "width": 390,
+      "height": 844,
+      "sectionPath": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/recette_section3_post_merge/section3_odoo_390.png"
+    }
+  ],
+  "checks": {
+    "390": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "sectionTitle": "Nos coups de cœur",
+      "hasMaquetteClass": true,
+      "cardCount": 5,
+      "cards": [
+        {
+          "title": "Confiture de goyave",
+          "href": "/shop/confiture-de-goyave-3",
+          "mediaHeight": 356,
+          "mediaWidth": 356,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/3/image_512\")"
+        },
+        {
+          "title": "Manio Crackers salé",
+          "href": "/shop/manio-crackers-4?attribute_values=2",
+          "mediaHeight": 356,
+          "mediaWidth": 356,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/21/image_512\")"
+        },
+        {
+          "title": "Manio Crackers sucré",
+          "href": "/shop/manio-crackers-4?attribute_values=3",
+          "mediaHeight": 356,
+          "mediaWidth": 356,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/22/image_512\")"
+        },
+        {
+          "title": "Galettes de manioc",
+          "href": "/shop/galettes-de-manioc-20",
+          "mediaHeight": 356,
+          "mediaWidth": 356,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/23/image_512\")"
+        },
+        {
+          "title": "Savon vétiver",
+          "href": "/shop/savon-vetiver-7",
+          "mediaHeight": 356,
+          "mediaWidth": 356,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/7/image_512\")"
+        }
+      ],
+      "orderHeroTrustFeatured": true,
+      "heroInterval": true,
+      "noNativeCarousel": true,
+      "noProductCart": true
+    },
+    "1280": {
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "overflow": false,
+      "sectionTitle": "Nos coups de cœur",
+      "hasMaquetteClass": true,
+      "cardCount": 5,
+      "cards": [
+        {
+          "title": "Confiture de goyave",
+          "href": "/shop/confiture-de-goyave-3",
+          "mediaHeight": 370,
+          "mediaWidth": 370,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/3/image_512\")"
+        },
+        {
+          "title": "Manio Crackers salé",
+          "href": "/shop/manio-crackers-4?attribute_values=2",
+          "mediaHeight": 370,
+          "mediaWidth": 370,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/21/image_512\")"
+        },
+        {
+          "title": "Manio Crackers sucré",
+          "href": "/shop/manio-crackers-4?attribute_values=3",
+          "mediaHeight": 370,
+          "mediaWidth": 370,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/22/image_512\")"
+        },
+        {
+          "title": "Galettes de manioc",
+          "href": "/shop/galettes-de-manioc-20",
+          "mediaHeight": 370,
+          "mediaWidth": 370,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/23/image_512\")"
+        },
+        {
+          "title": "Savon vétiver",
+          "href": "/shop/savon-vetiver-7",
+          "mediaHeight": 370,
+          "mediaWidth": 370,
+          "hasBackgroundImage": true,
+          "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/7/image_512\")"
+        }
+      ],
+      "orderHeroTrustFeatured": true,
+      "heroInterval": true,
+      "noNativeCarousel": true,
+      "noProductCart": true
+    }
+  },
+  "cards": [
+    {
+      "title": "Confiture de goyave",
+      "href": "/shop/confiture-de-goyave-3",
+      "mediaHeight": 370,
+      "mediaWidth": 370,
+      "hasBackgroundImage": true,
+      "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/3/image_512\")"
+    },
+    {
+      "title": "Manio Crackers salé",
+      "href": "/shop/manio-crackers-4?attribute_values=2",
+      "mediaHeight": 370,
+      "mediaWidth": 370,
+      "hasBackgroundImage": true,
+      "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/21/image_512\")"
+    },
+    {
+      "title": "Manio Crackers sucré",
+      "href": "/shop/manio-crackers-4?attribute_values=3",
+      "mediaHeight": 370,
+      "mediaWidth": 370,
+      "hasBackgroundImage": true,
+      "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/22/image_512\")"
+    },
+    {
+      "title": "Galettes de manioc",
+      "href": "/shop/galettes-de-manioc-20",
+      "mediaHeight": 370,
+      "mediaWidth": 370,
+      "hasBackgroundImage": true,
+      "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/23/image_512\")"
+    },
+    {
+      "title": "Savon vétiver",
+      "href": "/shop/savon-vetiver-7",
+      "mediaHeight": 370,
+      "mediaWidth": 370,
+      "hasBackgroundImage": true,
+      "backgroundImageSnippet": "url(\"http://localhost:18079/web/image/product.product/7/image_512\")"
+    }
+  ]
+}

@@ -254,40 +254,55 @@
     }
 }
 
-// Home V1 — trust-bar post-Hero (maquette §3 réassurance immédiate)
+// Home V1 — trust-bar post-Hero · variante C « épurée »
+// (séparateurs fins + icônes cerclées accent — polish au-delà maquette §3, validé MOA exploratoire 2026-06-15)
 .ck-reassurance--trust-bar {
     padding: $ck-space-5 0;
-    background-color: $ck-bg-soft;
+    background-color: $ck-bg;
+    border-top: 1px solid $ck-border;
     border-bottom: 1px solid $ck-border;
 
     .ck-reassurance__grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: $ck-space-4 $ck-space-5;
 
         @media (max-width: 767.98px) {
             grid-template-columns: repeat(2, 1fr);
-            gap: $ck-space-4;
+            row-gap: $ck-space-4;
         }
     }
 
     .ck-reassurance__item {
         display: flex;
         gap: 12px;
-        align-items: flex-start;
-        padding: $ck-space-2 0;
+        align-items: center;
+        padding: $ck-space-1 $ck-space-5;
         background: transparent;
         box-shadow: none;
         border-radius: 0;
         height: auto;
+        border-left: 1px solid $ck-border;
+
+        &:nth-child(4n + 1) {
+            border-left: 0;
+        }
+
+        @media (max-width: 767.98px) {
+            padding: $ck-space-2 $ck-space-4;
+
+            &:nth-child(2n + 1) {
+                border-left: 0;
+            }
+        }
     }
 
     .ck-reassurance__icon {
         flex-shrink: 0;
-        width: 40px;
-        height: 40px;
-        border-radius: $ck-radius-sm;
-        background-color: $ck-secondary-soft;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background-color: transparent;
+        border: 1.5px solid $ck-secondary;
         color: $ck-secondary;
         display: grid;
         place-items: center;
@@ -296,7 +311,7 @@
     }
 
     .ck-reassurance__title {
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: $ck-font-weight-semibold;
         margin: 0 0 2px;
         line-height: 1.3;
@@ -315,10 +330,15 @@
     .ck-featured-products__head {
         display: flex;
         justify-content: space-between;
-        align-items: flex-end;
+        align-items: center;
         gap: $ck-space-3;
         flex-wrap: wrap;
         margin-bottom: 20px;
+    }
+
+    .ck-featured-products__head-text {
+        flex: 1;
+        min-width: 0;
     }
 
     .ck-featured-products__title {
@@ -335,6 +355,8 @@
     }
 
     .ck-featured-products__shop-cta {
+        flex-shrink: 0;
+        align-self: center;
         padding: 8px 14px;
         font-size: 13px;
         border-radius: $ck-radius-md;
@@ -371,14 +393,31 @@
         border-radius: $ck-radius-lg;
         overflow: hidden;
         box-shadow: $ck-shadow-card;
-        transition: box-shadow 0.2s ease, transform 0.2s ease;
+        transition: box-shadow 0.25s ease, transform 0.25s ease;
         display: flex;
         flex-direction: column;
 
         &:hover {
             box-shadow: $ck-shadow-card-hover;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+
+            .product-card-media,
+            .ck-product-card__media {
+                transform: scale(1.03);
+            }
         }
+    }
+
+    .ck-product-card--interactive {
+        position: relative;
+    }
+
+    .ck-product-card__cover {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        border-radius: inherit;
+        text-decoration: none;
     }
 
     .product-card-media,
@@ -387,12 +426,34 @@
         aspect-ratio: 1 / 1;
         background: $ck-image-zone center / cover no-repeat;
         position: relative;
+        z-index: 0;
+        overflow: hidden;
+        transition: transform 0.35s ease;
+        transform-origin: center center;
         text-decoration: none;
     }
 
     .product-card-body {
+        position: relative;
+        z-index: 0;
         padding: 12px 14px;
         flex: 1;
+    }
+
+    .product-card-title,
+    .ck-product-card h3 {
+        font-size: 14px;
+        font-weight: $ck-font-weight-semibold;
+        margin: 0;
+        line-height: 1.3;
+        color: inherit;
+    }
+
+    .product-card-labels {
+        margin: 4px 0 0;
+        font-size: 11px;
+        color: $ck-text-muted;
+        line-height: 1.35;
     }
 
     .product-meta {
@@ -417,28 +478,26 @@
         font-size: 11px;
     }
 
-    .ck-product-card h3 {
-        font-size: 14px;
-        font-weight: $ck-font-weight-semibold;
-        margin: 0;
-        line-height: 1.3;
-
-        a {
-            color: inherit;
-            text-decoration: none;
-
-            &:hover {
-                color: $ck-primary;
-            }
-        }
+    .ck-product-card--interactive:hover .product-card-title {
+        color: $ck-primary;
     }
 
     .product-card-foot {
+        position: relative;
+        z-index: 2;
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 14px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 14px 12px;
         border-top: 1px solid $ck-border;
+    }
+
+    .product-card-pricing {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
     }
 
     .price {
@@ -447,8 +506,15 @@
         color: $ck-price;
     }
 
+    .reference-price {
+        font-size: 11px;
+        color: $ck-text-muted;
+        line-height: 1.35;
+    }
+
     .card-cta {
-        padding: 5px 12px;
+        align-self: flex-start;
+        padding: 6px 12px;
         border-radius: $ck-radius-md;
         font-size: 12px;
         font-weight: $ck-font-weight-semibold;
@@ -456,10 +522,29 @@
         border: 1px solid $ck-primary;
         background: $ck-surface;
         text-decoration: none;
+        white-space: nowrap;
 
         &:hover {
             background: $ck-primary;
             color: $ck-surface;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .product-card-foot {
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .product-card-pricing {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-cta {
+            flex-shrink: 0;
         }
     }
 
@@ -481,10 +566,16 @@
         color: $ck-surface;
     }
 
+    .badge-ribbon {
+        font-size: 10px;
+        font-weight: 700;
+    }
+
     .badge-float {
         position: absolute;
         top: 10px;
-        left: 10px;
+        right: 10px;
+        left: auto;
         z-index: 1;
     }
 }

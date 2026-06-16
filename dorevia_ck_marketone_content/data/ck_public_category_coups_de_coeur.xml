@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="public_categ_coups_de_coeur" model="product.public.category">
+        <field name="name">Coups de cœur</field>
+    </record>
+</odoo>
