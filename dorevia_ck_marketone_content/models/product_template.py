@@ -42,20 +42,26 @@ class ProductTemplate(models.Model):
         'product_template_ck_featured_label_rel',
         'product_tmpl_id',
         'label_id',
-        string='Étiquettes card home',
+        string='Étiquettes visibles sur la card',
+        help='Affichées sous le nom du produit sur la card home (ex. Réunion · Épicerie).',
     )
-    ck_net_quantity = fields.Float(string='Quantité nette commerciale')
+    ck_net_quantity = fields.Float(
+        string='Quantité nette',
+        default=None,
+        help='Quantité nette affichée sur la card home (ex. 320 g). Laisser vide si non applicable.',
+    )
     ck_net_quantity_uom = fields.Selection(
         selection=CK_NET_QUANTITY_UOM_SELECTION,
-        string='Unité quantité nette',
+        string='Unité de quantité nette',
     )
     ck_reference_price_uom = fields.Selection(
         selection=CK_REFERENCE_PRICE_UOM_SELECTION,
-        string='Unité prix de référence',
+        string='Unité du prix de référence',
     )
     ck_show_reference_price = fields.Boolean(
-        string='Afficher le prix de référence',
+        string='Afficher le prix au kg / litre',
         default=True,
+        help='Calcule et affiche le prix de référence sur la card home lorsque la quantité nette est renseignée.',
     )
 
     def _ck_refresh_home_featured_products(self):
