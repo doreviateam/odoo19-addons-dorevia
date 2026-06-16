@@ -280,12 +280,16 @@
         display: block;
         border-radius: $ck-radius-lg;
         overflow: hidden;
-        min-height: 220px;
+        min-height: 280px;
         text-decoration: none;
         color: #fff;
-        border: 1px solid $ck-border;
+        border: 1px solid rgba(28, 25, 23, 0.12);
         box-shadow: $ck-shadow-card;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+        @media (max-width: 767.98px) {
+            min-height: 240px;
+        }
 
         &:hover {
             transform: translateY(-2px);
@@ -293,8 +297,14 @@
             color: #fff;
             text-decoration: none;
 
-            .ck-univers-card__media {
-                transform: scale(1.03);
+            .ck-univers-card__img {
+                transform: scale(1.04);
+            }
+
+            .ck-univers-card__cta {
+                background-color: #fff;
+                color: $ck-primary-hover;
+                box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
             }
         }
     }
@@ -302,8 +312,17 @@
     .ck-univers-card__media {
         position: absolute;
         inset: 0;
-        background: $ck-image-zone center / cover no-repeat;
-        transition: transform 0.35s ease;
+        background: $ck-image-zone;
+        overflow: hidden;
+    }
+
+    .ck-univers-card__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        transition: transform 0.4s ease;
         transform-origin: center center;
     }
 
@@ -313,37 +332,61 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        min-height: 220px;
+        min-height: 280px;
         padding: $ck-space-5;
-        background: linear-gradient(
-            180deg,
-            rgba(28, 25, 23, 0.05) 0%,
-            rgba(28, 25, 23, 0.55) 55%,
-            rgba(28, 25, 23, 0.78) 100%
-        );
+        background:
+            linear-gradient(
+                180deg,
+                rgba(45, 32, 28, 0.08) 0%,
+                rgba(45, 32, 28, 0.42) 42%,
+                rgba(28, 25, 23, 0.88) 100%
+            ),
+            linear-gradient(
+                135deg,
+                rgba(124, 45, 18, 0.18) 0%,
+                rgba(28, 25, 23, 0.05) 55%,
+                rgba(28, 25, 23, 0.55) 100%
+            );
+
+        @media (max-width: 767.98px) {
+            min-height: 240px;
+            padding: $ck-space-4;
+        }
     }
 
     .ck-univers-card__title {
         font-family: $ck-font-display;
-        font-size: 1.125rem;
+        font-size: 1.25rem;
         font-weight: $ck-font-weight-semibold;
-        margin: 0 0 6px;
-        line-height: 1.25;
+        margin: 0 0 8px;
+        line-height: 1.2;
+        color: #fff;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
     }
 
     .ck-univers-card__desc {
-        margin: 0 0 10px;
+        margin: 0 0 14px;
         font-size: $ck-text-sm;
-        line-height: 1.4;
-        color: rgba(255, 255, 255, 0.92);
+        line-height: 1.45;
+        color: rgba(255, 255, 255, 0.96);
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+        max-width: 36ch;
     }
 
     .ck-univers-card__cta {
+        display: inline-flex;
+        align-items: center;
+        align-self: flex-start;
+        padding: 10px 18px;
+        border-radius: $ck-radius-md;
         font-size: $ck-text-sm;
         font-weight: $ck-font-weight-semibold;
-        color: #fff;
-        text-decoration: underline;
-        text-underline-offset: 3px;
+        line-height: 1;
+        color: $ck-primary;
+        background-color: rgba(255, 255, 255, 0.96);
+        text-decoration: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+        transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     }
 }
 

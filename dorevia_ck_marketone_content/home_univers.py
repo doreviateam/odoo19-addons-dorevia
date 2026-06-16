@@ -76,7 +76,9 @@ def _build_univers_card_html(card):
     image = escape(card['image'])
     return f"""
             <a href="{href}" class="ck-univers-card ck-univers-card--{escape(card['code'])}">
-                <div class="ck-univers-card__media" style="background-image: url('{image}');" role="img" aria-label="{title}"></div>
+                <div class="ck-univers-card__media">
+                    <img src="{image}" alt="{title}" class="ck-univers-card__img" loading="lazy" decoding="async"/>
+                </div>
                 <div class="ck-univers-card__overlay">
                     <h3 class="ck-univers-card__title">{title}</h3>
                     <p class="ck-univers-card__desc">{description}</p>
@@ -208,6 +210,8 @@ def univers_arch_is_valid(arch):
 
 def _univers_arch_matches_bo(env, arch):
     if not univers_arch_is_valid(arch):
+        return False
+    if 'ck-univers-card__img' not in arch:
         return False
     return all(card['href'] in arch for card in _resolve_univers_cards(env))
 
