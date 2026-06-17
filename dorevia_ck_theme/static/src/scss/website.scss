@@ -298,8 +298,6 @@
         &:hover {
             transform: translateY(-2px);
             box-shadow: $ck-shadow-card-hover;
-            color: #fff;
-            text-decoration: none;
 
             .ck-univers-card__img {
                 transform: scale(1.03);
@@ -313,15 +311,27 @@
         }
     }
 
+    .ck-univers-card__cover {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        border-radius: inherit;
+        text-decoration: none;
+    }
+
+    body.editor_enable .ck-univers-card__cover {
+        pointer-events: none;
+    }
+
     .ck-univers-card__media {
         position: absolute;
         inset: 0;
         background: $ck-image-zone;
         overflow: hidden;
+    }
 
-        &.o_editable {
-            cursor: pointer;
-        }
+    .ck-univers-card__img.o_editable_media {
+        cursor: pointer;
     }
 
     .ck-univers-card__img {
@@ -336,12 +346,13 @@
 
     .ck-univers-card__overlay {
         position: relative;
-        z-index: 1;
+        z-index: 2;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
         min-height: 280px;
         padding: $ck-space-5;
+        pointer-events: none;
         // Overlay chaud/sombre modéré — photo visible en haut, lisibilité en bas (brief MOA initial)
         background:
             linear-gradient(
@@ -371,6 +382,7 @@
         line-height: 1.2;
         color: #fff;
         text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+        pointer-events: auto;
     }
 
     .ck-univers-card__desc {
@@ -380,6 +392,7 @@
         color: rgba(255, 255, 255, 0.94);
         text-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
         max-width: 36ch;
+        pointer-events: auto;
     }
 
     .ck-univers-card__cta {

@@ -13,6 +13,8 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     FEATURED_SECTION_MARKER,
 )
 from odoo.addons.dorevia_ck_marketone_content.home_univers import (
+    UNIVERS_CARD_SNIPPET,
+    UNIVERS_EDITABLE_MEDIA_MARKER,
     UNIVERS_INTRO,
     UNIVERS_SECTION_MARKER,
     UNIVERS_TITLE,
@@ -68,7 +70,9 @@ class TestCkHomeSection4UniversCompose(HttpCase):
         self.assertIn('ck-univers-cards__grid', chunk)
         self.assertIn('ck-univers-card__overlay', chunk)
         self.assertEqual(chunk.count('ck-univers-card__img'), 3)
-        self.assertEqual(chunk.count('ck-univers-card__media o_editable'), 3)
+        self.assertEqual(chunk.count(UNIVERS_EDITABLE_MEDIA_MARKER), 3)
+        self.assertEqual(chunk.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"'), 3)
+        self.assertEqual(chunk.count('ck-univers-card__cover'), 3)
         self.assertIn('ck_univers_epicerie.jpg', chunk)
         self.assertIn('ck_univers_soin.jpg', chunk)
         self.assertIn('ck_univers_artisanat.jpg', chunk)

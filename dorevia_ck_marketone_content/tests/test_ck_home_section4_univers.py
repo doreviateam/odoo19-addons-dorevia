@@ -11,6 +11,8 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     FEATURED_SECTION_MARKER,
 )
 from odoo.addons.dorevia_ck_marketone_content.home_univers import (
+    UNIVERS_CARD_SNIPPET,
+    UNIVERS_EDITABLE_MEDIA_MARKER,
     UNIVERS_INTRO,
     UNIVERS_SECTION_MARKER,
     UNIVERS_TITLE,
@@ -63,7 +65,11 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
         self.assertIn("Voir l'épicerie", arch)
         self.assertNotIn('Packs & découvertes', arch)
         self.assertNotIn('route-hint', arch)
-        self.assertEqual(arch.count('ck-univers-card__media o_editable'), 3)
+        self.assertEqual(arch.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"'), 3)
+        self.assertEqual(arch.count(UNIVERS_EDITABLE_MEDIA_MARKER), 3)
+        self.assertEqual(arch.count('ck-univers-card__cover'), 3)
+        self.assertIn('data-name="Univers Épicerie créole"', arch)
+        self.assertIn('<div class="ck-univers-card ck-univers-card--epicerie"', arch)
 
     def test_bootstrap_injects_univers_after_featured(self):
         self.assertTrue(bootstrap_home_univers(self.env))

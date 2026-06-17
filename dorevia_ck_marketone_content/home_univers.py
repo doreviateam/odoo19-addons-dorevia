@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 """Home Section 4 — Acheter par univers · 3 cards visuelles catalogue."""
+import re
 from xml.sax.saxutils import escape
 
 UNIVERS_SECTION_MARKER = 'ck-univers-cards'
 UNIVERS_DATA_NAME = 'CK Acheter par univers'
 UNIVERS_TITLE = 'Acheter par univers'
 UNIVERS_INTRO = 'Trois univers pour entrer dans la boutique en un clic.'
-UNIVERS_EDITABLE_MEDIA_MARKER = 'ck-univers-card__media o_editable'
+UNIVERS_CARD_SNIPPET = 's_ck_univers_card'
+UNIVERS_EDITABLE_MEDIA_MARKER = 'o_editable_media'
 # Legacy migrations 21.3 / 21.4 — conservé pour historique install
 UNIVERS_IMAGES_VERSION = '4'
 
@@ -77,18 +79,19 @@ def _build_univers_card_html(card):
     cta = escape(card['cta'])
     href = escape(card['href'])
     image = escape(card['image'])
-    visual_name = escape(f"Visuel {card['title']}")
+    card_data_name = escape(f"Univers {card['title']}")
     return f"""
-            <a href="{href}" class="ck-univers-card ck-univers-card--{escape(card['code'])}">
-                <div class="{UNIVERS_EDITABLE_MEDIA_MARKER}" data-name="{visual_name}">
-                    <img src="{image}" alt="{title}" class="ck-univers-card__img" loading="lazy" decoding="async"/>
+            <div class="ck-univers-card ck-univers-card--{escape(card['code'])}" data-snippet="{UNIVERS_CARD_SNIPPET}" data-name="{card_data_name}">
+                <div class="ck-univers-card__media o_not_editable" contenteditable="false">
+                    <img src="{image}" alt="{title}" class="ck-univers-card__img {UNIVERS_EDITABLE_MEDIA_MARKER}" loading="lazy" decoding="async"/>
                 </div>
+                <a href="{href}" class="ck-univers-card__cover" aria-label="{title}"/>
                 <div class="ck-univers-card__overlay">
                     <h3 class="ck-univers-card__title o_editable">{title}</h3>
                     <p class="ck-univers-card__desc o_editable">{description}</p>
                     <span class="ck-univers-card__cta">{cta}</span>
                 </div>
-            </a>""".strip()
+            </div>""".strip()
 
 
 def build_home_univers_arch(env):
@@ -198,7 +201,13 @@ def univers_arch_is_valid(arch):
         return False
     if chunk.count('ck-univers-card--') != 3:
         return False
+    if chunk.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"') != 3:
+        return False
     if chunk.count(UNIVERS_EDITABLE_MEDIA_MARKER) != 3:
+        return False
+    if chunk.count('ck-univers-card__cover') != 3:
+        return False
+    if re.search(r'<a\s[^>]*class="ck-univers-card ck-univers-card--', chunk):
         return False
     if 'data-bs-ride="carousel"' in chunk:
         return False
@@ -216,10 +225,6 @@ def univers_arch_is_valid(arch):
 
 def _univers_arch_matches_bo(env, arch):
     if not univers_arch_is_valid(arch):
-        return False
-    if 'ck-univers-card__img' not in arch:
-        return False
-    if UNIVERS_EDITABLE_MEDIA_MARKER not in arch:
         return False
     if 'ck-univers-cards__head text-center' in arch:
         return False
