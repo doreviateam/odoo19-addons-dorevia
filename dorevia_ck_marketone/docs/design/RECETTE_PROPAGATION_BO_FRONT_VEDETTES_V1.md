@@ -1,9 +1,9 @@
-# Recette — Propagation BO → front · Section « Nos coups de cœur » · V1
+# Recette — Propagation BO → front · Section « Nos coups de cœur » · V1.1
 
 | Champ | Valeur |
 |-------|--------|
 | **Projet** | `dorevia_ck_marketone` · C-Kreyol / CK |
-| **Module** | `dorevia_ck_marketone_content` **19.0.1.25.9** |
+| **Module** | `dorevia_ck_marketone_content` **19.0.1.25.10** |
 | **Instance** | `dorevia_ck_marketone_01` · http://localhost:18079 |
 | **Date** | 2026-06-17 |
 | **Tests auto** | `--test-tags=dorevia_ck_marketone_featured_propagation` |
@@ -53,6 +53,19 @@ Prérequis : un produit publié rangé dans « Coups de cœur », visible sur la
 | P11 | Sortir le produit de « Coups de cœur » | Carte retirée (ou repli auto si seuil) | ORM immédiat |
 | S1 | Éditer un produit **hors** « Coups de cœur » | **Aucun** changement de la home | scope D3 |
 
+### Volet variantes (`product.product` d'un template multi-variantes — ex. Manio salé / sucré)
+
+Une card représente **une variante précise**. Contrôles dédiés :
+
+| # | Action BO sur la variante | Attendu front | Voie |
+|---|---------------------------|---------------|------|
+| V1 | Modifier le **prix de la variante** (price_extra) | Prix de **cette** card mis à jour, l'autre intacte | ORM immédiat (PTAV) |
+| V2 | Renommer la **valeur d'attribut** (salé → …) | Titre de **cette** card mis à jour, l'autre intacte | ORM immédiat (`product.attribute.value`) |
+| V3 | Donner une **image propre à la variante** | Visuel de **cette** card bascule sur l'image variante | ORM immédiat (`image_variant_1920`) |
+| V4 | Dé-publier / retirer de la vente **une** variante | Seule **cette** card disparaît | ORM immédiat |
+| V5 | Cliquer **Ajouter au panier** sur une variante | C'est bien **cette** variante qui entre au panier (`data-product-id`) | — |
+| V6 | Produit **simple** (mono-variante) | Continue de fonctionner comme avant | non-régression |
+
 ### Étapes par contrôle
 
 1. Ouvrir le BO produit, appliquer la modification, **enregistrer**.
@@ -64,7 +77,9 @@ Prérequis : un produit publié rangé dans « Coups de cœur », visible sur la
 
 ## 4. Edge cases / limites connues
 
-- **Origine via valeur d'attribut** : renommer une valeur d'attribut « origine » n'est pas propagé (l'origine n'est plus rendue sur la carte ; seul `price_extra` de variante déclenche un refresh).
+- **Nom de variante (valeur d'attribut)** : désormais **propagé** au titre (override `product.attribute.value`) — V2.
+- **Image de variante** : désormais **propagée** (`image_variant_1920` ajouté aux déclencheurs variante) — V3.
+- **Remplacement d'image au même emplacement** (mêmes bytes, URL inchangée) : l'URL `/web/image/...` sert le contenu courant ; vider le cache navigateur si l'ancienne image persiste.
 - **Catégorie / origine** : non rendues sur la carte actuelle → édition sans effet attendu (pas un défaut).
 - **Liste de prix** : sans pricelist publique en recette, le prix vient de `variant.lst_price` ; un changement de pricelist n'est pas un déclencheur (hors périmètre recette CK actuelle).
 - **Cron** : un changement appliqué hors ORM (SQL direct) n'est rattrapé qu'au prochain passage cron.
@@ -73,11 +88,12 @@ Prérequis : un produit publié rangé dans « Coups de cœur », visible sur la
 
 ## 5. Critères d'acceptation
 
-- P1 (titre) et P7/P8 (badge) : mise à jour immédiate — **les trous historiques sont corrigés** (`name` ajouté aux déclencheurs, override `product.ribbon`, détection titre dans le cron).
-- P2–P6, P9–P11 : non-régression OK.
+- P1 (titre) et P7/P8 (badge) : mise à jour immédiate — trous template corrigés (`name` aux déclencheurs, override `product.ribbon`, détection titre cron).
+- **V1–V5 (variantes)** : prix, nom de valeur d'attribut, image variante, publication, panier — propagation immédiate et **sans contamination** entre variantes (trous variantes corrigés : `image_variant_1920` aux déclencheurs, override `product.attribute.value`, détection image cron).
+- P2–P6, P9–P11, V6 : non-régression OK (produits simples inclus).
 - S1 : aucun rebuild (scope curation respecté).
-- Tests auto `dorevia_ck_marketone_featured_propagation` : verts.
+- Tests auto `dorevia_ck_marketone_featured_propagation` : verts (8 tests).
 
 ---
 
-*Recette propagation BO→front vedettes · `dorevia_ck_marketone_content` 19.0.1.25.9 · 2026-06-17.*
+*Recette propagation BO→front vedettes · `dorevia_ck_marketone_content` 19.0.1.25.10 · 2026-06-17.*

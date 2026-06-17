@@ -270,13 +270,14 @@ def _get_featured_display_name(variant):
 
 
 def _get_featured_image_url(variant):
+    """URL image card — variante seulement si ``image_variant_1920`` est renseignée."""
     template = variant.product_tmpl_id
-    if variant.image_1920 or variant.image_512:
+    if variant.image_variant_1920:
         return f'/web/image/product.product/{variant.id}/image_512'
     if template.image_1920 or template.image_512:
         return f'/web/image/product.template/{template.id}/image_512'
     for sibling in template.product_variant_ids:
-        if sibling.image_1920 or sibling.image_512:
+        if sibling.image_variant_1920:
             return f'/web/image/product.product/{sibling.id}/image_512'
     return f'/web/image/product.template/{template.id}/image_512'
 
@@ -483,6 +484,10 @@ def _featured_arch_stale_cards(env, website, arch, variants):
         expected_title = escape(_get_featured_display_name(variant))
         title_match = re.search(r'class="product-card-title"[^>]*>([^<]+)', chunk)
         if title_match and title_match.group(1) != expected_title:
+            return True
+        expected_image = _get_featured_image_url(variant)
+        image_match = re.search(r"background-image:url\('([^']+)'\)", chunk)
+        if image_match and image_match.group(1) != expected_image:
             return True
         expected_price = escape(_get_featured_price_label(env, website, variant))
         price_match = re.search(r'class="price"[^>]*>([^<]+)', chunk)

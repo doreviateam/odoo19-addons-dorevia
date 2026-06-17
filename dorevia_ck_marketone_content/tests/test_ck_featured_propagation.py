@@ -91,3 +91,101 @@ class TestCkFeaturedPropagation(TransactionCase):
         arch_after = self._home_arch()
         self.assertEqual(arch_before, arch_after)
         self.assertNotIn('CK Hors Curation', arch_after)
+
+    # --- Cas variantes (product.product d'un template multi-variantes) ---
+
+    def _make_two_variant_product(self, name, val_a='Salé', val_b='Sucré', **vals):
+        attribute = self.env['product.attribute'].sudo().create({
+            'name': f'{name} Saveur',
+            'create_variant': 'always',
+        })
+        value_a = self.env['product.attribute.value'].sudo().create({
+            'name': val_a, 'attribute_id': attribute.id,
+        })
+        value_b = self.env['product.attribute.value'].sudo().create({
+            'name': val_b, 'attribute_id': attribute.id,
+        })
+        base = {
+            'name': name,
+            'is_published': True,
+            'website_published': True,
+            'sale_ok': True,
+            'list_price': 3.0,
+            'image_1920': _TINY_PNG,
+            'attribute_line_ids': [(0, 0, {
+                'attribute_id': attribute.id,
+                'value_ids': [(6, 0, [value_a.id, value_b.id])],
+            })],
+        }
+        base.update(vals)
+        template = self.env['product.template'].sudo().create(base)
+        return template, value_a, value_b
+
+    def test_variant_attribute_value_rename_propagates_to_title(self):
+        """Renommer la valeur d'attribut met à jour le titre de la card de CETTE variante."""
+        cat = _ensure_featured_category(self.env)
+        template, value_a, _value_b = self._make_two_variant_product(
+            'CK Multi Titre', val_a='Piquant', val_b='Sucre',
+            public_categ_ids=[(4, cat.id)],
+        )
+        bootstrap_home_featured_products(self.env)
+        arch = self._home_arch()
+        self.assertIn('Piquant', arch)
+        self.assertIn('Sucre', arch)
+
+        value_a.write({'name': 'Relevé'})
+        arch = self._home_arch()
+        self.assertIn('Relevé', arch)
+        self.assertIn('Sucre', arch)        # l'autre variante intacte
+        self.assertNotIn('Piquant', arch)   # ancien libellé remplacé
+
+    def test_variant_specific_image_triggers_refresh(self):
+        """Donner une image propre à une variante bascule l'URL image de sa card."""
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _featured_card_arch_chunk,
+        )
+        cat = _ensure_featured_category(self.env)
+        template, _va, _vb = self._make_two_variant_product(
+            'CK Multi Image', public_categ_ids=[(4, cat.id)],
+        )
+        bootstrap_home_featured_products(self.env)
+        variant = template.product_variant_ids[0]
+        arch = self._home_arch()
+        chunk = _featured_card_arch_chunk(arch, variant)
+        self.assertIn(f'/web/image/product.template/{template.id}/image_512', chunk)
+        self.assertNotIn(f'/web/image/product.product/{variant.id}/image_512', chunk)
+
+        variant.write({'image_variant_1920': _TINY_PNG})
+        arch = self._home_arch()
+        chunk = _featured_card_arch_chunk(arch, variant)
+        self.assertIn(f'/web/image/product.product/{variant.id}/image_512', chunk)
+
+    def test_variant_price_change_does_not_contaminate_other(self):
+        """Changer le prix d'une variante n'affecte pas l'autre (isolation)."""
+        cat = _ensure_featured_category(self.env)
+        template, _va, _vb = self._make_two_variant_product(
+            'CK Multi Prix', public_categ_ids=[(4, cat.id)],
+        )
+        bootstrap_home_featured_products(self.env)
+        website = self.env['website'].search([], limit=1)
+        variant_a, variant_b = template.product_variant_ids[0], template.product_variant_ids[1]
+        price_b_before = _get_featured_price_label(self.env, website, variant_b)
+
+        variant_a.product_template_attribute_value_ids[:1].write({'price_extra': 2.0})
+        arch = self._home_arch()
+        price_a_after = _get_featured_price_label(self.env, website, variant_a)
+        price_b_after = _get_featured_price_label(self.env, website, variant_b)
+        self.assertIn(price_a_after, arch)
+        self.assertEqual(price_b_before, price_b_after)
+        self.assertIn(price_b_after, arch)
+
+    def test_each_variant_card_has_its_own_product_id(self):
+        """Le panier ajoute la bonne variante : chaque card porte son data-product-id."""
+        cat = _ensure_featured_category(self.env)
+        template, _va, _vb = self._make_two_variant_product(
+            'CK Multi Cart', public_categ_ids=[(4, cat.id)],
+        )
+        bootstrap_home_featured_products(self.env)
+        arch = self._home_arch()
+        for variant in template.product_variant_ids:
+            self.assertIn(f'data-product-id="{variant.id}"', arch)

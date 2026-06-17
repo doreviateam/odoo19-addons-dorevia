@@ -8,11 +8,18 @@ _VARIANT_PRICE_FIELDS = frozenset({
     'lst_price',
 })
 
+# Image propre à la variante (édition « Image variante » en BO → image_variant_1920).
+# La card affiche l'image de la variante en priorité (_get_featured_image_url).
+_VARIANT_IMAGE_FIELDS = frozenset({
+    'image_variant_1920',
+    'image_1920',
+})
+
 _VARIANT_FEATURED_REFRESH_FIELDS = frozenset({
     'additional_product_tag_ids',
     'is_published',
     'sale_ok',
-}) | _VARIANT_PRICE_FIELDS
+}) | _VARIANT_PRICE_FIELDS | _VARIANT_IMAGE_FIELDS
 
 
 class ProductProduct(models.Model):
