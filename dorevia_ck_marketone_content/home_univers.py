@@ -101,12 +101,13 @@ def _build_univers_card_html(card):
     image = escape(_univers_image_src(card['image']))
     card_data_name = escape(f"Univers {card['title']}")
     return f"""
-            <div class="ck-univers-card ck-univers-card--{escape(card['code'])}" data-snippet="{UNIVERS_CARD_SNIPPET}" data-name="{card_data_name}" data-href="{href}">
+            <div class="ck-univers-card ck-univers-card--{escape(card['code'])}" data-snippet="{UNIVERS_CARD_SNIPPET}" data-name="{card_data_name}">
                 <div class="ck-univers-card__media">
                     <p class="o_not_editable" contenteditable="false">
                         <img src="{image}" alt="{title}" class="ck-univers-card__img {UNIVERS_EDITABLE_MEDIA_MARKER}" loading="lazy" decoding="async"/>
                     </p>
                 </div>
+                <a href="{href}" class="ck-univers-card__cover" aria-label="{title}" tabindex="-1"/>
                 <div class="ck-univers-card__overlay">
                     <h3 class="ck-univers-card__title o_editable">{title}</h3>
                     <p class="ck-univers-card__desc o_editable">{description}</p>
@@ -226,9 +227,9 @@ def univers_arch_is_valid(arch):
         return False
     if chunk.count(UNIVERS_EDITABLE_MEDIA_MARKER) != 3:
         return False
-    if chunk.count('ck-univers-card__cover') != 0:
+    if chunk.count('ck-univers-card__cover') != 3:
         return False
-    if chunk.count('data-href=') < 3:
+    if re.search(r'class="ck-univers-card[^"]*"[^>]*data-href=', chunk):
         return False
     if 'ck-univers-card--epicerie' not in chunk:
         return False

@@ -26,7 +26,11 @@ class CkUniversOptionPlugin extends Plugin {
             `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__desc`,
             `${CK_UNIVERS_CARD_SELECTOR} .o_not_editable img`,
         ],
-        content_not_editable_selectors: `${CK_UNIVERS_CARD_SELECTOR} .o_not_editable`,
+        content_not_editable_selectors: [
+            `${CK_UNIVERS_CARD_SELECTOR} .o_not_editable`,
+            `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__cover`,
+            `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__cta`,
+        ],
         builder_options: [CkUniversCardOption],
     };
 }
