@@ -480,6 +480,10 @@ def _featured_arch_stale_cards(env, website, arch, variants):
         chunk = _featured_card_arch_chunk(arch, variant)
         if not chunk:
             continue
+        expected_title = escape(_get_featured_display_name(variant))
+        title_match = re.search(r'class="product-card-title"[^>]*>([^<]+)', chunk)
+        if title_match and title_match.group(1) != expected_title:
+            return True
         expected_price = escape(_get_featured_price_label(env, website, variant))
         price_match = re.search(r'class="price"[^>]*>([^<]+)', chunk)
         if price_match and price_match.group(1) != expected_price:

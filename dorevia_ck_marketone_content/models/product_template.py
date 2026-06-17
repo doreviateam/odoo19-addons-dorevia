@@ -7,6 +7,7 @@ _logger = logging.getLogger(__name__)
 
 
 FEATURED_REFRESH_FIELDS = {
+    'name',
     'public_categ_ids',
     'is_published',
     'website_published',
