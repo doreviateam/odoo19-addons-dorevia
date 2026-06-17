@@ -43,11 +43,16 @@ class ProductProduct(models.Model):
         touches_price = bool(_VARIANT_PRICE_FIELDS.intersection(vals))
         if touches_price:
             self._ck_sync_variant_fixed_pricelist_items()
-        if _VARIANT_FEATURED_REFRESH_FIELDS.intersection(vals):
-            templates = self.mapped('product_tmpl_id')
-            # QA D3 — cohérence avec M1 (product.template) : ne reconstruire la home
-            # que si un template concerné appartient aux vedettes (curation peuplée) ;
-            # sinon (mode repli auto) comportement large conservé.
-            if templates and templates._ck_touches_featured():
+        # QA D3 — cohérence avec M1 (product.template) : ne rien faire si aucun
+        # template concerné n'appartient aux vedettes (curation peuplée).
+        templates = self.mapped('product_tmpl_id')
+        if templates and templates._ck_touches_featured():
+            if _VARIANT_FEATURED_REFRESH_FIELDS.intersection(vals):
+                # Champs connus (éligibilité ou contenu rendu) → rebuild direct.
                 templates._ck_refresh_home_featured_products()
+            else:
+                # Tout autre champ variante : la card est reconstruite uniquement
+                # si son rendu SSR (titre, image, prix, métadonnée) a réellement
+                # changé. Couvre les champs non énumérés sans sur-rebuild.
+                templates._ck_refresh_home_featured_if_stale()
         return result

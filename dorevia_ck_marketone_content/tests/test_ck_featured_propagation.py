@@ -189,3 +189,41 @@ class TestCkFeaturedPropagation(TransactionCase):
         arch = self._home_arch()
         for variant in template.product_variant_ids:
             self.assertIn(f'data-product-id="{variant.id}"', arch)
+
+    def test_variant_unlisted_field_write_repairs_stale_card(self):
+        """Filet agnostique : tout write variante répare une card vedette périmée."""
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _featured_card_arch_chunk,
+        )
+        cat = _ensure_featured_category(self.env)
+        product = self._make_product(
+            'CK Vedette Filet', list_price=4.0, public_categ_ids=[(4, cat.id)],
+        )
+        variant = product.product_variant_id
+        bootstrap_home_featured_products(self.env)
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        # Simule un snapshot SSR figé (dérive BO non captée par un déclencheur connu).
+        page.view_id.sudo().write({
+            'arch_db': (page.view_id.arch_db or '').replace('4,00', '9,99'),
+        })
+        self.assertIn('9,99', self._home_arch())
+
+        # Champ hors liste explicite (default_code) → doit déclencher la réparation
+        # car le rendu attendu de la card diffère du snapshot.
+        variant.write({'default_code': 'CK-FILET-1'})
+        arch = self._home_arch()
+        self.assertIn('4,00', _featured_card_arch_chunk(arch, variant))
+        self.assertNotIn('9,99', arch)
+
+    def test_variant_unlisted_field_write_keeps_fresh_snapshot(self):
+        """Pas de sur-rebuild : un write hors rendu sur snapshot frais ne change rien."""
+        cat = _ensure_featured_category(self.env)
+        product = self._make_product(
+            'CK Vedette Filet Noop', public_categ_ids=[(4, cat.id)],
+        )
+        variant = product.product_variant_id
+        bootstrap_home_featured_products(self.env)
+        before = self._home_arch()
+
+        variant.write({'default_code': 'CK-FILET-NOOP'})
+        self.assertEqual(before, self._home_arch())

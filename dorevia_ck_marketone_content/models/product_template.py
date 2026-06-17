@@ -58,6 +58,31 @@ class ProductTemplate(models.Model):
 
         refresh_home_featured_products(self.env)
 
+    def _ck_refresh_home_featured_if_stale(self):
+        """Filet agnostique au champ : reconstruit seulement si une card affichée est périmée.
+
+        Utilisé comme repli après un write variante (``product.product``) portant
+        sur un champ hors liste explicite : tout changement qui modifie réellement
+        le rendu d'une card vedette (titre, image, prix, métadonnée) est ainsi
+        propagé immédiatement, sans sur-rebuild quand le snapshot est déjà à jour.
+        """
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _featured_arch_stale_cards,
+            bootstrap_home_featured_products,
+            get_curated_featured_variants,
+        )
+
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        if not page or not page.view_id:
+            return
+        website = self.env['website'].search([], limit=1)
+        if not website:
+            return
+        arch = page.view_id.arch_db or ''
+        variants = get_curated_featured_variants(self.env)
+        if _featured_arch_stale_cards(self.env, website, arch, variants):
+            bootstrap_home_featured_products(self.env)
+
     def _ck_touches_featured(self):
         """QA M1 : limite la reconstruction vedettes aux produits réellement concernés.
 
