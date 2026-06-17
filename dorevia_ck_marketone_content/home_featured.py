@@ -806,8 +806,54 @@ def refresh_home_featured_products(env):
     return bootstrap_home_featured_products(env)
 
 
+def _featured_target_langs(env, website):
+    """Langues dont l'``arch_db`` (jsonb traduit) doit être reconstruit.
+
+    ``ir.ui.view.arch_db`` est un champ ``xml_translate`` : chaque langue a sa
+    propre valeur jsonb. La home est servie dans la langue du visiteur ; si on
+    n'écrit que la langue source (en_US), l'entrée ``fr_FR`` servie reste figée
+    alors même que la base et les tests (lus en source) sont à jour. On
+    reconstruit donc explicitement chaque langue front + la source + la langue
+    courante.
+    """
+    langs = set(website.language_ids.mapped('code'))
+    if website.default_lang_id:
+        langs.add(website.default_lang_id.code)
+    langs.add('en_US')  # langue source / fallback de rendu des champs traduits
+    if env.context.get('lang'):
+        langs.add(env.context['lang'])
+    return [code for code in langs if code]
+
+
+def _featured_arch_stale_any_lang(env, website, page):
+    """True si l'``arch_db`` d'au moins une langue servie est périmé.
+
+    La détection mono-langue (souvent lue en source en_US) masquait la
+    péremption de l'entrée ``fr_FR`` réellement servie ; on contrôle donc chaque
+    langue cible.
+    """
+    base_variants = get_curated_featured_variants(env)
+    for lang in _featured_target_langs(env, website):
+        lang_env = env(context=dict(env.context, lang=lang))
+        view = page.view_id.with_env(lang_env).sudo()
+        arch = view.arch_db or ''
+        variants = base_variants.with_env(lang_env)
+        if _featured_arch_missing_product_labels(lang_env, arch, variants):
+            return True
+        if _featured_arch_missing_cart_cta(lang_env, website, arch, variants):
+            return True
+        if _featured_arch_stale_cards(lang_env, website, arch, variants):
+            return True
+    return False
+
+
 def bootstrap_home_featured_products(env):
-    """Lot 2 home — injecte la grille SSR vedettes maquette ou masque si BO insuffisant."""
+    """Lot 2 home — injecte la grille SSR vedettes maquette ou masque si BO insuffisant.
+
+    Reconstruit l'``arch_db`` pour chaque langue servie par le site afin que la
+    page rendue (toujours dans la langue du visiteur) reflète le BO — et pas
+    seulement la langue source.
+    """
     if not env.is_superuser():
         env = env(su=True)
     website = env['website'].search([], limit=1)
@@ -821,7 +867,17 @@ def bootstrap_home_featured_products(env):
     if not page or not page.view_id:
         return False
 
-    view = page.view_id.sudo()
+    changed = False
+    for lang in _featured_target_langs(env, website):
+        lang_env = env(context=dict(env.context, lang=lang))
+        if _bootstrap_home_featured_products_lang(lang_env, website, page):
+            changed = True
+    return changed
+
+
+def _bootstrap_home_featured_products_lang(env, website, page):
+    """Reconstruit l'``arch_db`` de la home pour la langue courante de ``env``."""
+    view = page.view_id.with_env(env).sudo()
     arch = _arch_as_string(view.arch_db or view.arch)
     if not arch.strip():
         return False

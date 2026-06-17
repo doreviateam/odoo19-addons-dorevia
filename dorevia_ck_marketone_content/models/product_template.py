@@ -67,9 +67,8 @@ class ProductTemplate(models.Model):
         propagé immédiatement, sans sur-rebuild quand le snapshot est déjà à jour.
         """
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
-            _featured_arch_stale_cards,
+            _featured_arch_stale_any_lang,
             bootstrap_home_featured_products,
-            get_curated_featured_variants,
         )
 
         page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
@@ -78,9 +77,7 @@ class ProductTemplate(models.Model):
         website = self.env['website'].search([], limit=1)
         if not website:
             return
-        arch = page.view_id.arch_db or ''
-        variants = get_curated_featured_variants(self.env)
-        if _featured_arch_stale_cards(self.env, website, arch, variants):
+        if _featured_arch_stale_any_lang(self.env, website, page):
             bootstrap_home_featured_products(self.env)
 
     def _ck_touches_featured(self):
@@ -122,24 +119,17 @@ class ProductTemplate(models.Model):
     def _ck_sync_home_featured_labels_on_startup(self):
         """Reconstruit la home si des étiquettes BO manquent des cards SSR (arch périmée)."""
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
-            _featured_arch_missing_cart_cta,
-            _featured_arch_missing_product_labels,
-            _featured_arch_stale_cards,
+            _featured_arch_stale_any_lang,
             bootstrap_home_featured_products,
-            get_curated_featured_variants,
         )
 
         page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
         if not page or not page.view_id:
             return
-        arch = page.view_id.arch_db or ''
         website = self.env['website'].search([], limit=1)
-        variants = get_curated_featured_variants(self.env)
-        if not _featured_arch_missing_product_labels(self.env, arch, variants) and not (
-            website and _featured_arch_missing_cart_cta(self.env, website, arch, variants)
-        ) and not (
-            website and _featured_arch_stale_cards(self.env, website, arch, variants)
-        ):
+        if not website:
+            return
+        if not _featured_arch_stale_any_lang(self.env, website, page):
             return
         if bootstrap_home_featured_products(self.env):
             _logger.info('CK Section 3 : home reconstruite (arch vedettes périmée).')
