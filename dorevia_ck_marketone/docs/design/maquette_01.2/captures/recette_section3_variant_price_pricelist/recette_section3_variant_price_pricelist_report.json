@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "home": [
+      {
+        "title": "Confiture de goyave",
+        "price": "5,80 €",
+        "variantId": "3",
+        "ref": "320 g · 18,13 €/kg"
+      },
+      {
+        "title": "Salé",
+        "price": "3,60 €",
+        "variantId": "21",
+        "ref": "100 g · 36,00 €/kg"
+      },
+      {
+        "title": "Sucré",
+        "price": "3,50 €",
+        "variantId": "22",
+        "ref": "100 g · 35,00 €/kg"
+      },
+      {
+        "title": "Chapeau Panama",
+        "price": "17,60 €",
+        "variantId": "1079"
+      }
+    ],
+    "sale": {
+      "title": "Salé",
+      "price": "3,60 €",
+      "variantId": "21",
+      "ref": "100 g · 36,00 €/kg"
+    },
+    "sweet": {
+      "title": "Sucré",
+      "price": "3,50 €",
+      "variantId": "22",
+      "ref": "100 g · 35,00 €/kg"
+    },
+    "saleProductPagePrice": "3,60",
+    "sweetProductPagePrice": "3,50"
+  },
+  "verdict": "GO",
+  "summary": {
+    "okSale": true,
+    "okSweet": true,
+    "okRef": true
+  }
+}
