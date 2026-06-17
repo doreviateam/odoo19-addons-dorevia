@@ -10,23 +10,6 @@
         </xpath>
     </template>
 
-    <!-- Typo maquette — link tags (pas @import SCSS bundle)
-         QA C3 (RGPD) : polices servies par le CDN Google Fonts. Avant go-live
-         public, auto-héberger Fraunces + DM Sans (assets locaux + @font-face)
-         pour ne pas transmettre l'IP visiteur à Google. Arbitrage self-host à
-         acter MOA. -->
-    <template id="layout_ck_header_fonts"
-              inherit_id="website.layout"
-              name="CK Theme header fonts"
-              priority="26">
-        <xpath expr="//head" position="inside">
-            <link rel="preconnect" href="https://fonts.googleapis.com"/>
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-            <link rel="stylesheet"
-                  href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&amp;family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;display=swap"/>
-        </xpath>
-    </template>
-
     <!-- Sticky fiable — non-régression scroll MOA.
          QA C4 : ces règles DOUBLENT volontairement website_header.scss. Le SCSS
          seul ne suffit pas : Odoo applique au scroll un comportement de

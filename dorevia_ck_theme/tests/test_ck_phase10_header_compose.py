@@ -44,6 +44,8 @@ class TestCkPhase10HeaderCompose(HttpCase):
         self.assertIn('ck-header__brand-accent', html)
         self.assertIn('C-Kreyol', html)
         self.assertNotIn('Your Logo', html)
+        self.assertNotIn('fonts.googleapis.com', html)
+        self.assertNotRegex(html, r'family=DM\+Sans|family=Fraunces')
         self.assertNotRegex(
             html,
             r'data-name="Navbar Logo"[^>]*>[\s\S]*?<img[^>]+logo',

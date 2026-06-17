@@ -90,3 +90,22 @@ class TestCkThemeTechnical(TransactionCase):
         self.assertIn('.ck-featured-products--maquette', scss_source)
         self.assertIn('.ck-product-card.product-card', scss_source)
         self.assertIn('.card-cta', scss_source)
+
+    def test_ck_fonts_self_hosted_no_google_cdn(self):
+        """QA C3 : polices Fraunces + DM Sans servies localement — pas de CDN Google."""
+        module_path = get_module_path('dorevia_ck_theme')
+        with open(os.path.join(module_path, 'views/website_header.xml'), encoding='utf-8') as handle:
+            header_xml = handle.read()
+        with open(os.path.join(module_path, '__manifest__.py'), encoding='utf-8') as handle:
+            manifest_source = handle.read()
+        fonts_dir = os.path.join(module_path, 'static/src/fonts')
+        self.assertNotIn('fonts.googleapis.com', header_xml)
+        self.assertNotIn('fonts.gstatic.com', header_xml)
+        self.assertIn('website_fonts.scss', manifest_source)
+        for filename in (
+            'dm-sans-latin.woff2',
+            'dm-sans-latin-ext.woff2',
+            'fraunces-latin.woff2',
+            'fraunces-latin-ext.woff2',
+        ):
+            self.assertTrue(os.path.isfile(os.path.join(fonts_dir, filename)), filename)
