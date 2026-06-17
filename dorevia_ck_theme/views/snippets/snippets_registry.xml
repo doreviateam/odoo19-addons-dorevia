@@ -14,6 +14,10 @@
                string="CK Produits vedettes"
                group="ck_marketone"
                t-thumbnail="/website/static/src/img/snippets_thumbs/s_product_list.svg"/>
+            <t t-snippet="dorevia_ck_theme.s_ck_univers_cards"
+               string="CK Acheter par univers"
+               group="ck_marketone"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_three_columns.svg"/>
             <t t-snippet="dorevia_ck_theme.s_ck_reassurance"
                string="CK Réassurance"
                group="ck_marketone"

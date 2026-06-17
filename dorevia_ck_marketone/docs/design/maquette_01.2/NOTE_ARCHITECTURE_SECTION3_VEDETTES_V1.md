@@ -343,6 +343,7 @@ Tags : `dorevia_ck_marketone_home_section3` · `dorevia_ck_marketone_home_sectio
 
 - `SPEC_SECTION3_VEDETTES_CURATION_BO_V1.md` — spec curation + matrice livraison
 - `SPEC_DEV_CARD_PRODUIT_COUPS_DE_COEUR_V1_1.md` — spec card V1.1 (quantité nette · prix de référence)
+- `NOTE_ARCHITECTURE_SECTION3_VEDETTES_V1.md` — Section 3 (précédente)
 - `RECETTE_VISUELLE_SECTION3_V1_1.md` — PV recette visuelle QA GO
 - `ONBOARDING_QA_SECTION3_PR73_V1.md` — checklist QA Section 3 (mise à jour post-#73)
 - `DECISION_MOA_SECTION3_PR73_CURATION_REPORTEE_V1.md` — historique arbitrage 2026-06-15
