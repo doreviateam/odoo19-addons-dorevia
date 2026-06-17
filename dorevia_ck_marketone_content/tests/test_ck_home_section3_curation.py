@@ -15,6 +15,7 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     _get_featured_commercial_line,
     _get_featured_display_name,
     _get_featured_labels_line,
+    _get_featured_price_label,
     _patch_homepage_featured_arch,
     bootstrap_home_featured_products,
     build_featured_product_card_html,
@@ -291,6 +292,59 @@ class TestCkHomeSection3Curation(TransactionCase):
         website = self.env['website'].search([], limit=1)
         card = build_featured_product_card_html(self.env, website, product.product_variant_id)
         self.assertNotIn('reference-price', card)
+
+    def test_card_variant_price_without_pricelist(self):
+        """Chaque card multi-variantes affiche le lst_price de la variante vendue."""
+        attr = self.env['product.attribute'].sudo().create({'name': 'Goût QA Prix'})
+        val_a = self.env['product.attribute.value'].sudo().create({
+            'name': 'Salé QA',
+            'attribute_id': attr.id,
+        })
+        val_b = self.env['product.attribute.value'].sudo().create({
+            'name': 'Sucré QA',
+            'attribute_id': attr.id,
+        })
+        product = self.env['product.template'].sudo().create({
+            'name': 'CK Crackers QA Prix',
+            'is_published': True,
+            'website_published': True,
+            'sale_ok': True,
+            'list_price': 3.5,
+            'image_1920': _TINY_PNG,
+            'attribute_line_ids': [(0, 0, {
+                'attribute_id': attr.id,
+                'value_ids': [(6, 0, [val_a.id, val_b.id])],
+            })],
+        })
+        sale = product.product_variant_ids.filtered(
+            lambda v: 'Salé QA' in (v.display_name or '')
+        )[:1]
+        sweet = product.product_variant_ids.filtered(
+            lambda v: 'Sucré QA' in (v.display_name or '')
+        )[:1]
+        self.assertTrue(sale and sweet)
+        sale_ptav = sale.product_template_attribute_value_ids[:1]
+        sale_ptav.write({'price_extra': 0.1})
+        sale.write({'image_1920': _TINY_PNG})
+        sweet.write({'image_1920': _TINY_PNG})
+        self.assertAlmostEqual(sale.lst_price, 3.6)
+        self.assertAlmostEqual(sweet.lst_price, 3.5)
+        website = self.env['website'].search([], limit=1)
+        self.assertEqual(_get_featured_price_label(self.env, website, sale), '3,60\u00a0€')
+        self.assertEqual(_get_featured_price_label(self.env, website, sweet), '3,50\u00a0€')
+
+    def test_variant_lst_price_write_refreshes_home_arch(self):
+        category = _ensure_featured_category(self.env)
+        product = self._make_product(
+            'CK Vedette Prix Variante',
+            list_price=3.5,
+            public_categ_ids=[(4, category.id)],
+        )
+        bootstrap_home_featured_products(self.env)
+        product.product_variant_id.write({'lst_price': 4.2})
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        arch = page.view_id.arch_db or ''
+        self.assertIn('4,20', arch)
 
     def test_card_cta_is_voir_le_produit(self):
         product = self._make_product('CK Vedette CTA')

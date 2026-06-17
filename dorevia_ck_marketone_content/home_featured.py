@@ -290,10 +290,12 @@ def _get_featured_price_amount(env, website, variant):
     ``_get_combination_info`` (qui s'appuyait sur une fausse requête, supprimée)."""
     template = variant.product_tmpl_id
     pricelist = website.sudo().get_pricelist_available()[:1]
-    if not pricelist:
-        return template.list_price
-    currency = pricelist.currency_id or website.currency_id
-    pricelist_price = pricelist._get_product_price(variant, 1.0)
+    currency = (pricelist.currency_id if pricelist else None) or website.currency_id
+    if pricelist:
+        pricelist_price = pricelist._get_product_price(variant, 1.0)
+    else:
+        # Sans pricelist publique : prix catalogue de la variante affichée (pas le template).
+        pricelist_price = variant.lst_price
     company = website.company_id or env.company
     product_taxes = variant.sudo().taxes_id.filtered(lambda t: t.company_id == company)
     fpos = env['account.fiscal.position'].sudo()._get_fiscal_position(env.user.partner_id)
