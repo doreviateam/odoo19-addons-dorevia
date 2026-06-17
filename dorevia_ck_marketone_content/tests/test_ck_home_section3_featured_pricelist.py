@@ -9,6 +9,7 @@ from odoo.tests import tagged
 from odoo.tests.common import HttpCase, TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+    _featured_card_arch_chunk,
     _get_featured_commercial_line,
     _get_featured_price_amount,
     _get_featured_price_label,
@@ -83,10 +84,15 @@ class TestCkHomeSection3FeaturedPricelist(TransactionCase):
         )[:1]
         set_variant_fixed_price(self.env, self.pricelist, variant_a, 4.2)
         set_variant_fixed_price(self.env, self.pricelist, variant_b, 2.95)
-        variant_a.write({'lst_price': 9.9})
-        variant_b.write({'lst_price': 8.8})
         self.assertEqual(_get_featured_price_label(self.env, self.website, variant_a), '4,20\u00a0€')
         self.assertEqual(_get_featured_price_label(self.env, self.website, variant_b), '2,95\u00a0€')
+
+    def test_bo_lst_price_write_syncs_fixed_pricelist_rule(self):
+        """Modification BO « Prix de vente » → règle pricelist fixed alignée."""
+        set_variant_fixed_price(self.env, self.pricelist, self.sale, 3.6)
+        self.sale.write({'lst_price': 3.5})
+        self.assertAlmostEqual(self.pricelist._get_product_price(self.sale, 1.0), 3.5)
+        self.assertEqual(_get_featured_price_label(self.env, self.website, self.sale), '3,50\u00a0€')
 
     def test_variant_rule_does_not_contaminate_sibling(self):
         set_variant_fixed_price(self.env, self.pricelist, self.sale, 3.6)
@@ -134,6 +140,50 @@ class TestCkHomeSection3FeaturedPricelist(TransactionCase):
         self.assertIn('100 g', card)
         self.assertIn('product-card-labels', card)
         self.assertNotIn('reference-price', card)
+
+    def test_manioc_bo_variant_price_write_refreshes_home_arch(self):
+        """Recette MOA : prix variante BO → pricelist + arch home sans rebuild manuel."""
+        set_variant_fixed_price(self.env, self.pricelist, self.sale, 3.6)
+        set_variant_fixed_price(self.env, self.pricelist, self.sweet, 3.5)
+        self.parent.write({
+            'ck_net_quantity': 100,
+            'ck_net_quantity_uom_id': self.env.ref(
+                'dorevia_ck_marketone_content.ck_card_uom_g'
+            ).id,
+            'ck_reference_price_uom_id': self.env.ref(
+                'dorevia_ck_marketone_content.ck_card_uom_kg'
+            ).id,
+            'ck_show_reference_price': True,
+        })
+        bootstrap_home_featured_products(self.env)
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        arch = page.view_id.arch_db or ''
+        self.assertIn('3,60', _featured_card_arch_chunk(arch, self.sale))
+        self.assertIn('36,00', _featured_card_arch_chunk(arch, self.sale))
+
+        # Chemin BO liste variantes : édition « Prix de vente » (inverse lst_price).
+        self.sale.write({'lst_price': 3.5})
+        self.sweet.write({'lst_price': 3.65})
+
+        arch = page.view_id.arch_db or ''
+        sale_chunk = _featured_card_arch_chunk(arch, self.sale)
+        sweet_chunk = _featured_card_arch_chunk(arch, self.sweet)
+        self.assertIn('3,50', sale_chunk)
+        self.assertIn('35,00', sale_chunk)
+        self.assertIn('3,65', sweet_chunk)
+        self.assertIn('36,50', sweet_chunk)
+        self.assertNotIn('3,60', sale_chunk)
+        self.assertNotIn('3,50', sweet_chunk)
+
+    def test_bo_variant_list_price_write_refreshes_home_arch(self):
+        """Écriture directe list_price (inverse Odoo 19) — refresh home vedettes."""
+        set_variant_fixed_price(self.env, self.pricelist, self.sale, 3.6)
+        bootstrap_home_featured_products(self.env)
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        extra = self.sale.price_extra
+        self.sale.write({'list_price': 3.5 - extra})
+        arch = page.view_id.arch_db or ''
+        self.assertIn('3,50', _featured_card_arch_chunk(arch, self.sale))
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_home_section3_pricelist')

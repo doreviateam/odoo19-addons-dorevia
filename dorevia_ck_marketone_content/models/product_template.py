@@ -98,6 +98,7 @@ class ProductTemplate(models.Model):
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
             _featured_arch_missing_cart_cta,
             _featured_arch_missing_product_labels,
+            _featured_arch_stale_cards,
             bootstrap_home_featured_products,
             get_curated_featured_variants,
         )
@@ -110,6 +111,8 @@ class ProductTemplate(models.Model):
         variants = get_curated_featured_variants(self.env)
         if not _featured_arch_missing_product_labels(self.env, arch, variants) and not (
             website and _featured_arch_missing_cart_cta(self.env, website, arch, variants)
+        ) and not (
+            website and _featured_arch_stale_cards(self.env, website, arch, variants)
         ):
             return
         if bootstrap_home_featured_products(self.env):

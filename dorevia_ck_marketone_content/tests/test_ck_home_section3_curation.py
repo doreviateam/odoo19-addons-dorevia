@@ -397,6 +397,21 @@ class TestCkHomeSection3Curation(TransactionCase):
         arch = page.view_id.arch_db or ''
         self.assertIn('4,20', arch)
 
+    def test_bo_variant_list_price_write_refreshes_home_arch(self):
+        """Chemin BO réel Odoo 19 : write list_price (pas lst_price dans vals)."""
+        category = _ensure_featured_category(self.env)
+        product = self._make_product(
+            'CK Vedette List Price BO',
+            list_price=3.5,
+            public_categ_ids=[(4, category.id)],
+        )
+        variant = product.product_variant_id
+        bootstrap_home_featured_products(self.env)
+        variant.write({'list_price': 4.75})
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        arch = page.view_id.arch_db or ''
+        self.assertIn('4,75', arch)
+
     def test_card_cta_is_voir_le_produit(self):
         product = self._make_product('CK Vedette CTA')
         website = self.env['website'].search([], limit=1)

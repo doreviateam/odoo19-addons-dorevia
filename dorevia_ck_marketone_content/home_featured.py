@@ -460,6 +460,38 @@ def _featured_arch_missing_cart_cta(env, website, arch, variants):
     return False
 
 
+def _featured_card_arch_chunk(arch, variant):
+    marker = f'data-product-id="{variant.id}"'
+    idx = arch.find(marker)
+    if idx < 0:
+        return ''
+    start = arch.rfind('<article', 0, idx)
+    end = arch.find('</article>', idx)
+    if start < 0 or end < 0:
+        return ''
+    return arch[start:end]
+
+
+def _featured_arch_stale_cards(env, website, arch, variants):
+    """True si prix ou métadonnées SSR d'une vedette ne correspondent plus au BO."""
+    if FEATURED_SECTION_MARKER not in (arch or ''):
+        return False
+    for variant in variants:
+        chunk = _featured_card_arch_chunk(arch, variant)
+        if not chunk:
+            continue
+        expected_price = escape(_get_featured_price_label(env, website, variant))
+        price_match = re.search(r'class="price"[^>]*>([^<]+)', chunk)
+        if price_match and price_match.group(1) != expected_price:
+            return True
+        expected_labels = escape(_get_featured_card_metadata_line(env, website, variant))
+        if expected_labels:
+            labels_match = re.search(r'class="product-card-labels"[^>]*>([^<]+)', chunk)
+            if labels_match and labels_match.group(1) != expected_labels:
+                return True
+    return False
+
+
 def _format_featured_quantity_value(quantity):
     if quantity == int(quantity):
         return str(int(quantity))
@@ -801,13 +833,14 @@ def bootstrap_home_featured_products(env):
     new_arch, patched = _patch_homepage_featured_arch(arch, featured_arch)
     stale_labels = _featured_arch_missing_product_labels(env, arch, variants)
     stale_cart_cta = _featured_arch_missing_cart_cta(env, website, arch, variants)
-    if not patched and not stale_labels and not stale_cart_cta:
+    stale_cards = _featured_arch_stale_cards(env, website, arch, variants)
+    if not patched and not stale_labels and not stale_cart_cta and not stale_cards:
         return False
     if not featured_arch:
         if patched and new_arch != arch:
             view.write({'arch_db': new_arch})
         return patched
-    if new_arch == arch and not stale_labels and not stale_cart_cta:
+    if new_arch == arch and not stale_labels and not stale_cart_cta and not stale_cards:
         return patched
 
     view.write({'arch_db': new_arch})
