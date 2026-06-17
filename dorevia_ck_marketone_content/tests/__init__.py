@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from . import test_ck_cms_seed_guard
 from . import test_ck_shop_phase3_compose
 from . import test_ck_shop_phase3_hooks
 from . import test_ck_product_phase4_compose

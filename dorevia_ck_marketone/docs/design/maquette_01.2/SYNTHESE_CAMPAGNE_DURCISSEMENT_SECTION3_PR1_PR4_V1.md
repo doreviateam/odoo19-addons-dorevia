@@ -69,6 +69,8 @@ Côté thème (préalable, hors numérotation PR) : tests Phase 10 isolés (skip
 
 Garde-fou non-régression : suites `dorevia_ck_marketone_home_section3` et `dorevia_ck_marketone_cms_guard` vertes à chaque PR.
 
+> **Note déploiement** — Après un `-u` touchant des assets JS frontend (ex. CTA panier `ck_featured_cart_add.js`), **redémarrer le worker Odoo** pour régénérer les bundles `web.assets_frontend(_lazy)` : sans restart, l'interaction publique n'est pas servie et le clic ne déclenche rien. Vaut pour tout déploiement modifiant des assets, pas seulement ce CTA.
+
 ---
 
 ## 5. Dette résiduelle (hors campagne)

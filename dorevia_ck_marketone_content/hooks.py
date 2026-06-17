@@ -4,10 +4,12 @@
 Pages CMS, enrichissements catalogue, mailing list, fiche producteur pilote.
 Module optionnel : ``dorevia_ck_theme`` reste un thème générique sans ce contenu.
 """
+import logging
 import re
 from xml.sax.saxutils import escape
 
 from .catalog_manioc_variants import bootstrap_catalog_vedettes_products
+from .home_arch import _arch_fingerprint
 from .home_discovery_pack import bootstrap_home_discovery_pack
 from .home_featured import bootstrap_home_featured_products
 from .legal_pages import (
@@ -28,6 +30,8 @@ from .legal_pages import (
     TERMS_PAGE_URL,
     TERMS_PAGE_VIEW_KEY,
 )
+
+_logger = logging.getLogger(__name__)
 
 EPICERIE_CATEGORY_NAME = 'Épicerie créole'
 EPICERIE_CATEGORY_DESCRIPTION = (
@@ -506,6 +510,11 @@ def _bootstrap_cms_page(env, *, page_url, view_key, view_name, page_name, arch, 
         ('website_id', '=', website.id),
     ], limit=1)
 
+    # QA H3 : guard anti-écrasement — empreinte du dernier seed module. Si l'arch
+    # courante diverge (édition MOA en BO), on ne réécrit pas la page.
+    param = env['ir.config_parameter'].sudo()
+    seed_key = f'ck_seed_arch.{view_key}'
+
     view = _resolve_cms_view(View, view_key, legacy_view_key)
     if not view:
         view = View.create({
@@ -515,8 +524,17 @@ def _bootstrap_cms_page(env, *, page_url, view_key, view_name, page_name, arch, 
             'arch': arch,
             'website_id': website.id,
         })
+        param.set_param(seed_key, _arch_fingerprint(view.arch_db or view.arch or ''))
     else:
-        view.write({'arch': arch})
+        seeded_fp = param.get_param(seed_key)
+        current_fp = _arch_fingerprint(view.arch_db or view.arch or '')
+        if seeded_fp and current_fp != seeded_fp:
+            _logger.info('CK CMS %s édité en BO — seed non écrasé', view_key)
+        else:
+            view.write({'arch': arch})
+            # Empreinte de la forme NORMALISÉE relue après écriture (évite un faux
+            # « édité » dû à la reformulation QWeb au write).
+            param.set_param(seed_key, _arch_fingerprint(view.arch_db or view.arch or ''))
 
     page_vals = {
         'name': page_name,
@@ -605,10 +623,31 @@ def _insert_footer_link_after(arch, marker, link_html):
     return arch
 
 
+def _href_of(link_html):
+    return link_html.split('href="', 1)[1].split('"', 1)[0] if 'href="' in link_html else ''
+
+
+def _insert_footer_legal_block_fallback(arch, links_html):
+    """QA M2 : repli — insère un bloc <ul> de liens légaux avant la fermeture du footer
+    quand le marqueur Contact est absent (évite l'échec silencieux)."""
+    items = '\n                                '.join(links_html)
+    block = (
+        '\n                            <ul class="list-unstyled ck-footer-legal-fallback">\n'
+        f'                                {items}\n'
+        '                            </ul>'
+    )
+    for anchor in ('</footer>', '</div></div>', '</div>'):
+        idx = arch.rfind(anchor)
+        if idx >= 0:
+            return arch[:idx] + block + arch[idx:], True
+    return arch, False
+
+
 def bootstrap_footer_legal_links(env):
     """Liens footer Mentions légales · Confidentialité · CGV (idempotent)."""
     website = env['website'].search([], limit=1)
     if not website:
+        _logger.warning('CK footer : aucun website — liens légaux non ajoutés')
         return False
 
     View = env['ir.ui.view'].sudo()
@@ -619,6 +658,9 @@ def bootstrap_footer_legal_links(env):
     if not footer:
         footer = View.search([('key', '=', 'website.footer_custom')], limit=1)
     if not footer:
+        _logger.warning(
+            'CK footer : vue website.footer_custom introuvable — liens légaux non ajoutés'
+        )
         return False
 
     arch = footer.arch_db or footer.arch or ''
@@ -638,6 +680,21 @@ def bootstrap_footer_legal_links(env):
             arch = _insert_footer_link_after(arch, FOOTER_LEGAL_LINK_HTML, FOOTER_TERMS_LINK_HTML)
         else:
             arch = _insert_footer_link_after(arch, FOOTER_CONTACT_LINK_MARKER, FOOTER_TERMS_LINK_HTML)
+
+    # QA M2 : si l'insertion ciblée a échoué (marqueur Contact absent), repli + log
+    # explicite plutôt qu'un abandon silencieux (verrou go-live).
+    missing = [
+        html for html in (FOOTER_LEGAL_LINK_HTML, FOOTER_PRIVACY_LINK_HTML, FOOTER_TERMS_LINK_HTML)
+        if _href_of(html) not in arch
+    ]
+    if missing:
+        arch, inserted = _insert_footer_legal_block_fallback(arch, missing)
+        if not inserted:
+            _logger.warning(
+                'CK footer : liens légaux non insérés (marqueur Contact et ancre footer '
+                'introuvables) — vérifier la structure de website.footer_custom : %s',
+                ', '.join(_href_of(h) for h in missing),
+            )
 
     if arch == original:
         return True
