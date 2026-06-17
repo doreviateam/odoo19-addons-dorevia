@@ -18,6 +18,22 @@ PHASE10_ROUTES = (
 
 @tagged('post_install', '-at_install', 'dorevia_ck_theme_phase10')
 class TestCkPhase10HeaderCompose(HttpCase):
+    def setUp(self):
+        super().setUp()
+        # QA C1 : ces tests valident le rendu Phase 10 (header + routes /a-propos,
+        # /recettes, /producteur/..., menus Boutique/Découvrir/Professionnels) qui
+        # n'existe que lorsque le module de contenu CK est installé. Sur une base
+        # « thème seul » (garde-fou §4bis), on saute la recette plutôt que d'échouer.
+        content = self.env['ir.module.module'].sudo().search([
+            ('name', '=', 'dorevia_ck_marketone_content'),
+            ('state', '=', 'installed'),
+        ], limit=1)
+        if not content:
+            self.skipTest(
+                'dorevia_ck_marketone_content non installé — recette Phase 10 '
+                '(header + routes contenu) non applicable en thème seul'
+            )
+
     def test_header_ck_chrome_on_home(self):
         resp = self.url_open('/?qa_ts=phase10')
         self.assertEqual(resp.status_code, 200)

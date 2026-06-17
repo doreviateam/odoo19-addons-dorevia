@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- QA C2 : visuels par défaut servis par dorevia_ck_marketone_content
+         (/dorevia_ck_marketone_content/static/img/ck_hero_home_v*.jpg). Dépendance
+         contenu assumée pour le rendu d'origine ; en thème seul, remplacer les
+         images via l'éditeur Website Builder. -->
     <template id="s_ck_hero" name="CK Hero">
         <section class="s_ck_hero ck-hero ck-hero--marketone-v1 o_colored_level" data-snippet="s_ck_hero" data-name="CK Hero V1">
             <div class="container">
@@ -15,7 +19,7 @@
                             <a href="/professionnels" class="btn btn-secondary">Espace professionnel</a>
                         </div>
                     </div>
-                    <div class="ck-hero__visual-col o_editable">
+                    <div class="ck-hero__visual-col">
                         <div class="ck-hero__visual">
                             <div id="ckHeroVisualCarousel" class="carousel slide ck-hero__visual-carousel ck-hero__visual-carousel--multi" data-oe-protected="false" data-bs-ride="carousel" data-bs-interval="25000" data-bs-pause="hover">
                                 <div class="carousel-indicators ck-hero__visual-indicators">
@@ -24,14 +28,26 @@
                                     <button type="button" data-bs-target="#ckHeroVisualCarousel" data-bs-slide-to="2" aria-label="Visuel 3"/>
                                 </div>
                                 <div class="carousel-inner">
-                                    <div class="carousel-item active" data-name="Visuel hero 1">
-                                        <img src="/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg" class="ck-hero__visual-media d-block w-100" alt="Sélection de produits créoles — épicerie et condiments" width="800" height="500" loading="eager"/>
+                                    <div class="carousel-item active" data-snippet="s_ck_hero_slide" data-name="Visuel hero 1">
+                                        <div class="ck-hero__slide-media o_editable">
+                                            <p class="o_not_editable" contenteditable="false">
+                                                <img src="/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg" class="ck-hero__visual-media o_editable_media d-block w-100" alt="Sélection de produits créoles — épicerie et condiments" width="800" height="500" loading="eager"/>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="carousel-item" data-name="Visuel hero 2">
-                                        <img src="/dorevia_ck_marketone_content/static/img/ck_hero_home_v2.jpg" class="ck-hero__visual-media d-block w-100" alt="Cuisine créole — plats et saveurs des îles" width="800" height="500" loading="lazy"/>
+                                    <div class="carousel-item" data-snippet="s_ck_hero_slide" data-name="Visuel hero 2">
+                                        <div class="ck-hero__slide-media o_editable">
+                                            <p class="o_not_editable" contenteditable="false">
+                                                <img src="/dorevia_ck_marketone_content/static/img/ck_hero_home_v2.jpg" class="ck-hero__visual-media o_editable_media d-block w-100" alt="Cuisine créole — plats et saveurs des îles" width="800" height="500" loading="lazy"/>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="carousel-item" data-name="Visuel hero 3">
-                                        <img src="/dorevia_ck_marketone_content/static/img/ck_hero_home_v3.jpg" class="ck-hero__visual-media d-block w-100" alt="Produits frais et épicerie fine créole" width="800" height="500" loading="lazy"/>
+                                    <div class="carousel-item" data-snippet="s_ck_hero_slide" data-name="Visuel hero 3">
+                                        <div class="ck-hero__slide-media o_editable">
+                                            <p class="o_not_editable" contenteditable="false">
+                                                <img src="/dorevia_ck_marketone_content/static/img/ck_hero_home_v3.jpg" class="ck-hero__visual-media o_editable_media d-block w-100" alt="Produits frais et épicerie fine créole" width="800" height="500" loading="lazy"/>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

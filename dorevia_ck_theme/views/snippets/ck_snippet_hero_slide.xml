@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- QA C5 : slide insérable — PAS de classe "active" (un slide ajouté ne doit
+         pas créer un second carousel-item actif ; l'état actif reste géré par le
+         premier slide du carrousel hôte s_ck_hero).
+         QA C2 : l'image par défaut provient de dorevia_ck_marketone_content
+         (dépendance contenu assumée — voir s_ck_hero / s_ck_univers_card). -->
+    <template id="s_ck_hero_slide" name="CK Hero slide">
+        <div class="carousel-item" data-snippet="s_ck_hero_slide" data-name="Visuel hero">
+            <div class="ck-hero__slide-media o_editable">
+                <p class="o_not_editable" contenteditable="false">
+                    <img src="/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg" alt="Sélection de produits créoles — épicerie et condiments" class="ck-hero__visual-media o_editable_media d-block w-100" width="800" height="500" loading="eager"/>
+                </p>
+            </div>
+        </div>
+    </template>
+</odoo>

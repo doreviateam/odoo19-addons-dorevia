@@ -10,7 +10,11 @@
         </xpath>
     </template>
 
-    <!-- Typo maquette — link tags (pas @import SCSS bundle) -->
+    <!-- Typo maquette — link tags (pas @import SCSS bundle)
+         QA C3 (RGPD) : polices servies par le CDN Google Fonts. Avant go-live
+         public, auto-héberger Fraunces + DM Sans (assets locaux + @font-face)
+         pour ne pas transmettre l'IP visiteur à Google. Arbitrage self-host à
+         acter MOA. -->
     <template id="layout_ck_header_fonts"
               inherit_id="website.layout"
               name="CK Theme header fonts"
@@ -23,7 +27,13 @@
         </xpath>
     </template>
 
-    <!-- Sticky fiable — non-régression scroll MOA -->
+    <!-- Sticky fiable — non-régression scroll MOA.
+         QA C4 : ces règles DOUBLENT volontairement website_header.scss. Le SCSS
+         seul ne suffit pas : Odoo applique au scroll un comportement de
+         masquage/transform du header (classes dynamiques) qui ne peut être
+         neutralisé de façon fiable que par un override !important injecté dans
+         <head> (postérieur au bundle frontend). Toute modification du sticky doit
+         être répercutée AUX DEUX endroits (ici + website_header.scss). -->
     <template id="layout_ck_header_sticky_critical"
               inherit_id="website.layout"
               name="CK Theme header sticky critical"

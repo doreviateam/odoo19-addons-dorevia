@@ -51,6 +51,9 @@ class TestCkThemeTechnical(TransactionCase):
         self.assertIn('data-bs-ride="carousel"', snippet_xml)
         self.assertIn('data-bs-pause="hover"', snippet_xml)
         self.assertIn('data-oe-protected="false"', snippet_xml)
+        self.assertIn('o_editable_media', snippet_xml)
+        self.assertIn('s_ck_hero_slide', snippet_xml)
+        self.assertIn('ck-hero__slide-media o_editable', snippet_xml)
         self.assertNotIn('ck_hero_carousel_option', manifest_source)
 
     def test_ck_reassurance_trust_bar_snippet(self):
