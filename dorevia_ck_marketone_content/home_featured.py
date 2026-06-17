@@ -788,6 +788,8 @@ def bootstrap_home_featured_products(env):
     if not patched and not stale_labels and not stale_cart_cta:
         return False
     if not featured_arch:
+        if patched and new_arch != arch:
+            view.write({'arch_db': new_arch})
         return patched
     if new_arch == arch and not stale_labels and not stale_cart_cta:
         return patched

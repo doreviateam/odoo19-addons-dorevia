@@ -6,6 +6,7 @@
 | **Module** | `dorevia_ck_marketone_content` |
 | **Type** | Dette test · périmètre étroit |
 | **Priorité** | Moyenne (non bloquant merge campagne PR-1→4) |
+| **Statut** | **Clôturé** — option B implémentée (2026-06-17) |
 | **Origine** | Note recette PR-4 (2026-06-17) |
 | **Lié à** | [`SYNTHESE_CAMPAGNE_DURCISSEMENT_SECTION3_PR1_PR4_V1.md`](./SYNTHESE_CAMPAGNE_DURCISSEMENT_SECTION3_PR1_PR4_V1.md) · dette « Lot2 seuil » |
 
@@ -64,8 +65,9 @@ Recommandation : **B** si l'on veut conserver la couverture du mode auto ; **A**
 
 ## 6. Critère de clôture
 
-- Tests `test_ck_home_lot2_*` verts sur `dorevia_ck_marketone_01` (base curée) **et** sur une base sans curation.
-- Doctrine §3 référencée dans le test (commentaire) pour éviter la régression de prémisse.
+- Tests `test_ck_home_lot2_*` verts sur `dorevia_ck_marketone_01` (base curée) **et** sur une base sans curation. ✅ **11/11** (2026-06-17)
+- Doctrine §3 référencée dans le test (commentaire) pour éviter la régression de prémisse. ✅ `ck_home_lot2_utils.py`
+- Correctif annexe bootstrap : retrait effectif de la section vedettes quand `featured_arch` est vide (`home_featured.py`).
 
 ---
 

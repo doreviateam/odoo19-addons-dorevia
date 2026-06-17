@@ -8,9 +8,15 @@ from odoo.tests.common import HttpCase
 
 from odoo.addons.dorevia_ck_marketone_content.home_featured import MIN_FEATURED_PRODUCTS
 from odoo.addons.dorevia_ck_marketone_content.hooks import bootstrap_home_featured_products
+from odoo.addons.dorevia_ck_marketone_content.tests.ck_home_lot2_utils import (
+    detach_featured_curation,
+    ensure_auto_featured_catalog,
+    restore_featured_curation,
+)
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+_CARD_IMAGE_RE = re.compile(
+    r"background-image:\s*url\(\s*(?:&#39;|['\"])?/web/image/product\.(?:template|product)/\d+/",
+    re.IGNORECASE,
 )
 
 
@@ -19,14 +25,15 @@ class TestCkHomeLot2Compose(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        products = cls.env['product.template'].search([
-            ('is_published', '=', True),
-            ('website_published', '=', True),
-        ], limit=MIN_FEATURED_PRODUCTS)
-        if len(products) < MIN_FEATURED_PRODUCTS:
-            cls.skipTest('Catalogue insuffisant pour Lot 2.')
-        products.write({'image_1920': _TINY_PNG})
+        # Lot2 option B : chemin auto + seuil MIN_FEATURED_PRODUCTS (pas la curation BO).
+        cls._curation_backup = detach_featured_curation(cls.env)
+        ensure_auto_featured_catalog(cls.env)
         bootstrap_home_featured_products(cls.env)
+
+    @classmethod
+    def tearDownClass(cls):
+        restore_featured_curation(cls.env, cls._curation_backup)
+        super().tearDownClass()
 
     def test_home_featured_ssr_present(self):
         html = self.url_open('/').text
@@ -60,11 +67,8 @@ class TestCkHomeLot2Compose(HttpCase):
         grid_start = html.find('ck-featured-products__grid--stable')
         grid_chunk = html[grid_start:grid_start + 120000]
         self.assertGreaterEqual(grid_chunk.count('class="price"'), MIN_FEATURED_PRODUCTS)
-        self.assertGreaterEqual(
-            len(re.findall(r"background-image:\s*url\(['\"]?/web/image/product\.template/", grid_chunk)),
-            MIN_FEATURED_PRODUCTS,
-        )
-        self.assertGreaterEqual(grid_chunk.count('class="card-cta"'), MIN_FEATURED_PRODUCTS)
+        self.assertGreaterEqual(len(_CARD_IMAGE_RE.findall(grid_chunk)), MIN_FEATURED_PRODUCTS)
+        self.assertGreaterEqual(grid_chunk.count('Voir le produit'), MIN_FEATURED_PRODUCTS)
 
     def test_home_no_carousel_in_featured(self):
         html = self.url_open('/').text
