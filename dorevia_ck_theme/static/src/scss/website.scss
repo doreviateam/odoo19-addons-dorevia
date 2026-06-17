@@ -318,6 +318,10 @@
         inset: 0;
         background: $ck-image-zone;
         overflow: hidden;
+
+        &.o_editable {
+            cursor: pointer;
+        }
     }
 
     .ck-univers-card__img {

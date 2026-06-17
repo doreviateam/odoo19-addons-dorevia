@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol Marketone — Thème CK",
-    "version": "19.0.1.30.0",
+    "version": "19.0.1.30.2",
     "category": "Theme/eCommerce",
     "summary": "Thème CK générique — tokens, layout, snippets Website Builder",
     "description": """
@@ -28,6 +28,7 @@
         "views/snippets/ck_snippet_hero.xml",
         "views/snippets/ck_snippet_category_links.xml",
         "views/snippets/ck_snippet_featured_products.xml",
+        "views/snippets/ck_snippet_univers_cards.xml",
         "views/snippets/ck_snippet_reassurance.xml",
         "views/snippets/ck_snippet_reassurance_m5.xml",
         "views/snippets/ck_snippet_shop_intro.xml",

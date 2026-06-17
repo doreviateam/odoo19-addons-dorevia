@@ -68,10 +68,10 @@ class TestCkHomeSection4UniversCompose(HttpCase):
         self.assertIn('ck-univers-cards__grid', chunk)
         self.assertIn('ck-univers-card__overlay', chunk)
         self.assertEqual(chunk.count('ck-univers-card__img'), 3)
+        self.assertEqual(chunk.count('ck-univers-card__media o_editable'), 3)
         self.assertIn('ck_univers_epicerie.jpg', chunk)
         self.assertIn('ck_univers_soin.jpg', chunk)
         self.assertIn('ck_univers_artisanat.jpg', chunk)
-        self.assertIn('?v=', chunk)
 
     def test_home_section3_non_regression(self):
         html = self.url_open('/').text

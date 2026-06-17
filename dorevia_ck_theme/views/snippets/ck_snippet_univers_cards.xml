@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_ck_univers_cards" name="CK Acheter par univers">
+        <section class="s_ck_univers_cards ck-univers-cards pt40 pb48 o_colored_level" data-snippet="s_ck_univers_cards" data-name="CK Acheter par univers">
+            <div class="container">
+                <div class="ck-univers-cards__head mb-4">
+                    <h2 id="univers-title" class="ck-univers-cards__title h3 mb-2 o_editable">Acheter par univers</h2>
+                    <p class="ck-univers-cards__intro mb-0 o_editable">Trois univers pour entrer dans la boutique en un clic.</p>
+                </div>
+                <div class="ck-univers-cards__grid">
+                    <a href="/shop" class="ck-univers-card ck-univers-card--epicerie">
+                        <div class="ck-univers-card__media o_editable" data-name="Visuel Épicerie créole">
+                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg" alt="Épicerie créole" class="ck-univers-card__img" loading="lazy" decoding="async"/>
+                        </div>
+                        <div class="ck-univers-card__overlay">
+                            <h3 class="ck-univers-card__title o_editable">Épicerie créole</h3>
+                            <p class="ck-univers-card__desc o_editable">Farines, confitures, condiments et douceurs à découvrir.</p>
+                            <span class="ck-univers-card__cta">Voir l'épicerie</span>
+                        </div>
+                    </a>
+                    <a href="/shop" class="ck-univers-card ck-univers-card--soin">
+                        <div class="ck-univers-card__media o_editable" data-name="Visuel Soin &amp; bien-être">
+                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_soin.jpg" alt="Soin &amp; bien-être" class="ck-univers-card__img" loading="lazy" decoding="async"/>
+                        </div>
+                        <div class="ck-univers-card__overlay">
+                            <h3 class="ck-univers-card__title o_editable">Soin &amp; bien-être</h3>
+                            <p class="ck-univers-card__desc o_editable">Savons, soins et produits bien-être pour le corps et le quotidien.</p>
+                            <span class="ck-univers-card__cta">Découvrir les soins</span>
+                        </div>
+                    </a>
+                    <a href="/shop" class="ck-univers-card ck-univers-card--artisanat">
+                        <div class="ck-univers-card__media o_editable" data-name="Visuel Artisanat &amp; culture">
+                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_artisanat.jpg" alt="Artisanat &amp; culture" class="ck-univers-card__img" loading="lazy" decoding="async"/>
+                        </div>
+                        <div class="ck-univers-card__overlay">
+                            <h3 class="ck-univers-card__title o_editable">Artisanat &amp; culture</h3>
+                            <p class="ck-univers-card__desc o_editable">Objets, créations et supports culturels à découvrir ou offrir.</p>
+                            <span class="ck-univers-card__cta">Explorer l'artisanat</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

@@ -6,7 +6,8 @@ UNIVERS_SECTION_MARKER = 'ck-univers-cards'
 UNIVERS_DATA_NAME = 'CK Acheter par univers'
 UNIVERS_TITLE = 'Acheter par univers'
 UNIVERS_INTRO = 'Trois univers pour entrer dans la boutique en un clic.'
-# Bump à chaque remplacement visuel — invalide le cache navigateur (max-age 7j sur /static/)
+UNIVERS_EDITABLE_MEDIA_MARKER = 'ck-univers-card__media o_editable'
+# Legacy migrations 21.3 / 21.4 — conservé pour historique install
 UNIVERS_IMAGES_VERSION = '4'
 
 _UNIVERS_CARD_SPECS = (
@@ -75,15 +76,16 @@ def _build_univers_card_html(card):
     description = escape(card['description'])
     cta = escape(card['cta'])
     href = escape(card['href'])
-    image = escape(f"{card['image']}?v={UNIVERS_IMAGES_VERSION}")
+    image = escape(card['image'])
+    visual_name = escape(f"Visuel {card['title']}")
     return f"""
             <a href="{href}" class="ck-univers-card ck-univers-card--{escape(card['code'])}">
-                <div class="ck-univers-card__media">
+                <div class="{UNIVERS_EDITABLE_MEDIA_MARKER}" data-name="{visual_name}">
                     <img src="{image}" alt="{title}" class="ck-univers-card__img" loading="lazy" decoding="async"/>
                 </div>
                 <div class="ck-univers-card__overlay">
-                    <h3 class="ck-univers-card__title">{title}</h3>
-                    <p class="ck-univers-card__desc">{description}</p>
+                    <h3 class="ck-univers-card__title o_editable">{title}</h3>
+                    <p class="ck-univers-card__desc o_editable">{description}</p>
                     <span class="ck-univers-card__cta">{cta}</span>
                 </div>
             </a>""".strip()
@@ -196,6 +198,8 @@ def univers_arch_is_valid(arch):
         return False
     if chunk.count('ck-univers-card--') != 3:
         return False
+    if chunk.count(UNIVERS_EDITABLE_MEDIA_MARKER) != 3:
+        return False
     if 'data-bs-ride="carousel"' in chunk:
         return False
     if 'route-hint' in chunk:
@@ -215,7 +219,7 @@ def _univers_arch_matches_bo(env, arch):
         return False
     if 'ck-univers-card__img' not in arch:
         return False
-    if f'?v={UNIVERS_IMAGES_VERSION}' not in arch:
+    if UNIVERS_EDITABLE_MEDIA_MARKER not in arch:
         return False
     if 'ck-univers-cards__head text-center' in arch:
         return False

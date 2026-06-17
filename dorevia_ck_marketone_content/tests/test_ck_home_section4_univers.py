@@ -63,6 +63,7 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
         self.assertIn("Voir l'épicerie", arch)
         self.assertNotIn('Packs & découvertes', arch)
         self.assertNotIn('route-hint', arch)
+        self.assertEqual(arch.count('ck-univers-card__media o_editable'), 3)
 
     def test_bootstrap_injects_univers_after_featured(self):
         self.assertTrue(bootstrap_home_univers(self.env))
@@ -102,3 +103,16 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
         slug = self.env['ir.http'].sudo()._slug(epicerie)
         self.assertIn(f'/shop/category/{slug}', arch)
         self.assertNotIn('href="/shop"', arch.split('ck-univers-card--epicerie')[1].split('ck-univers-card--')[0])
+
+    def test_bootstrap_preserves_editor_image_changes(self):
+        from odoo.addons.dorevia_ck_marketone_content.home_univers import bootstrap_home_univers
+
+        bootstrap_home_univers(self.env)
+        page = self.env['website.page'].search([('url', '=', '/')], limit=1)
+        arch = self._homepage_arch()
+        custom = '/web/image/ir.attachment/424242/custom_epicerie.jpg'
+        page.view_id.write({
+            'arch_db': arch.replace('ck_univers_epicerie.jpg', 'custom_epicerie_marker.jpg', 1),
+        })
+        bootstrap_home_univers(self.env)
+        self.assertIn('custom_epicerie_marker.jpg', self._homepage_arch())
