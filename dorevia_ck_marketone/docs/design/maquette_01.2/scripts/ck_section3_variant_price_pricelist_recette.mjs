@@ -28,8 +28,9 @@ const homePrices = await page.evaluate(() => {
         const title = card.querySelector('.product-card-title')?.textContent?.trim();
         const price = card.querySelector('.price')?.textContent?.replace(/\s+/g, ' ').trim();
         const variantId = card.querySelector('.card-cart-cta')?.dataset?.productId;
-        const ref = card.querySelector('.reference-price')?.textContent?.replace(/\s+/g, ' ').trim();
-        return { title, price, variantId, ref };
+        const labels = card.querySelector('.product-card-labels')?.textContent?.replace(/\s+/g, ' ').trim();
+        const priceOnly = card.querySelector('.product-card-pricing')?.textContent?.replace(/\s+/g, ' ').trim();
+        return { title, price, variantId, labels, priceOnly };
     });
 });
 
@@ -73,7 +74,7 @@ const okSale = saleCard?.price?.includes('3,60')
     && report.checks.saleProductPagePrice?.includes('3,60');
 const okSweet = sweetCard?.price?.includes('3,50')
     && report.checks.sweetProductPagePrice?.includes('3,50');
-const okRef = !saleCard?.ref || saleCard.ref.includes('36,00');
+const okRef = !saleCard?.labels || saleCard.labels.includes('36,00');
 
 report.verdict = okSale && okSweet && okRef ? 'GO' : 'KO';
 report.summary = { okSale, okSweet, okRef };

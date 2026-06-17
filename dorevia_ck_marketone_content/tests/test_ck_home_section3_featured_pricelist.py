@@ -131,6 +131,9 @@ class TestCkHomeSection3FeaturedPricelist(TransactionCase):
         card = build_featured_product_card_html(self.env, self.website, self.sale)
         self.assertIn('3,60', card)
         self.assertIn('36,00', card)
+        self.assertIn('100 g', card)
+        self.assertIn('product-card-labels', card)
+        self.assertNotIn('reference-price', card)
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_home_section3_pricelist')

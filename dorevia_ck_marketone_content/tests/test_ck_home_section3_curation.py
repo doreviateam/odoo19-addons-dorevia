@@ -12,6 +12,7 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     FEATURED_CATEGORY_XMLID,
     _ensure_featured_category,
     _get_featured_badge_html,
+    _get_featured_card_metadata_line,
     _get_featured_commercial_line,
     _get_featured_display_name,
     _get_featured_labels_line,
@@ -218,6 +219,49 @@ class TestCkHomeSection3Curation(TransactionCase):
         self.assertIn('Guadeloupe · Épicerie', card)
         self.assertNotIn(FEATURED_CATEGORY_NAME, card)
 
+    def test_card_metadata_line_joins_labels_format_and_reference(self):
+        guadeloupe = self.env['product.tag'].sudo().create({
+            'name': 'Guadeloupe',
+            'sequence': 10,
+        })
+        epicerie = self.env['product.tag'].sudo().create({
+            'name': 'Épicerie',
+            'sequence': 20,
+        })
+        product = self._make_product(
+            'CK Vedette Metadata',
+            list_price=3.6,
+            product_tag_ids=[(6, 0, [guadeloupe.id, epicerie.id])],
+            ck_net_quantity=100,
+            ck_net_quantity_uom_id=self._card_uom('g').id,
+            ck_reference_price_uom_id=self._card_uom('kg').id,
+            ck_show_reference_price=True,
+        )
+        website = self.env['website'].search([], limit=1)
+        variant = product.product_variant_id
+        metadata = _get_featured_card_metadata_line(self.env, website, variant)
+        self.assertEqual(metadata, 'Guadeloupe · Épicerie · 100 g · 36,00\xa0€/kg')
+
+        card = build_featured_product_card_html(self.env, website, variant)
+        self.assertIn('product-card-labels', card)
+        self.assertIn('Guadeloupe · Épicerie · 100 g', card)
+        self.assertIn('36,00', card)
+        self.assertNotIn('reference-price', card)
+
+    def test_card_metadata_line_skips_orphan_separators(self):
+        product = self._make_product(
+            'CK Vedette Metadata Labels Only',
+            product_tag_ids=[(6, 0, [self.env['product.tag'].sudo().create({
+                'name': 'Réunion',
+                'sequence': 1,
+            }).id])],
+        )
+        website = self.env['website'].search([], limit=1)
+        variant = product.product_variant_id
+        metadata = _get_featured_card_metadata_line(self.env, website, variant)
+        self.assertEqual(metadata, 'Réunion')
+        self.assertNotIn(' ·  · ', metadata)
+
     def test_card_labels_use_variant_additional_product_tags(self):
         category = _ensure_featured_category(self.env)
         martinique = self.env['product.tag'].sudo().create({
@@ -254,8 +298,15 @@ class TestCkHomeSection3Curation(TransactionCase):
         self.assertIn('18,13', commercial)
 
         card = build_featured_product_card_html(self.env, website, variant)
-        self.assertIn('reference-price', card)
+        self.assertIn('product-card-labels', card)
         self.assertIn('320 g', card)
+        self.assertIn('/kg', card)
+        self.assertIn('18,13', card)
+        self.assertNotIn('reference-price', card)
+        pricing_start = card.index('product-card-pricing')
+        pricing_end = card.index('product-card-actions', pricing_start)
+        pricing_block = card[pricing_start:pricing_end]
+        self.assertNotIn('/kg', pricing_block)
 
     def test_card_reference_price_uses_configurable_uom(self):
         custom_net = self.env['dorevia.ck.card.uom'].sudo().create({

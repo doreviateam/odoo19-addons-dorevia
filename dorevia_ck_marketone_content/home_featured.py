@@ -515,19 +515,39 @@ def _format_featured_reference_price(env, website, price, template):
     return f'{amount}/{ref_label}' if ref_label else amount
 
 
-def _get_featured_commercial_line(env, website, variant):
+def _join_featured_metadata_parts(*parts):
+    """Joint les segments d'étiquette en ignorant les valeurs vides (pas de « · » orphelin)."""
+    return ' · '.join(part for part in parts if part)
+
+
+def _get_featured_format_and_reference_parts(env, website, variant):
+    """Format net (ex. 100 g) et prix comparatif (ex. 36,00 €/kg) — logique inchangée."""
     template = variant.product_tmpl_id
     qty_part = _format_featured_net_quantity(
         template.ck_net_quantity,
         template.ck_net_quantity_uom_id,
     )
     if not qty_part:
-        return ''
+        return '', ''
     price = _get_featured_price_amount(env, website, variant)
     ref_part = _format_featured_reference_price(env, website, price, template)
-    if ref_part:
-        return f'{qty_part} · {ref_part}'
-    return qty_part
+    return qty_part, ref_part
+
+
+def _get_featured_commercial_line(env, website, variant):
+    """Format + prix comparatif (sans catégorie/origine) — conservé pour les tests unitaires."""
+    qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
+    if not qty_part:
+        return ''
+    return _join_featured_metadata_parts(qty_part, ref_part)
+
+
+def _get_featured_card_metadata_line(env, website, variant):
+    """Ligne unique sous le titre : catégorie · origine · format · prix comparatif."""
+    template = variant.product_tmpl_id
+    labels = _get_featured_labels_line(template, variant)
+    qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
+    return _join_featured_metadata_parts(labels, qty_part, ref_part)
 
 
 _SAFE_CSS_COLOR_RE = re.compile(
@@ -599,19 +619,14 @@ def build_featured_product_card_html(env, website, variant):
     href = escape(variant.website_url or template.website_url or '/shop')
     image_url = _get_featured_image_url(variant)
     price_label = escape(_get_featured_price_label(env, website, variant))
-    labels_line = escape(_get_featured_labels_line(template, variant))
-    commercial_line = escape(_get_featured_commercial_line(env, website, variant))
+    metadata_line = escape(_get_featured_card_metadata_line(env, website, variant))
     badge_html = _get_featured_badge_html(variant)
     card_title = escape(display_name)
     card_aria = escape(f'{FEATURED_CARD_CTA} : {display_name}')
 
     labels_block = (
-        f'<p class="product-card-labels">{labels_line}</p>'
-        if labels_line else ''
-    )
-    commercial_block = (
-        f'<span class="reference-price">{commercial_line}</span>'
-        if commercial_line else ''
+        f'<p class="product-card-labels">{metadata_line}</p>'
+        if metadata_line else ''
     )
     if _featured_variant_allows_quick_add(env, website, variant):
         actions_html = f"""<div class="product-card-actions">
@@ -636,7 +651,6 @@ def build_featured_product_card_html(env, website, variant):
     <div class="product-card-foot">
         <div class="product-card-pricing">
             <span class="price">{price_label}</span>
-            {commercial_block}
         </div>
         {actions_html}
     </div>
