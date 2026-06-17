@@ -68,7 +68,7 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
         self.assertEqual(arch.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"'), 3)
         self.assertEqual(arch.count(UNIVERS_EDITABLE_MEDIA_MARKER), 3)
         self.assertEqual(arch.count('ck-univers-card__cover'), 3)
-        self.assertIn('data-name="Univers Épicerie créole"', arch)
+        self.assertIn('ck_univers_epicerie.jpg?v=5', arch)
         self.assertIn('ck-univers-card--epicerie o_editable', arch)
         self.assertNotIn('data-snippet="s_ck_univers_cards"', arch.split('ck-univers-cards__grid')[0])
 

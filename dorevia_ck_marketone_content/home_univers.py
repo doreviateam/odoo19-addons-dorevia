@@ -11,8 +11,26 @@ UNIVERS_CARD_SNIPPET = 's_ck_univers_card'
 UNIVERS_SECTION_SNIPPET = 's_ck_univers_cards'
 UNIVERS_EDITABLE_MEDIA_MARKER = 'o_editable_media'
 UNIVERS_CARD_EDITABLE_CLASS = 'ck-univers-card o_editable'
-# Legacy migrations 21.3 / 21.4 — conservé pour historique install
-UNIVERS_IMAGES_VERSION = '4'
+# Bump à chaque changement des JPG par défaut (force refresh navigateur, cf. §7 note arch).
+UNIVERS_IMAGES_VERSION = '5'
+
+
+def _univers_image_src(path):
+    """URL image module + cache-bust (static Odoo : max-age 7j)."""
+    base = path.split('?', 1)[0]
+    return f'{base}?v={UNIVERS_IMAGES_VERSION}'
+
+
+def _univers_default_images_cache_busted(arch):
+    """True si les JPG module encore présents portent le ?v= courant."""
+    token = f'?v={UNIVERS_IMAGES_VERSION}'
+    for spec in _UNIVERS_CARD_SPECS:
+        fname = spec['image'].rsplit('/', 1)[-1]
+        if fname not in arch:
+            continue
+        if f'{fname}{token}' not in arch:
+            return False
+    return True
 
 _UNIVERS_CARD_SPECS = (
     {
@@ -80,7 +98,7 @@ def _build_univers_card_html(card):
     description = escape(card['description'])
     cta = escape(card['cta'])
     href = escape(card['href'])
-    image = escape(card['image'])
+    image = escape(_univers_image_src(card['image']))
     card_data_name = escape(f"Univers {card['title']}")
     return f"""
             <div class="ck-univers-card ck-univers-card--{escape(card['code'])} o_editable" data-snippet="{UNIVERS_CARD_SNIPPET}" data-name="{card_data_name}">
@@ -231,6 +249,8 @@ def univers_arch_is_valid(arch):
 
 def _univers_arch_matches_bo(env, arch):
     if not univers_arch_is_valid(arch):
+        return False
+    if not _univers_default_images_cache_busted(arch):
         return False
     if 'ck-univers-cards__head text-center' in arch:
         return False

@@ -10,7 +10,7 @@
                 <div class="ck-univers-cards__grid">
                     <div class="ck-univers-card ck-univers-card--epicerie o_editable" data-snippet="s_ck_univers_card" data-name="Univers Épicerie créole">
                         <div class="ck-univers-card__media o_not_editable" contenteditable="false">
-                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg" alt="Épicerie créole" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
+                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg?v=5" alt="Épicerie créole" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
                         </div>
                         <a href="/shop" class="ck-univers-card__cover" aria-label="Épicerie créole"/>
                         <div class="ck-univers-card__overlay">
@@ -21,7 +21,7 @@
                     </div>
                     <div class="ck-univers-card ck-univers-card--soin o_editable" data-snippet="s_ck_univers_card" data-name="Univers Soin &amp; bien-être">
                         <div class="ck-univers-card__media o_not_editable" contenteditable="false">
-                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_soin.jpg" alt="Soin &amp; bien-être" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
+                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_soin.jpg?v=5" alt="Soin &amp; bien-être" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
                         </div>
                         <a href="/shop" class="ck-univers-card__cover" aria-label="Soin &amp; bien-être"/>
                         <div class="ck-univers-card__overlay">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="ck-univers-card ck-univers-card--artisanat o_editable" data-snippet="s_ck_univers_card" data-name="Univers Artisanat &amp; culture">
                         <div class="ck-univers-card__media o_not_editable" contenteditable="false">
-                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_artisanat.jpg" alt="Artisanat &amp; culture" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
+                            <img src="/dorevia_ck_marketone_content/static/img/ck_univers_artisanat.jpg?v=5" alt="Artisanat &amp; culture" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
                         </div>
                         <a href="/shop" class="ck-univers-card__cover" aria-label="Artisanat &amp; culture"/>
                         <div class="ck-univers-card__overlay">

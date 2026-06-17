@@ -3,7 +3,7 @@
     <template id="s_ck_univers_card" name="CK Univers card">
         <div class="ck-univers-card ck-univers-card--epicerie o_editable" data-snippet="s_ck_univers_card" data-name="Univers Épicerie créole">
             <div class="ck-univers-card__media o_not_editable" contenteditable="false">
-                <img src="/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg" alt="Épicerie créole" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
+                <img src="/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg?v=5" alt="Épicerie créole" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
             </div>
             <a href="/shop" class="ck-univers-card__cover" aria-label="Épicerie créole"/>
             <div class="ck-univers-card__overlay">

@@ -4,7 +4,7 @@
 |-------|--------|
 | **Projet** | `dorevia_ck_marketone` |
 | **Section** | Home V1 — Section 4 |
-| **Instance recette** | `dorevia_ck_marketone_01` — http://localhost:18079 |
+| **Instance recette** | `dorevia_ck_marketone_01` — voir §7 **URLs d'accès** |
 | **Statut doc** | **Révision 2026-06-17** — alignée sur `dorevia_ck_marketone_content` **≥ `19.0.1.21.7`** · `dorevia_ck_theme` **≥ `19.0.1.30.3`** |
 | **Code** | `home_univers.py` · `home_discovery_pack.py` · `ck_snippet_univers_cards.xml` · `ck_snippet_univers_card.xml` · `ck_univers_plugin.js` · `website.scss` |
 | **PR** | [#76](https://github.com/doreviateam/odoo19-addons-dorevia/pull/76) — **recette QA GO** |
@@ -200,11 +200,26 @@ L'arch Section 4 est considérée valide si :
 
 ## 7. Notes opérationnelles recette
 
+### URLs d'accès (Odoo 19 — **important**)
+
+| URL | Résultat |
+|-----|----------|
+| `http://localhost:18079/fr?db=dorevia_ck_marketone_01` | **404** — `?db=` n'est pas supporté sur `/fr` |
+| `http://localhost:18079/web/login?db=dorevia_ck_marketone_01` | **Connexion** (choisir la base) |
+| `http://localhost:18079/fr` | **Home** (après login, session liée à la base) |
+| `http://localhost:18079/odoo?db=dorevia_ck_marketone_01` | **Backend** → app Site web |
+
+**Chemin MOA recommandé** : login avec `?db=dorevia_ck_marketone_01` → puis `/fr` ou Site web → Modifier.
+
+### Cache navigateur (visuels JPG)
+
+Les assets module sont servis avec `Cache-Control: max-age=604800` (7 jours). Les JPG par défaut incluent `?v=N` (constant `UNIVERS_IMAGES_VERSION` dans `home_univers.py`) — bump à chaque changement d'image module.
+
 | Sujet | Détail |
 |-------|--------|
-| Écriture directe `arch_db` | Sur `dorevia_ck_marketone_01`, visible en HTTP **après restart** du process web — comportement instance, pas le flux éditeur standard |
+| Images custom éditeur | Pas de `?v=` requis — bootstrap ne réécrit pas si arch valide |
+| Écriture directe `arch_db` | Visible en HTTP **après restart** du process web |
 | Flux MOA attendu | Website Builder → Modifier → sauvegarde éditeur |
-| Hard refresh | Recommandé après upgrade (`Cmd+Shift+R` / navigation privée) |
 
 ---
 
