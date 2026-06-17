@@ -4,9 +4,7 @@
     position: sticky;
     top: 0;
     z-index: 1030;
-    background-color: rgba($ck-surface, 0.94);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: $ck-surface;
     border-bottom: 1px solid $ck-border;
     box-shadow: none;
     transform: none !important;
@@ -64,7 +62,7 @@
     @media (min-width: 992px) {
         .navbar.d-none.d-lg-block {
             box-shadow: none !important;
-            background: transparent !important;
+            background-color: $ck-surface !important;
         }
 
         #o_main_nav.container-fluid {
@@ -216,7 +214,7 @@
     .ck-theme header#top.ck-header {
         .o_header_mobile.d-block.d-lg-none {
             box-shadow: none !important;
-            background: transparent !important;
+            background-color: $ck-surface !important;
         }
 
         .o_main_nav.container {

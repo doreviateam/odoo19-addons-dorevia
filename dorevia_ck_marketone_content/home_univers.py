@@ -8,7 +8,9 @@ UNIVERS_DATA_NAME = 'CK Acheter par univers'
 UNIVERS_TITLE = 'Acheter par univers'
 UNIVERS_INTRO = 'Trois univers pour entrer dans la boutique en un clic.'
 UNIVERS_CARD_SNIPPET = 's_ck_univers_card'
+UNIVERS_SECTION_SNIPPET = 's_ck_univers_cards'
 UNIVERS_EDITABLE_MEDIA_MARKER = 'o_editable_media'
+UNIVERS_CARD_EDITABLE_CLASS = 'ck-univers-card o_editable'
 # Legacy migrations 21.3 / 21.4 — conservé pour historique install
 UNIVERS_IMAGES_VERSION = '4'
 
@@ -81,7 +83,7 @@ def _build_univers_card_html(card):
     image = escape(card['image'])
     card_data_name = escape(f"Univers {card['title']}")
     return f"""
-            <div class="ck-univers-card ck-univers-card--{escape(card['code'])}" data-snippet="{UNIVERS_CARD_SNIPPET}" data-name="{card_data_name}">
+            <div class="ck-univers-card ck-univers-card--{escape(card['code'])} o_editable" data-snippet="{UNIVERS_CARD_SNIPPET}" data-name="{card_data_name}">
                 <div class="ck-univers-card__media o_not_editable" contenteditable="false">
                     <img src="{image}" alt="{title}" class="ck-univers-card__img {UNIVERS_EDITABLE_MEDIA_MARKER}" loading="lazy" decoding="async"/>
                 </div>
@@ -102,7 +104,7 @@ def build_home_univers_arch(env):
     title = escape(UNIVERS_TITLE)
     intro = escape(UNIVERS_INTRO)
     return f"""
-<section class="s_ck_univers_cards {UNIVERS_SECTION_MARKER} pt40 pb48 o_colored_level" data-snippet="s_ck_univers_cards" data-name="{UNIVERS_DATA_NAME}">
+<section class="s_ck_univers_cards {UNIVERS_SECTION_MARKER} pt40 pb48" data-name="{UNIVERS_DATA_NAME}">
     <div class="container">
         <div class="ck-univers-cards__head mb-4">
             <h2 id="univers-title" class="ck-univers-cards__title h3 mb-2 o_editable">{title}</h2>
@@ -206,6 +208,10 @@ def univers_arch_is_valid(arch):
     if chunk.count(UNIVERS_EDITABLE_MEDIA_MARKER) != 3:
         return False
     if chunk.count('ck-univers-card__cover') != 3:
+        return False
+    if 'ck-univers-card--epicerie o_editable' not in chunk:
+        return False
+    if f'data-snippet="{UNIVERS_SECTION_SNIPPET}"' in chunk.split('ck-univers-cards__grid')[0]:
         return False
     if re.search(r'<a\s[^>]*class="ck-univers-card ck-univers-card--', chunk):
         return False

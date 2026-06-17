@@ -32,4 +32,12 @@
                t-thumbnail="/website/static/src/img/snippets_thumbs/s_call_to_action.svg"/>
         </xpath>
     </template>
+
+    <template id="ck_snippets_inner_content" inherit_id="website.snippets" name="CK Snippets Inner Content">
+        <xpath expr="//snippets[@id='snippet_content']/*[last()]" position="after">
+            <t t-snippet="dorevia_ck_theme.s_ck_univers_card"
+               string="CK Univers card"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_three_columns.svg"/>
+        </xpath>
+    </template>
 </odoo>

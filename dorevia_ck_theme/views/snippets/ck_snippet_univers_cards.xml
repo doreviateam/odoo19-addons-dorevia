@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_ck_univers_cards" name="CK Acheter par univers">
-        <section class="s_ck_univers_cards ck-univers-cards pt40 pb48 o_colored_level" data-snippet="s_ck_univers_cards" data-name="CK Acheter par univers">
+        <section class="s_ck_univers_cards ck-univers-cards pt40 pb48" data-snippet="s_ck_univers_cards" data-name="CK Acheter par univers">
             <div class="container">
                 <div class="ck-univers-cards__head mb-4">
                     <h2 id="univers-title" class="ck-univers-cards__title h3 mb-2 o_editable">Acheter par univers</h2>
                     <p class="ck-univers-cards__intro mb-0 o_editable">Trois univers pour entrer dans la boutique en un clic.</p>
                 </div>
                 <div class="ck-univers-cards__grid">
-                    <div class="ck-univers-card ck-univers-card--epicerie" data-snippet="s_ck_univers_card" data-name="Univers Épicerie créole">
+                    <div class="ck-univers-card ck-univers-card--epicerie o_editable" data-snippet="s_ck_univers_card" data-name="Univers Épicerie créole">
                         <div class="ck-univers-card__media o_not_editable" contenteditable="false">
                             <img src="/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg" alt="Épicerie créole" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
                         </div>
@@ -19,7 +19,7 @@
                             <span class="ck-univers-card__cta">Voir l'épicerie</span>
                         </div>
                     </div>
-                    <div class="ck-univers-card ck-univers-card--soin" data-snippet="s_ck_univers_card" data-name="Univers Soin &amp; bien-être">
+                    <div class="ck-univers-card ck-univers-card--soin o_editable" data-snippet="s_ck_univers_card" data-name="Univers Soin &amp; bien-être">
                         <div class="ck-univers-card__media o_not_editable" contenteditable="false">
                             <img src="/dorevia_ck_marketone_content/static/img/ck_univers_soin.jpg" alt="Soin &amp; bien-être" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
                         </div>
@@ -30,7 +30,7 @@
                             <span class="ck-univers-card__cta">Découvrir les soins</span>
                         </div>
                     </div>
-                    <div class="ck-univers-card ck-univers-card--artisanat" data-snippet="s_ck_univers_card" data-name="Univers Artisanat &amp; culture">
+                    <div class="ck-univers-card ck-univers-card--artisanat o_editable" data-snippet="s_ck_univers_card" data-name="Univers Artisanat &amp; culture">
                         <div class="ck-univers-card__media o_not_editable" contenteditable="false">
                             <img src="/dorevia_ck_marketone_content/static/img/ck_univers_artisanat.jpg" alt="Artisanat &amp; culture" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
                         </div>

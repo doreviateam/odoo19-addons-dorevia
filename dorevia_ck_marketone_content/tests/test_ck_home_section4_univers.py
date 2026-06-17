@@ -69,7 +69,8 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
         self.assertEqual(arch.count(UNIVERS_EDITABLE_MEDIA_MARKER), 3)
         self.assertEqual(arch.count('ck-univers-card__cover'), 3)
         self.assertIn('data-name="Univers Épicerie créole"', arch)
-        self.assertIn('<div class="ck-univers-card ck-univers-card--epicerie"', arch)
+        self.assertIn('ck-univers-card--epicerie o_editable', arch)
+        self.assertNotIn('data-snippet="s_ck_univers_cards"', arch.split('ck-univers-cards__grid')[0])
 
     def test_bootstrap_injects_univers_after_featured(self):
         self.assertTrue(bootstrap_home_univers(self.env))
