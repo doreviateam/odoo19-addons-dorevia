@@ -70,6 +70,7 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
         self.assertEqual(arch.count('ck-univers-card__cover'), 3)
         self.assertNotIn('data-href=', arch.split('ck-univers-cards__grid')[-1].split('</section>')[0])
         self.assertIn('ck_univers_epicerie.jpg?v=5', arch)
+        self.assertIn('ck-univers-card__media o_editable', arch)
         self.assertIn('ck-univers-card--epicerie', arch)
         self.assertNotIn('data-snippet="s_ck_univers_cards"', arch.split('ck-univers-cards__grid')[0])
 

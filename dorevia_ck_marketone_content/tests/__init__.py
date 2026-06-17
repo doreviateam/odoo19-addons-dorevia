@@ -32,4 +32,3 @@ from . import test_ck_catalog_manioc_variants
 from . import test_ck_home_section3_curation
 from . import test_ck_home_section4_univers
 from . import test_ck_home_section4_univers_compose
-from . import test_ck_catalog_origine

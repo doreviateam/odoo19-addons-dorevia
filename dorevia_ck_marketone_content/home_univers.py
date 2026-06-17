@@ -102,7 +102,7 @@ def _build_univers_card_html(card):
     card_data_name = escape(f"Univers {card['title']}")
     return f"""
             <div class="ck-univers-card ck-univers-card--{escape(card['code'])}" data-snippet="{UNIVERS_CARD_SNIPPET}" data-name="{card_data_name}">
-                <div class="ck-univers-card__media">
+                <div class="ck-univers-card__media o_editable">
                     <p class="o_not_editable" contenteditable="false">
                         <img src="{image}" alt="{title}" class="ck-univers-card__img {UNIVERS_EDITABLE_MEDIA_MARKER}" loading="lazy" decoding="async"/>
                     </p>
@@ -232,6 +232,8 @@ def univers_arch_is_valid(arch):
     if re.search(r'class="ck-univers-card[^"]*"[^>]*data-href=', chunk):
         return False
     if 'ck-univers-card--epicerie' not in chunk:
+        return False
+    if 'ck-univers-card__media o_editable' not in chunk:
         return False
     if f'data-snippet="{UNIVERS_SECTION_SNIPPET}"' in chunk.split('ck-univers-cards__grid')[0]:
         return False

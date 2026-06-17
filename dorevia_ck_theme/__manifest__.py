@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol Marketone — Thème CK",
-    "version": "19.0.1.30.7",
+    "version": "19.0.1.30.8",
     "category": "Theme/eCommerce",
     "summary": "Thème CK générique — tokens, layout, snippets Website Builder",
     "description": """
@@ -62,6 +62,7 @@
         "website.assets_editor": [
             "dorevia_ck_theme/static/src/js/ck_univers_plugin.js",
             "dorevia_ck_theme/static/src/js/ck_univers_option_plugin.js",
+            "dorevia_ck_theme/static/src/js/ck_univers_builder_plugin.js",
         ],
     },
     "installable": True,

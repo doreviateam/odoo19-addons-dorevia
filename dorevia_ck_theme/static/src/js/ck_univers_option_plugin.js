@@ -8,6 +8,10 @@ import { BaseCardOption } from "@website/builder/plugins/options/card_option";
 export const CK_UNIVERS_CARD_SELECTOR =
     ".s_ck_univers_cards .ck-univers-cards__grid > .ck-univers-card";
 
+const CK_UNIVERS_MEDIA_SELECTOR = `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__media`;
+const CK_UNIVERS_TITLE_SELECTOR = `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__title`;
+const CK_UNIVERS_DESC_SELECTOR = `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__desc`;
+
 class CkUniversCardOption extends BaseCardOption {
     static selector = CK_UNIVERS_CARD_SELECTOR;
     static defaultProps = {
@@ -21,9 +25,14 @@ class CkUniversOptionPlugin extends Plugin {
     /** @type {import("plugins").WebsiteResources} */
     resources = {
         no_parent_containers: CK_UNIVERS_CARD_SELECTOR,
+        o_editable_selectors: [
+            CK_UNIVERS_MEDIA_SELECTOR,
+            CK_UNIVERS_TITLE_SELECTOR,
+            CK_UNIVERS_DESC_SELECTOR,
+        ],
         content_editable_selectors: [
-            `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__title`,
-            `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__desc`,
+            CK_UNIVERS_TITLE_SELECTOR,
+            CK_UNIVERS_DESC_SELECTOR,
             `${CK_UNIVERS_CARD_SELECTOR} .o_not_editable img`,
         ],
         content_not_editable_selectors: [
@@ -31,6 +40,9 @@ class CkUniversOptionPlugin extends Plugin {
             `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__cover`,
             `${CK_UNIVERS_CARD_SELECTOR} .ck-univers-card__cta`,
         ],
+        container_title: {
+            selector: CK_UNIVERS_CARD_SELECTOR,
+        },
         builder_options: [CkUniversCardOption],
     };
 }

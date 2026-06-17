@@ -415,18 +415,36 @@
     }
 
     body.editor_enable & {
+        .ck-univers-card {
+            display: flex;
+            flex-direction: column;
+            min-height: auto;
+            overflow: visible;
+        }
+
         .ck-univers-card__cover,
         .ck-univers-card__cta {
             display: none !important;
         }
 
         .ck-univers-card__media {
+            position: relative;
+            inset: auto;
+            flex: 0 0 auto;
+            min-height: 180px;
+            order: 1;
             z-index: 3;
             pointer-events: auto;
         }
 
         .ck-univers-card__overlay {
-            pointer-events: none;
+            position: relative;
+            inset: auto;
+            min-height: auto;
+            order: 2;
+            flex: 1 1 auto;
+            pointer-events: auto;
+            padding: $ck-space-4;
         }
 
         .ck-univers-card__title,
@@ -439,6 +457,7 @@
         .ck-univers-card__img.o_editable_media {
             pointer-events: auto;
             cursor: pointer;
+            min-height: 180px;
         }
     }
 }
