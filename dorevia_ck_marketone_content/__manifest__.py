@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol Marketone — Contenu démo",
-    "version": "19.0.1.21.13",
+    "version": "19.0.1.25.1",
     "category": "Website/Website",
     "summary": "Seed contenu CK Marketone — pages CMS, catalogue pilote, newsletter",
     "description": """
@@ -30,9 +30,15 @@
         "views/product_template_views.xml",
         "data/ck_public_category_coups_de_coeur.xml",
         "data/ck_product_ribbon_coups_de_coeur.xml",
+        "data/ck_cron.xml",
     ],
     "installable": True,
     "application": False,
     "auto_install": False,
     "post_init_hook": "post_init_hook",
+    "assets": {
+        "web.assets_frontend": [
+            "dorevia_ck_marketone_content/static/src/js/ck_featured_cart_add.js",
+        ],
+    },
 }

@@ -57,9 +57,32 @@ class ProductTemplate(models.Model):
 
         refresh_home_featured_products(self.env)
 
+    def _ck_touches_featured(self):
+        """QA M1 : limite la reconstruction vedettes aux produits réellement concernés.
+
+        En mode curation (catégorie « Coups de cœur » présente), seul un produit
+        rangé dans cette catégorie justifie un rebuild de la home. En mode repli
+        (pas de curation → sélection automatique), tout produit publié peut
+        entrer dans le top : on conserve le comportement large d'origine.
+        """
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            FEATURED_CATEGORY_XMLID,
+        )
+
+        featured = self.env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
+        # Curation active seulement si la catégorie existe ET contient des produits ;
+        # sinon mode repli auto-sélection → tout produit publié peut entrer → refresh large.
+        if featured and featured.product_tmpl_ids:
+            return bool(self.public_categ_ids & featured)
+        return True
+
     def write(self, vals):
+        touches_featured_fields = bool(FEATURED_REFRESH_FIELDS.intersection(vals))
+        # Membre des vedettes AVANT écriture (capte une sortie de curation).
+        was_featured = self._ck_touches_featured() if touches_featured_fields else False
         result = super().write(vals)
-        if FEATURED_REFRESH_FIELDS.intersection(vals):
+        # ... ou APRÈS écriture (capte une entrée en curation).
+        if touches_featured_fields and (was_featured or self._ck_touches_featured()):
             self._ck_refresh_home_featured_products()
         return result
 
@@ -73,6 +96,7 @@ class ProductTemplate(models.Model):
     def _ck_sync_home_featured_labels_on_startup(self):
         """Reconstruit la home si des étiquettes BO manquent des cards SSR (arch périmée)."""
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _featured_arch_missing_cart_cta,
             _featured_arch_missing_product_labels,
             bootstrap_home_featured_products,
             get_curated_featured_variants,
@@ -82,8 +106,11 @@ class ProductTemplate(models.Model):
         if not page or not page.view_id:
             return
         arch = page.view_id.arch_db or ''
+        website = self.env['website'].search([], limit=1)
         variants = get_curated_featured_variants(self.env)
-        if not _featured_arch_missing_product_labels(self.env, arch, variants):
+        if not _featured_arch_missing_product_labels(self.env, arch, variants) and not (
+            website and _featured_arch_missing_cart_cta(self.env, website, arch, variants)
+        ):
             return
         if bootstrap_home_featured_products(self.env):
-            _logger.info('CK Section 3 : home reconstruite (étiquettes produit manquantes).')
+            _logger.info('CK Section 3 : home reconstruite (arch vedettes périmée).')

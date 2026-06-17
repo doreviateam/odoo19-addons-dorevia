@@ -79,7 +79,8 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         expected = self.expected_featured_cards
         self.assertGreaterEqual(grid_chunk.count(FEATURED_CARD_MARKER), expected)
         self.assertGreaterEqual(len(_CARD_MEDIA_RE.findall(grid_chunk)), expected)
-        self.assertGreaterEqual(grid_chunk.count('class="card-cta"'), expected)
+        self.assertGreaterEqual(grid_chunk.count('card-cta--secondary'), expected)
+        self.assertGreaterEqual(grid_chunk.count('class="card-cart-cta"'), expected)
         self.assertGreaterEqual(grid_chunk.count('class="price"'), expected)
         self.assertNotIn('o_carousel_product_card', grid_chunk)
 
@@ -106,10 +107,14 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         self.assertIn('product-card-labels', grid_chunk)
         self.assertIn('Guadeloupe · Épicerie', grid_chunk)
 
-    def test_home_http_rebuilds_stale_arch_without_product_labels(self):
-        """GET / reconstruit la home si les étiquettes produit manquent (arch périmée)."""
-        import re
+    def test_stale_arch_rebuilt_by_sync(self):
+        """Le sync (cron/boot) reconstruit la home si les étiquettes produit manquent.
 
+        PR-3 (H2) : l'auto-réparation ne se fait plus via GET / (override
+        ir_http._pre_dispatch supprimé) mais via
+        product.template._ck_sync_home_featured_labels_on_startup() — appelée par
+        le cron ck_cron_sync_home_featured et au démarrage du worker.
+        """
         category = _ensure_featured_category(self.env)
         guadeloupe = self.env['product.tag'].sudo().create({
             'name': 'Guadeloupe',
@@ -120,7 +125,7 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
             'sequence': 20,
         })
         self.env['product.template'].sudo().create({
-            'name': 'CK Vedette HTTP Labels',
+            'name': 'CK Vedette Sync Labels',
             'list_price': 4.5,
             'is_published': True,
             'website_published': True,
@@ -140,9 +145,11 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         view.write({'arch_db': stale_arch})
         self.assertNotIn('<p class="product-card-labels">', view.arch_db or '')
 
-        grid_chunk = self._featured_grid_chunk(self.url_open('/').text)
-        self.assertIn('product-card-labels', grid_chunk)
-        self.assertIn('Guadeloupe · Épicerie', grid_chunk)
+        # Réparation par le sync (cron/boot), pas par une requête HTTP.
+        self.env['product.template']._ck_sync_home_featured_labels_on_startup()
+        view.invalidate_recordset(['arch_db'])
+        self.assertIn('product-card-labels', view.arch_db or '')
+        self.assertIn('Guadeloupe · Épicerie', view.arch_db or '')
 
     def test_home_featured_lot2_contract_intact(self):
         grid_chunk = self._featured_grid_chunk(self.url_open('/').text)

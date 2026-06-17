@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+# QA C6 — Convention de versionnage : le numéro de version est incrémenté à
+# chaque livraison (y compris assets/SCSS/JS sans changement de schéma DB). Seuls
+# les changements nécessitant une post-migration disposent d'un dossier dédié
+# sous migrations/ ; les écarts entre la version et le dernier dossier de
+# migration sont donc normaux (bumps « assets-only »).
 {
     "name": "C-Kreyol Marketone — Thème CK",
-    "version": "19.0.1.30.9",
+    "version": "19.0.1.31.3",
     "category": "Theme/eCommerce",
     "summary": "Thème CK générique — tokens, layout, snippets Website Builder",
     "description": """
@@ -26,6 +31,7 @@
     "data": [
         "views/snippets/snippet_groups.xml",
         "views/snippets/ck_snippet_hero.xml",
+        "views/snippets/ck_snippet_hero_slide.xml",
         "views/snippets/ck_snippet_category_links.xml",
         "views/snippets/ck_snippet_featured_products.xml",
         "views/snippets/ck_snippet_univers_card.xml",
@@ -60,6 +66,9 @@
             "dorevia_ck_theme/static/src/scss/website_sale.scss",
         ],
         "website.website_builder_assets": [
+            "dorevia_ck_theme/static/src/js/ck_hero_plugin.js",
+            "dorevia_ck_theme/static/src/js/ck_hero_option_plugin.js",
+            "dorevia_ck_theme/static/src/js/ck_hero_builder_plugin.js",
             "dorevia_ck_theme/static/src/js/ck_univers_plugin.js",
             "dorevia_ck_theme/static/src/js/ck_univers_option_plugin.js",
             "dorevia_ck_theme/static/src/js/ck_univers_builder_plugin.js",

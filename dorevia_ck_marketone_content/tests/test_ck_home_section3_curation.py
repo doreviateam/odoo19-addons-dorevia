@@ -5,6 +5,7 @@ from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+    FEATURED_CARD_CART_CTA,
     FEATURED_CARD_CTA,
     FEATURED_CATEGORY_NAME,
     FEATURED_GRID_MARKER,
@@ -296,8 +297,19 @@ class TestCkHomeSection3Curation(TransactionCase):
         website = self.env['website'].search([], limit=1)
         card = build_featured_product_card_html(self.env, website, product.product_variant_id)
         self.assertIn(FEATURED_CARD_CTA, card)
+        self.assertIn(FEATURED_CARD_CART_CTA, card)
+        self.assertIn('class="card-cart-cta"', card)
+        self.assertIn('class="card-cta card-cta--secondary"', card)
         self.assertIn('ck-product-card__cover', card)
         self.assertNotIn('>Voir</a>', card)
+
+    def test_card_hides_cart_cta_when_not_sale_ok(self):
+        product = self._make_product('CK Vedette Pas Vente', sale_ok=False)
+        website = self.env['website'].search([], limit=1)
+        card = build_featured_product_card_html(self.env, website, product.product_variant_id)
+        self.assertIn(FEATURED_CARD_CTA, card)
+        self.assertNotIn('class="card-cart-cta"', card)
+        self.assertIn('product-card-actions--view-only', card)
 
     def test_product_tags_write_refreshes_home_arch(self):
         category = _ensure_featured_category(self.env)

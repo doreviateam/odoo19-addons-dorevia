@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 """Home Lot 2 / Section 3 — Produits vedettes SSR maquette CK (cartes dédiées)."""
-import contextlib
 import json
 import re
-from unittest.mock import MagicMock, Mock, patch
 from xml.sax.saxutils import escape
 
-import odoo.http
-from odoo.tools import DotDict, format_amount, lazy
-from werkzeug.test import EnvironBuilder
+from odoo.tools import format_amount
 
 MIN_FEATURED_PRODUCTS = 5
 FEATURED_SECTION_MARKER = 'ck-featured-products'
@@ -18,6 +14,7 @@ FEATURED_TITLE = 'Nos coups de cœur'
 FEATURED_SUBTITLE = 'Sélection CK · origine, goût et savoir-faire créole'
 FEATURED_SHOP_CTA = 'Toute la boutique →'
 FEATURED_CARD_CTA = 'Voir le produit'
+FEATURED_CARD_CART_CTA = 'Ajouter au panier'
 FEATURED_CATEGORY_NAME = 'Coups de cœur'  # curation BO des vedettes (catégorie e-commerce dédiée)
 FEATURED_CATEGORY_XMLID = 'dorevia_ck_marketone_content.public_categ_coups_de_coeur'
 FEATURED_CURATED_MAX = 8
@@ -76,7 +73,7 @@ _CARD_IMAGE_RE = re.compile(
     re.IGNORECASE,
 )
 _CARD_PRICE_RE = re.compile(r'class="price"')
-_CARD_LINK_RE = re.compile(r'class="card-cta"')
+_CARD_LINK_RE = re.compile(r'class="card-cta(?:\s|")')
 _CARD_COVER_RE = re.compile(r'ck-product-card__cover')
 _CARD_CTA_TEXT_RE = re.compile(re.escape(FEATURED_CARD_CTA))
 _FEATURED_LABELS_BLOCK_RE = re.compile(
@@ -90,60 +87,6 @@ def _arch_as_string(arch):
     if isinstance(arch, dict):
         return next(iter(arch.values()), '')
     return arch or ''
-
-
-@contextlib.contextmanager
-def _with_website_request(env, website):
-    """Contexte HTTP minimal pour prix catalogue (hors requête WSGI)."""
-    lang_code = env.context.get('lang') or 'fr_FR'
-    env = env(context=dict(env.context, lang=lang_code))
-    request = Mock(
-        httprequest=Mock(
-            host='localhost',
-            path='/',
-            app=odoo.http.root,
-            environ=EnvironBuilder(
-                path='/',
-                base_url='http://127.0.0.1:8069',
-            ).get_environ(),
-            cookies={},
-            referrer='',
-            remote_addr='127.0.0.1',
-            url_root='http://127.0.0.1:8069/',
-            args=[],
-        ),
-        type='http',
-        future_response=odoo.http.FutureResponse(),
-        params={},
-        redirect=env['ir.http']._redirect,
-        session=DotDict(
-            odoo.http.get_default_session(),
-            context={'lang': lang_code},
-            force_website_id=website.id,
-        ),
-        geoip=odoo.http.GeoIP('127.0.0.1'),
-        db=env.registry.db_name,
-        env=env,
-        registry=env.registry,
-        lang=env['res.lang']._get_data(code=lang_code),
-        website=website,
-        render=lambda *args, **kwargs: '',
-    )
-    request.website_routing = website.id
-    request.pricelist = lazy(website._get_and_cache_current_pricelist)
-    request.cart = lazy(website._get_and_cache_current_cart)
-    request.fiscal_position = lazy(website._get_and_cache_current_fiscal_position)
-    router = MagicMock()
-    router.return_value.bind.return_value.match.return_value[0].routing = {
-        'type': 'http',
-        'website': True,
-        'multilang': True,
-    }
-    with contextlib.ExitStack() as stack:
-        odoo.http._request_stack.push(request)
-        stack.callback(odoo.http._request_stack.pop)
-        stack.enter_context(patch('odoo.http.root.get_db_router', router))
-        yield request
 
 
 def _variant_has_valid_image(variant):
@@ -339,10 +282,25 @@ def _get_featured_image_url(variant):
 
 
 def _get_featured_price_amount(env, website, variant):
+    """Prix B2C de la carte vedette — sans requête HTTP (PR-4 / H1).
+
+    Pipeline validé sur instance (candidat B) : prix pricelist + position fiscale
+    + couche taxes ``_apply_taxes_to_price`` (TTC/HT selon
+    ``website.show_line_subtotals_tax_selection``). Reproduit la sortie de l'ancien
+    ``_get_combination_info`` (qui s'appuyait sur une fausse requête, supprimée)."""
     template = variant.product_tmpl_id
-    with _with_website_request(env, website):
-        info = template._get_combination_info(product_id=variant.id, add_qty=1.0)
-    return info.get('price_reduce') or info.get('price') or template.list_price
+    pricelist = website.sudo().get_pricelist_available()[:1]
+    if not pricelist:
+        return template.list_price
+    currency = pricelist.currency_id or website.currency_id
+    pricelist_price = pricelist._get_product_price(variant, 1.0)
+    company = website.company_id or env.company
+    product_taxes = variant.sudo().taxes_id.filtered(lambda t: t.company_id == company)
+    fpos = env['account.fiscal.position'].sudo()._get_fiscal_position(env.user.partner_id)
+    taxes = fpos.map_tax(product_taxes) if fpos else product_taxes
+    return template._apply_taxes_to_price(
+        pricelist_price, currency, product_taxes, taxes, variant, website=website,
+    )
 
 
 def _get_featured_price_label(env, website, variant):
@@ -397,7 +355,15 @@ def _featured_label_parts_from_tags(tags):
 
 
 def _featured_label_parts_from_sql(cr, template_id, variant_id=None):
-    """Lecture SQL directe — template + variante (product_tag_ids + additional_product_tag_ids)."""
+    """Lecture SQL directe — template + variante (product_tag_ids + additional_product_tag_ids).
+
+    QA M4 : accès SQL direct assumé pour la performance du rendu SSR des cartes
+    (évite N lectures ORM par carte sur la home). Cible les tables de relation
+    ``product_tag_product_template_rel`` / ``product_tag_product_product_rel``.
+    Requête entièrement paramétrée (%s) — pas d'injection. Contournement
+    volontaire des record rules (exécution en contexte sudo de seed/refresh).
+    Un repli ORM existe dans ``_get_featured_labels_line`` si la lecture SQL ne
+    renvoie aucune étiquette."""
     if variant_id:
         cr.execute(
             """
@@ -477,6 +443,21 @@ def _featured_arch_missing_product_labels(env, arch, variants):
     return False
 
 
+def _featured_arch_missing_cart_cta(env, website, arch, variants):
+    """True si une vedette éligible au quick-add n'a pas le CTA panier dans l'arch home."""
+    if FEATURED_SECTION_MARKER not in (arch or ''):
+        return False
+    for variant in variants:
+        if not _featured_variant_allows_quick_add(env, website, variant):
+            continue
+        if 'class="card-cart-cta"' not in arch:
+            return True
+        product_marker = f'data-product-id="{variant.id}"'
+        if product_marker not in arch:
+            return True
+    return False
+
+
 def _format_featured_quantity_value(quantity):
     if quantity == int(quantity):
         return str(int(quantity))
@@ -547,6 +528,21 @@ def _get_featured_commercial_line(env, website, variant):
     return qty_part
 
 
+_SAFE_CSS_COLOR_RE = re.compile(
+    r'^#[0-9A-Fa-f]{3,8}$|^rgba?\([\d\s.,%]+\)$|^hsla?\([\d\s.,%]+\)$|^[a-zA-Z]+$'
+)
+
+
+def _safe_css_color(value):
+    """QA L1 : n'autorise qu'une couleur CSS simple (hex/rgb/hsl/mot-clé) en inline style.
+
+    Les valeurs `bg_color` / `text_color` du ruban e-commerce sont saisies en BO ;
+    on les filtre avant injection dans un attribut `style` pour écarter tout
+    contenu non couleur (défense XSS, risque faible mais réel)."""
+    value = (value or '').strip()
+    return value if _SAFE_CSS_COLOR_RE.match(value) else ''
+
+
 def _featured_ribbon_badge_class(ribbon):
     """Classes maquette CK pour les libellés ruban courants."""
     name = (ribbon.name or '').lower()
@@ -555,6 +551,22 @@ def _featured_ribbon_badge_class(ribbon):
     if any(token in name for token in ('coup', 'cœur', 'coeur', 'vente', 'sale', 'promo')):
         return 'badge-heart'
     return 'badge-ribbon'
+
+
+def _featured_variant_allows_quick_add(env, website, variant):
+    """Éligibilité ajout panier direct — alignée ``_website_show_quick_add`` sans requête HTTP."""
+    template = variant.product_tmpl_id.sudo()
+    if template.type == 'combo':
+        return False
+    if not variant.sale_ok or not template.sale_ok:
+        return False
+    if not template.website_published or not variant.active:
+        return False
+    if not template._is_add_to_cart_possible():
+        return False
+    if website.prevent_zero_price_sale and not _get_featured_price_amount(env, website, variant):
+        return False
+    return True
 
 
 def _get_featured_badge_html(variant):
@@ -566,10 +578,12 @@ def _get_featured_badge_html(variant):
     css_class = _featured_ribbon_badge_class(ribbon)
     if css_class == 'badge-ribbon':
         styles = []
-        if ribbon.bg_color:
-            styles.append(f'background-color:{ribbon.bg_color}')
-        if ribbon.text_color:
-            styles.append(f'color:{ribbon.text_color}')
+        bg_color = _safe_css_color(ribbon.bg_color)
+        if bg_color:
+            styles.append(f'background-color:{bg_color}')
+        text_color = _safe_css_color(ribbon.text_color)
+        if text_color:
+            styles.append(f'color:{text_color}')
         style_attr = f' style="{"; ".join(styles)}"' if styles else ''
     else:
         style_attr = ''
@@ -597,6 +611,15 @@ def build_featured_product_card_html(env, website, variant):
         f'<span class="reference-price">{commercial_line}</span>'
         if commercial_line else ''
     )
+    if _featured_variant_allows_quick_add(env, website, variant):
+        actions_html = f"""<div class="product-card-actions">
+            <button type="button" class="card-cart-cta" data-product-id="{variant.id}" data-product-template-id="{template.id}">{FEATURED_CARD_CART_CTA}</button>
+            <a href="{href}" class="card-cta card-cta--secondary">{FEATURED_CARD_CTA}</a>
+        </div>"""
+    else:
+        actions_html = f"""<div class="product-card-actions product-card-actions--view-only">
+            <a href="{href}" class="card-cta">{FEATURED_CARD_CTA}</a>
+        </div>"""
 
     return f"""
 <article class="{FEATURED_CARD_MARKER} product-card ck-product-card--interactive">
@@ -613,7 +636,7 @@ def build_featured_product_card_html(env, website, variant):
             <span class="price">{price_label}</span>
             {commercial_block}
         </div>
-        <a href="{href}" class="card-cta">{FEATURED_CARD_CTA}</a>
+        {actions_html}
     </div>
 </article>""".strip()
 
@@ -761,11 +784,12 @@ def bootstrap_home_featured_products(env):
 
     new_arch, patched = _patch_homepage_featured_arch(arch, featured_arch)
     stale_labels = _featured_arch_missing_product_labels(env, arch, variants)
-    if not patched and not stale_labels:
+    stale_cart_cta = _featured_arch_missing_cart_cta(env, website, arch, variants)
+    if not patched and not stale_labels and not stale_cart_cta:
         return False
     if not featured_arch:
         return patched
-    if new_arch == arch and not stale_labels:
+    if new_arch == arch and not stale_labels and not stale_cart_cta:
         return patched
 
     view.write({'arch_db': new_arch})

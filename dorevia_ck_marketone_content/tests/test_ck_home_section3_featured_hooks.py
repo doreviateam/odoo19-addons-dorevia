@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tests hooks Section 3 — vedettes SSR maquette · ordre trust-bar → grille."""
 
-from types import SimpleNamespace
-from unittest.mock import patch
-
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -14,7 +11,6 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     bootstrap_home_featured_products,
 )
 from odoo.addons.dorevia_ck_marketone_content.home_hero import bootstrap_home_hero
-from odoo.addons.dorevia_ck_marketone_content.models.ir_http import IrHttp
 from odoo.addons.dorevia_ck_marketone_content.home_reassurance import (
     FEATURED_MARKER,
     REASSURANCE_TRUST_BAR_MARKER,
@@ -52,15 +48,5 @@ class TestCkHomeSection3FeaturedHooks(TransactionCase):
         self.assertIn(FEATURED_TITLE, arch)
         self.assertIn(FEATURED_CARD_MARKER, arch)
         self.assertIn('product-card-media', arch)
-        self.assertIn('class="card-cta"', arch)
-
-    def test_home_refresh_guard_skips_backend_paths(self):
-        fake_request = SimpleNamespace(httprequest=SimpleNamespace(path='/odoo'))
-        with patch('odoo.addons.dorevia_ck_marketone_content.models.ir_http.request', fake_request):
-            self.assertFalse(IrHttp._ck_path_can_be_homepage())
-
-    def test_home_refresh_guard_accepts_root_and_lang_paths(self):
-        for path in ('/', '/fr'):
-            fake_request = SimpleNamespace(httprequest=SimpleNamespace(path=path))
-            with patch('odoo.addons.dorevia_ck_marketone_content.models.ir_http.request', fake_request):
-                self.assertTrue(IrHttp._ck_path_can_be_homepage())
+        self.assertIn('card-cta--secondary', arch)
+        self.assertIn('class="card-cart-cta"', arch)
