@@ -81,7 +81,8 @@
       ],
       "cartBefore": "0",
       "cartAfter": "1",
-      "cartIncreased": true
+      "cartIncreased": true,
+      "noDangerToastAfterCart": true
     }
   },
   "verdict": "GO",

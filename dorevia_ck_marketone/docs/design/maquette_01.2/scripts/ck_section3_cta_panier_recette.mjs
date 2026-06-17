@@ -63,9 +63,14 @@ async function runViewport(label, width, height) {
         await firstCart.click();
         await page.waitForTimeout(1500);
         const cartAfter = await page.locator('.my_cart_quantity').first().textContent().catch(() => '0');
+        const dangerToast = await page.getByText(
+            'Impossible d\'ajouter ce produit au panier',
+            { exact: false }
+        ).count();
         metrics.cartBefore = (cartBefore || '0').trim();
         metrics.cartAfter = (cartAfter || '0').trim();
         metrics.cartIncreased = parseInt(metrics.cartAfter, 10) > parseInt(metrics.cartBefore, 10);
+        metrics.noDangerToastAfterCart = dangerToast === 0;
     }
 
     const shot = path.join(OUT, `section3_cta_panier_${label}.png`);
@@ -83,7 +88,8 @@ const d = report.checks['1280'];
 const m = report.checks['390'];
 const okDesktop = d.cartCtaCount >= 3
     && d.cards.every((c) => c.hasCartCta && c.hasViewCta && c.cartIsButton)
-    && d.cartIncreased;
+    && d.cartIncreased
+    && d.noDangerToastAfterCart;
 const okMobile = m.cartCtaCount >= 3
     && !m.overflow
     && m.cards.every((c) => c.hasCartCta && (c.stacked || c.cartAboveView));
