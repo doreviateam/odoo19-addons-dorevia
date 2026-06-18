@@ -68,17 +68,40 @@ _PLACEHOLDER_MARKERS = (
     'is_sample',
 )
 
+def _ck_class_token_pattern(token):
+    """Fragment regex matchant un attribut ``class`` contenant le token BEM ``token``,
+    quel que soit son ordre, ses classes voisines ou la présence d'alias legacy
+    (``product-card-*``). On s'ancre sur les classes BEM ``ck-product-card__*`` :
+    elles sont stables et survivent à la suppression future des alias de compat.
+    Les bornes ``(?<![\\w-])`` / ``(?![\\w-])`` évitent les faux positifs (ex.
+    ``card-cta`` ne matche pas ``card-cta--secondary`` ni ``card-cart-cta``)."""
+    return r'class="[^"]*(?<![\w-])' + re.escape(token) + r'(?![\w-])[^"]*"'
+
+
+def _ck_class_token_re(token):
+    return re.compile(_ck_class_token_pattern(token))
+
+
+def _ck_class_token_text_re(token):
+    """Capture le texte interne d'un élément dont la ``class`` contient ``token``."""
+    return re.compile(_ck_class_token_pattern(token) + r'[^>]*>([^<]+)')
+
+
 _CARD_IMAGE_RE = re.compile(
     r"background-image:\s*url\(\s*['\"]?/web/image/product\.(?:template|product)/\d+/",
     re.IGNORECASE,
 )
-_CARD_PRICE_RE = re.compile(r'class="price"')
-_CARD_LINK_RE = re.compile(r'class="card-cta(?:\s|")')
-_CARD_COVER_RE = re.compile(r'ck-product-card__cover')
+_CARD_PRICE_RE = _ck_class_token_re('ck-product-card__price-value')
+_CARD_LINK_RE = _ck_class_token_re('card-cta')
+_CARD_COVER_RE = _ck_class_token_re('ck-product-card__cover')
+_CARD_CART_CTA_RE = _ck_class_token_re('card-cart-cta')
 _CARD_CTA_TEXT_RE = re.compile(re.escape(FEATURED_CARD_CTA))
 _FEATURED_LABELS_BLOCK_RE = re.compile(
-    r'<p class="product-card-labels">[^<]+</p>',
+    r'<p ' + _ck_class_token_pattern('ck-product-card__meta') + r'[^>]*>[^<]+</p>',
 )
+_CARD_TITLE_TEXT_RE = _ck_class_token_text_re('ck-product-card__title')
+_CARD_PRICE_TEXT_RE = _ck_class_token_text_re('ck-product-card__price-value')
+_CARD_META_TEXT_RE = _ck_class_token_text_re('ck-product-card__meta')
 
 FEATURED_TITLE_SECTION = ''  # rétro-compat tests import — section unique désormais
 
@@ -453,7 +476,7 @@ def _featured_arch_missing_cart_cta(env, website, arch, variants):
     for variant in variants:
         if not _featured_variant_allows_quick_add(env, website, variant):
             continue
-        if 'class="card-cart-cta"' not in arch:
+        if not _CARD_CART_CTA_RE.search(arch):
             return True
         product_marker = f'data-product-id="{variant.id}"'
         if product_marker not in arch:
@@ -482,7 +505,7 @@ def _featured_arch_stale_cards(env, website, arch, variants):
         if not chunk:
             continue
         expected_title = escape(_get_featured_display_name(variant))
-        title_match = re.search(r'class="product-card-title"[^>]*>([^<]+)', chunk)
+        title_match = _CARD_TITLE_TEXT_RE.search(chunk)
         if title_match and title_match.group(1) != expected_title:
             return True
         expected_image = _get_featured_image_url(variant)
@@ -490,12 +513,12 @@ def _featured_arch_stale_cards(env, website, arch, variants):
         if image_match and image_match.group(1) != expected_image:
             return True
         expected_price = escape(_get_featured_price_label(env, website, variant))
-        price_match = re.search(r'class="price"[^>]*>([^<]+)', chunk)
+        price_match = _CARD_PRICE_TEXT_RE.search(chunk)
         if price_match and price_match.group(1) != expected_price:
             return True
         expected_labels = escape(_get_featured_card_metadata_line(env, website, variant))
         if expected_labels:
-            labels_match = re.search(r'class="product-card-labels"[^>]*>([^<]+)', chunk)
+            labels_match = _CARD_META_TEXT_RE.search(chunk)
             if labels_match and labels_match.group(1) != expected_labels:
                 return True
     return False
@@ -650,7 +673,10 @@ def _get_featured_badge_html(variant):
         style_attr = f' style="{"; ".join(styles)}"' if styles else ''
     else:
         style_attr = ''
-    return f'<span class="badge {css_class} badge-float"{style_attr}>{label}</span>'
+    return (
+        f'<span class="ck-product-card__badge badge {css_class} badge-float"'
+        f'{style_attr}>{label}</span>'
+    )
 
 
 def build_featured_product_card_html(env, website, variant):
@@ -666,32 +692,37 @@ def build_featured_product_card_html(env, website, variant):
     card_aria = escape(f'{FEATURED_CARD_CTA} : {display_name}')
 
     labels_block = (
-        f'<p class="product-card-labels">{metadata_line}</p>'
+        f'<p class="ck-product-card__meta product-card-labels">{metadata_line}</p>'
         if metadata_line else ''
     )
     if _featured_variant_allows_quick_add(env, website, variant):
-        actions_html = f"""<div class="product-card-actions">
+        actions_html = f"""<div class="ck-product-card__actions product-card-actions">
             <button type="button" class="card-cart-cta" data-product-id="{variant.id}" data-product-template-id="{template.id}">{FEATURED_CARD_CART_CTA}</button>
             <a href="{href}" class="card-cta card-cta--secondary">{FEATURED_CARD_CTA}</a>
         </div>"""
     else:
-        actions_html = f"""<div class="product-card-actions product-card-actions--view-only">
+        actions_html = f"""<div class="ck-product-card__actions product-card-actions product-card-actions--view-only">
             <a href="{href}" class="card-cta">{FEATURED_CARD_CTA}</a>
         </div>"""
 
+    overlays_html = (
+        f'<div class="ck-product-card__overlays">{badge_html}</div>'
+        if badge_html else ''
+    )
+
     return f"""
-<article class="{FEATURED_CARD_MARKER} product-card ck-product-card--interactive">
+<article class="{FEATURED_CARD_MARKER} ck-product-card--home product-card ck-product-card--interactive">
     <a href="{href}" class="ck-product-card__cover" aria-label="{card_aria}"></a>
-    <div class="product-card-media ck-product-card__media" style="background-image:url('{image_url}')">
-        {badge_html}
+    <div class="ck-product-card__image product-card-media ck-product-card__media" style="background-image:url('{image_url}')">
+        {overlays_html}
     </div>
-    <div class="product-card-body">
-        <h3 class="product-card-title">{card_title}</h3>
+    <div class="ck-product-card__body product-card-body">
+        <h3 class="ck-product-card__title product-card-title">{card_title}</h3>
         {labels_block}
     </div>
-    <div class="product-card-foot">
-        <div class="product-card-pricing">
-            <span class="price">{price_label}</span>
+    <div class="ck-product-card__foot product-card-foot">
+        <div class="ck-product-card__price product-card-pricing">
+            <span class="ck-product-card__price-value price">{price_label}</span>
         </div>
         {actions_html}
     </div>
@@ -899,13 +930,26 @@ def _bootstrap_home_featured_products_lang(env, website, page):
     stale_labels = _featured_arch_missing_product_labels(env, arch, variants)
     stale_cart_cta = _featured_arch_missing_cart_cta(env, website, arch, variants)
     stale_cards = _featured_arch_stale_cards(env, website, arch, variants)
-    if not patched and not stale_labels and not stale_cart_cta and not stale_cards:
+    stale_structure = (
+        FEATURED_SECTION_MARKER in arch
+        and featured_arch
+        and 'ck-product-card--home' not in arch
+    )
+    section_missing = FEATURED_SECTION_MARKER not in arch and bool(featured_arch)
+    if (
+        not patched
+        and not stale_labels
+        and not stale_cart_cta
+        and not stale_cards
+        and not stale_structure
+        and not section_missing
+    ):
         return False
     if not featured_arch:
         if patched and new_arch != arch:
             view.write({'arch_db': new_arch})
         return patched
-    if new_arch == arch and not stale_labels and not stale_cart_cta and not stale_cards:
+    if new_arch == arch and not stale_labels and not stale_cart_cta and not stale_cards and not stale_structure and not section_missing:
         return patched
 
     view.write({'arch_db': new_arch})

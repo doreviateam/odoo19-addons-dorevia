@@ -81,7 +81,7 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         self.assertGreaterEqual(len(_CARD_MEDIA_RE.findall(grid_chunk)), expected)
         self.assertGreaterEqual(grid_chunk.count('card-cta--secondary'), expected)
         self.assertGreaterEqual(grid_chunk.count('class="card-cart-cta"'), expected)
-        self.assertGreaterEqual(grid_chunk.count('class="price"'), expected)
+        self.assertGreaterEqual(grid_chunk.count('ck-product-card__price-value'), expected)
         self.assertNotIn('o_carousel_product_card', grid_chunk)
 
     def test_home_featured_card_shows_product_tags_line(self):
