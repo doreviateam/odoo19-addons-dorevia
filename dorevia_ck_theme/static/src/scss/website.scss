@@ -56,8 +56,11 @@
 
 // V1 Hero home — grille maquette 1.2fr / 0.8fr · rythme éditorial
 .ck-hero.ck-hero--marketone-v1 {
-    background-color: $ck-surface;
-    border-bottom: 1px solid $ck-border;
+    // Harmonisé avec le fond crème global de la home ($ck-bg) : supprime la
+    // bande blanche froide / la rupture visuelle avec la trust-bar et les
+    // vedettes (qui héritent du body.ck-theme). La séparation visuelle est
+    // déjà assurée par le border-top de la trust-bar → pas de border-bottom ici.
+    background-color: $ck-bg;
     padding: 28px 0 24px;
 
     @media (max-width: 767.98px) {

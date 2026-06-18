@@ -4,15 +4,24 @@
     position: sticky;
     top: 0;
     z-index: 1030;
-    background-color: rgba($ck-surface, 0.94);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: $ck-surface;
     border-bottom: 1px solid $ck-border;
     box-shadow: none;
     transform: none !important;
     opacity: 1 !important;
     visibility: visible !important;
     font-family: "DM Sans", $ck-font-ui;
+
+    // Odoo website.scss force « background-color: transparent !important » sur
+    // header.o_header_is_scrolled / .o_header_affixed au scroll — d'où le
+    // contenu (trust-bar, vedettes) visible à travers le menu. On rétablit un
+    // fond opaque et une ombre légère pour distinguer le menu du reste.
+    &.o_header_affixed,
+    &.o_header_is_scrolled,
+    &.o_transitioning.o_header_affixed {
+        background-color: $ck-surface !important;
+        box-shadow: $ck-shadow-card;
+    }
 
     .navbar,
     .o_main_nav {
@@ -64,7 +73,7 @@
     @media (min-width: 992px) {
         .navbar.d-none.d-lg-block {
             box-shadow: none !important;
-            background: transparent !important;
+            background-color: $ck-surface !important;
         }
 
         #o_main_nav.container-fluid {
@@ -216,7 +225,7 @@
     .ck-theme header#top.ck-header {
         .o_header_mobile.d-block.d-lg-none {
             box-shadow: none !important;
-            background: transparent !important;
+            background-color: $ck-surface !important;
         }
 
         .o_main_nav.container {

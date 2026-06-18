@@ -30,6 +30,12 @@
                     transform: none !important;
                     opacity: 1 !important;
                     visibility: visible !important;
+                    background-color: #ffffff !important;
+                }
+                header#top.ck-header.o_header_affixed,
+                header#top.ck-header.o_header_is_scrolled,
+                header#top.ck-header.o_transitioning.o_header_affixed {
+                    background-color: #ffffff !important;
                 }
             </style>
         </xpath>
