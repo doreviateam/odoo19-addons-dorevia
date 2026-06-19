@@ -60,6 +60,12 @@ class TestCkPhase10HeaderCompose(HttpCase):
         html = self.url_open('/?qa_ts=phase10').text
         self.assertNotRegex(html, r'>\s*Producteurs\s*</a>')
 
+    def test_hero_carousel_pause_button_rendered(self):
+        """Garde-fou WCAG 2.2.2 : le bouton pause accessible est bien rendu en page."""
+        html = self.url_open('/?qa_ts=phase10').text
+        self.assertIn('ck-hero__visual-pause', html)
+        self.assertIn('aria-pressed="false"', html)
+
     def test_routes_non_regression_markers(self):
         markers = {
             '/': 'ck-featured-products__grid--stable',

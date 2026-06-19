@@ -16,8 +16,10 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     bootstrap_home_featured_products,
 )
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
+    ensure_test_product_image,
+    ensure_test_variant_images,
 )
 
 
@@ -30,7 +32,7 @@ class TestCkFeaturedPropagation(TransactionCase):
             'website_published': True,
             'sale_ok': True,
             'list_price': 4.0,
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         }
         base.update(vals)
         return self.env['product.template'].sudo().create(base)
@@ -111,7 +113,7 @@ class TestCkFeaturedPropagation(TransactionCase):
             'website_published': True,
             'sale_ok': True,
             'list_price': 3.0,
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
             'attribute_line_ids': [(0, 0, {
                 'attribute_id': attribute.id,
                 'value_ids': [(6, 0, [value_a.id, value_b.id])],
@@ -155,7 +157,7 @@ class TestCkFeaturedPropagation(TransactionCase):
         self.assertIn(f'/web/image/product.template/{template.id}/image_512', chunk)
         self.assertNotIn(f'/web/image/product.product/{variant.id}/image_512', chunk)
 
-        variant.write({'image_variant_1920': _TINY_PNG})
+        variant.write({'image_variant_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
         arch = self._home_arch()
         chunk = _featured_card_arch_chunk(arch, variant)
         self.assertIn(f'/web/image/product.product/{variant.id}/image_512', chunk)
@@ -336,7 +338,7 @@ class TestCkFeaturedPropagation(TransactionCase):
         variant = template.product_variant_ids[0]
         bootstrap_home_featured_products(self.env)
 
-        variant.write({'image_variant_1920': _TINY_PNG})
+        variant.write({'image_variant_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
         chunk = _featured_card_arch_chunk(self._home_arch(), variant)
         self.assertIn(f'/web/image/product.product/{variant.id}/image_512', chunk)
 

@@ -117,6 +117,9 @@ def dual_engage_home_arch_is_valid(arch, env):
         f'data-list-id="{mailing_list.id}"' in chunk,
         NEWSLETTER_RGPD_NOTE.split('Désinscription')[0].strip()[:20] in chunk,
         'col-lg-6' in chunk,
+        "S'inscrire" in chunk,
+        'Votre adresse e-mail' in chunk,
+        'pt48 pb48' in chunk,
     ]
     if not all(checks):
         return False

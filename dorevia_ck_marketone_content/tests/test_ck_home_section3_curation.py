@@ -24,8 +24,8 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     get_curated_featured_variants,
 )
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
 )
 
 
@@ -38,7 +38,7 @@ class TestCkHomeSection3Curation(TransactionCase):
             'website_published': True,
             'sale_ok': True,
             'list_price': 1.0,
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         }
         base.update(vals)
         return self.env['product.template'].sudo().create(base)
@@ -361,7 +361,7 @@ class TestCkHomeSection3Curation(TransactionCase):
             'website_published': True,
             'sale_ok': True,
             'list_price': 3.5,
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
             'attribute_line_ids': [(0, 0, {
                 'attribute_id': attr.id,
                 'value_ids': [(6, 0, [val_a.id, val_b.id])],
@@ -376,8 +376,8 @@ class TestCkHomeSection3Curation(TransactionCase):
         self.assertTrue(sale and sweet)
         sale_ptav = sale.product_template_attribute_value_ids[:1]
         sale_ptav.write({'price_extra': 0.1})
-        sale.write({'image_1920': _TINY_PNG})
-        sweet.write({'image_1920': _TINY_PNG})
+        sale.write({'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
+        sweet.write({'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
         self.assertAlmostEqual(sale.lst_price, 3.6)
         self.assertAlmostEqual(sweet.lst_price, 3.5)
         website = self.env['website'].search([], limit=1)

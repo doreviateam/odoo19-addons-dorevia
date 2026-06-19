@@ -18,6 +18,7 @@ FEATURED_REFRESH_FIELDS = {
     'image_1920',
     'image_512',
     'product_tag_ids',
+    'attribute_line_ids',
     'ck_net_quantity',
     'ck_net_quantity_uom_id',
     'ck_reference_price_uom_id',
@@ -50,6 +51,41 @@ class ProductTemplate(models.Model):
         default=True,
         help='Calcule et affiche le prix de référence sur la card home lorsque la quantité nette est renseignée.',
     )
+
+    def get_ck_shop_card_metadata_line(self, variant=None):
+        """Ligne secondaire card boutique — même logique que les vedettes home."""
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _get_featured_card_metadata_line,
+        )
+
+        self.ensure_one()
+        variant = (variant or self.product_variant_id).sudo()
+        if not variant:
+            return ''
+        website = self.env['website'].get_current_website()
+        if not website:
+            return ''
+        return _get_featured_card_metadata_line(self.env, website, variant)
+
+    def get_ck_product_page_detail_sections(self):
+        """Sections bas de fiche produit CK (Lot 2) — affichage conditionnel."""
+        from odoo.addons.dorevia_ck_marketone_content.product_page_details import (
+            build_ck_product_page_detail_sections,
+        )
+
+        self.ensure_one()
+        return build_ck_product_page_detail_sections(self)
+
+    def get_ck_product_page_tabs(self, variant=None):
+        """Blocs complémentaires fiche produit — empilement vertical + ancres MOA."""
+        from odoo.addons.dorevia_ck_marketone_content.product_page_tabs import (
+            build_ck_product_page_tabs,
+        )
+
+        self.ensure_one()
+        product = self.sudo()
+        variant = (variant or product.product_variant_id).sudo()
+        return build_ck_product_page_tabs(product, variant)
 
     def _ck_refresh_home_featured_products(self):
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (

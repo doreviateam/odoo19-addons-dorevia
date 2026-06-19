@@ -1,46 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!--
+    Onglet Ventes CK — réorganisation BO (7 blocs métier, 2 colonnes par ligne).
+    Hérite website_sale.product_template_form_view · champs inchangés · pas de front.
+    Voir docs/design/NOTE_BO_PRODUIT_ONGLET_VENTES_CK_V1.md (audit Phase 0).
+    -->
     <record id="product_template_form_view_ck_featured_card" model="ir.ui.view">
-        <field name="name">product.template.form.ck.ecommerce.bo</field>
+        <field name="name">product.template.form.ck.sales.tab</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="website_sale.product_template_form_view"/>
-        <field name="priority">30</field>
+        <field name="priority">35</field>
         <field name="arch" type="xml">
-            <xpath expr="//group[@name='extra_info']" position="replace">
-                <group name="extra_info" string="Boutique eCommerce" colspan="2">
-                    <group string="Publication" name="ck_ecom_publication">
-                        <field name="is_published"
-                               widget="boolean_toggle"
-                               string="Est publié"/>
-                        <field name="website_id"
-                               options="{'no_create': True}"
-                               groups="website.group_multi_website"
-                               placeholder="Tous les sites"/>
+            <xpath expr="//page[@name='sales']" position="replace">
+                <page string="Ventes" name="sales" invisible="not sale_ok">
+                    <group>
+                        <group name="ck_publication_highlight" string="Publication &amp; mise en avant">
+                            <field name="is_published"
+                                   widget="boolean_toggle"
+                                   string="Est publié"/>
+                            <field name="website_ribbon_id"
+                                   string="Ruban"
+                                   options="{'no_quick_create': True}"/>
+                            <field name="website_sequence"
+                                   string="Séquence du site web"
+                                   groups="base.group_no_one"/>
+                            <field name="website_id"
+                                   options="{'no_create': True}"
+                                   groups="website.group_multi_website"
+                                   placeholder="Tous les sites"/>
+                        </group>
+                        <group name="ck_shop_classification" string="Classement boutique">
+                            <field name="public_categ_ids"
+                                   widget="many2many_tags"
+                                   string="Catégories"/>
+                            <field name="product_tag_ids"
+                                   widget="many2many_tags"
+                                   string="Étiquettes produit"
+                                   context="{'product_template_id': id}"
+                                   placeholder="Guadeloupe, Épicerie…"
+                                   help="Affichées sous le nom du produit sur la card home (ex. Guadeloupe · Épicerie)."/>
+                        </group>
                     </group>
-                    <group string="Classement boutique" name="ck_ecom_catalog">
-                        <field name="public_categ_ids"
-                               widget="many2many_tags"
-                               string="Catégories"/>
-                        <field name="website_ribbon_id"
-                               string="Ruban"
-                               options="{'no_quick_create': True}"/>
-                        <field name="product_tag_ids"
-                               widget="many2many_tags"
-                               string="Étiquettes produit"
-                               context="{'product_template_id': id}"
-                               placeholder="Guadeloupe, Épicerie…"
-                               help="Affichées sous le nom du produit sur la card home (ex. Guadeloupe · Épicerie)."/>
-                        <field name="website_sequence" groups="base.group_no_one"/>
+
+                    <group>
+                        <group name="ck_card_reference_price" string="Affichage card &amp; prix de référence">
+                            <field name="ck_net_quantity" placeholder="ex. 320"/>
+                            <field name="ck_net_quantity_uom_id"
+                                   string="Unité de quantité nette"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="ck_show_reference_price"
+                                   string="Afficher le prix au kg / litre"/>
+                            <field name="ck_reference_price_uom_id"
+                                   string="Unité du prix de référence"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group name="ck_ecommerce_description" string="Accroche e-commerce">
+                            <div class="text-muted mb-2" colspan="2">
+                                Phrase courte affichée en tête de fiche produit sur le site.
+                                Distinct de la description longue et des notes commerciales.
+                            </div>
+                            <field name="description_ecommerce"
+                                   nolabel="1"
+                                   colspan="2"
+                                   placeholder="Ex. Confiture artisanale de goyave · 320 g · Guadeloupe"/>
+                        </group>
                     </group>
-                    <group string="Quantité commerciale" name="ck_featured_card_quantity">
-                        <field name="ck_net_quantity" placeholder="ex. 320"/>
-                        <field name="ck_net_quantity_uom_id"
-                               options="{'no_create': True, 'no_open': True}"/>
-                        <field name="ck_show_reference_price"/>
-                        <field name="ck_reference_price_uom_id"
-                               options="{'no_create': True, 'no_open': True}"/>
+
+                    <group>
+                        <group name="ck_ecommerce_media" string="Galerie e-commerce">
+                            <div class="text-muted mb-2" colspan="2">
+                                Visuels complémentaires publiés sur la boutique en ligne.
+                                Ne remplace pas l'image principale ni les photos de variantes.
+                            </div>
+                            <field name="product_template_image_ids"
+                                   class="o_website_sale_image_list"
+                                   context="{'default_name': name}"
+                                   mode="kanban"
+                                   add-label="Ajouter un média"
+                                   nolabel="1"
+                                   colspan="2"
+                                   widget="x2_many_media_viewer"
+                                   options="{'convert_to_webp': True}"/>
+                        </group>
+                        <group name="ck_product_recommendations" string="Recommandations produit">
+                            <group name="upsell" invisible="0">
+                                <field name="uom_ids"
+                                       string="Conditionnements"
+                                       widget="many2many_uom_tags"
+                                       options="{'no_quick_create': True, 'edit_tags': True}"
+                                       groups="uom.group_uom"
+                                       force_save="1"
+                                       help="Unités de vente additionnelles autorisées sur devis et commandes. À terme : bloc logistique / conditionnement dédié."
+                                       context="{'product_id': product_variant_id if product_variant_count == 1 else False, 'product_ids': product_variant_ids, 'show_variant_name': product_variant_count > 1}"/>
+                                <field name="optional_product_ids"
+                                       string="Produits optionnels"
+                                       widget="many2many_tags"
+                                       options="{'color_field': 'color'}"
+                                       domain="[('id', '!=', id), '|', ('company_id', '=', company_id), ('company_id', '=', False)]"
+                                       context="{'search_product_product': True}"
+                                       placeholder="Recommandé à l'ajout au panier ou sur devis"/>
+                                <field name="accessory_product_ids"
+                                       string="Produits accessoires"
+                                       widget="many2many_tags"
+                                       domain="[('sale_ok', '=', True)]"
+                                       placeholder="Accessoires suggérés dans le panier"/>
+                                <field name="alternative_product_ids"
+                                       string="Produits alternatifs"
+                                       widget="many2many_tags"
+                                       domain="[('id', '!=', id), '|', ('company_id', '=', company_id), ('company_id', '=', False)]"
+                                       context="{'search_product_product': True}"
+                                       placeholder="Affichés en bas de fiche produit"/>
+                                <field name="description_ecommerce" invisible="1"/>
+                            </group>
+                        </group>
                     </group>
-                </group>
+
+                    <group>
+                        <group name="ck_commercial_documents" string="Notes commerciales">
+                            <div class="text-muted mb-2" colspan="2">
+                                Texte repris sur les commandes, devis et factures Odoo.
+                                Distinct de l'accroche affichée sur le site e-commerce.
+                            </div>
+                            <group name="description">
+                                <field name="description_sale"
+                                       string="Note commandes et factures"
+                                       nolabel="1"
+                                       colspan="2"
+                                       placeholder="Note ajoutée aux commandes et factures."/>
+                            </group>
+                        </group>
+                    </group>
+
+                    <group name="extra_info" invisible="1" colspan="2"/>
+
+                    <group>
+                        <t groups="sales_team.group_sale_salesman">
+                            <group string="Alerte sur les commandes clients"
+                                   groups="sale.group_warning_sale">
+                                <field name="sale_line_warn_msg"
+                                       nolabel="1"
+                                       colspan="2"
+                                       placeholder="ex. Ce produit est défectueux."/>
+                            </group>
+                        </t>
+                        <group name="expense_info"
+                               string="Dépenses"
+                               invisible="not visible_expense_policy">
+                            <field name="expense_policy" widget="radio"/>
+                        </group>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

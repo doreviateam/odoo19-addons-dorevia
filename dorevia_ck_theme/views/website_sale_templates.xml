@@ -8,12 +8,6 @@
         </xpath>
     </template>
 
-    <template id="product_ck_theme" inherit_id="website_sale.product" name="CK Product page">
-        <xpath expr="//div[@id='wrap']" position="attributes">
-            <attribute name="class" add="ck-product-page" separator=" "/>
-        </xpath>
-        <xpath expr="//div[@id='product_details']" position="before">
-            <div class="ck-product-chips o_editable"/>
-        </xpath>
-    </template>
+    <!-- "ck-product-page" sur #wrap : voir product_ck_layout dans
+         website_sale_product_page.xml — ne pas dupliquer ici. -->
 </odoo>

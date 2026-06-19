@@ -1,0 +1,383 @@
+// Socle commun card produit CK — Home (vedettes) + Boutique (/shop)
+// Chargé avant website.scss et website_sale.scss (pas de @import partiel).
+
+@mixin ck-product-card-core {
+    background: $ck-surface;
+    border: 1px solid $ck-border;
+    border-radius: $ck-radius-lg;
+    overflow: hidden;
+    box-shadow: $ck-shadow-card;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        box-shadow: $ck-shadow-card-hover;
+        transform: translateY(-3px);
+    }
+}
+
+@mixin ck-product-card-body {
+    position: relative;
+    z-index: 0;
+    padding: 12px 14px;
+    flex: 1;
+}
+
+@mixin ck-product-card-meta {
+    margin: 4px 0 0;
+    font-size: 11px;
+    color: $ck-text-muted;
+    line-height: 1.35;
+}
+
+@mixin ck-product-card-foot {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px 14px 12px;
+    border-top: 1px solid $ck-border;
+}
+
+@mixin ck-product-card-price-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+
+    .ck-product-card__price-value,
+    .price,
+    .product_price .mb-0 {
+        font-size: $ck-text-base;
+        font-weight: $ck-font-weight-price;
+        color: $ck-price;
+    }
+}
+
+@mixin ck-product-card-actions-block {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+}
+
+@mixin ck-product-card-cta-cart {
+    padding: 8px 14px;
+    border-radius: $ck-radius-md;
+    font-size: 12px;
+    font-weight: $ck-font-weight-semibold;
+    color: $ck-surface !important;
+    border: 1px solid $ck-primary !important;
+    background: $ck-primary !important;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+    &:hover:not(:disabled),
+    &:focus:not(:disabled) {
+        background: $ck-primary-hover !important;
+        border-color: $ck-primary-hover !important;
+        color: $ck-surface !important;
+    }
+
+    &:disabled {
+        opacity: 0.65;
+        cursor: wait;
+    }
+}
+
+@mixin ck-product-card-cta-view {
+    align-self: flex-start;
+    padding: 6px 12px;
+    border-radius: $ck-radius-md;
+    font-size: 12px;
+    font-weight: $ck-font-weight-semibold;
+    color: $ck-primary-text;
+    border: 1px solid $ck-primary;
+    background: $ck-surface;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+        background: $ck-primary;
+        color: $ck-surface;
+    }
+}
+
+@mixin ck-product-card-cta-view-secondary {
+    align-self: center;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $ck-text-muted;
+    font-weight: $ck-font-weight-ui;
+    text-decoration: underline;
+    white-space: normal;
+
+    &:hover {
+        background: transparent;
+        color: $ck-primary;
+    }
+}
+
+@mixin ck-product-card-foot-desktop {
+    @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+
+        .ck-product-card__price,
+        .product-card-pricing,
+        .product_price {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ck-product-card__actions,
+        .product-card-actions,
+        .o_wsale_product_btn {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+            width: auto;
+
+            .o_wsale_product_action_row {
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 10px;
+                width: auto;
+
+                .btn {
+                    width: auto;
+                }
+            }
+        }
+
+        .card-cart-cta,
+        .o_wsale_product_btn_primary.card-cart-cta {
+            width: auto;
+            flex: 0 0 auto;
+        }
+
+        .card-cta--secondary {
+            align-self: auto;
+            padding: 6px 12px;
+            border: 1px solid $ck-primary;
+            background: $ck-surface;
+            color: $ck-primary-text;
+            font-weight: $ck-font-weight-semibold;
+            text-decoration: none;
+            white-space: nowrap;
+
+            &:hover {
+                background: $ck-primary;
+                color: $ck-surface;
+            }
+        }
+    }
+}
+
+@mixin ck-product-card-badge-new-style {
+    background: $ck-badge-new !important;
+    background-color: $ck-badge-new !important;
+    color: #1a1a1a !important;
+    border: none !important;
+}
+
+@mixin ck-product-card-badge-heart-style {
+    background: $ck-primary !important;
+    background-color: $ck-primary !important;
+    color: $ck-surface !important;
+    border: none !important;
+}
+
+@mixin ck-product-card-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: auto;
+    bottom: auto;
+    z-index: 2;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: $ck-radius-sm;
+    transform: none !important;
+    width: auto !important;
+    line-height: 1.2;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+@mixin ck-product-card-favorite {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 4;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba($ck-border, 0.85) !important;
+    background: rgba($ck-surface, 0.94) !important;
+    color: $ck-text-muted !important;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    pointer-events: auto;
+
+    .o_label {
+        display: none !important;
+    }
+
+    .fa {
+        font-size: 15px;
+        margin: 0 !important;
+    }
+
+    &.o_in_wishlist,
+    &:hover {
+        color: $ck-primary !important;
+        border-color: rgba($ck-primary, 0.35) !important;
+    }
+}
+
+// ——— Socle HTML commun (BEM + alias legacy product-card-*) ———
+
+.ck-product-card {
+    @include ck-product-card-core;
+
+    &--interactive {
+        position: relative;
+    }
+
+    &__cover {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        border-radius: inherit;
+        text-decoration: none;
+    }
+
+    &__image,
+    &__media,
+    .product-card-media {
+        display: block;
+        aspect-ratio: 1 / 1;
+        background: $ck-image-zone center / cover no-repeat;
+        position: relative;
+        z-index: 0;
+        overflow: hidden;
+        transition: transform 0.35s ease;
+        transform-origin: center center;
+        text-decoration: none;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    &:hover &__image,
+    &:hover &__media,
+    &:hover .product-card-media {
+        transform: scale(1.03);
+    }
+
+    &__overlays {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+    }
+
+    &__badge,
+    .badge-float {
+        @include ck-product-card-badge;
+        pointer-events: none;
+    }
+
+    &__badge.badge-new,
+    .badge-new {
+        @include ck-product-card-badge-new-style;
+    }
+
+    &__badge.badge-heart,
+    .badge-heart {
+        @include ck-product-card-badge-heart-style;
+    }
+
+    &__body,
+    .product-card-body {
+        @include ck-product-card-body;
+    }
+
+    &__title,
+    .product-card-title,
+    h3.product-card-title {
+        font-size: 14px;
+        font-weight: $ck-font-weight-semibold;
+        margin: 0;
+        line-height: 1.3;
+        color: inherit;
+    }
+
+    &--interactive:hover &__title,
+    &--interactive:hover .product-card-title {
+        color: $ck-primary;
+    }
+
+    &__meta,
+    .product-card-labels {
+        @include ck-product-card-meta;
+    }
+
+    &__foot,
+    .product-card-foot {
+        @include ck-product-card-foot;
+    }
+
+    &__price,
+    .product-card-pricing {
+        @include ck-product-card-price-block;
+    }
+
+    &__actions,
+    .product-card-actions {
+        @include ck-product-card-actions-block;
+    }
+
+    .card-cart-cta {
+        @include ck-product-card-cta-cart;
+    }
+
+    .card-cta {
+        @include ck-product-card-cta-view;
+    }
+
+    .card-cta--secondary {
+        @include ck-product-card-cta-view-secondary;
+    }
+
+    // Home — double CTA, pied desktop en ligne
+    &--home {
+        .ck-product-card__foot,
+        .product-card-foot {
+            @include ck-product-card-foot-desktop;
+        }
+    }
+}

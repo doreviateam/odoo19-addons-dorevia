@@ -27,8 +27,9 @@ from odoo.addons.dorevia_ck_marketone_content.home_reassurance import (
 )
 from odoo.addons.dorevia_ck_marketone_content.hooks import bootstrap_home_featured_products
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
+    ensure_test_variant_images,
 )
 
 _CARD_MEDIA_RE = re.compile(
@@ -50,9 +51,7 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         if len(variants) < cls.expected_featured_cards:
             raise unittest.SkipTest('Catalogue insuffisant pour Section 3 vedettes.')
         for variant in variants:
-            variant.write({'image_1920': _TINY_PNG})
-            if variant.product_tmpl_id:
-                variant.product_tmpl_id.write({'image_1920': _TINY_PNG})
+            ensure_test_variant_images(variant)
         bootstrap_home_hero(cls.env)
         bootstrap_home_reassurance(cls.env)
         bootstrap_home_featured_products(cls.env)
@@ -132,7 +131,7 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
             'sale_ok': True,
             'public_categ_ids': [(4, category.id)],
             'product_tag_ids': [(6, 0, [guadeloupe.id, epicerie.id])],
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         })
         bootstrap_home_featured_products(self.env)
         page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)

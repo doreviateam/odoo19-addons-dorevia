@@ -124,7 +124,7 @@ def build_home_univers_arch(env):
     title = escape(UNIVERS_TITLE)
     intro = escape(UNIVERS_INTRO)
     return f"""
-<section class="s_ck_univers_cards {UNIVERS_SECTION_MARKER} pt40 pb48" data-name="{UNIVERS_DATA_NAME}">
+<section class="s_ck_univers_cards {UNIVERS_SECTION_MARKER} pt48 pb48" data-name="{UNIVERS_DATA_NAME}">
     <div class="container">
         <div class="ck-univers-cards__head mb-4">
             <h2 id="univers-title" class="ck-univers-cards__title h3 mb-2 o_editable">{title}</h2>
@@ -260,6 +260,11 @@ def _univers_arch_matches_bo(env, arch):
         return False
     if 'ck-univers-cards__head text-center' in arch:
         return False
+    chunk_start = arch.find(UNIVERS_SECTION_MARKER)
+    if chunk_start >= 0:
+        chunk = arch[chunk_start:chunk_start + 12000]
+        if 'pt48 pb48' not in chunk:
+            return False
     return all(card['href'] in arch for card in _resolve_univers_cards(env))
 
 

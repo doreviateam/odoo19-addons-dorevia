@@ -23,8 +23,8 @@ from odoo.addons.dorevia_ck_marketone_content.tests.ck_home_section3_pricelist_u
     set_variant_fixed_price,
 )
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
 )
 _PRICE_RE = re.compile(r'class="price">([^<]+)')
 
@@ -70,7 +70,7 @@ class TestCkHomeSection3FeaturedPricelist(TransactionCase):
             'website_published': True,
             'sale_ok': True,
             'list_price': 3.5,
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
             'attribute_line_ids': [(0, 0, {
                 'attribute_id': attr.id,
                 'value_ids': [(6, 0, [val_a.id, val_b.id])],
@@ -113,7 +113,7 @@ class TestCkHomeSection3FeaturedPricelist(TransactionCase):
             'website_published': True,
             'sale_ok': True,
             'list_price': 5.8,
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         })
         variant = product.product_variant_id
         set_variant_fixed_price(self.env, self.pricelist, variant, 6.5)

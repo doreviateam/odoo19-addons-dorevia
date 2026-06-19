@@ -46,6 +46,9 @@ PRODUCT_WEBSITE_DESCRIPTIONS = {
         '<p>Confiture artisanale créole — goyave sélectionnée par CK. '
         'Texture fondante, notes florales et légèrement acidulées.</p>'
         '<p><strong>Usage :</strong> tartines, yaourts, pâtisseries, accords fromages frais.</p>'
+        '<h3 class="h5 mt-3">Ingrédients &amp; allergènes</h3>'
+        '<p>Goyave, sucre, pectine, acidifiant (acide citrique). '
+        'Peut contenir des traces de fruits à coque.</p>'
         '<h3 class="h5 mt-3">Conservation</h3>'
         '<p>Avant ouverture : conserver au sec, à l’abri de la lumière. '
         'Après ouverture : réfrigérer et consommer sous 3 semaines.</p>'
@@ -196,15 +199,15 @@ PROFESSIONNELS_PAGE_ARCH = """
                     <input type="hidden" class="form-control s_website_form_input" name="name" value="Demande professionnelle CK"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                    <label class="s_website_form_label" for="ck_pro_partner"><span class="s_website_form_label_content">Société / structure</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_pro_partner"><span class="s_website_form_label_content">Société / structure</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_pro_partner" type="text" class="form-control s_website_form_input" name="partner_name" required="" placeholder="Nom de votre structure"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                    <label class="s_website_form_label" for="ck_pro_contact"><span class="s_website_form_label_content">Nom du contact</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_pro_contact"><span class="s_website_form_label_content">Nom du contact</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_pro_contact" type="text" class="form-control s_website_form_input" name="contact_name" required="" placeholder="Prénom Nom"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
-                    <label class="s_website_form_label" for="ck_pro_email"><span class="s_website_form_label_content">E-mail</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_pro_email"><span class="s_website_form_label_content">E-mail</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" placeholder="contact@entreprise.com"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom" data-type="char" data-name="Field">
@@ -212,15 +215,20 @@ PROFESSIONNELS_PAGE_ARCH = """
                     <input id="ck_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" placeholder="01 23 45 67 89"/>
                 </div>
                 <div class="mb-0 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="text" data-name="Field">
-                    <label class="s_website_form_label" for="ck_pro_description"><span class="s_website_form_label_content">Nature de la demande professionnelle</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_pro_description"><span class="s_website_form_label_content">Nature de la demande professionnelle</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <textarea id="ck_pro_description" class="form-control s_website_form_input" name="description" required="" rows="5" placeholder="Ex. : producteur · fournisseur · distributeur · boutique / CHR — décrivez votre projet et votre zone d'activité."></textarea>
                 </div>
                 <div class="mb-0 col-12 s_website_form_submit" data-name="Submit Button">
                     <div style="width: 200px;" class="s_website_form_label"/>
-                    <a href="#" role="button" class="btn btn-primary s_website_form_send">Envoyer la demande</a>
+                    <button type="button" class="btn btn-primary s_website_form_send">Envoyer la demande</button>
                 </div>
             </div>
         </form>
+    </div>
+</section>
+<section class="s_text_block pt0 pb32 o_colored_level" data-snippet="s_text_block" data-name="Réassurance Pro">
+    <div class="container s_allow_columns">
+        <p class="mb-0"><strong>Données :</strong> vos coordonnées servent uniquement à traiter votre demande professionnelle — <a href="/privacy">en savoir plus sur la gestion de vos données</a>.</p>
     </div>
 </section>
 """.strip()
@@ -233,7 +241,8 @@ NEWSLETTER_LEAD = (
 )
 NEWSLETTER_RGPD_NOTE = (
     'En vous inscrivant, vous acceptez de recevoir nos sélections créoles par e-mail. '
-    'Désinscription possible à tout moment depuis chaque message.'
+    'Désinscription possible à tout moment depuis chaque message — '
+    '<a href="/privacy">politique de confidentialité</a>.'
 )
 PRO_DUAL_TITLE = 'Vous êtes professionnel ?'
 PRO_DUAL_LEAD = (
@@ -255,18 +264,44 @@ def bootstrap_newsletter_mailing_list(env):
     return mailing_list
 
 
+def _localize_newsletter_form_html(form_html):
+    """Libellés FR pour le snippet natif mass_mailing (polish home CK)."""
+    if not form_html:
+        return form_html
+    for placeholder in ('Email Address', 'Your Email', 'Email'):
+        form_html = form_html.replace(
+            f'placeholder="{placeholder}"',
+            'placeholder="Votre adresse e-mail"',
+        )
+    form_html = re.sub(
+        r'>\s*Email Address\s*<',
+        '>Votre adresse e-mail<',
+        form_html,
+        flags=re.I,
+    )
+    form_html = re.sub(
+        r'>\s*Subscribe\s*</',
+        ">S'inscrire</",
+        form_html,
+        flags=re.I,
+    )
+    form_html = form_html.replace('value="Subscribe"', "value=\"S'inscrire\"")
+    return form_html
+
+
 def render_newsletter_subscribe_form(env):
     """Snippet natif website_mass_mailing · list_id BO."""
     mailing_list = bootstrap_newsletter_mailing_list(env)
     form_html = str(
         env['ir.qweb']._render('website_mass_mailing.s_newsletter_subscribe_form', {})
     )
-    return re.sub(
+    form_html = re.sub(
         r'data-list-id="\d+"',
         f'data-list-id="{mailing_list.id}"',
         form_html,
         count=1,
     )
+    return _localize_newsletter_form_html(form_html)
 
 
 def build_dual_engage_compact_arch(env, *, pro_cta_href, pro_cta_label=None):
@@ -274,7 +309,7 @@ def build_dual_engage_compact_arch(env, *, pro_cta_href, pro_cta_label=None):
     newsletter_form = render_newsletter_subscribe_form(env)
     pro_cta_label = pro_cta_label or PRO_DUAL_CTA_DEFAULT
     return f"""
-<section class="s_text_block ck-dual-engage ck-dual-engage--compact pt32 pb64 o_colored_level" data-snippet="s_text_block" data-name="CK Dual Pro Newsletter compact">
+<section class="s_text_block ck-dual-engage ck-dual-engage--compact pt48 pb48 o_colored_level" data-snippet="s_text_block" data-name="CK Dual Pro Newsletter compact">
     <div class="container">
         <div class="row g-4 align-items-stretch">
             <div class="col-lg-6 o_colored_level">
@@ -364,7 +399,7 @@ CONTACTUS_PAGE_ARCH = """
         <form id="contactus_form" action="/website/form/" method="post" enctype="multipart/form-data" class="o_mark_required" data-mark="*" data-model_name="mail.mail" data-success-mode="redirect" data-success-page="/contactus-thank-you" data-pre-fill="true">
             <div class="s_website_form_rows row s_col_no_bgcolor g-3">
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                    <label class="s_website_form_label" for="ck_contact_name"><span class="s_website_form_label_content">Nom</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_contact_name"><span class="s_website_form_label_content">Nom</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_contact_name" type="text" class="form-control s_website_form_input" name="name" required="" data-fill-with="name"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom" data-type="char" data-name="Field">
@@ -372,7 +407,7 @@ CONTACTUS_PAGE_ARCH = """
                     <input id="ck_contact_phone" type="tel" class="form-control s_website_form_input" name="phone" data-fill-with="phone"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
-                    <label class="s_website_form_label" for="ck_contact_email"><span class="s_website_form_label_content">E-mail</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_contact_email"><span class="s_website_form_label_content">E-mail</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_contact_email" type="email" class="form-control s_website_form_input" name="email_from" required="" data-fill-with="email"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom" data-type="char" data-name="Field">
@@ -380,18 +415,18 @@ CONTACTUS_PAGE_ARCH = """
                     <input id="ck_contact_company" type="text" class="form-control s_website_form_input" name="company" data-fill-with="commercial_company_name"/>
                 </div>
                 <div class="mb-0 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="char" data-name="Field">
-                    <label class="s_website_form_label" for="ck_contact_subject"><span class="s_website_form_label_content">Sujet</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_contact_subject"><span class="s_website_form_label_content">Sujet</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_contact_subject" type="text" class="form-control s_website_form_input" name="subject" required=""/>
                 </div>
                 <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
-                    <label class="s_website_form_label" for="ck_contact_message"><span class="s_website_form_label_content">Message</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_contact_message"><span class="s_website_form_label_content">Message</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <textarea id="ck_contact_message" class="form-control s_website_form_input" name="description" required="" rows="6" placeholder="Décrivez votre question produit ou votre demande boutique."></textarea>
                 </div>
                 <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
                     <input type="hidden" class="form-control s_website_form_input" name="email_to"/>
                 </div>
                 <div class="mb-0 col-12 s_website_form_submit" data-name="Submit Button">
-                    <a href="#" role="button" class="btn btn-primary s_website_form_send">Envoyer</a>
+                    <button type="button" class="btn btn-primary s_website_form_send">Envoyer</button>
                 </div>
             </div>
         </form>
@@ -399,7 +434,7 @@ CONTACTUS_PAGE_ARCH = """
 </section>
 <section class="s_text_block pt16 pb64 o_colored_level" data-snippet="s_text_block" data-name="Réassurance contact">
     <div class="container s_allow_columns">
-        <p class="mb-2"><strong>Données :</strong> votre message sert uniquement à répondre à votre demande.</p>
+        <p class="mb-2"><strong>Données :</strong> votre message sert uniquement à répondre à votre demande — <a href="/privacy">en savoir plus sur la gestion de vos données</a>.</p>
         <p class="mb-0"><strong>Professionnels :</strong> producteurs, distributeurs et boutiques — <a href="/professionnels">qualifiez votre demande sur l’espace Pro</a>.</p>
     </div>
 </section>

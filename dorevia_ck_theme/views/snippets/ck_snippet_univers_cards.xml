@@ -5,7 +5,7 @@
          suppose donc le module de contenu installé pour le rendu d'origine ;
          en thème seul, remplacer les visuels via l'éditeur. -->
     <template id="s_ck_univers_cards" name="CK Acheter par univers">
-        <section class="s_ck_univers_cards ck-univers-cards pt40 pb48" data-snippet="s_ck_univers_cards" data-name="CK Acheter par univers">
+        <section class="s_ck_univers_cards ck-univers-cards pt48 pb48" data-snippet="s_ck_univers_cards" data-name="CK Acheter par univers">
             <div class="container">
                 <div class="ck-univers-cards__head mb-4">
                     <h2 id="univers-title" class="ck-univers-cards__title h3 mb-2 o_editable">Acheter par univers</h2>

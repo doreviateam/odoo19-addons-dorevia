@@ -6,7 +6,7 @@
 # migration sont donc normaux (bumps « assets-only »).
 {
     "name": "C-Kreyol Marketone — Thème CK",
-    "version": "19.0.1.31.8",
+    "version": "19.0.1.36.14",
     "category": "Theme/eCommerce",
     "summary": "Thème CK générique — tokens, layout, snippets Website Builder",
     "description": """
@@ -27,6 +27,7 @@
     "depends": [
         "website",
         "website_sale",
+        "website_sale_comparison",
     ],
     "data": [
         "views/snippets/snippet_groups.xml",
@@ -46,14 +47,18 @@
         "views/website_layout.xml",
         "views/website_header.xml",
         "views/website_sale_templates.xml",
+        "views/website_sale_product_card.xml",
+        "views/website_sale_product_page.xml",
         "views/website_sale_shop_compose.xml",
         "views/website_sale_product_compose.xml",
     ],
     "assets": {
-        "web._assets_primary_variables": [
-            "dorevia_ck_theme/static/src/scss/primary_variables.scss",
-        ],
         "web._assets_frontend_helpers": [
+            (
+                "before",
+                "website/static/src/scss/bootstrap_overridden.scss",
+                "dorevia_ck_theme/static/src/scss/ck_tokens.scss",
+            ),
             (
                 "after",
                 "website/static/src/scss/bootstrap_overridden.scss",
@@ -61,10 +66,18 @@
             ),
         ],
         "web.assets_frontend": [
+            (
+                "before",
+                "web/static/lib/bootstrap/scss/_variables.scss",
+                "dorevia_ck_theme/static/src/scss/frontend_bootstrap_variables.scss",
+            ),
             "dorevia_ck_theme/static/src/scss/website_fonts.scss",
+            "dorevia_ck_theme/static/src/scss/product_card.scss",
+            "dorevia_ck_theme/static/src/scss/product_page.scss",
             "dorevia_ck_theme/static/src/scss/website.scss",
             "dorevia_ck_theme/static/src/scss/website_header.scss",
             "dorevia_ck_theme/static/src/scss/website_sale.scss",
+            "dorevia_ck_theme/static/src/js/ck_hero_carousel_pause.js",
         ],
         "website.website_builder_assets": [
             "dorevia_ck_theme/static/src/js/ck_hero_plugin.js",

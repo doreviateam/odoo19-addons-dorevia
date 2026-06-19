@@ -22,8 +22,9 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     get_ready_featured_variants,
 )
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    ensure_test_product_image,
+    ensure_test_variant_images,
 )
 
 
@@ -37,9 +38,9 @@ class TestCkCatalogManiocVariants(TransactionCase):
         ], limit=1)
         if not parent:
             raise unittest.SkipTest('Template Manio Crackers absent.')
-        parent.write({'image_1920': _TINY_PNG})
+        ensure_test_product_image(parent, 'image_1920')
         for variant in parent.product_variant_ids:
-            variant.write({'image_1920': _TINY_PNG})
+            ensure_test_variant_images(variant)
         if not bootstrap_catalog_vedettes_products(cls.env):
             raise unittest.SkipTest('Bootstrap catalogue vedettes MOA impossible.')
 

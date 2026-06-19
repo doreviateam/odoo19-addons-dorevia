@@ -17,9 +17,8 @@ from odoo.addons.dorevia_ck_marketone_content.tests.ck_home_lot2_utils import (
     restore_featured_curation,
 )
 
-# PNG 1×1 valide (tests uniquement).
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
 )
 
 

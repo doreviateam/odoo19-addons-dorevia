@@ -61,10 +61,10 @@
     // vedettes (qui héritent du body.ck-theme). La séparation visuelle est
     // déjà assurée par le border-top de la trust-bar → pas de border-bottom ici.
     background-color: $ck-bg;
-    padding: 28px 0 24px;
+    padding: 32px 0 28px;
 
     @media (max-width: 767.98px) {
-        padding: 20px 0 16px;
+        padding: 24px 0 20px;
     }
 
     > .container {
@@ -205,6 +205,42 @@
         &:not(.ck-hero__visual-carousel--multi) .carousel-indicators {
             display: none;
         }
+    }
+
+    // Pause accessible du défilement auto (WCAG 2.2.2) — bouton natif, focus clavier
+    // et activation tactile gratuits ; voir ck_hero_carousel_pause.js pour l'état.
+    .ck-hero__visual-pause {
+        position: absolute;
+        right: $ck-space-3;
+        bottom: $ck-space-3;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background-color: rgba($ck-text, 0.55);
+        color: $ck-surface;
+        font-size: $ck-text-sm;
+        line-height: 1;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba($ck-text, 0.75);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $ck-surface;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 4px rgba($ck-primary, 0.55);
+        }
+    }
+
+    body.editor_enable & .ck-hero__visual-pause {
+        display: none;
     }
 
     // Zone utile stable du visuel hero — comportement identique builder / public.
@@ -404,18 +440,18 @@
         min-height: 280px;
         padding: $ck-space-5;
         pointer-events: none;
-        // Overlay chaud/sombre modéré — photo visible en haut, lisibilité en bas (brief MOA initial)
+        // Overlay chaud modéré — ambiance lumineuse / pastel premium (polish home CK)
         background:
             linear-gradient(
                 180deg,
                 rgba(28, 25, 23, 0) 0%,
-                rgba(28, 25, 23, 0.1) 40%,
-                rgba(45, 32, 28, 0.55) 70%,
-                rgba(28, 25, 23, 0.72) 100%
+                rgba(28, 25, 23, 0.06) 40%,
+                rgba(45, 32, 28, 0.38) 70%,
+                rgba(28, 25, 23, 0.52) 100%
             ),
             linear-gradient(
                 135deg,
-                rgba(216, 67, 21, 0.14) 0%,
+                rgba(216, 67, 21, 0.08) 0%,
                 rgba(28, 25, 23, 0) 55%
             );
 
@@ -457,7 +493,7 @@
         font-size: $ck-text-sm;
         font-weight: $ck-font-weight-semibold;
         line-height: 1;
-        color: $ck-primary;
+        color: $ck-primary-text;
         background-color: #fff;
         border: 1px solid rgba(255, 255, 255, 0.95);
         text-decoration: none;
@@ -526,10 +562,10 @@
 // Home V1 — trust-bar post-Hero · variante C « épurée »
 // (séparateurs fins + icônes cerclées accent — polish au-delà maquette §3, validé MOA exploratoire 2026-06-15)
 .ck-reassurance--trust-bar {
-    padding: $ck-space-5 0;
+    padding: $ck-space-4 0;
     background-color: $ck-bg;
-    border-top: 1px solid $ck-border;
-    border-bottom: 1px solid $ck-border;
+    border-top: 1px solid rgba($ck-border, 0.55);
+    border-bottom: 1px solid rgba($ck-border, 0.35);
 
     .ck-reassurance__grid {
         display: grid;
@@ -626,26 +662,13 @@
     .ck-featured-products__shop-cta {
         flex-shrink: 0;
         align-self: center;
-        padding: 8px 14px;
-        font-size: 13px;
-        border-radius: $ck-radius-md;
-        border: 1px solid $ck-border;
-        background: $ck-surface;
-        color: $ck-text;
-        font-weight: $ck-font-weight-semibold;
-        text-decoration: none;
         white-space: nowrap;
-
-        &:hover {
-            background: $ck-bg-soft;
-            color: $ck-text;
-        }
     }
 
     .product-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
+        gap: 14px;
 
         @media (max-width: 1023.98px) {
             grid-template-columns: repeat(2, 1fr);
@@ -656,266 +679,101 @@
         }
     }
 
-    .ck-product-card.product-card {
-        background: $ck-surface;
-        border: 1px solid $ck-border;
-        border-radius: $ck-radius-lg;
-        overflow: hidden;
-        box-shadow: $ck-shadow-card;
-        transition: box-shadow 0.25s ease, transform 0.25s ease;
-        display: flex;
-        flex-direction: column;
-
+    // Variante compacte — cards homepage « Coups de cœur » uniquement (pas /shop)
+    .ck-product-card--home {
         &:hover {
-            box-shadow: $ck-shadow-card-hover;
-            transform: translateY(-3px);
-
-            .product-card-media,
-            .ck-product-card__media {
-                transform: scale(1.03);
-            }
-        }
-    }
-
-    .ck-product-card--interactive {
-        position: relative;
-    }
-
-    .ck-product-card__cover {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        border-radius: inherit;
-        text-decoration: none;
-    }
-
-    .product-card-media,
-    .ck-product-card__media {
-        display: block;
-        aspect-ratio: 1 / 1;
-        background: $ck-image-zone center / cover no-repeat;
-        position: relative;
-        z-index: 0;
-        overflow: hidden;
-        transition: transform 0.35s ease;
-        transform-origin: center center;
-        text-decoration: none;
-    }
-
-    .product-card-body {
-        position: relative;
-        z-index: 0;
-        padding: 12px 14px;
-        flex: 1;
-    }
-
-    .product-card-title,
-    .ck-product-card h3 {
-        font-size: 14px;
-        font-weight: $ck-font-weight-semibold;
-        margin: 0;
-        line-height: 1.3;
-        color: inherit;
-    }
-
-    .product-card-labels {
-        margin: 4px 0 0;
-        font-size: 11px;
-        color: $ck-text-muted;
-        line-height: 1.35;
-    }
-
-    .product-meta {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        margin-bottom: 4px;
-        align-items: center;
-    }
-
-    .chip-origin {
-        background: $ck-secondary-soft;
-        color: $ck-secondary;
-        padding: 2px 7px;
-        border-radius: $ck-radius-sm;
-        font-weight: $ck-font-weight-semibold;
-        font-size: 11px;
-    }
-
-    .chip-cat {
-        color: $ck-text-muted;
-        font-size: 11px;
-    }
-
-    .ck-product-card--interactive:hover .product-card-title {
-        color: $ck-primary;
-    }
-
-    .product-card-foot {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-        padding: 10px 14px 12px;
-        border-top: 1px solid $ck-border;
-    }
-
-    .product-card-pricing {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        min-width: 0;
-    }
-
-    .price {
-        font-size: $ck-text-base;
-        font-weight: $ck-font-weight-price;
-        color: $ck-price;
-    }
-
-    .reference-price {
-        font-size: 11px;
-        color: $ck-text-muted;
-        line-height: 1.35;
-    }
-
-    .product-card-actions {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-    }
-
-    .card-cart-cta {
-        padding: 8px 14px;
-        border-radius: $ck-radius-md;
-        font-size: 12px;
-        font-weight: $ck-font-weight-semibold;
-        color: $ck-surface;
-        border: 1px solid $ck-primary;
-        background: $ck-primary;
-        text-align: center;
-        cursor: pointer;
-        white-space: nowrap;
-        transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-
-        &:hover:not(:disabled) {
-            background: darken($ck-primary, 6%);
-            border-color: darken($ck-primary, 6%);
-            color: $ck-surface;
+            transform: translateY(-2px);
         }
 
-        &:disabled {
-            opacity: 0.65;
-            cursor: wait;
+        .ck-product-card__image,
+        .ck-product-card__media,
+        .product-card-media {
+            aspect-ratio: unset;
+            height: 240px;
+            max-height: 260px;
+            min-height: 0;
+            padding: $ck-space-2 $ck-space-3;
+            background-color: $ck-image-zone;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
         }
-    }
 
-    .card-cta {
-        align-self: flex-start;
-        padding: 6px 12px;
-        border-radius: $ck-radius-md;
-        font-size: 12px;
-        font-weight: $ck-font-weight-semibold;
-        color: $ck-primary;
-        border: 1px solid $ck-primary;
-        background: $ck-surface;
-        text-decoration: none;
-        white-space: nowrap;
-        transition: background 0.2s ease, color 0.2s ease;
-
-        &:hover {
-            background: $ck-primary;
-            color: $ck-surface;
+        &:hover .ck-product-card__image,
+        &:hover .ck-product-card__media,
+        &:hover .product-card-media {
+            transform: none;
         }
-    }
 
-    .card-cta--secondary {
-        align-self: center;
-        padding: 0;
-        border: none;
-        background: transparent;
-        color: $ck-text-muted;
-        font-weight: $ck-font-weight-ui;
-        text-decoration: underline;
-        white-space: normal;
-
-        &:hover {
-            background: transparent;
-            color: $ck-primary;
+        .ck-product-card__body,
+        .product-card-body {
+            padding: 8px 12px 4px;
         }
-    }
 
-    @media (min-width: 768px) {
+        .ck-product-card__title,
+        .product-card-title,
+        h3.product-card-title {
+            font-size: 13px;
+            line-height: 1.25;
+        }
+
+        .ck-product-card__meta,
+        .product-card-labels {
+            margin-top: 2px;
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        .ck-product-card__foot,
         .product-card-foot {
-            flex-direction: row;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 12px;
+            gap: 6px;
+            padding: 8px 12px 10px;
         }
 
-        .product-card-pricing {
-            flex: 1;
-            min-width: 0;
+        .ck-product-card__price-value,
+        .price {
+            font-size: $ck-text-sm;
+            line-height: 1.2;
         }
 
+        .ck-product-card__actions,
         .product-card-actions {
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 10px;
-            flex-shrink: 0;
+            gap: 6px;
         }
 
-        .card-cta--secondary {
-            align-self: auto;
-            padding: 6px 12px;
-            border: 1px solid $ck-primary;
-            background: $ck-surface;
-            color: $ck-primary;
-            font-weight: $ck-font-weight-semibold;
-            text-decoration: none;
-            white-space: nowrap;
+        .card-cart-cta {
+            padding: 6px 10px;
+            font-size: 11px;
+            line-height: 1.2;
+        }
 
-            &:hover {
-                background: $ck-primary;
-                color: $ck-surface;
+        .card-cta {
+            padding: 5px 10px;
+            font-size: 11px;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 768px) {
+            .ck-product-card__foot,
+            .product-card-foot {
+                gap: 8px;
+            }
+
+            .ck-product-card__actions,
+            .product-card-actions {
+                gap: 6px;
             }
         }
-    }
 
-    .badge {
-        font-size: 10px;
-        font-weight: 700;
-        padding: 4px 8px;
-        border-radius: $ck-radius-sm;
-        display: inline-block;
-    }
-
-    .badge-new {
-        background: $ck-badge-new;
-        color: #1a1a1a;
-    }
-
-    .badge-heart {
-        background: $ck-primary;
-        color: $ck-surface;
-    }
-
-    .badge-ribbon {
-        font-size: 10px;
-        font-weight: 700;
-    }
-
-    .badge-float {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        left: auto;
-        z-index: 1;
+        @media (max-width: 479.98px) {
+            .ck-product-card__image,
+            .ck-product-card__media,
+            .product-card-media {
+                height: 200px;
+                max-height: 220px;
+                padding: $ck-space-2;
+            }
+        }
     }
 }
 
@@ -943,6 +801,69 @@
 .ck-footnote {
     font-size: $ck-text-xs;
     color: $ck-text-muted;
+}
+
+// Coffrets découverte — polish visuel (placeholder premium aligné sections CK)
+.ck-discovery-pack {
+    .ck-discovery-pack__card {
+        border: 1px solid $ck-border;
+        border-radius: $ck-radius-lg;
+        background: $ck-surface;
+        box-shadow: $ck-shadow-card;
+    }
+
+    .ck-discovery-pack__visual--editorial {
+        min-height: 180px;
+    }
+
+    .ck-discovery-pack__visual-inner {
+        background:
+            linear-gradient(
+                145deg,
+                $ck-bg-soft 0%,
+                $ck-image-zone 55%,
+                rgba($ck-primary, 0.06) 100%
+            );
+    }
+
+    .ck-discovery-pack__visual-icon {
+        font-size: 1.75rem;
+        color: rgba($ck-primary, 0.32);
+        line-height: 1;
+    }
+
+    .ck-discovery-pack__badge {
+        background-color: rgba($ck-secondary, 0.12);
+        color: $ck-secondary;
+        font-weight: $ck-font-weight-semibold;
+        font-size: 11px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 0.35em 0.75em;
+    }
+}
+
+// Dual Pro / newsletter — cartes alignées sur le rythme CK
+.ck-dual-engage.ck-dual-engage--compact {
+    .ck-dual-engage__pro,
+    .ck-dual-engage__newsletter {
+        border: 1px solid $ck-border;
+        box-shadow: $ck-shadow-card;
+        background: $ck-surface;
+    }
+}
+
+// Bloc éditorial bas de page
+.ck-home-editorial {
+    a.fw-bold {
+        color: $ck-primary;
+        text-decoration: none;
+
+        &:hover {
+            color: $ck-primary-hover;
+            text-decoration: underline;
+        }
+    }
 }
 
 // Hero carrousel — édition slide par slide (priorité sur Bootstrap carousel)

@@ -50,6 +50,17 @@ class TestCkProPhase5Compose(HttpCase):
         self.assertIn('s_website_form_send', html)
         self.assertNotIn('portail', html.lower())
 
+    def test_professionnels_form_submit_button_keyboard_accessible(self):
+        """Garde-fou a11y : <a role="button"> ne réagit pas à la touche Espace —
+        le bouton d'envoi doit être un <button> natif (Entrée + Espace gratuits)."""
+        html = self._professionnels_html()
+        self.assertIn('<button type="button" class="btn btn-primary s_website_form_send">', html)
+        self.assertNotRegex(html, r'<a[^>]+s_website_form_send')
+
+    def test_professionnels_form_has_rgpd_notice(self):
+        html = self._professionnels_html()
+        self.assertIn('href="/privacy"', html)
+
     def test_crm_form_submission_creates_lead(self):
         marker = 'Phase 5 CK test lead qualification producteur'
         before = self.env['crm.lead'].sudo().search_count([
@@ -85,7 +96,7 @@ class TestCkProPhase5Compose(HttpCase):
             self.skipTest('Aucun produit publié.')
         html = self.url_open(self.product.website_url).text
         self.assertIn('ck-product-page', html)
-        self.assertIn('ck-product-pro-signal', html)
+        self.assertIn('ck-product-page__pro-gateway', html)
 
     def test_cart_http_200(self):
         self.assertEqual(self.url_open('/shop/cart').status_code, 200)

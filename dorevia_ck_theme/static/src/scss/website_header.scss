@@ -48,6 +48,14 @@
             }
         }
 
+        // Le seul changement de couleur ci-dessus est insuffisant comme indicateur
+        // de focus (WCAG 2.4.7) — anneau visible dédié sur l'élément focusé.
+        &:focus-visible {
+            outline: 2px solid $ck-primary;
+            outline-offset: 2px;
+            border-radius: $ck-radius-sm;
+        }
+
         img,
         span[role="img"] {
             display: none !important;

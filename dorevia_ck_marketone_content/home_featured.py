@@ -19,27 +19,6 @@ FEATURED_CATEGORY_NAME = 'Coups de cœur'  # curation BO des vedettes (catégori
 FEATURED_CATEGORY_XMLID = 'dorevia_ck_marketone_content.public_categ_coups_de_coeur'
 FEATURED_CURATED_MAX = 8
 
-_DEMO_ORIGIN_BY_NAME_FRAGMENT = (
-    ('goyav', 'Réunion'),
-    ('galettes', 'Martinique'),
-    ('manioc', 'Martinique'),
-    ('manio', 'Guadeloupe'),
-    ('cracker', 'Guadeloupe'),
-    ('savon', 'Martinique'),
-    ('vétiver', 'Martinique'),
-    ('vetiver', 'Martinique'),
-    ('colombo', 'Martinique'),
-)
-
-_ORIGIN_KEYWORDS = (
-    'Réunion',
-    'Guadeloupe',
-    'Martinique',
-    'Guyane',
-    'Mayotte',
-    'Sélection CK',
-)
-
 _CATEGORY_SHORT_LABELS = (
     'Épicerie',
     'Snacks',
@@ -233,28 +212,6 @@ def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
     return variants[:max_count]
 
 
-def _get_featured_origin_label(template):
-    for line in template.attribute_line_ids:
-        attr_name = (line.attribute_id.name or '').lower()
-        if 'origine' in attr_name or 'origin' in attr_name:
-            value = line.value_ids[:1]
-            if value and (value.name or '').strip():
-                return value.name.strip()
-    haystack = ' '.join(filter(None, [
-        template.description_sale or '',
-        template.name or '',
-    ]))
-    lowered = haystack.lower()
-    for keyword in _ORIGIN_KEYWORDS:
-        if keyword.lower() in lowered:
-            return keyword
-    name_lower = (template.name or '').lower()
-    for fragment, origin in _DEMO_ORIGIN_BY_NAME_FRAGMENT:
-        if fragment in name_lower:
-            return origin
-    return ''
-
-
 def _get_featured_category_label(template):
     category = template.public_categ_ids[:1]
     if not category:
@@ -442,15 +399,36 @@ def _featured_tags_for_card(template, variant=None):
     return tags.sorted(key=lambda tag: (tag.sequence, tag.id))
 
 
-def _get_featured_labels_line(template, variant=None):
-    """Ligne descriptive client — product_tag_ids (+ variante), jamais « Coups de cœur »."""
+def _get_featured_tag_names(template, variant=None):
+    """Étiquettes produit ordonnées (hors exclusions), sans interprétation origine."""
     template = template.sudo()
     variant = (variant or template.product_variant_ids[:1]).sudo()
     variant_id = variant.id if variant else None
     parts = _featured_label_parts_from_sql(template.env.cr, template.id, variant_id)
     if not parts:
         parts = _featured_label_parts_from_tags(_featured_tags_for_card(template, variant))
-    return ' · '.join(parts)
+    return parts
+
+
+def _get_featured_origin_and_tag_parts(template, variant=None):
+    """Origine (attribut « Origines » + fallback tags Option A) et tags transversaux."""
+    from .ck_product_origin import (
+        ck_card_origin_and_transversal_tags,
+        ck_origin_from_attribute,
+    )
+
+    template = template.sudo()
+    origin, transversal = ck_card_origin_and_transversal_tags(
+        _get_featured_tag_names(template, variant),
+        ck_origin_from_attribute(template),
+    )
+    return origin, transversal
+
+
+def _get_featured_labels_line(template, variant=None):
+    """Segment origine + tags transversaux — attribut prioritaire, jamais « Coups de cœur »."""
+    origin, transversal = _get_featured_origin_and_tag_parts(template, variant)
+    return _join_featured_metadata_parts(origin, ' · '.join(transversal))
 
 
 def _featured_arch_missing_product_labels(env, arch, variants):
@@ -607,11 +585,11 @@ def _get_featured_commercial_line(env, website, variant):
 
 
 def _get_featured_card_metadata_line(env, website, variant):
-    """Ligne unique sous le titre : catégorie · origine · format · prix comparatif."""
+    """Ligne unique sous le titre : origine · tags transversaux · format · prix comparatif."""
     template = variant.product_tmpl_id
-    labels = _get_featured_labels_line(template, variant)
+    origin, transversal = _get_featured_origin_and_tag_parts(template, variant)
     qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
-    return _join_featured_metadata_parts(labels, qty_part, ref_part)
+    return _join_featured_metadata_parts(origin, ' · '.join(transversal), qty_part, ref_part)
 
 
 _SAFE_CSS_COLOR_RE = re.compile(

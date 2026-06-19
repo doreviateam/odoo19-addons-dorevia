@@ -11,8 +11,9 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     MIN_FEATURED_PRODUCTS,
 )
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
+    ensure_test_product_image,
 )
 
 
@@ -51,8 +52,7 @@ def ensure_auto_featured_catalog(env, min_count=MIN_FEATURED_PRODUCTS):
         ('sale_ok', '=', True),
     ], order='website_sequence asc, id asc')
     for template in published:
-        if not template.image_1920:
-            template.image_1920 = _TINY_PNG
+        ensure_test_product_image(template, 'image_1920')
     index = 0
     while len(get_ready_featured_variants(env)) < min_count and index < min_count + 3:
         Template.create({
@@ -61,6 +61,6 @@ def ensure_auto_featured_catalog(env, min_count=MIN_FEATURED_PRODUCTS):
             'website_published': True,
             'sale_ok': True,
             'list_price': 1.0,
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         })
         index += 1

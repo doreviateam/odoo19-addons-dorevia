@@ -1,0 +1,67 @@
+// ============================================================================
+// C-Kreyol Marketone — tokens SCSS site web (ticket 01)
+// Source : dorevia_ck_marketone/docs/design/maquette_01/tokens.md
+// Préfixe : $ck- · bundle frontend uniquement (pas de BO)
+// ============================================================================
+
+// --- Couleurs ----------------------------------------------------------------
+$ck-bg: #fffbf7;
+$ck-bg-soft: #f5f0e8;
+$ck-surface: #ffffff;
+$ck-text: #1c1917;
+$ck-text-muted: #57534e;
+$ck-border: #e7e0d5;
+$ck-primary: #d84315;
+$ck-primary-hover: #bf360c;
+// Orange accessible pour TEXTE / lien petite taille — 5.44:1 sur fond crème (WCAG AA).
+// $ck-primary (#d84315) reste réservé : fonds de bouton, badges, icônes, grand/gras texte.
+$ck-primary-text: $ck-primary-hover; // #bf360c
+$ck-secondary: #2e7d4f;
+$ck-secondary-soft: #e8f5e9;
+$ck-price: #1c1917;
+$ck-badge-new: #f9a825;
+$ck-badge-pack: #6d4c41;
+$ck-pro: #455a64;
+$ck-pro-hover: #3a4a52;
+$ck-image-zone: #faf6f0;
+
+// --- Typographie (Fraunces + DM Sans — auto-hébergées via website_fonts.scss) ---
+$ck-font-display: "Fraunces", georgia, "Times New Roman", serif;
+$ck-font-ui: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+$ck-font-weight-display: 600;
+$ck-font-weight-ui: 400;
+$ck-font-weight-semibold: 600;
+$ck-font-weight-price: 700;
+$ck-line-height-body: 1.5;
+$ck-line-height-heading: 1.2;
+
+$ck-text-xs: 0.75rem;   // 12px
+$ck-text-sm: 0.875rem;  // 14px
+$ck-text-base: 1rem;     // 16px
+$ck-text-lg: 1.125rem;   // 18px
+$ck-text-xl: 1.375rem;   // 22px
+$ck-text-2xl: 1.75rem;   // 28px
+$ck-text-3xl: 2.25rem;   // 36px
+$ck-text-hero-mobile: 1.75rem;
+
+// --- Espacements -------------------------------------------------------------
+$ck-space-1: 0.25rem;
+$ck-space-2: 0.5rem;
+$ck-space-3: 0.75rem;
+$ck-space-4: 1rem;
+$ck-space-5: 1.5rem;
+$ck-space-6: 2rem;
+$ck-space-7: 3rem;
+$ck-space-8: 4rem;
+
+$ck-container-max: 1200px;
+$ck-gutter-desktop: 1.5rem;
+$ck-gutter-mobile: 1rem;
+
+// --- Radius & ombres ---------------------------------------------------------
+$ck-radius-sm: 6px;
+$ck-radius-md: 10px;
+$ck-radius-lg: 14px;
+$ck-radius-xl: 20px;
+$ck-shadow-card: 0 2px 12px rgba(28, 25, 23, 0.06);
+$ck-shadow-card-hover: 0 8px 24px rgba(28, 25, 23, 0.1);

@@ -57,6 +57,15 @@ class TestCkMentionsLegalesCompose(HttpCase):
         self.assertIn('id="cgv"', html)
         self.assertIn('MÉDIATEUR À CONFIRMER', html)
 
+    def test_terms_page_has_statutory_withdrawal_form(self):
+        """Garde-fou légal : modèle de formulaire de rétractation (annexe R. 221-1
+        Code de la consommation) — obligatoire pour la vente à distance B2C."""
+        html = self.url_open('/terms').text
+        self.assertIn('Modèle de formulaire de rétractation', html)
+        self.assertIn('Je/nous (*) vous notifie/notifions (*)', html)
+        self.assertIn('Nom du (des) consommateur(s)', html)
+        self.assertIn('Adresse du (des) consommateur(s)', html)
+
     def test_footer_legal_links_home(self):
         html = self.url_open('/').text
         self.assertIn('href="/legal"', html)

@@ -78,7 +78,7 @@ class TestCkPhase6Compose(HttpCase):
             self.skipTest('Aucun produit publié.')
         html = self.url_open(self.product.website_url).text
         self.assertIn('ck-product-page', html)
-        self.assertIn('ck-product-pro-signal', html)
+        self.assertIn('ck-product-page__pro-gateway', html)
 
     def test_professionnels_phase5_intact(self):
         html = self.url_open('/professionnels').text

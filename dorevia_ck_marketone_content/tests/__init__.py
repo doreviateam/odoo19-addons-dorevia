@@ -33,7 +33,13 @@ from . import test_ck_home_section2_trust_bar_hooks
 from . import test_ck_home_section3_featured_compose
 from . import test_ck_home_section3_featured_hooks
 from . import test_ck_catalog_manioc_variants
+from . import test_ck_product_sales_tab_bo
+from . import test_ck_product_page_lot2
+from . import test_ck_product_page_lot2_front
+from . import test_ck_product_page_tabs
+from . import test_ck_product_origin_unification
 from . import test_ck_home_section3_curation
 from . import test_ck_home_section3_featured_pricelist
 from . import test_ck_home_section4_univers
 from . import test_ck_home_section4_univers_compose
+from . import test_ck_contactus_a11y_rgpd
