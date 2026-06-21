@@ -9,3 +9,4 @@ from . import product_public_category  # noqa: F401
 from . import product_ribbon  # noqa: F401
 from . import product_tag  # noqa: F401
 from . import product_template  # noqa: F401
+from . import website_menu  # noqa: F401

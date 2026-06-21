@@ -98,6 +98,19 @@
             justify-content: center;
             margin-left: 0 !important;
             margin-right: 0 !important;
+            flex-wrap: nowrap;
+            gap: 0.125rem;
+        }
+
+        #top_menu.top_menu > .nav-item > .nav-link,
+        #top_menu.top_menu > .nav-item > .dropdown-toggle.nav-link {
+            padding-inline: 0.625rem;
+            white-space: nowrap;
+        }
+
+        // Nav V2 — desktop : entrées univers plates · masquer regroupement mobile
+        #top_menu.top_menu > .nav-item.ck-nav-mobile-univers {
+            display: none !important;
         }
 
         .navbar-nav.align-items-center.gap-2 {
@@ -155,7 +168,7 @@
 
             &:hover,
             &:focus-visible {
-                color: $ck-primary;
+                color: $ck-primary-text;
                 background-color: rgba($ck-primary, 0.06);
             }
         }
@@ -216,6 +229,12 @@
     .my_cart_quantity.badge,
     .my_wish_quantity.badge {
         background-color: $ck-primary !important;
+    }
+
+    // Garde-fou Nav-1 — CTA Contact Us natif (vue désactivée · non-régression)
+    .btn_cta,
+    a.btn_cta {
+        display: none !important;
     }
 }
 
@@ -281,9 +300,19 @@
 
             &:hover,
             &:focus-visible {
-                color: $ck-primary;
+                color: $ck-primary-text;
                 background-color: rgba($ck-primary, 0.06);
             }
+        }
+
+        // Nav V2 mobile — masquer univers desktop · conserver Nos univers
+        // Ne pas re-préfixer #top_menu_collapse_mobile (déjà scopé par le bloc parent).
+        .ck-nav-desktop-universe {
+            display: none !important;
+        }
+
+        .ck-nav-mobile-univers > .dropdown-toggle {
+            cursor: pointer;
         }
 
         .o_mega_menu {

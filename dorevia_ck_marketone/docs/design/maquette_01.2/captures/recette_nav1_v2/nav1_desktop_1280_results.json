@@ -1,0 +1,62 @@
+{
+  "D1_D2_topMenu": [
+    "Tous nos produits",
+    "Nos univers",
+    "Épicerie",
+    "Soin & Bien-être",
+    "Découvrir"
+  ],
+  "D3_ctaContact": {
+    "btnCtaCount": 0,
+    "contactTextInHeaderTop": true
+  },
+  "D4_shop": {
+    "status": 200,
+    "productCount": 6
+  },
+  "D5_epicerie": {
+    "status": 200,
+    "productCount": 4
+  },
+  "D6_soinBienEtre": {
+    "status": 200,
+    "productCount": 1,
+    "menuLabel": "Soin & Bien-être"
+  },
+  "D7_D8_mega": {
+    "megaVisible": true,
+    "megaLinks": [
+      {
+        "text": "Producteurs & territoires",
+        "href": "/producteur/atelier-hauts-goyaviers"
+      },
+      {
+        "text": "Recettes & usages",
+        "href": "/recettes"
+      },
+      {
+        "text": "Professionnels",
+        "href": "/professionnels"
+      },
+      {
+        "text": "Contactez-nous",
+        "href": "/contactus"
+      }
+    ]
+  },
+  "D9_chrome": {
+    "logo": true,
+    "search": true,
+    "account": true,
+    "cart": true
+  },
+  "D10_contrast": "rgb(191, 54, 12)",
+  "V1_V2_V3": {
+    "soinFound": true,
+    "soinHeight": 37,
+    "soinText": "Soin & Bien-être",
+    "soinLineWrap": true,
+    "logoOverlapsSoin": false,
+    "chromeOverlapsSoin": false
+  }
+}

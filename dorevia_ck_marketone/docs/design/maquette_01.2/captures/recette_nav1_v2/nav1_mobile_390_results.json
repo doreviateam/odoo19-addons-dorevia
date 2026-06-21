@@ -1,0 +1,70 @@
+{
+  "M5_overflow_closed": {
+    "scrollW": 390,
+    "clientW": 390,
+    "overflow": false
+  },
+  "M1_offcanvas": {
+    "togglerOk": true,
+    "offcanvasVisible": true
+  },
+  "M1_entries": [
+    {
+      "text": "Tous nos produits",
+      "visible": true
+    },
+    {
+      "text": "Épicerie",
+      "visible": true
+    },
+    {
+      "text": "Soin & Bien-être",
+      "visible": true
+    },
+    {
+      "text": "Découvrir",
+      "visible": true
+    },
+    {
+      "text": "Se connecter",
+      "visible": true
+    }
+  ],
+  "M2_nosUnivers": {
+    "found": true,
+    "urlUnchanged": true,
+    "expandedVisible": false
+  },
+  "M3_children": [],
+  "M4_decouvrir": {
+    "found": true,
+    "megaLinks": [
+      {
+        "text": "Producteurs & territoires",
+        "href": "/producteur/atelier-hauts-goyaviers"
+      },
+      {
+        "text": "Recettes & usages",
+        "href": "/recettes"
+      },
+      {
+        "text": "Professionnels",
+        "href": "/professionnels"
+      },
+      {
+        "text": "Contactez-nous",
+        "href": "/contactus"
+      }
+    ]
+  },
+  "M5_overflow_open": {
+    "scrollW": 390,
+    "clientW": 390,
+    "overflow": false
+  },
+  "M6_chrome": {
+    "burger": true,
+    "cart": true,
+    "search": true
+  }
+}

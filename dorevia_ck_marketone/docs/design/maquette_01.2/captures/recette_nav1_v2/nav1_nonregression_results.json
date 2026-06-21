@@ -1,0 +1,32 @@
+{
+  "N1_homeS4": {
+    "cardCount": 3,
+    "labels": [
+      "Épicerie créole",
+      "Soin & bien-être",
+      "Artisanat & culture"
+    ]
+  },
+  "N2_professionnels": {
+    "status": 200,
+    "markerFound": true
+  },
+  "N3_contactus": {
+    "status": 200,
+    "markerFound": true
+  },
+  "N4_recettes": {
+    "status": 200,
+    "markerFound": true
+  },
+  "N5_addToCart": {
+    "addBtnFound": true,
+    "afterCount": "0",
+    "beforeCount": "0",
+    "incremented": false
+  },
+  "N6_consoleErrors": [
+    "Access to font at 'https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsH8ahuQ2e8.woff2' from origin 'http://localhost:18079' has been blocked by CORS policy: Request header field x-odoo-database is not allowed by Access-Control-Allow-Headers in preflight response.",
+    "Failed to load resource: net::ERR_FAILED"
+  ]
+}
