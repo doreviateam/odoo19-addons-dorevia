@@ -1,0 +1,10 @@
+// Bootstrap / Odoo — overrides couleurs site web uniquement (web.assets_frontend).
+// Ne pas injecter dans web._assets_primary_variables (sinon BO / smart buttons colorés CK).
+
+$primary: $ck-primary;
+$secondary: $ck-secondary;
+$body-bg: $ck-bg;
+$body-color: $ck-text;
+$border-radius: $ck-radius-md;
+$border-radius-sm: $ck-radius-sm;
+$border-radius-lg: $ck-radius-lg;

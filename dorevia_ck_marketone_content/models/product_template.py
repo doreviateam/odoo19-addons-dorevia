@@ -7,6 +7,7 @@ _logger = logging.getLogger(__name__)
 
 
 FEATURED_REFRESH_FIELDS = {
+    'name',
     'public_categ_ids',
     'is_published',
     'website_published',
@@ -17,6 +18,7 @@ FEATURED_REFRESH_FIELDS = {
     'image_1920',
     'image_512',
     'product_tag_ids',
+    'attribute_line_ids',
     'ck_net_quantity',
     'ck_net_quantity_uom_id',
     'ck_reference_price_uom_id',
@@ -50,6 +52,41 @@ class ProductTemplate(models.Model):
         help='Calcule et affiche le prix de référence sur la card home lorsque la quantité nette est renseignée.',
     )
 
+    def get_ck_shop_card_metadata_line(self, variant=None):
+        """Ligne secondaire card boutique — même logique que les vedettes home."""
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _get_featured_card_metadata_line,
+        )
+
+        self.ensure_one()
+        variant = (variant or self.product_variant_id).sudo()
+        if not variant:
+            return ''
+        website = self.env['website'].get_current_website()
+        if not website:
+            return ''
+        return _get_featured_card_metadata_line(self.env, website, variant)
+
+    def get_ck_product_page_detail_sections(self):
+        """Sections bas de fiche produit CK (Lot 2) — affichage conditionnel."""
+        from odoo.addons.dorevia_ck_marketone_content.product_page_details import (
+            build_ck_product_page_detail_sections,
+        )
+
+        self.ensure_one()
+        return build_ck_product_page_detail_sections(self)
+
+    def get_ck_product_page_tabs(self, variant=None):
+        """Blocs complémentaires fiche produit — empilement vertical + ancres MOA."""
+        from odoo.addons.dorevia_ck_marketone_content.product_page_tabs import (
+            build_ck_product_page_tabs,
+        )
+
+        self.ensure_one()
+        product = self.sudo()
+        variant = (variant or product.product_variant_id).sudo()
+        return build_ck_product_page_tabs(product, variant)
+
     def _ck_refresh_home_featured_products(self):
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
             refresh_home_featured_products,
@@ -57,9 +94,54 @@ class ProductTemplate(models.Model):
 
         refresh_home_featured_products(self.env)
 
+    def _ck_refresh_home_featured_if_stale(self):
+        """Filet agnostique au champ : reconstruit seulement si une card affichée est périmée.
+
+        Utilisé comme repli après un write variante (``product.product``) portant
+        sur un champ hors liste explicite : tout changement qui modifie réellement
+        le rendu d'une card vedette (titre, image, prix, métadonnée) est ainsi
+        propagé immédiatement, sans sur-rebuild quand le snapshot est déjà à jour.
+        """
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _featured_arch_stale_any_lang,
+            bootstrap_home_featured_products,
+        )
+
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        if not page or not page.view_id:
+            return
+        website = self.env['website'].search([], limit=1)
+        if not website:
+            return
+        if _featured_arch_stale_any_lang(self.env, website, page):
+            bootstrap_home_featured_products(self.env)
+
+    def _ck_touches_featured(self):
+        """QA M1 : limite la reconstruction vedettes aux produits réellement concernés.
+
+        En mode curation (catégorie « Coups de cœur » présente), seul un produit
+        rangé dans cette catégorie justifie un rebuild de la home. En mode repli
+        (pas de curation → sélection automatique), tout produit publié peut
+        entrer dans le top : on conserve le comportement large d'origine.
+        """
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            FEATURED_CATEGORY_XMLID,
+        )
+
+        featured = self.env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
+        # Curation active seulement si la catégorie existe ET contient des produits ;
+        # sinon mode repli auto-sélection → tout produit publié peut entrer → refresh large.
+        if featured and featured.product_tmpl_ids:
+            return bool(self.public_categ_ids & featured)
+        return True
+
     def write(self, vals):
+        touches_featured_fields = bool(FEATURED_REFRESH_FIELDS.intersection(vals))
+        # Membre des vedettes AVANT écriture (capte une sortie de curation).
+        was_featured = self._ck_touches_featured() if touches_featured_fields else False
         result = super().write(vals)
-        if FEATURED_REFRESH_FIELDS.intersection(vals):
+        # ... ou APRÈS écriture (capte une entrée en curation).
+        if touches_featured_fields and (was_featured or self._ck_touches_featured()):
             self._ck_refresh_home_featured_products()
         return result
 
@@ -73,17 +155,17 @@ class ProductTemplate(models.Model):
     def _ck_sync_home_featured_labels_on_startup(self):
         """Reconstruit la home si des étiquettes BO manquent des cards SSR (arch périmée)."""
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
-            _featured_arch_missing_product_labels,
+            _featured_arch_stale_any_lang,
             bootstrap_home_featured_products,
-            get_curated_featured_variants,
         )
 
         page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
         if not page or not page.view_id:
             return
-        arch = page.view_id.arch_db or ''
-        variants = get_curated_featured_variants(self.env)
-        if not _featured_arch_missing_product_labels(self.env, arch, variants):
+        website = self.env['website'].search([], limit=1)
+        if not website:
+            return
+        if not _featured_arch_stale_any_lang(self.env, website, page):
             return
         if bootstrap_home_featured_products(self.env):
-            _logger.info('CK Section 3 : home reconstruite (étiquettes produit manquantes).')
+            _logger.info('CK Section 3 : home reconstruite (arch vedettes périmée).')

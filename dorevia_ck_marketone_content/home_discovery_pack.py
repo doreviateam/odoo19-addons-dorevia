@@ -66,10 +66,11 @@ def _discovery_visual_html(product):
         )
     return (
         '<div class="ck-discovery-pack__visual ck-discovery-pack__visual--editorial '
-        'ratio ratio-4x3 rounded d-flex align-items-center justify-content-center h-100" '
-        'style="min-height: 180px; background: linear-gradient(135deg, #f5efe8 0%, #ebe3d8 100%);">'
-        '<span class="fa fa-gift fa-3x text-muted" aria-hidden="true"></span>'
-        '</div>'
+        'ratio ratio-4x3 rounded overflow-hidden h-100">'
+        '<div class="ck-discovery-pack__visual-inner w-100 h-100 '
+        'd-flex align-items-center justify-content-center">'
+        '<span class="ck-discovery-pack__visual-icon fa fa-gift" aria-hidden="true"></span>'
+        '</div></div>'
     )
 
 
@@ -97,17 +98,17 @@ def build_discovery_pack_arch(env):
         product_link = f'<span>{name}</span>'
 
     return f"""
-<section class="s_text_block ck-discovery-pack pt32 pb32 o_colored_level" data-snippet="s_text_block" data-name="{DISCOVERY_PACK_DATA_NAME}">
+<section class="s_text_block ck-discovery-pack ck-discovery-pack--polish-v1 pt48 pb48 o_colored_level" data-snippet="s_text_block" data-name="{DISCOVERY_PACK_DATA_NAME}">
     <div class="container">
         <h2 class="ck-section-title h3 mb-2">{DISCOVERY_PACK_TITLE}</h2>
         <p class="text-muted mb-4">{DISCOVERY_PACK_LEAD}</p>
-        <div class="ck-discovery-pack__card border rounded o_cc o_cc1 o_colored_level overflow-hidden">
+        <div class="ck-discovery-pack__card overflow-hidden">
             <div class="row g-0 align-items-stretch">
                 <div class="col-12 col-md-5 col-lg-4 p-3 p-md-4">
                     {_discovery_visual_html(product)}
                 </div>
                 <div class="col-12 col-md-7 col-lg-8 p-3 p-md-4 d-flex flex-column justify-content-center">
-                    <span class="badge rounded-pill text-bg-secondary align-self-start mb-2">{DISCOVERY_PACK_BADGE}</span>
+                    <span class="badge ck-discovery-pack__badge rounded-pill align-self-start mb-2">{DISCOVERY_PACK_BADGE}</span>
                     <h3 class="h5 mb-2">{product_link}</h3>
                     <p class="text-muted mb-3 mb-md-4">{teaser}</p>
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-auto">
@@ -183,6 +184,12 @@ def discovery_pack_arch_is_valid(arch):
     if f'href="{DISCOVERY_PACK_CTA_URL}"' not in chunk:
         return False
     if DISCOVERY_PACK_BADGE not in chunk:
+        return False
+    if 'ck-discovery-pack--polish-v1' not in chunk:
+        return False
+    if 'pt48 pb48' not in chunk:
+        return False
+    if 'fa-3x' in chunk:
         return False
     lowered = chunk.lower()
     return not any(marker in lowered for marker in _PLACEHOLDER_IMAGE_MARKERS)

@@ -1,0 +1,93 @@
+{
+  "captures": [
+    {
+      "label": "1280",
+      "width": 1280,
+      "height": 800,
+      "shot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/recette_section3_cta_panier/section3_cta_panier_1280.png"
+    },
+    {
+      "label": "390",
+      "width": 390,
+      "height": 844,
+      "shot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/recette_section3_cta_panier/section3_cta_panier_390.png"
+    }
+  ],
+  "checks": {
+    "390": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "cartCtaCount": 3,
+      "viewCtaCount": 3,
+      "cards": [
+        {
+          "title": "Confiture de goyave",
+          "hasCartCta": true,
+          "hasViewCta": true,
+          "cartIsButton": true,
+          "cartAboveView": true,
+          "stacked": false
+        },
+        {
+          "title": "Manio Crackers salé",
+          "hasCartCta": true,
+          "hasViewCta": true,
+          "cartIsButton": true,
+          "cartAboveView": true,
+          "stacked": false
+        },
+        {
+          "title": "Manio Crackers sucré",
+          "hasCartCta": true,
+          "hasViewCta": true,
+          "cartIsButton": true,
+          "cartAboveView": true,
+          "stacked": false
+        }
+      ]
+    },
+    "1280": {
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "overflow": false,
+      "cartCtaCount": 3,
+      "viewCtaCount": 3,
+      "cards": [
+        {
+          "title": "Confiture de goyave",
+          "hasCartCta": true,
+          "hasViewCta": true,
+          "cartIsButton": true,
+          "cartAboveView": true,
+          "stacked": false
+        },
+        {
+          "title": "Manio Crackers salé",
+          "hasCartCta": true,
+          "hasViewCta": true,
+          "cartIsButton": true,
+          "cartAboveView": true,
+          "stacked": false
+        },
+        {
+          "title": "Manio Crackers sucré",
+          "hasCartCta": true,
+          "hasViewCta": true,
+          "cartIsButton": true,
+          "cartAboveView": true,
+          "stacked": false
+        }
+      ],
+      "cartBefore": "0",
+      "cartAfter": "1",
+      "cartIncreased": true,
+      "noDangerToastAfterCart": true
+    }
+  },
+  "verdict": "GO",
+  "summary": {
+    "okDesktop": true,
+    "okMobile": true
+  }
+}

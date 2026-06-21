@@ -11,7 +11,9 @@ from odoo.addons.dorevia_ck_marketone_content.home_hero import (
     HERO_CAROUSEL_MARKER,
     HERO_CTA_PRO_LABEL,
     HERO_CTA_SHOP_LABEL,
+    HERO_EDITABLE_MEDIA_MARKER,
     HERO_KICKER,
+    HERO_SLIDE_SNIPPET,
     HERO_TITLE,
     HERO_VARIANT_MARKER,
     HERO_VISUAL_MAX_SLIDES,
@@ -46,6 +48,9 @@ class TestCkHomeLot1Hooks(TransactionCase):
         self.assertIn(f'data-bs-interval="{HERO_CAROUSEL_INTERVAL_MS}"', arch)
         self.assertIn('ck_hero_home_v1', arch)
         self.assertIn('ck-hero__visual-media', arch)
+        self.assertIn(HERO_EDITABLE_MEDIA_MARKER, arch)
+        self.assertIn('ck-hero__slide-media o_editable', arch)
+        self.assertEqual(arch.count(f'data-snippet="{HERO_SLIDE_SNIPPET}"'), HERO_VISUAL_MAX_SLIDES)
         self.assertGreaterEqual(arch.count('carousel-item'), 1)
         self.assertLessEqual(arch.count('carousel-item'), HERO_VISUAL_MAX_SLIDES)
         content_part = arch.split('ck-hero__visual-col', 1)[0]

@@ -218,6 +218,22 @@ TERMS_PAGE_ARCH = f"""
         <p class="mb-0">Contact&#160;: <a href="mailto:contact.ck@marketone.com">contact.ck@marketone.com</a>. Frais de retour&#160;: <em>[À PRÉCISER MOA]</em>.</p>
     </div>
 </section>
+<section class="s_text_block pt16 pb16 o_colored_level" data-snippet="s_text_block" data-name="Formulaire de rétractation">
+    <div class="container s_allow_columns">
+        <h2 class="h3-fs">Modèle de formulaire de rétractation</h2>
+        <p class="text-muted">Conformément à l'annexe à l'article R. 221-1 du Code de la consommation. À compléter et renvoyer uniquement en cas de rétractation.</p>
+        <div class="border rounded p-3 p-md-4 ck-terms-withdrawal-form">
+            <p class="mb-2">À l'attention de <strong>Marketone SAS</strong>, 12 rue Example, 44000 Nantes <em>[FICTIF]</em> — <a href="mailto:contact.ck@marketone.com">contact.ck@marketone.com</a> :</p>
+            <p class="mb-2">Je/nous (*) vous notifie/notifions (*) par la présente ma/notre (*) rétractation du contrat portant sur la vente du bien (*)/pour la prestation de services (*) ci-dessous :</p>
+            <p class="mb-2">Commandé le (*)/reçu le (*) : ……………………………………………</p>
+            <p class="mb-2">Nom du (des) consommateur(s) : ……………………………………………</p>
+            <p class="mb-2">Adresse du (des) consommateur(s) : ……………………………………………</p>
+            <p class="mb-2">Signature du (des) consommateur(s) (uniquement en cas de notification du présent formulaire sur papier) :</p>
+            <p class="mb-2">Date : ……………………………………………</p>
+            <p class="mb-0 small text-muted">(*) Rayez la mention inutile.</p>
+        </div>
+    </div>
+</section>
 <section class="s_text_block pt16 pb16 o_colored_level" data-snippet="s_text_block" data-name="Garanties">
     <div class="container s_allow_columns">
         <h2 class="h3-fs">Garanties légales</h2>

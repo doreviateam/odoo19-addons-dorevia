@@ -27,8 +27,9 @@ from odoo.addons.dorevia_ck_marketone_content.home_reassurance import (
 )
 from odoo.addons.dorevia_ck_marketone_content.hooks import bootstrap_home_featured_products
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
+    ensure_test_variant_images,
 )
 
 _CARD_MEDIA_RE = re.compile(
@@ -50,9 +51,7 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         if len(variants) < cls.expected_featured_cards:
             raise unittest.SkipTest('Catalogue insuffisant pour Section 3 vedettes.')
         for variant in variants:
-            variant.write({'image_1920': _TINY_PNG})
-            if variant.product_tmpl_id:
-                variant.product_tmpl_id.write({'image_1920': _TINY_PNG})
+            ensure_test_variant_images(variant)
         bootstrap_home_hero(cls.env)
         bootstrap_home_reassurance(cls.env)
         bootstrap_home_featured_products(cls.env)
@@ -79,8 +78,9 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         expected = self.expected_featured_cards
         self.assertGreaterEqual(grid_chunk.count(FEATURED_CARD_MARKER), expected)
         self.assertGreaterEqual(len(_CARD_MEDIA_RE.findall(grid_chunk)), expected)
-        self.assertGreaterEqual(grid_chunk.count('class="card-cta"'), expected)
-        self.assertGreaterEqual(grid_chunk.count('class="price"'), expected)
+        self.assertGreaterEqual(grid_chunk.count('card-cta--secondary'), expected)
+        self.assertGreaterEqual(grid_chunk.count('class="card-cart-cta"'), expected)
+        self.assertGreaterEqual(grid_chunk.count('ck-product-card__price-value'), expected)
         self.assertNotIn('o_carousel_product_card', grid_chunk)
 
     def test_home_featured_card_shows_product_tags_line(self):
@@ -106,10 +106,14 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         self.assertIn('product-card-labels', grid_chunk)
         self.assertIn('Guadeloupe · Épicerie', grid_chunk)
 
-    def test_home_http_rebuilds_stale_arch_without_product_labels(self):
-        """GET / reconstruit la home si les étiquettes produit manquent (arch périmée)."""
-        import re
+    def test_stale_arch_rebuilt_by_sync(self):
+        """Le sync (cron/boot) reconstruit la home si les étiquettes produit manquent.
 
+        PR-3 (H2) : l'auto-réparation ne se fait plus via GET / (override
+        ir_http._pre_dispatch supprimé) mais via
+        product.template._ck_sync_home_featured_labels_on_startup() — appelée par
+        le cron ck_cron_sync_home_featured et au démarrage du worker.
+        """
         category = _ensure_featured_category(self.env)
         guadeloupe = self.env['product.tag'].sudo().create({
             'name': 'Guadeloupe',
@@ -120,14 +124,14 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
             'sequence': 20,
         })
         self.env['product.template'].sudo().create({
-            'name': 'CK Vedette HTTP Labels',
+            'name': 'CK Vedette Sync Labels',
             'list_price': 4.5,
             'is_published': True,
             'website_published': True,
             'sale_ok': True,
             'public_categ_ids': [(4, category.id)],
             'product_tag_ids': [(6, 0, [guadeloupe.id, epicerie.id])],
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         })
         bootstrap_home_featured_products(self.env)
         page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
@@ -140,9 +144,11 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         view.write({'arch_db': stale_arch})
         self.assertNotIn('<p class="product-card-labels">', view.arch_db or '')
 
-        grid_chunk = self._featured_grid_chunk(self.url_open('/').text)
-        self.assertIn('product-card-labels', grid_chunk)
-        self.assertIn('Guadeloupe · Épicerie', grid_chunk)
+        # Réparation par le sync (cron/boot), pas par une requête HTTP.
+        self.env['product.template']._ck_sync_home_featured_labels_on_startup()
+        view.invalidate_recordset(['arch_db'])
+        self.assertIn('product-card-labels', view.arch_db or '')
+        self.assertIn('Guadeloupe · Épicerie', view.arch_db or '')
 
     def test_home_featured_lot2_contract_intact(self):
         grid_chunk = self._featured_grid_chunk(self.url_open('/').text)

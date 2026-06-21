@@ -36,6 +36,9 @@ class TestCkHomeLot4Hooks(TransactionCase):
         self.assertIn('ck-newsletter-subscribe', arch)
         mailing_list = bootstrap_newsletter_mailing_list(self.env)
         self.assertIn(f'data-list-id="{mailing_list.id}"', arch)
+        self.assertIn("S'inscrire", arch)
+        self.assertIn('Votre adresse e-mail', arch)
+        self.assertIn('pt48 pb48', arch)
 
     def test_bootstrap_replaces_dual_and_removes_pro_banner(self):
         self.assertTrue(bootstrap_home_dual_engage(self.env))

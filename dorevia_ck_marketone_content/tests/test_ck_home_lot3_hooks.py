@@ -31,6 +31,10 @@ class TestCkHomeLot3Hooks(TransactionCase):
         self.assertIn(DISCOVERY_PACK_TITLE, arch)
         self.assertIn(f'href="{DISCOVERY_PACK_CTA_URL}"', arch)
         self.assertIn('Pack', arch)
+        self.assertIn('ck-discovery-pack--polish-v1', arch)
+        self.assertIn('pt48 pb48', arch)
+        self.assertIn('ck-discovery-pack__visual-icon', arch)
+        self.assertNotIn('fa-3x', arch)
         self.assertNotIn('website.s_cover_default_image', arch)
 
     def test_bootstrap_injects_discovery_block(self):

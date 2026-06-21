@@ -16,12 +16,15 @@ from odoo.addons.dorevia_ck_marketone_content.catalog_manioc_variants import (
 from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     MIN_FEATURED_PRODUCTS,
     _get_featured_display_name,
+    _get_featured_price_label,
     bootstrap_home_featured_products,
+    build_featured_product_card_html,
     get_ready_featured_variants,
 )
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    ensure_test_product_image,
+    ensure_test_variant_images,
 )
 
 
@@ -35,9 +38,9 @@ class TestCkCatalogManiocVariants(TransactionCase):
         ], limit=1)
         if not parent:
             raise unittest.SkipTest('Template Manio Crackers absent.')
-        parent.write({'image_1920': _TINY_PNG})
+        ensure_test_product_image(parent, 'image_1920')
         for variant in parent.product_variant_ids:
-            variant.write({'image_1920': _TINY_PNG})
+            ensure_test_variant_images(variant)
         if not bootstrap_catalog_vedettes_products(cls.env):
             raise unittest.SkipTest('Bootstrap catalogue vedettes MOA impossible.')
 
@@ -81,6 +84,30 @@ class TestCkCatalogManiocVariants(TransactionCase):
         self.assertIn('Manio Crackers sucré', labels)
         self.assertIn(GALETTES_TEMPLATE_NAME, labels)
         self.assertIn('Savon vétiver', labels)
+
+    def test_featured_price_uses_variant_lst_price_without_pricelist(self):
+        """Sans pricelist publique, chaque card doit refléter le lst_price de sa variante."""
+        parent = self.env['product.template'].sudo().search([
+            ('name', '=', MANIO_CRACKERS_PARENT_NAME),
+        ], limit=1)
+        sale = parent.product_variant_ids.filtered(
+            lambda v: 'sal' in (v.display_name or '').lower()
+        )[:1]
+        sweet = parent.product_variant_ids.filtered(
+            lambda v: 'sucr' in (v.display_name or '').lower()
+        )[:1]
+        self.assertTrue(sale and sweet)
+        self.assertAlmostEqual(sale.lst_price, 3.6)
+        self.assertAlmostEqual(sweet.lst_price, 3.5)
+        website = self.env['website'].search([], limit=1)
+        self.assertEqual(_get_featured_price_label(self.env, website, sale), '3,60\u00a0€')
+        self.assertEqual(_get_featured_price_label(self.env, website, sweet), '3,50\u00a0€')
+        sale_card = build_featured_product_card_html(self.env, website, sale)
+        sweet_card = build_featured_product_card_html(self.env, website, sweet)
+        self.assertIn('3,60', sale_card)
+        self.assertIn('3,50', sweet_card)
+        self.assertIn(f'data-product-id="{sale.id}"', sale_card)
+        self.assertIn(f'data-product-id="{sweet.id}"', sweet_card)
 
     def test_home_featured_arch_matches_bo_catalog(self):
         bootstrap_home_featured_products(self.env)

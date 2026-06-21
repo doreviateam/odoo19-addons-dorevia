@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Socle card CK Home/Boutique — voir product_card.scss et home_featured.py -->
+    <template id="products_item_ck_card"
+              inherit_id="website_sale.products_item"
+              name="CK Shop product card"
+              priority="40">
+
+        <xpath expr="//form[contains(@t-attf-class, 'oe_product_cart')]" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-card ck-product-card--shop ck-product-card--interactive product-card flex-column" separator=" "/>
+        </xpath>
+
+        <xpath expr="//div[contains(@t-attf-class, 'oe_product_image')]" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-card__image product-card-media ck-product-card__media" separator=" "/>
+        </xpath>
+
+        <xpath expr="//div[hasclass('oe_subdescription_wrapper')]" position="replace"/>
+
+        <xpath expr="//div[hasclass('o_wsale_product_information_text')]" position="attributes">
+            <attribute name="class" add="ck-product-card__body product-card-body" separator=" "/>
+        </xpath>
+
+        <xpath expr="//h2[hasclass('o_wsale_products_item_title')]" position="attributes">
+            <attribute name="class" add="ck-product-card__title product-card-title h6 mb-0" separator=" "/>
+        </xpath>
+
+        <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="attributes">
+            <attribute name="class" add="ck-product-card__foot product-card-foot" separator=" "/>
+        </xpath>
+
+        <xpath expr="//div[hasclass('o_wsale_product_sub')]//div[hasclass('product_price')]" position="attributes">
+            <attribute name="class" add="ck-product-card__price product-card-pricing" separator=" "/>
+        </xpath>
+
+        <xpath expr="//div[hasclass('product_price')]//span[hasclass('fw-bold')]" position="attributes">
+            <attribute name="class" add="ck-product-card__price-value price" separator=" "/>
+            <attribute name="class" remove="fw-bold" separator=" "/>
+        </xpath>
+
+        <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="attributes">
+            <attribute name="class" add="ck-product-card__actions product-card-actions" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="shop_product_buttons_ck_card"
+              inherit_id="website_sale.shop_product_buttons"
+              name="CK Shop product card cart CTA"
+              priority="40">
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="attributes">
+            <attribute name="class" add="card-cart-cta" separator=" "/>
+            <attribute name="aria-label">Ajouter au panier</attribute>
+            <attribute name="title">Ajouter au panier</attribute>
+        </xpath>
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]//span[hasclass('o_label')]" position="replace">
+            <span class="o_label card-cart-cta__label">Ajouter au panier</span>
+        </xpath>
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]//i[hasclass('fa-shopping-cart')]" position="replace"/>
+    </template>
+</odoo>

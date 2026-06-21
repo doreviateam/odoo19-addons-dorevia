@@ -2,14 +2,16 @@
 <odoo>
     <template id="s_ck_univers_card" name="CK Univers card">
         <div class="ck-univers-card ck-univers-card--epicerie" data-snippet="s_ck_univers_card" data-name="Univers Épicerie créole">
-            <div class="ck-univers-card__media o_not_editable" contenteditable="false">
-                <img src="/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg" alt="Épicerie créole" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
+            <div class="ck-univers-card__media o_editable">
+                <p class="o_not_editable" contenteditable="false">
+                    <img src="/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg?v=5" alt="Épicerie créole" class="ck-univers-card__img o_editable_media" loading="lazy" decoding="async"/>
+                </p>
             </div>
-            <a href="/shop" class="ck-univers-card__cover" aria-label="Épicerie créole"/>
+            <a href="/shop" class="ck-univers-card__cover" aria-label="Épicerie créole" tabindex="-1"/>
             <div class="ck-univers-card__overlay">
                 <h3 class="ck-univers-card__title o_editable">Épicerie créole</h3>
                 <p class="ck-univers-card__desc o_editable">Farines, confitures, condiments et douceurs à découvrir.</p>
-                <span class="ck-univers-card__cta">Voir l'épicerie</span>
+                <a href="/shop" class="ck-univers-card__cta">Voir l'épicerie</a>
             </div>
         </div>
     </template>

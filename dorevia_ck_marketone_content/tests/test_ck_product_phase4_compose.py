@@ -50,22 +50,72 @@ class TestCkProductPhase4Compose(HttpCase):
         self.assertIn('o_wsale_product_page', html)
         self.assertRegex(html, r'product_price|o_wsale_product_details_content_section_price')
 
+    def test_product_page_lot1_layout(self):
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-layout', html)
+        self.assertIn('ck-product-layout__gallery', html)
+        self.assertIn('ck-product-layout__buy', html)
+        self.assertIn('ck-product-purchase', html)
+        self.assertIn('ck-product-purchase__title', html)
+
+    def test_product_page_lot1_french_cta(self):
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('Ajouter au panier', html)
+        self.assertIn('ck-product-purchase__cart-btn', html)
+
+    def test_product_page_lot1_reassurance(self):
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-purchase__trust', html)
+        self.assertIn('Livraison 2–3 jours ouvrables', html)
+        self.assertIn('Conditions générales', html)
+
+    def test_product_page_metadata_line_when_available(self):
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _get_featured_card_metadata_line,
+        )
+        website = self.env['website'].get_current_website()
+        variant = self.product.product_variant_id
+        expected = _get_featured_card_metadata_line(self.env, website, variant)
+        if not expected:
+            self.skipTest('Produit sans métadonnées card.')
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-purchase__meta', html)
+        self.assertIn(expected, html)
+
     def test_product_page_phase4_compose(self):
         html = self.url_open(self.product.website_url).text
-        self.assertIn('ck-product-pro-signal', html)
+        self.assertIn('ck-product-page__pro-gateway', html)
         self.assertIn('href="/professionnels"', html)
+        self.assertIn('Espace professionnel CK', html)
 
     def test_product_description_when_bootstrapped(self):
         if 'Confiture' not in (self.product.name or ''):
             self.product.write({'name': 'Confiture de goyave'})
             bootstrap_published_products(self.env)
         html = self.url_open(self.product.website_url).text
-        self.assertIn('ck-product-enrich', html)
+        self.assertIn('ck-product-page__complement', html)
+        self.assertIn('Découvrir', html)
+        self.assertIn('Origine &amp; usage', html)
+        self.assertIn('Conservation', html)
+        self.assertNotIn('ck-product-enrich', html)
+        self.assertNotIn('id="product_full_description"', html)
+
+    def test_product_page_lot2_b2b_gateway(self):
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-page__pro-gateway', html)
+        self.assertIn('Espace professionnel CK', html)
+        self.assertNotIn('s_ck_product_pro_signal', html)
+
+    def test_product_page_lot1_intact_with_lot2(self):
+        html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-layout', html)
+        self.assertIn('ck-product-purchase__cart-btn', html)
 
     def test_product_category_chips_when_assigned(self):
         if not self.product.public_categ_ids:
             self.skipTest('Produit sans catégorie e-commerce.')
         html = self.url_open(self.product.website_url).text
+        self.assertIn('ck-product-purchase__chips', html)
         self.assertIn('ck-chip', html)
 
     def test_cart_page_http_200(self):

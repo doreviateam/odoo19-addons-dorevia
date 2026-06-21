@@ -1,34 +1,202 @@
-// Boutique /shop et fiche produit — styles légers sur templates natifs
+// Boutique /shop — variantes card CK (Odoo natif + achat rapide)
 
 .ck-shop-page {
     background-color: $ck-bg;
-}
 
-// Tuiles produit — styles sur grilles website_sale natives
-.ck-shop-page {
     .oe_product {
-        border-radius: $ck-radius-lg;
-        box-shadow: $ck-shadow-card;
-        border: 1px solid $ck-border;
-        background: $ck-surface;
-        transition: box-shadow 0.2s ease, transform 0.2s ease;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        transform: none;
 
         &:hover {
-            box-shadow: $ck-shadow-card-hover;
-            transform: translateY(-2px);
+            box-shadow: none;
+            transform: none;
+        }
+    }
+}
+
+// Neutralise le mode Odoo « actions_onhover » — libellé panier + boutons compacts
+.ck-shop-page #o_wsale_products_grid.o_wsale_products_opt_actions_onhover form.ck-product-card--shop {
+    --o-wsale-card-btn-submit-label-display: inline;
+    --o-wsale-card-btn-label-display: inline;
+    --o-wsale-card-btn-submit-aspect-ratio: auto;
+    --o-wsale-card-btn-submit-flex-grow: 0;
+    --o-wsale-card-btn-submit-margin: 0;
+    --o-wsale-card-btn-submit-padding-x: 14px;
+    --o-wsale-card-btn-aspect-ratio: auto;
+    --o-wsale-card-btns-inset: auto;
+    --o-wsale-card-btns-width: auto;
+    --o-wsale-card-btns-margin-bottom: 0;
+}
+
+.ck-shop-page form.ck-product-card--shop {
+    position: relative;
+    height: 100%;
+
+    &:hover .oe_product_image_img {
+        transform: scale(1.03);
+    }
+
+    .ck-product-card__image {
+        background-color: $ck-image-zone;
+        border-radius: 0;
+
+        .oe_product_image_link {
+            display: block;
+            height: 100%;
+        }
+
+        .oe_product_image_img_wrapper,
+        .oe_product_image_img_wrapper_primary {
+            height: 100%;
+            width: 100%;
+        }
+
+        .oe_product_image_img,
+        .oe_product_image_img_wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.35s ease;
+            transform-origin: center center;
         }
     }
 
-    .oe_product_image {
-        background-color: $ck-image-zone;
-        border-radius: $ck-radius-lg $ck-radius-lg 0 0;
+    // Badge — position standard haut-gauche (favori haut-droite)
+    .ck-product-card__image .o_ribbons,
+    .ck-product-card__badge {
+        @include ck-product-card-badge;
+
+        &.o_wsale_badge.o_left,
+        &.o_wsale_badge.o_right,
+        &.o_wsale_ribbon {
+            top: 10px;
+            left: 10px;
+            right: auto;
+            bottom: auto;
+        }
     }
 
-    .product_price,
-    .oe_price {
-        color: $ck-price;
-        font-weight: $ck-font-weight-price;
-        font-size: $ck-text-lg;
+    .o_ribbons.o_wsale_ribbon {
+        @include ck-product-card-badge-new-style;
+    }
+
+    .ck-product-card__favorite,
+    .o_add_wishlist {
+        @include ck-product-card-favorite;
+    }
+
+    .o_wsale_product_information {
+        display: flex !important;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        grid-template: none !important;
+    }
+
+    .o_wsale_product_info_attributes_wrapper {
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    .ck-product-card__body {
+        .ck-product-card__title a,
+        .product-card-title a,
+        .o_wsale_products_item_title a {
+            color: inherit;
+            text-decoration: none;
+        }
+    }
+
+    &:hover .ck-product-card__title a,
+    &:hover .product-card-title a {
+        color: $ck-primary;
+    }
+
+    .ck-product-card__foot,
+    .o_wsale_product_sub {
+        position: static;
+        margin-top: auto;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .ck-product-card__price,
+    .product_price {
+        flex: 0 0 auto;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .ck-product-card__actions,
+    .o_wsale_product_btn {
+        position: static !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        aspect-ratio: unset !important;
+        overflow: visible !important;
+        pointer-events: auto !important;
+        inset: auto !important;
+        z-index: 2;
+
+        .o_wsale_product_action_row {
+            display: flex !important;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            width: 100%;
+            transform: none !important;
+            align-self: stretch !important;
+
+            .btn {
+                opacity: 1 !important;
+                transform: none !important;
+                pointer-events: auto !important;
+                aspect-ratio: unset !important;
+                width: 100%;
+            }
+        }
+    }
+
+    .card-cart-cta,
+    .o_wsale_product_btn_primary.card-cart-cta {
+        width: 100%;
+        max-width: 100%;
+        order: 1;
+        aspect-ratio: auto !important;
+        min-height: 0 !important;
+        flex-grow: 0 !important;
+        line-height: 1.25;
+        box-sizing: border-box;
+
+        .fa-shopping-cart {
+            display: none;
+        }
+
+        .o_label,
+        .card-cart-cta__label {
+            display: inline !important;
+            position: static !important;
+            width: auto !important;
+            height: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: visible !important;
+            clip: auto !important;
+            font-size: 12px;
+            font-weight: $ck-font-weight-semibold;
+            line-height: inherit;
+            white-space: nowrap;
+        }
+    }
+
+    .o_wsale_attribute_previewer {
+        margin-top: 6px;
     }
 }
 
@@ -48,6 +216,12 @@
         color: $ck-secondary;
         font-weight: $ck-font-weight-semibold;
         text-decoration: none;
+
+        // Pas de style hover/focus natif sur ce lien custom — anneau dédié (WCAG 2.4.7).
+        &:focus-visible {
+            outline: 2px solid $ck-secondary;
+            outline-offset: 2px;
+        }
     }
 }
 
@@ -60,7 +234,6 @@
     }
 }
 
-// Sidebar catégories — layout visuel (comportement natif product.public.category)
 .ck-shop-sidebar {
     background-color: $ck-bg-soft;
     border-radius: $ck-radius-lg;

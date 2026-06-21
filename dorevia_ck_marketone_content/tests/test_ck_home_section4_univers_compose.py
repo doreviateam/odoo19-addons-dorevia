@@ -73,7 +73,11 @@ class TestCkHomeSection4UniversCompose(HttpCase):
         self.assertEqual(chunk.count(UNIVERS_EDITABLE_MEDIA_MARKER), 3)
         self.assertEqual(chunk.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"'), 3)
         self.assertEqual(chunk.count('ck-univers-card__cover'), 3)
-        self.assertIn('ck_univers_epicerie.jpg', chunk)
+        self.assertNotIn('data-href=', chunk)
+        self.assertIn('ck-univers-card__media o_editable', chunk)
+        self.assertIn('ck-univers-card--epicerie', chunk)
+        self.assertNotIn('data-snippet="s_ck_univers_cards"', chunk.split('ck-univers-cards__grid')[0])
+        self.assertIn('ck_univers_epicerie.jpg?v=5', chunk)
         self.assertIn('ck_univers_soin.jpg', chunk)
         self.assertIn('ck_univers_artisanat.jpg', chunk)
 

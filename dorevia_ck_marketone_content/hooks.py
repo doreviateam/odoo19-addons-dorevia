@@ -4,10 +4,12 @@
 Pages CMS, enrichissements catalogue, mailing list, fiche producteur pilote.
 Module optionnel : ``dorevia_ck_theme`` reste un thème générique sans ce contenu.
 """
+import logging
 import re
 from xml.sax.saxutils import escape
 
 from .catalog_manioc_variants import bootstrap_catalog_vedettes_products
+from .home_arch import _arch_fingerprint
 from .home_discovery_pack import bootstrap_home_discovery_pack
 from .home_featured import bootstrap_home_featured_products
 from .legal_pages import (
@@ -29,6 +31,8 @@ from .legal_pages import (
     TERMS_PAGE_VIEW_KEY,
 )
 
+_logger = logging.getLogger(__name__)
+
 EPICERIE_CATEGORY_NAME = 'Épicerie créole'
 EPICERIE_CATEGORY_DESCRIPTION = (
     '<p>Savons artisanaux, confitures, crackers et galettes de manioc — '
@@ -42,6 +46,9 @@ PRODUCT_WEBSITE_DESCRIPTIONS = {
         '<p>Confiture artisanale créole — goyave sélectionnée par CK. '
         'Texture fondante, notes florales et légèrement acidulées.</p>'
         '<p><strong>Usage :</strong> tartines, yaourts, pâtisseries, accords fromages frais.</p>'
+        '<h3 class="h5 mt-3">Ingrédients &amp; allergènes</h3>'
+        '<p>Goyave, sucre, pectine, acidifiant (acide citrique). '
+        'Peut contenir des traces de fruits à coque.</p>'
         '<h3 class="h5 mt-3">Conservation</h3>'
         '<p>Avant ouverture : conserver au sec, à l’abri de la lumière. '
         'Après ouverture : réfrigérer et consommer sous 3 semaines.</p>'
@@ -192,15 +199,15 @@ PROFESSIONNELS_PAGE_ARCH = """
                     <input type="hidden" class="form-control s_website_form_input" name="name" value="Demande professionnelle CK"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                    <label class="s_website_form_label" for="ck_pro_partner"><span class="s_website_form_label_content">Société / structure</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_pro_partner"><span class="s_website_form_label_content">Société / structure</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_pro_partner" type="text" class="form-control s_website_form_input" name="partner_name" required="" placeholder="Nom de votre structure"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                    <label class="s_website_form_label" for="ck_pro_contact"><span class="s_website_form_label_content">Nom du contact</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_pro_contact"><span class="s_website_form_label_content">Nom du contact</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_pro_contact" type="text" class="form-control s_website_form_input" name="contact_name" required="" placeholder="Prénom Nom"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
-                    <label class="s_website_form_label" for="ck_pro_email"><span class="s_website_form_label_content">E-mail</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_pro_email"><span class="s_website_form_label_content">E-mail</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_pro_email" type="email" class="form-control s_website_form_input" name="email_from" required="" placeholder="contact@entreprise.com"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom" data-type="char" data-name="Field">
@@ -208,15 +215,20 @@ PROFESSIONNELS_PAGE_ARCH = """
                     <input id="ck_pro_phone" type="tel" class="form-control s_website_form_input" name="phone" placeholder="01 23 45 67 89"/>
                 </div>
                 <div class="mb-0 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="text" data-name="Field">
-                    <label class="s_website_form_label" for="ck_pro_description"><span class="s_website_form_label_content">Nature de la demande professionnelle</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_pro_description"><span class="s_website_form_label_content">Nature de la demande professionnelle</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <textarea id="ck_pro_description" class="form-control s_website_form_input" name="description" required="" rows="5" placeholder="Ex. : producteur · fournisseur · distributeur · boutique / CHR — décrivez votre projet et votre zone d'activité."></textarea>
                 </div>
                 <div class="mb-0 col-12 s_website_form_submit" data-name="Submit Button">
                     <div style="width: 200px;" class="s_website_form_label"/>
-                    <a href="#" role="button" class="btn btn-primary s_website_form_send">Envoyer la demande</a>
+                    <button type="button" class="btn btn-primary s_website_form_send">Envoyer la demande</button>
                 </div>
             </div>
         </form>
+    </div>
+</section>
+<section class="s_text_block pt0 pb32 o_colored_level" data-snippet="s_text_block" data-name="Réassurance Pro">
+    <div class="container s_allow_columns">
+        <p class="mb-0"><strong>Données :</strong> vos coordonnées servent uniquement à traiter votre demande professionnelle — <a href="/privacy">en savoir plus sur la gestion de vos données</a>.</p>
     </div>
 </section>
 """.strip()
@@ -229,7 +241,8 @@ NEWSLETTER_LEAD = (
 )
 NEWSLETTER_RGPD_NOTE = (
     'En vous inscrivant, vous acceptez de recevoir nos sélections créoles par e-mail. '
-    'Désinscription possible à tout moment depuis chaque message.'
+    'Désinscription possible à tout moment depuis chaque message — '
+    '<a href="/privacy">politique de confidentialité</a>.'
 )
 PRO_DUAL_TITLE = 'Vous êtes professionnel ?'
 PRO_DUAL_LEAD = (
@@ -251,18 +264,44 @@ def bootstrap_newsletter_mailing_list(env):
     return mailing_list
 
 
+def _localize_newsletter_form_html(form_html):
+    """Libellés FR pour le snippet natif mass_mailing (polish home CK)."""
+    if not form_html:
+        return form_html
+    for placeholder in ('Email Address', 'Your Email', 'Email'):
+        form_html = form_html.replace(
+            f'placeholder="{placeholder}"',
+            'placeholder="Votre adresse e-mail"',
+        )
+    form_html = re.sub(
+        r'>\s*Email Address\s*<',
+        '>Votre adresse e-mail<',
+        form_html,
+        flags=re.I,
+    )
+    form_html = re.sub(
+        r'>\s*Subscribe\s*</',
+        ">S'inscrire</",
+        form_html,
+        flags=re.I,
+    )
+    form_html = form_html.replace('value="Subscribe"', "value=\"S'inscrire\"")
+    return form_html
+
+
 def render_newsletter_subscribe_form(env):
     """Snippet natif website_mass_mailing · list_id BO."""
     mailing_list = bootstrap_newsletter_mailing_list(env)
     form_html = str(
         env['ir.qweb']._render('website_mass_mailing.s_newsletter_subscribe_form', {})
     )
-    return re.sub(
+    form_html = re.sub(
         r'data-list-id="\d+"',
         f'data-list-id="{mailing_list.id}"',
         form_html,
         count=1,
     )
+    return _localize_newsletter_form_html(form_html)
 
 
 def build_dual_engage_compact_arch(env, *, pro_cta_href, pro_cta_label=None):
@@ -270,7 +309,7 @@ def build_dual_engage_compact_arch(env, *, pro_cta_href, pro_cta_label=None):
     newsletter_form = render_newsletter_subscribe_form(env)
     pro_cta_label = pro_cta_label or PRO_DUAL_CTA_DEFAULT
     return f"""
-<section class="s_text_block ck-dual-engage ck-dual-engage--compact pt32 pb64 o_colored_level" data-snippet="s_text_block" data-name="CK Dual Pro Newsletter compact">
+<section class="s_text_block ck-dual-engage ck-dual-engage--compact pt48 pb48 o_colored_level" data-snippet="s_text_block" data-name="CK Dual Pro Newsletter compact">
     <div class="container">
         <div class="row g-4 align-items-stretch">
             <div class="col-lg-6 o_colored_level">
@@ -360,7 +399,7 @@ CONTACTUS_PAGE_ARCH = """
         <form id="contactus_form" action="/website/form/" method="post" enctype="multipart/form-data" class="o_mark_required" data-mark="*" data-model_name="mail.mail" data-success-mode="redirect" data-success-page="/contactus-thank-you" data-pre-fill="true">
             <div class="s_website_form_rows row s_col_no_bgcolor g-3">
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom s_website_form_required" data-type="char" data-name="Field">
-                    <label class="s_website_form_label" for="ck_contact_name"><span class="s_website_form_label_content">Nom</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_contact_name"><span class="s_website_form_label_content">Nom</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_contact_name" type="text" class="form-control s_website_form_input" name="name" required="" data-fill-with="name"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom" data-type="char" data-name="Field">
@@ -368,7 +407,7 @@ CONTACTUS_PAGE_ARCH = """
                     <input id="ck_contact_phone" type="tel" class="form-control s_website_form_input" name="phone" data-fill-with="phone"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_required s_website_form_model_required" data-type="email" data-name="Field">
-                    <label class="s_website_form_label" for="ck_contact_email"><span class="s_website_form_label_content">E-mail</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_contact_email"><span class="s_website_form_label_content">E-mail</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_contact_email" type="email" class="form-control s_website_form_input" name="email_from" required="" data-fill-with="email"/>
                 </div>
                 <div class="mb-0 col-12 col-lg-6 s_website_form_field s_website_form_custom" data-type="char" data-name="Field">
@@ -376,18 +415,18 @@ CONTACTUS_PAGE_ARCH = """
                     <input id="ck_contact_company" type="text" class="form-control s_website_form_input" name="company" data-fill-with="commercial_company_name"/>
                 </div>
                 <div class="mb-0 col-12 s_website_form_field s_website_form_required s_website_form_model_required" data-type="char" data-name="Field">
-                    <label class="s_website_form_label" for="ck_contact_subject"><span class="s_website_form_label_content">Sujet</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_contact_subject"><span class="s_website_form_label_content">Sujet</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <input id="ck_contact_subject" type="text" class="form-control s_website_form_input" name="subject" required=""/>
                 </div>
                 <div class="mb-0 col-12 s_website_form_field s_website_form_custom s_website_form_required" data-type="text" data-name="Field">
-                    <label class="s_website_form_label" for="ck_contact_message"><span class="s_website_form_label_content">Message</span><span class="s_website_form_mark"> *</span></label>
+                    <label class="s_website_form_label" for="ck_contact_message"><span class="s_website_form_label_content">Message</span><span class="s_website_form_mark" aria-hidden="true"> *</span><span class="visually-hidden"> (obligatoire)</span></label>
                     <textarea id="ck_contact_message" class="form-control s_website_form_input" name="description" required="" rows="6" placeholder="Décrivez votre question produit ou votre demande boutique."></textarea>
                 </div>
                 <div class="mb-0 col-12 s_website_form_field s_website_form_dnone">
                     <input type="hidden" class="form-control s_website_form_input" name="email_to"/>
                 </div>
                 <div class="mb-0 col-12 s_website_form_submit" data-name="Submit Button">
-                    <a href="#" role="button" class="btn btn-primary s_website_form_send">Envoyer</a>
+                    <button type="button" class="btn btn-primary s_website_form_send">Envoyer</button>
                 </div>
             </div>
         </form>
@@ -395,7 +434,7 @@ CONTACTUS_PAGE_ARCH = """
 </section>
 <section class="s_text_block pt16 pb64 o_colored_level" data-snippet="s_text_block" data-name="Réassurance contact">
     <div class="container s_allow_columns">
-        <p class="mb-2"><strong>Données :</strong> votre message sert uniquement à répondre à votre demande.</p>
+        <p class="mb-2"><strong>Données :</strong> votre message sert uniquement à répondre à votre demande — <a href="/privacy">en savoir plus sur la gestion de vos données</a>.</p>
         <p class="mb-0"><strong>Professionnels :</strong> producteurs, distributeurs et boutiques — <a href="/professionnels">qualifiez votre demande sur l’espace Pro</a>.</p>
     </div>
 </section>
@@ -506,6 +545,11 @@ def _bootstrap_cms_page(env, *, page_url, view_key, view_name, page_name, arch, 
         ('website_id', '=', website.id),
     ], limit=1)
 
+    # QA H3 : guard anti-écrasement — empreinte du dernier seed module. Si l'arch
+    # courante diverge (édition MOA en BO), on ne réécrit pas la page.
+    param = env['ir.config_parameter'].sudo()
+    seed_key = f'ck_seed_arch.{view_key}'
+
     view = _resolve_cms_view(View, view_key, legacy_view_key)
     if not view:
         view = View.create({
@@ -515,8 +559,17 @@ def _bootstrap_cms_page(env, *, page_url, view_key, view_name, page_name, arch, 
             'arch': arch,
             'website_id': website.id,
         })
+        param.set_param(seed_key, _arch_fingerprint(view.arch_db or view.arch or ''))
     else:
-        view.write({'arch': arch})
+        seeded_fp = param.get_param(seed_key)
+        current_fp = _arch_fingerprint(view.arch_db or view.arch or '')
+        if seeded_fp and current_fp != seeded_fp:
+            _logger.info('CK CMS %s édité en BO — seed non écrasé', view_key)
+        else:
+            view.write({'arch': arch})
+            # Empreinte de la forme NORMALISÉE relue après écriture (évite un faux
+            # « édité » dû à la reformulation QWeb au write).
+            param.set_param(seed_key, _arch_fingerprint(view.arch_db or view.arch or ''))
 
     page_vals = {
         'name': page_name,
@@ -605,10 +658,31 @@ def _insert_footer_link_after(arch, marker, link_html):
     return arch
 
 
+def _href_of(link_html):
+    return link_html.split('href="', 1)[1].split('"', 1)[0] if 'href="' in link_html else ''
+
+
+def _insert_footer_legal_block_fallback(arch, links_html):
+    """QA M2 : repli — insère un bloc <ul> de liens légaux avant la fermeture du footer
+    quand le marqueur Contact est absent (évite l'échec silencieux)."""
+    items = '\n                                '.join(links_html)
+    block = (
+        '\n                            <ul class="list-unstyled ck-footer-legal-fallback">\n'
+        f'                                {items}\n'
+        '                            </ul>'
+    )
+    for anchor in ('</footer>', '</div></div>', '</div>'):
+        idx = arch.rfind(anchor)
+        if idx >= 0:
+            return arch[:idx] + block + arch[idx:], True
+    return arch, False
+
+
 def bootstrap_footer_legal_links(env):
     """Liens footer Mentions légales · Confidentialité · CGV (idempotent)."""
     website = env['website'].search([], limit=1)
     if not website:
+        _logger.warning('CK footer : aucun website — liens légaux non ajoutés')
         return False
 
     View = env['ir.ui.view'].sudo()
@@ -619,6 +693,9 @@ def bootstrap_footer_legal_links(env):
     if not footer:
         footer = View.search([('key', '=', 'website.footer_custom')], limit=1)
     if not footer:
+        _logger.warning(
+            'CK footer : vue website.footer_custom introuvable — liens légaux non ajoutés'
+        )
         return False
 
     arch = footer.arch_db or footer.arch or ''
@@ -638,6 +715,21 @@ def bootstrap_footer_legal_links(env):
             arch = _insert_footer_link_after(arch, FOOTER_LEGAL_LINK_HTML, FOOTER_TERMS_LINK_HTML)
         else:
             arch = _insert_footer_link_after(arch, FOOTER_CONTACT_LINK_MARKER, FOOTER_TERMS_LINK_HTML)
+
+    # QA M2 : si l'insertion ciblée a échoué (marqueur Contact absent), repli + log
+    # explicite plutôt qu'un abandon silencieux (verrou go-live).
+    missing = [
+        html for html in (FOOTER_LEGAL_LINK_HTML, FOOTER_PRIVACY_LINK_HTML, FOOTER_TERMS_LINK_HTML)
+        if _href_of(html) not in arch
+    ]
+    if missing:
+        arch, inserted = _insert_footer_legal_block_fallback(arch, missing)
+        if not inserted:
+            _logger.warning(
+                'CK footer : liens légaux non insérés (marqueur Contact et ancre footer '
+                'introuvables) — vérifier la structure de website.footer_custom : %s',
+                ', '.join(_href_of(h) for h in missing),
+            )
 
     if arch == original:
         return True

@@ -47,7 +47,7 @@ def build_home_editorial_arch():
     link_producer = escape(EDITORIAL_LINK_PRODUCER_LABEL)
     link_recipes = EDITORIAL_LINK_RECIPES_LABEL
     return f"""
-<section class="s_text_block {EDITORIAL_SECTION_MARKER} pt32 pb48 o_colored_level" data-snippet="s_text_block" data-name="{EDITORIAL_DATA_NAME}">
+<section class="s_text_block {EDITORIAL_SECTION_MARKER} pt48 pb48 o_colored_level" data-snippet="s_text_block" data-name="{EDITORIAL_DATA_NAME}">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-xl-7 o_colored_level">
@@ -135,6 +135,8 @@ def editorial_home_arch_is_valid(arch):
     dual_pos = arch.find('ck-dual-engage')
     edito_pos = arch.find(EDITORIAL_SECTION_MARKER)
     if dual_pos >= 0 and edito_pos >= 0 and not (dual_pos < edito_pos):
+        return False
+    if 'pt48 pb48' not in chunk:
         return False
     return True
 

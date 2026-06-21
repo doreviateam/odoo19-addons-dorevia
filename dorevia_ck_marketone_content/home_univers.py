@@ -8,9 +8,29 @@ UNIVERS_DATA_NAME = 'CK Acheter par univers'
 UNIVERS_TITLE = 'Acheter par univers'
 UNIVERS_INTRO = 'Trois univers pour entrer dans la boutique en un clic.'
 UNIVERS_CARD_SNIPPET = 's_ck_univers_card'
+UNIVERS_SECTION_SNIPPET = 's_ck_univers_cards'
 UNIVERS_EDITABLE_MEDIA_MARKER = 'o_editable_media'
-# Legacy migrations 21.3 / 21.4 — conservé pour historique install
-UNIVERS_IMAGES_VERSION = '4'
+UNIVERS_CARD_EDITABLE_CLASS = 'ck-univers-card'
+# Bump à chaque changement des JPG par défaut (force refresh navigateur, cf. §7 note arch).
+UNIVERS_IMAGES_VERSION = '5'
+
+
+def _univers_image_src(path):
+    """URL image module + cache-bust (static Odoo : max-age 7j)."""
+    base = path.split('?', 1)[0]
+    return f'{base}?v={UNIVERS_IMAGES_VERSION}'
+
+
+def _univers_default_images_cache_busted(arch):
+    """True si les JPG module encore présents portent le ?v= courant."""
+    token = f'?v={UNIVERS_IMAGES_VERSION}'
+    for spec in _UNIVERS_CARD_SPECS:
+        fname = spec['image'].rsplit('/', 1)[-1]
+        if fname not in arch:
+            continue
+        if f'{fname}{token}' not in arch:
+            return False
+    return True
 
 _UNIVERS_CARD_SPECS = (
     {
@@ -78,18 +98,20 @@ def _build_univers_card_html(card):
     description = escape(card['description'])
     cta = escape(card['cta'])
     href = escape(card['href'])
-    image = escape(card['image'])
+    image = escape(_univers_image_src(card['image']))
     card_data_name = escape(f"Univers {card['title']}")
     return f"""
             <div class="ck-univers-card ck-univers-card--{escape(card['code'])}" data-snippet="{UNIVERS_CARD_SNIPPET}" data-name="{card_data_name}">
-                <div class="ck-univers-card__media o_not_editable" contenteditable="false">
-                    <img src="{image}" alt="{title}" class="ck-univers-card__img {UNIVERS_EDITABLE_MEDIA_MARKER}" loading="lazy" decoding="async"/>
+                <div class="ck-univers-card__media o_editable">
+                    <p class="o_not_editable" contenteditable="false">
+                        <img src="{image}" alt="{title}" class="ck-univers-card__img {UNIVERS_EDITABLE_MEDIA_MARKER}" loading="lazy" decoding="async"/>
+                    </p>
                 </div>
-                <a href="{href}" class="ck-univers-card__cover" aria-label="{title}"/>
+                <a href="{href}" class="ck-univers-card__cover" aria-label="{title}" tabindex="-1"/>
                 <div class="ck-univers-card__overlay">
                     <h3 class="ck-univers-card__title o_editable">{title}</h3>
                     <p class="ck-univers-card__desc o_editable">{description}</p>
-                    <span class="ck-univers-card__cta">{cta}</span>
+                    <a href="{href}" class="ck-univers-card__cta">{cta}</a>
                 </div>
             </div>""".strip()
 
@@ -102,7 +124,7 @@ def build_home_univers_arch(env):
     title = escape(UNIVERS_TITLE)
     intro = escape(UNIVERS_INTRO)
     return f"""
-<section class="s_ck_univers_cards {UNIVERS_SECTION_MARKER} pt40 pb48 o_colored_level" data-snippet="s_ck_univers_cards" data-name="{UNIVERS_DATA_NAME}">
+<section class="s_ck_univers_cards {UNIVERS_SECTION_MARKER} pt48 pb48" data-name="{UNIVERS_DATA_NAME}">
     <div class="container">
         <div class="ck-univers-cards__head mb-4">
             <h2 id="univers-title" class="ck-univers-cards__title h3 mb-2 o_editable">{title}</h2>
@@ -207,6 +229,14 @@ def univers_arch_is_valid(arch):
         return False
     if chunk.count('ck-univers-card__cover') != 3:
         return False
+    if re.search(r'class="ck-univers-card[^"]*"[^>]*data-href=', chunk):
+        return False
+    if 'ck-univers-card--epicerie' not in chunk:
+        return False
+    if 'ck-univers-card__media o_editable' not in chunk:
+        return False
+    if f'data-snippet="{UNIVERS_SECTION_SNIPPET}"' in chunk.split('ck-univers-cards__grid')[0]:
+        return False
     if re.search(r'<a\s[^>]*class="ck-univers-card ck-univers-card--', chunk):
         return False
     if 'data-bs-ride="carousel"' in chunk:
@@ -226,8 +256,15 @@ def univers_arch_is_valid(arch):
 def _univers_arch_matches_bo(env, arch):
     if not univers_arch_is_valid(arch):
         return False
+    if not _univers_default_images_cache_busted(arch):
+        return False
     if 'ck-univers-cards__head text-center' in arch:
         return False
+    chunk_start = arch.find(UNIVERS_SECTION_MARKER)
+    if chunk_start >= 0:
+        chunk = arch[chunk_start:chunk_start + 12000]
+        if 'pt48 pb48' not in chunk:
+            return False
     return all(card['href'] in arch for card in _resolve_univers_cards(env))
 
 

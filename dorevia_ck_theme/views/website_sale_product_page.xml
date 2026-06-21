@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lot 1 — zone haute fiche produit CK : 2 colonnes desktop + bloc achat structuré -->
+
+    <template id="product_ck_layout"
+              inherit_id="website_sale.product"
+              name="CK Product page layout"
+              priority="30">
+        <xpath expr="//div[@id='wrap']" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-page" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='product_detail_main']" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-layout" separator=" "/>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_images')]" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-layout__gallery" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='product_details']" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-layout__buy" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='o_wsale_product_details_content']" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-purchase" separator=" "/>
+        </xpath>
+        <xpath expr="//section[@id='product_detail']" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-detail" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="product_ck_title_chips"
+              inherit_id="website_sale.product_title"
+              name="CK Product category chips in buy block"
+              priority="30">
+        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_details_content_section_title')]" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-purchase__head" separator=" "/>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_details_content_section_title')]//h1" position="before">
+            <div class="ck-product-purchase__chips" t-if="product.public_categ_ids">
+                <t t-foreach="product.public_categ_ids" t-as="categ">
+                    <a t-attf-href="/shop/category/{{slug(categ)}}"
+                       class="ck-chip"
+                       t-out="categ.name"/>
+                </t>
+            </div>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_details_content_section_title')]//h1" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-purchase__title" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@t-field='product.description_ecommerce']" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-purchase__lead" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="product_ck_price_block"
+              inherit_id="website_sale.product"
+              name="CK Product price block classes"
+              priority="31">
+        <xpath expr="//div[hasclass('o_wsale_product_details_content_section_price')]" position="attributes">
+            <attribute name="class" add="ck-product-purchase__price" separator=" "/>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_details_content_section_attributes')]" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-purchase__variants" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('o_wsale_product_details_content_section_cta')]" position="attributes">
+            <attribute name="class" add="ck-product-purchase__cta" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="product_ck_add_to_cart_fr"
+              inherit_id="website_sale.cta_wrapper"
+              name="CK Product add to cart French"
+              priority="35">
+        <xpath expr="//a[@id='add_to_cart']" position="attributes">
+            <attribute name="t-attf-class" add="ck-product-purchase__cart-btn" separator=" "/>
+        </xpath>
+        <xpath expr="//a[@id='add_to_cart']/i[hasclass('fa-shopping-cart')]" position="replace"/>
+        <xpath expr="//a[@id='add_to_cart']" position="inside">
+            <span class="ck-product-purchase__cart-label">Ajouter au panier</span>
+        </xpath>
+    </template>
+
+    <template id="product_ck_terms_fr"
+              inherit_id="website_sale.product_terms_and_conditions"
+              name="CK Product reassurance FR"
+              priority="35">
+        <xpath expr="//small" position="replace">
+            <div class="ck-product-purchase__trust">
+                <ul class="ck-product-purchase__trust-list">
+                    <li>Garantie satisfaction — remboursement sous 30 jours</li>
+                    <li>Livraison 2–3 jours ouvrables</li>
+                </ul>
+                <p class="ck-product-purchase__trust-legal mb-0">
+                    <a href="/terms" class="o_translate_inline">Conditions générales de vente</a>
+                </p>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Lot 2 / Option A — empilement vertical compact + navigation par ancres -->
+
+    <template id="product_ck_section_body"
+              name="CK Product section body">
+        <t t-if="ck_section.get('subtitles')">
+            <div class="ck-product-page__section-split">
+                <div t-foreach="ck_section.get('subtitles')" t-as="ck_sub"
+                     class="ck-product-page__section-panel">
+                    <h4 t-if="ck_sub.get('title')"
+                        class="ck-product-page__section-panel-title"
+                        t-out="ck_sub.get('title')"/>
+                    <div t-if="ck_sub.get('body')"
+                         class="ck-product-page__section-body"
+                         t-out="ck_sub.get('body')"/>
+                </div>
+            </div>
+        </t>
+        <div t-elif="ck_section.get('body')"
+             class="ck-product-page__section-body"
+             t-out="ck_section.get('body')"/>
+    </template>
+
+    <template id="product_ck_long_zone"
+              name="CK Product long zone with anchor nav">
+        <div class="ck-product-page__complement">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-8">
+                        <t t-if="ck_product_page_tabs">
+                            <div class="ck-product-page__long-zone">
+                                <nav t-if="len(ck_product_page_tabs) &gt; 1"
+                                     class="ck-product-page__anchor-nav"
+                                     aria-label="Sections produit">
+                                    <t t-foreach="ck_product_page_tabs" t-as="ck_block">
+                                        <a t-att-href="'#' + ck_block.get('anchor_id')"
+                                           class="ck-product-page__anchor-link"
+                                           t-out="ck_block.get('nav_label')"/>
+                                        <span t-if="not ck_block_last"
+                                              class="ck-product-page__anchor-separator"
+                                              aria-hidden="true">·</span>
+                                    </t>
+                                </nav>
+                                <t t-foreach="ck_product_page_tabs" t-as="ck_block">
+                                    <section t-att-id="ck_block.get('anchor_id')"
+                                             t-attf-class="ck-product-page__block ck-product-page__block--#{ck_block.get('key')}">
+                                        <h2 class="ck-product-page__block-title"
+                                            t-out="ck_block.get('title')"/>
+                                        <t t-if="ck_block.get('sections')">
+                                            <t t-foreach="ck_block.get('sections')" t-as="ck_section">
+                                                <article t-attf-class="ck-product-page__section ck-product-page__section--#{ck_section.get('key')}"
+                                                         t-att-data-ck-section="ck_section.get('key')">
+                                                    <h3 class="ck-product-page__section-title"
+                                                        t-out="ck_section.get('title')"/>
+                                                    <t t-call="dorevia_ck_theme.product_ck_section_body"/>
+                                                </article>
+                                            </t>
+                                        </t>
+                                        <t t-if="ck_block.get('key') == 'conservation'">
+                                            <div class="ck-product-page__delivery-note">
+                                                <p class="mb-0">Livraison 2–3 jours ouvrables en France métropolitaine. Paiement sécurisé.</p>
+                                            </div>
+                                        </t>
+                                        <t t-if="ck_block.get('specs')">
+                                            <dl class="ck-product-page__specs">
+                                                <t t-foreach="ck_block.get('specs')" t-as="spec">
+                                                    <div class="ck-product-page__specs-row">
+                                                        <dt t-out="spec.get('label')"/>
+                                                        <dd t-out="spec.get('value')"/>
+                                                    </div>
+                                                </t>
+                                            </dl>
+                                        </t>
+                                    </section>
+                                </t>
+                            </div>
+                        </t>
+                        <p class="ck-product-page__pro-gateway mb-0">
+                            Vous commandez pour un commerce ou un restaurant ?
+                            <a href="/professionnels" class="ck-product-page__pro-gateway-link">Espace professionnel CK</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="product_ck_tabs_zone"
+              inherit_id="website_sale.product"
+              name="CK Product long zone placement"
+              priority="32">
+        <xpath expr="//div[@id='wrap']" position="before">
+            <t t-set="ck_product_page_tabs" t-value="[]"/>
+        </xpath>
+        <xpath expr="//section[@id='product_detail']" position="after">
+            <t t-call="dorevia_ck_theme.product_ck_long_zone"/>
+        </xpath>
+    </template>
+
+    <template id="product_ck_hide_comparison_specs"
+              inherit_id="website_sale_comparison.product_attributes_body"
+              name="CK Hide comparison specs when tabs"
+              priority="50">
+        <xpath expr="//t[@t-if='attrib_categories']" position="attributes">
+            <attribute name="t-if">attrib_categories and not ck_product_page_tabs</attribute>
+        </xpath>
+    </template>
+
+    <template id="product_ck_hide_native_blocks"
+              inherit_id="website_sale.product"
+              name="CK Hide native accordion and documents when tabs"
+              priority="36">
+        <xpath expr="//div[contains(@class, 'o_wsale_product_details_content_section_accordion')]" position="attributes">
+            <attribute name="t-if">(is_view_active('website_sale_comparison.accordion_specs_item') or is_view_active('website_sale.accordion_more_information')) and not ck_product_page_tabs</attribute>
+        </xpath>
+        <xpath expr="//div[@id='product_documents']" position="attributes">
+            <attribute name="t-if">product_documents and not ck_product_page_tabs</attribute>
+        </xpath>
+    </template>
+
+</odoo>

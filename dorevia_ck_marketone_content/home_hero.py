@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 """Home V1 Hero / Lot 1 — rapprochement maquette (MOA maquette V1)."""
+import re
 from xml.sax.saxutils import escape
+
+# Visuel « bandeau crêpes manioc » recadré pour un crop carrousel peu profond :
+# sujet centré verticalement dans le fichier source (cf. ck_hero_crepe_manioc.webp).
+HERO_CREPE_FOCAL_SRC = '/dorevia_ck_marketone_content/static/img/ck_hero_crepe_manioc.webp'
+HERO_CREPE_FOCAL_ALT = 'Galettes de manioc créoles dorées'
+_HERO_LEGACY_FOCAL_CLASS = ' ck-hero__slide-media--focal-product'
 
 HERO_VARIANT_MARKER = 'ck-hero--marketone-v1'
 HERO_DATA_NAME = 'CK Hero home V1'
@@ -17,6 +24,8 @@ HERO_VISUAL_ALT = 'Sélection de produits créoles — épicerie et condiments'
 HERO_CAROUSEL_ID = 'ckHeroVisualCarousel'
 HERO_CAROUSEL_MARKER = 'ck-hero__visual-carousel'
 HERO_CAROUSEL_INTERVAL_MS = 25000
+HERO_SLIDE_SNIPPET = 's_ck_hero_slide'
+HERO_EDITABLE_MEDIA_MARKER = 'o_editable_media'
 HERO_VISUAL_STATIC_MARKER = 'ck_hero_home_v1'
 HERO_VISUAL_MAX_SLIDES = 3
 HERO_VISUAL_IMAGES = (
@@ -48,11 +57,18 @@ def _arch_as_string(arch):
 
 def _hero_visual_slide_html(index, src, alt, *, active=False):
     active_class = ' active' if active else ''
+    data_name = escape(f'Visuel hero {index + 1}')
+    image = escape(src)
     return (
-        f'<div class="carousel-item{active_class}" data-name="Visuel hero {index + 1}">'
-        f'<img src="{src}" class="ck-hero__visual-media d-block w-100" '
+        f'<div class="carousel-item{active_class}" data-snippet="{HERO_SLIDE_SNIPPET}" '
+        f'data-name="{data_name}">'
+        f'<div class="ck-hero__slide-media o_editable">'
+        f'<p class="o_not_editable" contenteditable="false">'
+        f'<img src="{image}" class="ck-hero__visual-media {HERO_EDITABLE_MEDIA_MARKER} d-block w-100" '
         f'alt="{escape(alt)}" loading="{"eager" if active else "lazy"}" '
         f'width="800" height="500"/>'
+        f'</p>'
+        f'</div>'
         f'</div>'
     )
 
@@ -115,7 +131,7 @@ def build_home_hero_arch(env):
                     <a href="/professionnels" class="btn btn-secondary">{cta_pro}</a>
                 </div>
             </div>
-            <div class="ck-hero__visual-col o_colored_level">
+            <div class="ck-hero__visual-col">
                 {visual}
             </div>
         </div>
@@ -175,6 +191,9 @@ def hero_home_arch_is_valid(arch):
         'ck-hero__visual-media' in chunk,
         slide_count >= 1,
         slide_count <= HERO_VISUAL_MAX_SLIDES,
+        visual_chunk.count(HERO_EDITABLE_MEDIA_MARKER) == slide_count,
+        visual_chunk.count(f'data-snippet="{HERO_SLIDE_SNIPPET}"') == slide_count,
+        'ck-hero__slide-media o_editable' in visual_chunk,
     ]
     if not all(checks):
         return False
@@ -223,3 +242,54 @@ def bootstrap_home_hero(env):
 
     view.write({'arch_db': new_arch})
     return hero_home_arch_is_valid(new_arch)
+
+
+def repair_hero_crepe_focal(arch):
+    """Stabilise le visuel crêpes manioc du hero (idempotent).
+
+    - remplace l'ancienne image (attachment /web/image ou png source) par le
+      fichier statique recadré centré ``ck_hero_crepe_manioc.webp`` ;
+    - purge les métadonnées éditeur périmées (data-original-src, etc.) sur ce
+      visuel pour qu'il soit traité comme une image statique propre ;
+    - retire la classe ``ck-hero__slide-media--focal-product`` (override CSS
+      ``object-position: 78%`` supprimé : cause de la divergence builder/public).
+
+    Renvoie ``(new_arch, changed)``.
+    """
+    if not arch:
+        return arch, False
+    new_arch = arch
+
+    if _HERO_LEGACY_FOCAL_CLASS in new_arch:
+        new_arch = new_arch.replace(_HERO_LEGACY_FOCAL_CLASS, '')
+
+    if 'crepe_manio' in new_arch or 'ck_hero_crepe_manioc' in new_arch:
+        clean_img = (
+            f'<img src="{HERO_CREPE_FOCAL_SRC}" '
+            f'alt="{escape(HERO_CREPE_FOCAL_ALT)}" '
+            f'class="ck-hero__visual-media {HERO_EDITABLE_MEDIA_MARKER} d-block w-100" '
+            f'loading="eager" width="800" height="500"/>'
+        )
+        new_arch = re.sub(
+            r'<img\b[^>]*?(?:crepe_manio|ck_hero_crepe_manioc)[^>]*?/?>',
+            clean_img,
+            new_arch,
+            count=1,
+        )
+
+    return new_arch, (new_arch != arch)
+
+
+def normalize_homepage_hero_crepe(env):
+    """Applique ``repair_hero_crepe_focal`` sur la home (sudo, idempotent)."""
+    if not env.is_superuser():
+        env = env(su=True)
+    page = env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+    if not page or not page.view_id:
+        return False
+    view = page.view_id.sudo()
+    arch = _arch_as_string(view.arch_db or view.arch)
+    new_arch, changed = repair_hero_crepe_focal(arch)
+    if changed:
+        view.write({'arch_db': new_arch})
+    return changed

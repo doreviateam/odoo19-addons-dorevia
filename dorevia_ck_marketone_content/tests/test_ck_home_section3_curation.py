@@ -5,15 +5,18 @@ from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+    FEATURED_CARD_CART_CTA,
     FEATURED_CARD_CTA,
     FEATURED_CATEGORY_NAME,
     FEATURED_GRID_MARKER,
     FEATURED_CATEGORY_XMLID,
     _ensure_featured_category,
     _get_featured_badge_html,
+    _get_featured_card_metadata_line,
     _get_featured_commercial_line,
     _get_featured_display_name,
     _get_featured_labels_line,
+    _get_featured_price_label,
     _patch_homepage_featured_arch,
     bootstrap_home_featured_products,
     build_featured_product_card_html,
@@ -21,8 +24,8 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     get_curated_featured_variants,
 )
 
-_TINY_PNG = (
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
 )
 
 
@@ -35,7 +38,7 @@ class TestCkHomeSection3Curation(TransactionCase):
             'website_published': True,
             'sale_ok': True,
             'list_price': 1.0,
-            'image_1920': _TINY_PNG,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         }
         base.update(vals)
         return self.env['product.template'].sudo().create(base)
@@ -216,6 +219,49 @@ class TestCkHomeSection3Curation(TransactionCase):
         self.assertIn('Guadeloupe · Épicerie', card)
         self.assertNotIn(FEATURED_CATEGORY_NAME, card)
 
+    def test_card_metadata_line_joins_labels_format_and_reference(self):
+        guadeloupe = self.env['product.tag'].sudo().create({
+            'name': 'Guadeloupe',
+            'sequence': 10,
+        })
+        epicerie = self.env['product.tag'].sudo().create({
+            'name': 'Épicerie',
+            'sequence': 20,
+        })
+        product = self._make_product(
+            'CK Vedette Metadata',
+            list_price=3.6,
+            product_tag_ids=[(6, 0, [guadeloupe.id, epicerie.id])],
+            ck_net_quantity=100,
+            ck_net_quantity_uom_id=self._card_uom('g').id,
+            ck_reference_price_uom_id=self._card_uom('kg').id,
+            ck_show_reference_price=True,
+        )
+        website = self.env['website'].search([], limit=1)
+        variant = product.product_variant_id
+        metadata = _get_featured_card_metadata_line(self.env, website, variant)
+        self.assertEqual(metadata, 'Guadeloupe · Épicerie · 100 g · 36,00\xa0€/kg')
+
+        card = build_featured_product_card_html(self.env, website, variant)
+        self.assertIn('product-card-labels', card)
+        self.assertIn('Guadeloupe · Épicerie · 100 g', card)
+        self.assertIn('36,00', card)
+        self.assertNotIn('reference-price', card)
+
+    def test_card_metadata_line_skips_orphan_separators(self):
+        product = self._make_product(
+            'CK Vedette Metadata Labels Only',
+            product_tag_ids=[(6, 0, [self.env['product.tag'].sudo().create({
+                'name': 'Réunion',
+                'sequence': 1,
+            }).id])],
+        )
+        website = self.env['website'].search([], limit=1)
+        variant = product.product_variant_id
+        metadata = _get_featured_card_metadata_line(self.env, website, variant)
+        self.assertEqual(metadata, 'Réunion')
+        self.assertNotIn(' ·  · ', metadata)
+
     def test_card_labels_use_variant_additional_product_tags(self):
         category = _ensure_featured_category(self.env)
         martinique = self.env['product.tag'].sudo().create({
@@ -252,8 +298,15 @@ class TestCkHomeSection3Curation(TransactionCase):
         self.assertIn('18,13', commercial)
 
         card = build_featured_product_card_html(self.env, website, variant)
-        self.assertIn('reference-price', card)
+        self.assertIn('product-card-labels', card)
         self.assertIn('320 g', card)
+        self.assertIn('/kg', card)
+        self.assertIn('18,13', card)
+        self.assertNotIn('reference-price', card)
+        pricing_start = card.index('product-card-pricing')
+        pricing_end = card.index('product-card-actions', pricing_start)
+        pricing_block = card[pricing_start:pricing_end]
+        self.assertNotIn('/kg', pricing_block)
 
     def test_card_reference_price_uses_configurable_uom(self):
         custom_net = self.env['dorevia.ck.card.uom'].sudo().create({
@@ -291,13 +344,92 @@ class TestCkHomeSection3Curation(TransactionCase):
         card = build_featured_product_card_html(self.env, website, product.product_variant_id)
         self.assertNotIn('reference-price', card)
 
+    def test_card_variant_price_without_pricelist(self):
+        """Chaque card multi-variantes affiche le lst_price de la variante vendue."""
+        attr = self.env['product.attribute'].sudo().create({'name': 'Goût QA Prix'})
+        val_a = self.env['product.attribute.value'].sudo().create({
+            'name': 'Salé QA',
+            'attribute_id': attr.id,
+        })
+        val_b = self.env['product.attribute.value'].sudo().create({
+            'name': 'Sucré QA',
+            'attribute_id': attr.id,
+        })
+        product = self.env['product.template'].sudo().create({
+            'name': 'CK Crackers QA Prix',
+            'is_published': True,
+            'website_published': True,
+            'sale_ok': True,
+            'list_price': 3.5,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
+            'attribute_line_ids': [(0, 0, {
+                'attribute_id': attr.id,
+                'value_ids': [(6, 0, [val_a.id, val_b.id])],
+            })],
+        })
+        sale = product.product_variant_ids.filtered(
+            lambda v: 'Salé QA' in (v.display_name or '')
+        )[:1]
+        sweet = product.product_variant_ids.filtered(
+            lambda v: 'Sucré QA' in (v.display_name or '')
+        )[:1]
+        self.assertTrue(sale and sweet)
+        sale_ptav = sale.product_template_attribute_value_ids[:1]
+        sale_ptav.write({'price_extra': 0.1})
+        sale.write({'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
+        sweet.write({'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
+        self.assertAlmostEqual(sale.lst_price, 3.6)
+        self.assertAlmostEqual(sweet.lst_price, 3.5)
+        website = self.env['website'].search([], limit=1)
+        self.assertEqual(_get_featured_price_label(self.env, website, sale), '3,60\u00a0€')
+        self.assertEqual(_get_featured_price_label(self.env, website, sweet), '3,50\u00a0€')
+
+    def test_variant_lst_price_write_refreshes_home_arch(self):
+        category = _ensure_featured_category(self.env)
+        product = self._make_product(
+            'CK Vedette Prix Variante',
+            list_price=3.5,
+            public_categ_ids=[(4, category.id)],
+        )
+        bootstrap_home_featured_products(self.env)
+        product.product_variant_id.write({'lst_price': 4.2})
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        arch = page.view_id.arch_db or ''
+        self.assertIn('4,20', arch)
+
+    def test_bo_variant_list_price_write_refreshes_home_arch(self):
+        """Chemin BO réel Odoo 19 : write list_price (pas lst_price dans vals)."""
+        category = _ensure_featured_category(self.env)
+        product = self._make_product(
+            'CK Vedette List Price BO',
+            list_price=3.5,
+            public_categ_ids=[(4, category.id)],
+        )
+        variant = product.product_variant_id
+        bootstrap_home_featured_products(self.env)
+        variant.write({'list_price': 4.75})
+        page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+        arch = page.view_id.arch_db or ''
+        self.assertIn('4,75', arch)
+
     def test_card_cta_is_voir_le_produit(self):
         product = self._make_product('CK Vedette CTA')
         website = self.env['website'].search([], limit=1)
         card = build_featured_product_card_html(self.env, website, product.product_variant_id)
         self.assertIn(FEATURED_CARD_CTA, card)
+        self.assertIn(FEATURED_CARD_CART_CTA, card)
+        self.assertIn('class="card-cart-cta"', card)
+        self.assertIn('class="card-cta card-cta--secondary"', card)
         self.assertIn('ck-product-card__cover', card)
         self.assertNotIn('>Voir</a>', card)
+
+    def test_card_hides_cart_cta_when_not_sale_ok(self):
+        product = self._make_product('CK Vedette Pas Vente', sale_ok=False)
+        website = self.env['website'].search([], limit=1)
+        card = build_featured_product_card_html(self.env, website, product.product_variant_id)
+        self.assertIn(FEATURED_CARD_CTA, card)
+        self.assertNotIn('class="card-cart-cta"', card)
+        self.assertIn('product-card-actions--view-only', card)
 
     def test_product_tags_write_refreshes_home_arch(self):
         category = _ensure_featured_category(self.env)

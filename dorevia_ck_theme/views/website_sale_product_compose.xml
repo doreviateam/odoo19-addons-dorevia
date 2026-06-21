@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Phase 4 — composition fiche produit portable (install / -u dorevia_ck_theme). -->
-    <template id="product_ck_chips"
-              inherit_id="dorevia_ck_theme.product_ck_theme"
-              name="CK Product category chips"
-              priority="21">
-        <xpath expr="//div[hasclass('ck-product-chips')]" position="inside">
-            <t t-foreach="product.public_categ_ids" t-as="categ">
-                <a t-attf-href="/shop/category/{{slug(categ)}}" class="ck-chip" t-out="categ.name"/>
-            </t>
-        </xpath>
-    </template>
+    <delete model="ir.ui.view" search="[('key', '=', 'dorevia_ck_theme.product_ck_chips')]"/>
 
     <template id="product_ck_compose"
               inherit_id="website_sale.product"
               name="CK Product Phase 4 compose"
               priority="25">
-        <xpath expr="//div[@id='oe_structure_website_sale_product_2']" position="inside">
-            <t t-call="dorevia_ck_theme.s_ck_product_pro_signal"/>
-        </xpath>
+        <!-- Passerelle Pro sous la zone longue (product_ck_long_zone) — pas de grande section ici. -->
     </template>
 </odoo>

@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 """Home Lot 2 / Section 3 — Produits vedettes SSR maquette CK (cartes dédiées)."""
-import contextlib
 import json
 import re
-from unittest.mock import MagicMock, Mock, patch
 from xml.sax.saxutils import escape
 
-import odoo.http
-from odoo.tools import DotDict, format_amount, lazy
-from werkzeug.test import EnvironBuilder
+from odoo.tools import format_amount
 
 MIN_FEATURED_PRODUCTS = 5
 FEATURED_SECTION_MARKER = 'ck-featured-products'
@@ -18,30 +14,10 @@ FEATURED_TITLE = 'Nos coups de cœur'
 FEATURED_SUBTITLE = 'Sélection CK · origine, goût et savoir-faire créole'
 FEATURED_SHOP_CTA = 'Toute la boutique →'
 FEATURED_CARD_CTA = 'Voir le produit'
+FEATURED_CARD_CART_CTA = 'Ajouter au panier'
 FEATURED_CATEGORY_NAME = 'Coups de cœur'  # curation BO des vedettes (catégorie e-commerce dédiée)
 FEATURED_CATEGORY_XMLID = 'dorevia_ck_marketone_content.public_categ_coups_de_coeur'
 FEATURED_CURATED_MAX = 8
-
-_DEMO_ORIGIN_BY_NAME_FRAGMENT = (
-    ('goyav', 'Réunion'),
-    ('galettes', 'Martinique'),
-    ('manioc', 'Martinique'),
-    ('manio', 'Guadeloupe'),
-    ('cracker', 'Guadeloupe'),
-    ('savon', 'Martinique'),
-    ('vétiver', 'Martinique'),
-    ('vetiver', 'Martinique'),
-    ('colombo', 'Martinique'),
-)
-
-_ORIGIN_KEYWORDS = (
-    'Réunion',
-    'Guadeloupe',
-    'Martinique',
-    'Guyane',
-    'Mayotte',
-    'Sélection CK',
-)
 
 _CATEGORY_SHORT_LABELS = (
     'Épicerie',
@@ -71,17 +47,40 @@ _PLACEHOLDER_MARKERS = (
     'is_sample',
 )
 
+def _ck_class_token_pattern(token):
+    """Fragment regex matchant un attribut ``class`` contenant le token BEM ``token``,
+    quel que soit son ordre, ses classes voisines ou la présence d'alias legacy
+    (``product-card-*``). On s'ancre sur les classes BEM ``ck-product-card__*`` :
+    elles sont stables et survivent à la suppression future des alias de compat.
+    Les bornes ``(?<![\\w-])`` / ``(?![\\w-])`` évitent les faux positifs (ex.
+    ``card-cta`` ne matche pas ``card-cta--secondary`` ni ``card-cart-cta``)."""
+    return r'class="[^"]*(?<![\w-])' + re.escape(token) + r'(?![\w-])[^"]*"'
+
+
+def _ck_class_token_re(token):
+    return re.compile(_ck_class_token_pattern(token))
+
+
+def _ck_class_token_text_re(token):
+    """Capture le texte interne d'un élément dont la ``class`` contient ``token``."""
+    return re.compile(_ck_class_token_pattern(token) + r'[^>]*>([^<]+)')
+
+
 _CARD_IMAGE_RE = re.compile(
     r"background-image:\s*url\(\s*['\"]?/web/image/product\.(?:template|product)/\d+/",
     re.IGNORECASE,
 )
-_CARD_PRICE_RE = re.compile(r'class="price"')
-_CARD_LINK_RE = re.compile(r'class="card-cta"')
-_CARD_COVER_RE = re.compile(r'ck-product-card__cover')
+_CARD_PRICE_RE = _ck_class_token_re('ck-product-card__price-value')
+_CARD_LINK_RE = _ck_class_token_re('card-cta')
+_CARD_COVER_RE = _ck_class_token_re('ck-product-card__cover')
+_CARD_CART_CTA_RE = _ck_class_token_re('card-cart-cta')
 _CARD_CTA_TEXT_RE = re.compile(re.escape(FEATURED_CARD_CTA))
 _FEATURED_LABELS_BLOCK_RE = re.compile(
-    r'<p class="product-card-labels">[^<]+</p>',
+    r'<p ' + _ck_class_token_pattern('ck-product-card__meta') + r'[^>]*>[^<]+</p>',
 )
+_CARD_TITLE_TEXT_RE = _ck_class_token_text_re('ck-product-card__title')
+_CARD_PRICE_TEXT_RE = _ck_class_token_text_re('ck-product-card__price-value')
+_CARD_META_TEXT_RE = _ck_class_token_text_re('ck-product-card__meta')
 
 FEATURED_TITLE_SECTION = ''  # rétro-compat tests import — section unique désormais
 
@@ -90,60 +89,6 @@ def _arch_as_string(arch):
     if isinstance(arch, dict):
         return next(iter(arch.values()), '')
     return arch or ''
-
-
-@contextlib.contextmanager
-def _with_website_request(env, website):
-    """Contexte HTTP minimal pour prix catalogue (hors requête WSGI)."""
-    lang_code = env.context.get('lang') or 'fr_FR'
-    env = env(context=dict(env.context, lang=lang_code))
-    request = Mock(
-        httprequest=Mock(
-            host='localhost',
-            path='/',
-            app=odoo.http.root,
-            environ=EnvironBuilder(
-                path='/',
-                base_url='http://127.0.0.1:8069',
-            ).get_environ(),
-            cookies={},
-            referrer='',
-            remote_addr='127.0.0.1',
-            url_root='http://127.0.0.1:8069/',
-            args=[],
-        ),
-        type='http',
-        future_response=odoo.http.FutureResponse(),
-        params={},
-        redirect=env['ir.http']._redirect,
-        session=DotDict(
-            odoo.http.get_default_session(),
-            context={'lang': lang_code},
-            force_website_id=website.id,
-        ),
-        geoip=odoo.http.GeoIP('127.0.0.1'),
-        db=env.registry.db_name,
-        env=env,
-        registry=env.registry,
-        lang=env['res.lang']._get_data(code=lang_code),
-        website=website,
-        render=lambda *args, **kwargs: '',
-    )
-    request.website_routing = website.id
-    request.pricelist = lazy(website._get_and_cache_current_pricelist)
-    request.cart = lazy(website._get_and_cache_current_cart)
-    request.fiscal_position = lazy(website._get_and_cache_current_fiscal_position)
-    router = MagicMock()
-    router.return_value.bind.return_value.match.return_value[0].routing = {
-        'type': 'http',
-        'website': True,
-        'multilang': True,
-    }
-    with contextlib.ExitStack() as stack:
-        odoo.http._request_stack.push(request)
-        stack.callback(odoo.http._request_stack.pop)
-        stack.enter_context(patch('odoo.http.root.get_db_router', router))
-        yield request
 
 
 def _variant_has_valid_image(variant):
@@ -267,28 +212,6 @@ def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
     return variants[:max_count]
 
 
-def _get_featured_origin_label(template):
-    for line in template.attribute_line_ids:
-        attr_name = (line.attribute_id.name or '').lower()
-        if 'origine' in attr_name or 'origin' in attr_name:
-            value = line.value_ids[:1]
-            if value and (value.name or '').strip():
-                return value.name.strip()
-    haystack = ' '.join(filter(None, [
-        template.description_sale or '',
-        template.name or '',
-    ]))
-    lowered = haystack.lower()
-    for keyword in _ORIGIN_KEYWORDS:
-        if keyword.lower() in lowered:
-            return keyword
-    name_lower = (template.name or '').lower()
-    for fragment, origin in _DEMO_ORIGIN_BY_NAME_FRAGMENT:
-        if fragment in name_lower:
-            return origin
-    return ''
-
-
 def _get_featured_category_label(template):
     category = template.public_categ_ids[:1]
     if not category:
@@ -327,22 +250,40 @@ def _get_featured_display_name(variant):
 
 
 def _get_featured_image_url(variant):
+    """URL image card — variante seulement si ``image_variant_1920`` est renseignée."""
     template = variant.product_tmpl_id
-    if variant.image_1920 or variant.image_512:
+    if variant.image_variant_1920:
         return f'/web/image/product.product/{variant.id}/image_512'
     if template.image_1920 or template.image_512:
         return f'/web/image/product.template/{template.id}/image_512'
     for sibling in template.product_variant_ids:
-        if sibling.image_1920 or sibling.image_512:
+        if sibling.image_variant_1920:
             return f'/web/image/product.product/{sibling.id}/image_512'
     return f'/web/image/product.template/{template.id}/image_512'
 
 
 def _get_featured_price_amount(env, website, variant):
+    """Prix B2C de la carte vedette — sans requête HTTP (PR-4 / H1).
+
+    Pipeline validé sur instance (candidat B) : prix pricelist + position fiscale
+    + couche taxes ``_apply_taxes_to_price`` (TTC/HT selon
+    ``website.show_line_subtotals_tax_selection``). Reproduit la sortie de l'ancien
+    ``_get_combination_info`` (qui s'appuyait sur une fausse requête, supprimée)."""
     template = variant.product_tmpl_id
-    with _with_website_request(env, website):
-        info = template._get_combination_info(product_id=variant.id, add_qty=1.0)
-    return info.get('price_reduce') or info.get('price') or template.list_price
+    pricelist = website.sudo().get_pricelist_available()[:1]
+    currency = (pricelist.currency_id if pricelist else None) or website.currency_id
+    if pricelist:
+        pricelist_price = pricelist._get_product_price(variant, 1.0)
+    else:
+        # Sans pricelist publique : prix catalogue de la variante affichée (pas le template).
+        pricelist_price = variant.lst_price
+    company = website.company_id or env.company
+    product_taxes = variant.sudo().taxes_id.filtered(lambda t: t.company_id == company)
+    fpos = env['account.fiscal.position'].sudo()._get_fiscal_position(env.user.partner_id)
+    taxes = fpos.map_tax(product_taxes) if fpos else product_taxes
+    return template._apply_taxes_to_price(
+        pricelist_price, currency, product_taxes, taxes, variant, website=website,
+    )
 
 
 def _get_featured_price_label(env, website, variant):
@@ -397,7 +338,15 @@ def _featured_label_parts_from_tags(tags):
 
 
 def _featured_label_parts_from_sql(cr, template_id, variant_id=None):
-    """Lecture SQL directe — template + variante (product_tag_ids + additional_product_tag_ids)."""
+    """Lecture SQL directe — template + variante (product_tag_ids + additional_product_tag_ids).
+
+    QA M4 : accès SQL direct assumé pour la performance du rendu SSR des cartes
+    (évite N lectures ORM par carte sur la home). Cible les tables de relation
+    ``product_tag_product_template_rel`` / ``product_tag_product_product_rel``.
+    Requête entièrement paramétrée (%s) — pas d'injection. Contournement
+    volontaire des record rules (exécution en contexte sudo de seed/refresh).
+    Un repli ORM existe dans ``_get_featured_labels_line`` si la lecture SQL ne
+    renvoie aucune étiquette."""
     if variant_id:
         cr.execute(
             """
@@ -450,15 +399,36 @@ def _featured_tags_for_card(template, variant=None):
     return tags.sorted(key=lambda tag: (tag.sequence, tag.id))
 
 
-def _get_featured_labels_line(template, variant=None):
-    """Ligne descriptive client — product_tag_ids (+ variante), jamais « Coups de cœur »."""
+def _get_featured_tag_names(template, variant=None):
+    """Étiquettes produit ordonnées (hors exclusions), sans interprétation origine."""
     template = template.sudo()
     variant = (variant or template.product_variant_ids[:1]).sudo()
     variant_id = variant.id if variant else None
     parts = _featured_label_parts_from_sql(template.env.cr, template.id, variant_id)
     if not parts:
         parts = _featured_label_parts_from_tags(_featured_tags_for_card(template, variant))
-    return ' · '.join(parts)
+    return parts
+
+
+def _get_featured_origin_and_tag_parts(template, variant=None):
+    """Origine (attribut « Origines » + fallback tags Option A) et tags transversaux."""
+    from .ck_product_origin import (
+        ck_card_origin_and_transversal_tags,
+        ck_origin_from_attribute,
+    )
+
+    template = template.sudo()
+    origin, transversal = ck_card_origin_and_transversal_tags(
+        _get_featured_tag_names(template, variant),
+        ck_origin_from_attribute(template),
+    )
+    return origin, transversal
+
+
+def _get_featured_labels_line(template, variant=None):
+    """Segment origine + tags transversaux — attribut prioritaire, jamais « Coups de cœur »."""
+    origin, transversal = _get_featured_origin_and_tag_parts(template, variant)
+    return _join_featured_metadata_parts(origin, ' · '.join(transversal))
 
 
 def _featured_arch_missing_product_labels(env, arch, variants):
@@ -474,6 +444,61 @@ def _featured_arch_missing_product_labels(env, arch, variants):
             return True
         if line not in arch:
             return True
+    return False
+
+
+def _featured_arch_missing_cart_cta(env, website, arch, variants):
+    """True si une vedette éligible au quick-add n'a pas le CTA panier dans l'arch home."""
+    if FEATURED_SECTION_MARKER not in (arch or ''):
+        return False
+    for variant in variants:
+        if not _featured_variant_allows_quick_add(env, website, variant):
+            continue
+        if not _CARD_CART_CTA_RE.search(arch):
+            return True
+        product_marker = f'data-product-id="{variant.id}"'
+        if product_marker not in arch:
+            return True
+    return False
+
+
+def _featured_card_arch_chunk(arch, variant):
+    marker = f'data-product-id="{variant.id}"'
+    idx = arch.find(marker)
+    if idx < 0:
+        return ''
+    start = arch.rfind('<article', 0, idx)
+    end = arch.find('</article>', idx)
+    if start < 0 or end < 0:
+        return ''
+    return arch[start:end]
+
+
+def _featured_arch_stale_cards(env, website, arch, variants):
+    """True si prix ou métadonnées SSR d'une vedette ne correspondent plus au BO."""
+    if FEATURED_SECTION_MARKER not in (arch or ''):
+        return False
+    for variant in variants:
+        chunk = _featured_card_arch_chunk(arch, variant)
+        if not chunk:
+            continue
+        expected_title = escape(_get_featured_display_name(variant))
+        title_match = _CARD_TITLE_TEXT_RE.search(chunk)
+        if title_match and title_match.group(1) != expected_title:
+            return True
+        expected_image = _get_featured_image_url(variant)
+        image_match = re.search(r"background-image:url\('([^']+)'\)", chunk)
+        if image_match and image_match.group(1) != expected_image:
+            return True
+        expected_price = escape(_get_featured_price_label(env, website, variant))
+        price_match = _CARD_PRICE_TEXT_RE.search(chunk)
+        if price_match and price_match.group(1) != expected_price:
+            return True
+        expected_labels = escape(_get_featured_card_metadata_line(env, website, variant))
+        if expected_labels:
+            labels_match = _CARD_META_TEXT_RE.search(chunk)
+            if labels_match and labels_match.group(1) != expected_labels:
+                return True
     return False
 
 
@@ -532,19 +557,54 @@ def _format_featured_reference_price(env, website, price, template):
     return f'{amount}/{ref_label}' if ref_label else amount
 
 
-def _get_featured_commercial_line(env, website, variant):
+def _join_featured_metadata_parts(*parts):
+    """Joint les segments d'étiquette en ignorant les valeurs vides (pas de « · » orphelin)."""
+    return ' · '.join(part for part in parts if part)
+
+
+def _get_featured_format_and_reference_parts(env, website, variant):
+    """Format net (ex. 100 g) et prix comparatif (ex. 36,00 €/kg) — logique inchangée."""
     template = variant.product_tmpl_id
     qty_part = _format_featured_net_quantity(
         template.ck_net_quantity,
         template.ck_net_quantity_uom_id,
     )
     if not qty_part:
-        return ''
+        return '', ''
     price = _get_featured_price_amount(env, website, variant)
     ref_part = _format_featured_reference_price(env, website, price, template)
-    if ref_part:
-        return f'{qty_part} · {ref_part}'
-    return qty_part
+    return qty_part, ref_part
+
+
+def _get_featured_commercial_line(env, website, variant):
+    """Format + prix comparatif (sans catégorie/origine) — conservé pour les tests unitaires."""
+    qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
+    if not qty_part:
+        return ''
+    return _join_featured_metadata_parts(qty_part, ref_part)
+
+
+def _get_featured_card_metadata_line(env, website, variant):
+    """Ligne unique sous le titre : origine · tags transversaux · format · prix comparatif."""
+    template = variant.product_tmpl_id
+    origin, transversal = _get_featured_origin_and_tag_parts(template, variant)
+    qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
+    return _join_featured_metadata_parts(origin, ' · '.join(transversal), qty_part, ref_part)
+
+
+_SAFE_CSS_COLOR_RE = re.compile(
+    r'^#[0-9A-Fa-f]{3,8}$|^rgba?\([\d\s.,%]+\)$|^hsla?\([\d\s.,%]+\)$|^[a-zA-Z]+$'
+)
+
+
+def _safe_css_color(value):
+    """QA L1 : n'autorise qu'une couleur CSS simple (hex/rgb/hsl/mot-clé) en inline style.
+
+    Les valeurs `bg_color` / `text_color` du ruban e-commerce sont saisies en BO ;
+    on les filtre avant injection dans un attribut `style` pour écarter tout
+    contenu non couleur (défense XSS, risque faible mais réel)."""
+    value = (value or '').strip()
+    return value if _SAFE_CSS_COLOR_RE.match(value) else ''
 
 
 def _featured_ribbon_badge_class(ribbon):
@@ -557,6 +617,22 @@ def _featured_ribbon_badge_class(ribbon):
     return 'badge-ribbon'
 
 
+def _featured_variant_allows_quick_add(env, website, variant):
+    """Éligibilité ajout panier direct — alignée ``_website_show_quick_add`` sans requête HTTP."""
+    template = variant.product_tmpl_id.sudo()
+    if template.type == 'combo':
+        return False
+    if not variant.sale_ok or not template.sale_ok:
+        return False
+    if not template.website_published or not variant.active:
+        return False
+    if not template._is_add_to_cart_possible():
+        return False
+    if website.prevent_zero_price_sale and not _get_featured_price_amount(env, website, variant):
+        return False
+    return True
+
+
 def _get_featured_badge_html(variant):
     """Badge carte = ruban e-commerce BO (`website_ribbon_id` sur le template)."""
     ribbon = variant.product_tmpl_id.website_ribbon_id
@@ -566,14 +642,19 @@ def _get_featured_badge_html(variant):
     css_class = _featured_ribbon_badge_class(ribbon)
     if css_class == 'badge-ribbon':
         styles = []
-        if ribbon.bg_color:
-            styles.append(f'background-color:{ribbon.bg_color}')
-        if ribbon.text_color:
-            styles.append(f'color:{ribbon.text_color}')
+        bg_color = _safe_css_color(ribbon.bg_color)
+        if bg_color:
+            styles.append(f'background-color:{bg_color}')
+        text_color = _safe_css_color(ribbon.text_color)
+        if text_color:
+            styles.append(f'color:{text_color}')
         style_attr = f' style="{"; ".join(styles)}"' if styles else ''
     else:
         style_attr = ''
-    return f'<span class="badge {css_class} badge-float"{style_attr}>{label}</span>'
+    return (
+        f'<span class="ck-product-card__badge badge {css_class} badge-float"'
+        f'{style_attr}>{label}</span>'
+    )
 
 
 def build_featured_product_card_html(env, website, variant):
@@ -583,37 +664,45 @@ def build_featured_product_card_html(env, website, variant):
     href = escape(variant.website_url or template.website_url or '/shop')
     image_url = _get_featured_image_url(variant)
     price_label = escape(_get_featured_price_label(env, website, variant))
-    labels_line = escape(_get_featured_labels_line(template, variant))
-    commercial_line = escape(_get_featured_commercial_line(env, website, variant))
+    metadata_line = escape(_get_featured_card_metadata_line(env, website, variant))
     badge_html = _get_featured_badge_html(variant)
     card_title = escape(display_name)
     card_aria = escape(f'{FEATURED_CARD_CTA} : {display_name}')
 
     labels_block = (
-        f'<p class="product-card-labels">{labels_line}</p>'
-        if labels_line else ''
+        f'<p class="ck-product-card__meta product-card-labels">{metadata_line}</p>'
+        if metadata_line else ''
     )
-    commercial_block = (
-        f'<span class="reference-price">{commercial_line}</span>'
-        if commercial_line else ''
+    if _featured_variant_allows_quick_add(env, website, variant):
+        actions_html = f"""<div class="ck-product-card__actions product-card-actions">
+            <button type="button" class="card-cart-cta" data-product-id="{variant.id}" data-product-template-id="{template.id}">{FEATURED_CARD_CART_CTA}</button>
+            <a href="{href}" class="card-cta card-cta--secondary">{FEATURED_CARD_CTA}</a>
+        </div>"""
+    else:
+        actions_html = f"""<div class="ck-product-card__actions product-card-actions product-card-actions--view-only">
+            <a href="{href}" class="card-cta">{FEATURED_CARD_CTA}</a>
+        </div>"""
+
+    overlays_html = (
+        f'<div class="ck-product-card__overlays">{badge_html}</div>'
+        if badge_html else ''
     )
 
     return f"""
-<article class="{FEATURED_CARD_MARKER} product-card ck-product-card--interactive">
+<article class="{FEATURED_CARD_MARKER} ck-product-card--home product-card ck-product-card--interactive">
     <a href="{href}" class="ck-product-card__cover" aria-label="{card_aria}"></a>
-    <div class="product-card-media ck-product-card__media" style="background-image:url('{image_url}')">
-        {badge_html}
+    <div class="ck-product-card__image product-card-media ck-product-card__media" style="background-image:url('{image_url}')">
+        {overlays_html}
     </div>
-    <div class="product-card-body">
-        <h3 class="product-card-title">{card_title}</h3>
+    <div class="ck-product-card__body product-card-body">
+        <h3 class="ck-product-card__title product-card-title">{card_title}</h3>
         {labels_block}
     </div>
-    <div class="product-card-foot">
-        <div class="product-card-pricing">
-            <span class="price">{price_label}</span>
-            {commercial_block}
+    <div class="ck-product-card__foot product-card-foot">
+        <div class="ck-product-card__price product-card-pricing">
+            <span class="ck-product-card__price-value price">{price_label}</span>
         </div>
-        <a href="{href}" class="card-cta">{FEATURED_CARD_CTA}</a>
+        {actions_html}
     </div>
 </article>""".strip()
 
@@ -726,8 +815,54 @@ def refresh_home_featured_products(env):
     return bootstrap_home_featured_products(env)
 
 
+def _featured_target_langs(env, website):
+    """Langues dont l'``arch_db`` (jsonb traduit) doit être reconstruit.
+
+    ``ir.ui.view.arch_db`` est un champ ``xml_translate`` : chaque langue a sa
+    propre valeur jsonb. La home est servie dans la langue du visiteur ; si on
+    n'écrit que la langue source (en_US), l'entrée ``fr_FR`` servie reste figée
+    alors même que la base et les tests (lus en source) sont à jour. On
+    reconstruit donc explicitement chaque langue front + la source + la langue
+    courante.
+    """
+    langs = set(website.language_ids.mapped('code'))
+    if website.default_lang_id:
+        langs.add(website.default_lang_id.code)
+    langs.add('en_US')  # langue source / fallback de rendu des champs traduits
+    if env.context.get('lang'):
+        langs.add(env.context['lang'])
+    return [code for code in langs if code]
+
+
+def _featured_arch_stale_any_lang(env, website, page):
+    """True si l'``arch_db`` d'au moins une langue servie est périmé.
+
+    La détection mono-langue (souvent lue en source en_US) masquait la
+    péremption de l'entrée ``fr_FR`` réellement servie ; on contrôle donc chaque
+    langue cible.
+    """
+    base_variants = get_curated_featured_variants(env)
+    for lang in _featured_target_langs(env, website):
+        lang_env = env(context=dict(env.context, lang=lang))
+        view = page.view_id.with_env(lang_env).sudo()
+        arch = view.arch_db or ''
+        variants = base_variants.with_env(lang_env)
+        if _featured_arch_missing_product_labels(lang_env, arch, variants):
+            return True
+        if _featured_arch_missing_cart_cta(lang_env, website, arch, variants):
+            return True
+        if _featured_arch_stale_cards(lang_env, website, arch, variants):
+            return True
+    return False
+
+
 def bootstrap_home_featured_products(env):
-    """Lot 2 home — injecte la grille SSR vedettes maquette ou masque si BO insuffisant."""
+    """Lot 2 home — injecte la grille SSR vedettes maquette ou masque si BO insuffisant.
+
+    Reconstruit l'``arch_db`` pour chaque langue servie par le site afin que la
+    page rendue (toujours dans la langue du visiteur) reflète le BO — et pas
+    seulement la langue source.
+    """
     if not env.is_superuser():
         env = env(su=True)
     website = env['website'].search([], limit=1)
@@ -741,7 +876,17 @@ def bootstrap_home_featured_products(env):
     if not page or not page.view_id:
         return False
 
-    view = page.view_id.sudo()
+    changed = False
+    for lang in _featured_target_langs(env, website):
+        lang_env = env(context=dict(env.context, lang=lang))
+        if _bootstrap_home_featured_products_lang(lang_env, website, page):
+            changed = True
+    return changed
+
+
+def _bootstrap_home_featured_products_lang(env, website, page):
+    """Reconstruit l'``arch_db`` de la home pour la langue courante de ``env``."""
+    view = page.view_id.with_env(env).sudo()
     arch = _arch_as_string(view.arch_db or view.arch)
     if not arch.strip():
         return False
@@ -761,11 +906,28 @@ def bootstrap_home_featured_products(env):
 
     new_arch, patched = _patch_homepage_featured_arch(arch, featured_arch)
     stale_labels = _featured_arch_missing_product_labels(env, arch, variants)
-    if not patched and not stale_labels:
+    stale_cart_cta = _featured_arch_missing_cart_cta(env, website, arch, variants)
+    stale_cards = _featured_arch_stale_cards(env, website, arch, variants)
+    stale_structure = (
+        FEATURED_SECTION_MARKER in arch
+        and featured_arch
+        and 'ck-product-card--home' not in arch
+    )
+    section_missing = FEATURED_SECTION_MARKER not in arch and bool(featured_arch)
+    if (
+        not patched
+        and not stale_labels
+        and not stale_cart_cta
+        and not stale_cards
+        and not stale_structure
+        and not section_missing
+    ):
         return False
     if not featured_arch:
+        if patched and new_arch != arch:
+            view.write({'arch_db': new_arch})
         return patched
-    if new_arch == arch and not stale_labels:
+    if new_arch == arch and not stale_labels and not stale_cart_cta and not stale_cards and not stale_structure and not section_missing:
         return patched
 
     view.write({'arch_db': new_arch})

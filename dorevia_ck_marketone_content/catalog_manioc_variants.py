@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Catalogue CK — modèle MOA vedettes : Manio Crackers (variantes) + Galettes séparées."""
-import base64
+
+from .ck_product_placeholders import CK_CREAM_PLACEHOLDER_PNG_B64
 
 MANIO_CRACKERS_PARENT_NAME = 'Manio Crackers'
 GALETTES_TEMPLATE_NAME = 'Galettes de manioc'
@@ -10,12 +11,6 @@ CRACKER_FORMAT_VALUES = (
     'Manio Crackers sucré',
 )
 GALETTES_WEBSITE_SEQUENCE = 10015
-
-# PNG 1×1 — placeholder recette si image BO absente à la création.
-_PLACEHOLDER_PNG = base64.b64decode(
-    b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC'
-)
-
 
 def _manio_crackers_parent(env):
     return env['product.template'].sudo().search([
@@ -95,7 +90,7 @@ def _ensure_galettes_separate_product(env):
             'website_sequence': GALETTES_WEBSITE_SEQUENCE,
         })
         if not galettes.image_1920:
-            galettes.write({'image_1920': _PLACEHOLDER_PNG})
+            galettes.write({'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
         _link_epicerie_category(env, galettes)
         return True
 
@@ -107,7 +102,7 @@ def _ensure_galettes_separate_product(env):
         'sale_ok': True,
         'list_price': 1.0,
         'website_sequence': GALETTES_WEBSITE_SEQUENCE,
-        'image_1920': _PLACEHOLDER_PNG,
+        'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
     })
     _link_epicerie_category(env, galettes)
     return bool(galettes)
