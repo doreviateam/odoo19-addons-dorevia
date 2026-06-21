@@ -9,6 +9,7 @@ from odoo.tests import tagged
 from odoo.tests.common import HttpCase, TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+    _CARD_PRICE_TEXT_RE,
     _featured_card_arch_chunk,
     _get_featured_commercial_line,
     _get_featured_price_amount,
@@ -26,7 +27,6 @@ from odoo.addons.dorevia_ck_marketone_content.tests.ck_home_section3_pricelist_u
 from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
     CK_CREAM_PLACEHOLDER_PNG_B64,
 )
-_PRICE_RE = re.compile(r'class="price">([^<]+)')
 
 
 def _normalize_price_label(text):
@@ -207,13 +207,10 @@ class TestCkHomeSection3FeaturedPricelistCompose(HttpCase):
         set_variant_fixed_price(self.env, self.pricelist, self.sweet, 3.5)
         bootstrap_home_featured_products(self.env)
 
-    def _featured_card_price(self, html, variant_id):
-        marker = f'data-product-id="{variant_id}"'
-        idx = html.find(marker)
-        self.assertGreater(idx, -1, msg=f'Card variante {variant_id} absente')
-        start = html.rfind('ck-product-card', 0, idx)
-        chunk = html[start:idx + 400]
-        match = _PRICE_RE.search(chunk)
+    def _featured_card_price(self, html, variant):
+        chunk = _featured_card_arch_chunk(html, variant)
+        self.assertTrue(chunk, msg=f'Card variante {variant.id} absente')
+        match = _CARD_PRICE_TEXT_RE.search(chunk)
         self.assertTrue(match, msg=chunk[:200])
         return _normalize_price_label(match.group(1))
 
@@ -262,12 +259,12 @@ class TestCkHomeSection3FeaturedPricelistCompose(HttpCase):
 
     def test_home_card_product_cart_price_alignment_sale(self):
         home = self.url_open('/').text
-        self.assertIn('3,60', self._featured_card_price(home, self.sale.id))
+        self.assertIn('3,60', self._featured_card_price(home, self.sale))
         self.assertEqual(self._product_page_price(self.sale.website_url), '3,60')
         self._cart_line_price(self.sale)
 
     def test_home_card_product_cart_price_alignment_sweet(self):
         home = self.url_open('/').text
-        self.assertIn('3,50', self._featured_card_price(home, self.sweet.id))
+        self.assertIn('3,50', self._featured_card_price(home, self.sweet))
         self.assertEqual(self._product_page_price(self.sweet.website_url), '3,50')
         self._cart_line_price(self.sweet)
