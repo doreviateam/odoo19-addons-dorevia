@@ -1,0 +1,38 @@
+{
+  "M1_chrome": {
+    "burgerFound": true,
+    "burgerAriaLabel": "Menu",
+    "logoFound": true,
+    "searchFound": true,
+    "cartFound": true,
+    "accountVisibleInChrome": true
+  },
+  "M4_overflow_closed": {
+    "scrollW": 390,
+    "clientW": 390,
+    "overflow": false
+  },
+  "M5_logo": {
+    "text": "C-Kréyòl",
+    "width": 0,
+    "height": 0,
+    "hasOMacron": true
+  },
+  "M4_banner": {
+    "width": 390,
+    "scrollWidth": 390,
+    "text": "Produits créoles sélectionnés · Origines identifiées · Livraison suivie"
+  },
+  "M2_drawer": {
+    "topItems": [
+      "Tous nos produits",
+      "Découvrir"
+    ],
+    "searchVisibleInDrawer": false
+  },
+  "M3_account": {
+    "found": true,
+    "href": "/web/login",
+    "text": "Se connecter"
+  }
+}

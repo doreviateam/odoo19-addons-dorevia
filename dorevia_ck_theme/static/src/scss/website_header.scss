@@ -1,5 +1,41 @@
 // Header / menu / branding CK — Phase 10 · A1 reprise visuelle maquette
 
+// Lot H1 — Strate 0 bandeau service global (Option A)
+.ck-header-service-bar {
+    background-color: rgba($ck-primary, 0.92);
+    color: #fff;
+    font-family: "DM Sans", $ck-font-ui;
+    font-size: $ck-text-xs;
+    font-weight: $ck-font-weight-semibold;
+    letter-spacing: 0.01em;
+    line-height: 1.35;
+    border-bottom: 1px solid rgba(#fff, 0.12);
+
+    &__inner {
+        max-width: $ck-container-max;
+        margin-inline: auto;
+        padding: 0.4rem $ck-gutter-mobile;
+        text-align: center;
+
+        @media (min-width: 992px) {
+            padding-inline: $ck-gutter-desktop;
+        }
+    }
+
+    &__text {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem 0.5rem;
+    }
+
+    &__sep {
+        opacity: 0.72;
+        user-select: none;
+    }
+}
+
 .ck-theme header#top.ck-header {
     position: sticky;
     top: 0;
@@ -66,7 +102,7 @@
         display: inline-block;
         font-family: "Fraunces", $ck-font-display;
         font-weight: 700;
-        font-size: 1.25rem;
+        font-size: 1.3125rem;
         line-height: 1.1;
         letter-spacing: -0.01em;
         color: $ck-text;
@@ -75,6 +111,61 @@
 
     .ck-header__brand-accent {
         color: $ck-primary;
+    }
+
+    // Lot H1 — recherche centrale desktop
+    .ck-header__search {
+        max-width: 28rem;
+        min-width: 12rem;
+
+        .ck-header__search-form {
+            .search-query.form-control {
+                font-family: "DM Sans", $ck-font-ui;
+                font-size: $ck-text-sm;
+                border-color: $ck-border !important;
+                background-color: $ck-bg-soft;
+
+                &:focus {
+                    border-color: rgba($ck-primary, 0.45) !important;
+                    box-shadow: 0 0 0 0.15rem rgba($ck-primary, 0.12);
+                }
+            }
+
+            .oe_search_button {
+                border-color: $ck-border !important;
+                color: $ck-text-muted !important;
+
+                &:hover,
+                &:focus-visible {
+                    color: $ck-primary !important;
+                }
+            }
+        }
+    }
+
+    // Lot H1 — panier prioritaire sur compte
+    .ck-header__cart-link {
+        width: 2.5rem !important;
+        height: 2.5rem !important;
+        border-color: rgba($ck-primary, 0.28) !important;
+        background-color: rgba($ck-primary, 0.06) !important;
+
+        .fa-shopping-cart {
+            font-size: 1rem;
+        }
+
+        &:hover,
+        &:focus-visible {
+            border-color: rgba($ck-primary, 0.5) !important;
+            background-color: rgba($ck-primary, 0.1) !important;
+            color: $ck-primary !important;
+        }
+    }
+
+    .o_wsale_my_cart .my_cart_quantity.badge {
+        min-width: 1.125rem;
+        font-size: 0.625rem;
+        font-weight: 700;
     }
 
     // Desktop — densité · hiérarchie · nav centrée (maquette .header-inner)
@@ -255,6 +346,51 @@
             background-color: $ck-surface !important;
         }
 
+        .o_main_nav.ck-header-mobile-chrome {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: $ck-space-2;
+
+            > .d-flex.flex-grow-1 {
+                order: 2;
+                flex: 1 1 auto;
+                min-width: 0;
+                align-items: center;
+            }
+
+            > button.ck-header-mobile__menu,
+            > button[data-bs-target="#top_menu_collapse_mobile"] {
+                order: 1;
+                flex: 0 0 auto;
+            }
+
+            .navbar-brand.ck-header__brand-link,
+            .navbar-brand.logo {
+                flex: 1 1 auto;
+                justify-content: center;
+                margin-right: 0 !important;
+                text-align: center;
+            }
+
+            .o_header_mobile_buttons_wrap {
+                flex: 0 0 auto;
+                margin-left: 0 !important;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                > li.ck-header-mobile__search-item,
+                > li:has(.ck-header-mobile__search) {
+                    order: 1;
+                }
+
+                > li.o_wsale_my_cart {
+                    order: 2;
+                }
+            }
+        }
+
         .o_main_nav.container {
             min-height: 3.75rem;
             padding-inline: $ck-gutter-mobile;
@@ -266,7 +402,14 @@
         }
 
         .ck-header__brand {
-            font-size: 1.125rem;
+            font-size: 1.1875rem;
+        }
+    }
+
+    .ck-header-service-bar {
+        &__text {
+            font-size: 0.6875rem;
+            gap: 0.25rem 0.35rem;
         }
     }
 

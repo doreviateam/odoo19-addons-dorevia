@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lot H1 — recherche catalogue produits uniquement + placeholder V1 -->
+    <template id="ck_header_search_box_input"
+              inherit_id="website.header_search_box_input"
+              name="CK H1 header search products"
+              priority="99">
+        <xpath expr="." position="replace">
+            <t t-call="website.website_search_box_input"
+                search_type.f="products"
+                action.f="/shop"
+                placeholder.f="Rechercher un produit, une saveur..."
+                limit="limit or '5'"
+                display_image.f="true"
+                display_description.f="true"
+                display_extra_link.f="true"
+                display_detail.f="true"/>
+        </xpath>
+    </template>
+
+    <!-- Lot H1 — desktop : recherche centrale inline · panier en dernier -->
+    <template id="ck_template_header_default_h1"
+              inherit_id="website.template_header_default"
+              name="CK H1 header desktop search"
+              priority="50">
+        <xpath expr="//div[@id='o_main_nav']//t[@t-call='website.placeholder_header_brand']" position="after">
+            <div class="ck-header__search flex-grow-1 d-none d-lg-flex align-items-center">
+                <t t-call="website.header_search_box_input"
+                    _input_classes.f="border border-end-0 ps-3"
+                    _submit_classes.f="border border-start-0 px-3 bg-o-color-4"
+                    _form_classes.f="w-100 ck-header__search-form"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[@id='o_main_nav']//ul[hasclass('navbar-nav') and hasclass('align-items-center')]//t[@t-call='website.placeholder_header_search_box']" position="replace"/>
+        <xpath expr="//div[@id='o_main_nav']//t[@t-call='website_sale.header_cart_link']" position="replace"/>
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_sale.header_cart_link">
+                <t t-set="_icon" t-value="True"/>
+                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__cart-link'"/>
+                <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Lot H1 — mobile : chrome Menu · C-Kréyòl · Recherche · Panier -->
+    <template id="ck_template_header_mobile_h1"
+              inherit_id="website.template_header_mobile"
+              name="CK H1 header mobile chrome"
+              priority="50">
+        <xpath expr="//div[hasclass('o_main_nav') and hasclass('container')]" position="attributes">
+            <attribute name="class" add="ck-header-mobile-chrome" separator=" "/>
+        </xpath>
+        <xpath expr="//button[@data-bs-target='#top_menu_collapse_mobile']" position="attributes">
+            <attribute name="aria-label">Menu</attribute>
+            <attribute name="class" add="ck-header-mobile__menu" separator=" "/>
+        </xpath>
+        <xpath expr="//ul[hasclass('o_header_mobile_buttons_wrap')]" position="inside">
+            <t t-call="website.placeholder_header_search_box"
+                _layout.f="modal"
+                _item_class.f="ck-header-mobile__search-item"
+                _button_classes.f="o_navlink_background text-reset ck-header-mobile__search"
+                _input_classes.f="rounded-start-pill text-bg-light ps-3"
+                _submit_classes.f="rounded-end-pill bg-o-color-3 pe-3"/>
+        </xpath>
+        <xpath expr="//div[@id='top_menu_collapse_mobile']//t[@t-call='website.placeholder_header_search_box']" position="replace"/>
+    </template>
+</odoo>

@@ -1,0 +1,36 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "results": {
+    "M1_chrome": {
+      "menuLabel": "Menu",
+      "brand": "C-Kréyòl",
+      "searchBtn": true,
+      "cart": true,
+      "chromeClass": true
+    },
+    "M2_drawer": {
+      "items": [
+        "Tous nos produits",
+        "Épicerie",
+        "Soin & Bien-être",
+        "Découvrir"
+      ],
+      "searchInDrawer": false
+    },
+    "M3_account": {
+      "loginInDrawer": true,
+      "loginInChrome": false
+    },
+    "M4_overflow": {
+      "docWidth": 390,
+      "viewWidth": 390
+    },
+    "M6_homeCoexistence": {
+      "serviceBar": "Produits créoles sélectionnés · Origines identifiées · Livraison suivie",
+      "trustBar": "Livraison France & Europe Expédition suivie, délais annoncés. Paiement sécurisé Paiement en ligne simple et protégé. Producteurs sélectionnés Des produits choisis dans les territoires créolophones. Service client Une question ? CK vous accompagne."
+    }
+  }
+}

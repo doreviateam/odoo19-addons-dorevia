@@ -41,7 +41,29 @@
         </xpath>
     </template>
 
-    <!-- Logo typographique C-Kreyol — remplace image générique website -->
+    <!-- Lot H1 — Strate 0 : bandeau service global Option A (toutes pages) -->
+    <template id="layout_ck_header_service_bar"
+              inherit_id="website.layout"
+              name="CK Theme header service bar H1"
+              priority="24">
+        <xpath expr="//header[@id='top']" position="before">
+            <div class="ck-header-service-bar"
+                 role="region"
+                 aria-label="Promesse C-Kréyòl">
+                <div class="ck-header-service-bar__inner container-fluid">
+                    <p class="ck-header-service-bar__text mb-0">
+                        <span class="ck-header-service-bar__item">Produits créoles sélectionnés</span>
+                        <span class="ck-header-service-bar__sep" aria-hidden="true">·</span>
+                        <span class="ck-header-service-bar__item">Origines identifiées</span>
+                        <span class="ck-header-service-bar__sep" aria-hidden="true">·</span>
+                        <span class="ck-header-service-bar__item">Livraison suivie</span>
+                    </p>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Logo typographique C-Kréyòl — remplace image générique website -->
     <template id="layout_ck_header_brand"
               inherit_id="website.option_header_brand_logo"
               name="CK Theme header brand text"
@@ -50,9 +72,9 @@
             <a data-name="Navbar Logo"
                href="/"
                t-attf-class="navbar-brand logo ck-header__brand-link #{_link_class}"
-               aria-label="C-Kreyol — Accueil">
+               aria-label="C-Kréyòl — Accueil">
                 <span class="ck-header__brand" aria-hidden="true">
-                    C-<span class="ck-header__brand-accent">Kreyol</span>
+                    C-<span class="ck-header__brand-accent">Kréyòl</span>
                 </span>
             </a>
         </xpath>

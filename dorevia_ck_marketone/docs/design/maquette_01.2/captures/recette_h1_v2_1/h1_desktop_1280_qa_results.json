@@ -1,0 +1,44 @@
+{
+  "R1_banner_home": "Produits créoles sélectionnés · Origines identifiées · Livraison suivie",
+  "R1_banner_shop": "Produits créoles sélectionnés · Origines identifiées · Livraison suivie",
+  "R1_banner_contactus": "Produits créoles sélectionnés · Origines identifiées · Livraison suivie",
+  "R2_logo": {
+    "ariaLabel": "C-Kréyòl — Accueil",
+    "text": "C-Kréyòl",
+    "hasO_circumflex": true
+  },
+  "R3_search": {
+    "found": true,
+    "placeholder": "Rechercher un produit, une saveur...",
+    "placeholderMatches": true,
+    "searchType": "products"
+  },
+  "R4_cartAccount": {
+    "cartFound": true,
+    "accountFound": true,
+    "order": "cart_after_account"
+  },
+  "R5_nav": [
+    "Tous nos produits",
+    "Épicerie",
+    "Soin & Bien-être",
+    "Découvrir"
+  ],
+  "R6_mega": [
+    "Producteurs & territoires",
+    "Recettes & usages",
+    "Professionnels",
+    "Contactez-nous"
+  ],
+  "R7_sticky": {
+    "position": "sticky",
+    "top": 0,
+    "backgroundColor": "rgb(255, 255, 255)",
+    "opacity": "1"
+  },
+  "R8_contrast": {
+    "color": "rgb(255, 255, 255)",
+    "background": "rgba(216, 67, 21, 0.92)"
+  },
+  "R1_bannerMatchesExpected": true
+}
