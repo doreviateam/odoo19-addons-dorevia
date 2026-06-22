@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 FEATURED_REFRESH_FIELDS = {
     'name',
     'public_categ_ids',
+    'ck_is_featured',
     'is_published',
     'website_published',
     'website_sequence',
@@ -50,6 +51,11 @@ class ProductTemplate(models.Model):
         string='Afficher le prix au kg / litre',
         default=True,
         help='Calcule et affiche le prix de référence sur la card home lorsque la quantité nette est renseignée.',
+    )
+    ck_is_featured = fields.Boolean(
+        string='En vedette',
+        default=False,
+        help='Affiche ce produit dans la section Nos coups de cœur de la page d\'accueil.',
     )
 
     def get_ck_shop_card_metadata_line(self, variant=None):
@@ -117,23 +123,8 @@ class ProductTemplate(models.Model):
             bootstrap_home_featured_products(self.env)
 
     def _ck_touches_featured(self):
-        """QA M1 : limite la reconstruction vedettes aux produits réellement concernés.
-
-        En mode curation (catégorie « Coups de cœur » présente), seul un produit
-        rangé dans cette catégorie justifie un rebuild de la home. En mode repli
-        (pas de curation → sélection automatique), tout produit publié peut
-        entrer dans le top : on conserve le comportement large d'origine.
-        """
-        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
-            FEATURED_CATEGORY_XMLID,
-        )
-
-        featured = self.env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
-        # Curation active seulement si la catégorie existe ET contient des produits ;
-        # sinon mode repli auto-sélection → tout produit publié peut entrer → refresh large.
-        if featured and featured.product_tmpl_ids:
-            return bool(self.public_categ_ids & featured)
-        return True
+        """Rebuild home si le produit est (ou était) marqué En vedette."""
+        return any(self.mapped('ck_is_featured'))
 
     def write(self, vals):
         touches_featured_fields = bool(FEATURED_REFRESH_FIELDS.intersection(vals))

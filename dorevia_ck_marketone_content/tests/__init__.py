@@ -40,6 +40,7 @@ from . import test_ck_product_page_lot2_front
 from . import test_ck_product_page_tabs
 from . import test_ck_product_origin_unification
 from . import test_ck_home_section3_curation
+from . import test_ck_home_section3_featured_field
 from . import test_ck_home_section3_featured_pricelist
 from . import test_ck_home_section4_univers
 from . import test_ck_home_section4_univers_compose

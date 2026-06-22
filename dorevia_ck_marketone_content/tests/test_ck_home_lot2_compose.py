@@ -6,12 +6,12 @@ import re
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase
 
-from odoo.addons.dorevia_ck_marketone_content.home_featured import MIN_FEATURED_PRODUCTS
 from odoo.addons.dorevia_ck_marketone_content.hooks import bootstrap_home_featured_products
 from odoo.addons.dorevia_ck_marketone_content.tests.ck_home_lot2_utils import (
-    detach_featured_curation,
-    ensure_auto_featured_catalog,
-    restore_featured_curation,
+    FEATURED_TEST_MIN_CARDS,
+    clear_ck_is_featured,
+    ensure_featured_catalog,
+    restore_ck_is_featured,
 )
 
 _CARD_IMAGE_RE = re.compile(
@@ -25,14 +25,13 @@ class TestCkHomeLot2Compose(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Lot2 option B : chemin auto + seuil MIN_FEATURED_PRODUCTS (pas la curation BO).
-        cls._curation_backup = detach_featured_curation(cls.env)
-        ensure_auto_featured_catalog(cls.env)
+        cls._featured_backup = clear_ck_is_featured(cls.env)
+        ensure_featured_catalog(cls.env)
         bootstrap_home_featured_products(cls.env)
 
     @classmethod
     def tearDownClass(cls):
-        restore_featured_curation(cls.env, cls._curation_backup)
+        restore_ck_is_featured(cls.env, cls._featured_backup)
         super().tearDownClass()
 
     def test_home_featured_ssr_present(self):
@@ -51,24 +50,24 @@ class TestCkHomeLot2Compose(HttpCase):
         self.assertGreater(grid_start, 0)
         grid_chunk = html[grid_start:grid_start + 120000]
         cards = grid_chunk.count('ck-product-card')
-        self.assertGreaterEqual(cards, MIN_FEATURED_PRODUCTS)
+        self.assertGreaterEqual(cards, FEATURED_TEST_MIN_CARDS)
 
     def test_home_featured_product_links_200(self):
         html = self.url_open('/').text
         grid_start = html.find('ck-featured-products__grid--stable')
         grid_chunk = html[grid_start:grid_start + 120000]
         links = re.findall(r'href="(/shop/[^"]+)"', grid_chunk)
-        self.assertGreaterEqual(len(links), MIN_FEATURED_PRODUCTS)
-        for href in links[:MIN_FEATURED_PRODUCTS]:
+        self.assertGreaterEqual(len(links), FEATURED_TEST_MIN_CARDS)
+        for href in links[:FEATURED_TEST_MIN_CARDS]:
             self.assertEqual(self.url_open(href).status_code, 200)
 
     def test_home_featured_prices_and_images(self):
         html = self.url_open('/').text
         grid_start = html.find('ck-featured-products__grid--stable')
         grid_chunk = html[grid_start:grid_start + 120000]
-        self.assertGreaterEqual(grid_chunk.count('class="price"'), MIN_FEATURED_PRODUCTS)
-        self.assertGreaterEqual(len(_CARD_IMAGE_RE.findall(grid_chunk)), MIN_FEATURED_PRODUCTS)
-        self.assertGreaterEqual(grid_chunk.count('Voir le produit'), MIN_FEATURED_PRODUCTS)
+        self.assertGreaterEqual(grid_chunk.count('ck-product-card__price-value'), FEATURED_TEST_MIN_CARDS)
+        self.assertGreaterEqual(len(_CARD_IMAGE_RE.findall(grid_chunk)), FEATURED_TEST_MIN_CARDS)
+        self.assertGreaterEqual(grid_chunk.count('Voir le produit'), FEATURED_TEST_MIN_CARDS)
 
     def test_home_no_carousel_in_featured(self):
         html = self.url_open('/').text

@@ -6,7 +6,6 @@ from xml.sax.saxutils import escape
 
 from odoo.tools import format_amount
 
-MIN_FEATURED_PRODUCTS = 5
 FEATURED_SECTION_MARKER = 'ck-featured-products'
 FEATURED_GRID_MARKER = 'ck-featured-products__grid--stable'
 FEATURED_CARD_MARKER = 'ck-product-card'
@@ -105,37 +104,33 @@ def _template_featured_variant_cap(template):
     return 1
 
 
-def get_ready_featured_variants(env, *, min_count=MIN_FEATURED_PRODUCTS, max_count=MIN_FEATURED_PRODUCTS):
-    """Variantes publiées — une entrée par variante si template multi-variantes."""
+def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
+    """Vedettes homepage — `ck_is_featured` · publié · vendable · image · max 8."""
     templates = env['product.template'].sudo().search([
+        ('ck_is_featured', '=', True),
         ('is_published', '=', True),
         ('website_published', '=', True),
         ('sale_ok', '=', True),
     ], order='website_sequence asc, id asc')
-
+    templates.mapped('product_tag_ids')
     variants = env['product.product'].browse()
     for template in templates:
-        if not template.image_1920 and not any(
-            v.image_1920 or v.image_512 for v in template.product_variant_ids
-        ):
-            continue
         candidates = template.product_variant_ids.filtered(
             lambda v: v.is_published and v.sale_ok and _variant_has_valid_image(v)
         ).sorted(key=lambda v: v.id)
+        if candidates:
+            candidates.mapped('additional_product_tag_ids')
         if not candidates:
             continue
         cap = _template_featured_variant_cap(template)
         variants |= candidates[:cap]
         if len(variants) >= max_count:
             break
-
-    if len(variants) < min_count:
-        return env['product.product'].browse()
     return variants[:max_count]
 
 
 def _merge_duplicate_featured_categories(env, canonical):
-    """Fusionne les doublons « Coups de cœur » vers la catégorie xmlid canonique."""
+    """Fusionne les doublons « Coups de cœur » (hygiène catalogue — hors homepage)."""
     Category = env['product.public.category'].sudo()
     dupes = Category.search([
         ('name', '=', FEATURED_CATEGORY_NAME),
@@ -155,7 +150,7 @@ def _merge_duplicate_featured_categories(env, canonical):
 
 
 def _ensure_featured_category(env):
-    """Catégorie e-commerce 'Coups de cœur' — support de la curation BO (créée si absente)."""
+    """Catégorie catalogue « Coups de cœur » — conservée, ne pilote plus la homepage."""
     category = env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
     if category:
         return _merge_duplicate_featured_categories(env, category.sudo())
@@ -179,37 +174,22 @@ def _ensure_featured_category(env):
     return _merge_duplicate_featured_categories(env, category.sudo())
 
 
-def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
-    """Vedettes curatées en BO : produits publiés rangés dans 'Coups de cœur', ordre website_sequence.
-
-    Renvoie un recordset vide si la catégorie n'existe pas ou ne contient aucun produit
-    publié — le bootstrap retombe alors sur la sélection automatique (comportement #73).
-    """
+def migrate_coups_de_coeur_category_to_ck_is_featured(env):
+    """Migration 19.0.1.28.3 — produits en catégorie vedettes → ck_is_featured=True."""
     category = env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
     if not category:
-        return env['product.product'].browse()
-    category = category.sudo()
+        category = env['product.public.category'].sudo().search([
+            ('name', '=', FEATURED_CATEGORY_NAME),
+        ], limit=1)
+    if not category:
+        return 0
     templates = env['product.template'].sudo().search([
         ('public_categ_ids', 'in', category.ids),
-        ('is_published', '=', True),
-        ('website_published', '=', True),
-        ('sale_ok', '=', True),
-    ], order='website_sequence asc, id asc')
-    templates.mapped('product_tag_ids')
-    variants = env['product.product'].browse()
-    for template in templates:
-        candidates = template.product_variant_ids.filtered(
-            lambda v: v.is_published and v.sale_ok and _variant_has_valid_image(v)
-        ).sorted(key=lambda v: v.id)
-        if candidates:
-            candidates.mapped('additional_product_tag_ids')
-        if not candidates:
-            continue
-        cap = _template_featured_variant_cap(template)
-        variants |= candidates[:cap]
-        if len(variants) >= max_count:
-            break
-    return variants[:max_count]
+        ('ck_is_featured', '=', False),
+    ])
+    if templates:
+        templates.write({'ck_is_featured': True})
+    return len(templates)
 
 
 def _get_featured_category_label(template):
@@ -891,18 +871,12 @@ def _bootstrap_home_featured_products_lang(env, website, page):
     if not arch.strip():
         return False
 
-    _ensure_featured_category(env)
     variants = get_curated_featured_variants(env)
-    curated = bool(variants)
-    if not curated:
-        variants = get_ready_featured_variants(env)  # repli : sélection automatique (#73)
     featured_arch = ''
     if variants:
         cards = render_ck_featured_cards(env, website, variants)
-        min_cards = 1 if curated else MIN_FEATURED_PRODUCTS
-        if len(cards) >= min_cards:
-            limit = len(cards) if curated else MIN_FEATURED_PRODUCTS
-            featured_arch = build_featured_ssr_arch(cards[:limit])
+        if cards:
+            featured_arch = build_featured_ssr_arch(cards)
 
     new_arch, patched = _patch_homepage_featured_arch(arch, featured_arch)
     stale_labels = _featured_arch_missing_product_labels(env, arch, variants)

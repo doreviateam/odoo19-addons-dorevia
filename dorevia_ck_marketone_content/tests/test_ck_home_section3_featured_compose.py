@@ -13,12 +13,10 @@ from odoo.addons.dorevia_ck_marketone_content.catalog_manioc_variants import (
 from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     FEATURED_CARD_MARKER,
     FEATURED_TITLE,
-    MIN_FEATURED_PRODUCTS,
     _ensure_featured_category,
     _get_featured_labels_line,
     bootstrap_home_featured_products,
     get_curated_featured_variants,
-    get_ready_featured_variants,
 )
 from odoo.addons.dorevia_ck_marketone_content.home_hero import bootstrap_home_hero
 from odoo.addons.dorevia_ck_marketone_content.home_reassurance import (
@@ -45,9 +43,10 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         super().setUpClass()
         bootstrap_catalog_vedettes_products(cls.env)
         curated_variants = get_curated_featured_variants(cls.env)
-        fallback_variants = get_ready_featured_variants(cls.env)
-        variants = curated_variants or fallback_variants
-        cls.expected_featured_cards = len(curated_variants) or MIN_FEATURED_PRODUCTS
+        if not curated_variants:
+            raise unittest.SkipTest('Aucune vedette ck_is_featured sur instance seed.')
+        cls.expected_featured_cards = len(curated_variants)
+        variants = curated_variants
         if len(variants) < cls.expected_featured_cards:
             raise unittest.SkipTest('Catalogue insuffisant pour Section 3 vedettes.')
         for variant in variants:
@@ -114,22 +113,15 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         product.template._ck_sync_home_featured_labels_on_startup() — appelée par
         le cron ck_cron_sync_home_featured et au démarrage du worker.
         """
-        category = _ensure_featured_category(self.env)
-        guadeloupe = self.env['product.tag'].sudo().create({
-            'name': 'Guadeloupe',
-            'sequence': 10,
-        })
-        epicerie = self.env['product.tag'].sudo().create({
-            'name': 'Épicerie',
-            'sequence': 20,
-        })
+        guadeloupe = self.env['product.tag'].sudo().create({'name': 'Guadeloupe'})
+        epicerie = self.env['product.tag'].sudo().create({'name': 'Épicerie'})
         self.env['product.template'].sudo().create({
             'name': 'CK Vedette Sync Labels',
             'list_price': 4.5,
             'is_published': True,
             'website_published': True,
             'sale_ok': True,
-            'public_categ_ids': [(4, category.id)],
+            'ck_is_featured': True,
             'product_tag_ids': [(6, 0, [guadeloupe.id, epicerie.id])],
             'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         })
