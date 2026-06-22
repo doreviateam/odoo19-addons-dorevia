@@ -1,0 +1,81 @@
+{
+  "overflowClosed": {
+    "scrollW": 390,
+    "clientW": 390,
+    "overflow": false
+  },
+  "topLevel": [
+    {
+      "text": "Tous nos produits",
+      "visible": true,
+      "classes": "nav-item border-top  px-0 "
+    },
+    {
+      "text": "(accordion-item)",
+      "visible": true,
+      "classes": "nav-item border-top    accordion accordion-flush ck-nav-mobile-univers"
+    },
+    {
+      "text": "(accordion-item)",
+      "visible": false,
+      "classes": "nav-item border-top    accordion accordion-flush ck-nav-desktop-universe"
+    },
+    {
+      "text": "Maison & bien-être",
+      "visible": false,
+      "classes": "nav-item border-top  px-0 ck-nav-desktop-universe"
+    },
+    {
+      "text": "Artisanat & Culture",
+      "visible": false,
+      "classes": "nav-item border-top  px-0 ck-nav-desktop-universe"
+    },
+    {
+      "text": "Coups de cœur",
+      "visible": false,
+      "classes": "nav-item border-top  px-0 ck-nav-desktop-universe"
+    },
+    {
+      "text": "(accordion-item)",
+      "visible": false,
+      "classes": "nav-item border-top    accordion accordion-flush ck-nav-desktop-universe"
+    },
+    {
+      "text": "Découvrir",
+      "visible": true,
+      "classes": "nav-item border-top border-bottom position-static  dropdown "
+    }
+  ],
+  "nosUniversChildren": [
+    {
+      "text": "Biscuits",
+      "tag": "A",
+      "href": "/shop/category/epicerie-biscuits-173",
+      "classes": " px-0 ck-nav-mobile-universe-child"
+    },
+    {
+      "text": "Maison & bien-être",
+      "tag": "A",
+      "href": "/shop/category/maison-bien-etre-2",
+      "classes": " px-0 ck-nav-mobile-universe-child"
+    },
+    {
+      "text": "Artisanat & Culture",
+      "tag": "A",
+      "href": "/shop/category/artisanat-culture-3",
+      "classes": " px-0 ck-nav-mobile-universe-child"
+    },
+    {
+      "text": "Coups de cœur",
+      "tag": "A",
+      "href": "/shop/category/coups-de-cœur-24",
+      "classes": " px-0 ck-nav-mobile-universe-child"
+    },
+    {
+      "text": "Jus de fruits",
+      "tag": "A",
+      "href": "/shop/category/boissons-jus-de-fruits-171",
+      "classes": " px-0 ck-nav-mobile-universe-child"
+    }
+  ]
+}

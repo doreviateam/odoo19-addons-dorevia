@@ -114,8 +114,35 @@ class TestCkPhase10HeaderCompose(HttpCase):
 
     def test_header_soin_bien_etre_label_when_visible(self):
         html = self._home_html()
-        if 'Soin &amp; Bien-être' in html or 'Soin & Bien-être' in html:
-            self.assertRegex(html, r'Soin (&amp;|&) Bien-être')
+        if 'Maison &amp; bien-être' in html or 'Maison & bien-être' in html:
+            self.assertRegex(html, r'Maison (&amp;|&) bien-être')
+
+    def test_header_boissons_when_category_visible(self):
+        html = self._home_html()
+        mapping = __import__(
+            'odoo.addons.dorevia_ck_marketone_content.nav_sync',
+            fromlist=['get_nav_category_mapping'],
+        ).get_nav_category_mapping(self.env)
+        boissons = next((r for r in mapping if r.get('category_name') == 'Boissons'), None)
+        if boissons and boissons.get('visible'):
+            self.assertIn('Boissons', html)
+
+    def test_header_decouvrir_pinned_no_autohide_class(self):
+        """Découvrir épinglé via o_no_autohide_item sur le menu BO."""
+        decouvrir = self.env['website.menu'].sudo().search([
+            ('website_id', '=', self.env['website'].search([], limit=1).id),
+            ('name', '=', 'Découvrir'),
+            ('parent_id', '!=', False),
+        ], limit=1)
+        self.assertTrue(decouvrir)
+        self.assertIn('o_no_autohide_item', (decouvrir.ck_nav_css_class or '').split())
+
+    def test_header_desktop_universe_split_when_level2(self):
+        html = self._home_html()
+        if 'ck-nav-universe-split' not in html:
+            self.skipTest('Aucune racine avec L2 éligible sur instance seed.')
+        self.assertIn('ck-nav-universe-split__link', html)
+        self.assertIn('ck-nav-universe-split__toggle', html)
 
     def test_hero_carousel_pause_button_rendered(self):
         html = self._home_html()
@@ -175,15 +202,20 @@ class TestCkPhase10HeaderCompose(HttpCase):
             msg='Nos univers doit porter ck-nav-mobile-univers dans #top_menu desktop',
         )
 
-    def test_mobile_offcanvas_no_duplicate_universe_entries(self):
-        """B2 — Épicerie / Soin ne doivent pas apparaître en double (accordéon + plat)."""
+    def test_mobile_offcanvas_no_duplicate_leaf_universe_without_l2(self):
+        """B2 Nav-Shop — racines sans L2 : une seule occurrence visible (classe ck_nav_css_class conservée)."""
         html = self._home_html()
         mobile = self._mobile_offcanvas_chunk(html)
-        for pattern in (r'>\s*Épicerie\s*<', r'>\s*Soin (&amp;|&) Bien-être\s*<'):
+        for pattern in (
+            r'>\s*Épicerie\s*<',
+            r'>\s*Maison (&amp;|&) bien-être\s*<',
+            r'>\s*Artisanat &amp; Culture\s*<',
+            r'>\s*Coups de cœur\s*<',
+        ):
             matches = re.findall(pattern, mobile)
             if matches:
                 self.assertEqual(
                     len(matches),
                     1,
-                    msg=f'Entrée univers dupliquée dans le drawer mobile ({len(matches)}×)',
+                    msg=f'Entrée dupliquée dans le drawer mobile ({len(matches)}×)',
                 )

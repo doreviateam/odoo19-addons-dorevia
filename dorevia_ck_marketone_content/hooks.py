@@ -1047,8 +1047,10 @@ def bootstrap_all_marketone_content(env):
     bootstrap_privacy_page(env)
     bootstrap_terms_page(env)
     bootstrap_footer_legal_links(env)
+    from .nav_shop_l2_seed import seed_nav_shop_l2_categories
     from .nav_sync import bootstrap_ck_navigation
 
+    seed_nav_shop_l2_categories(env)
     bootstrap_ck_navigation(env)
 
 

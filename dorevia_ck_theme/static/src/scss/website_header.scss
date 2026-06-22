@@ -193,7 +193,44 @@
             gap: 0.125rem;
         }
 
+        // Nav-Shop — desktop : racine navigable + toggle L2
+        .ck-nav-universe-split {
+            .ck-nav-universe-split__link {
+                padding-inline: 0.625rem 0.25rem;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            .ck-nav-universe-split__toggle {
+                padding-inline: 0.35rem 0.5rem;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+
+                &::after {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        // Nav-Shop — overflow Odoo : sous-menu L2 position static
+        .o_extra_menu_items {
+            .dropdown-menu .dropdown-menu {
+                position: static !important;
+                float: none;
+                box-shadow: none;
+                border: 0;
+                padding-left: 0.75rem;
+            }
+
+            .dropdown-menu > .dropdown-item.p-0 > .dropdown-toggle {
+                width: 100%;
+                text-align: left;
+            }
+        }
+
         #top_menu.top_menu > .nav-item > .nav-link,
+        #top_menu.top_menu > .nav-item .ck-nav-universe-split__link,
+        #top_menu.top_menu > .nav-item .ck-nav-universe-split__toggle,
         #top_menu.top_menu > .nav-item > .dropdown-toggle.nav-link {
             padding-inline: 0.625rem;
             white-space: nowrap;
@@ -202,6 +239,19 @@
         // Nav V2 — desktop : entrées univers plates · masquer regroupement mobile
         #top_menu.top_menu > .nav-item.ck-nav-mobile-univers {
             display: none !important;
+        }
+
+        // Nav-Shop — dropdown niveau 2 sous racine catalogue
+        #top_menu.top_menu > .nav-item.ck-nav-desktop-universe .dropdown-menu {
+            min-width: 12rem;
+            padding: $ck-space-2 $ck-space-3;
+        }
+
+        #top_menu.top_menu .ck-nav-desktop-universe-child > .nav-link {
+            font-size: $ck-text-sm;
+            font-weight: $ck-font-weight-ui;
+            padding: 0.4rem 0.65rem;
+            white-space: nowrap;
         }
 
         .navbar-nav.align-items-center.gap-2 {
@@ -445,6 +495,32 @@
             &:focus-visible {
                 color: $ck-primary-text;
                 background-color: rgba($ck-primary, 0.06);
+            }
+        }
+
+        .ck-nav-mobile-universe-nested {
+            .ck-nav-mobile-universe-nested__header {
+                border-bottom: 1px solid rgba($ck-border, 0.65);
+            }
+
+            .ck-nav-mobile-universe-nested__link {
+                min-height: 2.75rem;
+                display: flex;
+                align-items: center;
+                padding-left: $ck-space-4;
+                text-decoration: none;
+                color: $ck-text;
+            }
+
+            .ck-nav-mobile-universe-nested__toggle {
+                width: 2.75rem;
+                min-width: 2.75rem;
+                padding: 0;
+                box-shadow: none;
+            }
+
+            .ck-nav-mobile-universe-l2 {
+                padding-left: $ck-space-5 !important;
             }
         }
 

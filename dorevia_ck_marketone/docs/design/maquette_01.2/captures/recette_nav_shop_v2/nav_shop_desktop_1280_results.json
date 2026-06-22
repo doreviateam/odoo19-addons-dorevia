@@ -1,0 +1,58 @@
+{
+  "D1_topMenuVisible": [
+    "Tous nos produits",
+    "Épicerie",
+    "Maison & bien-être",
+    "Artisanat & Culture"
+  ],
+  "D2_fixedEntries": {
+    "tousNosProduits": true,
+    "decouvrir": false,
+    "decouvrirInExtraMenu": true,
+    "nosUniversHidden": true
+  },
+  "D3_boNamesFromBO": [
+    "Épicerie",
+    "Maison & bien-être",
+    "Artisanat & Culture"
+  ],
+  "D4_decouvrirMega": {
+    "found": true,
+    "inExtraMenu": true,
+    "megaVisible": true,
+    "links": [
+      {
+        "text": "Producteurs & territoires",
+        "href": "/producteur/atelier-hauts-goyaviers"
+      },
+      {
+        "text": "Recettes & usages",
+        "href": "/recettes"
+      },
+      {
+        "text": "Professionnels",
+        "href": "/professionnels"
+      },
+      {
+        "text": "Contactez-nous",
+        "href": "/contactus"
+      }
+    ],
+    "hasCommerceDuplicate": false
+  },
+  "D7_contrastHover": "rgb(28, 25, 23)",
+  "D5_h1Chrome": {
+    "serviceBar": true,
+    "search": true,
+    "brand": true,
+    "cart": true
+  },
+  "D6_density": {
+    "visibleCount": 5,
+    "rootCategoryCount": 3,
+    "logoRight": 156.625,
+    "lastUniverseRight": 979.671875,
+    "cartLeft": 1176,
+    "overlapChrome": false
+  }
+}

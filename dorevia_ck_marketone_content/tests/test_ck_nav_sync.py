@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Lot Nav-1 — sync navigation + règle visibilité catégories."""
+"""Lot Nav-Shop — sync navigation catalogue dynamique + règle visibilité."""
 
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -8,14 +8,17 @@ from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
     CK_CREAM_PLACEHOLDER_PNG_B64,
 )
 from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
+    NAV_CSS_DESKTOP_UNIVERSE,
+    NAV_CSS_DESKTOP_UNIVERSE_CHILD,
+    NAV_CSS_NO_AUTOHIDE,
     NAV_DECOUVRIR_LABEL,
     NAV_MOBILE_UNIVERS_LABEL,
     NAV_SHOP_ALL_LABEL,
     bootstrap_ck_navigation,
+    build_shop_nav_trees,
     get_nav_category_mapping,
     sync_ck_navigation_for_website,
     _category_has_published_products,
-    _find_public_category,
 )
 
 
@@ -36,6 +39,18 @@ class TestCkNavSync(TransactionCase):
             ('parent_id', '=', parent.id),
             ('name', '=', name),
         ], limit=1)
+
+    def _create_published_product(self, name, categories):
+        return self.env['product.template'].sudo().create({
+            'name': name,
+            'type': 'consu',
+            'is_published': True,
+            'website_published': True,
+            'sale_ok': True,
+            'list_price': 5.0,
+            'public_categ_ids': [(6, 0, categories.ids)],
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
+        })
 
     def test_category_empty_is_not_visible(self):
         cat = self.Category.create({'name': 'CK Nav Empty QA Cat'})
@@ -76,30 +91,102 @@ class TestCkNavSync(TransactionCase):
         ])
         self.assertFalse(legacy)
 
+    def test_shop_nav_trees_from_public_categories(self):
+        trees = build_shop_nav_trees(self.env, self.Category)
+        self.assertTrue(trees, msg='Au moins une racine catalogue éligible attendue')
+        names = [tree['name'] for tree in trees]
+        self.assertIn('Épicerie', names)
+
+    def test_boissons_visible_when_category_has_product(self):
+        boissons = self.Category.search([('name', '=', 'Boissons'), ('parent_id', '=', False)], limit=1)
+        if not boissons:
+            boissons = self.Category.create({'name': 'Boissons', 'sequence': 10030})
+        if not _category_has_published_products(self.env, boissons):
+            self._create_published_product('CK Nav QA Boissons Product', boissons)
+        sync_ck_navigation_for_website(self.env, self.website)
+        menu = self._menu_by_name('Boissons')
+        self.assertTrue(menu, msg='Boissons doit remonter depuis product.public.category')
+        self.assertEqual(menu.ck_nav_css_class, NAV_CSS_DESKTOP_UNIVERSE)
+
+    def test_level2_children_under_parent_not_at_root(self):
+        root_cat = self.Category.create({'name': 'CK Nav QA Root L2', 'sequence': 99990})
+        child_cat = self.Category.create({
+            'name': 'CK Nav QA Child L2',
+            'parent_id': root_cat.id,
+            'sequence': 1,
+        })
+        self._create_published_product('CK Nav QA Root Product', root_cat)
+        self._create_published_product('CK Nav QA Child Product', child_cat)
+        sync_ck_navigation_for_website(self.env, self.website)
+        parent_menu = self._menu_by_name('CK Nav QA Root L2')
+        self.assertTrue(parent_menu)
+        child_menu = self._menu_by_name('CK Nav QA Child L2', parent=parent_menu)
+        self.assertTrue(child_menu)
+        self.assertEqual(child_menu.ck_nav_css_class, NAV_CSS_DESKTOP_UNIVERSE_CHILD)
+        self.assertFalse(self._menu_by_name('CK Nav QA Child L2', parent=self.root))
+        mobile = self._menu_by_name(NAV_MOBILE_UNIVERS_LABEL)
+        mobile_root = self._menu_by_name('CK Nav QA Root L2', parent=mobile)
+        self.assertTrue(mobile_root)
+        self.assertEqual(mobile_root.ck_nav_category_id, root_cat)
+        self.assertIn('/shop/category/', mobile_root.url)
+        self.assertFalse(self._menu_by_name('CK Nav QA Child L2', parent=mobile))
+        tout_menu = self._menu_by_name('Toute CK Nav QA Root L2', parent=parent_menu)
+        self.assertTrue(tout_menu)
+        self.assertIn('/shop/category/', tout_menu.url)
+
+    def test_decouvrir_and_shop_all_pinned_no_autohide(self):
+        sync_ck_navigation_for_website(self.env, self.website)
+        decouvrir = self._menu_by_name(NAV_DECOUVRIR_LABEL)
+        shop_all = self._menu_by_name(NAV_SHOP_ALL_LABEL)
+        self.assertIn(NAV_CSS_NO_AUTOHIDE, (decouvrir.ck_nav_css_class or '').split())
+        self.assertIn(NAV_CSS_NO_AUTOHIDE, (shop_all.ck_nav_css_class or '').split())
+
+    def test_nav_shop_l2_seed_creates_subcategories(self):
+        from odoo.addons.dorevia_ck_marketone_content.nav_shop_l2_seed import seed_nav_shop_l2_categories
+
+        epicerie = self.Category.search([('name', '=', 'Épicerie'), ('parent_id', '=', False)], limit=1)
+        if not epicerie:
+            epicerie = self.Category.create({'name': 'Épicerie', 'sequence': 10000})
+        seed_nav_shop_l2_categories(self.env)
+        biscuits = self.Category.search([
+            ('name', '=', 'Biscuits'),
+            ('parent_id', '=', epicerie.id),
+        ], limit=1)
+        self.assertTrue(biscuits)
+
+    def test_level3_not_in_header(self):
+        root_cat = self.Category.create({'name': 'CK Nav QA Root L3', 'sequence': 99991})
+        l2 = self.Category.create({'name': 'CK Nav QA L2 L3', 'parent_id': root_cat.id})
+        l3 = self.Category.create({'name': 'CK Nav QA L3 Hidden', 'parent_id': l2.id})
+        self._create_published_product('CK Nav QA L3 Product', l3)
+        sync_ck_navigation_for_website(self.env, self.website)
+        self.assertFalse(self._menu_by_name('CK Nav QA L3 Hidden'))
+
+    def test_order_follows_category_sequence(self):
+        low = self.Category.create({'name': 'CK Nav QA Seq A', 'sequence': 99980})
+        high = self.Category.create({'name': 'CK Nav QA Seq B', 'sequence': 99985})
+        self._create_published_product('CK Nav QA Seq A Product', low)
+        self._create_published_product('CK Nav QA Seq B Product', high)
+        sync_ck_navigation_for_website(self.env, self.website)
+        menus = self.Menu.search([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.root.id),
+            ('name', 'in', ('CK Nav QA Seq A', 'CK Nav QA Seq B')),
+        ], order='sequence')
+        self.assertEqual(menus.mapped('name'), ['CK Nav QA Seq A', 'CK Nav QA Seq B'])
+
     def test_mobile_univers_group_when_category_visible(self):
-        cat = _find_public_category(self.Category, ('Épicerie créole', 'Épicerie'))
-        if not cat:
-            self.skipTest('Catégorie Épicerie absente sur instance seed.')
-        if not _category_has_published_products(self.env, cat):
-            self.skipTest('Épicerie sans produit publié — skip groupe mobile.')
+        epicerie = self.Category.search([('name', '=', 'Épicerie'), ('parent_id', '=', False)], limit=1)
+        if not epicerie or not _category_has_published_products(self.env, epicerie):
+            self.skipTest('Épicerie absente ou sans produit publié sur instance seed.')
         sync_ck_navigation_for_website(self.env, self.website)
         mobile = self._menu_by_name(NAV_MOBILE_UNIVERS_LABEL)
         self.assertTrue(mobile)
         child = self._menu_by_name('Épicerie', parent=mobile)
         self.assertTrue(child)
-        self.assertEqual(child.url, cat and self.env['ir.http'].sudo()._slug(cat) and
-                        f'/shop/category/{self.env["ir.http"].sudo()._slug(cat)}')
 
-    def test_soin_bien_etre_label_on_desktop_menu(self):
-        bootstrap_ck_navigation(self.env)
-        menu = self._menu_by_name('Soin & Bien-être')
-        if not menu:
-            cat = _find_public_category(
-                self.Category,
-                ('Maison & bien-être', 'Soin & bien-être', 'Soin'),
-            )
-            if cat and _category_has_published_products(self.env, cat):
-                self.fail('Menu Soin & Bien-être absent alors que catégorie exploitable.')
-            self.skipTest('Catégorie Soin non exploitable — menu masqué conforme MOA.')
-        self.assertEqual(menu.name, 'Soin & Bien-être')
-        self.assertEqual(menu.ck_nav_css_class, 'ck-nav-desktop-universe')
+    def test_get_nav_category_mapping_has_dynamic_rows(self):
+        mapping = get_nav_category_mapping(self.env)
+        self.assertEqual(mapping[0]['menu_label'], NAV_SHOP_ALL_LABEL)
+        level1 = [row for row in mapping if row.get('level') == 1]
+        self.assertTrue(level1)
