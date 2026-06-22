@@ -88,6 +88,23 @@ class TestCkPhase10HeaderCompose(HttpCase):
             msg='Recherche header limitée au catalogue produits',
         )
 
+    def test_header_h1_2_three_levels_desktop(self):
+        """Lot H1.2 — header desktop structuré en 3 niveaux (promesse · identité · exploration)."""
+        html = self._home_html()
+        self.assertIn('ck-header__main', html)
+        self.assertIn('ck-header__identity-row', html)
+        self.assertIn('ck-header__nav-row', html)
+        self.assertRegex(
+            html,
+            r'ck-header__identity-row[\s\S]{0,4000}ck-header__search',
+            msg='Recherche doit appartenir au niveau identité/achat',
+        )
+        self.assertRegex(
+            html,
+            r'ck-header__nav-row[\s\S]{0,2000}id="top_menu"',
+            msg='Navigation catalogue doit être sur la ligne exploration dédiée',
+        )
+
     def test_header_h1_mobile_chrome_menu_label(self):
         html = self._home_html()
         self.assertRegex(

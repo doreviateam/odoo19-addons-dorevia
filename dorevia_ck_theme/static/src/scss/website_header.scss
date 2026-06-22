@@ -168,50 +168,62 @@
         font-weight: 700;
     }
 
-    // Desktop — densité · hiérarchie · nav centrée (maquette .header-inner)
+    // Desktop — Lot H1.2 · header 3 niveaux (identité/achat · exploration)
     @media (min-width: 992px) {
         .navbar.d-none.d-lg-block {
             box-shadow: none !important;
             background-color: $ck-surface !important;
         }
 
-        // Nav-Shop V2.1 — passe corrective densité (arbitrage MOA) : le rail de
-        // navigation du header utilise une largeur propre, légèrement supérieure au
-        // conteneur de contenu ($ck-container-max, partagé avec le reste du site et
-        // non modifié ici) — uniquement pour absorber 5-6 racines catalogue sans
-        // bouton overflow ni compression excessive des libellés.
-        #o_main_nav.container-fluid {
+        #o_main_nav.ck-header__main {
             display: flex;
-            align-items: center;
-            gap: $ck-space-2;
-            max-width: calc(#{$ck-container-max} + 11rem);
+            flex-direction: column;
+            align-items: stretch;
+            max-width: $ck-container-max;
             margin-inline: auto;
-            // Gouttière resserrée pour ce rail de nav uniquement (le token partagé
-            // $ck-gutter-desktop, utilisé ailleurs sur le site, n'est pas modifié).
-            padding-inline: $ck-space-3;
-        }
-
-        // La recherche centrale cède un peu de largeur à la navigation catalogue
-        // plutôt que de compresser les libellés.
-        .ck-header__search {
-            max-width: 7rem !important;
-            min-width: 7rem !important;
-        }
-
-        #top_menu.top_menu {
-            flex: 1 1 auto;
-            justify-content: center;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-            flex-wrap: nowrap;
+            padding-inline: $ck-gutter-desktop;
+            min-height: auto;
             gap: 0;
         }
 
-        // Nav-Shop V2.1 — desktop : racine navigable + toggle L2. Le <li> lui-même
-        // est le conteneur flex (lien + toggle = frères directs, requis par Bootstrap
-        // pour que le toggle retrouve son <ul class="dropdown-menu"> — cf. commentaire
-        // XML dans website_nav_ck_shop_v2.xml). Le dropdown-menu est positionné en
-        // absolute par Bootstrap, donc hors du flux flex, sans incidence sur l'alignement.
+        .ck-header__identity-row {
+            gap: $ck-space-4;
+            padding-block: $ck-space-2;
+            min-height: 3.75rem;
+
+            .navbar-brand.ck-header__brand-link,
+            .navbar-brand.logo {
+                margin-right: 0;
+            }
+        }
+
+        // Recherche élargie — niveau 1 dédié, hors ligne de navigation
+        .ck-header__identity-row .ck-header__search {
+            max-width: 36rem;
+            min-width: 16rem;
+            margin-inline: auto;
+        }
+
+        .ck-header__actions {
+            margin-left: 0;
+            padding-left: 0 !important;
+        }
+
+        .ck-header__nav-row {
+            border-top: 1px solid rgba($ck-border, 0.85);
+            padding-block: $ck-space-1;
+        }
+
+        #top_menu.top_menu {
+            flex: 0 1 auto;
+            width: 100%;
+            justify-content: center;
+            margin: 0 !important;
+            flex-wrap: nowrap;
+            gap: 1.25rem;
+        }
+
+        // Nav-Shop — desktop : racine navigable + toggle L2 (frères directs du <li>)
         #top_menu.top_menu > .nav-item:has(> .ck-nav-universe-split__toggle) {
             display: inline-flex;
             align-items: stretch;
@@ -219,13 +231,13 @@
         }
 
         .ck-nav-universe-split__link {
-            padding-inline: 0.4rem 0.15rem;
+            padding-inline: 0.5rem 0.15rem;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
         }
 
         .ck-nav-universe-split__toggle {
-            padding-inline: 0.2rem 0.3rem;
+            padding-inline: 0.25rem 0.35rem;
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
 
@@ -234,10 +246,7 @@
             }
         }
 
-        // Nav-Shop V2.1 — passe corrective MOA §2.3 : le déclencheur overflow natif
-        // Odoo (icône « + » seule, classe .oi-plus) est interdit visuellement. On masque
-        // l'icône et on la remplace par un libellé explicite, stylé comme une entrée nav
-        // à part entière — jamais un bouton technique nu.
+        // Cas 7+ racines — libellé overflow explicite (jamais icône « + » seule)
         .o_extra_menu_items {
             > .dropdown-toggle {
                 display: inline-flex;
@@ -249,11 +258,8 @@
                     display: none;
                 }
 
-                // Libellé strictement repris de la liste pré-approuvée MOA (§2.3) — pas
-                // de validation supplémentaire requise. N'apparaît jamais en simultané
-                // avec le groupe mobile « Nos univers » (breakpoints mutuellement exclusifs).
                 &::before {
-                    content: "Nos univers";
+                    content: "Plus de catégories";
                 }
             }
 
@@ -271,9 +277,7 @@
             }
         }
 
-        // Nav-Shop V2.1 — passe corrective MOA §3 : habillage CK des dropdowns niveau 2
-        // (racine en barre principale ET racine relogée dans l'overflow) — fond, bordure,
-        // ombre, espacements, états hover/focus/active alignés sur les tokens Nav-1/H1.
+        // Dropdowns niveau 2 — identité CK
         #top_menu.top_menu .dropdown-menu {
             background-color: $ck-surface;
             border: 1px solid rgba($ck-text, 0.06);
@@ -310,46 +314,29 @@
             }
         }
 
-        // Nav-Shop V2.1 — passe corrective densité (arbitrage MOA §2.2) : taille et
-        // espacement minimaux pour faire tenir 5-6 racines sans bouton overflow.
         #top_menu.top_menu > .nav-item > .nav-link,
         #top_menu.top_menu > .nav-item .ck-nav-universe-split__link,
         #top_menu.top_menu > .nav-item .ck-nav-universe-split__toggle,
         #top_menu.top_menu > .nav-item > .dropdown-toggle.nav-link {
-            padding-inline: 0.45rem;
+            padding-inline: 0.5rem;
             font-size: $ck-text-sm;
             letter-spacing: 0.01em;
             white-space: nowrap;
         }
 
-        // Caret Bootstrap des toggles — réduit pour limiter l'emprise horizontale
-        // de « Découvrir » et du toggle niveau 2 sans le supprimer (affordance conservée).
         #top_menu.top_menu .dropdown-toggle::after {
             margin-left: 0.2em;
             vertical-align: 0.1em;
         }
 
-        // Nav V2 — desktop : entrées univers plates · masquer regroupement mobile
         #top_menu.top_menu > .nav-item.ck-nav-mobile-univers {
             display: none !important;
-        }
-
-        // Nav-Shop — dropdown niveau 2 sous racine catalogue
-        #top_menu.top_menu > .nav-item.ck-nav-desktop-universe .dropdown-menu {
-            min-width: 12rem;
-            padding: $ck-space-2 $ck-space-3;
         }
 
         #top_menu.top_menu .ck-nav-desktop-universe-child > .nav-link {
             font-size: $ck-text-sm;
             font-weight: $ck-font-weight-ui;
-            padding: 0.4rem 0.65rem;
             white-space: nowrap;
-        }
-
-        .navbar-nav.align-items-center.gap-2 {
-            margin-left: auto;
-            padding-left: 0 !important;
         }
     }
 

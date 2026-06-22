@@ -7,6 +7,7 @@
               priority="25">
         <xpath expr="//header[@id='top']" position="attributes">
             <attribute name="t-attf-class" add="ck-header o_hoverable_dropdown" separator=" "/>
+            <attribute name="data-extra-items-toggle-aria-label">Plus de catégories</attribute>
         </xpath>
     </template>
 

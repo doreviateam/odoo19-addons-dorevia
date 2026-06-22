@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lot H1.2 — desktop : header 3 niveaux (promesse · identité/achat · exploration) -->
+    <template id="ck_template_header_h1_2_three_levels"
+              inherit_id="website.template_header_default"
+              name="CK H1.2 header three levels desktop"
+              priority="60">
+        <xpath expr="//div[@id='o_main_nav']" position="replace">
+            <div id="o_main_nav" t-attf-class="o_main_nav ck-header__main #{header_content_width}">
+                <!-- Niveau 1 — identité + recherche + actions transactionnelles -->
+                <div class="ck-header__identity-row w-100 d-none d-lg-flex align-items-center">
+                    <t t-call="website.placeholder_header_brand"
+                        _link_class.f="flex-shrink-0"/>
+                    <div class="ck-header__search flex-grow-1 d-flex align-items-center">
+                        <t t-call="website.header_search_box_input"
+                            _input_classes.f="border border-end-0 ps-3"
+                            _submit_classes.f="border border-start-0 px-3 bg-o-color-4"
+                            _form_classes.f="w-100 ck-header__search-form"/>
+                    </div>
+                    <ul class="navbar-nav align-items-center gap-2 flex-shrink-0 ck-header__actions">
+                        <t t-call="website.placeholder_header_text_element"/>
+                        <t t-call="website.placeholder_header_social_links"/>
+                        <t t-call="website.placeholder_header_language_selector"
+                            _btn_class="_additional_btn_color or 'nav-link'"
+                            _dropdown_menu_class.f="dropdown-menu-end"/>
+                        <t t-call="portal.placeholder_user_sign_in"
+                            _link_class="_additional_btn_color or 'o_nav_link_btn nav-link border px-3'"/>
+                        <t t-call="portal.user_dropdown"
+                            _user_name="True"
+                            _item_class.f="dropdown"
+                            _link_class.f="{{_additional_btn_color or 'nav-link'}} border-0"
+                            _dropdown_menu_class.f="dropdown-menu-end"/>
+                        <t t-call="website.placeholder_header_call_to_action"/>
+                        <t t-call="website_sale.header_cart_link">
+                            <t t-set="_icon" t-value="True"/>
+                            <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__cart-link'"/>
+                            <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+                        </t>
+                    </ul>
+                </div>
+                <!-- Niveau 2 — exploration catalogue + éditoriale (ligne dédiée pleine largeur) -->
+                <div class="ck-header__nav-row w-100 d-none d-lg-flex justify-content-center">
+                    <t t-call="website.navbar_nav"
+                        _nav_class.f="ck-header__top-menu justify-content-center">
+                        <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                            <t t-call="website.submenu"
+                                item_class.f="nav-item"
+                                link_class.f="nav-link"/>
+                        </t>
+                    </t>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
