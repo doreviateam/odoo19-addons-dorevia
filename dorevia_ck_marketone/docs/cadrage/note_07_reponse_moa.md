@@ -113,10 +113,9 @@ Coexistence home : ne pas dupliquer le même triptyque que la trust-bar S2 sur `
 
 ```text
 GO cadrage Header C-Kréyòl V2.1 — amendé post-Nav-1
-GO rédaction ticket Dev H1 (delta Strate 0/1 + mobile chrome)
+GO exécution ticket Dev H1 — 2026-06-21 (micro-ajustements §3 bis actés)
 Nav-1 = baseline navigation figée
 H2 / Nav-2 / Nav-1 bis = lots ultérieurs distincts
-Pas d’exécution H1 avant relecture ticket → **GO exécution** après micro-ajustements §3 bis (2026-06-21).
 ```
 
 ---
