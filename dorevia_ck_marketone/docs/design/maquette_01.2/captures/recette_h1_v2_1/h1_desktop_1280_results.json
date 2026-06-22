@@ -1,0 +1,36 @@
+{
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "results": {
+    "R1_serviceBar": {
+      "present": true,
+      "text": "Produits créoles sélectionnés · Origines identifiées · Livraison suivie"
+    },
+    "R2_brand": {
+      "text": "C-Kréyòl",
+      "ariaLabel": "C-Kréyòl — Accueil"
+    },
+    "R3_search": {
+      "visible": true,
+      "placeholder": "Rechercher un produit, une saveur...",
+      "searchType": "products"
+    },
+    "R4_cartAccount": {
+      "cartPresent": true,
+      "loginPresent": true,
+      "cartRightOfLogin": true
+    },
+    "R5_nav": [
+      "Tous nos produits",
+      "Nos univers",
+      "Épicerie",
+      "Soin & Bien-être",
+      "Découvrir"
+    ],
+    "R7_sticky": {
+      "position": "sticky"
+    }
+  }
+}

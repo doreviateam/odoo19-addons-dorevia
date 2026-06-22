@@ -46,7 +46,12 @@ class TestCkPhase10HeaderCompose(HttpCase):
         self.assertIn('ck-theme', html)
         self.assertIn('ck-header__brand', html)
         self.assertIn('ck-header__brand-accent', html)
-        self.assertIn('C-Kreyol', html)
+        self.assertRegex(html, r'C-[\s\S]{0,24}?Kr[eéè]yòl')
+        self.assertRegex(
+            html,
+            r'aria-label="C-Kréyòl — Accueil"[^>]*>[\s\S]*?ck-header__brand',
+            msg='Marque header doit être C-Kréyòl (graphie MOA)',
+        )
         self.assertNotIn('Your Logo', html)
         self.assertNotIn('fonts.googleapis.com', html)
         self.assertNotRegex(html, r'family=DM\+Sans|family=Fraunces')
@@ -60,6 +65,39 @@ class TestCkPhase10HeaderCompose(HttpCase):
         self.assertIn('o_mega_menu', html)
         self.assertIn('/professionnels', html)
         self.assertIn('/contactus', html)
+
+    def test_header_h1_service_bar_global(self):
+        html = self._home_html()
+        self.assertIn('ck-header-service-bar', html)
+        self.assertIn('Produits créoles sélectionnés', html)
+        self.assertIn('Origines identifiées', html)
+        self.assertIn('Livraison suivie', html)
+        for path in ('/shop', '/contactus'):
+            with self.subTest(path=path):
+                resp = self.url_open(f'{path}?qa_ts=phase10')
+                self.assertEqual(resp.status_code, 200, path)
+                self.assertIn('ck-header-service-bar', resp.text, path)
+
+    def test_header_h1_search_products_central(self):
+        html = self._home_html()
+        self.assertIn('ck-header__search', html)
+        self.assertIn('Rechercher un produit, une saveur...', html)
+        self.assertRegex(
+            html,
+            r'data-search-type="products"',
+            msg='Recherche header limitée au catalogue produits',
+        )
+
+    def test_header_h1_mobile_chrome_menu_label(self):
+        html = self._home_html()
+        self.assertRegex(
+            html,
+            r'data-bs-target="#top_menu_collapse_mobile"[^>]*aria-label="Menu"',
+            msg='Burger mobile doit porter aria-label Menu',
+        )
+        self.assertIn('ck-header-mobile-chrome', html)
+        offcanvas = self._mobile_offcanvas_chunk(html)
+        self.assertNotIn('Rechercher un produit, une saveur...', offcanvas)
 
     def test_header_no_top_level_professionnels_or_contact_cta(self):
         html = self._home_html()
