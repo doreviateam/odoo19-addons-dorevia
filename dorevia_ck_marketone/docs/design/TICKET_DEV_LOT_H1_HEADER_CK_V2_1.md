@@ -7,7 +7,7 @@
 | **Modules** | `dorevia_ck_theme` (principal) · `dorevia_ck_marketone_content` (si bandeau wording / coexistence home) |
 | **Type** | Header / chrome / marque · lot technique recettable |
 | **Priorité** | Haute |
-| **Statut** | **GO MOA cadrage** — **exécution après relecture ticket** |
+| **Statut** | **GO MOA exécution** — micro-ajustements §3 bis actés · 2026-06-21 |
 | **Instance recette** | `dorevia_ck_marketone_01` — http://localhost:18079 |
 | **Documents source** | [`note_07.md`](../cadrage/note_07.md) · [`note_07_reponse_moa.md`](../cadrage/note_07_reponse_moa.md) · [`note_07_retour_dev.md`](../cadrage/note_07_retour_dev.md) |
 
@@ -57,19 +57,20 @@ Arbitrages MOA actés le **2026-06-21** — voir [`note_07_reponse_moa.md`](../c
 | # | Livrable |
 | ---: | --- |
 | H1-1 | **Strate 0** — bandeau global toutes pages : `Produits créoles sélectionnés · Origines identifiées · Livraison suivie` |
-| H1-2 | Coexistence home `/` : pas de doublon message avec trust-bar S2 (cf. §9 bis `note_07`) |
+| H1-2 | Coexistence home `/` : doctrine bandeau vs trust-bar S2 (§3 bis · §4.1) |
 | H1-3 | **Rebrand** logo header + `aria-label` : **C-Kréyòl** (caractère **ò** validé en recette) |
 | H1-4 | Renforcement visuel logo (taille, poids, contraste — sans écraser recherche/panier) |
 | H1-5 | **Recherche centrale** desktop : barre large visible · placeholder `Rechercher un produit, une saveur...` |
 | H1-6 | Recherche mobile : accessible depuis chrome ligne 1 (icône ou champ selon layout retenu) |
 | H1-7 | Moteur recherche : **produits / catalogue Odoo standard** uniquement — pas origine/recette/producteur |
 | H1-8 | Chrome e-commerce : panier prioritaire visuellement sur compte · compteur lisible |
-| H1-9 | **Mobile chrome** : `Menu · C-Kréyòl · Recherche · Panier` · compte dans offcanvas |
-| H1-10 | SCSS tokens CK · contraste WCAG usages texte header (`$ck-primary-text` / `#bf360c` si `color:`) |
-| H1-11 | Préservation sticky header (QWeb critical + `website_header.scss` — pattern Phase 10) |
-| H1-12 | Tests header mis à jour (`dorevia_ck_theme_phase10` + tests H1 dédiés si créés) |
-| H1-13 | Recette QA documentée desktop **1280** + mobile **390** |
-| H1-14 | **Non-régression Nav-1** : navigation inchangée · 15 tests nav_sync + phase10 verts |
+| H1-9 | **Mobile chrome** : `Menu · C-Kréyòl · Recherche · Panier` · compte dans offcanvas (§4.5 · §3 bis) |
+| H1-10 | **Garde-fou design** : pas de refonte graphique globale — identité CK actuelle (§3 bis) |
+| H1-11 | SCSS tokens CK · contraste WCAG usages texte header (`$ck-primary-text` / `#bf360c` si `color:`) |
+| H1-12 | Préservation sticky header (QWeb critical + `website_header.scss` — pattern Phase 10) |
+| H1-13 | Tests header mis à jour (`dorevia_ck_theme_phase10` + tests H1 dédiés si créés) |
+| H1-14 | Recette QA documentée desktop **1280** + mobile **390** |
+| H1-15 | **Non-régression Nav-1** : navigation inchangée · 15 tests nav_sync + phase10 verts |
 
 ---
 
@@ -89,6 +90,53 @@ Arbitrages MOA actés le **2026-06-21** — voir [`note_07_reponse_moa.md`](../c
 | Recherche multi-contenus | Hors H1 |
 | Page résultats vide custom | **H1 bis** backlog |
 | Moteur recherche avancé | Hors H1 |
+| Refonte graphique globale header | **Interdit** — §3 bis |
+
+---
+
+## 3 bis. Garde-fous MOA (micro-ajustements pré-exécution · 2026-06-21)
+
+### 3 bis.1 — Compte mobile dans le drawer
+
+Le déplacement du **compte** depuis la ligne chrome vers le **drawer mobile** ne doit **pas** casser l’accès standard Odoo au **portail client** / **connexion** / **inscription**.
+
+| Règle | Exigence |
+| --- | --- |
+| Parcours | Connexion · déconnexion · `/my` · commandes — **non régressés** |
+| Implémentation | Réutiliser les liens / comportements natifs Odoo CE (`/web/login`, portail `portal`) — pas de lien mort ni de JS custom bloquant |
+| Si contrainte layout Odoo | **Documenter l’arbitrage** (note recette ou commentaire ticket) **avant** de figer l’implémentation — ex. conserver une icône compte discrète en chrome si le déplacement drawer casse le parcours |
+| Recette | M3 mobile + parcours connexion / compte sur instance seed |
+
+### 3 bis.2 — Doctrine bandeau global vs trust-bar Home S2
+
+| Zone | Rôle MOA |
+| --- | --- |
+| **Bandeau Strate 0** (header global) | Promesse **transversale courte** : `Produits créoles sélectionnés · Origines identifiées · Livraison suivie` |
+| **Trust-bar Home S2** (`s_ck_reassurance`) | Message **complémentaire** sur `/` uniquement — détail, preuve ou angle différent |
+
+**Règle** : la trust-bar Home **ne doit pas répéter mot pour mot** le même triptyque que le bandeau header.
+
+Exemples de complémentarité acceptée :
+
+* bandeau = promesse courte transversale ;
+* trust-bar = détail livraison, sélection, origine avec formulation ou structure **distincte**.
+
+Tout ajustement trust-bar home = **minimal** · documenté en recette H1 (cf. livrable §7).
+
+### 3 bis.3 — Garde-fou design : pas de refonte graphique globale
+
+**H1 n’est pas une refonte graphique globale du header.**
+
+Les ajustements restent dans l’**identité CK actuelle** :
+
+| Élément | Conserver |
+| --- | --- |
+| Fond | Clair chaud / crème (`$ck-surface`) |
+| Accent | Rouge CK — usages mesurés |
+| Ton | Sobriété e-commerce · premium accessible |
+| Interdit | Effets lourds · animations agressives · surcharge décorative · rupture palette Phase 10 |
+
+> H1 renforce marque, bandeau, recherche et chrome — **sans** réinventer le système visuel header Nav-1.
 
 ---
 
@@ -101,11 +149,18 @@ Arbitrages MOA actés le **2026-06-21** — voir [`note_07_reponse_moa.md`](../c
 | Wording | `Produits créoles sélectionnés · Origines identifiées · Livraison suivie` |
 | Portée | **Toutes les pages** (hors backend / éditeur si non pertinent) |
 | Comportement | Statique · pas d’animation · pas de CTA |
-| Style | Hauteur réduite · fond chaud ou rouge CK sobre · texte lisible |
+| Style | Hauteur réduite · fond chaud ou rouge CK sobre · texte lisible · **pas d’effet lourd** (§3 bis.3) |
 
-**Home `/`** : vérifier coexistence avec trust-bar Section 2 — documenter le choix retenu en recette (allègement trust-bar ou rôles distincts).
+### Doctrine bandeau vs trust-bar Home (MOA actée)
 
-### 4.2 Strate 1 — Logo C-Kréyòl
+| Composant | Rôle |
+| --- | --- |
+| Bandeau Strate 0 | Promesse **transversale courte** (wording ci-dessus) — toutes pages |
+| Trust-bar S2 home | **Complémentaire** sur `/` — formulation **distincte** · pas de répétition mot pour mot |
+
+Si la trust-bar actuelle recoupe le triptyque bandeau : allègement ou reformulation **minimale** documentée en recette H1.
+
+---
 
 | Attribut | Valeur |
 | --- | --- |
@@ -136,9 +191,11 @@ Arbitrages MOA actés le **2026-06-21** — voir [`note_07_reponse_moa.md`](../c
 | Élément | Cible H1 |
 | --- | --- |
 | Ligne 1 | Menu (burger) · **C-Kréyòl** · Recherche · Panier |
-| Compte | Dans le **drawer** (pas icône header si MOA chrome strict) |
+| Compte | Dans le **drawer** — **sans régression** portail / connexion Odoo (§3 bis.1) |
 | Drawer contenu | **Nav-1 inchangé** (Tous nos produits · Nos univers · Découvrir) |
 | Contact | Via Découvrir + footer — **pas** entrée directe drawer |
+
+**Contrainte Odoo** : si le layout CE ne permet pas de déplacer le compte sans casser le parcours, documenter l’arbitrage MOA/Dev **avant** merge (ex. icône compte conservée en chrome secondaire).
 
 ---
 
@@ -192,9 +249,10 @@ Arbitrages MOA actés le **2026-06-21** — voir [`note_07_reponse_moa.md`](../c
 | ---: | --- | --- |
 | M1 | Chrome ligne 1 | Menu · C-Kréyòl · Recherche · Panier |
 | M2 | Drawer | Nav-1 inchangé · Nos univers OK · pas doublon univers |
-| M3 | Compte | Dans drawer |
+| M3 | Compte | Dans drawer · **connexion / portail `/my` OK** |
 | M4 | Bandeau | Lisible · pas d’overflow horizontal |
 | M5 | Logo **ò** | Lisible à 390 px |
+| M6 | Home `/` | Bandeau + trust-bar S2 **complémentaires** · pas de doublon verbatim |
 
 ### Non-régression Nav-1
 
@@ -229,6 +287,9 @@ Arbitrages MOA actés le **2026-06-21** — voir [`note_07_reponse_moa.md`](../c
 | C7 | Hors périmètre | Aucun diff navigation / nav_sync |
 | C8 | Home S4 | Inchangée |
 | C9 | Sticky / contraste | Non-régression Phase 10 |
+| C10 | Compte mobile drawer | Portail / connexion Odoo non régressés (§3 bis.1) |
+| C11 | Bandeau vs trust-bar | Complémentarité · pas de répétition verbatim (§3 bis.2) |
+| C12 | Garde-fou design | Identité CK actuelle · pas de refonte graphique lourde (§3 bis.3) |
 
 ---
 
@@ -243,7 +304,7 @@ Lot Nav-2   → enrichissement éditorial Découvrir
 Nav-1 bis   → pivot navigation si MOA (hors H1)
 ```
 
-**Pas d’exécution Dev** tant que ce ticket n’a pas été **relu MOA / Dev**.
+**GO exécution MOA** — micro-ajustements §3 bis actés le 2026-06-21.
 
 ---
 
@@ -251,8 +312,8 @@ Nav-1 bis   → pivot navigation si MOA (hors H1)
 
 | Rôle | Verdict |
 | --- | --- |
-| MOA | GO cadrage acté · relecture ticket avant exécution |
-| Dev | Ticket prêt exécution post-relecture |
+| MOA | **GO exécution H1** · 2026-06-21 |
+| Dev | **GO implémentation** |
 | QA | Recette H1 + non-régression Nav-1 |
 
 ---

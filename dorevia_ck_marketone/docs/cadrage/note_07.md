@@ -387,12 +387,14 @@ Produits créoles sélectionnés · Origines identifiées · Livraison suivie
 | **Strate 0 header** | Réassurance transversale boutique | **H1** |
 | Trust-bar home S2 (`s_ck_reassurance`) | Réassurance page d’accueil | Existant — **ne pas dupliquer le même message** sur la home |
 
-### Règle de coexistence home
+### Règle de coexistence home (MOA actée · 2026-06-21)
 
-Sur `/` uniquement : le bandeau header Strate 0 et la trust-bar Section 2 **ne doivent pas répéter le même triptyque**. Arbitrage H1 :
+| Composant | Rôle |
+| --- | --- |
+| **Bandeau header Strate 0** | Promesse transversale **courte** (wording §9.1) — toutes pages |
+| **Trust-bar home S2** | Message **complémentaire** sur `/` — **ne pas répéter mot pour mot** le triptyque bandeau |
 
-* soit trust-bar home **allégée / reformulée** ;
-* soit trust-bar home **conservée** avec rôle distinct (détail livraison, sélection…) documenté en recette.
+La trust-bar conserve un angle distinct (détail livraison, sélection, preuves) ; reformulation minimale autorisée en H1 si recoupement constaté.
 
 ### Implémentation technique (piste Dev H1)
 
@@ -1355,8 +1357,11 @@ Référence : [`note_07_reponse_moa.md`](./note_07_reponse_moa.md) · retour Dev
 | 12 | Contact mobile direct drawer | ❌ — Nav-1 (Découvrir + footer) |
 | 13 | Pivot Nav-1 bis éventuel | Lot séparé |
 | 14 | Doctrine origine/fournisseur §4–5 | ✅ — implémentation hors H1 |
+| 15 | Compte mobile drawer sans régression portail Odoo | ✅ §3 bis ticket H1 |
+| 16 | Bandeau vs trust-bar complémentaires (pas verbatim) | ✅ §3 bis ticket H1 |
+| 17 | H1 ≠ refonte graphique globale header | ✅ §3 bis ticket H1 |
 
-**Suite** : ticket Dev [`TICKET_DEV_LOT_H1_HEADER_CK_V2_1.md`](../design/TICKET_DEV_LOT_H1_HEADER_CK_V2_1.md) — **pas d’exécution H1 avant relecture ticket**.
+**Suite** : ticket Dev [`TICKET_DEV_LOT_H1_HEADER_CK_V2_1.md`](../design/TICKET_DEV_LOT_H1_HEADER_CK_V2_1.md) — **GO exécution MOA · 2026-06-21** (micro-ajustements §3 bis actés).
 
 ---
 

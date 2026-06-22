@@ -46,7 +46,7 @@ Lire dans cet ordre :
 | Retour Dev Header V2.1 | [note_07_retour_dev.md](../cadrage/note_07_retour_dev.md) |
 | Réponse MOA Header V2.1 | [note_07_reponse_moa.md](../cadrage/note_07_reponse_moa.md) · **acté 2026-06-21** |
 | Ticket Dev Lot Nav-1 | [Navigation](./TICKET_DEV_LOT_NAV1_NAVIGATION_CK_V2.md) · **clôturé** |
-| **Ticket Dev Lot H1** | [**Header delta V2.1**](./TICKET_DEV_LOT_H1_HEADER_CK_V2_1.md) · relecture avant exécution |
+| **Ticket Dev Lot H1** | [**Header delta V2.1**](./TICKET_DEV_LOT_H1_HEADER_CK_V2_1.md) · **GO exécution MOA** |
 | Recette Dev Nav-1 | [Recette QA Lot Nav-1](./maquette_01.2/RECETTE_QA_LOT_NAV1_NAVIGATION_CK_V2.md) |
 | Intervention QA Nav-1 | [Note QA Lot Nav-1](./maquette_01.2/NOTE_QA_LOT_NAV1_NAVIGATION_CK_V2.md) · **GO merge** |
 
