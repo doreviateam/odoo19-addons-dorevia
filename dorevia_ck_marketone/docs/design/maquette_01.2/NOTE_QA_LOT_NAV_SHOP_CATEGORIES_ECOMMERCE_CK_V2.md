@@ -304,6 +304,100 @@ Re-contrôle rapide du top menu : `Tous nos produits` et `Découvrir` toujours v
 
 ---
 
+## 8 quater. Passe corrective visuelle V2.1 (arbitrage MOA — densité, dropdown L2, doublons)
+
+> **Contexte** : malgré le GO fonctionnel du §8 ter, la MOA a émis un **NO GO merge** sur la qualité visuelle desktop du rendu en l'état (cf. arbitrage MOA détaillé côté ticket) : risque de bouton overflow « + » nu non identifié dès 5-6 racines catalogue, dropdown niveau 2 non habillé (style brut Bootstrap), lien redondant « Toute {catégorie} » dans le dropdown alors que la racine est déjà cliquable. Passe corrective ciblée, strictement visuelle, sans élargissement fonctionnel, sur `feat/ck-nav-shop-categories-v2`.
+
+### Correctif structurel découvert en cours de recette (bloquant non documenté)
+
+En vérifiant l'ouverture du dropdown niveau 2 (« Boissons »), un **crash JS Bootstrap** a été identifié (non détecté par les recettes précédentes, qui n'avaient pas testé l'ouverture effective du dropdown sur cette racine précise) :
+
+- **Symptôme** : `TypeError: Cannot read properties of null (reading 'classList')` dans `Dropdown._isShown()` (Bootstrap 5, bundle `web.assets_frontend_lazy.min.js`) à chaque interaction sur le toggle niveau 2 de « Boissons ».
+- **Cause racine** : Bootstrap résout le menu associé à un toggle via `SelectorEngine.next(toggle, '.dropdown-menu')` — le frère DOM **suivant immédiat**. Le template `submenu_ck_nav_shop_desktop_split` (`website_nav_ck_shop_v2.xml`) enveloppait le lien racine et le toggle dans un `<div class="ck-nav-universe-split">` intermédiaire, plaçant le toggle en dernier enfant de ce `<div>` — son frère suivant réel n'existait pas, donc `this._menu` valait `null`.
+- **Correctif** : suppression du `<div>` wrapper ; le lien et le toggle sont désormais des enfants directs du `<li>`, frères du `<ul class="dropdown-menu">` existant. La mise en forme « pilule » du couple lien+toggle est reportée en CSS sur le `<li>` lui-même (`display: inline-flex` via un sélecteur `:has()`), sans incidence sur la résolution Bootstrap.
+- **Vérification** : confirmé sans aucune erreur JS console (`page.on('pageerror')` → `[]`) et ouverture effective du dropdown en conditions réelles (le header utilise `o_hoverable_dropdown`, mécanisme natif Odoo — ouverture **au survol**, pas au clic ; témoin « Découvrir » re-testé en parallèle pour écarter un faux positif méthodologique).
+
+### Correctifs appliqués
+
+| # | Exigence MOA | Mise en œuvre | Fichier |
+| --- | --- | --- | --- |
+| 1 | Aucun bouton « + » nu visible à 5-6 racines à 1280 px | Densité resserrée (rail de nav élargi via `calc()`, recherche centrale réduite à 112 px, gouttière et gaps resserrés, typographie nav 14 px) jusqu'à overflow nul sur le jeu de données actuel (5 racines) | `website_header.scss` |
+| 2 | Si overflow malgré tout, jamais l'icône « + » seule | Icône `.oi-plus` masquée, remplacée par le libellé pré-approuvé MOA « Nos univers » (mécanisme natif `auto_hide_menu.js` / `.o_extra_menu_items`, actuellement dormant — 0 overflow constaté) | `website_header.scss` |
+| 3 | Dropdown niveau 2 habillé (fond, bordure, ombre, espacements, hover/focus/active) | Bloc de styles dédié `#top_menu.top_menu .dropdown-menu` (fond `$ck-surface`, bordure 1px, ombre douce, items 0.6rem/1.25rem, états hover/focus-visible/active sur tokens `$ck-primary`) | `website_header.scss` |
+| 4 | Pas de lien redondant « Toute {catégorie} » | Suppression du prepend `Toute {tree["name"]}` dans `_sync_desktop_shop_menus` | `nav_sync.py` |
+| — | (bloquant découvert en recette) Dropdown niveau 2 ne s'ouvrait jamais | Suppression du `<div>` wrapper cassant la résolution Bootstrap (cf. ci-dessus) | `website_nav_ck_shop_v2.xml` |
+
+### Vérification — désormais sans objet (réserve #1 du §8 ter levée)
+
+La réserve non bloquante #1 du PV final précédent (« survol seul n'ouvre pas le dropdown niveau 2 hors overflow ») est **résolue** par le correctif structurel ci-dessus : le survol ouvre désormais correctement le dropdown niveau 2, conforme au mécanisme `o_hoverable_dropdown` du header.
+
+### Libellés — clarification (point MOA)
+
+`tree['name']` provient directement de `category.name` (`product.public.category`), sans alias ni renommage applicatif (`build_shop_nav_trees`, `nav_sync.py`). « Maison & bien-être » et « Coups de cœur » sont donc des noms de catégorie BO tels quels, pas des libellés calculés. « Coups de cœur » apparaît en racine catalogue car c'est une catégorie BO racine légitime avec produits publiés (cf. `data/ck_public_category_coups_de_coeur.xml`), pas une anomalie de navigation.
+
+### Hiérarchie dropdown — choix de conception documenté
+
+Le dropdown niveau 2 affiche uniquement les enfants directs éligibles (ex. « Jus de fruits » sous « Boissons ») ; la racine elle-même est déjà directement cliquable via `ck-nav-universe-split__link`. Aucun lien de repli n'est nécessaire dans le dropdown.
+
+### Tests automatisés
+
+Mise à jour de l'assertion obsolète `test_level2_children_under_parent_not_at_root` (attendait l'ancien lien « Toute X », contraire à l'exigence MOA — inversée pour vérifier son **absence**).
+
+```bash
+docker exec sandbox-odoo19-odoo-1 odoo -u dorevia_ck_theme,dorevia_ck_marketone_content -d dorevia_ck_marketone_01 --stop-after-init --no-http
+docker exec sandbox-odoo19-odoo-1 odoo -d dorevia_ck_marketone_01 --test-enable \
+  --test-tags dorevia_ck_marketone_nav_sync,dorevia_ck_theme_phase10 \
+  -u dorevia_ck_marketone_content,dorevia_ck_theme --stop-after-init --http-port=8169
+```
+
+| Contrôle | Statut QA |
+| --- | --- |
+| Tests auto **28/28** | ☒ OK — `0 failed, 0 error(s) of 28 tests` (après correction de l'assertion obsolète) |
+| Erreurs console JS | ☒ OK — `[]` (crash `Dropdown._isShown()` résolu) |
+
+### Non-régression desktop 1280 px (H1 / Nav-1)
+
+| Contrôle | Statut |
+| --- | --- |
+| Header / logo / recherche / panier / compte présents | ☒ OK |
+| `Tous nos produits` et `Découvrir` en barre principale | ☒ OK |
+| Mega menu Découvrir (survol) | ☒ OK — `show: true` |
+| Overflow desktop (`.o_extra_menu_items`) | ☒ Absent — 0 overflow sur 5 racines |
+| Dropdown niveau 2 « Boissons » (survol) | ☒ OK — `show: true`, contenu : Jus de fruits |
+
+**Preuves** :
+- [`nav_shop_v2_1_header_closed_final.png`](./captures/recette_nav_shop_v2/nav_shop_v2_1_header_closed_final.png) — header fermé, 7 entrées sans bouton overflow
+- [`nav_shop_v2_1_dropdown_open_final.png`](./captures/recette_nav_shop_v2/nav_shop_v2_1_dropdown_open_final.png) — dropdown L2 « Boissons » ouvert, habillage CK
+- [`nav_shop_v2_1_dropdown_item_hover_final.png`](./captures/recette_nav_shop_v2/nav_shop_v2_1_dropdown_item_hover_final.png) — état hover sur un item du dropdown
+
+### Non-régression mobile 390 px
+
+| Contrôle | Statut |
+| --- | --- |
+| Drawer offcanvas s'ouvre | ☒ OK |
+| `Tous nos produits` / `Nos univers` (accordéon) / `Découvrir` | ☒ OK — présents, structure inchangée |
+| Aucun bouton overflow desktop visible en mobile | ☒ OK |
+
+**Preuve** : [`nav_shop_v2_1_mobile_390_final.png`](./captures/recette_nav_shop_v2/nav_shop_v2_1_mobile_390_final.png)
+
+### PV final — passe corrective V2.1
+
+| Champ | Valeur |
+| --- | --- |
+| **Recetteur** | Assistant IA (Claude), en session avec doreviateam |
+| **Date** | 2026-06-22 |
+| **Version finale constatée** | `dorevia_ck_marketone_content` **19.0.1.28.2** · `dorevia_ck_theme` **19.0.1.38.3** |
+| **Verdict final** | ☒ **GO merge** |
+
+**Réserves reportées au backlog** (ne conditionnent pas le merge) :
+
+1. Le libellé de repli overflow « Nos univers » (icône « + » masquée) reste **dormant** sur le jeu de données actuel (5 racines, 0 overflow) — à revérifier visuellement dès qu'un 6e/7e univers BO sera publié et fera réellement apparaître l'overflow.
+2. Le rail de navigation desktop utilise désormais une largeur propre (`$ck-container-max + 11rem`), distincte du conteneur de contenu partagé — cohérent avec le périmètre « visuel ciblé header » de cet arbitrage, mais à garder en tête si une refonte de grille plus large est engagée ultérieurement.
+
+**Bilan** : le correctif structurel Bootstrap découvert en cours de recette (dropdown niveau 2 ne s'ouvrant jamais, crash JS silencieux côté navigation réelle) était plus sérieux que la demande visuelle initiale de la MOA ; il est corrigé et vérifié en conditions réelles (hover, conforme au mécanisme `o_hoverable_dropdown` du header), pas seulement via les tests automatisés. Les 4 exigences visuelles MOA (densité sans overflow nu, habillage dropdown L2, libellé de repli non technique, retrait des liens redondants) sont satisfaites et vérifiées. Recommandation : merge PR Nav-Shop V2.1.
+
+---
+
 ## 9. Références
 
 | Document | Rôle |

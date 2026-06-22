@@ -130,9 +130,9 @@ class TestCkNavSync(TransactionCase):
         self.assertEqual(mobile_root.ck_nav_category_id, root_cat)
         self.assertIn('/shop/category/', mobile_root.url)
         self.assertFalse(self._menu_by_name('CK Nav QA Child L2', parent=mobile))
-        tout_menu = self._menu_by_name('Toute CK Nav QA Root L2', parent=parent_menu)
-        self.assertTrue(tout_menu)
-        self.assertIn('/shop/category/', tout_menu.url)
+        # Nav-Shop V2.1 — passe corrective MOA : pas de lien "Toute {root}" en
+        # tête du dropdown L2, la racine étant déjà directement cliquable.
+        self.assertFalse(self._menu_by_name('Toute CK Nav QA Root L2', parent=parent_menu))
 
     def test_decouvrir_and_shop_all_pinned_no_autohide(self):
         sync_ck_navigation_for_website(self.env, self.website)
