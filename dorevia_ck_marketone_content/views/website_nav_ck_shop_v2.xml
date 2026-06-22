@@ -7,23 +7,29 @@
               priority="35">
         <xpath expr="//li[@t-elif='show_dropdown'][@role='presentation']/a[@data-bs-toggle='dropdown'][@href='#'][span[@t-field='submenu.name']]" position="replace">
             <t t-if="submenu._ck_nav_is_desktop_universe() and submenu.child_id and not is_vertical_nav and not submenu.is_mega_menu">
-                <div class="ck-nav-universe-split d-inline-flex align-items-stretch">
-                    <a t-att-href="submenu._ck_nav_category_shop_url()"
-                       t-attf-class="nav-link ck-nav-universe-split__link #{link_class or ''} #{submenu._is_active() and 'active'}"
-                       role="menuitem"
-                       t-ignore="true"
-                       t-att-target="'_blank' if submenu.new_window else None">
-                        <span t-field="submenu.name"/>
-                    </a>
-                    <a href="#"
-                       t-attf-class="nav-link dropdown-toggle ck-nav-universe-split__toggle #{dropdown_toggler_classes or ''}"
-                       data-bs-toggle="dropdown"
-                       data-bs-auto-close="outside"
-                       role="menuitem"
-                       t-att-aria-label="'Sous-catégories ' + submenu.name">
-                        <span class="visually-hidden" t-esc="submenu.name"/>
-                    </a>
-                </div>
+                <!-- Nav-Shop V2.1 — passe corrective : le lien et le toggle sont des
+                     frères DIRECTS du <li> (pas de <div> intermédiaire). Bootstrap 5
+                     résout le menu associé à un toggle via le frère suivant immédiat
+                     (SelectorEngine.next) ; un wrapper intermédiaire empêchait Bootstrap
+                     de retrouver le <ul class="dropdown-menu"> qui suit dans le <li>,
+                     et le dropdown ne s'ouvrait jamais (ni au clic ni au survol). La
+                     mise en forme « pilule » du couple lien+toggle est assurée en CSS
+                     sur le <li> lui-même (display: inline-flex), pas par ce wrapper. -->
+                <a t-att-href="submenu._ck_nav_category_shop_url()"
+                   t-attf-class="nav-link ck-nav-universe-split__link #{link_class or ''} #{submenu._is_active() and 'active'}"
+                   role="menuitem"
+                   t-ignore="true"
+                   t-att-target="'_blank' if submenu.new_window else None">
+                    <span t-field="submenu.name"/>
+                </a>
+                <a href="#"
+                   t-attf-class="nav-link dropdown-toggle ck-nav-universe-split__toggle #{dropdown_toggler_classes or ''}"
+                   data-bs-toggle="dropdown"
+                   data-bs-auto-close="outside"
+                   role="menuitem"
+                   t-att-aria-label="'Sous-catégories ' + submenu.name">
+                    <span class="visually-hidden" t-esc="submenu.name"/>
+                </a>
             </t>
             <t t-if="not (submenu._ck_nav_is_desktop_universe() and submenu.child_id and not is_vertical_nav and not submenu.is_mega_menu)">
                 <a

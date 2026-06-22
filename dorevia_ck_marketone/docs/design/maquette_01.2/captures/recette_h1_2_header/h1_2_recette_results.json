@@ -1,0 +1,34 @@
+{
+  "R1_threeLevels": {
+    "serviceBar": true,
+    "identityRow": true,
+    "navRow": true,
+    "searchInIdentity": true,
+    "topMenuInNavRow": true,
+    "extraMenuPlus": false,
+    "extraMenuVisible": false
+  },
+  "R1_topMenu": [
+    "Tous nos produits",
+    "Épicerie",
+    "Maison & bien-être",
+    "Artisanat & Culture",
+    "Coups de cœur",
+    "Boissons",
+    "Découvrir"
+  ],
+  "R2_dropdown": {
+    "opened": true,
+    "category": "Boissons",
+    "items": [
+      "Jus de fruits"
+    ]
+  },
+  "R2_hoverColor": "rgb(28, 25, 23)",
+  "R4_mobile": {
+    "mobileChrome": true,
+    "offcanvas": true,
+    "identityRowHidden": true,
+    "navRowHidden": true
+  }
+}

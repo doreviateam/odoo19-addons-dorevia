@@ -168,52 +168,101 @@
         font-weight: 700;
     }
 
-    // Desktop — densité · hiérarchie · nav centrée (maquette .header-inner)
+    // Desktop — Lot H1.2 · header 3 niveaux (identité/achat · exploration)
     @media (min-width: 992px) {
         .navbar.d-none.d-lg-block {
             box-shadow: none !important;
             background-color: $ck-surface !important;
         }
 
-        #o_main_nav.container-fluid {
+        #o_main_nav.ck-header__main {
             display: flex;
-            align-items: center;
-            gap: $ck-space-4;
+            flex-direction: column;
+            align-items: stretch;
             max-width: $ck-container-max;
             margin-inline: auto;
             padding-inline: $ck-gutter-desktop;
+            min-height: auto;
+            gap: 0;
+        }
+
+        .ck-header__identity-row {
+            gap: $ck-space-4;
+            padding-block: $ck-space-2;
+            min-height: 3.75rem;
+
+            .navbar-brand.ck-header__brand-link,
+            .navbar-brand.logo {
+                margin-right: 0;
+            }
+        }
+
+        // Recherche élargie — niveau 1 dédié, hors ligne de navigation
+        .ck-header__identity-row .ck-header__search {
+            max-width: 36rem;
+            min-width: 16rem;
+            margin-inline: auto;
+        }
+
+        .ck-header__actions {
+            margin-left: 0;
+            padding-left: 0 !important;
+        }
+
+        .ck-header__nav-row {
+            border-top: 1px solid rgba($ck-border, 0.85);
+            padding-block: $ck-space-1;
         }
 
         #top_menu.top_menu {
-            flex: 1 1 auto;
+            flex: 0 1 auto;
+            width: 100%;
             justify-content: center;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
+            margin: 0 !important;
             flex-wrap: nowrap;
-            gap: 0.125rem;
+            gap: 1.25rem;
         }
 
-        // Nav-Shop — desktop : racine navigable + toggle L2
-        .ck-nav-universe-split {
-            .ck-nav-universe-split__link {
-                padding-inline: 0.625rem 0.25rem;
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
+        // Nav-Shop — desktop : racine navigable + toggle L2 (frères directs du <li>)
+        #top_menu.top_menu > .nav-item:has(> .ck-nav-universe-split__toggle) {
+            display: inline-flex;
+            align-items: stretch;
+            position: relative;
+        }
+
+        .ck-nav-universe-split__link {
+            padding-inline: 0.5rem 0.15rem;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .ck-nav-universe-split__toggle {
+            padding-inline: 0.25rem 0.35rem;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+
+            &::after {
+                margin-left: 0;
             }
+        }
 
-            .ck-nav-universe-split__toggle {
-                padding-inline: 0.35rem 0.5rem;
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
+        // Cas 7+ racines — libellé overflow explicite (jamais icône « + » seule)
+        .o_extra_menu_items {
+            > .dropdown-toggle {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                font-weight: $ck-font-weight-semibold;
 
-                &::after {
-                    margin-left: 0;
+                .oi-plus {
+                    display: none;
+                }
+
+                &::before {
+                    content: "Plus de catégories";
                 }
             }
-        }
 
-        // Nav-Shop — overflow Odoo : sous-menu L2 position static
-        .o_extra_menu_items {
             .dropdown-menu .dropdown-menu {
                 position: static !important;
                 float: none;
@@ -228,35 +277,66 @@
             }
         }
 
+        // Dropdowns niveau 2 — identité CK
+        #top_menu.top_menu .dropdown-menu {
+            background-color: $ck-surface;
+            border: 1px solid rgba($ck-text, 0.06);
+            border-radius: $ck-radius-md;
+            box-shadow: 0 4px 20px rgba($ck-text, 0.08);
+            padding-block: $ck-space-2;
+            min-width: 220px;
+            max-width: 320px;
+
+            .dropdown-item,
+            .nav-link {
+                padding: 0.6rem 1.25rem;
+                font-size: $ck-text-sm;
+                line-height: 1.5;
+                color: $ck-text;
+                border-radius: 0;
+
+                &:hover,
+                &:focus-visible {
+                    background-color: rgba($ck-primary, 0.06);
+                    color: $ck-primary-text;
+                    outline: none;
+                }
+
+                &:focus-visible {
+                    box-shadow: inset 2px 0 0 $ck-primary-text;
+                }
+
+                &.active,
+                &:active {
+                    background-color: rgba($ck-primary, 0.1);
+                    color: $ck-primary-text;
+                }
+            }
+        }
+
         #top_menu.top_menu > .nav-item > .nav-link,
         #top_menu.top_menu > .nav-item .ck-nav-universe-split__link,
         #top_menu.top_menu > .nav-item .ck-nav-universe-split__toggle,
         #top_menu.top_menu > .nav-item > .dropdown-toggle.nav-link {
-            padding-inline: 0.625rem;
+            padding-inline: 0.5rem;
+            font-size: $ck-text-sm;
+            letter-spacing: 0.01em;
             white-space: nowrap;
         }
 
-        // Nav V2 — desktop : entrées univers plates · masquer regroupement mobile
-        #top_menu.top_menu > .nav-item.ck-nav-mobile-univers {
-            display: none !important;
+        #top_menu.top_menu .dropdown-toggle::after {
+            margin-left: 0.2em;
+            vertical-align: 0.1em;
         }
 
-        // Nav-Shop — dropdown niveau 2 sous racine catalogue
-        #top_menu.top_menu > .nav-item.ck-nav-desktop-universe .dropdown-menu {
-            min-width: 12rem;
-            padding: $ck-space-2 $ck-space-3;
+        #top_menu.top_menu > .nav-item.ck-nav-mobile-univers {
+            display: none !important;
         }
 
         #top_menu.top_menu .ck-nav-desktop-universe-child > .nav-link {
             font-size: $ck-text-sm;
             font-weight: $ck-font-weight-ui;
-            padding: 0.4rem 0.65rem;
             white-space: nowrap;
-        }
-
-        .navbar-nav.align-items-center.gap-2 {
-            margin-left: auto;
-            padding-left: 0 !important;
         }
     }
 

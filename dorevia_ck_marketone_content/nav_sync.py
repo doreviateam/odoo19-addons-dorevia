@@ -242,13 +242,11 @@ def _sync_desktop_shop_menus(env, website, root, Menu, trees):
             category_id=tree['category_id'],
         )
         managed_child_names = set()
+        # Nav-Shop V2.1 — passe corrective MOA : pas d'entrée "Toute {root}" en
+        # tête du dropdown L2. La racine elle-même est déjà cliquable (lien
+        # direct vers l'univers via ck-nav-universe-split__link) ; ce doublon
+        # de navigation était explicitement proscrit par l'arbitrage MOA.
         child_rows = list(tree['children'])
-        if child_rows:
-            child_rows = [{
-                'name': f'Toute {tree["name"]}',
-                'url': tree['url'],
-                'sequence': 0,
-            }] + child_rows
         for child in child_rows:
             managed_child_names.add(child['name'])
             _upsert_menu(
