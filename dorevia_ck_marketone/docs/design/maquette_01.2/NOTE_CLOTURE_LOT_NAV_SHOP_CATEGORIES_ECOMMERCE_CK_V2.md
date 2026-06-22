@@ -5,8 +5,9 @@
 | **Lot** | Nav-Shop — navigation boutique `product.public.category` |
 | **Ticket** | [`TICKET_DEV_LOT_NAV_SHOP_CATEGORIES_ECOMMERCE_CK_V2.md`](../TICKET_DEV_LOT_NAV_SHOP_CATEGORIES_ECOMMERCE_CK_V2.md) |
 | **Branche Dev** | `feat/ck-nav-shop-categories-v2` |
-| **PR** | *(à compléter post-création)* |
-| **Commit merge** | *(à compléter post-merge)* |
+| **PR** | [#80](https://github.com/doreviateam/odoo19-addons-dorevia/pull/80) |
+| **Commit merge** | `18c04b42330c75f6bd0c51a4efc1c37746e88d9e` |
+| **Commit Dev** | `ce08032` (branche `feat/ck-nav-shop-categories-v2`) |
 | **Statut MOA** | **✅ GO merge · 2026-06-22** |
 | **Statut QA** | **✅ GO merge · NOTE_QA §8 ter** |
 
