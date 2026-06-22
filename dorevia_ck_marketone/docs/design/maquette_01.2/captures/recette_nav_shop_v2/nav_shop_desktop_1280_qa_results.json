@@ -1,0 +1,60 @@
+{
+  "topMenu": [
+    {
+      "text": "Tous nos produits",
+      "visible": true,
+      "classes": "nav-item  "
+    },
+    {
+      "text": "Nos univers",
+      "visible": false,
+      "classes": "nav-item   dropdown ck-nav-mobile-univers"
+    },
+    {
+      "text": "Épicerie",
+      "visible": true,
+      "classes": "nav-item  ck-nav-desktop-universe"
+    },
+    {
+      "text": "Maison & bien-être",
+      "visible": true,
+      "classes": "nav-item  ck-nav-desktop-universe"
+    },
+    {
+      "text": "Artisanat & Culture",
+      "visible": true,
+      "classes": "nav-item  ck-nav-desktop-universe"
+    },
+    {
+      "text": "",
+      "visible": true,
+      "classes": "nav-item dropdown o_extra_menu_items"
+    }
+  ],
+  "extraMenu": {
+    "found": true,
+    "visible": true,
+    "items": [
+      "Coups de cœur",
+      "Boissons",
+      "Jus de fruits",
+      "Découvrir",
+      "Producteurs & territoires",
+      "Recettes & usages",
+      "Professionnels",
+      "Contactez-nous"
+    ]
+  },
+  "extraMenuOpenContent": [
+    "Coups de cœur",
+    "Boissons",
+    "Jus de fruits",
+    "Découvrir",
+    "Producteurs & territoires",
+    "Recettes & usages",
+    "Professionnels",
+    "Contactez-nous"
+  ],
+  "boissonsFoundInMainBar": false,
+  "level2Dropdown": "Boissons not in main bar, checking overflow"
+}

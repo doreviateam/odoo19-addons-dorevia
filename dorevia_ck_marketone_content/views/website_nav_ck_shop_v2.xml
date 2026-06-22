@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Nav-Shop — desktop : racine navigable + toggle sous-menu L2 -->
+    <template id="submenu_ck_nav_shop_desktop_split"
+              inherit_id="website.submenu"
+              name="CK Nav-Shop — desktop universe split link"
+              priority="35">
+        <xpath expr="//li[@t-elif='show_dropdown'][@role='presentation']/a[@data-bs-toggle='dropdown'][@href='#'][span[@t-field='submenu.name']]" position="replace">
+            <t t-if="submenu._ck_nav_is_desktop_universe() and submenu.child_id and not is_vertical_nav and not submenu.is_mega_menu">
+                <div class="ck-nav-universe-split d-inline-flex align-items-stretch">
+                    <a t-att-href="submenu._ck_nav_category_shop_url()"
+                       t-attf-class="nav-link ck-nav-universe-split__link #{link_class or ''} #{submenu._is_active() and 'active'}"
+                       role="menuitem"
+                       t-ignore="true"
+                       t-att-target="'_blank' if submenu.new_window else None">
+                        <span t-field="submenu.name"/>
+                    </a>
+                    <a href="#"
+                       t-attf-class="nav-link dropdown-toggle ck-nav-universe-split__toggle #{dropdown_toggler_classes or ''}"
+                       data-bs-toggle="dropdown"
+                       data-bs-auto-close="outside"
+                       role="menuitem"
+                       t-att-aria-label="'Sous-catégories ' + submenu.name">
+                        <span class="visually-hidden" t-esc="submenu.name"/>
+                    </a>
+                </div>
+            </t>
+            <t t-if="not (submenu._ck_nav_is_desktop_universe() and submenu.child_id and not is_vertical_nav and not submenu.is_mega_menu)">
+                <a
+                    t-if="not is_accordion_nav"
+                    href="#"
+                    t-attf-class="dropdown-toggle #{link_class or ''} #{submenu.is_mega_menu and 'o_mega_menu_toggle'} #{submenu._is_active() and 'active'} #{dropdown_toggler_classes}"
+                    data-bs-toggle="dropdown"
+                    t-att-data-bs-display="'static' if submenu.is_mega_menu else None"
+                    data-bs-auto-close="outside"
+                    role="menuitem"
+                >
+                    <span t-field="submenu.name"/>
+                </a>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Nav-Shop — mobile : racine avec L2 dynamiques BO (entrée feuille website.menu) -->
+    <template id="submenu_ck_nav_shop_mobile_l2_leaf"
+              inherit_id="website.submenu"
+              name="CK Nav-Shop — mobile leaf with L2 category"
+              priority="36">
+        <xpath expr="//li[@t-if='submenu.is_visible and not (submenu.child_id or submenu.is_mega_menu)'][@role='presentation']" position="replace">
+            <t t-if="submenu.is_visible and not (submenu.child_id or submenu.is_mega_menu) and is_vertical_nav and submenu._ck_nav_is_mobile_universe_child() and submenu._ck_nav_has_eligible_l2()">
+                <li t-attf-class="#{item_class or ''} #{submenu.ck_nav_css_class or ''} ck-nav-mobile-universe-nested-wrap px-0" role="presentation">
+                    <div class="accordion-item ck-nav-mobile-universe-nested border-0">
+                        <div class="ck-nav-mobile-universe-nested__header d-flex align-items-stretch">
+                            <a t-att-href="submenu._ck_nav_category_shop_url()"
+                               t-attf-class="#{link_class or ''} ck-nav-mobile-universe-nested__link flex-grow-1"
+                               role="menuitem"
+                               t-ignore="true">
+                                <span t-field="submenu.name"/>
+                            </a>
+                            <a href="#"
+                               t-attf-class="#{link_class or ''} accordion-button collapsed ck-nav-mobile-universe-nested__toggle flex-grow-0"
+                               data-bs-toggle="collapse"
+                               t-attf-data-bs-target=".o_accordion_target_#{submenu.id}"
+                               aria-expanded="false"
+                               t-attf-aria-controls="o_accordion_target_#{submenu.id}"
+                               t-att-aria-label="'Sous-catégories ' + submenu.name"/>
+                        </div>
+                        <div t-attf-class="o_accordion_target_#{submenu.id} accordion-collapse collapse"
+                             t-attf-data-bs-parent="#{is_mobile and '#top_menu_collapse_mobile' or '#top_menu'}">
+                            <ul class="show list-group list-unstyled py-0" role="menu">
+                                <t t-foreach="submenu._ck_nav_eligible_l2_categories()" t-as="l2_cat">
+                                    <li role="presentation">
+                                        <a t-att-href="l2_cat['url']"
+                                           class="nav-link list-group-item list-group-item-action border-0 rounded-0 px-4 text-wrap ck-nav-mobile-universe-l2"
+                                           role="menuitem">
+                                            <t t-esc="l2_cat['name']"/>
+                                        </a>
+                                    </li>
+                                </t>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </t>
+            <t t-if="submenu.is_visible and not (submenu.child_id or submenu.is_mega_menu) and not (is_vertical_nav and submenu._ck_nav_is_mobile_universe_child() and submenu._ck_nav_has_eligible_l2())">
+                <li t-attf-class="#{item_class or ''} #{submenu.ck_nav_css_class or ''} #{is_vertical_nav and 'px-0'}" role="presentation">
+                    <a t-att-href="submenu._ck_nav_category_shop_url()"
+                        t-attf-class="#{link_class or ''} #{submenu._is_active() and 'active'}"
+                        role="menuitem"
+                        t-ignore="true"
+                        t-att-target="'_blank' if submenu.new_window else None">
+                        <span t-field="submenu.name"/>
+                    </a>
+                </li>
+            </t>
+        </xpath>
+    </template>
+</odoo>

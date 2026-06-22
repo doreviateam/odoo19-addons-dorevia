@@ -6,7 +6,7 @@
               name="CK Theme header chrome"
               priority="25">
         <xpath expr="//header[@id='top']" position="attributes">
-            <attribute name="t-attf-class" add="ck-header" separator=" "/>
+            <attribute name="t-attf-class" add="ck-header o_hoverable_dropdown" separator=" "/>
         </xpath>
     </template>
 

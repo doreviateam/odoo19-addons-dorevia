@@ -1,0 +1,46 @@
+{
+  "topMenu": [
+    {
+      "text": "Tous nos produits",
+      "visible": true,
+      "classes": "nav-item ",
+      "hasSplitLink": false,
+      "splitLinkHref": null
+    },
+    {
+      "text": "Nos univers",
+      "visible": false,
+      "classes": "nav-item   dropdown ck-nav-mobile-univers",
+      "hasSplitLink": false,
+      "splitLinkHref": null
+    },
+    {
+      "text": "Épicerie",
+      "visible": true,
+      "classes": "nav-item ",
+      "hasSplitLink": false,
+      "splitLinkHref": null
+    },
+    {
+      "text": "Maison & bien-être",
+      "visible": true,
+      "classes": "nav-item ",
+      "hasSplitLink": false,
+      "splitLinkHref": null
+    },
+    {
+      "text": "",
+      "visible": true,
+      "classes": "nav-item dropdown o_extra_menu_items",
+      "hasSplitLink": true,
+      "splitLinkHref": "/shop/category/boissons-123"
+    },
+    {
+      "text": "Découvrir",
+      "visible": true,
+      "classes": "nav-item position-static  dropdown o_no_autohide_item",
+      "hasSplitLink": false,
+      "splitLinkHref": null
+    }
+  ]
+}

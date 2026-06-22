@@ -1,0 +1,46 @@
+{
+  "M5_overflow_closed": {
+    "overflow": false
+  },
+  "M1_visibleEntries": [
+    "Tous nos produits",
+    "Découvrir",
+    "Se connecter"
+  ],
+  "M2_nosUniversChildren": [
+    {
+      "text": "Épicerie",
+      "href": "/shop/category/epicerie-1"
+    },
+    {
+      "text": "Maison & bien-être",
+      "href": "/shop/category/maison-bien-etre-2"
+    },
+    {
+      "text": "Artisanat & Culture",
+      "href": "/shop/category/artisanat-culture-3"
+    },
+    {
+      "text": "Coups de cœur",
+      "href": "/shop/category/coups-de-cœur-24"
+    },
+    {
+      "text": "Boissons",
+      "href": "/shop/category/boissons-123"
+    }
+  ],
+  "M3_noDuplicateRoots": {
+    "Épicerie": 1,
+    "Maison & bien-être": 1,
+    "Boissons": 1,
+    "Coups de cœur": 1
+  },
+  "M4_h1Mobile": {
+    "serviceBar": true,
+    "mobileChrome": true,
+    "burger": true
+  },
+  "M5_overflow_open": {
+    "overflow": false
+  }
+}
