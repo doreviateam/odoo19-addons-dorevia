@@ -41,7 +41,7 @@ Héritage V2.1 Nav-Shop (branche parente) : suppression « Toute {racine} », sp
 |---|---|
 | 3 niveaux visibles | ✅ |
 | Recherche lisible (niveau 1) | ✅ |
-| 6 racines + `Tous nos produits` + `Découvrir` sur une ligne | ✅ |
+| 5 racines catalogue + `Tous nos produits` + `Découvrir` (**7 entrées** au total) sur une ligne | ✅ |
 | Bouton `+` overflow absent | ✅ |
 | Mobile 390 px non régressé | ✅ |
 | Tests `dorevia_ck_marketone_nav_sync` + `dorevia_ck_theme_phase10` | **29/29 ✅** |
@@ -64,4 +64,4 @@ Captures : `docs/design/maquette_01.2/captures/recette_h1_2_header/`
 
 ## Cas 7+ racines
 
-Non observé sur seed actuel (6 racines visibles à 1280 px sans overflow). Si le catalogue dépasse 7 racines, le libellé overflow autorisé est **« Plus de catégories »** (jamais icône `+` seule) — arbitrage MOA requis pour stratégie durable.
+Non observé sur seed actuel (**5 racines** catalogue visibles à 1280 px · 7 entrées nav au total, sans overflow). Si le catalogue dépasse 7 racines, le libellé overflow autorisé est **« Plus de catégories »** (jamais icône `+` seule) — arbitrage MOA requis pour stratégie durable.
