@@ -185,6 +185,25 @@ class TestCkNavSync(TransactionCase):
         child = self._menu_by_name('Épicerie', parent=mobile)
         self.assertTrue(child)
 
+    def test_public_user_can_render_category_menu_helpers(self):
+        """Le header public ne doit pas exiger l'ACL BO des catégories eCommerce."""
+        root_cat = self.Category.create({'name': 'CK Nav QA Public Root', 'sequence': 99992})
+        child_cat = self.Category.create({
+            'name': 'CK Nav QA Public Child',
+            'parent_id': root_cat.id,
+            'sequence': 1,
+        })
+        self._create_published_product('CK Nav QA Public Product', child_cat)
+        sync_ck_navigation_for_website(self.env, self.website)
+
+        menu = self._menu_by_name('CK Nav QA Public Root')
+        public_menu = menu.with_user(self.env.ref('base.public_user'))
+        self.assertIn('/shop/category/', public_menu._ck_nav_category_shop_url())
+        self.assertEqual(
+            public_menu._ck_nav_eligible_l2_categories()[0]['name'],
+            'CK Nav QA Public Child',
+        )
+
     def test_get_nav_category_mapping_has_dynamic_rows(self):
         mapping = get_nav_category_mapping(self.env)
         self.assertEqual(mapping[0]['menu_label'], NAV_SHOP_ALL_LABEL)

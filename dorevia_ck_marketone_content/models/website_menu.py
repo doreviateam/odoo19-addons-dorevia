@@ -32,16 +32,21 @@ class WebsiteMenu(models.Model):
         )
 
         self.ensure_one()
-        if not self.ck_nav_category_id:
+        # Le header est rendu pour l'utilisateur public, qui n'a volontairement
+        # pas d'ACL de lecture globale sur product.public.category. Le menu a été
+        # construit côté serveur depuis des catégories publiées : on élève donc
+        # uniquement la lecture de la catégorie explicitement liée au menu.
+        category = self.sudo().ck_nav_category_id
+        if not category:
             return []
         rows = []
-        for category in _eligible_level2_children(self.env, self.ck_nav_category_id):
-            url = _category_shop_url(self.env, category)
+        for child in _eligible_level2_children(self.env, category):
+            url = _category_shop_url(self.env, child)
             if not url:
                 continue
             rows.append({
-                'id': category.id,
-                'name': category.name,
+                'id': child.id,
+                'name': child.name,
                 'url': url,
             })
         return rows
@@ -54,6 +59,7 @@ class WebsiteMenu(models.Model):
         from odoo.addons.dorevia_ck_marketone_content.nav_sync import _category_shop_url
 
         self.ensure_one()
-        if self.ck_nav_category_id:
-            return _category_shop_url(self.env, self.ck_nav_category_id) or self._clean_url()
+        category = self.sudo().ck_nav_category_id
+        if category:
+            return _category_shop_url(self.env, category) or self._clean_url()
         return self._clean_url()
