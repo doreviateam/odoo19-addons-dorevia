@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol Marketone — Contenu démo",
-    "version": "19.0.1.25.33",
+    "version": "19.0.1.26.1",
     "category": "Website/Website",
     "summary": "Seed contenu CK Marketone — pages CMS, catalogue pilote, newsletter",
     "description": """
@@ -30,6 +30,7 @@
         "views/product_template_views.xml",
         "views/website_sale_product_card.xml",
         "views/website_sale_product_page.xml",
+        "views/website_nav_ck_v1.xml",
         "data/ck_public_category_coups_de_coeur.xml",
         "data/ck_product_ribbon_coups_de_coeur.xml",
         "data/ck_cron.xml",

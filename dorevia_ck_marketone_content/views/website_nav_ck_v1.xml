@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lot Nav-1 — classes CSS menu (desktop univers / mobile Nos univers) -->
+    <template id="submenu_ck_nav_css_class"
+              inherit_id="website.submenu"
+              name="CK Nav V1 — menu CSS class"
+              priority="30">
+        <!-- Branche feuille (t-if) — entrées lien simple -->
+        <xpath expr="//li[@t-if][@role='presentation']" position="attributes">
+            <attribute name="t-attf-class" add="#{submenu.ck_nav_css_class or ''}" separator=" "/>
+        </xpath>
+        <!-- Branche dropdown / accordéon (t-elif) — Nos univers · Découvrir · mega -->
+        <xpath expr="//li[@t-elif][@role='presentation']" position="attributes">
+            <attribute name="t-attf-class" add="#{submenu.ck_nav_css_class or ''}" separator=" "/>
+        </xpath>
+    </template>
+</odoo>

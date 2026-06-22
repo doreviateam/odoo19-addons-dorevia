@@ -1047,6 +1047,9 @@ def bootstrap_all_marketone_content(env):
     bootstrap_privacy_page(env)
     bootstrap_terms_page(env)
     bootstrap_footer_legal_links(env)
+    from .nav_sync import bootstrap_ck_navigation
+
+    bootstrap_ck_navigation(env)
 
 
 def post_init_hook(env):

@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Tests Phase 10 — header / menu / branding CK · GO §5undecies."""
+"""Tests Phase 10 / Nav-1 — header / menu / branding CK."""
+
+import re
 
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase
+
+from odoo.addons.dorevia_ck_marketone_content.nav_sync import bootstrap_ck_navigation
 
 
 PHASE10_ROUTES = (
@@ -18,26 +22,26 @@ PHASE10_ROUTES = (
 
 @tagged('post_install', '-at_install', 'dorevia_ck_theme_phase10')
 class TestCkPhase10HeaderCompose(HttpCase):
-    def setUp(self):
-        super().setUp()
-        # QA C1 : ces tests valident le rendu Phase 10 (header + routes /a-propos,
-        # /recettes, /producteur/..., menus Boutique/Découvrir/Professionnels) qui
-        # n'existe que lorsque le module de contenu CK est installé. Sur une base
-        # « thème seul » (garde-fou §4bis), on saute la recette plutôt que d'échouer.
-        content = self.env['ir.module.module'].sudo().search([
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        content = cls.env['ir.module.module'].sudo().search([
             ('name', '=', 'dorevia_ck_marketone_content'),
             ('state', '=', 'installed'),
         ], limit=1)
         if not content:
-            self.skipTest(
-                'dorevia_ck_marketone_content non installé — recette Phase 10 '
-                '(header + routes contenu) non applicable en thème seul'
+            raise cls.skipTest(
+                'dorevia_ck_marketone_content non installé — recette header Nav non applicable'
             )
+        bootstrap_ck_navigation(cls.env)
 
-    def test_header_ck_chrome_on_home(self):
+    def _home_html(self):
         resp = self.url_open('/?qa_ts=phase10')
         self.assertEqual(resp.status_code, 200)
-        html = resp.text
+        return resp.text
+
+    def test_header_ck_chrome_on_home(self):
+        html = self._home_html()
         self.assertIn('ck-header', html)
         self.assertIn('ck-theme', html)
         self.assertIn('ck-header__brand', html)
@@ -51,18 +55,32 @@ class TestCkPhase10HeaderCompose(HttpCase):
             r'data-name="Navbar Logo"[^>]*>[\s\S]*?<img[^>]+logo',
             msg='Logo image générique interdit — marque typographique CK attendue',
         )
-        self.assertIn('Boutique', html)
+        self.assertIn('Tous nos produits', html)
         self.assertIn('Découvrir', html)
-        self.assertIn('Professionnels', html)
         self.assertIn('o_mega_menu', html)
+        self.assertIn('/professionnels', html)
+        self.assertIn('/contactus', html)
+
+    def test_header_no_top_level_professionnels_or_contact_cta(self):
+        html = self._home_html()
+        top_menu = re.search(r'id="top_menu"[^>]*>(.*?)</ul>', html, re.S)
+        self.assertTrue(top_menu, msg='top_menu introuvable')
+        chunk = top_menu.group(1)
+        self.assertNotRegex(chunk, r'>\s*Professionnels\s*<')
+        self.assertNotRegex(chunk, r'>\s*Contactez-nous\s*<')
+        self.assertNotIn('btn_cta', chunk)
 
     def test_header_no_producteurs_nav_label(self):
-        html = self.url_open('/?qa_ts=phase10').text
+        html = self._home_html()
         self.assertNotRegex(html, r'>\s*Producteurs\s*</a>')
 
+    def test_header_soin_bien_etre_label_when_visible(self):
+        html = self._home_html()
+        if 'Soin &amp; Bien-être' in html or 'Soin & Bien-être' in html:
+            self.assertRegex(html, r'Soin (&amp;|&) Bien-être')
+
     def test_hero_carousel_pause_button_rendered(self):
-        """Garde-fou WCAG 2.2.2 : le bouton pause accessible est bien rendu en page."""
-        html = self.url_open('/?qa_ts=phase10').text
+        html = self._home_html()
         self.assertIn('ck-hero__visual-pause', html)
         self.assertIn('aria-pressed="false"', html)
 
@@ -82,3 +100,52 @@ class TestCkPhase10HeaderCompose(HttpCase):
                 self.assertEqual(resp.status_code, 200, path)
                 self.assertIn('ck-header', resp.text, path)
                 self.assertIn(needle, resp.text, path)
+
+    def test_decouvrir_mega_has_no_commerce_duplicates(self):
+        html = self._home_html()
+        links = re.search(r'ck-nav-decouvrir-links">(.*?)</nav>', html, re.S)
+        self.assertTrue(links, msg='Mega Découvrir sans liens éditoriaux')
+        self.assertNotIn('/shop/category/', links.group(1))
+
+    def _desktop_top_menu_chunk(self, html):
+        match = re.search(
+            r'<nav[^>]*class="[^"]*d-none d-lg-block[^"]*"[^>]*>.*?'
+            r'<ul[^>]*id="top_menu"[^>]*>(.*?)</ul>',
+            html,
+            re.S,
+        )
+        self.assertTrue(match, msg='Menu desktop #top_menu introuvable')
+        return match.group(1)
+
+    def _mobile_offcanvas_chunk(self, html):
+        match = re.search(
+            r'id="top_menu_collapse_mobile"[^>]*>(.*?)</div>\s*</div>',
+            html,
+            re.S,
+        )
+        self.assertTrue(match, msg='Offcanvas mobile introuvable')
+        return match.group(1)
+
+    def test_desktop_top_menu_mobile_univers_has_hide_class(self):
+        """B1 — Nos univers porte ck-nav-mobile-univers (masqué desktop via SCSS)."""
+        html = self._home_html()
+        desktop_menu = self._desktop_top_menu_chunk(html)
+        self.assertRegex(
+            desktop_menu,
+            r'class="[^"]*ck-nav-mobile-univers[^"]*"[^>]*>[\s\S]*?'
+            r'<span>Nos univers</span>',
+            msg='Nos univers doit porter ck-nav-mobile-univers dans #top_menu desktop',
+        )
+
+    def test_mobile_offcanvas_no_duplicate_universe_entries(self):
+        """B2 — Épicerie / Soin ne doivent pas apparaître en double (accordéon + plat)."""
+        html = self._home_html()
+        mobile = self._mobile_offcanvas_chunk(html)
+        for pattern in (r'>\s*Épicerie\s*<', r'>\s*Soin (&amp;|&) Bien-être\s*<'):
+            matches = re.findall(pattern, mobile)
+            if matches:
+                self.assertEqual(
+                    len(matches),
+                    1,
+                    msg=f'Entrée univers dupliquée dans le drawer mobile ({len(matches)}×)',
+                )
