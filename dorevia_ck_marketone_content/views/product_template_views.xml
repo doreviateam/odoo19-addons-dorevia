@@ -39,6 +39,7 @@
                                    context="{'product_template_id': id}"
                                    placeholder="Guadeloupe, Épicerie…"
                                    help="Affichées sous le nom du produit sur la card home (ex. Guadeloupe · Épicerie)."/>
+                            <field name="ck_is_featured" widget="boolean_toggle"/>
                         </group>
                     </group>
 

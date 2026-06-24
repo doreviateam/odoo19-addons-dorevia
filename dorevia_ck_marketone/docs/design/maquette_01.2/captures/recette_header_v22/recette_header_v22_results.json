@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "db": "dorevia_ck_marketone_01",
+    "base": "http://localhost:18079",
+    "qa": "header_v22",
+    "capturedAt": "2026-06-23T11:11:48.844Z"
+  },
+  "checks": {
+    "desktop_initial": {
+      "serviceBar": true,
+      "serviceBarText": "Produits sélectionnés · Origines identifiées · Livraison suivie · Stocké/expédié depuis Nantes",
+      "baseline": "épicerie créole",
+      "placeholder": "Rechercher un produit, une saveur, une île...",
+      "sticky": "sticky",
+      "n3": [
+        "Tous nos produits",
+        "Épicerie",
+        "Épicerie",
+        "Boissons",
+        "Boissons",
+        "Maison & Bien-être",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Nos producteurs",
+        "Espace pro"
+      ]
+    },
+    "desktop_scroll": {
+      "serviceBarHidden": true,
+      "headerSticky": "sticky",
+      "headerVisible": true
+    },
+    "mega_Épicerie": {
+      "open": true,
+      "panelShow": true,
+      "panelHeight": 226,
+      "panelWidth": 1200,
+      "titles": [
+        "Origines & producteurs"
+      ],
+      "hasFamilies": false,
+      "linkCount": 2,
+      "links": [
+        {
+          "text": "Guadeloupe",
+          "href": "/shop?attrib=2-5"
+        },
+        {
+          "text": "Voir les producteurs",
+          "href": "/nos-producteurs"
+        }
+      ]
+    },
+    "mega_Boissons": {
+      "open": true,
+      "panelShow": true,
+      "panelHeight": 205,
+      "panelWidth": 1200,
+      "titles": [
+        "Acheter par famille",
+        "Origines & producteurs"
+      ],
+      "hasFamilies": true,
+      "linkCount": 3,
+      "links": [
+        {
+          "text": "Jus & nectars",
+          "href": "/shop/category/boissons-jus-de-fruits-186"
+        },
+        {
+          "text": "Guadeloupe",
+          "href": "/shop?attrib=2-5"
+        },
+        {
+          "text": "Voir les producteurs",
+          "href": "/nos-producteurs"
+        }
+      ]
+    },
+    "mega_Maison & Bien-être": {
+      "open": true,
+      "panelShow": true,
+      "panelHeight": 205,
+      "panelWidth": 1200,
+      "titles": [
+        "Acheter par famille",
+        "Origines & producteurs"
+      ],
+      "hasFamilies": true,
+      "linkCount": 3,
+      "links": [
+        {
+          "text": "Savons & soins solides",
+          "href": "/shop/category/soin-bien-etre-savons-189"
+        },
+        {
+          "text": "Guadeloupe",
+          "href": "/shop?attrib=2-5"
+        },
+        {
+          "text": "Voir les producteurs",
+          "href": "/nos-producteurs"
+        }
+      ]
+    },
+    "mega_hover_bridge": {
+      "pass": true,
+      "phase": "traverse",
+      "after": {
+        "open": true,
+        "panelShow": true,
+        "panelHeight": 226,
+        "panelWidth": 1200,
+        "titles": [
+          "Origines & producteurs"
+        ],
+        "hasFamilies": false,
+        "linkCount": 2,
+        "links": [
+          {
+            "text": "Guadeloupe",
+            "href": "/shop?attrib=2-5"
+          },
+          {
+            "text": "Voir les producteurs",
+            "href": "/nos-producteurs"
+          }
+        ]
+      },
+      "hovered": {
+        "tag": "A",
+        "text": "Guadeloupe",
+        "href": "/shop?attrib=2-5"
+      }
+    },
+    "mega_hover_switch": {
+      "pass": true,
+      "labels": [
+        "Épicerie",
+        "Boissons",
+        "Maison & Bien-être",
+        "Boissons",
+        "Épicerie"
+      ],
+      "steps": [
+        {
+          "label": "Épicerie",
+          "pass": true,
+          "openLabels": [
+            "Épicerie"
+          ],
+          "panelWidth": 1200,
+          "linkCount": 2
+        },
+        {
+          "label": "Boissons",
+          "pass": true,
+          "openLabels": [
+            "Boissons"
+          ],
+          "panelWidth": 1200,
+          "linkCount": 3
+        },
+        {
+          "label": "Maison & Bien-être",
+          "pass": true,
+          "openLabels": [
+            "Maison & Bien-être"
+          ],
+          "panelWidth": 1200,
+          "linkCount": 3
+        },
+        {
+          "label": "Boissons",
+          "pass": true,
+          "openLabels": [
+            "Boissons"
+          ],
+          "panelWidth": 1200,
+          "linkCount": 3
+        },
+        {
+          "label": "Épicerie",
+          "pass": true,
+          "openLabels": [
+            "Épicerie"
+          ],
+          "panelWidth": 1200,
+          "linkCount": 2
+        }
+      ]
+    },
+    "artisanat": {
+      "visible": true,
+      "isMega": false
+    },
+    "espace_pro": {
+      "anchors": [
+        "/professionnels#acheter",
+        "/professionnels#conditions",
+        "/professionnels#partenaire",
+        "/professionnels#contact",
+        "/professionnels#acheter",
+        "/professionnels#conditions",
+        "/professionnels#partenaire",
+        "/professionnels#contact"
+      ]
+    },
+    "nos_producteurs": {
+      "href": "/nos-producteurs"
+    },
+    "coups_de_coeur": {
+      "directLink": true,
+      "href": "/shop/category/coups-de-cœur-24",
+      "noMega": true
+    },
+    "coffrets": {
+      "visible": false,
+      "seedBehavior": "absent — aucun tag coffret publié sur instance seed"
+    },
+    "mobile_closed": {
+      "serviceBar": true,
+      "menuBtn": true,
+      "brand": "C-Kréyòl"
+    },
+    "mobile_drawer": {
+      "entries": [
+        "Tous nos produits",
+        "Épicerie",
+        "Boissons",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Nos producteurs",
+        "Espace pro Acheter pour mon commerce Demander les conditions pro Devenir partenaire / distributeur Contacter C-Kréyòl"
+      ],
+      "hasAccordion": true
+    },
+    "mobile_mega_epicerie": {
+      "rayon": "Épicerie",
+      "panelOpen": true,
+      "accordion": true,
+      "expandedSections": [
+        "Origines & producteurs"
+      ],
+      "linkCount": 2,
+      "links": [
+        {
+          "text": "Guadeloupe",
+          "href": "/shop?attrib=2-5"
+        },
+        {
+          "text": "Voir les producteurs",
+          "href": "/nos-producteurs"
+        }
+      ],
+      "noVisualCol": true
+    }
+  }
+}

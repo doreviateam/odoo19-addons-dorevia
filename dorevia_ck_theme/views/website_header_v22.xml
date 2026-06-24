@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lot Header V2.2 — bandeau promesses 4 items + masquage scroll -->
+    <template id="layout_ck_header_service_bar_v22"
+              inherit_id="dorevia_ck_theme.layout_ck_header_service_bar"
+              name="CK Header V2.2 service bar"
+              priority="30">
+        <xpath expr="//p[hasclass('ck-header-service-bar__text')]" position="replace">
+            <p class="ck-header-service-bar__text mb-0">
+                <span class="ck-header-service-bar__item">Produits sélectionnés</span>
+                <span class="ck-header-service-bar__sep" aria-hidden="true">·</span>
+                <span class="ck-header-service-bar__item">Origines identifiées</span>
+                <span class="ck-header-service-bar__sep" aria-hidden="true">·</span>
+                <span class="ck-header-service-bar__item">Livraison suivie</span>
+                <span class="ck-header-service-bar__sep" aria-hidden="true">·</span>
+                <span class="ck-header-service-bar__item">Stocké/expédié depuis Nantes</span>
+            </p>
+        </xpath>
+    </template>
+
+    <!-- Lot Header V2.2 — baseline « épicerie créole » sous le logo -->
+    <template id="layout_ck_header_brand_v22"
+              inherit_id="dorevia_ck_theme.layout_ck_header_brand"
+              name="CK Header V2.2 brand baseline"
+              priority="96">
+        <xpath expr="//span[hasclass('ck-header__brand')]" position="after">
+            <span class="ck-header__baseline d-none d-lg-block">épicerie créole</span>
+        </xpath>
+    </template>
+
+    <!-- Lot Header V2.2 — placeholder recherche V2.2 -->
+    <template id="ck_header_search_box_input_v22"
+              inherit_id="dorevia_ck_theme.ck_header_search_box_input"
+              name="CK Header V2.2 search placeholder"
+              priority="100">
+        <xpath expr="//t[@t-call='website.website_search_box_input']" position="attributes">
+            <attribute name="placeholder.f">Rechercher un produit, une saveur, une île...</attribute>
+        </xpath>
+    </template>
+
+    <!-- Lot Header V2.2 — panier textuel desktop (icône + libellé) -->
+    <template id="ck_template_header_cart_v22"
+              inherit_id="dorevia_ck_theme.ck_template_header_default_h1"
+              name="CK Header V2.2 cart label"
+              priority="55">
+        <xpath expr="//t[@t-call='website_sale.header_cart_link']" position="replace">
+            <t t-call="website_sale.header_cart_link">
+                <t t-set="_icon" t-value="True"/>
+                <t t-set="_text" t-value="True"/>
+                <t t-set="_text_class" t-value="'ms-1 d-none d-xl-inline'"/>
+                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-pill px-3 text-center text-reset ck-header__cart-link'"/>
+                <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="ck_template_header_h1_2_cart_v22"
+              inherit_id="dorevia_ck_theme.ck_template_header_h1_2_three_levels"
+              name="CK Header V2.2 cart label H1.2"
+              priority="65">
+        <xpath expr="//t[@t-call='website_sale.header_cart_link']" position="replace">
+            <t t-call="website_sale.header_cart_link">
+                <t t-set="_icon" t-value="True"/>
+                <t t-set="_text" t-value="True"/>
+                <t t-set="_text_class" t-value="'ms-1 d-none d-xl-inline'"/>
+                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-pill px-3 text-center text-reset ck-header__cart-link'"/>
+                <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+            </t>
+        </xpath>
+    </template>
+</odoo>

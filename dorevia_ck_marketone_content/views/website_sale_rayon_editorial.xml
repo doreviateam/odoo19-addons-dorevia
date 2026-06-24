@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- P2B — header de rayon éditorialisé (Épicerie, seul rayon publiable
+         à ce jour, cf. shop_rayon_editorial.py). Se masque automatiquement
+         sur /shop et sur tout rayon ne réunissant pas les conditions §6. -->
+    <template id="website_sale_rayon_editorial"
+              inherit_id="dorevia_ck_theme.products_ck_shop_compose"
+              name="CK Rayon éditorial — P2B">
+        <xpath expr="//t[@t-call='dorevia_ck_theme.s_ck_shop_intro']" position="attributes">
+            <attribute name="t-if">not ck_rayon</attribute>
+        </xpath>
+        <xpath expr="//t[@t-call='dorevia_ck_theme.s_ck_shop_intro']" position="before">
+            <t t-set="ck_rayon" t-value="category and category.get_ck_rayon_editorial()"/>
+
+            <!-- Bannière de rayon — repère MOA (Abbaye de Sept-Fons) : bloc
+                 colonne pleine largeur, titre + phrase en clair sur fond couleur. -->
+            <section t-if="ck_rayon" class="ck-rayon-banner" data-snippet="ck_rayon_banner">
+                <div class="container">
+                    <h1 class="ck-rayon-banner__title" t-esc="ck_rayon['title']"/>
+                    <p class="ck-rayon-banner__phrase" t-esc="ck_rayon['phrase']"/>
+                </div>
+            </section>
+
+            <!-- Répertoire visuel des sous-familles — cercles photo produit réel,
+                 fallback texte "Aucune image disponible" si aucune photo (jamais
+                 d'image générique inventée), même principe que le repère fourni. -->
+            <section t-if="ck_rayon and ck_rayon['families']" class="ck-rayon-families">
+                <div class="container">
+                    <div class="row g-4 justify-content-center justify-content-md-start">
+                        <div class="col-4 col-md-2" t-foreach="ck_rayon['families']" t-as="ck_family">
+                            <a t-att-href="ck_family['url']" class="ck-rayon-family-tile">
+                                <span class="ck-rayon-family-tile__media">
+                                    <img t-if="ck_family['image_url']" t-att-src="ck_family['image_url']"
+                                         t-att-alt="ck_family['label']" loading="lazy"/>
+                                    <span t-else="" class="ck-rayon-family-tile__placeholder">Aucune image disponible</span>
+                                </span>
+                                <span class="ck-rayon-family-tile__label" t-esc="ck_family['label']"/>
+                            </a>
+                        </div>
+                    </div>
+                    <p class="ck-rayon-families__proof" t-esc="ck_rayon['proof']"/>
+                </div>
+            </section>
+
+            <section t-if="ck_rayon and ck_rayon['highlights']" class="container ck-rayon-header__highlights">
+                <div class="row g-3">
+                    <div class="col-md-4" t-foreach="ck_rayon['highlights']" t-as="ck_highlight">
+                        <a t-att-href="ck_highlight['url']" class="ck-rayon-highlight">
+                            <span class="ck-rayon-highlight__title" t-esc="ck_highlight['title']"/>
+                            <span class="ck-rayon-highlight__text" t-esc="ck_highlight['text']"/>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- Le header natif (titre H1 + description catégorie) duplique le header de
+         rayon ci-dessus quand celui-ci est actif — on le masque dans ce seul cas
+         (il reste affiché normalement sur /shop et sur les rayons non publiables). -->
+    <template id="website_sale_rayon_editorial_hide_native_title"
+              inherit_id="website_sale.products"
+              name="CK Rayon éditorial — masque titre natif dupliqué"
+              priority="40">
+        <xpath expr="//header[@id='o_wsale_products_header']//h1" position="attributes">
+            <attribute name="t-if">(category or search) and not ck_rayon</attribute>
+        </xpath>
+        <xpath expr="//div[@id='category_header']" position="attributes">
+            <attribute name="t-if">not ck_rayon</attribute>
+        </xpath>
+    </template>
+</odoo>

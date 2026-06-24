@@ -51,9 +51,13 @@
             <attribute name="aria-label">Ajouter au panier</attribute>
             <attribute name="title">Ajouter au panier</attribute>
         </xpath>
+        <!-- Ticket Dev — P2A allègement CTA : bouton icône compacte (grammaire
+             boutique mature plutôt que bandeau plein largeur). L'icône native
+             est conservée visible ; le libellé reste dans le DOM pour les
+             lecteurs d'écran (visually-hidden), aria-label/title déjà posés
+             ci-dessus portent le nom accessible du bouton. -->
         <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]//span[hasclass('o_label')]" position="replace">
-            <span class="o_label card-cart-cta__label">Ajouter au panier</span>
+            <span class="o_label card-cart-cta__label visually-hidden">Ajouter au panier</span>
         </xpath>
-        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]//i[hasclass('fa-shopping-cart')]" position="replace"/>
     </template>
 </odoo>

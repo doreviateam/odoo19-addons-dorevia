@@ -665,9 +665,11 @@
         white-space: nowrap;
     }
 
+    // Ticket Dev — grille 4 colonnes desktop / 2 tablette / 1 mobile,
+    // alignée sur la limite FEATURED_CURATED_MAX=4 (home_featured.py).
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 14px;
 
         @media (max-width: 1023.98px) {

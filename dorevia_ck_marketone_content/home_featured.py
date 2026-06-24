@@ -6,7 +6,6 @@ from xml.sax.saxutils import escape
 
 from odoo.tools import format_amount
 
-MIN_FEATURED_PRODUCTS = 5
 FEATURED_SECTION_MARKER = 'ck-featured-products'
 FEATURED_GRID_MARKER = 'ck-featured-products__grid--stable'
 FEATURED_CARD_MARKER = 'ck-product-card'
@@ -17,7 +16,7 @@ FEATURED_CARD_CTA = 'Voir le produit'
 FEATURED_CARD_CART_CTA = 'Ajouter au panier'
 FEATURED_CATEGORY_NAME = 'Coups de cœur'  # curation BO des vedettes (catégorie e-commerce dédiée)
 FEATURED_CATEGORY_XMLID = 'dorevia_ck_marketone_content.public_categ_coups_de_coeur'
-FEATURED_CURATED_MAX = 8
+FEATURED_CURATED_MAX = 4
 
 _CATEGORY_SHORT_LABELS = (
     'Épicerie',
@@ -78,7 +77,9 @@ _CARD_CTA_TEXT_RE = re.compile(re.escape(FEATURED_CARD_CTA))
 _FEATURED_LABELS_BLOCK_RE = re.compile(
     r'<p ' + _ck_class_token_pattern('ck-product-card__meta') + r'[^>]*>[^<]+</p>',
 )
-_CARD_TITLE_TEXT_RE = _ck_class_token_text_re('ck-product-card__title')
+# Ticket Dev — le titre est maintenant un lien (<h3><a class="…__title-link">) :
+# le texte capturé suit immédiatement le tag <a> imbriqué, plus le <h3> lui-même.
+_CARD_TITLE_TEXT_RE = _ck_class_token_text_re('ck-product-card__title-link')
 _CARD_PRICE_TEXT_RE = _ck_class_token_text_re('ck-product-card__price-value')
 _CARD_META_TEXT_RE = _ck_class_token_text_re('ck-product-card__meta')
 
@@ -105,37 +106,33 @@ def _template_featured_variant_cap(template):
     return 1
 
 
-def get_ready_featured_variants(env, *, min_count=MIN_FEATURED_PRODUCTS, max_count=MIN_FEATURED_PRODUCTS):
-    """Variantes publiées — une entrée par variante si template multi-variantes."""
+def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
+    """Vedettes homepage — `ck_is_featured` · publié · vendable · image · max 8."""
     templates = env['product.template'].sudo().search([
+        ('ck_is_featured', '=', True),
         ('is_published', '=', True),
         ('website_published', '=', True),
         ('sale_ok', '=', True),
     ], order='website_sequence asc, id asc')
-
+    templates.mapped('product_tag_ids')
     variants = env['product.product'].browse()
     for template in templates:
-        if not template.image_1920 and not any(
-            v.image_1920 or v.image_512 for v in template.product_variant_ids
-        ):
-            continue
         candidates = template.product_variant_ids.filtered(
             lambda v: v.is_published and v.sale_ok and _variant_has_valid_image(v)
         ).sorted(key=lambda v: v.id)
+        if candidates:
+            candidates.mapped('additional_product_tag_ids')
         if not candidates:
             continue
         cap = _template_featured_variant_cap(template)
         variants |= candidates[:cap]
         if len(variants) >= max_count:
             break
-
-    if len(variants) < min_count:
-        return env['product.product'].browse()
     return variants[:max_count]
 
 
 def _merge_duplicate_featured_categories(env, canonical):
-    """Fusionne les doublons « Coups de cœur » vers la catégorie xmlid canonique."""
+    """Fusionne les doublons « Coups de cœur » (hygiène catalogue — hors homepage)."""
     Category = env['product.public.category'].sudo()
     dupes = Category.search([
         ('name', '=', FEATURED_CATEGORY_NAME),
@@ -155,7 +152,7 @@ def _merge_duplicate_featured_categories(env, canonical):
 
 
 def _ensure_featured_category(env):
-    """Catégorie e-commerce 'Coups de cœur' — support de la curation BO (créée si absente)."""
+    """Catégorie catalogue « Coups de cœur » — conservée, ne pilote plus la homepage."""
     category = env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
     if category:
         return _merge_duplicate_featured_categories(env, category.sudo())
@@ -179,37 +176,22 @@ def _ensure_featured_category(env):
     return _merge_duplicate_featured_categories(env, category.sudo())
 
 
-def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
-    """Vedettes curatées en BO : produits publiés rangés dans 'Coups de cœur', ordre website_sequence.
-
-    Renvoie un recordset vide si la catégorie n'existe pas ou ne contient aucun produit
-    publié — le bootstrap retombe alors sur la sélection automatique (comportement #73).
-    """
+def migrate_coups_de_coeur_category_to_ck_is_featured(env):
+    """Migration 19.0.1.28.3 — produits en catégorie vedettes → ck_is_featured=True."""
     category = env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
     if not category:
-        return env['product.product'].browse()
-    category = category.sudo()
+        category = env['product.public.category'].sudo().search([
+            ('name', '=', FEATURED_CATEGORY_NAME),
+        ], limit=1)
+    if not category:
+        return 0
     templates = env['product.template'].sudo().search([
         ('public_categ_ids', 'in', category.ids),
-        ('is_published', '=', True),
-        ('website_published', '=', True),
-        ('sale_ok', '=', True),
-    ], order='website_sequence asc, id asc')
-    templates.mapped('product_tag_ids')
-    variants = env['product.product'].browse()
-    for template in templates:
-        candidates = template.product_variant_ids.filtered(
-            lambda v: v.is_published and v.sale_ok and _variant_has_valid_image(v)
-        ).sorted(key=lambda v: v.id)
-        if candidates:
-            candidates.mapped('additional_product_tag_ids')
-        if not candidates:
-            continue
-        cap = _template_featured_variant_cap(template)
-        variants |= candidates[:cap]
-        if len(variants) >= max_count:
-            break
-    return variants[:max_count]
+        ('ck_is_featured', '=', False),
+    ])
+    if templates:
+        templates.write({'ck_is_featured': True})
+    return len(templates)
 
 
 def _get_featured_category_label(template):
@@ -592,6 +574,24 @@ def _get_featured_card_metadata_line(env, website, variant):
     return _join_featured_metadata_parts(origin, ' · '.join(transversal), qty_part, ref_part)
 
 
+# Ticket Dev — P2A densification card boutique. L'origine est désormais
+# affichée à part (eyebrow au-dessus du titre, cf. products_item_ck_card_metadata)
+# plutôt que noyée dans la ligne secondaire — même donnée réelle déjà calculée
+# par _get_featured_origin_and_tag_parts, pas de nouvelle source d'information.
+def _get_shop_card_secondary_line(env, website, variant):
+    """Ligne secondaire boutique sous le titre : tags transversaux · format · prix comparatif."""
+    template = variant.product_tmpl_id
+    _origin, transversal = _get_featured_origin_and_tag_parts(template, variant)
+    qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
+    return _join_featured_metadata_parts(' · '.join(transversal), qty_part, ref_part)
+
+
+def _get_shop_card_origin_label(template, variant=None):
+    """Origine seule — eyebrow card boutique (même donnée que la ligne meta home)."""
+    origin, _transversal = _get_featured_origin_and_tag_parts(template, variant)
+    return origin
+
+
 _SAFE_CSS_COLOR_RE = re.compile(
     r'^#[0-9A-Fa-f]{3,8}$|^rgba?\([\d\s.,%]+\)$|^hsla?\([\d\s.,%]+\)$|^[a-zA-Z]+$'
 )
@@ -658,7 +658,14 @@ def _get_featured_badge_html(variant):
 
 
 def build_featured_product_card_html(env, website, variant):
-    """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence."""
+    """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence.
+
+    Ticket Dev — simplification CTA : le CTA secondaire "Voir le produit" est
+    retiré de la zone basse. La navigation vers la fiche produit est portée
+    par l'image/le reste de la card (lien ``cover`` plein format, déjà
+    existant) et par un lien dédié sur le titre. Seul "Ajouter au panier"
+    reste visible en zone basse, quand l'ajout rapide est possible.
+    """
     template = variant.product_tmpl_id
     display_name = _get_featured_display_name(variant)
     href = escape(variant.website_url or template.website_url or '/shop')
@@ -676,12 +683,12 @@ def build_featured_product_card_html(env, website, variant):
     if _featured_variant_allows_quick_add(env, website, variant):
         actions_html = f"""<div class="ck-product-card__actions product-card-actions">
             <button type="button" class="card-cart-cta" data-product-id="{variant.id}" data-product-template-id="{template.id}">{FEATURED_CARD_CART_CTA}</button>
-            <a href="{href}" class="card-cta card-cta--secondary">{FEATURED_CARD_CTA}</a>
         </div>"""
     else:
-        actions_html = f"""<div class="ck-product-card__actions product-card-actions product-card-actions--view-only">
-            <a href="{href}" class="card-cta">{FEATURED_CARD_CTA}</a>
-        </div>"""
+        # Pas d'ajout rapide possible (ex. combo, prix nul si vente bloquée) :
+        # aucun CTA en zone basse — navigation toujours possible via l'image
+        # et le titre (lien dédié + cover).
+        actions_html = ''
 
     overlays_html = (
         f'<div class="ck-product-card__overlays">{badge_html}</div>'
@@ -695,7 +702,7 @@ def build_featured_product_card_html(env, website, variant):
         {overlays_html}
     </div>
     <div class="ck-product-card__body product-card-body">
-        <h3 class="ck-product-card__title product-card-title">{card_title}</h3>
+        <h3 class="ck-product-card__title product-card-title"><a href="{href}" class="ck-product-card__title-link">{card_title}</a></h3>
         {labels_block}
     </div>
     <div class="ck-product-card__foot product-card-foot">
@@ -708,7 +715,13 @@ def build_featured_product_card_html(env, website, variant):
 
 
 def card_fragment_is_valid(fragment):
-    """Carte SSR maquette : image template, prix, CTA Voir le produit — pas de placeholder."""
+    """Carte SSR maquette : image template, prix, lien produit — pas de placeholder.
+
+    Ticket Dev — le CTA secondaire "Voir le produit" n'existe plus en zone
+    basse (cf. build_featured_product_card_html) ; la validité ne dépend
+    donc plus de sa présence, seulement du lien cover (toujours présent,
+    porte la navigation) et de l'image/prix.
+    """
     if not fragment or FEATURED_CARD_MARKER not in fragment:
         return False
     lowered = fragment.lower()
@@ -718,11 +731,7 @@ def card_fragment_is_valid(fragment):
         return False
     if not _CARD_PRICE_RE.search(fragment):
         return False
-    if not _CARD_LINK_RE.search(fragment):
-        return False
     if not _CARD_COVER_RE.search(fragment):
-        return False
-    if not _CARD_CTA_TEXT_RE.search(fragment):
         return False
     return True
 
@@ -891,18 +900,12 @@ def _bootstrap_home_featured_products_lang(env, website, page):
     if not arch.strip():
         return False
 
-    _ensure_featured_category(env)
     variants = get_curated_featured_variants(env)
-    curated = bool(variants)
-    if not curated:
-        variants = get_ready_featured_variants(env)  # repli : sélection automatique (#73)
     featured_arch = ''
     if variants:
         cards = render_ck_featured_cards(env, website, variants)
-        min_cards = 1 if curated else MIN_FEATURED_PRODUCTS
-        if len(cards) >= min_cards:
-            limit = len(cards) if curated else MIN_FEATURED_PRODUCTS
-            featured_arch = build_featured_ssr_arch(cards[:limit])
+        if cards:
+            featured_arch = build_featured_ssr_arch(cards)
 
     new_arch, patched = _patch_homepage_featured_arch(arch, featured_arch)
     stale_labels = _featured_arch_missing_product_labels(env, arch, variants)

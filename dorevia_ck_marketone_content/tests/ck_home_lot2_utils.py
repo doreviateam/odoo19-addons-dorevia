@@ -1,50 +1,39 @@
 # -*- coding: utf-8 -*-
-"""Helpers Lot2 — mode auto sélection vedettes (ticket lot2 option B).
-
-En mode curation peuplée, ``get_ready_featured_variants`` et le seuil
-``MIN_FEATURED_PRODUCTS`` ne s'appliquent plus. Les tests lot2 neutralisent
-temporairement la catégorie « Coups de cœur » pour exercer le chemin auto.
-"""
-
-from odoo.addons.dorevia_ck_marketone_content.home_featured import (
-    FEATURED_CATEGORY_XMLID,
-    MIN_FEATURED_PRODUCTS,
-)
+"""Helpers Lot2 / Section 3 — sélection vedettes via ck_is_featured."""
 
 from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
     CK_CREAM_PLACEHOLDER_PNG_B64,
     ensure_test_product_image,
 )
+from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+    FEATURED_CURATED_MAX,
+    get_curated_featured_variants,
+)
+
+# Ticket Dev — aligné sur FEATURED_CURATED_MAX (cap grille 4 colonnes) :
+# au-delà, ces tests min-cards échoueraient puisque le cap empêche d'afficher
+# plus que FEATURED_CURATED_MAX cartes, quel que soit le nombre saisi en BO.
+FEATURED_TEST_MIN_CARDS = FEATURED_CURATED_MAX
 
 
-def detach_featured_curation(env):
-    """Retire les produits de la catégorie curation — retourne l'état pour restauration."""
-    category = env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
-    if not category:
-        return []
-    category = category.sudo()
-    templates = env['product.template'].sudo().search([
-        ('public_categ_ids', 'in', category.ids),
-    ])
-    saved = [(template.id, list(template.public_categ_ids.ids)) for template in templates]
-    if templates:
-        templates.write({'public_categ_ids': [(3, category.id)]})
+def clear_ck_is_featured(env):
+    """Désactive En vedette sur tous les produits — retourne les ids précédemment actifs."""
+    Template = env['product.template'].sudo()
+    featured = Template.search([('ck_is_featured', '=', True)])
+    saved = featured.ids
+    if featured:
+        featured.write({'ck_is_featured': False})
     return saved
 
 
-def restore_featured_curation(env, saved):
-    """Restaure la curation BO après un test lot2."""
-    if not saved:
+def restore_ck_is_featured(env, template_ids):
+    if not template_ids:
         return
-    Template = env['product.template'].sudo()
-    for template_id, categ_ids in saved:
-        Template.browse(template_id).write({'public_categ_ids': [(6, 0, categ_ids)]})
+    env['product.template'].sudo().browse(template_ids).write({'ck_is_featured': True})
 
 
-def ensure_auto_featured_catalog(env, min_count=MIN_FEATURED_PRODUCTS):
-    """Assure assez de produits publiés avec image pour le seuil auto lot2."""
-    from odoo.addons.dorevia_ck_marketone_content.home_featured import get_ready_featured_variants
-
+def ensure_featured_catalog(env, min_count=FEATURED_TEST_MIN_CARDS):
+    """Assure assez de produits En vedette publiés avec image pour les tests lot2."""
     Template = env['product.template'].sudo()
     published = Template.search([
         ('is_published', '=', True),
@@ -54,9 +43,10 @@ def ensure_auto_featured_catalog(env, min_count=MIN_FEATURED_PRODUCTS):
     for template in published:
         ensure_test_product_image(template, 'image_1920')
     index = 0
-    while len(get_ready_featured_variants(env)) < min_count and index < min_count + 3:
+    while len(get_curated_featured_variants(env)) < min_count and index < min_count + 3:
         Template.create({
-            'name': f'CK Lot2 Vedette Auto {index}',
+            'name': f'CK Lot2 Vedette Featured {index}',
+            'ck_is_featured': True,
             'is_published': True,
             'website_published': True,
             'sale_ok': True,
@@ -64,3 +54,7 @@ def ensure_auto_featured_catalog(env, min_count=MIN_FEATURED_PRODUCTS):
             'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         })
         index += 1
+
+
+def mark_featured(env, template, *, featured=True):
+    template.sudo().write({'ck_is_featured': featured})

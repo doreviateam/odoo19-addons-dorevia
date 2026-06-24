@@ -6,11 +6,55 @@ from .ck_product_placeholders import CK_CREAM_PLACEHOLDER_PNG_B64
 MANIO_CRACKERS_PARENT_NAME = 'Manio Crackers'
 GALETTES_TEMPLATE_NAME = 'Galettes de manioc'
 FORMAT_ATTRIBUTE_NAME = 'Format'
+FORMAT_ATTRIBUTE_ALIASES = (FORMAT_ATTRIBUTE_NAME, 'Saveur')
 CRACKER_FORMAT_VALUES = (
     'Manio Crackers salé',
     'Manio Crackers sucré',
 )
+MANIO_SALE_LST_PRICE = 3.6
+MANIO_SWEET_LST_PRICE = 3.5
 GALETTES_WEBSITE_SEQUENCE = 10015
+
+
+def _normalize_cracker_token(value):
+    """Compare libellés variantes sans casse ni accents (seed BO hétérogène)."""
+    import unicodedata
+    normalized = unicodedata.normalize('NFKD', (value or '').lower())
+    return ''.join(ch for ch in normalized if not unicodedata.combining(ch))
+
+
+def cracker_format_attribute_line(parent):
+    """Ligne d'attribut Format/Saveur du parent Manio Crackers (vide si absente)."""
+    if not parent:
+        return parent.attribute_line_ids[:0]
+    for line in parent.attribute_line_ids:
+        if line.attribute_id.name in FORMAT_ATTRIBUTE_ALIASES:
+            return line
+    for line in parent.attribute_line_ids:
+        tokens = {_normalize_cracker_token(name) for name in line.value_ids.mapped('name')}
+        if any('sal' in token for token in tokens) and any('sucr' in token for token in tokens):
+            return line
+    return parent.attribute_line_ids[:0]
+
+
+def _cracker_value_tokens(line):
+    return {_normalize_cracker_token(name) for name in line.value_ids.mapped('name')}
+
+
+def _manio_crackers_variants_ready(parent):
+    if not parent:
+        return False
+    line = cracker_format_attribute_line(parent)
+    if not line:
+        return False
+    tokens = _cracker_value_tokens(line)
+    return (
+        len(parent.product_variant_ids) == len(CRACKER_FORMAT_VALUES)
+        and any('sal' in token for token in tokens)
+        and any('sucr' in token for token in tokens)
+        and not any('galette' in token for token in tokens)
+    )
+
 
 def _manio_crackers_parent(env):
     return env['product.template'].sudo().search([
@@ -18,20 +62,24 @@ def _manio_crackers_parent(env):
     ], limit=1)
 
 
-def _manio_crackers_variants_ready(parent):
-    if not parent:
-        return False
-    line = parent.attribute_line_ids.filtered(
-        lambda l: l.attribute_id.name == FORMAT_ATTRIBUTE_NAME
+def _align_manioc_cracker_prices(parent):
+    """Prix MOA recette — lst_price salé 3,6 € · sucré 3,5 € (via list_price + price_extra)."""
+    sale = parent.product_variant_ids.filtered(
+        lambda v: 'sucr' not in _normalize_cracker_token(v.display_name)
+        and 'sal' in _normalize_cracker_token(v.display_name)
     )[:1]
-    if not line:
-        return False
-    value_names = set(line.value_ids.mapped('name'))
-    return (
-        len(parent.product_variant_ids) == len(CRACKER_FORMAT_VALUES)
-        and all(name in value_names for name in CRACKER_FORMAT_VALUES)
-        and 'Galettes de manioc' not in value_names
-    )
+    sweet = parent.product_variant_ids.filtered(
+        lambda v: 'sucr' in _normalize_cracker_token(v.display_name)
+    )[:1]
+    parent.write({'list_price': MANIO_SALE_LST_PRICE})
+    if sale:
+        sale.write({'list_price': MANIO_SALE_LST_PRICE})
+    if sweet:
+        ptav = sweet.product_template_attribute_value_ids[:1]
+        if ptav:
+            ptav.write({'price_extra': MANIO_SWEET_LST_PRICE - MANIO_SALE_LST_PRICE})
+        else:
+            sweet.write({'list_price': MANIO_SWEET_LST_PRICE})
 
 
 def _deprecate_duplicate_cracker_templates(env, parent):
@@ -64,6 +112,7 @@ def _ensure_manioc_crackers_parent(env):
     })
     for variant in parent.product_variant_ids:
         variant.write({'is_published': True, 'sale_ok': True})
+    _align_manioc_cracker_prices(parent)
     return _manio_crackers_variants_ready(parent)
 
 

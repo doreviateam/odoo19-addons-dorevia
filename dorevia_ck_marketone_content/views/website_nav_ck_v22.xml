@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Header CK V2.2 — séparateurs visuels groupes N3 -->
+    <template id="submenu_ck_nav_v22_groups"
+              inherit_id="website.submenu"
+              name="CK Nav V2.2 — N3 group markers"
+              priority="32">
+        <xpath expr="//li[@t-elif][@role='presentation']" position="inside">
+            <span t-if="submenu.ck_nav_css_class and 'ck-nav-n3-group-end' in (submenu.ck_nav_css_class or '')"
+                  class="ck-nav-n3-separator d-none d-lg-inline-block"
+                  aria-hidden="true"/>
+        </xpath>
+    </template>
+</odoo>

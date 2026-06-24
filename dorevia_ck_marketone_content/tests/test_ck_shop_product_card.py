@@ -8,6 +8,8 @@ from odoo.tests.common import HttpCase, TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     _get_featured_card_metadata_line,
+    _get_shop_card_origin_label,
+    _get_shop_card_secondary_line,
 )
 
 
@@ -41,7 +43,9 @@ class TestCkShopProductCardHooks(TransactionCase):
         self.assertIn('get_ck_shop_card_metadata_line', arch)
         self.assertIn('ck-product-card__meta', arch)
 
-    def test_metadata_line_reuses_featured_logic(self):
+    def test_metadata_line_excludes_origin_shown_separately(self):
+        """P2A — la ligne meta boutique exclut l'origine (eyebrow à part) ;
+        la home (vedettes) garde la ligne combinée d'origine, inchangée."""
         website = self.env['website'].search([], limit=1)
         product = self.env['product.template'].search([
             ('sale_ok', '=', True),
@@ -49,8 +53,14 @@ class TestCkShopProductCardHooks(TransactionCase):
         ], limit=1)
         self.assertTrue(product)
         variant = product.product_variant_id
-        expected = _get_featured_card_metadata_line(self.env, website, variant)
-        self.assertEqual(product.get_ck_shop_card_metadata_line(variant), expected)
+        expected_secondary = _get_shop_card_secondary_line(self.env, website, variant)
+        expected_origin = _get_shop_card_origin_label(product, variant)
+        self.assertEqual(product.get_ck_shop_card_metadata_line(variant), expected_secondary)
+        self.assertEqual(product.get_ck_shop_card_origin_label(variant), expected_origin)
+        if expected_origin:
+            # L'origine ne doit pas être dupliquée dans la ligne secondaire.
+            combined = _get_featured_card_metadata_line(self.env, website, variant)
+            self.assertNotEqual(product.get_ck_shop_card_metadata_line(variant), combined)
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_shop_card')

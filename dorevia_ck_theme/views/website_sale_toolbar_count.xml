@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lot S1 — compteur déplacé dans s_ck_shop_intro (évite doublon toolbar).
+         Fichier conservé : ancrage historique P1, sans rendu toolbar. -->
+    <template id="products_ck_toolbar_count"
+              inherit_id="website_sale.products"
+              name="CK Shop — compteur produits barre catalogue"
+              priority="30"
+              active="False"/>
+</odoo>

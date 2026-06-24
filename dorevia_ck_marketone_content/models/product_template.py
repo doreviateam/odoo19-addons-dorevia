@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 FEATURED_REFRESH_FIELDS = {
     'name',
     'public_categ_ids',
+    'ck_is_featured',
     'is_published',
     'website_published',
     'website_sequence',
@@ -51,11 +52,21 @@ class ProductTemplate(models.Model):
         default=True,
         help='Calcule et affiche le prix de référence sur la card home lorsque la quantité nette est renseignée.',
     )
+    ck_is_featured = fields.Boolean(
+        string='En vedette',
+        default=False,
+        help='Affiche ce produit dans la section Nos coups de cœur de la page d\'accueil.',
+    )
 
     def get_ck_shop_card_metadata_line(self, variant=None):
-        """Ligne secondaire card boutique — même logique que les vedettes home."""
+        """Ligne secondaire card boutique — tags · format · prix comparatif.
+
+        P2A — l'origine n'est plus incluse ici, elle est affichée à part en
+        eyebrow (cf. get_ck_shop_card_origin_label) : même donnée, présentation
+        densifiée façon "marque" au-dessus du titre.
+        """
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
-            _get_featured_card_metadata_line,
+            _get_shop_card_secondary_line,
         )
 
         self.ensure_one()
@@ -65,7 +76,19 @@ class ProductTemplate(models.Model):
         website = self.env['website'].get_current_website()
         if not website:
             return ''
-        return _get_featured_card_metadata_line(self.env, website, variant)
+        return _get_shop_card_secondary_line(self.env, website, variant)
+
+    def get_ck_shop_card_origin_label(self, variant=None):
+        """Eyebrow card boutique — origine seule, au-dessus du titre."""
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _get_shop_card_origin_label,
+        )
+
+        self.ensure_one()
+        variant = (variant or self.product_variant_id).sudo()
+        if not variant:
+            return ''
+        return _get_shop_card_origin_label(self, variant)
 
     def get_ck_product_page_detail_sections(self):
         """Sections bas de fiche produit CK (Lot 2) — affichage conditionnel."""
@@ -117,23 +140,8 @@ class ProductTemplate(models.Model):
             bootstrap_home_featured_products(self.env)
 
     def _ck_touches_featured(self):
-        """QA M1 : limite la reconstruction vedettes aux produits réellement concernés.
-
-        En mode curation (catégorie « Coups de cœur » présente), seul un produit
-        rangé dans cette catégorie justifie un rebuild de la home. En mode repli
-        (pas de curation → sélection automatique), tout produit publié peut
-        entrer dans le top : on conserve le comportement large d'origine.
-        """
-        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
-            FEATURED_CATEGORY_XMLID,
-        )
-
-        featured = self.env.ref(FEATURED_CATEGORY_XMLID, raise_if_not_found=False)
-        # Curation active seulement si la catégorie existe ET contient des produits ;
-        # sinon mode repli auto-sélection → tout produit publié peut entrer → refresh large.
-        if featured and featured.product_tmpl_ids:
-            return bool(self.public_categ_ids & featured)
-        return True
+        """Rebuild home si le produit est (ou était) marqué En vedette."""
+        return any(self.mapped('ck_is_featured'))
 
     def write(self, vals):
         touches_featured_fields = bool(FEATURED_REFRESH_FIELDS.intersection(vals))
