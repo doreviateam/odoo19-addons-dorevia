@@ -3,11 +3,11 @@
 | Champ | Valeur |
 | --- | --- |
 | Date | 2026-06-24 |
-| Branche | `codex/ck-home-shop-consolidation-20260624` |
+| Branche | `main` après merge PR #83 (source : `codex/ck-home-shop-consolidation-20260624`) |
 | Module | `dorevia_ck_theme` **19.0.1.56.0** |
 | Instance | `dorevia_ck_marketone_01` · `http://localhost:18079` |
 | Statut | **Recevable** · recette machine + recette manuelle MOA au vert |
-| Commit de référence | `98208cf` (`codex/ck-home-shop-consolidation-20260624`) |
+| Commit de référence | `97113e0` (clôture recette S1) · merge `main` `3508a19` |
 
 ---
 
@@ -140,7 +140,7 @@ dorevia_ck_marketone_content/
 
 ## 7. Recette manuelle MOA (2026-06-24)
 
-Base : `dorevia_ck_marketone_01` · branche `codex/ck-home-shop-consolidation-20260624` @ `98208cf`
+Base : `dorevia_ck_marketone_01` · branche source `codex/ck-home-shop-consolidation-20260624` @ `97113e0` · merge `main` `3508a19`
 
 ### Contrôles fonctionnels
 
