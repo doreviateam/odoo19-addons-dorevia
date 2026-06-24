@@ -16,7 +16,7 @@ FEATURED_CARD_CTA = 'Voir le produit'
 FEATURED_CARD_CART_CTA = 'Ajouter au panier'
 FEATURED_CATEGORY_NAME = 'Coups de cœur'  # curation BO des vedettes (catégorie e-commerce dédiée)
 FEATURED_CATEGORY_XMLID = 'dorevia_ck_marketone_content.public_categ_coups_de_coeur'
-FEATURED_CURATED_MAX = 8
+FEATURED_CURATED_MAX = 4
 
 _CATEGORY_SHORT_LABELS = (
     'Épicerie',
@@ -77,7 +77,9 @@ _CARD_CTA_TEXT_RE = re.compile(re.escape(FEATURED_CARD_CTA))
 _FEATURED_LABELS_BLOCK_RE = re.compile(
     r'<p ' + _ck_class_token_pattern('ck-product-card__meta') + r'[^>]*>[^<]+</p>',
 )
-_CARD_TITLE_TEXT_RE = _ck_class_token_text_re('ck-product-card__title')
+# Ticket Dev — le titre est maintenant un lien (<h3><a class="…__title-link">) :
+# le texte capturé suit immédiatement le tag <a> imbriqué, plus le <h3> lui-même.
+_CARD_TITLE_TEXT_RE = _ck_class_token_text_re('ck-product-card__title-link')
 _CARD_PRICE_TEXT_RE = _ck_class_token_text_re('ck-product-card__price-value')
 _CARD_META_TEXT_RE = _ck_class_token_text_re('ck-product-card__meta')
 
@@ -572,6 +574,24 @@ def _get_featured_card_metadata_line(env, website, variant):
     return _join_featured_metadata_parts(origin, ' · '.join(transversal), qty_part, ref_part)
 
 
+# Ticket Dev — P2A densification card boutique. L'origine est désormais
+# affichée à part (eyebrow au-dessus du titre, cf. products_item_ck_card_metadata)
+# plutôt que noyée dans la ligne secondaire — même donnée réelle déjà calculée
+# par _get_featured_origin_and_tag_parts, pas de nouvelle source d'information.
+def _get_shop_card_secondary_line(env, website, variant):
+    """Ligne secondaire boutique sous le titre : tags transversaux · format · prix comparatif."""
+    template = variant.product_tmpl_id
+    _origin, transversal = _get_featured_origin_and_tag_parts(template, variant)
+    qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
+    return _join_featured_metadata_parts(' · '.join(transversal), qty_part, ref_part)
+
+
+def _get_shop_card_origin_label(template, variant=None):
+    """Origine seule — eyebrow card boutique (même donnée que la ligne meta home)."""
+    origin, _transversal = _get_featured_origin_and_tag_parts(template, variant)
+    return origin
+
+
 _SAFE_CSS_COLOR_RE = re.compile(
     r'^#[0-9A-Fa-f]{3,8}$|^rgba?\([\d\s.,%]+\)$|^hsla?\([\d\s.,%]+\)$|^[a-zA-Z]+$'
 )
@@ -638,7 +658,14 @@ def _get_featured_badge_html(variant):
 
 
 def build_featured_product_card_html(env, website, variant):
-    """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence."""
+    """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence.
+
+    Ticket Dev — simplification CTA : le CTA secondaire "Voir le produit" est
+    retiré de la zone basse. La navigation vers la fiche produit est portée
+    par l'image/le reste de la card (lien ``cover`` plein format, déjà
+    existant) et par un lien dédié sur le titre. Seul "Ajouter au panier"
+    reste visible en zone basse, quand l'ajout rapide est possible.
+    """
     template = variant.product_tmpl_id
     display_name = _get_featured_display_name(variant)
     href = escape(variant.website_url or template.website_url or '/shop')
@@ -656,12 +683,12 @@ def build_featured_product_card_html(env, website, variant):
     if _featured_variant_allows_quick_add(env, website, variant):
         actions_html = f"""<div class="ck-product-card__actions product-card-actions">
             <button type="button" class="card-cart-cta" data-product-id="{variant.id}" data-product-template-id="{template.id}">{FEATURED_CARD_CART_CTA}</button>
-            <a href="{href}" class="card-cta card-cta--secondary">{FEATURED_CARD_CTA}</a>
         </div>"""
     else:
-        actions_html = f"""<div class="ck-product-card__actions product-card-actions product-card-actions--view-only">
-            <a href="{href}" class="card-cta">{FEATURED_CARD_CTA}</a>
-        </div>"""
+        # Pas d'ajout rapide possible (ex. combo, prix nul si vente bloquée) :
+        # aucun CTA en zone basse — navigation toujours possible via l'image
+        # et le titre (lien dédié + cover).
+        actions_html = ''
 
     overlays_html = (
         f'<div class="ck-product-card__overlays">{badge_html}</div>'
@@ -675,7 +702,7 @@ def build_featured_product_card_html(env, website, variant):
         {overlays_html}
     </div>
     <div class="ck-product-card__body product-card-body">
-        <h3 class="ck-product-card__title product-card-title">{card_title}</h3>
+        <h3 class="ck-product-card__title product-card-title"><a href="{href}" class="ck-product-card__title-link">{card_title}</a></h3>
         {labels_block}
     </div>
     <div class="ck-product-card__foot product-card-foot">
@@ -688,7 +715,13 @@ def build_featured_product_card_html(env, website, variant):
 
 
 def card_fragment_is_valid(fragment):
-    """Carte SSR maquette : image template, prix, CTA Voir le produit — pas de placeholder."""
+    """Carte SSR maquette : image template, prix, lien produit — pas de placeholder.
+
+    Ticket Dev — le CTA secondaire "Voir le produit" n'existe plus en zone
+    basse (cf. build_featured_product_card_html) ; la validité ne dépend
+    donc plus de sa présence, seulement du lien cover (toujours présent,
+    porte la navigation) et de l'image/prix.
+    """
     if not fragment or FEATURED_CARD_MARKER not in fragment:
         return False
     lowered = fragment.lower()
@@ -698,11 +731,7 @@ def card_fragment_is_valid(fragment):
         return False
     if not _CARD_PRICE_RE.search(fragment):
         return False
-    if not _CARD_LINK_RE.search(fragment):
-        return False
     if not _CARD_COVER_RE.search(fragment):
-        return False
-    if not _CARD_CTA_TEXT_RE.search(fragment):
         return False
     return True
 

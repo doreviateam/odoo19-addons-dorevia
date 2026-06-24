@@ -28,10 +28,15 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_card_markers')
 class TestCkFeaturedCardMarkers(TransactionCase):
     def test_title_dual_bem_only_and_reordered(self):
+        # Ticket Dev — le titre est un lien imbriqué dans le <h3> (navigation
+        # fiche produit) ; la regex cible le lien ``…__title-link``, pas le <h3>.
         for html in (
-            '<h3 class="ck-product-card__title product-card-title">Manio Sucré</h3>',  # dual actuel
-            '<h3 class="ck-product-card__title">Manio Sucré</h3>',                     # BEM-only (futur)
-            '<h3 class="product-card-title ck-product-card__title">Manio Sucré</h3>',  # réordonné
+            '<h3 class="ck-product-card__title product-card-title">'
+            '<a href="/shop/x" class="ck-product-card__title-link">Manio Sucré</a></h3>',  # dual actuel
+            '<h3 class="ck-product-card__title">'
+            '<a href="/shop/x" class="ck-product-card__title-link">Manio Sucré</a></h3>',  # BEM-only (futur)
+            '<h3 class="product-card-title ck-product-card__title">'
+            '<a href="/shop/x" class="ck-product-card__title-link">Manio Sucré</a></h3>',  # réordonné
         ):
             match = _CARD_TITLE_TEXT_RE.search(html)
             self.assertTrue(match, html)

@@ -48,5 +48,7 @@ class TestCkHomeSection3FeaturedHooks(TransactionCase):
         self.assertIn(FEATURED_TITLE, arch)
         self.assertIn(FEATURED_CARD_MARKER, arch)
         self.assertIn('product-card-media', arch)
-        self.assertIn('card-cta--secondary', arch)
+        # Ticket Dev — CTA secondaire retiré ; navigation portée par image/titre.
+        self.assertNotIn('card-cta--secondary', arch)
+        self.assertIn('ck-product-card__title-link', arch)
         self.assertIn('class="card-cart-cta"', arch)

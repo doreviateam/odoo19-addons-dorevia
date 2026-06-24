@@ -100,7 +100,10 @@
 
     .ck-header__brand {
         display: inline-block;
-        font-family: "Fraunces", $ck-font-display;
+        // P4 — test contrôlé : $ck-font-logo (Bitter) au lieu de Fraunces,
+        // scopé au seul wordmark. Le reste du système typo ($ck-font-display)
+        // est inchangé (H1, titres mega-menu, colonne visuelle…).
+        font-family: $ck-font-logo;
         font-weight: 700;
         font-size: 1.3125rem;
         line-height: 1.1;
@@ -131,13 +134,19 @@
                 }
             }
 
+            // P3 pilote — bouton plein (au lieu du contour discret) : la
+            // recherche devient un repère visuel fort de la barre N2 sans
+            // agrandir le champ lui-même.
             .oe_search_button {
-                border-color: $ck-border !important;
-                color: $ck-text-muted !important;
+                border-color: $ck-primary !important;
+                background-color: $ck-primary !important;
+                color: #fff !important;
 
                 &:hover,
                 &:focus-visible {
-                    color: $ck-primary !important;
+                    border-color: $ck-primary-hover !important;
+                    background-color: $ck-primary-hover !important;
+                    color: #fff !important;
                 }
             }
         }
@@ -187,9 +196,9 @@
         }
 
         .ck-header__identity-row {
-            gap: $ck-space-4;
-            padding-block: $ck-space-2;
-            min-height: 3.75rem;
+            gap: $ck-space-3;
+            padding-block: 0.45rem;
+            min-height: 3.5rem;
 
             .navbar-brand.ck-header__brand-link,
             .navbar-brand.logo {
@@ -199,8 +208,8 @@
 
         // Recherche élargie — niveau 1 dédié, hors ligne de navigation
         .ck-header__identity-row .ck-header__search {
-            max-width: 36rem;
-            min-width: 16rem;
+            max-width: 32rem;
+            min-width: 14rem;
             margin-inline: auto;
         }
 
@@ -210,8 +219,39 @@
         }
 
         .ck-header__nav-row {
+            // Containing block du mega-menu (voir règle .o_mega_menu:has(.ck-mega-menu)
+            // plus bas) — sans ce position:relative, le panneau absolu remonte
+            // jusqu'au <nav> englobant N2+N3 (la <li> mega reste position:static,
+            // forcé par .position-static !important Bootstrap) et se positionne
+            // au niveau du lien survolé au lieu de sous la ligne N3 → recouvrement.
+            position: relative;
+            // z-index (valeur, pas auto) — nav-row doit créer SON PROPRE
+            // contexte d'empilement local. Sans ça, le ::before z-index:-1
+            // ci-dessous se positionne dans le contexte du <header> sticky
+            // (le plus proche ancêtre à créer un contexte), où il passe
+            // derrière le <nav> Odoo non positionné (contenu de flux normal,
+            // peint au-dessus des descendants z-index négatif) — qui a son
+            // propre fond blanc opaque : la teinte restait invisible.
+            z-index: 0;
             border-top: 1px solid rgba($ck-border, 0.85);
-            padding-block: $ck-space-1;
+            padding-block: 0.35rem;
+
+            // P3 pilote — bande N3 différenciée (surface teintée plutôt que
+            // blanc-sur-blanc). Pseudo-élément full-bleed (centré via
+            // left:50%/translateX, indépendant de la largeur du containing
+            // block — même technique que l'ancrage mega-menu ci-dessous) :
+            // le nav-row lui-même reste inset par le padding du header, un
+            // simple background-color sur l'élément n'irait pas bord à bord.
+            &::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                left: 50%;
+                width: 100vw;
+                transform: translateX(-50%);
+                background-color: $ck-bg-soft;
+                z-index: -1;
+            }
         }
 
         #top_menu.top_menu {
@@ -278,7 +318,12 @@
         }
 
         // Dropdowns niveau 2 — identité CK
-        #top_menu.top_menu .dropdown-menu {
+        // :not(.o_mega_menu) — ce cap 220/320px vise les dropdowns simples
+        // (Espace pro, Nos producteurs…). Sans cette exclusion, il s'applique
+        // aussi au panneau mega-menu rayons (qui porte aussi .dropdown-menu)
+        // et l'écrase à 320px de large, quel que soit le nombre de colonnes
+        // alimentées — d'où le rendu "mini-dropdown" au lieu d'un mega-menu.
+        #top_menu.top_menu .dropdown-menu:not(.o_mega_menu) {
             background-color: $ck-surface;
             border: 1px solid rgba($ck-text, 0.06);
             border-radius: $ck-radius-md;
@@ -522,7 +567,7 @@
         }
 
         .o_main_nav.container {
-            min-height: 3.75rem;
+            min-height: 3.5rem;
             padding-inline: $ck-gutter-mobile;
         }
 
@@ -621,6 +666,395 @@
             border: 0;
             padding: 0 0 $ck-space-3 $ck-space-3;
             background: transparent;
+        }
+
+        // P2 — respiration groupes N3 dans le drawer
+        .top_menu > .nav-item.ck-nav-n3-group-end {
+            > .nav-link,
+            > .dropdown-toggle,
+            .ck-nav-mega-split__link {
+                border-bottom-width: 2px;
+                border-bottom-color: rgba($ck-border, 0.9);
+                margin-bottom: 0.35rem;
+            }
+        }
+
+        .top_menu > .nav-item.ck-nav-n3-rayon .nav-link,
+        .top_menu > .nav-item.ck-nav-n3-rayon .dropdown-toggle {
+            font-weight: 500;
+            color: $ck-text-muted;
+        }
+
+        .top_menu > .nav-item.ck-nav-n3-selection .nav-link,
+        .top_menu > .nav-item.ck-nav-n3-selection .dropdown-toggle {
+            font-weight: $ck-font-weight-semibold;
+            color: $ck-text;
+        }
+
+        .top_menu > .nav-item.ck-nav-producteurs .nav-link {
+            font-weight: $ck-font-weight-semibold;
+            letter-spacing: 0.01em;
+        }
+    }
+}
+
+// Lot Header V2.2 — bandeau promesses scroll-away
+.ck-header-service-bar {
+    transition: transform 0.25s ease, opacity 0.2s ease, max-height 0.25s ease;
+    max-height: 3rem;
+    overflow: hidden;
+
+    &--hidden {
+        transform: translateY(-100%);
+        opacity: 0;
+        max-height: 0;
+        pointer-events: none;
+        border-bottom-width: 0;
+    }
+}
+
+.ck-theme header#top.ck-header {
+    .ck-header__baseline {
+        display: block;
+        font-family: "DM Sans", $ck-font-ui;
+        font-size: 0.6875rem;
+        font-weight: $ck-font-weight-semibold;
+        letter-spacing: 0.04em;
+        text-transform: lowercase;
+        color: $ck-text-muted;
+        line-height: 1.2;
+        margin-top: 0.1rem;
+    }
+
+    .ck-header__cart-link {
+        width: auto !important;
+        height: auto !important;
+        min-height: 2.375rem;
+        border-radius: 999px !important;
+        padding-inline: 0.7rem !important;
+        font-size: $ck-text-sm;
+        font-weight: $ck-font-weight-semibold;
+        border-color: rgba($ck-border, 0.95) !important;
+        background-color: rgba($ck-primary, 0.04) !important;
+    }
+
+    @media (min-width: 992px) {
+        #top_menu.top_menu {
+            gap: 0.5rem;
+
+            // Séparateur de groupe — uniquement sur le dernier item du bloc rayons
+            // (évite le double trait Maison + Artisanat).
+            > .nav-item.ck-nav-n3-group-end.ck-nav-mega-product:has(~ .nav-item.ck-nav-n3-rayon) {
+                margin-right: 0;
+                padding-right: 0;
+                border-right: 0;
+            }
+
+            > .nav-item.ck-nav-n3-group-end:not(:has(~ .nav-item.ck-nav-n3-rayon)) {
+                margin-right: 1.35rem;
+                padding-right: 1.35rem;
+                border-right: 1px solid rgba($ck-border, 0.75);
+            }
+
+            > .nav-item.ck-nav-n3-rayon > .nav-link,
+            > .nav-item.ck-nav-n3-rayon .ck-nav-mega-split__link {
+                font-weight: 500;
+                color: $ck-text-muted;
+
+                &:hover,
+                &:focus-visible,
+                &.active {
+                    color: $ck-text;
+                }
+            }
+
+            > .nav-item.ck-nav-n3-selection > .nav-link,
+            > .nav-item.ck-nav-n3-selection .ck-nav-mega-split__link {
+                font-weight: $ck-font-weight-semibold;
+                color: $ck-text;
+            }
+
+            > .nav-item.ck-nav-n3-rayon.ck-nav-n3-group-end + .nav-item.ck-nav-n3-selection {
+                margin-left: 0.15rem;
+            }
+
+            > .nav-item.ck-nav-producteurs > .nav-link {
+                font-weight: $ck-font-weight-semibold;
+                color: $ck-text;
+                letter-spacing: 0.015em;
+            }
+
+            > .nav-item.ck-nav-espace-pro > .dropdown-toggle {
+                background-color: rgba($ck-primary, 0.07);
+                border: 1px solid rgba($ck-primary, 0.18);
+                border-radius: 999px;
+                padding-inline: 0.75rem !important;
+                color: $ck-primary-text;
+                font-weight: $ck-font-weight-semibold;
+                font-size: $ck-text-sm;
+
+                &:hover,
+                &:focus-visible {
+                    background-color: rgba($ck-primary, 0.12);
+                }
+            }
+        }
+
+        .ck-nav-mega-split__link {
+            padding-inline: 0.5rem 0.15rem;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .ck-nav-mega-split__toggle {
+            padding-inline: 0.25rem 0.35rem;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+
+            &::after {
+                margin-left: 0;
+            }
+        }
+
+        #top_menu.top_menu > .nav-item:has(> .ck-nav-mega-split__toggle) {
+            display: inline-flex;
+            align-items: stretch;
+            position: relative;
+        }
+    }
+
+    .o_mega_menu.ck-mega-menu,
+    .o_mega_menu .ck-mega-menu {
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    // Mega-menu rayons — largeur container réelle, centrée, ancrée sous N3
+    // .o_mega_menu est positionné en absolu, sans top/inset fournis par
+    // Bootstrap (data-bs-display="static" désactive Popper). Le containing
+    // block est désormais .ck-header__nav-row (position:relative ci-dessus)
+    // — top:100% ancre donc le panneau juste sous la ligne N3, jamais sous N2.
+    // Largeur fixe (pas width:100%) car le containing block nav-row est plus
+    // étroit (padding interne) que le container éditorial visé ; left:50% +
+    // translateX(-50%) centre le panneau indépendamment de la largeur du
+    // containing block.
+    @media (min-width: 992px) {
+        .o_mega_menu:has(.ck-mega-menu) {
+            top: 100% !important;
+            left: 50% !important;
+            min-width: 0 !important;
+            width: $ck-container-max !important;
+            max-width: calc(100vw - #{$ck-gutter-desktop * 2}) !important;
+            transform: translateX(-50%) !important;
+            margin-top: 0 !important;
+            border: 1px solid rgba($ck-border, 0.85);
+            border-radius: $ck-radius-lg;
+            box-shadow: $ck-shadow-card-hover;
+            background-color: $ck-surface;
+            padding: $ck-space-4 $ck-space-5;
+        }
+
+        .ck-mega-menu__desktop {
+            min-height: 7.5rem;
+        }
+
+        // Slots de grille fixes — une colonne absente laisse de l'espace
+        // visible dans le panneau plutôt que de faire collapser le panneau
+        // entier à la largeur de son seul contenu (effet "mini-dropdown").
+        .ck-mega-menu__col {
+            flex: 0 0 25%;
+            max-width: 25%;
+        }
+    }
+
+    .ck-mega-menu {
+        &__title {
+            font-family: "Fraunces", $ck-font-display;
+            font-size: $ck-text-sm;
+            font-weight: 700;
+            color: $ck-text;
+            padding-bottom: 0.35rem;
+            margin-bottom: 0.35rem;
+        }
+
+        &__link {
+            display: block;
+            padding: 0.35rem 0;
+            color: $ck-text-muted;
+            text-decoration: none;
+            font-size: $ck-text-sm;
+
+            &:hover,
+            &:focus-visible {
+                color: $ck-primary-text;
+            }
+        }
+
+        &__visual-img {
+            max-height: 10rem;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        &__accordion .accordion-button {
+            font-size: $ck-text-sm;
+            font-weight: $ck-font-weight-semibold;
+            padding: 0.65rem 0;
+        }
+    }
+
+    // P3 pilote — fallback éditorial CK (colonne 4) quand aucun bloc visuel
+    // BO n'est saisi (cf. nav_mega_menu.py::_visual_column). Carte de marque
+    // toujours présente, même en seed pauvre — évite l'effet "liste de liens".
+    .ck-mega-menu__visual--fallback {
+        height: 100%;
+        min-height: 7rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: $ck-space-4;
+        border: 1px solid rgba($ck-border, 0.7);
+        border-radius: $ck-radius-md;
+        background:
+            radial-gradient(120% 140% at 100% 0%, rgba($ck-primary, 0.14), transparent 60%),
+            $ck-bg-soft;
+    }
+
+    .ck-mega-menu__visual-eyebrow {
+        font-family: "DM Sans", $ck-font-ui;
+        font-size: $ck-text-xs;
+        font-weight: $ck-font-weight-semibold;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $ck-primary-text;
+    }
+
+    .ck-mega-menu__col--visual-fallback .ck-mega-menu__visual-title {
+        font-family: "Fraunces", $ck-font-display;
+        font-size: $ck-text-lg;
+        font-weight: 600;
+        color: $ck-text;
+    }
+
+    .ck-mega-menu__col--visual-fallback .ck-mega-menu__visual-subtitle {
+        color: $ck-text-muted;
+    }
+}
+
+// ============================================================================
+// P4 hybride — arbitrage MOA : intensité « enseigne » de la piste A, logo
+// signé sans macaron (proche piste B), mega-menu éditorial visuel maîtrisé
+// (image curatée en BO, jamais un produit arbitraire), bandeau de preuves
+// en mini-pills (corrige le collage de texte constaté en piste B).
+// ============================================================================
+.ck-theme header#top.ck-header {
+    // Logo — wordmark renforcé + trait d'accent terracotta (pas de macaron).
+    // Le trait est ancré sur le SPAN .ck-header__brand (largeur = texte,
+    // ~101px), pas sur le lien .navbar-brand : en mobile, ce lien est
+    // flex-grow + text-align:center (chrome compact, hamburger/logo/icônes),
+    // donc beaucoup plus large que le texte affiché (mesuré : conteneur
+    // 226px vs texte 101px, centré). Un ancrage left:0 sur le lien plaçait
+    // le trait à l'extrême gauche du conteneur, visuellement détaché du mot
+    // « C-Kréyòl » (signalé MOA comme « élément flottant à gauche »).
+    // Ancré sur le span (toujours inline-block, taille = texte, sur les
+    // deux gabarits), le trait reste sous le mot quel que soit l'écran.
+    .ck-header__brand {
+        position: relative;
+        font-size: 1.4375rem;
+
+        &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -0.3rem;
+            width: 1.85rem;
+            height: 3px;
+            border-radius: 999px;
+            background-color: $ck-primary;
+        }
+    }
+
+    // Mega-menu — photo/territoire (campagne ou visuel rayon BO) : carte
+    // pleine largeur avec dégradé pour la lisibilité du texte en surimpression.
+    .ck-mega-menu__col--visual-fallback .ck-mega-menu__visual--photo {
+        position: relative;
+        min-height: 11rem;
+        color: #fff;
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+        border: 0;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(#000, 0.12), rgba(#000, 0.62));
+        }
+
+        > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ck-mega-menu__visual-eyebrow,
+        .ck-mega-menu__visual-title,
+        .ck-mega-menu__visual-subtitle {
+            color: #fff;
+        }
+    }
+
+    // Bandeau de preuves — mini-pills avec fond et séparation réelle (corrige
+    // le texte collé constaté piste B : chaque preuve est son propre bloc
+    // visuel, pas un texte au fil de l'eau qui dépend du seul `gap`).
+    .ck-mega-menu__trust-strip {
+        gap: 0.5rem;
+        margin-top: $ck-space-3;
+        padding-top: $ck-space-3;
+        border-top: 1px solid rgba($ck-border, 0.7);
+
+        span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            background-color: rgba($ck-primary, 0.07);
+            color: $ck-text-muted;
+            font-size: $ck-text-xs;
+            font-weight: $ck-font-weight-semibold;
+            white-space: nowrap;
+
+            &::before {
+                content: "";
+                width: 5px;
+                height: 5px;
+                flex: none;
+                border-radius: 50%;
+                background-color: $ck-primary;
+            }
+        }
+    }
+
+    // Plaque N2/N3 unifiée — desktop uniquement (≥992px). Mobile reste
+    // strictement P3 : aucun changement de fond/chrome sous ce seuil.
+    @media (min-width: 992px) {
+        background-color: $ck-bg-soft !important;
+
+        &.o_header_affixed,
+        &.o_header_is_scrolled,
+        &.o_transitioning.o_header_affixed {
+            background-color: $ck-bg-soft !important;
+        }
+
+        .ck-header__nav-row {
+            border-top-color: transparent;
+
+            &::before {
+                display: none;
+            }
         }
     }
 }

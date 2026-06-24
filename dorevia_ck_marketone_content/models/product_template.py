@@ -59,9 +59,14 @@ class ProductTemplate(models.Model):
     )
 
     def get_ck_shop_card_metadata_line(self, variant=None):
-        """Ligne secondaire card boutique — même logique que les vedettes home."""
+        """Ligne secondaire card boutique — tags · format · prix comparatif.
+
+        P2A — l'origine n'est plus incluse ici, elle est affichée à part en
+        eyebrow (cf. get_ck_shop_card_origin_label) : même donnée, présentation
+        densifiée façon "marque" au-dessus du titre.
+        """
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
-            _get_featured_card_metadata_line,
+            _get_shop_card_secondary_line,
         )
 
         self.ensure_one()
@@ -71,7 +76,19 @@ class ProductTemplate(models.Model):
         website = self.env['website'].get_current_website()
         if not website:
             return ''
-        return _get_featured_card_metadata_line(self.env, website, variant)
+        return _get_shop_card_secondary_line(self.env, website, variant)
+
+    def get_ck_shop_card_origin_label(self, variant=None):
+        """Eyebrow card boutique — origine seule, au-dessus du titre."""
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _get_shop_card_origin_label,
+        )
+
+        self.ensure_one()
+        variant = (variant or self.product_variant_id).sudo()
+        if not variant:
+            return ''
+        return _get_shop_card_origin_label(self, variant)
 
     def get_ck_product_page_detail_sections(self):
         """Sections bas de fiche produit CK (Lot 2) — affichage conditionnel."""

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ticket Dev — polish boutique mature P1 — sidebar filtres structurée.
+         Pure habillage : aucune facette/logique de filtre touchée, juste
+         une classe (déjà définie en SCSS, jamais appliquée) + un titre. -->
+    <template id="products_ck_sidebar_polish"
+              inherit_id="website_sale.products"
+              name="CK Shop — sidebar filtres structurée"
+              priority="30">
+        <xpath expr="//aside[@id='products_grid_before']" position="attributes">
+            <attribute name="class" add="ck-shop-sidebar" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('o_wsale_products_grid_before_rail')]" position="before">
+            <p class="ck-shop-sidebar__title">Filtres</p>
+        </xpath>
+    </template>
+</odoo>

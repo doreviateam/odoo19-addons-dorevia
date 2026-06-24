@@ -1,147 +1,77 @@
 # -*- coding: utf-8 -*-
-"""Navigation CK — sync header / menus (Nav-1 · Nav-Shop)."""
+"""Navigation CK V2.2 — sync header / mega-menus (ticket Header & Mega-menus CK V2.2)."""
 import logging
-from xml.sax.saxutils import escape
+
+from .nav_mega_menu import (
+    _category_has_published_products,
+    _category_shop_url,
+    _find_root_category,
+    _tag_shop_url,
+    build_artisanat_mega,
+    build_boissons_mega,
+    build_epicerie_mega,
+    build_maison_mega,
+    count_artisanat_families,
+)
+from .nav_v22_config import (
+    ARTISANAT_MEGA_MIN_FAMILIES,
+    LEGACY_ROOT_MENU_NAMES,
+    MANAGED_V22_ROOT_NAMES,
+    NAV_ALL_LABEL,
+    NAV_ALL_SEQUENCE,
+    NAV_ALL_URL,
+    NAV_ARTISANAT_LABEL,
+    NAV_BOISSONS_LABEL,
+    NAV_COFFRETS_LABEL,
+    NAV_COUPS_LABEL,
+    NAV_CSS_ESPACE_PRO,
+    NAV_CSS_MEGA_PRODUCT,
+    NAV_CSS_N3_GROUP_END,
+    NAV_CSS_N3_RAYON,
+    NAV_CSS_N3_RELATION,
+    NAV_CSS_N3_SELECTION,
+    NAV_CSS_NO_AUTOHIDE,
+    NAV_CSS_PRODUCTEURS,
+    NAV_EPICERIE_LABEL,
+    NAV_ESPACE_PRO_LABEL,
+    NAV_MAISON_LABEL,
+    NAV_PRODUCTEURS_LABEL,
+    NAV_PRODUCTEURS_URL,
+    NAV_PRO_PAGE_URL,
+    NAV_RAYON_SEQUENCE,
+    NAV_RELATION_SEQUENCE,
+    NAV_SELECTION_SEQUENCE,
+)
 
 _logger = logging.getLogger(__name__)
 
-NAV_SHOP_ALL_LABEL = 'Tous nos produits'
-NAV_SHOP_ALL_URL = '/shop'
-NAV_SHOP_ALL_SEQUENCE = 10
-
-NAV_MOBILE_UNIVERS_LABEL = 'Nos univers'
-NAV_MOBILE_UNIVERS_SEQUENCE = 15
-
-NAV_DECOUVRIR_LABEL = 'Découvrir'
-NAV_DECOUVRIR_SEQUENCE = 60
-
-NAV_CSS_DESKTOP_UNIVERSE = 'ck-nav-desktop-universe'
+# Rétrocompat tests Nav-Shop V2.1
+NAV_SHOP_ALL_LABEL = NAV_ALL_LABEL
+NAV_SHOP_ALL_URL = NAV_ALL_URL
+NAV_CSS_DESKTOP_UNIVERSE = NAV_CSS_N3_RAYON
 NAV_CSS_DESKTOP_UNIVERSE_CHILD = 'ck-nav-desktop-universe-child'
 NAV_CSS_MOBILE_UNIVERS_GROUP = 'ck-nav-mobile-univers'
 NAV_CSS_MOBILE_UNIVERSE_CHILD = 'ck-nav-mobile-universe-child'
-NAV_CSS_NO_AUTOHIDE = 'o_no_autohide_item'
-
-NAV_SHOP_CATEGORY_SEQUENCE_BASE = 20
-NAV_SHOP_CATEGORY_SEQUENCE_STEP = 5
-
-# Ordre MOA · URLs None = masqué sauf page teaser MOA (non implémenté Nav-1).
-DECOUVRIR_LINK_SPECS = (
-    ('Producteurs & territoires', '/producteur/atelier-hauts-goyaviers'),
-    ('Histoires de produits', None),
-    ('Recettes & usages', '/recettes'),
-    ('Le blog CK', '/blog'),
-    ('Professionnels', '/professionnels'),
-    ('Contactez-nous', '/contactus'),
-    ('Communauté', None),
-    ('Contribuer', None),
-)
-
-LEGACY_ROOT_MENU_NAMES = frozenset({
-    'Boutique',
-    'Professionnels',
-    'Contactez-nous',
-    'Contact Us',
-    'Contact us',
-    'Accueil',
-    'Home',
-    'Shop',
-    'Contact',
-    'Catégories',
-    'Épicerie créole',
-    'Soin & Bien-être',
-    'Artisanat',
-})
-
-MANAGED_FIXED_ROOT_NAMES = frozenset({
-    NAV_SHOP_ALL_LABEL,
-    NAV_MOBILE_UNIVERS_LABEL,
-    NAV_DECOUVRIR_LABEL,
-})
-
-
-def _category_shop_url(env, category):
-    if not category:
-        return None
-    slug = env['ir.http'].sudo()._slug(category)
-    return f'/shop/category/{slug}'
-
-
-def _category_has_published_products(env, category):
-    if not category:
-        return False
-    Product = env['product.template'].sudo()
-    domain = [
-        ('sale_ok', '=', True),
-        ('is_published', '=', True),
-        ('website_published', '=', True),
-        ('public_categ_ids', 'child_of', category.id),
-    ]
-    return bool(Product.search(domain, limit=1))
-
-
-def _blog_route_visible(env):
-    module = env['ir.module.module'].sudo().search([
-        ('name', '=', 'website_blog'),
-        ('state', '=', 'installed'),
-    ], limit=1)
-    return bool(module)
-
-
-def _page_url_visible(env, website, url):
-    if not url or url == '#':
-        return False
-    if url == '/blog':
-        return _blog_route_visible(env)
-    Page = env['website.page'].sudo()
-    page = Page.search([
-        ('url', '=', url),
-        '|', ('website_id', '=', False), ('website_id', '=', website.id),
-    ], limit=1)
-    if not page:
-        return False
-    return bool(page.is_published)
+NAV_DECOUVRIR_LABEL = 'Découvrir'
+NAV_MOBILE_UNIVERS_LABEL = 'Nos univers'
 
 
 def _shop_all_visible(env):
-    Product = env['product.template'].sudo()
-    return bool(Product.search([
+    return bool(env['product.template'].sudo().search([
         ('sale_ok', '=', True),
         ('is_published', '=', True),
         ('website_published', '=', True),
     ], limit=1))
 
 
-def _resolve_decouvrir_links(env, website):
-    links = []
-    for label, url in DECOUVRIR_LINK_SPECS:
-        if not url:
-            continue
-        if url == '/blog' and not _blog_route_visible(env):
-            continue
-        if not _page_url_visible(env, website, url):
-            continue
-        links.append((label, url))
-    return links
-
-
-def _build_decouvrir_mega_content(links):
-    if not links:
-        return (
-            '<div class="container py-3">'
-            '<p class="text-muted mb-0">Contenus Découvrir à venir.</p>'
-            '</div>'
-        )
-    rows = ''.join(
-        f'<a class="nav-link" href="{escape(url)}">{escape(label)}</a>'
-        for label, url in links
-    )
-    return (
-        '<div class="container py-2">'
-        '<div class="row"><div class="col-lg-10">'
-        '<h5 class="dropdown-header">Découvrir CK</h5>'
-        f'<nav class="nav flex-column ck-nav-decouvrir-links">{rows}</nav>'
-        '</div></div></div>'
-    )
+def _page_url_visible(env, website, url):
+    if not url or url == '#':
+        return False
+    page = env['website.page'].sudo().search([
+        ('url', '=', url),
+        '|', ('website_id', '=', False), ('website_id', '=', website.id),
+    ], limit=1)
+    return bool(page and page.is_published)
 
 
 def _unlink_menu(menu):
@@ -150,7 +80,7 @@ def _unlink_menu(menu):
 
 
 def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
-                 is_mega=False, mega_content='', category_id=None):
+                 is_mega=False, mega_content='', category_id=None, child_menus=None):
     menu = Menu.search([
         ('website_id', '=', website.id),
         ('parent_id', '=', parent.id),
@@ -166,6 +96,9 @@ def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
         'ck_nav_category_id': category_id or False,
     }
     if menu:
+        if is_mega and menu.child_id:
+            for child in menu.child_id:
+                _unlink_menu(child)
         menu.write(vals)
     else:
         menu = Menu.create({
@@ -173,251 +106,348 @@ def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
             'parent_id': parent.id,
             'website_id': website.id,
         })
-    return menu
 
-
-def _sorted_category_children(category):
-    return category.child_id.sorted(key=lambda c: (c.sequence, c.name or ''))
-
-
-def _eligible_level2_children(env, category):
-    return _sorted_category_children(category).filtered(
-        lambda c: _category_has_published_products(env, c)
-    )
-
-
-def build_shop_nav_trees(env, Category):
-    """Arborescence Nav-Shop : racines + enfants directs éligibles (max 2 niveaux header)."""
-    trees = []
-    roots = Category.search([('parent_id', '=', False)], order='sequence, name')
-    menu_sequence = NAV_SHOP_CATEGORY_SEQUENCE_BASE
-    for category in roots:
-        if not _category_has_published_products(env, category):
-            continue
-        children = []
-        child_seq = 1
-        for child in _eligible_level2_children(env, category):
-            url = _category_shop_url(env, child)
-            if not url:
-                continue
-            children.append({
-                'category_id': child.id,
-                'name': child.name,
-                'url': url,
-                'sequence': child_seq,
-            })
-            child_seq += 1
-        url = _category_shop_url(env, category)
-        if not url:
-            continue
-        trees.append({
-            'category_id': category.id,
-            'name': category.name,
-            'url': url,
-            'sequence': menu_sequence,
-            'children': children,
-        })
-        menu_sequence += NAV_SHOP_CATEGORY_SEQUENCE_STEP
-    return trees
-
-
-def _prune_menu_children(Menu, parent_menu, managed_names):
-    for child in parent_menu.child_id:
-        if child.name not in managed_names:
-            _unlink_menu(child)
-
-
-def _sync_desktop_shop_menus(env, website, root, Menu, trees):
-    active_root_names = set()
-    for tree in trees:
-        active_root_names.add(tree['name'])
-        parent_menu = _upsert_menu(
-            Menu,
-            website=website,
-            parent=root,
-            name=tree['name'],
-            url=tree['url'],
-            sequence=tree['sequence'],
-            css_class=NAV_CSS_DESKTOP_UNIVERSE,
-            category_id=tree['category_id'],
-        )
-        managed_child_names = set()
-        # Nav-Shop V2.1 — passe corrective MOA : pas d'entrée "Toute {root}" en
-        # tête du dropdown L2. La racine elle-même est déjà cliquable (lien
-        # direct vers l'univers via ck-nav-universe-split__link) ; ce doublon
-        # de navigation était explicitement proscrit par l'arbitrage MOA.
-        child_rows = list(tree['children'])
-        for child in child_rows:
-            managed_child_names.add(child['name'])
+    if child_menus is not None:
+        managed = set()
+        for child_spec in child_menus:
+            managed.add(child_spec['name'])
             _upsert_menu(
                 Menu,
                 website=website,
-                parent=parent_menu,
-                name=child['name'],
-                url=child['url'],
-                sequence=child['sequence'],
-                css_class=NAV_CSS_DESKTOP_UNIVERSE_CHILD,
+                parent=menu,
+                name=child_spec['name'],
+                url=child_spec['url'],
+                sequence=child_spec.get('sequence', 10),
+                css_class=child_spec.get('css_class', ''),
             )
-        _prune_menu_children(Menu, parent_menu, managed_child_names)
+        for child in menu.child_id:
+            if child.name not in managed:
+                _unlink_menu(child)
+    elif not is_mega and menu.child_id:
+        for child in menu.child_id:
+            _unlink_menu(child)
+    return menu
 
-    stale = Menu.search([
-        ('website_id', '=', website.id),
-        ('parent_id', '=', root.id),
-        ('ck_nav_css_class', '=', NAV_CSS_DESKTOP_UNIVERSE),
-    ])
-    for menu in stale:
-        if menu.name not in active_root_names:
+
+def _prune_unmanaged_root_menus(website, root, Menu):
+    for menu in Menu.search([('website_id', '=', website.id), ('parent_id', '=', root.id)]):
+        if menu.name in MANAGED_V22_ROOT_NAMES:
+            continue
+        if menu.name in LEGACY_ROOT_MENU_NAMES or menu.url in ('/professionnels', '/contactus'):
             _unlink_menu(menu)
-    return trees
+        elif menu.ck_nav_css_class and 'ck-nav-desktop-universe' in menu.ck_nav_css_class.split():
+            _unlink_menu(menu)
+        elif menu.ck_nav_css_class in (
+            NAV_CSS_DESKTOP_UNIVERSE_CHILD,
+            NAV_CSS_MOBILE_UNIVERS_GROUP,
+            NAV_CSS_MOBILE_UNIVERSE_CHILD,
+        ):
+            _unlink_menu(menu)
 
 
-def _sync_mobile_univers_group(env, website, root, Menu, trees):
-    """Mobile — racines sous Nos univers ; L2 rendu depuis BO (QWeb · ck_nav_category_id)."""
-    mobile_parent = Menu.search([
-        ('website_id', '=', website.id),
-        ('parent_id', '=', root.id),
-        ('name', '=', NAV_MOBILE_UNIVERS_LABEL),
-    ], limit=1)
-    if not trees:
-        if mobile_parent:
-            _prune_menu_children(Menu, mobile_parent, set())
-        _unlink_menu(mobile_parent)
-        return
-
-    parent = _upsert_menu(
-        Menu,
-        website=website,
-        parent=root,
-        name=NAV_MOBILE_UNIVERS_LABEL,
-        url='#',
-        sequence=NAV_MOBILE_UNIVERS_SEQUENCE,
-        css_class=NAV_CSS_MOBILE_UNIVERS_GROUP,
-    )
-    managed_names = set()
-    seq = NAV_SHOP_CATEGORY_SEQUENCE_BASE
-    for tree in trees:
-        managed_names.add(tree['name'])
+def _sync_shop_all(env, website, root, Menu):
+    if _shop_all_visible(env):
         _upsert_menu(
             Menu,
             website=website,
-            parent=parent,
-            name=tree['name'],
-            url=tree['url'],
-            sequence=seq,
-            css_class=NAV_CSS_MOBILE_UNIVERSE_CHILD,
-            category_id=tree['category_id'],
+            parent=root,
+            name=NAV_ALL_LABEL,
+            url=NAV_ALL_URL,
+            sequence=NAV_ALL_SEQUENCE,
+            css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_RAYON}',
         )
-        seq += NAV_SHOP_CATEGORY_SEQUENCE_STEP
-    _prune_menu_children(Menu, parent, managed_names)
+    else:
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', NAV_ALL_LABEL),
+        ], limit=1)
+        _unlink_menu(menu)
 
 
-def _sync_decouvrir_menu(env, website, root, Menu):
-    links = _resolve_decouvrir_links(env, website)
-    mega_html = _build_decouvrir_mega_content(links)
+def _sync_mega_rayon(env, website, root, Menu, label, sequence, mega_html, css_extra=''):
+    root_cat = _find_root_category(env, label)
+    if root_cat and not _category_has_published_products(env, root_cat):
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', label),
+        ], limit=1)
+        _unlink_menu(menu)
+        return
+    url = _category_shop_url(env, root_cat) if root_cat else '#'
+    css = f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_RAYON} {NAV_CSS_MEGA_PRODUCT} {css_extra}'.strip()
     _upsert_menu(
         Menu,
         website=website,
         parent=root,
-        name=NAV_DECOUVRIR_LABEL,
-        url='#',
-        sequence=NAV_DECOUVRIR_SEQUENCE,
-        css_class=NAV_CSS_NO_AUTOHIDE,
+        name=label,
+        url=url or '#',
+        sequence=sequence,
+        css_class=css,
         is_mega=True,
         mega_content=mega_html,
+        category_id=root_cat.id if root_cat else False,
     )
 
 
-def _sync_shop_all_menu(env, website, root, Menu):
-    visible = _shop_all_visible(env)
-    menu = Menu.search([
-        ('website_id', '=', website.id),
-        ('parent_id', '=', root.id),
-        ('name', '=', NAV_SHOP_ALL_LABEL),
-    ], limit=1)
-    if visible:
+def _sync_artisanat(env, website, root, Menu):
+    families_count = count_artisanat_families(env)
+    root_cat = _find_root_category(env, NAV_ARTISANAT_LABEL)
+    if not root_cat or not _category_has_published_products(env, root_cat):
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', NAV_ARTISANAT_LABEL),
+        ], limit=1)
+        _unlink_menu(menu)
+        return
+    url = _category_shop_url(env, root_cat)
+    if families_count >= ARTISANAT_MEGA_MIN_FAMILIES:
         _upsert_menu(
             Menu,
             website=website,
             parent=root,
-            name=NAV_SHOP_ALL_LABEL,
-            url=NAV_SHOP_ALL_URL,
-            sequence=NAV_SHOP_ALL_SEQUENCE,
-            css_class=NAV_CSS_NO_AUTOHIDE,
+            name=NAV_ARTISANAT_LABEL,
+            url=url or '#',
+            sequence=NAV_RAYON_SEQUENCE[NAV_ARTISANAT_LABEL],
+            css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_RAYON} {NAV_CSS_MEGA_PRODUCT} {NAV_CSS_N3_GROUP_END}',
+            is_mega=True,
+            mega_content=build_artisanat_mega(env),
+            category_id=root_cat.id,
+        )
+    else:
+        _upsert_menu(
+            Menu,
+            website=website,
+            parent=root,
+            name=NAV_ARTISANAT_LABEL,
+            url=url or '#',
+            sequence=NAV_RAYON_SEQUENCE[NAV_ARTISANAT_LABEL],
+            css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_RAYON} {NAV_CSS_N3_GROUP_END}',
+            category_id=root_cat.id,
+        )
+
+
+def _sync_coups_de_coeur(env, website, root, Menu):
+    url = _tag_shop_url(env, 'coup_de_coeur')
+    if not url:
+        root_cat = _find_root_category(env, NAV_COUPS_LABEL)
+        if root_cat and _category_has_published_products(env, root_cat):
+            url = _category_shop_url(env, root_cat)
+    if not url:
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', NAV_COUPS_LABEL),
+        ], limit=1)
+        _unlink_menu(menu)
+        return
+    _upsert_menu(
+        Menu,
+        website=website,
+        parent=root,
+        name=NAV_COUPS_LABEL,
+        url=url,
+        sequence=NAV_SELECTION_SEQUENCE[NAV_COUPS_LABEL],
+        css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_SELECTION}',
+    )
+
+
+def _sync_coffrets(env, website, root, Menu):
+    child_links = _coffrets_child_links(env)
+    default_url = _tag_shop_url(env, 'coffret')
+    menu = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', NAV_COFFRETS_LABEL),
+    ], limit=1)
+
+    if child_links:
+        _upsert_menu(
+            Menu,
+            website=website,
+            parent=root,
+            name=NAV_COFFRETS_LABEL,
+            url='#',
+            sequence=NAV_SELECTION_SEQUENCE[NAV_COFFRETS_LABEL],
+            css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_SELECTION} {NAV_CSS_N3_GROUP_END}',
+            child_menus=[
+                {'name': label, 'url': child_url, 'sequence': (idx + 1) * 10}
+                for idx, (label, child_url) in enumerate(child_links)
+            ],
+        )
+    elif default_url:
+        _upsert_menu(
+            Menu,
+            website=website,
+            parent=root,
+            name=NAV_COFFRETS_LABEL,
+            url=default_url,
+            sequence=NAV_SELECTION_SEQUENCE[NAV_COFFRETS_LABEL],
+            css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_SELECTION} {NAV_CSS_N3_GROUP_END}',
         )
     elif menu:
         _unlink_menu(menu)
 
 
-def _remove_legacy_root_menus(website, root, Menu, active_shop_names):
-    protected = MANAGED_FIXED_ROOT_NAMES | set(active_shop_names)
-    for menu in Menu.search([('website_id', '=', website.id), ('parent_id', '=', root.id)]):
-        if menu.name in protected:
+def _coffrets_child_links(env):
+    from .nav_v22_config import COFFRETS_ANGLES, COFFRETS_MINI_DROPDOWN_MIN_ANGLES
+    from .nav_mega_menu import _tag_shop_url as tag_url
+
+    rows = []
+    for label, kind, source in COFFRETS_ANGLES:
+        if kind != 'tag':
             continue
-        if menu.name in LEGACY_ROOT_MENU_NAMES or menu.url in ('/professionnels', '/contactus'):
-            _unlink_menu(menu)
-        elif menu.ck_nav_css_class in (
-            NAV_CSS_DESKTOP_UNIVERSE,
-            NAV_CSS_DESKTOP_UNIVERSE_CHILD,
-        ):
-            _unlink_menu(menu)
+        url = tag_url(env, source)
+        if url:
+            rows.append((label, url))
+    return rows[:5] if len(rows) >= COFFRETS_MINI_DROPDOWN_MIN_ANGLES else []
 
 
-def _dedupe_shop_root_menus(website, root, Menu):
-    for menu in Menu.search([
-        ('website_id', '=', website.id),
-        ('parent_id', '=', root.id),
-        ('url', '=', NAV_SHOP_ALL_URL),
-        ('name', '!=', NAV_SHOP_ALL_LABEL),
-    ]):
+def _sync_producteurs(env, website, root, Menu):
+    """Entrée stratégique MOA — lien direct /nos-producteurs."""
+    _upsert_menu(
+        Menu,
+        website=website,
+        parent=root,
+        name=NAV_PRODUCTEURS_LABEL,
+        url=NAV_PRODUCTEURS_URL,
+        sequence=NAV_RELATION_SEQUENCE[NAV_PRODUCTEURS_LABEL],
+        css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_RELATION} {NAV_CSS_PRODUCTEURS}',
+    )
+
+
+def _sync_espace_pro(env, website, root, Menu):
+    if not _page_url_visible(env, website, NAV_PRO_PAGE_URL):
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', NAV_ESPACE_PRO_LABEL),
+        ], limit=1)
+        _unlink_menu(menu)
+        return
+    child_menus = [
+        {'name': label, 'url': url, 'sequence': (idx + 1) * 10}
+        for idx, (label, url) in enumerate(
+            __import__(
+                'odoo.addons.dorevia_ck_marketone_content.nav_v22_config',
+                fromlist=['ESPACE_PRO_LINKS'],
+            ).ESPACE_PRO_LINKS
+        )
+    ]
+    _upsert_menu(
+        Menu,
+        website=website,
+        parent=root,
+        name=NAV_ESPACE_PRO_LABEL,
+        url='#',
+        sequence=NAV_RELATION_SEQUENCE[NAV_ESPACE_PRO_LABEL],
+        css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_RELATION} {NAV_CSS_ESPACE_PRO}',
+        child_menus=child_menus,
+    )
+
+
+def _remove_decouvrir_and_mobile_univers(website, root, Menu):
+    for name in (NAV_DECOUVRIR_LABEL, NAV_MOBILE_UNIVERS_LABEL):
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', name),
+        ], limit=1)
         _unlink_menu(menu)
 
 
 def sync_ck_navigation_for_website(env, website):
     root = website.menu_id
     if not root:
-        _logger.warning('Nav sync : website %s sans menu racine — skip', website.id)
+        _logger.warning('Nav sync V2.2 : website %s sans menu racine — skip', website.id)
         return False
     Menu = env['website.menu'].sudo()
-    Category = env['product.public.category'].sudo()
 
-    trees = build_shop_nav_trees(env, Category)
-    active_shop_names = {tree['name'] for tree in trees}
+    _prune_unmanaged_root_menus(website, root, Menu)
+    _remove_decouvrir_and_mobile_univers(website, root, Menu)
+    _sync_shop_all(env, website, root, Menu)
 
-    _remove_legacy_root_menus(website, root, Menu, active_shop_names)
-    _sync_shop_all_menu(env, website, root, Menu)
-    _dedupe_shop_root_menus(website, root, Menu)
-    _sync_desktop_shop_menus(env, website, root, Menu, trees)
-    _sync_mobile_univers_group(env, website, root, Menu, trees)
-    _sync_decouvrir_menu(env, website, root, Menu)
+    _sync_mega_rayon(
+        env, website, root, Menu,
+        NAV_EPICERIE_LABEL,
+        NAV_RAYON_SEQUENCE[NAV_EPICERIE_LABEL],
+        build_epicerie_mega(env),
+    )
+    _sync_mega_rayon(
+        env, website, root, Menu,
+        NAV_BOISSONS_LABEL,
+        NAV_RAYON_SEQUENCE[NAV_BOISSONS_LABEL],
+        build_boissons_mega(env),
+    )
+    _sync_mega_rayon(
+        env, website, root, Menu,
+        NAV_MAISON_LABEL,
+        NAV_RAYON_SEQUENCE[NAV_MAISON_LABEL],
+        build_maison_mega(env),
+        css_extra=NAV_CSS_N3_GROUP_END,
+    )
+    _sync_artisanat(env, website, root, Menu)
+    _sync_coups_de_coeur(env, website, root, Menu)
+    _sync_coffrets(env, website, root, Menu)
+    _sync_producteurs(env, website, root, Menu)
+    _sync_espace_pro(env, website, root, Menu)
     return True
 
 
 def bootstrap_ck_navigation(env):
-    """Synchronise la navigation CK pour chaque site web."""
     Website = env['website'].sudo()
     synced = 0
     for website in Website.search([]):
         if sync_ck_navigation_for_website(env, website):
             synced += 1
-    _logger.info('Nav sync : navigation synchronisée pour %s site(s)', synced)
+    _logger.info('Nav sync V2.2 : navigation synchronisée pour %s site(s)', synced)
     return synced
 
 
+def build_shop_nav_trees(env, Category):
+    """Rétrocompat — arborescence racines catalogue pour tests / doc."""
+    trees = []
+    for label in NAV_RAYON_SEQUENCE:
+        root = _find_root_category(env, label)
+        if not root or not _category_has_published_products(env, root):
+            continue
+        children = []
+        for child in root.child_id.sorted(key=lambda c: (c.sequence, c.name or '')):
+            if not _category_has_published_products(env, child):
+                continue
+            url = _category_shop_url(env, child)
+            if url:
+                children.append({
+                    'category_id': child.id,
+                    'name': child.name,
+                    'url': url,
+                    'sequence': child.sequence,
+                })
+        trees.append({
+            'category_id': root.id,
+            'name': root.name,
+            'url': _category_shop_url(env, root),
+            'sequence': NAV_RAYON_SEQUENCE[label],
+            'children': children,
+        })
+    return trees
+
+
 def get_nav_category_mapping(env):
-    """Mapping opérationnel menu → catégorie BO (recette / doc)."""
-    Category = env['product.public.category'].sudo()
     rows = [{
-        'menu_label': NAV_SHOP_ALL_LABEL,
+        'menu_label': NAV_ALL_LABEL,
         'category_id': None,
         'category_name': 'Catalogue complet',
-        'url': NAV_SHOP_ALL_URL,
+        'url': NAV_ALL_URL,
         'visible': _shop_all_visible(env),
         'published_products': _shop_all_visible(env),
         'level': 0,
         'children': [],
     }]
-    for tree in build_shop_nav_trees(env, Category):
-        category = Category.browse(tree['category_id'])
+    for tree in build_shop_nav_trees(env, env['product.public.category'].sudo()):
+        category = env['product.public.category'].sudo().browse(tree['category_id'])
         rows.append({
             'menu_label': tree['name'],
             'category_id': tree['category_id'],
@@ -426,14 +456,6 @@ def get_nav_category_mapping(env):
             'visible': True,
             'published_products': _category_has_published_products(env, category),
             'level': 1,
-            'children': [
-                {
-                    'menu_label': child['name'],
-                    'category_id': child['category_id'],
-                    'url': child['url'],
-                    'level': 2,
-                }
-                for child in tree['children']
-            ],
+            'children': tree['children'],
         })
     return rows

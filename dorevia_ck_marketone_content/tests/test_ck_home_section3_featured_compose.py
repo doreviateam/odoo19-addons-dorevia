@@ -77,8 +77,11 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         expected = self.expected_featured_cards
         self.assertGreaterEqual(grid_chunk.count(FEATURED_CARD_MARKER), expected)
         self.assertGreaterEqual(len(_CARD_MEDIA_RE.findall(grid_chunk)), expected)
-        self.assertGreaterEqual(grid_chunk.count('card-cta--secondary'), expected)
+        # Ticket Dev — CTA secondaire "Voir le produit" retiré de la zone basse ;
+        # seul "Ajouter au panier" reste visible (image + titre portent la nav).
+        self.assertNotIn('card-cta--secondary', grid_chunk)
         self.assertGreaterEqual(grid_chunk.count('class="card-cart-cta"'), expected)
+        self.assertGreaterEqual(grid_chunk.count('ck-product-card__title-link'), expected)
         self.assertGreaterEqual(grid_chunk.count('ck-product-card__price-value'), expected)
         self.assertNotIn('o_carousel_product_card', grid_chunk)
 

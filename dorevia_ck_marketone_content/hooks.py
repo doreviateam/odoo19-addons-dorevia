@@ -156,7 +156,7 @@ PROFESSIONNELS_PAGE_ARCH = """
         <p>CK met en relation producteurs et transformateurs créoles, distributeurs et points de vente en Europe. Les prix affichés sur la boutique concernent le grand public ; les conditions professionnelles sont étudiées avec vous après qualification de votre demande.</p>
     </div>
 </section>
-<section class="s_features pt32 pb32 o_cc o_cc1 o_colored_level" data-snippet="s_features" data-name="Double cible">
+<section id="acheter" class="s_features pt32 pb32 o_cc o_cc1 o_colored_level" data-snippet="s_features" data-name="Double cible">
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-6">
@@ -184,12 +184,18 @@ PROFESSIONNELS_PAGE_ARCH = """
         </div>
     </div>
 </section>
-<section class="s_text_block pt16 pb16 o_colored_level" data-snippet="s_text_block" data-name="Note qualification">
+<section id="conditions" class="s_text_block pt16 pb16 o_colored_level" data-snippet="s_text_block" data-name="Note qualification">
     <div class="container s_allow_columns">
         <p class="mb-0"><strong>Objectif :</strong> qualifier une demande professionnelle — pas de commande B2B en ligne, pas de tarif automatique. Notre équipe vous recontacte après lecture de votre message.</p>
     </div>
 </section>
+<section id="partenaire" class="s_text_block pt16 pb16 o_colored_level" data-snippet="s_text_block" data-name="Ancre partenaire">
+    <div class="container s_allow_columns">
+        <p class="mb-0">Vous souhaitez distribuer ou référencer C-Kréyòl ? Utilisez le formulaire ci-dessous pour qualifier votre demande partenaire.</p>
+    </div>
+</section>
 <section id="ck-pro-form" class="s_website_form pt32 pb64 o_colored_level" data-vcss="001" data-snippet="s_website_form" data-name="Formulaire Pro">
+    <span id="contact" class="visually-hidden">Contact</span>
     <div class="container">
         <h2 class="h3-fs mb-2">Qualifiez votre demande</h2>
         <p class="text-muted mb-4">Décrivez votre projet et laissez vos coordonnées. Qualification portée par le message — sans champ CRM custom.</p>
@@ -1049,8 +1055,10 @@ def bootstrap_all_marketone_content(env):
     bootstrap_footer_legal_links(env)
     from .nav_shop_l2_seed import seed_nav_shop_l2_categories
     from .nav_sync import bootstrap_ck_navigation
+    from .nos_producteurs_page import bootstrap_nos_producteurs_page
 
     seed_nav_shop_l2_categories(env)
+    bootstrap_nos_producteurs_page(env)
     bootstrap_ck_navigation(env)
 
 

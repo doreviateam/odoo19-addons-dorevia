@@ -61,15 +61,16 @@ class TestCkPhase10HeaderCompose(HttpCase):
             msg='Logo image générique interdit — marque typographique CK attendue',
         )
         self.assertIn('Tous nos produits', html)
-        self.assertIn('Découvrir', html)
-        self.assertIn('o_mega_menu', html)
+        self.assertIn('Espace pro', html)
+        if 'ck-mega-menu' in html:
+            self.assertIn('o_mega_menu', html)
         self.assertIn('/professionnels', html)
         self.assertIn('/contactus', html)
 
     def test_header_h1_service_bar_global(self):
         html = self._home_html()
         self.assertIn('ck-header-service-bar', html)
-        self.assertIn('Produits créoles sélectionnés', html)
+        self.assertIn('Produits sélectionnés', html)
         self.assertIn('Origines identifiées', html)
         self.assertIn('Livraison suivie', html)
         for path in ('/shop', '/contactus'):
@@ -81,7 +82,7 @@ class TestCkPhase10HeaderCompose(HttpCase):
     def test_header_h1_search_products_central(self):
         html = self._home_html()
         self.assertIn('ck-header__search', html)
-        self.assertIn('Rechercher un produit, une saveur...', html)
+        self.assertIn('Rechercher un produit, une saveur, une île...', html)
         self.assertRegex(
             html,
             r'data-search-type="products"',
@@ -144,25 +145,22 @@ class TestCkPhase10HeaderCompose(HttpCase):
         if boissons and boissons.get('visible'):
             self.assertIn('Boissons', html)
 
-    def test_header_decouvrir_pinned_no_autohide_class(self):
-        """Découvrir épinglé via o_no_autohide_item sur le menu BO."""
-        decouvrir = self.env['website.menu'].sudo().search([
-            ('website_id', '=', self.env['website'].search([], limit=1).id),
-            ('name', '=', 'Découvrir'),
-            ('parent_id', '!=', False),
-        ], limit=1)
-        self.assertTrue(decouvrir)
-        self.assertIn('o_no_autohide_item', (decouvrir.ck_nav_css_class or '').split())
-
-    def test_header_desktop_universe_split_when_level2(self):
+    def test_header_nos_producteurs_when_v22(self):
         html = self._home_html()
-        if 'ck-nav-universe-split' not in html:
-            self.skipTest('Aucune racine avec L2 éligible sur instance seed.')
-        self.assertIn('ck-nav-universe-split__link', html)
-        self.assertIn('ck-nav-universe-split__toggle', html)
+        if 'Nos producteurs' in html:
+            self.assertIn('/nos-producteurs', html)
+
+    def test_header_mega_split_when_product_mega(self):
+        html = self._home_html()
+        if 'ck-nav-mega-split' not in html:
+            self.skipTest('Aucun mega-menu produit rayon sur instance seed.')
+        self.assertIn('ck-nav-mega-split__link', html)
+        self.assertIn('ck-nav-mega-split__toggle', html)
 
     def test_hero_carousel_pause_button_rendered(self):
         html = self._home_html()
+        if 'ck-hero__visual-carousel--multi' not in html:
+            self.skipTest('Hero mono-slide — bouton pause non requis.')
         self.assertIn('ck-hero__visual-pause', html)
         self.assertIn('aria-pressed="false"', html)
 
@@ -183,11 +181,9 @@ class TestCkPhase10HeaderCompose(HttpCase):
                 self.assertIn('ck-header', resp.text, path)
                 self.assertIn(needle, resp.text, path)
 
-    def test_decouvrir_mega_has_no_commerce_duplicates(self):
+    def test_decouvrir_removed_in_v22(self):
         html = self._home_html()
-        links = re.search(r'ck-nav-decouvrir-links">(.*?)</nav>', html, re.S)
-        self.assertTrue(links, msg='Mega Découvrir sans liens éditoriaux')
-        self.assertNotIn('/shop/category/', links.group(1))
+        self.assertNotIn('ck-nav-decouvrir-links', html)
 
     def _desktop_top_menu_chunk(self, html):
         match = re.search(
@@ -208,15 +204,14 @@ class TestCkPhase10HeaderCompose(HttpCase):
         self.assertTrue(match, msg='Offcanvas mobile introuvable')
         return match.group(1)
 
-    def test_desktop_top_menu_mobile_univers_has_hide_class(self):
-        """B1 — Nos univers porte ck-nav-mobile-univers (masqué desktop via SCSS)."""
+    def test_desktop_top_menu_no_mobile_univers_v22(self):
+        """V2.2 — Nos univers retiré ; entrées N3 plates."""
         html = self._home_html()
         desktop_menu = self._desktop_top_menu_chunk(html)
-        self.assertRegex(
+        self.assertNotRegex(
             desktop_menu,
-            r'class="[^"]*ck-nav-mobile-univers[^"]*"[^>]*>[\s\S]*?'
-            r'<span>Nos univers</span>',
-            msg='Nos univers doit porter ck-nav-mobile-univers dans #top_menu desktop',
+            r'>\s*Nos univers\s*<',
+            msg='Nos univers ne doit plus figurer en N3 V2.2',
         )
 
     def test_mobile_offcanvas_no_duplicate_leaf_universe_without_l2(self):

@@ -10,7 +10,10 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     get_curated_featured_variants,
 )
 
-FEATURED_TEST_MIN_CARDS = 5
+# Ticket Dev — aligné sur FEATURED_CURATED_MAX (cap grille 4 colonnes) :
+# au-delà, ces tests min-cards échoueraient puisque le cap empêche d'afficher
+# plus que FEATURED_CURATED_MAX cartes, quel que soit le nombre saisi en BO.
+FEATURED_TEST_MIN_CARDS = FEATURED_CURATED_MAX
 
 
 def clear_ck_is_featured(env):

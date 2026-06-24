@@ -28,6 +28,10 @@ $ck-image-zone: #faf6f0;
 // --- Typographie (Fraunces + DM Sans — auto-hébergées via website_fonts.scss) ---
 $ck-font-display: "Fraunces", georgia, "Times New Roman", serif;
 $ck-font-ui: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+// P4 — test contrôlé wordmark logo uniquement (arbitrage MOA 2026-06-23).
+// Volontairement séparé de $ck-font-display : ne touche pas H1/mega-menu/
+// titres, qui restent Fraunces tant que le GO final P4 n'est pas posé.
+$ck-font-logo: "Bitter", $ck-font-display;
 $ck-font-weight-display: 600;
 $ck-font-weight-ui: 400;
 $ck-font-weight-semibold: 600;

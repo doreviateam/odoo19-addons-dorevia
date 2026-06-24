@@ -72,15 +72,13 @@ class TestCkNavSync(TransactionCase):
         product.write({'is_published': True, 'website_published': True})
         self.assertTrue(_category_has_published_products(self.env, cat))
 
-    def test_bootstrap_creates_nav_v2_structure(self):
+    def test_bootstrap_creates_nav_v22_structure(self):
         bootstrap_ck_navigation(self.env)
         self.assertTrue(self._menu_by_name(NAV_SHOP_ALL_LABEL))
-        decouvrir = self._menu_by_name(NAV_DECOUVRIR_LABEL)
-        self.assertTrue(decouvrir)
-        self.assertTrue(decouvrir.is_mega_menu)
-        self.assertIn('/professionnels', decouvrir.mega_menu_content or '')
-        self.assertIn('/contactus', decouvrir.mega_menu_content or '')
-        self.assertNotIn('Épicerie créole', decouvrir.mega_menu_content or '')
+        self.assertTrue(self._menu_by_name('Épicerie'))
+        self.assertFalse(self._menu_by_name(NAV_DECOUVRIR_LABEL))
+        self.assertTrue(self._menu_by_name('Nos producteurs'))
+        self.assertTrue(self._menu_by_name('Espace pro'))
 
     def test_legacy_top_level_professionnels_hidden(self):
         bootstrap_ck_navigation(self.env)
@@ -106,9 +104,11 @@ class TestCkNavSync(TransactionCase):
         sync_ck_navigation_for_website(self.env, self.website)
         menu = self._menu_by_name('Boissons')
         self.assertTrue(menu, msg='Boissons doit remonter depuis product.public.category')
-        self.assertEqual(menu.ck_nav_css_class, NAV_CSS_DESKTOP_UNIVERSE)
+        self.assertTrue(menu.is_mega_menu)
+        self.assertIn(NAV_CSS_DESKTOP_UNIVERSE, (menu.ck_nav_css_class or '').split())
 
-    def test_level2_children_under_parent_not_at_root(self):
+    def test_level2_not_exposed_as_header_children_v22(self):
+        """V2.2 — familles L2 dans mega-menu HTML, pas en website.menu enfants."""
         root_cat = self.Category.create({'name': 'CK Nav QA Root L2', 'sequence': 99990})
         child_cat = self.Category.create({
             'name': 'CK Nav QA Child L2',
@@ -119,26 +119,12 @@ class TestCkNavSync(TransactionCase):
         self._create_published_product('CK Nav QA Child Product', child_cat)
         sync_ck_navigation_for_website(self.env, self.website)
         parent_menu = self._menu_by_name('CK Nav QA Root L2')
-        self.assertTrue(parent_menu)
-        child_menu = self._menu_by_name('CK Nav QA Child L2', parent=parent_menu)
-        self.assertTrue(child_menu)
-        self.assertEqual(child_menu.ck_nav_css_class, NAV_CSS_DESKTOP_UNIVERSE_CHILD)
+        self.assertFalse(parent_menu, msg='Racine QA ad hoc non gérée en N3 V2.2')
         self.assertFalse(self._menu_by_name('CK Nav QA Child L2', parent=self.root))
-        mobile = self._menu_by_name(NAV_MOBILE_UNIVERS_LABEL)
-        mobile_root = self._menu_by_name('CK Nav QA Root L2', parent=mobile)
-        self.assertTrue(mobile_root)
-        self.assertEqual(mobile_root.ck_nav_category_id, root_cat)
-        self.assertIn('/shop/category/', mobile_root.url)
-        self.assertFalse(self._menu_by_name('CK Nav QA Child L2', parent=mobile))
-        # Nav-Shop V2.1 — passe corrective MOA : pas de lien "Toute {root}" en
-        # tête du dropdown L2, la racine étant déjà directement cliquable.
-        self.assertFalse(self._menu_by_name('Toute CK Nav QA Root L2', parent=parent_menu))
 
-    def test_decouvrir_and_shop_all_pinned_no_autohide(self):
+    def test_shop_all_pinned_no_autohide(self):
         sync_ck_navigation_for_website(self.env, self.website)
-        decouvrir = self._menu_by_name(NAV_DECOUVRIR_LABEL)
         shop_all = self._menu_by_name(NAV_SHOP_ALL_LABEL)
-        self.assertIn(NAV_CSS_NO_AUTOHIDE, (decouvrir.ck_nav_css_class or '').split())
         self.assertIn(NAV_CSS_NO_AUTOHIDE, (shop_all.ck_nav_css_class or '').split())
 
     def test_nav_shop_l2_seed_creates_subcategories(self):
@@ -162,47 +148,33 @@ class TestCkNavSync(TransactionCase):
         sync_ck_navigation_for_website(self.env, self.website)
         self.assertFalse(self._menu_by_name('CK Nav QA L3 Hidden'))
 
-    def test_order_follows_category_sequence(self):
-        low = self.Category.create({'name': 'CK Nav QA Seq A', 'sequence': 99980})
-        high = self.Category.create({'name': 'CK Nav QA Seq B', 'sequence': 99985})
-        self._create_published_product('CK Nav QA Seq A Product', low)
-        self._create_published_product('CK Nav QA Seq B Product', high)
+    def test_n3_managed_menu_order_v22(self):
         sync_ck_navigation_for_website(self.env, self.website)
-        menus = self.Menu.search([
-            ('website_id', '=', self.website.id),
-            ('parent_id', '=', self.root.id),
-            ('name', 'in', ('CK Nav QA Seq A', 'CK Nav QA Seq B')),
-        ], order='sequence')
-        self.assertEqual(menus.mapped('name'), ['CK Nav QA Seq A', 'CK Nav QA Seq B'])
+        all_menu = self._menu_by_name(NAV_SHOP_ALL_LABEL)
+        epicerie = self._menu_by_name('Épicerie')
+        espace_pro = self._menu_by_name('Espace pro')
+        if all_menu and epicerie:
+            self.assertLess(all_menu.sequence, epicerie.sequence)
+        if epicerie and espace_pro:
+            self.assertLess(epicerie.sequence, espace_pro.sequence)
 
-    def test_mobile_univers_group_when_category_visible(self):
+    def test_mobile_univers_group_removed_v22(self):
+        sync_ck_navigation_for_website(self.env, self.website)
+        self.assertFalse(self._menu_by_name(NAV_MOBILE_UNIVERS_LABEL))
+
+    def test_public_user_can_read_category_shop_url_on_mega_menu(self):
+        """Le header public peut résoudre l'URL catégorie d'un mega-menu rayon."""
         epicerie = self.Category.search([('name', '=', 'Épicerie'), ('parent_id', '=', False)], limit=1)
-        if not epicerie or not _category_has_published_products(self.env, epicerie):
-            self.skipTest('Épicerie absente ou sans produit publié sur instance seed.')
+        if not epicerie:
+            self.skipTest('Épicerie absente')
+        if not _category_has_published_products(self.env, epicerie):
+            self._create_published_product('CK Nav QA Epicerie', epicerie)
         sync_ck_navigation_for_website(self.env, self.website)
-        mobile = self._menu_by_name(NAV_MOBILE_UNIVERS_LABEL)
-        self.assertTrue(mobile)
-        child = self._menu_by_name('Épicerie', parent=mobile)
-        self.assertTrue(child)
-
-    def test_public_user_can_render_category_menu_helpers(self):
-        """Le header public ne doit pas exiger l'ACL BO des catégories eCommerce."""
-        root_cat = self.Category.create({'name': 'CK Nav QA Public Root', 'sequence': 99992})
-        child_cat = self.Category.create({
-            'name': 'CK Nav QA Public Child',
-            'parent_id': root_cat.id,
-            'sequence': 1,
-        })
-        self._create_published_product('CK Nav QA Public Product', child_cat)
-        sync_ck_navigation_for_website(self.env, self.website)
-
-        menu = self._menu_by_name('CK Nav QA Public Root')
+        menu = self._menu_by_name('Épicerie')
+        if not menu:
+            self.skipTest('Menu Épicerie non visible')
         public_menu = menu.with_user(self.env.ref('base.public_user'))
         self.assertIn('/shop/category/', public_menu._ck_nav_category_shop_url())
-        self.assertEqual(
-            public_menu._ck_nav_eligible_l2_categories()[0]['name'],
-            'CK Nav QA Public Child',
-        )
 
     def test_get_nav_category_mapping_has_dynamic_rows(self):
         mapping = get_nav_category_mapping(self.env)

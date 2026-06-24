@@ -99,12 +99,20 @@ def _hero_visual_html():
         else ''
     )
     multi_class = ' ck-hero__visual-carousel--multi' if len(slides) > 1 else ''
+    pause_btn = ''
+    if len(slides) > 1:
+        pause_btn = (
+            '<button type="button" class="ck-hero__visual-pause" aria-pressed="false" '
+            'aria-label="Mettre en pause le défilement automatique des visuels">'
+            '<i class="fa fa-pause" aria-hidden="true"/></button>'
+        )
     return (
         f'<div class="ck-hero__visual">'
         f'<div id="{HERO_CAROUSEL_ID}" '
         f'class="carousel slide {HERO_CAROUSEL_MARKER}{multi_class}"{ride_attrs}>'
         f'<div class="carousel-indicators ck-hero__visual-indicators">{indicators}</div>'
         f'<div class="carousel-inner">{items}</div>'
+        f'{pause_btn}'
         f'</div>'
         f'</div>'
     )
@@ -195,6 +203,8 @@ def hero_home_arch_is_valid(arch):
         visual_chunk.count(f'data-snippet="{HERO_SLIDE_SNIPPET}"') == slide_count,
         'ck-hero__slide-media o_editable' in visual_chunk,
     ]
+    if slide_count > 1:
+        checks.append('ck-hero__visual-pause' in visual_chunk)
     if not all(checks):
         return False
     content_chunk = chunk.split('ck-hero__visual-col', 1)[0]

@@ -17,10 +17,20 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
     get_curated_featured_variants,
     migrate_coups_de_coeur_category_to_ck_is_featured,
 )
+from odoo.addons.dorevia_ck_marketone_content.tests.ck_home_lot2_utils import (
+    clear_ck_is_featured,
+)
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_home_section3_featured_field')
 class TestCkHomeSection3FeaturedField(TransactionCase):
+    def setUp(self):
+        super().setUp()
+        # Ticket Dev — FEATURED_CURATED_MAX=4 : les vedettes seed peuvent
+        # saturer le cap et masquer le produit créé par le test (cf. fix
+        # identique dans test_ck_home_section3_curation.py).
+        clear_ck_is_featured(self.env)
+
     def _make_product(self, name, **vals):
         base = {
             'name': name,
@@ -81,6 +91,10 @@ class TestCkHomeSection3FeaturedField(TransactionCase):
         product = self._make_product(
             'CK Vedette Migration Cat',
             ck_is_featured=False,
+            # website_sequence très bas — la migration peut aussi re-featurer
+            # d'autres membres seed de la catégorie ; avec FEATURED_CURATED_MAX=4,
+            # seul l'ordre garantit que CE produit reste dans la fenêtre cappée.
+            website_sequence=-100,
             public_categ_ids=[(4, category.id)],
         )
         count = migrate_coups_de_coeur_category_to_ck_is_featured(self.env)

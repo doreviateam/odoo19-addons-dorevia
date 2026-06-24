@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ticket Dev — polish boutique mature P1 — compteur produits dans la
+         barre catalogue. `search_count` est déjà exposé par le contrôleur
+         natif website_sale pour la searchbar ("common for all searchbox") —
+         aucune logique ajoutée, juste son affichage. -->
+    <template id="products_ck_toolbar_count"
+              inherit_id="website_sale.products"
+              name="CK Shop — compteur produits barre catalogue"
+              priority="30">
+        <xpath expr="//header[@id='o_wsale_products_header']" position="inside">
+            <span t-if="search_count" class="ck-shop-toolbar__count">
+                <t t-esc="search_count"/> <t t-if="search_count &gt; 1">produits</t><t t-else="">produit</t>
+            </span>
+        </xpath>
+    </template>
+</odoo>

@@ -6,7 +6,24 @@
               name="CK Nav-Shop — desktop universe split link"
               priority="35">
         <xpath expr="//li[@t-elif='show_dropdown'][@role='presentation']/a[@data-bs-toggle='dropdown'][@href='#'][span[@t-field='submenu.name']]" position="replace">
-            <t t-if="submenu._ck_nav_is_desktop_universe() and submenu.child_id and not is_vertical_nav and not submenu.is_mega_menu">
+            <t t-if="submenu.is_mega_menu and submenu.ck_nav_category_id and not is_vertical_nav">
+                <a t-att-href="submenu._ck_nav_category_shop_url()"
+                   t-attf-class="nav-link ck-nav-mega-split__link #{link_class or ''} #{submenu._is_active() and 'active'}"
+                   role="menuitem"
+                   t-ignore="true">
+                    <span t-field="submenu.name"/>
+                </a>
+                <a href="#"
+                   t-attf-class="nav-link dropdown-toggle o_mega_menu_toggle ck-nav-mega-split__toggle #{dropdown_toggler_classes or ''}"
+                   data-bs-toggle="dropdown"
+                   data-bs-display="static"
+                   data-bs-auto-close="outside"
+                   role="menuitem"
+                   t-att-aria-label="'Menu ' + submenu.name">
+                    <span class="visually-hidden" t-esc="submenu.name"/>
+                </a>
+            </t>
+            <t t-elif="submenu._ck_nav_is_desktop_universe() and submenu.child_id and not is_vertical_nav and not submenu.is_mega_menu">
                 <!-- Nav-Shop V2.1 — passe corrective : le lien et le toggle sont des
                      frères DIRECTS du <li> (pas de <div> intermédiaire). Bootstrap 5
                      résout le menu associé à un toggle via le frère suivant immédiat
@@ -31,7 +48,7 @@
                     <span class="visually-hidden" t-esc="submenu.name"/>
                 </a>
             </t>
-            <t t-if="not (submenu._ck_nav_is_desktop_universe() and submenu.child_id and not is_vertical_nav and not submenu.is_mega_menu)">
+            <t t-if="not (submenu.is_mega_menu and submenu.ck_nav_category_id and not is_vertical_nav) and not (submenu._ck_nav_is_desktop_universe() and submenu.child_id and not is_vertical_nav and not submenu.is_mega_menu)">
                 <a
                     t-if="not is_accordion_nav"
                     href="#"

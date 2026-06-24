@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ticket Dev — polish boutique mature P1 — barre catalogue unifiée.
+         Active le variant natif Odoo "pills" du filmstrip catégories
+         (website_sale.filmstrip_categories_pills, inactif par défaut) au
+         lieu de réécrire le filmstrip : zéro nouveau template, comportement
+         JS/clic natif inchangé. $primary étant déjà remappé sur le terracotta
+         CK (frontend_bootstrap_variables.scss), le rendu est nativement CK. -->
+    <record id="website_sale.filmstrip_categories_pills" model="ir.ui.view">
+        <field name="active">True</field>
+    </record>
+</odoo>

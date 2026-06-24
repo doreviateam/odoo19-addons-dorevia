@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ck_mega_menu_visual_block_tree" model="ir.ui.view">
+        <field name="name">ck.mega.menu.visual.block.tree</field>
+        <field name="model">ck.mega.menu.visual.block</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="menu_key"/>
+                <field name="title"/>
+                <field name="active"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ck_mega_menu_visual_block_form" model="ir.ui.view">
+        <field name="name">ck.mega.menu.visual.block.form</field>
+        <field name="model">ck.mega.menu.visual.block</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="menu_key"/>
+                            <field name="active"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                    <group string="Contenu visuel">
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <field name="title"/>
+                        <field name="subtitle"/>
+                        <field name="target_url"/>
+                        <field name="cta_label"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ck_mega_menu_visual_block" model="ir.actions.act_window">
+        <field name="name">Blocs visuels mega-menu</field>
+        <field name="res_model">ck.mega.menu.visual.block</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_ck_mega_menu_visual_block"
+              name="Blocs mega-menu header"
+              parent="website.menu_website_configuration"
+              action="action_ck_mega_menu_visual_block"
+              sequence="46"
+              groups="website.group_website_designer"/>
+</odoo>
