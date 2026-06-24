@@ -1,0 +1,681 @@
+{
+  "generatedAt": "2026-06-23T17:58:53.686Z",
+  "base": "http://localhost:18079",
+  "db": "dorevia_ck_marketone_01",
+  "results": [
+    {
+      "name": "shop_desktop",
+      "url": "/shop",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "title": "Products | C-Kreyol",
+      "h1": "Boutique C-Kreyol",
+      "statusText": "7 produits",
+      "overflow": false,
+      "cardCount": 14,
+      "ckShopCardCount": 7,
+      "productNames": [
+        "Confiture de goyave",
+        "Manio Crackers",
+        "Galettes de manioc",
+        "Savon vétiver",
+        "Chapeau Panama",
+        "Pâte de manioc",
+        "Jus Mont-Pelé"
+      ],
+      "eyebrowTexts": [
+        "C-Kréyòl",
+        "C-Kréyòl",
+        "C-Kréyòl",
+        "Guadeloupe",
+        "Guadeloupe",
+        "Guadeloupe",
+        "Martinique"
+      ],
+      "addButtonCount": 7,
+      "cardButtons": [
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        }
+      ],
+      "categoryLabels": [
+        "Épicerie",
+        "Épicerie",
+        "Biscuits & crackers",
+        "Confitures & douceurs",
+        "Farines & manioc",
+        "Biscuits & crackers",
+        "Confitures & douceurs",
+        "Farines & manioc",
+        "Boissons",
+        "Boissons",
+        "Maison & Bien-être",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Épicerie",
+        "Boissons",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Épicerie",
+        "Artisanat",
+        "Coups de cœur",
+        "Boissons"
+      ],
+      "categoryLinks": [
+        {
+          "text": "Épicerie",
+          "href": "/shop/category/epicerie-1"
+        },
+        {
+          "text": "Épicerie",
+          "href": "#"
+        },
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        },
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        },
+        {
+          "text": "Épicerie",
+          "href": "#"
+        },
+        {
+          "text": "Épicerie",
+          "href": "/shop/category/epicerie-1"
+        }
+      ],
+      "hasFiltersTitle": false,
+      "hasPriceFilter": true
+    },
+    {
+      "name": "epicerie_desktop",
+      "url": "/shop/category/epicerie-1",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "title": "Épicerie | C-Kreyol",
+      "h1": "Boutique C-Kreyol",
+      "statusText": "4 produits",
+      "overflow": false,
+      "cardCount": 8,
+      "ckShopCardCount": 4,
+      "productNames": [
+        "Confiture de goyave",
+        "Manio Crackers",
+        "Galettes de manioc",
+        "Pâte de manioc"
+      ],
+      "eyebrowTexts": [
+        "C-Kréyòl",
+        "C-Kréyòl",
+        "C-Kréyòl",
+        "Guadeloupe",
+        "Guadeloupe",
+        "Guadeloupe"
+      ],
+      "addButtonCount": 4,
+      "cardButtons": [
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        }
+      ],
+      "categoryLabels": [
+        "Épicerie",
+        "Épicerie",
+        "Biscuits & crackers",
+        "Confitures & douceurs",
+        "Farines & manioc",
+        "Biscuits & crackers",
+        "Confitures & douceurs",
+        "Farines & manioc",
+        "Boissons",
+        "Boissons",
+        "Maison & Bien-être",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Épicerie",
+        "Boissons",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Farines & manioc"
+      ],
+      "categoryLinks": [
+        {
+          "text": "Épicerie",
+          "href": "/shop/category/epicerie-1"
+        },
+        {
+          "text": "Épicerie",
+          "href": "#"
+        },
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        },
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        },
+        {
+          "text": "Épicerie",
+          "href": "#"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        }
+      ],
+      "hasFiltersTitle": false,
+      "hasPriceFilter": true
+    },
+    {
+      "name": "shop_tablet",
+      "url": "/shop",
+      "viewport": {
+        "width": 800,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "title": "Products | C-Kreyol",
+      "h1": "Boutique C-Kreyol",
+      "statusText": "7 produits",
+      "overflow": false,
+      "cardCount": 14,
+      "ckShopCardCount": 7,
+      "productNames": [
+        "Confiture de goyave",
+        "Manio Crackers",
+        "Galettes de manioc",
+        "Savon vétiver",
+        "Chapeau Panama",
+        "Pâte de manioc",
+        "Jus Mont-Pelé"
+      ],
+      "eyebrowTexts": [
+        "C-Kréyòl",
+        "C-Kréyòl",
+        "C-Kréyòl",
+        "Guadeloupe",
+        "Guadeloupe",
+        "Guadeloupe",
+        "Martinique"
+      ],
+      "addButtonCount": 7,
+      "cardButtons": [
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        }
+      ],
+      "categoryLabels": [
+        "Épicerie",
+        "Épicerie",
+        "Biscuits & crackers",
+        "Confitures & douceurs",
+        "Farines & manioc",
+        "Biscuits & crackers",
+        "Confitures & douceurs",
+        "Farines & manioc",
+        "Boissons",
+        "Boissons",
+        "Maison & Bien-être",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Épicerie",
+        "Boissons",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Épicerie",
+        "Artisanat",
+        "Coups de cœur",
+        "Boissons"
+      ],
+      "categoryLinks": [
+        {
+          "text": "Épicerie",
+          "href": "/shop/category/epicerie-1"
+        },
+        {
+          "text": "Épicerie",
+          "href": "#"
+        },
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        },
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        },
+        {
+          "text": "Épicerie",
+          "href": "#"
+        },
+        {
+          "text": "Épicerie",
+          "href": "/shop/category/epicerie-1"
+        }
+      ],
+      "hasFiltersTitle": false,
+      "hasPriceFilter": true
+    },
+    {
+      "name": "shop_mobile",
+      "url": "/shop",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "title": "Products | C-Kreyol",
+      "h1": "Boutique C-Kreyol",
+      "statusText": "7 produits",
+      "overflow": false,
+      "cardCount": 14,
+      "ckShopCardCount": 7,
+      "productNames": [
+        "Confiture de goyave",
+        "Manio Crackers",
+        "Galettes de manioc",
+        "Savon vétiver",
+        "Chapeau Panama",
+        "Pâte de manioc",
+        "Jus Mont-Pelé"
+      ],
+      "eyebrowTexts": [
+        "C-Kréyòl",
+        "C-Kréyòl",
+        "C-Kréyòl",
+        "Guadeloupe",
+        "Guadeloupe",
+        "Guadeloupe",
+        "Martinique"
+      ],
+      "addButtonCount": 7,
+      "cardButtons": [
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        },
+        {
+          "width": 38,
+          "height": 38,
+          "radius": "999px",
+          "label": "Ajouter au panier"
+        },
+        {
+          "width": 34,
+          "height": 34,
+          "radius": "50%",
+          "label": "Ajouter à la liste de souhaits"
+        }
+      ],
+      "categoryLabels": [
+        "Épicerie",
+        "Épicerie",
+        "Biscuits & crackers",
+        "Confitures & douceurs",
+        "Farines & manioc",
+        "Biscuits & crackers",
+        "Confitures & douceurs",
+        "Farines & manioc",
+        "Boissons",
+        "Boissons",
+        "Maison & Bien-être",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Épicerie",
+        "Boissons",
+        "Maison & Bien-être",
+        "Artisanat",
+        "Coups de cœur",
+        "Épicerie",
+        "Artisanat",
+        "Coups de cœur",
+        "Boissons"
+      ],
+      "categoryLinks": [
+        {
+          "text": "Épicerie",
+          "href": "/shop/category/epicerie-1"
+        },
+        {
+          "text": "Épicerie",
+          "href": "#"
+        },
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        },
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        },
+        {
+          "text": "Épicerie",
+          "href": "#"
+        },
+        {
+          "text": "Épicerie",
+          "href": "/shop/category/epicerie-1"
+        }
+      ],
+      "hasFiltersTitle": false,
+      "hasPriceFilter": true
+    }
+  ],
+  "urlStatuses": [
+    {
+      "url": "/shop/category/epicerie-1",
+      "httpStatus": 200,
+      "finalPath": "/shop/category/epicerie-1",
+      "h1": "Boutique C-Kreyol"
+    },
+    {
+      "url": "/shop/category/epicerie-biscuits-183",
+      "httpStatus": 200,
+      "finalPath": "/shop/category/epicerie-biscuits-183",
+      "h1": "Boutique C-Kreyol"
+    },
+    {
+      "url": "/shop/category/epicerie-confitures-184",
+      "httpStatus": 200,
+      "finalPath": "/shop/category/epicerie-confitures-184",
+      "h1": "Boutique C-Kreyol"
+    },
+    {
+      "url": "/shop/category/epicerie-farines-manioc-388",
+      "httpStatus": 200,
+      "finalPath": "/shop/category/epicerie-farines-manioc-388",
+      "h1": "Boutique C-Kreyol"
+    }
+  ],
+  "cartClick": {
+    "attempted": true,
+    "ok": true,
+    "beforeCart": "0",
+    "afterCart": "1"
+  },
+  "screenshots": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/shop_recette_current"
+}

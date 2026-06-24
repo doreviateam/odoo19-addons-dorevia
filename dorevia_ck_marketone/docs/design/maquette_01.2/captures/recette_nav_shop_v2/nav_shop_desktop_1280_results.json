@@ -3,22 +3,21 @@
     "Tous nos produits",
     "Épicerie",
     "Maison & bien-être",
-    "Artisanat & Culture"
+    "Découvrir"
   ],
   "D2_fixedEntries": {
     "tousNosProduits": true,
-    "decouvrir": false,
+    "decouvrir": true,
     "decouvrirInExtraMenu": true,
     "nosUniversHidden": true
   },
   "D3_boNamesFromBO": [
     "Épicerie",
-    "Maison & bien-être",
-    "Artisanat & Culture"
+    "Maison & bien-être"
   ],
   "D4_decouvrirMega": {
     "found": true,
-    "inExtraMenu": true,
+    "inExtraMenu": false,
     "megaVisible": true,
     "links": [
       {
@@ -49,9 +48,9 @@
   },
   "D6_density": {
     "visibleCount": 5,
-    "rootCategoryCount": 3,
+    "rootCategoryCount": 2,
     "logoRight": 156.625,
-    "lastUniverseRight": 979.671875,
+    "lastUniverseRight": 864.359375,
     "cartLeft": 1176,
     "overlapChrome": false
   }
