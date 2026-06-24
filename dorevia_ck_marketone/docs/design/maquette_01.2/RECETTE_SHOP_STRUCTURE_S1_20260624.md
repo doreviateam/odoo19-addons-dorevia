@@ -6,7 +6,8 @@
 | Branche | `codex/ck-home-shop-consolidation-20260624` |
 | Module | `dorevia_ck_theme` **19.0.1.56.0** |
 | Instance | `dorevia_ck_marketone_01` · `http://localhost:18079` |
-| Statut | Livré · recette machine au vert |
+| Statut | **Recevable** · recette machine + recette manuelle MOA au vert |
+| Commit de référence | `98208cf` (`codex/ck-home-shop-consolidation-20260624`) |
 
 ---
 
@@ -137,13 +138,48 @@ dorevia_ck_marketone_content/
 
 ---
 
-## 7. Verdict
+## 7. Recette manuelle MOA (2026-06-24)
+
+Base : `dorevia_ck_marketone_01` · branche `codex/ck-home-shop-consolidation-20260624` @ `98208cf`
+
+### Contrôles fonctionnels
+
+| Contrôle | Résultat |
+| --- | --- |
+| `/shop` | ✅ 200 |
+| `/shop/category/epicerie-1` | ✅ 200 |
+| Recherche `manioc` | ✅ 200 |
+| Tri prix décroissant | ✅ 200 |
+| Filtre origine `attrib=2-5` | ✅ 200 |
+
+### Contrôles visuels / structure
+
+| Élément | Résultat |
+| --- | --- |
+| Intro + promesse + compteur | ✅ |
+| Sidebar « Affiner ma sélection » | ✅ |
+| Recherche, tri, filmstrip | ✅ |
+| Cards | ✅ |
+| Absence de doublon compteur (intro vs toolbar) | ✅ |
+| Captures 1280 haut / grille, catégorie, tablette 800, mobile 390 | ✅ pas de blocage visuel |
+
+### Réserves notées — hors périmètre S1
+
+| Point | Lecture |
+| --- | --- |
+| Nantes / livraison / producteurs dans header ou mega-menu | Pas une régression S1 (arbitrage intro Shop). Lot séparé header / bande réassurance si MOA veut nettoyer la première impression globale. |
+| Tuile famille sans image sur `/shop/category/epicerie-1` | Contenu / BO — hors S1. |
+| Pills catalogue serrées en mobile 390 | Acceptable S1 — pas d’overflow horizontal. |
+| `/shop` en `404` sans contexte de base explicite | Recette technique : utiliser `dorevia_ck_marketone_01` (cf. script captures). |
+
+---
+
+## 8. Verdict
 
 ```text
-Lot S1 livré.
-La page /shop se lit désormais comme un rayon boutique C-Kréyòl :
-promesse → catégories → outils secondaires → produits achetables.
-Odoo intact (recherche, tri, filtres, URLs, panier rapide).
+S1 recevable.
+La page /shop passe de « catalogue Odoo » à « rayon boutique C-Kréyòl »
+sans casser les mécaniques natives (recherche, tri, filtres, URLs, panier).
 ```
 
-Critère de réussite MOA : **atteint** sur instance de recette.
+**Recommandation** : GO recette MOA, réserves ci-dessus traitées en lots séparés (header/réassurance, contenu Épicerie, S2/S3).
