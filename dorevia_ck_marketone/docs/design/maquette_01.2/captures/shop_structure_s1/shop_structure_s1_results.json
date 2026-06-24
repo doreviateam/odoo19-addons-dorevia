@@ -1,0 +1,98 @@
+{
+  "generatedAt": "2026-06-24T10:20:42.482Z",
+  "base": "http://localhost:18079",
+  "db": "dorevia_ck_marketone_01",
+  "results": [
+    {
+      "name": "shop_desktop_top",
+      "url": "/shop",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "h1": "Boutique C-Kréyòl",
+      "introLead": "Produits créoles sélectionnés, aux origines identifiées.",
+      "introNote": "7\n                     produits sélectionnés",
+      "sidebarTitle": "Affiner ma sélection",
+      "toolbarCount": 0,
+      "cardCount": 14,
+      "overflow": false,
+      "hasBudget": false,
+      "hasAffiner": true
+    },
+    {
+      "name": "shop_desktop_grid",
+      "url": "/shop",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "h1": "Boutique C-Kréyòl",
+      "introLead": "Produits créoles sélectionnés, aux origines identifiées.",
+      "introNote": "7\n                     produits sélectionnés",
+      "sidebarTitle": "Affiner ma sélection",
+      "toolbarCount": 0,
+      "cardCount": 14,
+      "overflow": false,
+      "hasBudget": false,
+      "hasAffiner": true
+    },
+    {
+      "name": "shop_category_epicerie_desktop",
+      "url": "/shop/category/epicerie-1",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "h1": "Épicerie créole",
+      "introLead": null,
+      "introNote": null,
+      "sidebarTitle": "Affiner ma sélection",
+      "toolbarCount": 0,
+      "cardCount": 8,
+      "overflow": false,
+      "hasBudget": false,
+      "hasAffiner": true
+    },
+    {
+      "name": "shop_tablet_800",
+      "url": "/shop",
+      "viewport": {
+        "width": 800,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "h1": "Boutique C-Kréyòl",
+      "introLead": "Produits créoles sélectionnés, aux origines identifiées.",
+      "introNote": "7\n                     produits sélectionnés",
+      "sidebarTitle": "Affiner ma sélection",
+      "toolbarCount": 0,
+      "cardCount": 14,
+      "overflow": false,
+      "hasBudget": false,
+      "hasAffiner": true
+    },
+    {
+      "name": "shop_mobile_390",
+      "url": "/shop",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "h1": "Boutique C-Kréyòl",
+      "introLead": "Produits créoles sélectionnés, aux origines identifiées.",
+      "introNote": "7\n                     produits sélectionnés",
+      "sidebarTitle": "Affiner ma sélection",
+      "toolbarCount": 0,
+      "cardCount": 14,
+      "overflow": false,
+      "hasBudget": false,
+      "hasAffiner": true
+    }
+  ],
+  "screenshots": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/shop_structure_s1"
+}

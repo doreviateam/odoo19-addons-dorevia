@@ -61,7 +61,8 @@ class TestCkShopPhase3Compose(HttpCase):
     def test_shop_has_phase3_compose_blocks(self):
         html = self.url_open('/shop').text
         self.assertIn('s_ck_shop_intro', html)
-        self.assertIn('Boutique C-Kreyol', html)
+        self.assertIn('Boutique C-Kréyòl', html)
+        self.assertIn('Produits créoles sélectionnés, aux origines identifiées.', html)
         self.assertIn('s_ck_reassurance', html)
         self.assertIn('Producteurs et transformateurs repérés par CK.', html)
         self.assertIn('ck-shop-pro-signal', html)

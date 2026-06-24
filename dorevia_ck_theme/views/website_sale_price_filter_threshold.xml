@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lot S1 — option B documentée : masquer le slider si &lt; 15 résultats courants,
+         sauf filtre prix déjà actif (isFilteringByPrice natif website_sale).
+         Approximation volontaire — lot S2 pour total publié indépendant. -->
+    <template id="filter_products_price_ck_threshold"
+              inherit_id="website_sale.filter_products_price"
+              name="CK Shop — seuil slider prix"
+              priority="36">
+        <xpath expr="//div[@id='o_wsale_price_range_option']" position="attributes">
+            <attribute name="t-if">(search_count or 0) &gt;= 15 or isFilteringByPrice</attribute>
+        </xpath>
+    </template>
+</odoo>

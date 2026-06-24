@@ -11,7 +11,7 @@
             <attribute name="class" add="ck-shop-sidebar" separator=" "/>
         </xpath>
         <xpath expr="//div[hasclass('o_wsale_products_grid_before_rail')]" position="before">
-            <p class="ck-shop-sidebar__title">Filtres</p>
+            <p class="ck-shop-sidebar__title">Affiner ma sélection</p>
         </xpath>
     </template>
 </odoo>

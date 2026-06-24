@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Lot S1 — promesse CK avant les outils catalogue (compact, non hero). -->
     <template id="s_ck_shop_intro" name="CK Intro boutique">
-        <!-- Boutique au plus simple : un seul titre, rien d'autre. -->
         <section class="s_ck_shop_intro ck-shop-intro" data-snippet="s_ck_shop_intro">
-            <div class="container o_editable">
-                <h1 class="ck-section-title ck-shop-intro__title mb-0">Boutique C-Kreyol</h1>
+            <div class="container">
+                <div class="o_editable">
+                    <h1 class="ck-section-title ck-shop-intro__title mb-0">Boutique C-Kréyòl</h1>
+                </div>
+                <p class="ck-shop-intro__lead mb-0">
+                    Produits créoles sélectionnés, aux origines identifiées.
+                </p>
+                <p t-if="search_count" class="ck-shop-intro__note mb-0">
+                    <t t-esc="search_count"/>
+                    <t t-if="search_count &gt; 1"> produits sélectionnés</t>
+                    <t t-else=""> produit sélectionné</t>
+                </p>
             </div>
         </section>
     </template>

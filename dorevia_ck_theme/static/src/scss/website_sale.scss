@@ -6,17 +6,21 @@
 
     &__title {
         font-size: $ck-text-2xl;
-        margin-bottom: $ck-space-1;
+        margin-bottom: $ck-space-2;
     }
 
     &__lead {
         font-size: $ck-text-sm;
         color: $ck-text-muted;
+        margin-top: $ck-space-2;
+        max-width: 52ch;
     }
 
     &__note {
         font-size: $ck-text-xs;
         color: $ck-text-muted;
+        margin-top: $ck-space-2;
+        font-weight: $ck-font-weight-semibold;
     }
 
     // Pills de preuve — même recette que le bandeau de pied de mega-menu
@@ -499,15 +503,13 @@
 }
 
 // Ticket Dev — polish boutique mature P1 — barre catalogue unifiée.
-// Regroupe visuellement titre + filmstrip catégories + recherche/tri dans
-// une seule bande (fond + radius cohérents avec le header P4), sans toucher
-// au DOM/JS natif (catégories, recherche, tri restent les mécanismes Odoo).
+// Lot S1 — outils secondaires : recherche et tri discrets, filmstrip prioritaire.
 .ck-shop-page #o_wsale_products_header {
     background-color: $ck-bg-soft;
     border-radius: $ck-radius-lg;
-    padding: $ck-space-4;
+    padding: $ck-space-3 $ck-space-4;
     margin-bottom: $ck-space-4;
-    row-gap: $ck-space-3 !important;
+    row-gap: $ck-space-2 !important;
 
     .o_wsale_shop_title {
         font-family: $ck-font-display;
@@ -515,25 +517,30 @@
         color: $ck-text;
     }
 
-    .ck-shop-toolbar__count {
-        font-size: $ck-text-xs;
-        color: $ck-text-muted;
-        font-weight: $ck-font-weight-semibold;
-        white-space: nowrap;
-        align-self: center;
-        margin-inline-end: $ck-space-2;
+    .products_header.btn-toolbar {
+        gap: $ck-space-2;
+    }
+
+    .o_wsale_products_header_search_form_container {
+        flex: 0 1 auto;
+        max-width: 15rem;
     }
 
     .search-query.form-control,
     .oe_search_box {
         background-color: $ck-surface;
         border-color: $ck-border !important;
+        font-size: $ck-text-sm;
+        padding-block: 0.35rem;
     }
 
     .o_sortby_dropdown > .dropdown-toggle {
         background-color: $ck-surface;
         border: 1px solid $ck-border;
         border-radius: $ck-radius-md;
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+        padding: 0.35rem 0.65rem;
     }
 }
 
