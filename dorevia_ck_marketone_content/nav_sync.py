@@ -15,6 +15,7 @@ from .nav_mega_menu import (
 )
 from .nav_v22_config import (
     ARTISANAT_MEGA_MIN_FAMILIES,
+    LEGACY_NAV_MAISON_LABEL,
     LEGACY_ROOT_MENU_NAMES,
     MANAGED_V22_ROOT_NAMES,
     NAV_ALL_LABEL,
@@ -167,7 +168,29 @@ def _sync_shop_all(env, website, root, Menu):
         _unlink_menu(menu)
 
 
+def _retire_legacy_maison_nav_menu(website, root, Menu, target_label):
+    """Renomme ou retire l'ancienne entrée « Maison & Bien-être » avant upsert."""
+    legacy = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', LEGACY_NAV_MAISON_LABEL),
+    ], limit=1)
+    if not legacy:
+        return
+    target = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', target_label),
+    ], limit=1)
+    if target and target.id != legacy.id:
+        _unlink_menu(legacy)
+    else:
+        legacy.write({'name': target_label})
+
+
 def _sync_mega_rayon(env, website, root, Menu, label, sequence, mega_html, css_extra=''):
+    if label == NAV_MAISON_LABEL:
+        _retire_legacy_maison_nav_menu(website, root, Menu, label)
     root_cat = _find_root_category(env, label)
     if root_cat and not _category_has_published_products(env, root_cat):
         menu = Menu.search([

@@ -251,7 +251,7 @@ await page.evaluate(() => window.scrollTo(0, 0));
 await page.waitForTimeout(200);
 
 // 3-5 — Mega-menus rayons (panneau réellement ouvert)
-for (const [idx, label] of [['03', 'Épicerie'], ['04', 'Boissons'], ['05', 'Maison & Bien-être']]) {
+for (const [idx, label] of [['03', 'Épicerie'], ['04', 'Boissons'], ['05', 'Soin & Bien-être']]) {
   const megaState = await openMegaDesktop(label);
   if (!megaState.open) {
     console.warn(`[QA] Mega ${label} non visible avant capture — état:`, megaState);
@@ -266,7 +266,7 @@ await closeMegaDesktop();
 results.checks.mega_hover_switch = await checkMegaHoverSwitch([
   'Épicerie',
   'Boissons',
-  'Maison & Bien-être',
+  'Soin & Bien-être',
   'Boissons',
   'Épicerie',
 ]);

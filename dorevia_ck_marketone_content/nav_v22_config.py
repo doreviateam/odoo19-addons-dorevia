@@ -18,7 +18,8 @@ NAV_ALL_SEQUENCE = 10
 
 NAV_EPICERIE_LABEL = 'Épicerie'
 NAV_BOISSONS_LABEL = 'Boissons'
-NAV_MAISON_LABEL = 'Maison & Bien-être'
+NAV_MAISON_LABEL = 'Soin & Bien-être'
+LEGACY_NAV_MAISON_LABEL = 'Maison & Bien-être'  # ancien libellé N3 — retiré du header
 NAV_ARTISANAT_LABEL = 'Artisanat'
 NAV_COMMUNAUTE_LABEL = 'Communauté'
 NAV_COMMUNAUTE_URL = '#'

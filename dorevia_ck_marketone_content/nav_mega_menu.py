@@ -17,6 +17,7 @@ from .nav_v22_config import (
     MEGA_MENU_BOISSONS,
     MEGA_MENU_EPICERIE,
     MEGA_MENU_MAISON,
+    NAV_MAISON_LABEL,
     NAV_PRODUCTEURS_URL,
     ORIGINS_EPICERIE,
     PARAM_BOISSONS_FRAICHES,
@@ -261,7 +262,7 @@ def _links_column(title, links):
 _FALLBACK_VISUAL_COPY = {
     'epicerie': ('Épicerie créole', 'Saveurs et producteurs sélectionnés dans les territoires créolophones.'),
     'boissons': ('Boissons créoles', 'Jus, sirops et boissons locales, origine identifiée.'),
-    'maison_bien_etre': ('Maison & Bien-être', 'Rituels, senteurs et soins inspirés des Caraïbes.'),
+    'maison_bien_etre': (NAV_MAISON_LABEL, 'Rituels, senteurs et soins inspirés des Caraïbes.'),
     'artisanat': ('Artisanat créole', 'Créations authentiques, faites main par nos artisans.'),
 }
 
@@ -434,7 +435,7 @@ def build_maison_mega(env):
     return build_product_mega_menu_html(
         env,
         menu_key=MEGA_MENU_MAISON,
-        root_label='Maison & Bien-être',
+        root_label=NAV_MAISON_LABEL,
         family_specs=MAISON_FAMILIES,
         selection_specs=MAISON_SELECTIONS,
         origin_specs=ORIGINS_EPICERIE,

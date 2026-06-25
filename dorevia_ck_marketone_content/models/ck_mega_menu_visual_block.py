@@ -6,6 +6,7 @@ from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
     MEGA_MENU_BOISSONS,
     MEGA_MENU_EPICERIE,
     MEGA_MENU_MAISON,
+    NAV_MAISON_LABEL,
 )
 
 
@@ -17,7 +18,7 @@ class CkMegaMenuVisualBlock(models.Model):
     MENU_SELECTION = [
         (MEGA_MENU_EPICERIE, 'Épicerie'),
         (MEGA_MENU_BOISSONS, 'Boissons'),
-        (MEGA_MENU_MAISON, 'Maison & Bien-être'),
+        (MEGA_MENU_MAISON, NAV_MAISON_LABEL),
         (MEGA_MENU_ARTISANAT, 'Artisanat'),
     ]
 

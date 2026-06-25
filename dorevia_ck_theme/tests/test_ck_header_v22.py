@@ -9,6 +9,7 @@ from odoo.tests.common import HttpCase
 from odoo.addons.dorevia_ck_marketone_content.nav_sync import bootstrap_ck_navigation
 from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
     LEGACY_NAV_COUPS_LABEL,
+    LEGACY_NAV_MAISON_LABEL,
     NAV_COFFRETS_LABEL,
     NAV_COMMUNAUTE_LABEL,
     NAV_COMMUNAUTE_URL,
@@ -126,6 +127,13 @@ class TestCkHeaderV22Compose(HttpCase):
             ('parent_id', '=', root.id),
         ])
         self.assertFalse(legacy, 'Coups de cœur ne doit plus figurer en navigation principale')
+
+    def test_soin_bien_etre_nav_label_desktop(self):
+        html = self._home_html()
+        nav = self._header_nav_chunk(html)
+        self.assertIn('Soin &amp; Bien-être', nav)
+        self.assertNotIn('Maison &amp; Bien-être', nav)
+        self.assertNotIn(LEGACY_NAV_MAISON_LABEL, nav)
 
     def test_decouvrir_removed_from_nav(self):
         decouvrir = self.env['website.menu'].sudo().search([
