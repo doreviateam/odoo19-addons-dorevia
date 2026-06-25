@@ -222,7 +222,7 @@ class TestCkPhase10HeaderCompose(HttpCase):
             r'>\s*Épicerie\s*<',
             r'>\s*Maison (&amp;|&) bien-être\s*<',
             r'>\s*Artisanat &amp; Culture\s*<',
-            r'>\s*Coups de cœur\s*<',
+            r'>\s*Communauté\s*<',
         ):
             matches = re.findall(pattern, mobile)
             if matches:

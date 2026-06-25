@@ -8,8 +8,10 @@ from odoo.tests.common import HttpCase
 
 from odoo.addons.dorevia_ck_marketone_content.nav_sync import bootstrap_ck_navigation
 from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
+    LEGACY_NAV_COUPS_LABEL,
     NAV_COFFRETS_LABEL,
-    NAV_COUPS_LABEL,
+    NAV_COMMUNAUTE_LABEL,
+    NAV_COMMUNAUTE_URL,
     NAV_ESPACE_PRO_LABEL,
     NAV_PRODUCTEURS_LABEL,
 )
@@ -58,12 +60,17 @@ class TestCkHeaderV22Compose(HttpCase):
         for label in (
             'Tous nos produits',
             'Épicerie',
-            'Boissons',
-            'Coups de cœur',
+            'Communauté',
             NAV_PRODUCTEURS_LABEL,
             NAV_ESPACE_PRO_LABEL,
         ):
             self.assertIn(label, nav, label)
+        boissons = self.env['website.menu'].sudo().search([
+            ('name', '=', 'Boissons'),
+            ('parent_id', '!=', False),
+        ], limit=1)
+        if boissons:
+            self.assertIn('Boissons', nav)
         coffrets = self.env['website.menu'].sudo().search([
             ('name', '=', NAV_COFFRETS_LABEL),
             ('parent_id', '!=', False),
@@ -95,15 +102,30 @@ class TestCkHeaderV22Compose(HttpCase):
         self.assertIn('/professionnels#acheter', html)
         self.assertIn('/professionnels#contact', html)
 
-    def test_coups_de_coeur_not_mega_menu(self):
+    def test_communaute_placeholder_link(self):
         menu = self.env['website.menu'].sudo().search([
-            ('name', '=', NAV_COUPS_LABEL),
+            ('name', '=', NAV_COMMUNAUTE_LABEL),
             ('parent_id', '!=', False),
         ], limit=1)
-        if not menu:
-            self.skipTest('Coups de cœur non visible sans contenu tag/catégorie.')
+        self.assertTrue(menu, 'Communauté doit être présent en N3')
+        self.assertEqual(menu.url, NAV_COMMUNAUTE_URL)
         self.assertFalse(menu.is_mega_menu)
         self.assertFalse(menu.child_id)
+
+    def test_communaute_renders_hash_href(self):
+        html = self._home_html()
+        self.assertRegex(
+            html,
+            r'href="#"\s+class="[^"]*nav-link[^"]*"[^>]*>\s*<span>Communauté</span>',
+        )
+
+    def test_coups_de_coeur_absent_from_root_nav(self):
+        root = self.env['website'].search([], limit=1).menu_id
+        legacy = self.env['website.menu'].sudo().search([
+            ('name', '=', LEGACY_NAV_COUPS_LABEL),
+            ('parent_id', '=', root.id),
+        ])
+        self.assertFalse(legacy, 'Coups de cœur ne doit plus figurer en navigation principale')
 
     def test_decouvrir_removed_from_nav(self):
         decouvrir = self.env['website.menu'].sudo().search([

@@ -16,6 +16,13 @@ class WebsiteMenu(models.Model):
         help='Catégorie BO liée (rendu mobile L2 dynamique · palier parent navigable).',
     )
 
+    def _clean_url(self):
+        """Placeholder Communauté — conserver ``#`` (Odoo core convertit sinon en ``/#``)."""
+        self.ensure_one()
+        if self.url == '#':
+            return '#'
+        return super()._clean_url()
+
     def _ck_nav_is_desktop_universe(self):
         self.ensure_one()
         return 'ck-nav-desktop-universe' in (self.ck_nav_css_class or '').split()

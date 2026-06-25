@@ -23,7 +23,9 @@ from .nav_v22_config import (
     NAV_ARTISANAT_LABEL,
     NAV_BOISSONS_LABEL,
     NAV_COFFRETS_LABEL,
-    NAV_COUPS_LABEL,
+    LEGACY_NAV_COUPS_LABEL,
+    NAV_COMMUNAUTE_LABEL,
+    NAV_COMMUNAUTE_URL,
     NAV_CSS_ESPACE_PRO,
     NAV_CSS_MEGA_PRODUCT,
     NAV_CSS_N3_GROUP_END,
@@ -229,29 +231,46 @@ def _sync_artisanat(env, website, root, Menu):
         )
 
 
-def _sync_coups_de_coeur(env, website, root, Menu):
-    url = _tag_shop_url(env, 'coup_de_coeur')
-    if not url:
-        root_cat = _find_root_category(env, NAV_COUPS_LABEL)
-        if root_cat and _category_has_published_products(env, root_cat):
-            url = _category_shop_url(env, root_cat)
-    if not url:
-        menu = Menu.search([
-            ('website_id', '=', website.id),
-            ('parent_id', '=', root.id),
-            ('name', '=', NAV_COUPS_LABEL),
-        ], limit=1)
+def _sync_communaute(env, website, root, Menu):
+    """Entrée N3 Communauté — placeholder # en attendant blog/forum CK."""
+    legacy = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', LEGACY_NAV_COUPS_LABEL),
+    ])
+    for menu in legacy:
         _unlink_menu(menu)
-        return
     _upsert_menu(
         Menu,
         website=website,
         parent=root,
-        name=NAV_COUPS_LABEL,
-        url=url,
-        sequence=NAV_SELECTION_SEQUENCE[NAV_COUPS_LABEL],
+        name=NAV_COMMUNAUTE_LABEL,
+        url=NAV_COMMUNAUTE_URL,
+        sequence=NAV_SELECTION_SEQUENCE[NAV_COMMUNAUTE_LABEL],
         css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_SELECTION}',
     )
+
+
+def sync_communaute_header_for_website(env, website):
+    """Remplacement chirurgical Coups de cœur → Communauté (sans resync rayons)."""
+    root = website.menu_id
+    if not root:
+        _logger.warning(
+            'Nav Communauté : website %s sans menu racine — skip', website.id,
+        )
+        return False
+    _sync_communaute(env, website, root, env['website.menu'].sudo())
+    return True
+
+
+def sync_communaute_header(env):
+    """Sync header Communauté sur tous les sites — périmètre ticket nav uniquement."""
+    synced = 0
+    for website in env['website'].sudo().search([]):
+        if sync_communaute_header_for_website(env, website):
+            synced += 1
+    _logger.info('Nav Communauté : entrée synchronisée pour %s site(s)', synced)
+    return synced
 
 
 def _sync_coffrets(env, website, root, Menu):
@@ -389,7 +408,7 @@ def sync_ck_navigation_for_website(env, website):
         css_extra=NAV_CSS_N3_GROUP_END,
     )
     _sync_artisanat(env, website, root, Menu)
-    _sync_coups_de_coeur(env, website, root, Menu)
+    _sync_communaute(env, website, root, Menu)
     _sync_coffrets(env, website, root, Menu)
     _sync_producteurs(env, website, root, Menu)
     _sync_espace_pro(env, website, root, Menu)

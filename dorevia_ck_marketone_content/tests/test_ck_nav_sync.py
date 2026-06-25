@@ -176,6 +176,13 @@ class TestCkNavSync(TransactionCase):
         public_menu = menu.with_user(self.env.ref('base.public_user'))
         self.assertIn('/shop/category/', public_menu._ck_nav_category_shop_url())
 
+    def test_communaute_menu_v22(self):
+        sync_ck_navigation_for_website(self.env, self.website)
+        menu = self._menu_by_name('Communauté')
+        self.assertTrue(menu)
+        self.assertEqual(menu.url, '#')
+        self.assertFalse(self._menu_by_name('Coups de cœur'))
+
     def test_get_nav_category_mapping_has_dynamic_rows(self):
         mapping = get_nav_category_mapping(self.env)
         self.assertEqual(mapping[0]['menu_label'], NAV_SHOP_ALL_LABEL)

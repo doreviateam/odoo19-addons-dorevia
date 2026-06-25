@@ -20,7 +20,9 @@ NAV_EPICERIE_LABEL = 'Épicerie'
 NAV_BOISSONS_LABEL = 'Boissons'
 NAV_MAISON_LABEL = 'Maison & Bien-être'
 NAV_ARTISANAT_LABEL = 'Artisanat'
-NAV_COUPS_LABEL = 'Coups de cœur'
+NAV_COMMUNAUTE_LABEL = 'Communauté'
+NAV_COMMUNAUTE_URL = '#'
+LEGACY_NAV_COUPS_LABEL = 'Coups de cœur'  # ancienne entrée N3 — retirée du header
 NAV_COFFRETS_LABEL = 'Coffrets'
 NAV_PRODUCTEURS_LABEL = 'Nos producteurs'
 NAV_ESPACE_PRO_LABEL = 'Espace pro'
@@ -32,7 +34,7 @@ NAV_RAYON_SEQUENCE = {
     NAV_ARTISANAT_LABEL: 35,
 }
 NAV_SELECTION_SEQUENCE = {
-    NAV_COUPS_LABEL: 45,
+    NAV_COMMUNAUTE_LABEL: 45,
     NAV_COFFRETS_LABEL: 50,
 }
 NAV_RELATION_SEQUENCE = {
@@ -162,6 +164,7 @@ LEGACY_ROOT_MENU_NAMES = frozenset({
     'Boutique', 'Professionnels', 'Contactez-nous', 'Contact Us', 'Contact us',
     'Accueil', 'Home', 'Shop', 'Contact', 'Catégories', 'Épicerie créole',
     'Soin & Bien-être', 'Artisanat', 'Découvrir', 'Nos univers',
+    LEGACY_NAV_COUPS_LABEL,
 })
 
 MANAGED_V22_ROOT_NAMES = frozenset({
@@ -170,7 +173,7 @@ MANAGED_V22_ROOT_NAMES = frozenset({
     NAV_BOISSONS_LABEL,
     NAV_MAISON_LABEL,
     NAV_ARTISANAT_LABEL,
-    NAV_COUPS_LABEL,
+    NAV_COMMUNAUTE_LABEL,
     NAV_COFFRETS_LABEL,
     NAV_PRODUCTEURS_LABEL,
     NAV_ESPACE_PRO_LABEL,
