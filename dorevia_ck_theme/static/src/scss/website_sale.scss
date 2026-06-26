@@ -645,3 +645,65 @@
         font-size: $ck-text-sm;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Note 07 · Lot D — Cards sans ligne vide + mobile 390px
+// ---------------------------------------------------------------------------
+
+// D1 : le padding natif de .o_wsale_product_information (8px haut/bas) crée
+//      un blanc visible sous le pied des cartes CK (double avec foot padding).
+//      Note : .o_wsale_product_info_attributes_wrapper a display:contents →
+//      aucun impact layout, pas de min-height à corriger.
+.ck-shop-page form.ck-product-card--shop .o_wsale_product_information {
+    padding-block-end: 0;
+}
+
+// D2 + D3 : mobile ≤ 575 px
+@media (max-width: 575.98px) {
+    // Toolbar : retour à la ligne si les boutons débordent
+    .ck-shop-page #o_wsale_products_header .btn-toolbar {
+        flex-wrap: wrap;
+        row-gap: $ck-space-2;
+    }
+
+    // Grille 1 colonne — reflow table en blocs ; overflow-x: clip (D3) absorbe
+    // tout débordement résiduel sans casser le scroll des tuiles voisines.
+    .ck-shop-page #o_wsale_products_grid {
+        overflow-x: clip;
+
+        table,
+        tbody,
+        tr {
+            display: block;
+            width: 100%;
+        }
+
+        colgroup,
+        col {
+            display: none;
+        }
+
+        td {
+            display: block;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+    }
+
+    // Tuiles sous-catégories — scroll horizontal si > 3 tuiles sur 390 px
+    .ck-category-tiles {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: $ck-space-2;
+    }
+
+    .ck-category-tiles .row {
+        flex-wrap: nowrap;
+
+        > [class*="col-"] {
+            flex: 0 0 7rem;
+            width: 7rem;
+            max-width: none;
+        }
+    }
+}
