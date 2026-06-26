@@ -43,8 +43,8 @@ class TestCkHeaderV22Compose(HttpCase):
 
     def test_baseline_epicerie_creole_desktop(self):
         html = self._home_html()
-        self.assertIn('ck-header__baseline', html)
-        self.assertIn('épicerie créole', html)
+        self.assertIn('ck-header__brand-img', html)
+        self.assertIn('dorevia_ck_theme/static/src/img/ck-logo.svg', html)
 
     def test_search_placeholder_v22(self):
         html = self._home_html()

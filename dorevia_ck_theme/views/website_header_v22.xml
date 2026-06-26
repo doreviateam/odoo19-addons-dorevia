@@ -18,16 +18,6 @@
         </xpath>
     </template>
 
-    <!-- Lot Header V2.2 — baseline « épicerie créole » sous le logo -->
-    <template id="layout_ck_header_brand_v22"
-              inherit_id="dorevia_ck_theme.layout_ck_header_brand"
-              name="CK Header V2.2 brand baseline"
-              priority="96">
-        <xpath expr="//span[hasclass('ck-header__brand')]" position="after">
-            <span class="ck-header__baseline d-none d-lg-block">épicerie créole</span>
-        </xpath>
-    </template>
-
     <!-- Lot Header V2.2 — placeholder recherche V2.2 -->
     <template id="ck_header_search_box_input_v22"
               inherit_id="dorevia_ck_theme.ck_header_search_box_input"

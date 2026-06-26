@@ -27,6 +27,11 @@ export class CkNavShopExtraMenu extends Interaction {
         super.destroy();
     }
 
+    _getDropdown(toggle) {
+        const Dropdown = window.Dropdown ?? window.bootstrap?.Dropdown;
+        return Dropdown?.getOrCreateInstance(toggle);
+    }
+
     bindExtraMenuDropdowns() {
         this._extraMenuCleanups?.forEach((fn) => fn());
         this._extraMenuCleanups = [];
@@ -43,10 +48,10 @@ export class CkNavShopExtraMenu extends Interaction {
                 return;
             }
             const onEnter = () => {
-                window.Dropdown.getOrCreateInstance(toggle).show();
+                this._getDropdown(toggle)?.show();
             };
             const onLeave = () => {
-                window.Dropdown.getOrCreateInstance(toggle).hide();
+                this._getDropdown(toggle)?.hide();
             };
             dropdownEl.addEventListener('mouseenter', onEnter);
             dropdownEl.addEventListener('mouseleave', onLeave);
@@ -66,7 +71,7 @@ export class CkNavShopExtraMenu extends Interaction {
         }
         ev.preventDefault();
         ev.stopPropagation();
-        window.Dropdown.getOrCreateInstance(toggle).toggle();
+        this._getDropdown(toggle)?.toggle();
     }
 }
 

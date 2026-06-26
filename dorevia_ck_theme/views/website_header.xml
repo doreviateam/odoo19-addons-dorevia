@@ -64,20 +64,4 @@
         </xpath>
     </template>
 
-    <!-- Logo typographique C-Kréyòl — remplace image générique website -->
-    <template id="layout_ck_header_brand"
-              inherit_id="website.option_header_brand_logo"
-              name="CK Theme header brand text"
-              priority="95">
-        <xpath expr="//a[@data-name='Navbar Logo']" position="replace">
-            <a data-name="Navbar Logo"
-               href="/"
-               t-attf-class="navbar-brand logo ck-header__brand-link #{_link_class}"
-               aria-label="C-Kréyòl — Accueil">
-                <span class="ck-header__brand" aria-hidden="true">
-                    C-<span class="ck-header__brand-accent">Kréyòl</span>
-                </span>
-            </a>
-        </xpath>
-    </template>
 </odoo>

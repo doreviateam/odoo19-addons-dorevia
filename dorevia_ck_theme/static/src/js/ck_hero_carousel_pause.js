@@ -33,7 +33,9 @@ export class CkHeroCarouselPause extends Interaction {
     }
 
     onToggle() {
-        const carousel = window.Carousel.getOrCreateInstance(this.el);
+        const Carousel = window.Carousel ?? window.bootstrap?.Carousel;
+        if (!Carousel) return;
+        const carousel = Carousel.getOrCreateInstance(this.el);
         if (this.paused) {
             carousel.cycle();
         } else {

@@ -65,55 +65,48 @@
         min-height: 3.75rem;
     }
 
-    // Logo typographique — maquette artifact .logo
+    // Logo — asset SVG unique (ck-logo.svg) · positionnement responsive
     .navbar-brand.ck-header__brand-link,
     .navbar-brand.logo {
         margin-right: $ck-space-4;
         padding-top: $ck-space-1;
         padding-bottom: $ck-space-1;
         text-decoration: none;
+        line-height: 0;
 
         &:hover,
         &:focus-visible {
-            .ck-header__brand {
-                color: $ck-text;
-            }
-
-            .ck-header__brand-accent {
-                color: $ck-primary-hover;
+            .ck-header__brand-img {
+                opacity: 0.88;
             }
         }
 
-        // Le seul changement de couleur ci-dessus est insuffisant comme indicateur
-        // de focus (WCAG 2.4.7) — anneau visible dédié sur l'élément focusé.
         &:focus-visible {
             outline: 2px solid $ck-primary;
             outline-offset: 2px;
             border-radius: $ck-radius-sm;
         }
-
-        img,
-        span[role="img"] {
-            display: none !important;
-        }
     }
 
-    .ck-header__brand {
+    .ck-header__brand-img-wrap {
         display: inline-block;
-        // P4 — test contrôlé : $ck-font-logo (Bitter) au lieu de Fraunces,
-        // scopé au seul wordmark. Le reste du système typo ($ck-font-display)
-        // est inchangé (H1, titres mega-menu, colonne visuelle…).
-        font-family: $ck-font-logo;
-        font-weight: 700;
-        font-size: 1.3125rem;
-        line-height: 1.1;
-        letter-spacing: -0.01em;
-        color: $ck-text;
-        white-space: nowrap;
+        overflow: hidden;
+        line-height: 0;
+        // Mobile — wordmark seul (baseline masquée par crop)
+        height: 1.625rem;
     }
 
-    .ck-header__brand-accent {
-        color: $ck-primary;
+    .ck-header__brand-img {
+        display: block;
+        height: 2.5rem;
+        width: auto;
+        max-width: none;
+    }
+
+    @media (min-width: 992px) {
+        .ck-header__brand-img-wrap {
+            height: 2.5rem;
+        }
     }
 
     // Lot H1 — recherche centrale desktop
@@ -575,10 +568,6 @@
         .navbar-brand.ck-header__brand-link {
             margin-right: $ck-space-3;
         }
-
-        .ck-header__brand {
-            font-size: 1.1875rem;
-        }
     }
 
     .ck-header-service-bar {
@@ -714,18 +703,6 @@
 }
 
 .ck-theme header#top.ck-header {
-    .ck-header__baseline {
-        display: block;
-        font-family: "DM Sans", $ck-font-ui;
-        font-size: 0.6875rem;
-        font-weight: $ck-font-weight-semibold;
-        letter-spacing: 0.04em;
-        text-transform: lowercase;
-        color: $ck-text-muted;
-        line-height: 1.2;
-        margin-top: 0.1rem;
-    }
-
     .ck-header__cart-link {
         width: auto !important;
         height: auto !important;
@@ -944,38 +921,12 @@
 }
 
 // ============================================================================
-// P4 hybride — arbitrage MOA : intensité « enseigne » de la piste A, logo
-// signé sans macaron (proche piste B), mega-menu éditorial visuel maîtrisé
-// (image curatée en BO, jamais un produit arbitraire), bandeau de preuves
-// en mini-pills (corrige le collage de texte constaté en piste B).
+// P4 hybride — arbitrage MOA : intensité « enseigne » de la piste A, mega-menu
+// éditorial visuel maîtrisé (image curatée en BO, jamais un produit arbitraire),
+// bandeau de preuves en mini-pills (corrige le collage de texte constaté en piste B).
+// Logo : asset SVG unique (ck-logo.svg) — voir website_header_brand.xml.
 // ============================================================================
 .ck-theme header#top.ck-header {
-    // Logo — wordmark renforcé + trait d'accent terracotta (pas de macaron).
-    // Le trait est ancré sur le SPAN .ck-header__brand (largeur = texte,
-    // ~101px), pas sur le lien .navbar-brand : en mobile, ce lien est
-    // flex-grow + text-align:center (chrome compact, hamburger/logo/icônes),
-    // donc beaucoup plus large que le texte affiché (mesuré : conteneur
-    // 226px vs texte 101px, centré). Un ancrage left:0 sur le lien plaçait
-    // le trait à l'extrême gauche du conteneur, visuellement détaché du mot
-    // « C-Kréyòl » (signalé MOA comme « élément flottant à gauche »).
-    // Ancré sur le span (toujours inline-block, taille = texte, sur les
-    // deux gabarits), le trait reste sous le mot quel que soit l'écran.
-    .ck-header__brand {
-        position: relative;
-        font-size: 1.4375rem;
-
-        &::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -0.3rem;
-            width: 1.85rem;
-            height: 3px;
-            border-radius: 999px;
-            background-color: $ck-primary;
-        }
-    }
-
     // Mega-menu — photo/territoire (campagne ou visuel rayon BO) : carte
     // pleine largeur avec dégradé pour la lisibilité du texte en surimpression.
     .ck-mega-menu__col--visual-fallback .ck-mega-menu__visual--photo {

@@ -44,22 +44,27 @@ class TestCkPhase10HeaderCompose(HttpCase):
         html = self._home_html()
         self.assertIn('ck-header', html)
         self.assertIn('ck-theme', html)
-        self.assertIn('ck-header__brand', html)
-        self.assertIn('ck-header__brand-accent', html)
-        self.assertRegex(html, r'C-[\s\S]{0,24}?Kr[eéè]yòl')
+        self.assertIn('ck-header__brand-img', html)
+        self.assertIn('dorevia_ck_theme/static/src/img/ck-logo.svg', html)
         self.assertRegex(
             html,
-            r'aria-label="C-Kréyòl — Accueil"[^>]*>[\s\S]*?ck-header__brand',
+            r'alt="C-Kréyòl"[^>]*class="[^"]*ck-header__brand-img',
+            msg='Logo header doit porter alt C-Kréyòl',
+        )
+        self.assertRegex(
+            html,
+            r'aria-label="C-Kréyòl — Accueil"[^>]*>[\s\S]*?ck-header__brand-img',
             msg='Marque header doit être C-Kréyòl (graphie MOA)',
+        )
+        self.assertEqual(
+            html.count('dorevia_ck_theme/static/src/img/ck-logo.svg'),
+            2,
+            msg='Logo desktop et mobile doivent partager la même source SVG',
         )
         self.assertNotIn('Your Logo', html)
         self.assertNotIn('fonts.googleapis.com', html)
         self.assertNotRegex(html, r'family=DM\+Sans|family=Fraunces')
-        self.assertNotRegex(
-            html,
-            r'data-name="Navbar Logo"[^>]*>[\s\S]*?<img[^>]+logo',
-            msg='Logo image générique interdit — marque typographique CK attendue',
-        )
+        self.assertNotIn('ck-header__brand-accent', html)
         self.assertIn('Tous nos produits', html)
         self.assertIn('Espace pro', html)
         if 'ck-mega-menu' in html:

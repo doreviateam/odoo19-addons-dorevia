@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Baseline V2.2 retirée du code — purge explicite si encore en base (upgrade 19.0.1.58.0) -->
+    <delete model="ir.ui.view" search="[('key', '=', 'dorevia_ck_theme.layout_ck_header_brand_v22')]"/>
+
+    <!-- Logo natif Odoo (image website.logo) — remplacé par l'asset CK à la source -->
+    <record id="website.option_header_brand_logo" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- Source unique logo header CK — asset SVG partagé desktop / mobile -->
+    <template id="ck_header_brand_mark"
+              name="CK header brand logo mark">
+        <span class="ck-header__brand-img-wrap">
+            <img src="/dorevia_ck_theme/static/src/img/ck-logo.svg"
+                 alt="C-Kréyòl"
+                 class="ck-header__brand-img"
+                 width="124"
+                 height="40"
+                 loading="eager"/>
+        </span>
+    </template>
+
+    <template id="layout_ck_header_brand"
+              inherit_id="website.placeholder_header_brand"
+              name="CK Theme header brand logo"
+              priority="96">
+        <xpath expr="//*[@id='o_fake_navbar_brand']" position="replace">
+            <a data-name="Navbar Logo"
+               href="/"
+               t-attf-class="navbar-brand logo ck-header__brand-link #{_link_class}"
+               aria-label="C-Kréyòl — Accueil">
+                <t t-call="dorevia_ck_theme.ck_header_brand_mark"/>
+            </a>
+        </xpath>
+    </template>
+</odoo>
