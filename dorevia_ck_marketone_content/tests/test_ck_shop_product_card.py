@@ -32,6 +32,7 @@ class TestCkShopProductCardHooks(TransactionCase):
         btn_arch = buttons.arch_db if isinstance(buttons.arch_db, str) else str(buttons.arch_db)
         self.assertIn('card-cart-cta', btn_arch)
         self.assertIn('Ajouter au panier', btn_arch)
+        self.assertNotIn('visually-hidden', btn_arch)
         self.assertNotIn('card-cta--secondary', btn_arch)
 
     def test_metadata_view_installed(self):
@@ -107,6 +108,16 @@ class TestCkShopProductCardCompose(HttpCase):
         self.assertNotIn('Add to Cart', chunk)
         self.assertNotIn('card-cta--secondary', chunk)
 
+    def test_shop_card_cta_label_visible(self):
+        """Le libellé panier ne doit pas être masqué (CTA unifié Home/Shop)."""
+        html = self.url_open('/shop').text
+        chunk = self._first_product_card_chunk(html)
+        self.assertRegex(
+            chunk,
+            r'card-cart-cta__label[^>]*>Ajouter au panier</span>',
+        )
+        self.assertNotIn('card-cart-cta__label visually-hidden', chunk)
+
     def test_shop_card_product_link_via_title_or_image(self):
         """Accès fiche produit via image / titre — pas de second CTA en pied de card."""
         html = self.url_open('/shop').text
@@ -167,7 +178,15 @@ class TestCkShopProductCardCompose(HttpCase):
         self.assertIn('ck-product-card--home', html)
         self.assertIn('ck-product-card__meta', html)
         self.assertIn('card-cart-cta', html)
-        self.assertIn('Voir le produit', html)
+        self.assertIn('ck-product-card__title-link', html)
+
+    def test_shop_grid_four_columns(self):
+        """Grille catalogue — shop_ppr=4 (aligné Home 4 colonnes desktop)."""
+        html = self.url_open('/shop').text
+        self.assertRegex(html, r'--o-wsale-ppr:\s*4')
+        self.assertIn('g-col-lg-3', html)
+        website = self.env['website'].get_current_website()
+        self.assertEqual(website.shop_ppr, 4)
 
     def test_shop_page_scope_unchanged(self):
         html = self.url_open('/shop').text

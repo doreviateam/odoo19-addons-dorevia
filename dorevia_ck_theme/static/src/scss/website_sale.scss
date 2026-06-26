@@ -218,10 +218,10 @@
     }
 }
 
-// Neutralise le mode Odoo « actions_onhover » — libellé panier + boutons compacts
+// Neutralise le mode Odoo « actions_onhover » — CTA texte toujours visible (tous viewports).
 .ck-shop-page #o_wsale_products_grid.o_wsale_products_opt_actions_onhover form.ck-product-card--shop {
-    --o-wsale-card-btn-submit-label-display: inline;
-    --o-wsale-card-btn-label-display: inline;
+    --o-wsale-card-btn-submit-label-display: inline !important;
+    --o-wsale-card-btn-label-display: inline !important;
     --o-wsale-card-btn-submit-aspect-ratio: auto;
     --o-wsale-card-btn-submit-flex-grow: 0;
     --o-wsale-card-btn-submit-margin: 0;
@@ -330,22 +330,20 @@
         color: $ck-primary;
     }
 
-    // Ticket Dev — P2A densification : prix + CTA icône côte à côte (au lieu
-    // d'un empilement prix au-dessus / bouton plein largeur en dessous).
+    // CTA unifié Home/Shop — pied colonne + bouton texte pill (réversion P2A icône).
     .ck-product-card__foot,
     .o_wsale_product_sub {
         position: static;
         margin-top: auto;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: stretch;
         gap: 10px;
     }
 
     .ck-product-card__price,
     .product_price {
-        flex: 1 1 auto;
-        width: auto;
+        flex: none;
+        width: 100%;
         min-width: 0;
     }
 
@@ -353,10 +351,10 @@
     .o_wsale_product_btn {
         position: static !important;
         display: flex !important;
-        flex-direction: row;
-        align-items: center;
-        width: auto;
-        flex: 0 0 auto;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        flex: none;
         aspect-ratio: unset !important;
         overflow: visible !important;
         pointer-events: auto !important;
@@ -365,10 +363,10 @@
 
         .o_wsale_product_action_row {
             display: flex !important;
-            flex-direction: row;
-            align-items: center;
+            flex-direction: column;
+            align-items: stretch;
             gap: 8px;
-            width: auto;
+            width: 100%;
             transform: none !important;
             align-self: auto !important;
 
@@ -377,44 +375,32 @@
                 transform: none !important;
                 pointer-events: auto !important;
                 aspect-ratio: unset !important;
-                width: auto;
+                width: 100%;
             }
         }
     }
 
-    // Ticket Dev — P2A allègement CTA : bouton icône compacte (remplace le
-    // bandeau plein largeur P1) — grammaire "boutique mature" (cf. référence
-    // bienmanger.com), libellé conservé accessible via .visually-hidden
-    // (Bootstrap, non ré-écrasé ici) + aria-label/title sur le bouton.
     .card-cart-cta,
     .o_wsale_product_btn_primary.card-cart-cta {
-        width: 38px;
-        height: 38px;
-        min-width: 38px;
-        min-height: 0 !important;
-        max-width: none;
-        padding: 0 !important;
-        order: 1;
-        flex: none !important;
-        aspect-ratio: auto !important;
+        width: 100%;
+        min-height: 44px;
+        padding: 8px 14px !important;
         display: inline-flex !important;
         align-items: center;
         justify-content: center;
-        border-radius: 999px;
-        box-sizing: border-box;
-        box-shadow: none;
-        transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-
-        &:hover,
-        &:focus-visible {
-            box-shadow: 0 4px 10px rgba($ck-primary, 0.28);
-            transform: translateY(-1px);
-        }
+        white-space: normal;
+        line-height: 1.2;
+        visibility: visible !important;
+        opacity: 1 !important;
 
         .fa-shopping-cart {
-            display: inline-block;
-            font-size: 14px;
-            margin: 0;
+            display: none;
+        }
+
+        .o_label,
+        .card-cart-cta__label {
+            display: inline !important;
+            visibility: visible !important;
         }
     }
 
@@ -567,6 +553,13 @@
         width: 100%;
     }
 
+    // Desktop ≥ 992 px — 4 colonnes (shop_ppr=4)
+    @media (min-width: 992px) {
+        #o_wsale_products_grid {
+            --o-wsale-ppr: 4;
+        }
+    }
+
     // A3 : bouton "Filtrer" visible sur desktop (écrase d-lg-none Bootstrap)
     @media (min-width: 992px) {
         .o_wsale_toggle_filter_btn,
@@ -647,7 +640,38 @@
 }
 
 // ---------------------------------------------------------------------------
-// Note 07 · Lot D — Cards sans ligne vide + mobile 390px
+// CTA unifié · responsive < lg
+// Odoo 19 (product_tile.scss) masque .o_wsale_product_btn et le libellé en
+// actions_onhover sous lg — neutralisation explicite pour le CTA texte CK.
+// ---------------------------------------------------------------------------
+@media (max-width: 991.98px) {
+    .ck-shop-page #o_wsale_products_grid.o_wsale_products_opt_actions_onhover {
+        form.ck-product-card--shop {
+            .o_wsale_product_btn {
+                visibility: visible !important;
+                pointer-events: auto !important;
+                position: static !important;
+            }
+
+            .o_wsale_product_action_row .btn,
+            .card-cart-cta,
+            .o_wsale_product_btn_primary.card-cart-cta {
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+
+                .o_label,
+                .card-cart-cta__label {
+                    visibility: visible !important;
+                    display: inline !important;
+                }
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Note 07 · Lot D — Cards sans ligne vide + responsive grille 4 / 2 / 1
 // ---------------------------------------------------------------------------
 
 // D1 : le padding natif de .o_wsale_product_information (8px haut/bas) crée
@@ -658,7 +682,18 @@
     padding-block-end: 0;
 }
 
-// D2 + D3 : mobile ≤ 575 px
+// Tablette 576–991 px — 2 colonnes (g-col-md-3 natif = 4 cols avec ppr=4)
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .ck-shop-page #o_wsale_products_grid {
+        --o-wsale-ppr: 2;
+
+        .oe_product {
+            grid-column: auto / span 6 !important;
+        }
+    }
+}
+
+// D2 + D3 : mobile ≤ 575 px — 1 colonne (g-col-6 natif = 2 cols)
 @media (max-width: 575.98px) {
     // Toolbar : retour à la ligne si les boutons débordent
     .ck-shop-page #o_wsale_products_header .btn-toolbar {
@@ -666,27 +701,14 @@
         row-gap: $ck-space-2;
     }
 
-    // Grille 1 colonne — reflow table en blocs ; overflow-x: clip (D3) absorbe
-    // tout débordement résiduel sans casser le scroll des tuiles voisines.
     .ck-shop-page #o_wsale_products_grid {
+        --o-wsale-ppr: 1;
         overflow-x: clip;
 
-        table,
-        tbody,
-        tr {
-            display: block;
+        .oe_product {
+            grid-column: auto / span 12 !important;
             width: 100%;
-        }
-
-        colgroup,
-        col {
-            display: none;
-        }
-
-        td {
-            display: block;
-            width: 100% !important;
-            max-width: 100% !important;
+            max-width: 100%;
         }
     }
 

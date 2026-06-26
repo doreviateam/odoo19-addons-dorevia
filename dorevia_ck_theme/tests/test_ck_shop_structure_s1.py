@@ -104,6 +104,11 @@ class TestCkShopStructureS1(HttpCase):
             'Grille catégorie sans produit',
         )
 
+    def test_shop_grid_four_columns_desktop(self):
+        html = self._shop_html()
+        self.assertRegex(html, r'--o-wsale-ppr:\s*4')
+        self.assertIn('g-col-lg-3', html)
+
     def test_shop_no_horizontal_overflow_marker(self):
         html = self._shop_html()
         intro_count = len(re.findall(r'class="[^"]*s_ck_shop_intro', html))

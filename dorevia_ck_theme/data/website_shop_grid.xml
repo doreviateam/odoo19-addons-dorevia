@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grille boutique CK : 4 colonnes desktop (aligné Home Coups de cœur + maquette 4→2→1). -->
+    <function model="website" name="write">
+        <value eval="[ref('website.default_website')]"/>
+        <value eval="{'shop_ppr': 4}"/>
+    </function>
+</odoo>
