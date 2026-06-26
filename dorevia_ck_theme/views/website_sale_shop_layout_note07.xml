@@ -6,17 +6,13 @@
          ne pas déplacer ni réécrire le formulaire de filtrage. -->
     <template id="products_ck_note07_layout"
               inherit_id="website_sale.products"
-              name="CK Shop Note07 — grille pleine largeur + offcanvas desktop"
+              name="CK Shop Note07 — grille pleine largeur + drawer filtres"
               priority="40">
 
-        <!-- A1 : sidebar masquée — l'offcanvas natif contient son propre form.js_attributes -->
+        <!-- A1 : sidebar masquée — l'offcanvas natif (#o_wsale_offcanvas) porte les filtres ;
+             le bouton "Filtrer" desktop est géré par SCSS (A3 : d-lg-none écrasé par !important). -->
         <xpath expr="//aside[@id='products_grid_before']" position="attributes">
             <attribute name="class" add="d-none" separator=" "/>
-        </xpath>
-
-        <!-- A3 : offcanvas panel accessible sur desktop (retrait d-lg-none natif Odoo) -->
-        <xpath expr="//div[@id='o_wsale_offcanvas']" position="attributes">
-            <attribute name="class" remove="d-lg-none" separator=" "/>
         </xpath>
     </template>
 </odoo>
