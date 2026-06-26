@@ -86,6 +86,7 @@ class TestCkShopFilterDrawerHttp(HttpCase):
     def test_reset_button_top_french(self):
         drawer = self._offcanvas_block(self._drawer_html())
         self.assertIn('Réinitialiser les filtres', drawer)
+        self.assertIn('Appliquer les filtres', drawer)
         self.assertNotIn('Clear Filters', drawer)
 
     def test_tag_filter_url_still_works(self):

@@ -656,6 +656,27 @@
         }
     }
 
+    .ck-shop-offcanvas__apply-wrap {
+        padding-top: $ck-space-3;
+        border-top: 1px solid rgba($ck-border, 0.7);
+    }
+
+    .ck-shop-offcanvas__apply-btn {
+        background-color: $ck-primary;
+        border: 1px solid $ck-primary;
+        border-radius: $ck-radius-md;
+        color: #fff;
+        font-size: $ck-text-sm;
+        font-weight: 600;
+        padding: 0.55rem 0.75rem;
+
+        &:hover {
+            background-color: darken($ck-primary, 6%);
+            border-color: darken($ck-primary, 6%);
+            color: #fff;
+        }
+    }
+
     .o_wsale_offcanvas_title.accordion-button > b {
         font-family: $ck-font-display;
         font-size: $ck-text-sm;

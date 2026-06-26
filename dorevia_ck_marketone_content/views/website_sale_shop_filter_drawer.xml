@@ -109,5 +109,14 @@
         <xpath expr="//aside[@id='o_wsale_offcanvas']//div[hasclass('border-top')]" position="attributes">
             <attribute name="class" add="d-none" separator=" "/>
         </xpath>
+        <xpath expr="//div[@id='o_wsale_offcanvas_content']" position="after">
+            <div t-if="opt_wsale_filter_tags"
+                 class="offcanvas-body flex-grow-0 ck-shop-offcanvas__apply-wrap">
+                <button type="button"
+                        class="btn ck-shop-offcanvas__apply-btn w-100">
+                    Appliquer les filtres
+                </button>
+            </div>
+        </xpath>
     </template>
 </odoo>
