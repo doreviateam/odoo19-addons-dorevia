@@ -12,7 +12,7 @@
 | Modules | `dorevia_ck_theme` (principal) · `dorevia_ck_marketone_content` (rebond + tuiles génériques) |
 | Estimation | **4–5,5 j-h Dev** + **1,5–2 j-h QA** |
 | Priorité | Moyenne — **backlog lot suivant** |
-| Statut | **Prêt Dev · GO backlog · NO GO démarrage immédiat** |
+| Statut | **GO technique recette 26/06** — validation MOA R1 (tuiles Boissons) · voir [`RECETTE_QA_NOTE_07_VERDICT.md`](../design/maquette_01.2/RECETTE_QA_NOTE_07_VERDICT.md) |
 | Séquencement | **Après clôture Axe C post-correction** (voir §1.1) |
 
 ---
