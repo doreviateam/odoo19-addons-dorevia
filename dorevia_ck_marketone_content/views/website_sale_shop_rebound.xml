@@ -11,11 +11,13 @@
         <xpath expr="//div[@id='oe_structure_website_sale_products_2']" position="before">
             <section t-if="ck_show_rebound" class="ck-shop-rebound">
                 <div class="container">
-                    <p class="ck-shop-rebound__message"
-                       t-esc="ck_rebound_message"/>
-                    <a t-att-href="ck_rebound_cta_url"
-                       class="btn btn-outline-primary ck-shop-rebound__cta"
-                       t-esc="ck_rebound_cta_label"/>
+                    <div class="ck-shop-rebound__card">
+                        <p class="ck-shop-rebound__message"
+                           t-esc="ck_rebound_message"/>
+                        <a t-att-href="ck_rebound_cta_url"
+                           class="ck-shop-rebound__cta"
+                           t-esc="ck_rebound_cta_label"/>
+                    </div>
                 </div>
             </section>
         </xpath>

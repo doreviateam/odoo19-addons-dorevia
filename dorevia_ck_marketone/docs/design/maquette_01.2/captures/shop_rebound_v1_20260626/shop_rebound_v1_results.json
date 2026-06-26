@@ -1,0 +1,49 @@
+{
+  "results": [
+    {
+      "name": "boissons_desktop1280",
+      "path": "/shop/category/boissons-123",
+      "vp": {
+        "width": 1280,
+        "height": 900
+      },
+      "reboundVisible": true,
+      "message": "Cette sélection s'enrichit progressivement. Nous ajoutons de nouvelles références créoles au fil de nos sélections, avec une attention particulière portée à l'origine, au producteur et à la qualité.",
+      "ctaHref": "/shop",
+      "ctaLabel": "Découvrir toute la boutique",
+      "cardBg": "rgb(255, 251, 247)",
+      "cardBorder": "1px solid rgb(232, 232, 227)",
+      "overflow": false
+    },
+    {
+      "name": "epicerie_desktop1280",
+      "path": "/shop/category/epicerie-1",
+      "vp": {
+        "width": 1280,
+        "height": 900
+      },
+      "reboundVisible": false,
+      "message": null,
+      "ctaHref": null,
+      "ctaLabel": null,
+      "cardBg": null,
+      "cardBorder": "undefined undefined undefined",
+      "overflow": false
+    },
+    {
+      "name": "boissons_mobile390",
+      "path": "/shop/category/boissons-123",
+      "vp": {
+        "width": 390,
+        "height": 900
+      },
+      "reboundVisible": true,
+      "message": "Cette sélection s'enrichit progressivement. Nous ajoutons de nouvelles références créoles au fil de nos sélections, avec une attention particulière portée à l'origine, au producteur et à la qualité.",
+      "ctaHref": "/shop",
+      "ctaLabel": "Découvrir toute la boutique",
+      "cardBg": "rgb(255, 251, 247)",
+      "cardBorder": "1px solid rgb(232, 232, 227)",
+      "overflow": false
+    }
+  ]
+}

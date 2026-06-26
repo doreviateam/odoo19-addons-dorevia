@@ -11,7 +11,8 @@ Condition D5/C3 :
 
 CK_REBOUND_MESSAGE = (
     "Cette sélection s'enrichit progressivement. "
-    "Découvrez d'autres produits créoles sur toute la boutique."
+    "Nous ajoutons de nouvelles références créoles au fil de nos sélections, "
+    "avec une attention particulière portée à l'origine, au producteur et à la qualité."
 )
 CK_REBOUND_CTA_LABEL = 'Découvrir toute la boutique'
 CK_REBOUND_CTA_URL = '/shop'

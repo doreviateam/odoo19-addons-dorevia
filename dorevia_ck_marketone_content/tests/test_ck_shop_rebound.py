@@ -5,6 +5,7 @@ from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.shop_rebound import (
+    CK_REBOUND_MESSAGE,
     ck_shop_has_active_filters,
     ck_should_show_rebound,
 )
@@ -41,6 +42,11 @@ class TestCkShopRebound(TransactionCase):
 
     def test_show_when_1_product(self):
         self.assertTrue(ck_should_show_rebound(_values(self._make_cat(), search_count=1), {}))
+
+    def test_rebound_message_v1_copy(self):
+        self.assertIn("s'enrichit progressivement", CK_REBOUND_MESSAGE)
+        self.assertIn("origine, au producteur et à la qualité", CK_REBOUND_MESSAGE)
+        self.assertNotIn("Découvrez d'autres produits créoles", CK_REBOUND_MESSAGE)
 
     def test_show_when_2_products(self):
         self.assertTrue(ck_should_show_rebound(_values(self._make_cat(), search_count=2), {}))

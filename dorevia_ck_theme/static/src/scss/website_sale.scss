@@ -641,22 +641,52 @@
 }
 
 // ---------------------------------------------------------------------------
-// Note 07 · Lot C — Bloc rebond rayon pauvre
-// ---------------------------------------------------------------------------
+// Note 07 · Lot C — Bloc rebond rayon pauvre (V1 brief final)
+.ck-shop-page .ck-shop-rebound {
+    margin-top: $ck-space-6;
+    padding: 0;
 
-.ck-shop-rebound {
-    border-top: 1px solid $ck-border;
-    padding-block: $ck-space-5 $ck-space-6;
+    &__card {
+        background-color: $ck-bg;
+        border: 1px solid #e8e8e3;
+        border-radius: 12px;
+        padding: $ck-space-5;
+        text-align: center;
+
+        @media (min-width: 768px) {
+            padding: $ck-space-6;
+        }
+    }
 
     &__message {
-        font-size: $ck-text-sm;
-        color: $ck-text-muted;
-        max-width: 52ch;
-        margin-bottom: $ck-space-3;
+        font-size: 15px;
+        line-height: 1.55;
+        color: #666666;
+        max-width: 600px;
+        margin: 0 auto $ck-space-4;
     }
 
     &__cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.55rem 1.25rem;
+        border-radius: 999px;
         font-size: $ck-text-sm;
+        font-weight: $ck-font-weight-semibold;
+        color: $ck-surface !important;
+        background-color: #c45c3e;
+        border: 1px solid #c45c3e;
+        text-decoration: none;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+
+        &:hover,
+        &:focus-visible {
+            color: $ck-surface !important;
+            background-color: #b05238;
+            border-color: #b05238;
+            text-decoration: none;
+        }
     }
 }
 
