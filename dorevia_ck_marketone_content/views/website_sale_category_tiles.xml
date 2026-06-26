@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Note 07 Lot B — tuiles sous-catégories génériques.
+         S'active sur les pages catégorie SANS contenu éditorial P2B (hors Épicerie).
+         Même markup .ck-rayon-family-tile que le rayon éditorial — cohérence visuelle.
+         t-if="ck_category_tiles" garantit l'absence de bloc vide. -->
+    <template id="website_sale_category_tiles"
+              inherit_id="dorevia_ck_theme.products_ck_shop_compose"
+              name="CK Catégorie — tuiles sous-familles génériques (Note 07 B)">
+        <xpath expr="//t[@t-call='dorevia_ck_theme.s_ck_shop_intro']" position="before">
+
+            <!-- Calcul autonome : ne dépend pas de ck_rayon dans le scope pour éviter
+                 les aléas d'ordre de chargement entre templates frères.
+                 Épicerie est exclue via get_ck_rayon_editorial() == truthy. -->
+            <t t-set="ck_category_tiles"
+               t-value="(category.get_ck_category_family_tiles()
+                         if (category and not category.get_ck_rayon_editorial())
+                         else [])"/>
+
+            <section t-if="ck_category_tiles" class="ck-rayon-families ck-category-tiles">
+                <div class="container">
+                    <div class="row g-4 justify-content-center justify-content-md-start">
+                        <div class="col-4 col-md-2"
+                             t-foreach="ck_category_tiles" t-as="ck_tile">
+                            <a t-att-href="ck_tile['url']" class="ck-rayon-family-tile">
+                                <span class="ck-rayon-family-tile__media">
+                                    <img t-if="ck_tile['image_url']"
+                                         t-att-src="ck_tile['image_url']"
+                                         t-att-alt="ck_tile['label']"
+                                         loading="lazy"/>
+                                    <span t-else=""
+                                          class="ck-rayon-family-tile__placeholder">Aucune image disponible</span>
+                                </span>
+                                <span class="ck-rayon-family-tile__label"
+                                      t-esc="ck_tile['label']"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- D4 — masque le filmstrip catégories quand le header rayon P2B est actif.
+         ck_rayon est positionné avant le filmstrip dans le DOM (oe_structure_1
+         précède o_wsale_container) ; le scope est partagé via t-call QWeb. -->
+    <template id="website_sale_filmstrip_hide_if_rayon"
+              inherit_id="website_sale.filmstrip_categories"
+              name="CK — masque filmstrip si rayon éditorial actif (D4)">
+        <xpath expr="//div[@id='o_wsale_categories_filmstrip']" position="attributes">
+            <attribute name="t-if">not ck_rayon</attribute>
+        </xpath>
+    </template>
+</odoo>

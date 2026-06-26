@@ -13,3 +13,9 @@ class ProductPublicCategory(models.Model):
         self.ensure_one()
         from ..shop_rayon_editorial import get_rayon_editorial
         return get_rayon_editorial(self.env, self)
+
+    def get_ck_category_family_tiles(self):
+        """Tuiles visuelles des enfants directs (Note 07 Lot B), ou []."""
+        self.ensure_one()
+        from ..shop_category_tiles import get_ck_category_family_tiles
+        return get_ck_category_family_tiles(self.env, self)
