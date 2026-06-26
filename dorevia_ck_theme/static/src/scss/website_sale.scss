@@ -625,3 +625,23 @@
         width: 100%;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Note 07 · Lot C — Bloc rebond rayon pauvre
+// ---------------------------------------------------------------------------
+
+.ck-shop-rebound {
+    border-top: 1px solid $ck-border;
+    padding-block: $ck-space-5 $ck-space-6;
+
+    &__message {
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+        max-width: 52ch;
+        margin-bottom: $ck-space-3;
+    }
+
+    &__cta {
+        font-size: $ck-text-sm;
+    }
+}
