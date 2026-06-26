@@ -3,6 +3,10 @@
 
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 
+from odoo.addons.dorevia_ck_marketone_content.shop_filter_groups import (
+    build_ck_shop_filter_tag_groups,
+    ck_shop_filter_active_tag_ids,
+)
 from odoo.addons.dorevia_ck_marketone_content.shop_rebound import (
     CK_REBOUND_CTA_LABEL,
     CK_REBOUND_CTA_URL,
@@ -30,4 +34,19 @@ class CkWebsiteSaleController(WebsiteSale):
         for key in ('categories', 'category_entries'):
             if key in values:
                 result[key] = filter_ck_toolbar_categories(values[key])
+        all_tags = values.get('all_tags')
+        if all_tags is not None:
+            active_tag_ids = ck_shop_filter_active_tag_ids(values, kwargs)
+            grouped_tags = all_tags.filtered('ck_shop_filter_group')
+            result['all_tags'] = grouped_tags
+            result['ck_shop_filter_tag_groups'] = build_ck_shop_filter_tag_groups(
+                grouped_tags,
+                active_tag_ids=active_tag_ids,
+            )
+            result['ck_shop_filter_has_active'] = bool(
+                active_tag_ids
+                or values.get('attrib_set')
+                or values.get('min_price')
+                or values.get('max_price')
+            )
         return result

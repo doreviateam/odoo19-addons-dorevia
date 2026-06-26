@@ -501,6 +501,15 @@
         border-top-color: rgba($ck-border, 0.9) !important;
         padding-top: $ck-space-2;
     }
+
+    &__tag-group-title {
+        font-family: $ck-font-display;
+        font-size: $ck-text-xs;
+        font-weight: 700;
+        color: $ck-text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
 }
 
 @media (max-width: 767.98px) {
@@ -614,6 +623,44 @@
 
     .offcanvas-body {
         padding: $ck-space-3 $ck-space-4;
+    }
+
+    .ck-shop-offcanvas__reset-wrap {
+        padding-top: 0;
+        padding-bottom: $ck-space-3;
+        border-bottom: 1px solid rgba($ck-border, 0.7);
+    }
+
+    .ck-shop-offcanvas__reset-btn {
+        display: inline-flex;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+        border: 1px solid $ck-primary;
+        border-radius: $ck-radius-md;
+        color: $ck-primary;
+        background-color: transparent;
+        font-size: $ck-text-sm;
+        font-weight: 600;
+        padding: 0.45rem 0.75rem;
+        text-decoration: none;
+
+        &:hover:not(.disabled) {
+            background-color: rgba($ck-primary, 0.08);
+            color: $ck-primary;
+        }
+
+        &.disabled {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+    }
+
+    .o_wsale_offcanvas_title.accordion-button > b {
+        font-family: $ck-font-display;
+        font-size: $ck-text-sm;
+        font-weight: 700;
+        letter-spacing: 0.02em;
     }
 }
 

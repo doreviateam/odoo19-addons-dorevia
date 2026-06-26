@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-06-26T20:11:23.416Z",
+  "base": "http://localhost:18079",
+  "db": "dorevia_ck_marketone_01",
+  "results": [
+    {
+      "name": "shop_filtres_drawer_desktop_1280",
+      "url": "/shop",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "hasOrigines": true,
+      "hasProducteurs": true,
+      "hasPreferences": true,
+      "hasReset": true,
+      "hasBienEtre": false,
+      "productCount": 14
+    },
+    {
+      "name": "shop_filtres_drawer_mobile_390",
+      "url": "/shop",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "hasOrigines": true,
+      "hasProducteurs": true,
+      "hasPreferences": true,
+      "hasReset": true,
+      "hasBienEtre": false,
+      "productCount": 14
+    },
+    {
+      "name": "shop_filtres_drawer_filtre_actif_mobile_390",
+      "tagId": "3"
+    },
+    {
+      "name": "shop_filtres_grille_filtree_mobile_390",
+      "productCount": 8
+    }
+  ],
+  "screenshots": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/micro_lot_3b"
+}

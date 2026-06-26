@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Micro-lot 3B — drawer filtres : 3 sections métier + reset en tête. -->
+
+    <template id="ck_shop_offcanvas_filter_tag_group"
+              name="CK Shop — section tags drawer">
+        <t t-set="ck_fg_id" t-value="filter_group['dom_id']"/>
+        <t t-set="ck_fg_label" t-value="filter_group['label']"/>
+        <t t-set="ck_fg_tags" t-value="filter_group['tags']"/>
+        <t t-set="ck_fg_active" t-value="filter_group['active']"/>
+        <t t-set="ck_fg_header_id" t-value="ck_fg_id + '_header'"/>
+        <t t-set="ck_fg_target" t-value="'#' + ck_fg_id"/>
+        <div t-if="ck_fg_tags">
+            <h2 class="accordion-header mb-0" t-att-id="ck_fg_header_id">
+                <button type="button"
+                        data-bs-toggle="collapse"
+                        t-att-class="'o_wsale_offcanvas_title accordion-button border-top rounded-0' + (not ck_fg_active and ' collapsed' or '')"
+                        t-att-data-status="ck_fg_active and 'active' or 'inactive'"
+                        t-att-data-bs-target="ck_fg_target"
+                        t-att-aria-expanded="ck_fg_active and 'True' or 'False'"
+                        t-att-aria-controls="ck_fg_id">
+                    <b t-esc="ck_fg_label"/>
+                </button>
+            </h2>
+            <div t-att-id="ck_fg_id"
+                 t-att-class="'accordion-collapse collapse' + (ck_fg_active and ' show' or '')"
+                 t-att-aria-expanded="ck_fg_active and 'True' or 'False'"
+                 t-att-aria-labelledby="ck_fg_header_id">
+                <div class="accordion-body pt-0">
+                    <div class="list-group list-group-flush">
+                        <t t-call="website_sale.filter_products_tags_list">
+                            <t t-set="all_tags" t-value="ck_fg_tags"/>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="ck_shop_sidebar_filter_tag_group"
+              name="CK Shop — section tags sidebar desktop">
+        <t t-set="ck_fg_label" t-value="filter_group['label']"/>
+        <t t-set="ck_fg_tags" t-value="filter_group['tags']"/>
+        <div t-if="ck_fg_tags" class="ck-shop-sidebar__tag-group mb-3">
+            <h6 class="ck-shop-sidebar__tag-group-title mb-2">
+                <b t-esc="ck_fg_label"/>
+            </h6>
+            <t t-call="website_sale.filter_products_tags_list">
+                <t t-set="all_tags" t-value="ck_fg_tags"/>
+            </t>
+        </div>
+    </template>
+
+    <template id="ck_shop_offcanvas_filter_tag_groups"
+              name="CK Shop — regroupement tags drawer">
+        <t t-foreach="ck_shop_filter_tag_groups" t-as="filter_group">
+            <t t-call="dorevia_ck_marketone_content.ck_shop_offcanvas_filter_tag_group"/>
+        </t>
+    </template>
+
+    <template id="ck_shop_sidebar_filter_tag_groups"
+              name="CK Shop — regroupement tags sidebar">
+        <t t-foreach="ck_shop_filter_tag_groups" t-as="filter_group">
+            <t t-call="dorevia_ck_marketone_content.ck_shop_sidebar_filter_tag_group"/>
+        </t>
+    </template>
+
+    <template id="ck_shop_offcanvas_filter_tags_replace"
+              inherit_id="website_sale.product_attribute_filters_form"
+              name="CK Shop — drawer tags par groupe"
+              priority="40">
+        <xpath expr="//t[@t-if='isMobile']/t[@t-if=&quot;opt_wsale_filter_tags and (opt_wsale_attributes or opt_wsale_attributes_top)&quot;]" position="replace">
+            <t t-if="opt_wsale_filter_tags">
+                <t t-call="dorevia_ck_marketone_content.ck_shop_offcanvas_filter_tag_groups"/>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-else='']/t[@t-if=&quot;opt_wsale_filter_tags and opt_wsale_attributes&quot;]" position="attributes">
+            <attribute name="t-if">opt_wsale_filter_tags</attribute>
+        </xpath>
+    </template>
+
+    <template id="ck_shop_sidebar_filter_tags_replace"
+              inherit_id="website_sale.filter_products_tags"
+              name="CK Shop — sidebar tags par groupe"
+              priority="40">
+        <xpath expr="//div[@t-if='all_tags']" position="replace">
+            <t t-if="ck_shop_filter_tag_groups">
+                <t t-call="dorevia_ck_marketone_content.ck_shop_sidebar_filter_tag_groups"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="ck_shop_offcanvas_reset_top"
+              inherit_id="website_sale.o_wsale_offcanvas"
+              name="CK Shop — réinitialiser filtres (haut drawer)"
+              priority="40">
+        <xpath expr="//div[@t-if=&quot;is_view_active('website_sale.search') and (opt_wsale_attributes or opt_wsale_attributes_top)&quot;]" position="after">
+            <div t-if="opt_wsale_filter_tags"
+                 class="offcanvas-body flex-grow-0 ck-shop-offcanvas__reset-wrap">
+                <a title="Réinitialiser les filtres"
+                   t-attf-class="btn ck-shop-offcanvas__reset-btn {{(not tags and not attrib_values and not isFilteringByPrice) and 'disabled' or ''}}"
+                   t-att-aria-disabled="(not tags and not attrib_values and not isFilteringByPrice) and 'true' or 'false'"
+                   t-att-href="keep(attribute_values=0, tags=0, min_price=0, max_price=0)">
+                    Réinitialiser les filtres
+                </a>
+            </div>
+        </xpath>
+        <xpath expr="//aside[@id='o_wsale_offcanvas']//div[hasclass('border-top')]/a" position="replace"/>
+        <xpath expr="//aside[@id='o_wsale_offcanvas']//div[hasclass('border-top')]" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
+    </template>
+</odoo>

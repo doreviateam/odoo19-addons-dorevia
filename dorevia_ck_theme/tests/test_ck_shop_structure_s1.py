@@ -84,8 +84,10 @@ class TestCkShopStructureS1(HttpCase):
         )
         # Drawer présent dans le DOM
         self.assertIn('o_wsale_offcanvas', html)
-        # Microcopy drawer — libellé CK (products_ck_offcanvas_tags_label)
-        self.assertIn('Origines & préférences', html)
+        # Microcopy drawer — sections filtres CK (Micro-lot 3B)
+        self.assertIn('Origines', html)
+        self.assertIn('Producteurs', html)
+        self.assertIn('Préférences', html)
         if 'o_wsale_price_range_option' in html:
             self.assertIn('Budget</b>', html)
 

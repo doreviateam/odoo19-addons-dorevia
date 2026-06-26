@@ -39,6 +39,12 @@ def ck_is_geographic_origin_name(name):
         return True
     if normalized.startswith('la ') and normalized[3:] in _CK_GEOGRAPHIC_ORIGIN_NAMES:
         return True
+    # Variantes catalogue : « Dominique (Île) », « Dominique (Ile) », etc.
+    base = normalized.split('(')[0].strip()
+    if base in _CK_GEOGRAPHIC_ORIGIN_NAMES:
+        return True
+    if base.startswith('la ') and base[3:] in _CK_GEOGRAPHIC_ORIGIN_NAMES:
+        return True
     return False
 
 

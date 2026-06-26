@@ -1,11 +1,23 @@
 # -*- coding: utf-8 -*-
-from odoo import models
+from odoo import fields, models
 
-_TAG_REFRESH_FIELDS = {'name', 'sequence', 'active', 'visible_to_customers'}
+from odoo.addons.dorevia_ck_marketone_content.shop_filter_groups import (
+    CK_SHOP_FILTER_GROUP_LABELS,
+    CK_SHOP_FILTER_GROUP_ORDER,
+)
+
+_TAG_REFRESH_FIELDS = {'name', 'sequence', 'active', 'visible_to_customers', 'ck_shop_filter_group'}
 
 
 class ProductTag(models.Model):
     _inherit = 'product.tag'
+
+    ck_shop_filter_group = fields.Selection(
+        selection=[(key, CK_SHOP_FILTER_GROUP_LABELS[key]) for key in CK_SHOP_FILTER_GROUP_ORDER],
+        string='Groupe filtres boutique',
+        index=True,
+        help='Regroupe l’étiquette dans le drawer filtres /shop (Origines, Producteurs, Préférences).',
+    )
 
     def _ck_featured_templates_for_tags(self):
         return self.env['product.template'].sudo().search([

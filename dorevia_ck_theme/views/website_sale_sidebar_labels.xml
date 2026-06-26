@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Lot S1 — micro-copy sidebar (affichage uniquement, facettes natives intactes). -->
+    <!-- Micro-lot 3B : libellés section tags unique désactivés (regroupement CK). -->
 
-    <template id="products_ck_sidebar_tags_label"
-              inherit_id="website_sale.filter_products_tags"
-              name="CK Shop — libellé Origines &amp; préférences"
-              priority="35">
-        <xpath expr="//button[hasclass('accordion-button')]//b" position="replace">
-            <b>Origines &amp; préférences</b>
-        </xpath>
-    </template>
+    <record id="products_ck_sidebar_tags_label" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="products_ck_offcanvas_tags_label" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
 
     <template id="products_ck_sidebar_price_label"
               inherit_id="website_sale.filter_products_price"
@@ -17,15 +17,6 @@
               priority="35">
         <xpath expr="//div[@id='o_wsale_price_range_option']//b" position="replace">
             <b>Budget</b>
-        </xpath>
-    </template>
-
-    <template id="products_ck_offcanvas_tags_label"
-              inherit_id="website_sale.product_attribute_filters_form"
-              name="CK Shop — libellé tags offcanvas mobile"
-              priority="35">
-        <xpath expr="//button[@t-attf-data-bs-target='#o_wsale_offcanvas_tags']//b" position="replace">
-            <b>Origines &amp; préférences</b>
         </xpath>
     </template>
 </odoo>
