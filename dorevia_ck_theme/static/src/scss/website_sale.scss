@@ -554,3 +554,74 @@
         gap: $ck-space-2;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Note 07 · Lot A — Boutique pleine largeur + drawer filtres
+// ---------------------------------------------------------------------------
+
+// A2 : grille pleine largeur — sidebar masquée par le template Note 07
+.ck-shop-page {
+    #o_wsale_products_grid {
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    // A3 : bouton "Filtrer" visible sur desktop (écrase d-lg-none Bootstrap)
+    @media (min-width: 992px) {
+        .o_wsale_toggle_filter_btn,
+        [data-bs-toggle="offcanvas"][data-bs-target="#o_wsale_offcanvas"] {
+            display: inline-flex !important;
+        }
+    }
+}
+
+// A4 : drawer offcanvas — fond et dimensions CK
+#o_wsale_offcanvas {
+    background-color: $ck-bg-soft;
+
+    @media (min-width: 992px) {
+        width: 380px;
+    }
+
+    .offcanvas-header {
+        padding: $ck-space-3 $ck-space-4;
+        border-bottom: 1px solid rgba($ck-border, 0.7);
+
+        .offcanvas-title {
+            font-family: $ck-font-display;
+            font-size: $ck-text-sm;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: $ck-text;
+        }
+    }
+
+    .offcanvas-body {
+        padding: $ck-space-3 $ck-space-4;
+    }
+}
+
+// A5 : bouton "Filtrer" intégré dans la barre catalogue CK
+.ck-shop-page #o_wsale_products_header .o_wsale_toggle_filter_btn {
+    background-color: $ck-surface;
+    border: 1px solid $ck-border;
+    border-radius: $ck-radius-md;
+    font-size: $ck-text-sm;
+    color: $ck-text-muted;
+    padding: 0.35rem 0.65rem;
+    gap: 0.4rem;
+
+    &:hover {
+        border-color: $ck-primary;
+        color: $ck-primary;
+    }
+}
+
+// A8 : mobile 390px — offcanvas pleine largeur
+@media (max-width: 391.98px) {
+    #o_wsale_offcanvas {
+        width: 100%;
+    }
+}

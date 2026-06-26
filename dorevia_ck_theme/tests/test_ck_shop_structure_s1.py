@@ -66,8 +66,18 @@ class TestCkShopStructureS1(HttpCase):
         self.assertNotIn('ck-shop-toolbar__count', html)
 
     def test_shop_sidebar_microcopy(self):
+        """Note 07 Lot A : sidebar masquée, drawer filtres actif avec microcopy CK."""
         html = self._shop_html()
-        self.assertIn('Affiner ma sélection', html)
+        # Sidebar masquée — Note 07 ajoute d-none sur aside#products_grid_before
+        self.assertRegex(
+            html,
+            r'<aside\b[^>]*\bd-none\b[^>]*id="products_grid_before"'
+            r'|<aside\b[^>]*id="products_grid_before"[^>]*\bd-none\b',
+            msg='Sidebar #products_grid_before doit avoir d-none (Note 07 Lot A)',
+        )
+        # Drawer présent dans le DOM
+        self.assertIn('o_wsale_offcanvas', html)
+        # Microcopy drawer — libellé CK (products_ck_offcanvas_tags_label)
         self.assertIn('Origines & préférences', html)
         if 'o_wsale_price_range_option' in html:
             self.assertIn('Budget</b>', html)
@@ -79,6 +89,7 @@ class TestCkShopStructureS1(HttpCase):
         self.assertIn('ck-shop-sidebar', html)
         self.assertIn('o_wsale_products_grid', html)
         self.assertIn('ck-product-card--shop', html)
+        self.assertIn('o_wsale_offcanvas', html)
 
     def test_category_epicerie_non_regression(self):
         if not self.category:
