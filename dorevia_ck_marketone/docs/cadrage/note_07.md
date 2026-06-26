@@ -4,7 +4,7 @@ Projet : C-Kréyòl — Évolution des pages catégories boutique
 Date : 26 juin 2026
 Rédigé par : Produit / UX
 Destinataires : Dev, QA, Lead Tech
-Statut : À valider par Dev & QA avant conception détaillée
+Statut : Validé MOA — ticket Dev TICKET_DEV_SHOP_CATEGORY_PAGES_CK_NOTE_07.md
 
     Gouvernance : Ce document ne prescrit pas l'implémentation technique. Il fixe l'expérience cible et les comportements attendus. Le Dev et la QA restent responsables de proposer l'approche la plus robuste.
 

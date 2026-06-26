@@ -5,7 +5,7 @@
 | Date | 26 juin 2026 |
 | Référence | `note_07.md` v1.1 |
 | Destinataires | Produit / UX, Lead Tech |
-| Statut | **À valider** avant conception détaillée et implémentation |
+| Statut | **Validé MOA** — ticket Dev [`TICKET_DEV_SHOP_CATEGORY_PAGES_CK_NOTE_07.md`](TICKET_DEV_SHOP_CATEGORY_PAGES_CK_NOTE_07.md) |
 | Auteur | Dev / QA |
 
 ---
@@ -17,7 +17,7 @@
 | **Faisabilité** | **Oui** — avec arbitrages produit mineurs (bloc rebond, copy/CTA) |
 | **Approche** | Héritages xpath légers sur `website_sale.products` + offcanvas natif Odoo 19 — **pas** de réécriture du template |
 | **Estimation** | **4–5,5 j-h Dev** + **1,5–2 j-h QA** — livrable en **1 sprint court** |
-| **Implémentation** | **Non engagée** — en attente validation de cette approche |
+| **Implémentation** | **Ticket Dev ouvert** — voir `TICKET_DEV_SHOP_CATEGORY_PAGES_CK_NOTE_07.md` |
 
 ---
 
