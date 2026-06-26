@@ -2,12 +2,16 @@
 
 | Champ | Valeur |
 | --- | --- |
-| Date | 26 juin 2026 (rejeu post-upgrade 19.0.1.43.0) |
+| Date | 26 juin 2026 — **clôture Axe C** |
 | Base | `dorevia_ck_marketone_01` · `http://localhost:18079` |
-| Exécutant | Dev / QA (automatisé + HTTP/SQL) |
+| Exécutant | Dev / QA (automatisé + HTTP/SQL + recette visuelle) |
 | Modules | `dorevia_ck_theme` **19.0.1.59.0** · `dorevia_ck_marketone_content` **19.0.1.44.0** |
 | Référence checklist | [`RECETTE_QA_CALE_PRODUIT_V1_POST_CORRECTION.md`](RECETTE_QA_CALE_PRODUIT_V1_POST_CORRECTION.md) |
-| Résultat global | **GO avec réserves** — recette visuelle mobile 1280/390 px restante |
+| Résultat global | **GO final Axe C** — Rail 2 Note 07 peut s'ouvrir |
+
+**Preuves recette visuelle** (26/06/2026) :
+- Rapport : `/private/tmp/ck_axe_c_visual_recipe_20260626/axe_c_visual_recipe_report.json` (`allPass: true`)
+- Captures : `/private/tmp/ck_axe_c_visual_recipe_20260626/` (A2/A3 · G1–G6)
 
 ---
 
@@ -16,10 +20,10 @@
 | # | Action | Résultat |
 | --- | --- | --- |
 | P1 | `-u dorevia_ck_theme` + redémarrage | ✅ `19.0.1.59.0` |
-| P2 | `-u dorevia_ck_marketone_content` + redémarrage | ✅ `19.0.1.44.0` (migration MOA-2 exécutée) |
-| P3 | Corrections BO MOA Axe C | ⚠️ **Quasi complet** — F au vert · QA visuelle restante |
+| P2 | `-u dorevia_ck_marketone_content` + redémarrage | ✅ `19.0.1.44.0` |
+| P3 | Corrections BO MOA Axe C | ✅ **Complet** (hors suivi MOA-1 XML Coups de cœur) |
 
-**Tests auto post-upgrade** :
+**Tests auto** :
 - `dorevia_ck_marketone_home_section3_featured_field` — **5/5 OK**
 - `dorevia_ck_axe_c_bo_sync` — **2/2 OK**
 - `dorevia_ck_moa2_bo_sync` — **2/2 OK**
@@ -30,13 +34,13 @@
 
 | Bloc | Résultat | Commentaire |
 | --- | --- | --- |
-| A — Livraisons Dev 26/06 | ✅ | Libellé BO + logo SVG (A3 mobile à confirmer visuellement) |
-| B — Coups de cœur | ✅ | 0 produit en catégorie · menu/filmstrip OK · upgrade `-u` n'a pas re-rattaché Panama |
-| C — Navigation Soin | ✅ | Menu **Soin & Bien-être** · URL HTTP 200 |
-| D — Traductions fr_FR | ✅ | Migration 43.0 — 9 catégories · Galettes · Origine/Guadeloupe |
-| E — UOM / prix réf. | ✅ | Migration 43.0 — g/kg sur 4 masse · Panama `show_ref=False` |
-| F — MOA-2 (Jus / Pâte) | ✅ | Migration 44.0 — l/l · kg/kg · `show_ref=true` |
-| G — Cards catalogue | ⚠️ | Smoke HTTP OK (`/shop`, rayons Boissons/Artisanat/Soin) · recette visuelle 1280/390 px restante |
+| A — Livraisons Dev 26/06 | ✅ | Libellé BO · logo SVG 1280 + 390 px |
+| B — Coups de cœur | ✅ | 0 produit en catégorie · menu/filmstrip OK |
+| C — Navigation Soin | ✅ | **Soin & Bien-être** · URL HTTP 200 |
+| D — Traductions fr_FR | ✅ | Migration 43.0 |
+| E — UOM / prix réf. | ✅ | Migration 43.0 |
+| F — MOA-2 (Jus / Pâte) | ✅ | Migration 44.0 — l/l · kg/kg |
+| G — Cards catalogue | ✅ | Recette visuelle 1280/390 px — G1–G6 OK |
 
 ---
 
@@ -46,88 +50,72 @@
 
 | # | Contrôle | Résultat |
 | --- | --- | --- |
-| A1 | Libellé **Afficher sur l'accueil** | ✅ `ir_model_fields` + test auto |
-| A2 | Logo SVG desktop | ✅ `ck-logo.svg` (×2) sur `/` |
-| A3 | Logo mobile | ☐ Recette visuelle 390 px à confirmer MOA/QA |
+| A1 | Libellé **Afficher sur l'accueil** | ✅ test auto + BO |
+| A2 | Logo SVG desktop 1280 px | ✅ `ck-logo.svg` · `aria-label="C-Kréyòl — Accueil"` |
+| A3 | Logo SVG mobile 390 px | ✅ pas d'overflow · même source SVG |
 
 ### B — Coups de cœur ✅
 
 | # | Contrôle | Résultat | Preuve |
 | --- | --- | --- | --- |
-| B1 | 0 produit avec catégorie Coups de cœur | ✅ | SQL `produits_coups_coeur = 0` (post `-u`) |
-| B2 | Pas d'entrée menu Coups de cœur | ✅ | `website_menu` : 0 ligne |
-| B3 | Pas de pill filmstrip `/shop` | ✅ | HTML `/shop` : aucune occurrence « Coups de cœur » |
-| B4 | Home « Nos coups de cœur » | ✅ | Section présente sur `/` |
-| B5 | Pilotage `ck_is_featured` | ✅ | Tests auto |
-| B6 | Catégorie en base (MOA-1) | ☐ | Catégorie toujours en DB · **0 produit** rattaché — arbitrage MOA-1 ouvert |
+| B1 | 0 produit avec catégorie Coups de cœur | ✅ | SQL + recette visuelle |
+| B2 | Pas d'entrée menu Coups de cœur | ✅ | header 1280/390 |
+| B3 | Pas de pill filmstrip `/shop` | ✅ | recette visuelle `/shop` |
+| B4 | Home « Nos coups de cœur » | ✅ | section présente |
+| B5 | Pilotage `ck_is_featured` | ✅ | tests auto |
+| B6 | Catégorie en base (MOA-1) | ☐ suivi | Catégorie en DB · 0 produit — **ticket XML séparé, non bloquant clôture** |
 
 ### C — Navigation ✅
 
 | # | Contrôle | Résultat |
 | --- | --- | --- |
-| C1 | Libellé Soin & Bien-être | ✅ Menu `Soin & Bien-être` |
-| C2 | URL | ✅ `/shop/category/soin-bien-etre-2` · HTTP 200 |
+| C1 | Libellé Soin & Bien-être | ✅ |
+| C2 | URL | ✅ HTTP 200 |
 
 ### D — Traductions fr_FR ✅
 
-| # | Contrôle | Résultat | Preuve |
-| --- | --- | --- | --- |
-| D1 | Attribut Origine | ✅ | `origine_fr = Origine` |
-| D2 | Valeur Guadeloupe | ✅ | `guadeloupe_fr = Guadeloupe` |
-| D3 | Galettes de manioc | ✅ | `name->>'fr_FR' = Galettes de manioc` |
-| D4 | Sous-catégories Épicerie (+ Soin) | ✅ | **9/9** catégories cibles sans `fr_FR` NULL |
+Migration 43.0 — 9 catégories · Galettes · Origine/Guadeloupe.
 
 ### E — UOM et prix de référence ✅
 
-| Produit | UOM nette | UOM réf. | `show_ref` | Résultat |
-| --- | --- | --- | --- | --- |
-| Confiture de goyave | g | kg | true | ✅ |
-| Manio Crackers | g | kg | true | ✅ |
-| Galettes de manioc | g | kg | true | ✅ |
-| Savon vétiver | g | kg | true | ✅ |
-| Chapeau Panama | *(vide)* | *(vide)* | **false** | ✅ |
+Migration 43.0 — g/kg (4 masse) · Panama sans prix réf.
 
 ### F — MOA-2 ✅
 
-| Produit | UOM nette | UOM réf. | `show_ref` | Résultat |
-| --- | --- | --- | --- | --- |
-| Jus Mont-Pelé | **l** | **l** | true | ✅ migration 44.0 |
-| Pâte de manioc | **kg** | **kg** | true | ✅ migration 44.0 |
+Migration 44.0 — Jus Mont-Pelé **l/l** · Pâte de manioc **kg/kg**.
 
-### G — Cards catalogue ⚠️
+### G — Cards catalogue ✅
 
 | # | Contrôle | Résultat |
 | --- | --- | --- |
-| G1 | Grille `/shop` | ✅ HTTP 200 · smoke OK |
-| G2 | Rayon Boissons | ✅ HTTP 200 · Jus Mont-Pelé visible |
-| G3 | Rayon Soin | ✅ HTTP 200 |
-| G4 | Rayon Artisanat | ✅ HTTP 200 |
-| G5–G6 | Fiche produit · panier | ☐ Recette visuelle / parcours MOA |
+| G1 | Grille `/shop` 1280/390 | ✅ pas d'UOM absurdes · pas de pill Coups de cœur |
+| G2 | Rayon Boissons | ✅ Jus Mont-Pelé · badge OK |
+| G3 | Rayon Soin & Bien-être | ✅ produit/badge attendus |
+| G4 | Rayon Artisanat | ✅ badge OK |
+| G5 | Fiche produit témoin | ✅ |
+| G6 | Panier | ✅ badge `0 → 1` |
 
 ---
 
-## 3. Écarts bloquants clôture Axe C
+## 3. Écarts résiduels (non bloquants clôture)
 
-| Priorité | Écart | Responsable |
+| Suivi | Écart | Responsable |
 | --- | --- | --- |
-| ~~P1~~ | ~~Coups de cœur (B1/B3)~~ | ✅ Corrigé |
-| ~~P2~~ | ~~Traductions fr_FR (D)~~ | ✅ Migration 43.0 |
-| ~~P2~~ | ~~UOM périmètre E~~ | ✅ Migration 43.0 |
-| ~~P1~~ | ~~Jus Mont-Pelé · Pâte de manioc (F)~~ | ✅ Migration 44.0 |
-| **P1** | Recette visuelle 1280/390 px (A3, G) | QA / MOA |
-| P3 | Catégorie Coups de cœur en base (B6 / MOA-1) | MOA — ticket XML séparé |
+| MOA-1 | Catégorie « Coups de cœur » en DB (B6) | MOA — ticket XML `noupdate` / retrait |
+| — | Action 6 origines sur 6 produits | MOA — hors périmètre migrations 43/44 |
 
 ---
 
 ## 4. Décision
 
 ```text
-☐ Cale produit V1 clôturée — Rail 2 Note 07 peut s'ouvrir
-☑ Corrections BO complémentaires requises avant clôture (QA visuelle + MOA-1 Coups de cœur XML)
+☑ Cale produit V1 clôturée — Rail 2 Note 07 peut s'ouvrir
+☐ Corrections BO complémentaires bloquantes
 ```
 
-**Verdict** : **GO avec réserves** — upgrade **19.0.1.59.0 / 19.0.1.44.0** validé · blocs **A–F** au vert (hors A3/G visuel).  
-**NO GO clôture Axe C** tant que la recette visuelle **1280/390 px** n'est pas au vert.
+**Verdict** : **GO final Axe C** — sandbox `dorevia_ck_marketone_01` validée post-upgrade **19.0.1.59.0 / 19.0.1.44.0** + recette visuelle **1280/390 px**.
+
+**Rail 2** : **GO démarrage** lot Note 07 (pages catégories pleine largeur) — cf. [`note_07.md`](../../cadrage/note_07.md) et ticket Dev.
 
 ---
 
@@ -135,10 +123,10 @@
 
 | Ordre | Qui | Action |
 | --- | --- | --- |
-| 1 | QA | Recette visuelle **1280 px** + **390 px** (logo, filmstrip, cards G) |
-| 2 | MOA | Décision MOA-1 + ticket XML « Coups de cœur » (`noupdate` / retrait) |
-| 3 | Lead | Clôture Axe C → GO démarrage Rail 2 Note 07 |
+| 1 | Lead / Dev | Ouvrir Rail 2 — ticket Note 07 |
+| 2 | MOA | Ticket XML Coups de cœur (MOA-1) en parallèle si souhaité |
+| 3 | QA | Baseline recette Note 07 sur slugs cibles |
 
 ---
 
-*Verdict post-upgrade — 26 juin 2026 — sandbox `dorevia_ck_marketone_01`*
+*Verdict final — 26 juin 2026 — sandbox `dorevia_ck_marketone_01`*
