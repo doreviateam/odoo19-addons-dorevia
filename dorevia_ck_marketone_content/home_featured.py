@@ -574,22 +574,9 @@ def _get_featured_card_metadata_line(env, website, variant):
     return _join_featured_metadata_parts(origin, ' · '.join(transversal), qty_part, ref_part)
 
 
-# Ticket Dev — P2A densification card boutique. L'origine est désormais
-# affichée à part (eyebrow au-dessus du titre, cf. products_item_ck_card_metadata)
-# plutôt que noyée dans la ligne secondaire — même donnée réelle déjà calculée
-# par _get_featured_origin_and_tag_parts, pas de nouvelle source d'information.
 def _get_shop_card_secondary_line(env, website, variant):
-    """Ligne secondaire boutique sous le titre : tags transversaux · format · prix comparatif."""
-    template = variant.product_tmpl_id
-    _origin, transversal = _get_featured_origin_and_tag_parts(template, variant)
-    qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
-    return _join_featured_metadata_parts(' · '.join(transversal), qty_part, ref_part)
-
-
-def _get_shop_card_origin_label(template, variant=None):
-    """Origine seule — eyebrow card boutique (même donnée que la ligne meta home)."""
-    origin, _transversal = _get_featured_origin_and_tag_parts(template, variant)
-    return origin
+    """Ligne meta boutique — parité canon Home (origine · tags · format · prix comparatif)."""
+    return _get_featured_card_metadata_line(env, website, variant)
 
 
 _SAFE_CSS_COLOR_RE = re.compile(

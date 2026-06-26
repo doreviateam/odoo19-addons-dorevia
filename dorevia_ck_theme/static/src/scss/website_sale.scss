@@ -225,7 +225,7 @@
     --o-wsale-card-btn-submit-aspect-ratio: auto;
     --o-wsale-card-btn-submit-flex-grow: 0;
     --o-wsale-card-btn-submit-margin: 0;
-    --o-wsale-card-btn-submit-padding-x: 14px;
+    --o-wsale-card-btn-submit-padding-x: 10px;
     --o-wsale-card-btn-aspect-ratio: auto;
     --o-wsale-card-btns-inset: auto;
     --o-wsale-card-btns-width: auto;
@@ -296,6 +296,8 @@
         flex: 1 1 auto;
         min-height: 0;
         grid-template: none !important;
+        // Compacité canon Home — neutralise le padding natif Odoo (évite double écart avec body).
+        padding: 0 !important;
     }
 
     .o_wsale_product_info_attributes_wrapper {
@@ -303,17 +305,23 @@
         min-height: 0;
     }
 
-    // Ticket Dev — P2A densification : eyebrow origine au-dessus du titre
-    // (donnée déjà affichée avant, juste sortie de la ligne meta — pas de
-    // "marque" inventée, cf. get_ck_shop_card_origin_label).
-    .ck-product-card__origin {
-        display: block;
-        font-size: 11px;
-        font-weight: $ck-font-weight-semibold;
-        color: $ck-primary-text;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: 2px;
+    .ck-product-card__body,
+    .product-card-body {
+        padding: 8px 12px 4px;
+    }
+
+    .ck-product-card__title,
+    .product-card-title,
+    .o_wsale_products_item_title {
+        font-size: 13px;
+        line-height: 1.25;
+    }
+
+    .ck-product-card__meta,
+    .product-card-labels {
+        margin-top: 2px;
+        font-size: 10px;
+        line-height: 1.3;
     }
 
     .ck-product-card__body {
@@ -336,7 +344,16 @@
     .o_wsale_product_sub {
         position: static;
         margin-top: auto;
+        gap: 6px;
+        padding: 8px 12px 10px;
         border-top: 1px solid $ck-border !important;
+    }
+
+    .ck-product-card__price-value,
+    .product_price .price,
+    .product_price .mb-0 {
+        font-size: $ck-text-sm;
+        line-height: 1.2;
     }
 
     .ck-product-card__actions,
@@ -365,8 +382,8 @@
 
     .card-cart-cta,
     .o_wsale_product_btn_primary.card-cart-cta {
-        min-height: 44px;
-        padding: 8px 14px !important;
+        padding: 6px 10px !important;
+        font-size: 11px;
         display: inline-flex !important;
         align-items: center;
         justify-content: center;
@@ -656,13 +673,7 @@
 // Note 07 · Lot D — Cards sans ligne vide + responsive grille 4 / 2 / 1
 // ---------------------------------------------------------------------------
 
-// D1 : le padding natif de .o_wsale_product_information (8px haut/bas) crée
-//      un blanc visible sous le pied des cartes CK (double avec foot padding).
-//      Note : .o_wsale_product_info_attributes_wrapper a display:contents →
-//      aucun impact layout, pas de min-height à corriger.
-.ck-shop-page form.ck-product-card--shop .o_wsale_product_information {
-    padding-block-end: 0;
-}
+// D1 : padding Odoo neutralisé sur --shop (cf. bloc form.ck-product-card--shop).
 
 // Tablette 576–991 px — 2 colonnes (g-col-md-3 natif = 4 cols avec ppr=4)
 @media (min-width: 576px) and (max-width: 991.98px) {
@@ -729,6 +740,9 @@
         .card-cart-cta,
         .o_wsale_product_btn_primary.card-cart-cta {
             width: 100% !important;
+            min-height: 44px;
+            padding: 8px 14px !important;
+            font-size: 12px;
             white-space: normal;
         }
     }
