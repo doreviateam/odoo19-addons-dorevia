@@ -53,9 +53,12 @@ class ProductTemplate(models.Model):
         help='Calcule et affiche le prix de référence sur la card home lorsque la quantité nette est renseignée.',
     )
     ck_is_featured = fields.Boolean(
-        string='En vedette',
+        string='Afficher sur l\'accueil',
         default=False,
-        help='Affiche ce produit dans la section Nos coups de cœur de la page d\'accueil.',
+        help=(
+            'Affiche ce produit dans les sélections de la page d\'accueil C-Kréyòl '
+            'lorsque les règles de mise en avant le permettent.'
+        ),
     )
 
     def get_ck_shop_card_metadata_line(self, variant=None):
@@ -140,7 +143,7 @@ class ProductTemplate(models.Model):
             bootstrap_home_featured_products(self.env)
 
     def _ck_touches_featured(self):
-        """Rebuild home si le produit est (ou était) marqué En vedette."""
+        """Rebuild home si le produit est (ou était) marqué Afficher sur l'accueil."""
         return any(self.mapped('ck_is_featured'))
 
     def write(self, vals):

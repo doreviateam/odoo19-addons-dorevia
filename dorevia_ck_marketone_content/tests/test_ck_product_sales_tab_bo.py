@@ -82,7 +82,11 @@ class TestCkProductSalesTabBo(TransactionCase):
         self.assertIn('name="ck_is_featured"', xml)
         tag_pos = xml.index('name="product_tag_ids"')
         featured_pos = xml.index('name="ck_is_featured"')
-        self.assertLess(tag_pos, featured_pos, 'En vedette doit suivre Étiquettes produit')
+        self.assertLess(
+            tag_pos,
+            featured_pos,
+            'Afficher sur l\'accueil doit suivre Étiquettes produit',
+        )
 
     def test_card_reference_fields(self):
         xml = self._block_xml('ck_card_reference_price')

@@ -857,11 +857,13 @@ def _producer_products_section_html(env):
 
     cards = []
     for product in products:
+        url = escape(product.website_url or '/shop')
+        name = escape(product.name or '')
         cards.append(
             f'<div class="col-md-6 col-lg-3">'
             f'<div class="h-100 p-3 border rounded o_colored_level">'
-            f'<h3 class="h6-fs mb-2"><a href="{product.website_url}">{product.name}</a></h3>'
-            f'<a href="{product.website_url}" class="btn btn-link px-0">Voir le produit →</a>'
+            f'<h3 class="h6-fs mb-2"><a href="{url}">{name}</a></h3>'
+            f'<a href="{url}" class="btn btn-link px-0">Voir le produit →</a>'
             f'</div></div>'
         )
     grid = '\n'.join(cards)

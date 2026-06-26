@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Tests ticket En vedette — ck_is_featured (T5, T7 multi-langues, T8 migration)."""
+"""Tests ticket Afficher sur l'accueil — ck_is_featured (T5, T7 multi-langues, T8 migration)."""
 
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -67,6 +67,12 @@ class TestCkHomeSection3FeaturedField(TransactionCase):
         if lang not in website.language_ids:
             website.sudo().write({'language_ids': [(4, lang.id)]})
         return lang
+
+    def test_ck_is_featured_field_label_and_help(self):
+        """Action 10 Axe C — libellé BO durable (modèle Python, pas traduction manuelle)."""
+        field = self.env['product.template']._fields['ck_is_featured']
+        self.assertEqual(field.string, 'Afficher sur l\'accueil')
+        self.assertIn('page d\'accueil C-Kréyòl', field.help or '')
 
     def test_featured_without_image_is_excluded(self):
         product = self._make_product(
