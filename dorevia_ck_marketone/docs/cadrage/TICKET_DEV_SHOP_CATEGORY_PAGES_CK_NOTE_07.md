@@ -11,8 +11,9 @@
 | Hors périmètre | Fiche produit · checkout · BO · nouveaux modèles métier · refonte moteur filtres Odoo · header/nav |
 | Modules | `dorevia_ck_theme` (principal) · `dorevia_ck_marketone_content` (rebond + tuiles génériques) |
 | Estimation | **4–5,5 j-h Dev** + **1,5–2 j-h QA** |
-| Priorité | Moyenne |
-| Statut | **À implémenter** |
+| Priorité | Moyenne — **backlog lot suivant** |
+| Statut | **Prêt Dev · GO backlog · NO GO démarrage immédiat** |
+| Séquencement | **Après clôture Axe C post-correction** (voir §1.1) |
 
 ---
 
@@ -29,7 +30,24 @@ Après : toolbar compacte + grille pleine largeur + filtres en drawer + rebond s
 
 **Validation MOA** : approche technique de `note_07_reponse.md` acceptée — héritages xpath sur `website_sale.products`, offcanvas natif `#o_wsale_offcanvas`, pas de réécriture du template Odoo.
 
-**Prérequis recommandé** : catalogue BO stabilisé (Axe C post-correction) avant recette finale — non bloquant pour le Dev si les slugs seed ci-dessous sont disponibles.
+### 1.1 Séquencement et réserve de pilotage (MOA)
+
+> **Ce ticket est prêt, mais il ne doit pas détourner l'objectif immédiat : finir Axe C / cale produit, puis recetter post-correction.**
+
+| Arbitrage MOA | Décision |
+| --- | --- |
+| Ticket document | **GO** |
+| Backlog Dev | **GO** — lot suivant préparé, transmissible au Dev |
+| Démarrage immédiat | **NO GO** tant que Axe C n'est pas recetté |
+
+**Ordre impératif avant Lot A Note 07 :**
+
+1. Mise à jour instance (`dorevia_ck_theme` + `dorevia_ck_marketone_content` livraisons 26/06).
+2. Corrections BO Axe C (MOA).
+3. Recette post-correction cale produit (`RECETTE_QA_CALE_PRODUIT_V1_POST_CORRECTION`).
+4. Production de la recette QA finale catalogue.
+
+**Prérequis bloquant recette Note 07** : catalogue BO stabilisé (Axe C post-correction). Le Dev peut préparer le code en parallèle seulement si explicitement dépriorisé par le lead — par défaut **attendre le vert Axe C**.
 
 ---
 
@@ -56,7 +74,7 @@ Sur toutes les pages catalogue CK (`.ck-shop-page`) :
 | D2 | Message rebond (V1) | **« Cette sélection s'enrichit progressivement. Découvrez d'autres produits créoles sur toute la boutique. »** |
 | D3 | Tri modifié vs rebond | Le rebond **ne disparaît pas** si seul le tri change (aligné checklist QA §4.2) |
 | D4 | Filmstrip sur Épicerie | **Masquer** `#o_wsale_categories_filmstrip` sur les pages catégorie où le header P2B (`.ck-rayon-families`) est actif — éviter double navigation |
-| D5 | Seuil rebond | `< 3` produits affichés · catégorie définie · pas de recherche · pas de filtre actif |
+| D5 | Seuil rebond | Catégorie définie · **`products_count > 0`** · **`products_count < 3`** · pas de recherche · pas de filtre actif (voir condition complète §Lot C) |
 
 ---
 
@@ -101,7 +119,7 @@ Sur toutes les pages catalogue CK (`.ck-shop-page`) :
 **Fichiers pressentis** :
 
 - `shop_category_tiles.py` *(nouveau)* ou extension `shop_rayon_editorial.py`
-- `models/product_public_category.py` — méthode publique template
+- `models/product_public_category.py` — **méthode/helper template uniquement** (ex. `get_ck_category_family_tiles`) · **sans ajout de champ ni modification structurelle du modèle**
 - `views/website_sale_category_tiles.xml` *(nouveau)*
 - `views/website_sale_rayon_editorial.xml` — masquage filmstrip si besoin xpath séparé
 
@@ -115,9 +133,19 @@ Sur toutes les pages catalogue CK (`.ck-shop-page`) :
 | --- | --- | --- |
 | C1 | Helper filtre actif | `ck_shop_has_active_filters(request, post)` — attrib, tags, min/max price |
 | C2 | Variables shop | Extension `WebsiteSale._get_additional_shop_values()` → `ck_show_rebound`, `ck_rebound_message`, `ck_rebound_cta_url`, `ck_rebound_cta_label` |
-| C3 | Condition affichage | `category and not search and not filter_active and products_count < 3` |
+| C3 | Condition affichage | Voir bloc ci-dessous — **jamais** si `products_count == 0` (message natif Odoo catégorie vide) |
 | C4 | Template | Section sous `#o_wsale_products_grid` · classes `.ck-shop-rebound` · pas de conflit message Odoo catégorie vide |
 | C5 | Copy | Textes D1/D2 — constantes Python ou snippet statique |
+
+**Condition rebond (verrouillée D5 / C3) :**
+
+```text
+category définie
+AND products_count > 0
+AND products_count < 3
+AND pas de recherche active
+AND pas de filtre actif
+```
 
 **Fichiers pressentis** :
 
@@ -223,6 +251,7 @@ Reprendre checklist intégrale **note_07.md §4** avec slugs §5 ci-dessus.
 | Double nav Épicerie | Décision D4 — masquer filmstrip |
 | Tests S1 rouges | Mise à jour attendue dès Lot A |
 | Rebond affiché après filtre | Tests unitaires `ck_shop_has_active_filters` |
+| Rebond sur catégorie vide (`products_count == 0`) | Condition D5/C3 — laisser le message natif Odoo |
 | Multi-site | Vérifier qu'aucun autre site n'utilise `dorevia_ck_theme` sans intention CK |
 
 ---
