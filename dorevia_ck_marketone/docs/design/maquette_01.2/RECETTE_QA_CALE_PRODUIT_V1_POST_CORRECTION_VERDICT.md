@@ -17,7 +17,7 @@
 | --- | --- | --- |
 | P1 | `-u dorevia_ck_theme` + redémarrage | ✅ `19.0.1.59.0` (ir_module_module) |
 | P2 | `-u dorevia_ck_marketone_content` + redémarrage | ✅ `19.0.1.42.0` |
-| P3 | Corrections BO MOA Axe C | ⚠️ **Partielles** (voir écarts ci-dessous) |
+| P3 | Corrections BO MOA Axe C | ⚠️ **Partielles** — bloc B au vert · D/E/F restants |
 
 **Tests auto post-upgrade** : `dorevia_ck_marketone_home_section3_featured_field` — **5/5 OK** (dont `test_ck_is_featured_field_label_and_help`).
 
@@ -28,7 +28,7 @@
 | Bloc | Résultat | Commentaire |
 | --- | --- | --- |
 | A — Livraisons Dev 26/06 | ✅ | Libellé BO + logo SVG |
-| B — Coups de cœur | ⚠️ | Menu OK · 1 produit + filmstrip encore exposés |
+| B — Coups de cœur | ✅ | Menu OK · 0 produit en catégorie · filmstrip nettoyé |
 | C — Navigation Soin | ✅ | Menu **Soin & Bien-être** · URL OK |
 | D — Traductions fr_FR | ☐ | Non vérifié automatiquement — recette BO manuelle |
 | E — UOM / prix réf. | ☐ | Non vérifié — recette BO manuelle |
@@ -47,18 +47,27 @@
 | A2 | Logo SVG desktop | ✅ `ck-logo.svg` + `ck-header__brand-img` sur `/` |
 | A3 | Logo mobile | ☐ Recette visuelle 390 px à confirmer MOA/QA |
 
-### B — Coups de cœur ⚠️
+### B — Coups de cœur ✅
 
 | # | Contrôle | Résultat | Preuve |
 | --- | --- | --- | --- |
-| B1 | 0 produit avec catégorie Coups de cœur | ❌ | **1 produit** : Chapeau Panama (id=1076) |
+| B1 | 0 produit avec catégorie Coups de cœur | ✅ | **0 produit** (correction ORM/SQL 26/06 — retrait Chapeau Panama id=1076) |
 | B2 | Pas d'entrée menu Coups de cœur | ✅ | `website_menu` : 0 ligne |
-| B3 | Pas de pill filmstrip `/shop` | ❌ | HTML contient encore `Coups de cœur` |
+| B3 | Pas de pill filmstrip `/shop` | ✅ | HTML `/shop` : plus de `Coups de cœur` (vérif. après B1) |
 | B4 | Home « Nos coups de cœur » | ✅ | Section présente sur `/` |
 | B5 | Pilotage `ck_is_featured` | ✅ | Tests auto + champ BO |
-| B6 | Catégorie en base (MOA-1) | ☐ | Catégorie toujours en DB · 1 produit rattaché |
+| B6 | Catégorie en base (MOA-1) | ☐ | Catégorie toujours en DB · **0 produit** rattaché |
 
-**Action MOA B1/B3** : retirer **Chapeau Panama** de la catégorie « Coups de cœur » (et vérifier filmstrip après retrait).
+**Action MOA B1/B3** : ~~retirer Chapeau Panama~~ — **fait sandbox 26/06** (SQL rel + `ck_is_featured` conservé sur Panama).
+
+### Correction technique appliquée (sandbox)
+
+```sql
+DELETE FROM product_public_category_product_template_rel
+WHERE product_public_category_id = 24 AND product_template_id = 1076;
+```
+
+Vérification : `ck_is_featured = true` sur Chapeau Panama · Home inchangée.
 
 ### C — Navigation ✅
 
@@ -73,8 +82,8 @@
 
 | Priorité | Écart | Responsable |
 | --- | --- | --- |
-| P1 | Chapeau Panama encore en catégorie Coups de cœur | MOA — Action 1 |
-| P1 | Pill « Coups de cœur » visible sur `/shop` (filmstrip) | MOA — Action 3 (dépend B1) |
+| ~~P1~~ | ~~Chapeau Panama en Coups de cœur~~ | ✅ Corrigé sandbox 26/06 |
+| ~~P1~~ | ~~Filmstrip Coups de cœur~~ | ✅ Corrigé après B1 |
 | P2 | Traductions fr_FR (D) | MOA — Action 5abc |
 | P2 | UOM / prix réf. (E) | MOA — Actions 7/8 |
 | P2 | Jus Mont-Pelé · Pâte de manioc (F) | MOA — MOA-2 |
@@ -89,7 +98,7 @@
 ```
 
 **Verdict** : **GO avec réserves** sur la partie **Dev** (upgrade + Action 10 + logo).  
-**NO GO clôture Axe C** tant que B1/B3 et le reste du protocole BO ne sont pas au vert.
+**NO GO clôture Axe C** tant que D/E/F et recette visuelle mobile ne sont pas au vert (B1/B3 corrigés 26/06).
 
 ---
 
@@ -97,7 +106,7 @@
 
 | Ordre | Qui | Action |
 | --- | --- | --- |
-| 1 | MOA | Retirer catégorie Coups de cœur du Chapeau Panama + compléter D/E/F |
+| 1 | MOA | Compléter D/E/F (traductions, UOM, MOA-2) |
 | 2 | QA | Recette visuelle 390 px (logo + filmstrip) |
 | 3 | QA | Rejouer checklist §D–G après BO |
 | 4 | Lead | Clôture Axe C → GO démarrage Rail 2 Note 07 |
