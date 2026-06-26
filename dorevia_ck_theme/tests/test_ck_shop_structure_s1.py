@@ -63,6 +63,13 @@ class TestCkShopStructureS1(HttpCase):
             r'\d+\s+produit',
             msg='Compteur dynamique attendu dans l’intro',
         )
+        note = re.search(
+            r'class="[^"]*ck-shop-intro__note[^"]*"[\s\S]*?</p>',
+            intro_html,
+        )
+        self.assertTrue(note, 'Note compteur intro introuvable')
+        self.assertIn('en rayon', note.group(0))
+        self.assertNotIn('sélectionnés', note.group(0))
         self.assertNotIn('ck-shop-toolbar__count', html)
 
     def test_shop_sidebar_microcopy(self):

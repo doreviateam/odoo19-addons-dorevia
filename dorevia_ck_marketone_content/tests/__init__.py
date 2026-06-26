@@ -53,3 +53,4 @@ from . import test_ck_footer_legal_links
 from . import test_ck_shop_category_tiles
 from . import test_ck_shop_rebound
 from . import test_ck_shop_sparse_grid
+from . import test_ck_shop_toolbar

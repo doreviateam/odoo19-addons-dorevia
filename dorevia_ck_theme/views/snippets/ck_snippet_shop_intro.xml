@@ -12,8 +12,8 @@
                 </p>
                 <p t-if="search_count" class="ck-shop-intro__note mb-0">
                     <t t-esc="search_count"/>
-                    <t t-if="search_count &gt; 1"> produits sélectionnés</t>
-                    <t t-else=""> produit sélectionné</t>
+                    <t t-if="search_count &gt; 1"> produits en rayon</t>
+                    <t t-else=""> produit en rayon</t>
                 </p>
             </div>
         </section>

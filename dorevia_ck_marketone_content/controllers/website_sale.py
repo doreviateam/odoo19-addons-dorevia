@@ -10,6 +10,9 @@ from odoo.addons.dorevia_ck_marketone_content.shop_rebound import (
     ck_should_show_rebound,
     ck_sparse_grid_class,
 )
+from odoo.addons.dorevia_ck_marketone_content.shop_toolbar import (
+    filter_ck_toolbar_categories,
+)
 
 
 class CkWebsiteSaleController(WebsiteSale):
@@ -24,4 +27,7 @@ class CkWebsiteSaleController(WebsiteSale):
                 'ck_rebound_cta_url': CK_REBOUND_CTA_URL,
                 'ck_rebound_cta_label': CK_REBOUND_CTA_LABEL,
             })
+        for key in ('categories', 'category_entries'):
+            if key in values:
+                result[key] = filter_ck_toolbar_categories(values[key])
         return result

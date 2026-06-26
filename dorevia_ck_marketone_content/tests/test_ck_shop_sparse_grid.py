@@ -14,16 +14,23 @@ class TestCkShopSparseGridHttp(HttpCase):
 
     def test_sparse_grid_class_on_two_product_category(self):
         cat = self.env['product.public.category'].sudo().create({
-            'name': 'CK Sparse Grid QA 2',
+            'name': 'CK Sparse Grid QA ephemeral',
         })
+        products = self.env['product.template']
         for idx in range(2):
-            self.env['product.template'].sudo().create({
+            products |= self.env['product.template'].sudo().create({
                 'name': f'CK Sparse Grid QA Produit {idx}',
                 'type': 'consu',
                 'list_price': 5.0,
                 'is_published': True,
                 'public_categ_ids': [(4, cat.id)],
             })
+
+        def _cleanup():
+            products.sudo().unlink()
+            cat.sudo().unlink()
+
+        self.addCleanup(_cleanup)
         html = self.url_open(f'/shop/category/{cat.id}').text
         self.assertIn('ck-shop-grid--count-2', html)
 
