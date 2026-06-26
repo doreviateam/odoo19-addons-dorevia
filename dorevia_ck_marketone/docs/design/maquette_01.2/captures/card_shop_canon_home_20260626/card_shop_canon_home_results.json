@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-26T17:46:15.364Z",
+  "date": "2026-06-26T17:55:00.220Z",
   "base": "http://localhost:18079",
   "db": "dorevia_ck_marketone_01",
   "modules": {
@@ -240,8 +240,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -251,29 +251,29 @@
             "top": 501,
             "left": 64,
             "right": 340,
-            "bottom": 878,
+            "bottom": 882,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 77,
-            "y": 850,
-            "top": 850,
+            "y": 855,
+            "top": 855,
             "left": 77,
-            "right": 207,
-            "bottom": 867,
-            "width": 130,
+            "right": 193,
+            "bottom": 871,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 223,
+            "x": 209,
             "y": 836,
             "top": 836,
-            "left": 223,
+            "left": 209,
             "right": 319,
-            "bottom": 859,
-            "width": 96,
-            "height": 23
+            "bottom": 863,
+            "width": 110,
+            "height": 27
           }
         },
         {
@@ -285,8 +285,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -296,29 +296,29 @@
             "top": 501,
             "left": 356,
             "right": 632,
-            "bottom": 878,
+            "bottom": 882,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 369,
-            "y": 850,
-            "top": 850,
+            "y": 855,
+            "top": 855,
             "left": 369,
-            "right": 499,
-            "bottom": 867,
-            "width": 130,
+            "right": 485,
+            "bottom": 871,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 515,
+            "x": 501,
             "y": 836,
             "top": 836,
-            "left": 515,
+            "left": 501,
             "right": 611,
-            "bottom": 859,
-            "width": 96,
-            "height": 23
+            "bottom": 863,
+            "width": 110,
+            "height": 27
           }
         },
         {
@@ -330,8 +330,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -341,29 +341,29 @@
             "top": 501,
             "left": 648,
             "right": 924,
-            "bottom": 878,
+            "bottom": 882,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 661,
-            "y": 850,
-            "top": 850,
+            "y": 855,
+            "top": 855,
             "left": 661,
-            "right": 791,
-            "bottom": 867,
-            "width": 130,
+            "right": 777,
+            "bottom": 871,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 807,
+            "x": 793,
             "y": 836,
             "top": 836,
-            "left": 807,
+            "left": 793,
             "right": 903,
-            "bottom": 859,
-            "width": 96,
-            "height": 23
+            "bottom": 863,
+            "width": 110,
+            "height": 27
           }
         },
         {
@@ -375,8 +375,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -386,29 +386,29 @@
             "top": 501,
             "left": 940,
             "right": 1216,
-            "bottom": 878,
+            "bottom": 882,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 953,
-            "y": 850,
-            "top": 850,
+            "y": 855,
+            "top": 855,
             "left": 953,
-            "right": 1083,
-            "bottom": 867,
-            "width": 130,
+            "right": 1069,
+            "bottom": 871,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 1099,
+            "x": 1085,
             "y": 836,
             "top": 836,
-            "left": 1099,
+            "left": 1085,
             "right": 1195,
-            "bottom": 859,
-            "width": 96,
-            "height": 23
+            "bottom": 863,
+            "width": 110,
+            "height": 27
           }
         }
       ],
@@ -438,10 +438,10 @@
           "metaAfterTitle": true,
           "footColumnish": true,
           "sameLineDesktopish": false,
-          "fullWidthish": true,
+          "fullWidthish": false,
           "ctaVisible": true,
           "ctaHeight": 44,
-          "ctaWidth": 316,
+          "ctaWidth": 130,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -470,9 +470,9 @@
             "y": 869,
             "top": 869,
             "left": 37,
-            "right": 353,
+            "right": 167,
             "bottom": 913,
-            "width": 316,
+            "width": 130,
             "height": 44
           }
         },
@@ -483,10 +483,10 @@
           "metaAfterTitle": true,
           "footColumnish": true,
           "sameLineDesktopish": false,
-          "fullWidthish": true,
+          "fullWidthish": false,
           "ctaVisible": true,
           "ctaHeight": 44,
-          "ctaWidth": 316,
+          "ctaWidth": 130,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -515,9 +515,9 @@
             "y": 1406,
             "top": 1406,
             "left": 37,
-            "right": 353,
+            "right": 167,
             "bottom": 1450,
-            "width": 316,
+            "width": 130,
             "height": 44
           }
         },
@@ -528,10 +528,10 @@
           "metaAfterTitle": true,
           "footColumnish": true,
           "sameLineDesktopish": false,
-          "fullWidthish": true,
+          "fullWidthish": false,
           "ctaVisible": true,
           "ctaHeight": 44,
-          "ctaWidth": 316,
+          "ctaWidth": 130,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -560,9 +560,9 @@
             "y": 1943,
             "top": 1943,
             "left": 37,
-            "right": 353,
+            "right": 167,
             "bottom": 1987,
-            "width": 316,
+            "width": 130,
             "height": 44
           }
         },
@@ -573,10 +573,10 @@
           "metaAfterTitle": true,
           "footColumnish": true,
           "sameLineDesktopish": false,
-          "fullWidthish": true,
+          "fullWidthish": false,
           "ctaVisible": true,
           "ctaHeight": 44,
-          "ctaWidth": 316,
+          "ctaWidth": 130,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -605,9 +605,9 @@
             "y": 2480,
             "top": 2480,
             "left": 37,
-            "right": 353,
+            "right": 167,
             "bottom": 2524,
-            "width": 316,
+            "width": 130,
             "height": 44
           }
         }
@@ -640,8 +640,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -651,29 +651,29 @@
             "top": 788,
             "left": 64,
             "right": 340,
-            "bottom": 1165,
+            "bottom": 1169,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 77,
-            "y": 1137,
-            "top": 1137,
+            "y": 1141,
+            "top": 1141,
             "left": 77,
-            "right": 207,
-            "bottom": 1154,
-            "width": 130,
+            "right": 193,
+            "bottom": 1158,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 223,
+            "x": 209,
             "y": 1123,
             "top": 1123,
-            "left": 223,
+            "left": 209,
             "right": 319,
-            "bottom": 1146,
-            "width": 96,
-            "height": 23
+            "bottom": 1150,
+            "width": 110,
+            "height": 27
           }
         },
         {
@@ -685,8 +685,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -696,29 +696,29 @@
             "top": 788,
             "left": 356,
             "right": 632,
-            "bottom": 1165,
+            "bottom": 1169,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 369,
-            "y": 1137,
-            "top": 1137,
+            "y": 1141,
+            "top": 1141,
             "left": 369,
-            "right": 499,
-            "bottom": 1154,
-            "width": 130,
+            "right": 485,
+            "bottom": 1158,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 515,
+            "x": 501,
             "y": 1123,
             "top": 1123,
-            "left": 515,
+            "left": 501,
             "right": 611,
-            "bottom": 1146,
-            "width": 96,
-            "height": 23
+            "bottom": 1150,
+            "width": 110,
+            "height": 27
           }
         },
         {
@@ -730,8 +730,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -741,29 +741,29 @@
             "top": 788,
             "left": 648,
             "right": 924,
-            "bottom": 1165,
+            "bottom": 1169,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 661,
-            "y": 1137,
-            "top": 1137,
+            "y": 1141,
+            "top": 1141,
             "left": 661,
-            "right": 791,
-            "bottom": 1154,
-            "width": 130,
+            "right": 777,
+            "bottom": 1158,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 807,
+            "x": 793,
             "y": 1123,
             "top": 1123,
-            "left": 807,
+            "left": 793,
             "right": 903,
-            "bottom": 1146,
-            "width": 96,
-            "height": 23
+            "bottom": 1150,
+            "width": 110,
+            "height": 27
           }
         },
         {
@@ -775,8 +775,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -786,29 +786,29 @@
             "top": 788,
             "left": 940,
             "right": 1216,
-            "bottom": 1165,
+            "bottom": 1169,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 953,
-            "y": 1137,
-            "top": 1137,
+            "y": 1141,
+            "top": 1141,
             "left": 953,
-            "right": 1083,
-            "bottom": 1154,
-            "width": 130,
+            "right": 1069,
+            "bottom": 1158,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 1099,
+            "x": 1085,
             "y": 1123,
             "top": 1123,
-            "left": 1099,
+            "left": 1085,
             "right": 1195,
-            "bottom": 1146,
-            "width": 96,
-            "height": 23
+            "bottom": 1150,
+            "width": 110,
+            "height": 27
           }
         }
       ],
@@ -840,8 +840,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -851,29 +851,29 @@
             "top": 430,
             "left": 64,
             "right": 340,
-            "bottom": 807,
+            "bottom": 812,
             "width": 276,
-            "height": 377
+            "height": 381
           },
           "priceRect": {
             "x": 77,
-            "y": 779,
-            "top": 779,
+            "y": 784,
+            "top": 784,
             "left": 77,
-            "right": 207,
-            "bottom": 796,
-            "width": 130,
+            "right": 193,
+            "bottom": 801,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 223,
+            "x": 209,
             "y": 765,
             "top": 765,
-            "left": 223,
+            "left": 209,
             "right": 319,
-            "bottom": 788,
-            "width": 96,
-            "height": 23
+            "bottom": 793,
+            "width": 110,
+            "height": 27
           }
         }
       ],
@@ -905,8 +905,8 @@
           "sameLineDesktopish": true,
           "fullWidthish": false,
           "ctaVisible": true,
-          "ctaHeight": 23,
-          "ctaWidth": 96,
+          "ctaHeight": 27,
+          "ctaWidth": 110,
           "hasSeparator": true,
           "orphanSeparator": false,
           "originBeforeTitle": false,
@@ -916,29 +916,29 @@
             "top": 430,
             "left": 64,
             "right": 340,
-            "bottom": 792,
+            "bottom": 797,
             "width": 276,
-            "height": 362
+            "height": 366
           },
           "priceRect": {
             "x": 77,
-            "y": 764,
-            "top": 764,
+            "y": 769,
+            "top": 769,
             "left": 77,
-            "right": 207,
-            "bottom": 781,
-            "width": 130,
+            "right": 193,
+            "bottom": 786,
+            "width": 116,
             "height": 17
           },
           "ctaRect": {
-            "x": 223,
+            "x": 209,
             "y": 750,
             "top": 750,
-            "left": 223,
+            "left": 209,
             "right": 319,
-            "bottom": 773,
-            "width": 96,
-            "height": 23
+            "bottom": 778,
+            "width": 110,
+            "height": 27
           }
         }
       ],
