@@ -9,10 +9,11 @@
               name="CK Shop Note07 — grille pleine largeur + drawer filtres"
               priority="40">
 
-        <!-- A1 : sidebar masquée — l'offcanvas natif (#o_wsale_offcanvas) porte les filtres ;
-             le bouton "Filtrer" desktop est géré par SCSS (A3 : d-lg-none écrasé par !important). -->
+        <!-- A1 : sidebar masquée — l'offcanvas natif porte les filtres.
+             Native class = "d-none d-lg-block" ; on retire d-lg-block (display:block !important
+             au-dessus de d-none en desktop car Bootstrap charge les resp. utilities après). -->
         <xpath expr="//aside[@id='products_grid_before']" position="attributes">
-            <attribute name="class" add="d-none" separator=" "/>
+            <attribute name="class" remove="d-lg-block" separator=" "/>
         </xpath>
     </template>
 </odoo>
