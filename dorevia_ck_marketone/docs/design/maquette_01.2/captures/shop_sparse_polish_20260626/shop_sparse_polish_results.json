@@ -1,0 +1,60 @@
+{
+  "results": [
+    {
+      "name": "sparse_1product_desktop1280",
+      "path": "/shop/category/boissons-123",
+      "vp": {
+        "width": 1280,
+        "height": 900
+      },
+      "gridClass": "o_wsale_products_grid_table grid o_wsale_products_grid_table_md o_wsale_products_opt_layout_catalog o_wsale_products_opt_design_thumbs o_wsale_products_opt_name_color_regular o_wsale_products_opt_rounded_2 o_wsale_products_opt_thumb_cover o_wsale_products_opt_img_secondary_show o_wsale_products_opt_img_hover_zoom_out_light o_wsale_products_opt_has_cta o_wsale_products_opt_actions_onhover o_wsale_products_opt_has_wishlist o_wsale_products_opt_wishlist_fixed o_wsale_products_opt_has_description o_wsale_products_opt_actions_subtle o_wsale_products_opt_cc1 ck-shop-grid--count-1",
+      "productCount": 1,
+      "reboundBg": "rgb(250, 250, 248)",
+      "reboundMaxW": "740px",
+      "centerDelta": 0,
+      "overflow": false
+    },
+    {
+      "name": "sparse_2products_desktop1280",
+      "path": "/shop/category/772",
+      "vp": {
+        "width": 1280,
+        "height": 900
+      },
+      "gridClass": "o_wsale_products_grid_table grid o_wsale_products_grid_table_md o_wsale_products_opt_layout_catalog o_wsale_products_opt_design_thumbs o_wsale_products_opt_name_color_regular o_wsale_products_opt_rounded_2 o_wsale_products_opt_thumb_cover o_wsale_products_opt_img_secondary_show o_wsale_products_opt_img_hover_zoom_out_light o_wsale_products_opt_has_cta o_wsale_products_opt_actions_onhover o_wsale_products_opt_has_wishlist o_wsale_products_opt_wishlist_fixed o_wsale_products_opt_has_description o_wsale_products_opt_actions_subtle o_wsale_products_opt_cc1 ck-shop-grid--count-2",
+      "productCount": 2,
+      "reboundBg": "rgb(250, 250, 248)",
+      "reboundMaxW": "740px",
+      "centerDelta": 0,
+      "overflow": false
+    },
+    {
+      "name": "sparse_4plus_desktop1280",
+      "path": "/shop/category/epicerie-1",
+      "vp": {
+        "width": 1280,
+        "height": 900
+      },
+      "gridClass": "o_wsale_products_grid_table grid o_wsale_products_grid_table_md o_wsale_products_opt_layout_catalog o_wsale_products_opt_design_thumbs o_wsale_products_opt_name_color_regular o_wsale_products_opt_rounded_2 o_wsale_products_opt_thumb_cover o_wsale_products_opt_img_secondary_show o_wsale_products_opt_img_hover_zoom_out_light o_wsale_products_opt_has_cta o_wsale_products_opt_actions_onhover o_wsale_products_opt_has_wishlist o_wsale_products_opt_wishlist_fixed o_wsale_products_opt_has_description o_wsale_products_opt_actions_subtle o_wsale_products_opt_cc1 ",
+      "productCount": 4,
+      "reboundBg": null,
+      "reboundMaxW": null,
+      "centerDelta": 0,
+      "overflow": false
+    },
+    {
+      "name": "sparse_1product_mobile390",
+      "path": "/shop/category/boissons-123",
+      "vp": {
+        "width": 390,
+        "height": 900
+      },
+      "gridClass": "o_wsale_products_grid_table grid o_wsale_products_grid_table_md o_wsale_products_opt_layout_catalog o_wsale_products_opt_design_thumbs o_wsale_products_opt_name_color_regular o_wsale_products_opt_rounded_2 o_wsale_products_opt_thumb_cover o_wsale_products_opt_img_secondary_show o_wsale_products_opt_img_hover_zoom_out_light o_wsale_products_opt_has_cta o_wsale_products_opt_actions_onhover o_wsale_products_opt_has_wishlist o_wsale_products_opt_wishlist_fixed o_wsale_products_opt_has_description o_wsale_products_opt_actions_subtle o_wsale_products_opt_cc1 ck-shop-grid--count-1",
+      "productCount": 1,
+      "reboundBg": "rgb(250, 250, 248)",
+      "reboundMaxW": "740px",
+      "centerDelta": 0,
+      "overflow": false
+    }
+  ]
+}

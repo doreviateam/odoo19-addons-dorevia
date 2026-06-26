@@ -52,3 +52,4 @@ from . import test_ck_contactus_a11y_rgpd
 from . import test_ck_footer_legal_links
 from . import test_ck_shop_category_tiles
 from . import test_ck_shop_rebound
+from . import test_ck_shop_sparse_grid

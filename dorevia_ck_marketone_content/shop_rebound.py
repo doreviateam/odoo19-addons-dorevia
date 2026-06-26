@@ -49,3 +49,15 @@ def ck_should_show_rebound(values, post):
     if ck_shop_has_active_filters(values, post):
         return False
     return True
+
+
+def ck_sparse_grid_class(values):
+    """Classe modificateur grille — catégorie avec 1 ou 2 produits (centrage horizontal)."""
+    if not values.get('category'):
+        return ''
+    count = values.get('search_count', 0)
+    if count == 1:
+        return 'ck-shop-grid--count-1'
+    if count == 2:
+        return 'ck-shop-grid--count-2'
+    return ''

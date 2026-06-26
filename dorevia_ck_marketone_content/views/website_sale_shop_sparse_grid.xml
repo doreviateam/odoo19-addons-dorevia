@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Micro-polish catégories pauvres — centrage grille 1–2 produits. -->
+    <template id="website_sale_shop_sparse_grid"
+              inherit_id="website_sale.products"
+              name="CK Shop — grille sparse centrée (catégorie 1–2 produits)"
+              priority="40">
+        <xpath expr="//section[@id='o_wsale_products_grid']" position="attributes">
+            <attribute name="t-attf-class" add="#{ck_sparse_grid_class or ''}" separator=" "/>
+        </xpath>
+    </template>
+</odoo>

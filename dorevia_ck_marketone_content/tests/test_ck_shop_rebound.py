@@ -8,6 +8,7 @@ from odoo.addons.dorevia_ck_marketone_content.shop_rebound import (
     CK_REBOUND_MESSAGE,
     ck_shop_has_active_filters,
     ck_should_show_rebound,
+    ck_sparse_grid_class,
 )
 
 
@@ -110,3 +111,23 @@ class TestCkShopRebound(TransactionCase):
         self.assertFalse(ck_shop_has_active_filters(
             _values(min_price=0.0, available_min_price=0.0,
                     max_price=100.0, available_max_price=100.0), {}))
+
+    # ---- ck_sparse_grid_class ----
+
+    def test_sparse_grid_class_count_1(self):
+        self.assertEqual(
+            ck_sparse_grid_class(_values(self._make_cat(), search_count=1)),
+            'ck-shop-grid--count-1',
+        )
+
+    def test_sparse_grid_class_count_2(self):
+        self.assertEqual(
+            ck_sparse_grid_class(_values(self._make_cat(), search_count=2)),
+            'ck-shop-grid--count-2',
+        )
+
+    def test_sparse_grid_class_count_3_empty(self):
+        self.assertEqual(ck_sparse_grid_class(_values(self._make_cat(), search_count=3)), '')
+
+    def test_sparse_grid_class_without_category(self):
+        self.assertEqual(ck_sparse_grid_class(_values(None, search_count=1)), '')

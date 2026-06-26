@@ -646,16 +646,20 @@
     margin-top: $ck-space-6;
     padding: 0;
 
+    .container {
+        display: flex;
+        justify-content: center;
+    }
+
     &__card {
-        background-color: $ck-bg;
+        width: 100%;
+        max-width: 740px;
+        margin-inline: auto;
+        background-color: #fafaf8;
         border: 1px solid #e8e8e3;
         border-radius: 12px;
-        padding: $ck-space-5;
+        padding: $ck-space-6;
         text-align: center;
-
-        @media (min-width: 768px) {
-            padding: $ck-space-6;
-        }
     }
 
     &__message {
@@ -686,6 +690,34 @@
             background-color: #b05238;
             border-color: #b05238;
             text-decoration: none;
+        }
+    }
+}
+
+// Micro-polish catégories pauvres — grille centrée (1–2 produits sur page catégorie)
+.ck-shop-page #o_wsale_products_grid {
+    &.ck-shop-grid--count-1,
+    &.ck-shop-grid--count-2 {
+        display: flex !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        column-gap: 16px;
+        row-gap: 32px;
+
+        .oe_product {
+            grid-column: auto !important;
+            width: 100%;
+            max-width: 100%;
+
+            @media (min-width: 576px) and (max-width: 991.98px) {
+                width: calc((100% - 16px) / 2);
+                max-width: calc((100% - 16px) / 2);
+            }
+
+            @media (min-width: 992px) {
+                width: calc((100% - 3 * 16px) / 4);
+                max-width: calc((100% - 3 * 16px) / 4);
+            }
         }
     }
 }
