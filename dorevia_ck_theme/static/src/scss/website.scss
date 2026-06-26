@@ -729,7 +729,8 @@
         .ck-product-card__foot,
         .product-card-foot {
             gap: 6px;
-            padding: 8px 12px 10px;
+            // Pied resserré en bas — parité densité Shop (micro 70.0, hors scope shop).
+            padding: 8px 12px 6px;
         }
 
         .ck-product-card__price-value,
