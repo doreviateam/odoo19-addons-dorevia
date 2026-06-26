@@ -8,7 +8,7 @@ Périmètre :
   attribut Origine et valeur Guadeloupe.
 
 Hors périmètre (autres migrations / tickets) :
-- Jus Mont-Pelé, Pâte de manioc (MOA-2 → 19.0.1.44.0).
+- Jus Mont-Pelé, Pâte de manioc (MOA-2 → ``apply_moa2_bo_corrections`` · 19.0.1.44.0).
 - Catégorie « Coups de cœur » (ticket XML data séparé).
 - Action 6 — origine sur les 6 produits sans attribut (données MOA).
 """
@@ -41,6 +41,13 @@ _PRODUCT_UOM_TARGETS = (
     ('Galettes de manioc', True, False),
     ('Savon vétiver', True, False),
     ('Chapeau Panama', False, True),
+)
+
+# MOA-2 — arbitrage contenance / prix de référence (migration 19.0.1.44.0).
+# (nom produit, code UOM nette, code UOM prix réf., afficher prix réf.)
+_MOA2_PRODUCT_UOM_TARGETS = (
+    ('Jus Mont-Pelé', 'l', 'l', True),
+    ('Pâte de manioc', 'kg', 'kg', True),
 )
 
 
@@ -184,6 +191,58 @@ def _ensure_product_card_uom(env, uom_g, uom_kg):
         product.write(changes)
         updated += 1
     return updated
+
+
+def _write_product_card_uom_if_differs(product, vals):
+    changes = {
+        key: val
+        for key, val in vals.items()
+        if _product_field_differs(product, key, val)
+    }
+    if not changes:
+        return False
+    product.write(changes)
+    return True
+
+
+def _ensure_moa2_product_card_uom(env):
+    """UOM card MOA-2 — Jus Mont-Pelé (l/l) et Pâte de manioc (kg/kg) uniquement."""
+    Product = env['product.template'].sudo()
+    updated = 0
+    for product_name, net_code, ref_code, show_ref in _MOA2_PRODUCT_UOM_TARGETS:
+        product = Product.search([('name', '=', product_name)], limit=1)
+        if not product:
+            _logger.warning(
+                'MOA-2 BO sync : produit « %s » introuvable — ignoré.',
+                product_name,
+            )
+            continue
+        uom_net = _card_uom(env, net_code)
+        uom_ref = _card_uom(env, ref_code)
+        if not uom_net or not uom_ref:
+            _logger.error(
+                'MOA-2 BO sync : UOM card %s/%s absentes — « %s » ignoré.',
+                net_code,
+                ref_code,
+                product_name,
+            )
+            continue
+        if _write_product_card_uom_if_differs(product, {
+            'ck_net_quantity_uom_id': uom_net.id,
+            'ck_reference_price_uom_id': uom_ref.id,
+            'ck_show_reference_price': show_ref,
+        }):
+            updated += 1
+    return updated
+
+
+def apply_moa2_bo_corrections(env):
+    """Applique l'arbitrage MOA-2 (migration 19.0.1.44.0, idempotent)."""
+    stats = {
+        'moa2_products_uom': _ensure_moa2_product_card_uom(env),
+    }
+    _logger.info('MOA-2 BO sync 19.0.1.44.0 appliqué : %s', stats)
+    return stats
 
 
 def apply_axe_c_bo_corrections(env):

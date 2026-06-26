@@ -5,9 +5,9 @@
 | Date | 26 juin 2026 (rejeu post-upgrade 19.0.1.43.0) |
 | Base | `dorevia_ck_marketone_01` · `http://localhost:18079` |
 | Exécutant | Dev / QA (automatisé + HTTP/SQL) |
-| Modules | `dorevia_ck_theme` **19.0.1.59.0** · `dorevia_ck_marketone_content` **19.0.1.43.0** |
+| Modules | `dorevia_ck_theme` **19.0.1.59.0** · `dorevia_ck_marketone_content` **19.0.1.44.0** |
 | Référence checklist | [`RECETTE_QA_CALE_PRODUIT_V1_POST_CORRECTION.md`](RECETTE_QA_CALE_PRODUIT_V1_POST_CORRECTION.md) |
-| Résultat global | **GO avec réserves** — bloc F (MOA-2) + recette visuelle mobile restants |
+| Résultat global | **GO avec réserves** — recette visuelle mobile 1280/390 px restante |
 
 ---
 
@@ -16,12 +16,13 @@
 | # | Action | Résultat |
 | --- | --- | --- |
 | P1 | `-u dorevia_ck_theme` + redémarrage | ✅ `19.0.1.59.0` |
-| P2 | `-u dorevia_ck_marketone_content` + redémarrage | ✅ `19.0.1.43.0` (migration D/E exécutée) |
-| P3 | Corrections BO MOA Axe C | ⚠️ **Partielles** — D/E au vert · F en attente MOA-2 |
+| P2 | `-u dorevia_ck_marketone_content` + redémarrage | ✅ `19.0.1.44.0` (migration MOA-2 exécutée) |
+| P3 | Corrections BO MOA Axe C | ⚠️ **Quasi complet** — F au vert · QA visuelle restante |
 
 **Tests auto post-upgrade** :
 - `dorevia_ck_marketone_home_section3_featured_field` — **5/5 OK**
 - `dorevia_ck_axe_c_bo_sync` — **2/2 OK**
+- `dorevia_ck_moa2_bo_sync` — **2/2 OK**
 
 ---
 
@@ -34,7 +35,7 @@
 | C — Navigation Soin | ✅ | Menu **Soin & Bien-être** · URL HTTP 200 |
 | D — Traductions fr_FR | ✅ | Migration 43.0 — 9 catégories · Galettes · Origine/Guadeloupe |
 | E — UOM / prix réf. | ✅ | Migration 43.0 — g/kg sur 4 masse · Panama `show_ref=False` |
-| F — MOA-2 (Jus / Pâte) | ☐ | Hors migration 43.0 — UOM à arbitrer MOA |
+| F — MOA-2 (Jus / Pâte) | ✅ | Migration 44.0 — l/l · kg/kg · `show_ref=true` |
 | G — Cards catalogue | ⚠️ | Smoke HTTP OK (`/shop`, rayons Boissons/Artisanat/Soin) · recette visuelle 1280/390 px restante |
 
 ---
@@ -86,12 +87,12 @@
 | Savon vétiver | g | kg | true | ✅ |
 | Chapeau Panama | *(vide)* | *(vide)* | **false** | ✅ |
 
-### F — MOA-2 ☐
+### F — MOA-2 ✅
 
-| Produit | État actuel | Attendu |
-| --- | --- | --- |
-| Jus Mont-Pelé | net **l** · réf **l** · `show_ref=true` | Arbitrage MOA-2 (migration 44.0) |
-| Pâte de manioc | net **kg** · réf **kg** · `show_ref=true` | Idem |
+| Produit | UOM nette | UOM réf. | `show_ref` | Résultat |
+| --- | --- | --- | --- | --- |
+| Jus Mont-Pelé | **l** | **l** | true | ✅ migration 44.0 |
+| Pâte de manioc | **kg** | **kg** | true | ✅ migration 44.0 |
 
 ### G — Cards catalogue ⚠️
 
@@ -112,8 +113,8 @@
 | ~~P1~~ | ~~Coups de cœur (B1/B3)~~ | ✅ Corrigé |
 | ~~P2~~ | ~~Traductions fr_FR (D)~~ | ✅ Migration 43.0 |
 | ~~P2~~ | ~~UOM périmètre E~~ | ✅ Migration 43.0 |
-| **P1** | Jus Mont-Pelé · Pâte de manioc (F) | MOA — MOA-2 → migration 44.0 |
-| P2 | Recette visuelle mobile 390 px (A3, G) | QA / MOA |
+| ~~P1~~ | ~~Jus Mont-Pelé · Pâte de manioc (F)~~ | ✅ Migration 44.0 |
+| **P1** | Recette visuelle 1280/390 px (A3, G) | QA / MOA |
 | P3 | Catégorie Coups de cœur en base (B6 / MOA-1) | MOA — ticket XML séparé |
 
 ---
@@ -122,11 +123,11 @@
 
 ```text
 ☐ Cale produit V1 clôturée — Rail 2 Note 07 peut s'ouvrir
-☑ Corrections BO complémentaires requises avant clôture (F + QA visuelle)
+☑ Corrections BO complémentaires requises avant clôture (QA visuelle + MOA-1 Coups de cœur XML)
 ```
 
-**Verdict** : **GO avec réserves** — upgrade **19.0.1.59.0 / 19.0.1.43.0** validé · blocs **A–E** au vert (hors A3 visuel).  
-**NO GO clôture Axe C** tant que **MOA-2** (Jus / Pâte) et recette visuelle mobile ne sont pas au vert.
+**Verdict** : **GO avec réserves** — upgrade **19.0.1.59.0 / 19.0.1.44.0** validé · blocs **A–F** au vert (hors A3/G visuel).  
+**NO GO clôture Axe C** tant que la recette visuelle **1280/390 px** n'est pas au vert.
 
 ---
 
@@ -134,10 +135,9 @@
 
 | Ordre | Qui | Action |
 | --- | --- | --- |
-| 1 | MOA | Arbitrage MOA-2 → migration **19.0.1.44.0** (Jus / Pâte) |
+| 1 | QA | Recette visuelle **1280 px** + **390 px** (logo, filmstrip, cards G) |
 | 2 | MOA | Décision MOA-1 + ticket XML « Coups de cœur » (`noupdate` / retrait) |
-| 3 | QA | Recette visuelle 390 px (logo, filmstrip, cards G) |
-| 4 | Lead | Clôture Axe C → GO démarrage Rail 2 Note 07 |
+| 3 | Lead | Clôture Axe C → GO démarrage Rail 2 Note 07 |
 
 ---
 
