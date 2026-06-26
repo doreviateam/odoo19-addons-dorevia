@@ -149,3 +149,11 @@ class TestCkHomeSection3FeaturedCompose(HttpCase):
         grid_chunk = self._featured_grid_chunk(self.url_open('/').text)
         self.assertNotIn('s_dynamic_snippet_products', grid_chunk)
         self.assertNotIn('data-bs-ride="carousel"', grid_chunk)
+
+    def test_home_featured_wishlist_on_cards(self):
+        """Wishlist Home — même contrat Odoo que la grille /shop."""
+        grid_chunk = self._featured_grid_chunk(self.url_open('/').text)
+        self.assertIn('o_add_wishlist', grid_chunk)
+        self.assertIn('ck-product-card__favorite', grid_chunk)
+        self.assertIn('data-action="o_wishlist"', grid_chunk)
+        self.assertGreaterEqual(grid_chunk.count('ck-product-card--home'), 1)

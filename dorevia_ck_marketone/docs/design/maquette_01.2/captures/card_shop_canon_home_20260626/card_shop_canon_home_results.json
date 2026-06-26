@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-26T17:55:00.220Z",
+  "date": "2026-06-26T18:08:17.931Z",
   "base": "http://localhost:18079",
   "db": "dorevia_ck_marketone_01",
   "modules": {
@@ -30,6 +30,7 @@
       "originEyebrowCount": 0,
       "shopCardCount": 0,
       "homeCardCount": 4,
+      "wishlistCount": 4,
       "cardSamples": [
         {
           "titleText": "Confiture de goyave",
@@ -230,6 +231,7 @@
       "originEyebrowCount": 0,
       "shopCardCount": 7,
       "homeCardCount": 0,
+      "wishlistCount": 7,
       "cardSamples": [
         {
           "titleText": "Confiture de goyave",
@@ -430,6 +432,7 @@
       "originEyebrowCount": 0,
       "shopCardCount": 7,
       "homeCardCount": 0,
+      "wishlistCount": 7,
       "cardSamples": [
         {
           "titleText": "Confiture de goyave",
@@ -630,6 +633,7 @@
       "originEyebrowCount": 0,
       "shopCardCount": 4,
       "homeCardCount": 0,
+      "wishlistCount": 4,
       "cardSamples": [
         {
           "titleText": "Confiture de goyave",
@@ -830,6 +834,7 @@
       "originEyebrowCount": 0,
       "shopCardCount": 1,
       "homeCardCount": 0,
+      "wishlistCount": 1,
       "cardSamples": [
         {
           "titleText": "Savon vétiver",
@@ -895,6 +900,7 @@
       "originEyebrowCount": 0,
       "shopCardCount": 1,
       "homeCardCount": 0,
+      "wishlistCount": 1,
       "cardSamples": [
         {
           "titleText": "Chapeau Panama",

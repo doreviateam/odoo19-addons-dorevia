@@ -136,11 +136,18 @@ function extractPageData({ scope, viewportKey }) {
   const toolbarRect = rect(toolbar);
   const toolbarStyle = toolbar ? getComputedStyle(toolbar) : null;
 
+  const wishlistCount = document.querySelectorAll(
+    scope === 'home'
+      ? '.ck-product-card--home .o_add_wishlist'
+      : '.ck-product-card--shop .o_add_wishlist',
+  ).length;
+
   return {
     overflow,
     originEyebrowCount: originEyebrows.length,
     shopCardCount: shopCards.length,
     homeCardCount: homeCards.length,
+    wishlistCount,
     cardSamples,
     toolbarVisible:
       !!toolbar &&
@@ -211,6 +218,7 @@ function evaluateRoute(result, viewportKey) {
   if (result.key === 'home') {
     if (!result.hasHomeFeatured) failures.push('section vedettes absente');
     if ((result.homeCardCount || 0) < 1) failures.push('cards home absentes');
+    if ((result.wishlistCount || 0) < 1) failures.push('wishlist absente sur Home');
   }
 
   if (result.key === 'shop' && viewportKey === 'desktop1280') {

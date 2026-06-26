@@ -174,6 +174,12 @@ class TestCkShopProductCardCompose(HttpCase):
         self.assertIn('ck-product-card__meta', chunk)
         self.assertIn(expected, html)
 
+    def test_shop_home_wishlist_non_regression(self):
+        html = self.url_open('/shop').text
+        chunk = self._first_product_card_chunk(html)
+        self.assertIn('o_add_wishlist', chunk)
+        self.assertIn('data-action="o_wishlist"', chunk)
+
     def test_shop_home_non_regression(self):
         html = self.url_open('/').text
         self.assertIn('ck-featured-products--maquette', html)

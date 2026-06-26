@@ -755,6 +755,14 @@
             line-height: 1.2;
         }
 
+        .ck-product-card__overlays {
+            .ck-product-card__favorite,
+            .o_add_wishlist {
+                @include ck-product-card-favorite;
+                pointer-events: auto;
+            }
+        }
+
         @media (min-width: 768px) {
             .ck-product-card__foot,
             .product-card-foot {

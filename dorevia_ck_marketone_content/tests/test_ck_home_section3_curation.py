@@ -165,6 +165,8 @@ class TestCkHomeSection3Curation(TransactionCase):
         website = self.env['website'].search([], limit=1)
         card = build_featured_product_card_html(self.env, website, product.product_variant_id)
         self.assertNotIn('badge-float', card)
+        self.assertIn('o_add_wishlist', card)
+        self.assertIn('ck-product-card__favorite', card)
 
     def test_unfeatured_write_refreshes_home(self):
         product = self._make_product('CK Vedette Remove Featured', ck_is_featured=True)

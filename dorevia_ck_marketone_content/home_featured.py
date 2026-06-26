@@ -73,6 +73,9 @@ _CARD_PRICE_RE = _ck_class_token_re('ck-product-card__price-value')
 _CARD_LINK_RE = _ck_class_token_re('card-cta')
 _CARD_COVER_RE = _ck_class_token_re('ck-product-card__cover')
 _CARD_CART_CTA_RE = _ck_class_token_re('card-cart-cta')
+_CARD_WISHLIST_RE = re.compile(
+    r'o_add_wishlist[^>]*ck-product-card__favorite|ck-product-card__favorite[^>]*o_add_wishlist',
+)
 _CARD_CTA_TEXT_RE = re.compile(re.escape(FEATURED_CARD_CTA))
 _FEATURED_LABELS_BLOCK_RE = re.compile(
     r'<p ' + _ck_class_token_pattern('ck-product-card__meta') + r'[^>]*>[^<]+</p>',
@@ -644,6 +647,26 @@ def _get_featured_badge_html(variant):
     )
 
 
+def _render_featured_wishlist_button_html(env, template, variant):
+    """Bouton wishlist SSR — QWeb partagé avec le handler Odoo ``data-action=o_wishlist``."""
+    variant = (variant or template.product_variant_id).sudo()
+    template = template.sudo()
+    if not variant or not template._get_first_possible_variant_id():
+        return ''
+    return (
+        env['ir.qweb']
+        ._render(
+            'dorevia_ck_marketone_content.ck_featured_card_wishlist_button',
+            {
+                'product': template,
+                'product_variant': variant,
+            },
+            minimal_qcontext=True,
+        )
+        .strip()
+    )
+
+
 def build_featured_product_card_html(env, website, variant):
     """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence.
 
@@ -677,9 +700,11 @@ def build_featured_product_card_html(env, website, variant):
         # et le titre (lien dédié + cover).
         actions_html = ''
 
+    wishlist_html = _render_featured_wishlist_button_html(env, template, variant)
+    overlay_parts = [part for part in (badge_html, wishlist_html) if part]
     overlays_html = (
-        f'<div class="ck-product-card__overlays">{badge_html}</div>'
-        if badge_html else ''
+        f'<div class="ck-product-card__overlays">{"".join(overlay_parts)}</div>'
+        if overlay_parts else ''
     )
 
     return f"""
