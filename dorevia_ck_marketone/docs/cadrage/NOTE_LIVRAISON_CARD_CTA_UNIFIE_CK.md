@@ -3,9 +3,9 @@
 | Champ | Valeur |
 | --- | --- |
 | Date | 26 juin 2026 |
-| Commit | _à compléter_ |
+| Commit | `b92c57f` |
 | Verdict QA | **GO technique** — [`RECETTE_QA_CARD_CTA_UNIFIE_VERDICT.md`](../design/maquette_01.2/RECETTE_QA_CARD_CTA_UNIFIE_VERDICT.md) |
-| Modules | `dorevia_ck_theme` **19.0.1.65.0** · `dorevia_ck_marketone_content` _(tests uniquement)_ |
+| Modules | `dorevia_ck_theme` **19.0.1.66.0** (pied canon) · **65.0** (CTA unifié) · `dorevia_ck_marketone_content` _(tests)_ |
 | Instance recette | `dorevia_ck_marketone_01` |
 
 ---
@@ -91,6 +91,18 @@ Dossier suggéré : `docs/design/maquette_01.2/captures/card_cta_unifie_YYYYMMDD
 | 4 | Catégorie pauvre (Boissons) | `04_boissons_1280.png` |
 | 5 | Mobile 390 px — `/shop` | `05_shop_390.png` |
 | 6 | Mobile 390 px — catégorie | `06_category_390.png` |
+
+---
+
+## Correctif 19.0.1.66.0 — pied canon Home (post-GO 65.0)
+
+| Élément | Correction |
+| --- | --- |
+| Desktop ≥ 768 px | Prix + CTA sur **une ligne**, bouton compact (`ck-product-card-foot-desktop` sur `--shop`) |
+| Séparateur | `border-top` explicite sur le pied card |
+| Mobile ≤ 575 px | Colonne + CTA pleine largeur conservés (non-régression 65.0) |
+
+**Recette** : en attente MOA/QA ciblée desktop 1280 + 390 px.
 
 ---
 

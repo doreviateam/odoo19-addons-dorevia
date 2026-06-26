@@ -330,31 +330,19 @@
         color: $ck-primary;
     }
 
-    // CTA unifié Home/Shop — pied colonne + bouton texte pill (réversion P2A icône).
+    // Pied shop — séparateur canon ; layout desktop via ck-product-card-foot-desktop (--shop).
+    // Colonne + CTA pleine largeur : mobile uniquement (≤575 px, cf. Lot D).
     .ck-product-card__foot,
     .o_wsale_product_sub {
         position: static;
         margin-top: auto;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-
-    .ck-product-card__price,
-    .product_price {
-        flex: none;
-        width: 100%;
-        min-width: 0;
+        border-top: 1px solid $ck-border !important;
     }
 
     .ck-product-card__actions,
     .o_wsale_product_btn {
         position: static !important;
         display: flex !important;
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-        flex: none;
         aspect-ratio: unset !important;
         overflow: visible !important;
         pointer-events: auto !important;
@@ -363,10 +351,6 @@
 
         .o_wsale_product_action_row {
             display: flex !important;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 8px;
-            width: 100%;
             transform: none !important;
             align-self: auto !important;
 
@@ -375,20 +359,18 @@
                 transform: none !important;
                 pointer-events: auto !important;
                 aspect-ratio: unset !important;
-                width: 100%;
             }
         }
     }
 
     .card-cart-cta,
     .o_wsale_product_btn_primary.card-cart-cta {
-        width: 100%;
         min-height: 44px;
         padding: 8px 14px !important;
         display: inline-flex !important;
         align-items: center;
         justify-content: center;
-        white-space: normal;
+        white-space: nowrap;
         line-height: 1.2;
         visibility: visible !important;
         opacity: 1 !important;
@@ -693,7 +675,7 @@
     }
 }
 
-// D2 + D3 : mobile ≤ 575 px — 1 colonne (g-col-6 natif = 2 cols)
+// D2 + D3 : mobile ≤ 575 px — 1 colonne + pied colonne (CTA pleine largeur)
 @media (max-width: 575.98px) {
     // Toolbar : retour à la ligne si les boutons débordent
     .ck-shop-page #o_wsale_products_header .btn-toolbar {
@@ -709,6 +691,45 @@
             grid-column: auto / span 12 !important;
             width: 100%;
             max-width: 100%;
+        }
+    }
+
+    // Pied card mobile — colonne + CTA tactile pleine largeur (non-régression QA 65.0)
+    .ck-shop-page form.ck-product-card--shop {
+        .ck-product-card__foot,
+        .o_wsale_product_sub {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 10px;
+        }
+
+        .ck-product-card__price,
+        .product_price {
+            flex: none;
+            width: 100%;
+        }
+
+        .ck-product-card__actions,
+        .o_wsale_product_btn {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            width: 100% !important;
+
+            .o_wsale_product_action_row {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                width: 100% !important;
+
+                .btn {
+                    width: 100% !important;
+                }
+            }
+        }
+
+        .card-cart-cta,
+        .o_wsale_product_btn_primary.card-cart-cta {
+            width: 100% !important;
+            white-space: normal;
         }
     }
 

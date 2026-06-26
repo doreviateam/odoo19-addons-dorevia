@@ -389,8 +389,16 @@
         @include ck-product-card-cta-view-secondary;
     }
 
-    // Home — double CTA, pied desktop en ligne
+    // Home — pied desktop en ligne (prix | CTA)
     &--home {
+        .ck-product-card__foot,
+        .product-card-foot {
+            @include ck-product-card-foot-desktop;
+        }
+    }
+
+    // Shop — même canon pied desktop que la Home (micro-ticket pied canon)
+    &--shop {
         .ck-product-card__foot,
         .product-card-foot {
             @include ck-product-card-foot-desktop;
