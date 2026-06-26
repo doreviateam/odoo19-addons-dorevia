@@ -3,7 +3,7 @@
 | Champ | Valeur |
 | --- | --- |
 | Date | 26 juin 2026 |
-| Commit | _à compléter_ |
+| Commit | `fde7055` |
 | Verdict QA | **GO technique** — [`RECETTE_QA_CARD_SHOP_CANON_HOME_VERDICT.md`](../design/maquette_01.2/RECETTE_QA_CARD_SHOP_CANON_HOME_VERDICT.md) |
 | Modules | `dorevia_ck_theme` **19.0.1.67.0** · `dorevia_ck_marketone_content` **19.0.1.47.0** |
 | Instance recette | `dorevia_ck_marketone_01` · `http://localhost:18079` |
