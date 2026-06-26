@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Axe C — corrections BO catalogue scriptables (migration 19.0.1.43.0).
+"""Axe C — corrections BO catalogue scriptables.
 
-Périmètre :
-- Bloc E : UOM card (g / kg) + prix de référence pour 4 produits masse.
-- Bloc E : Chapeau Panama — pas de prix de référence, UOM card vidées.
-- Bloc D : traductions fr_FR catégories publiques exposées, Galettes de manioc,
-  attribut Origine et valeur Guadeloupe.
+Migration 19.0.1.43.0 : blocs D (fr_FR) et E (UOM card masse + Panama).
+Migration 19.0.1.44.0 : MOA-2 Jus Mont-Pelé (l/l) et Pâte de manioc (kg/kg).
 
-Hors périmètre (autres migrations / tickets) :
-- Jus Mont-Pelé, Pâte de manioc (MOA-2 → ``apply_moa2_bo_corrections`` · 19.0.1.44.0).
-- Catégorie « Coups de cœur » (ticket XML data séparé).
+Hors périmètre :
+- Catégorie « Coups de cœur » → ticket XML data (noupdate / retrait record).
 - Action 6 — origine sur les 6 produits sans attribut (données MOA).
 """
 
 import logging
+
+from psycopg2 import sql as pgsql
 
 _logger = logging.getLogger(__name__)
 
@@ -51,6 +49,10 @@ _MOA2_PRODUCT_UOM_TARGETS = (
 )
 
 
+# ---------------------------------------------------------------------------
+# Utilitaires partagés
+# ---------------------------------------------------------------------------
+
 def _card_uom(env, xmlid_suffix):
     return env.ref(
         f'dorevia_ck_marketone_content.ck_card_uom_{xmlid_suffix}',
@@ -59,15 +61,14 @@ def _card_uom(env, xmlid_suffix):
 
 
 def _raw_field_translation(env, record, field, lang):
-    """Valeur jsonb brute — sans repli automatique sur en_US.
-
-    ``field`` et ``record._table`` sont des littéraux internes (name, _table) ;
-    ne pas réutiliser avec des noms dynamiques non contrôlés.
-    """
-    env.cr.execute(
-        f"SELECT COALESCE({field}->>%s, '') FROM {record._table} WHERE id = %s",
-        (lang, record.id),
+    """Valeur jsonb brute — sans repli automatique sur en_US."""
+    query = pgsql.SQL(
+        "SELECT COALESCE({field}->>%s, '') FROM {table} WHERE id = %s"
+    ).format(
+        field=pgsql.Identifier(field),
+        table=pgsql.Identifier(record._table),
     )
+    env.cr.execute(query, (lang, record.id))
     row = env.cr.fetchone()
     return (row[0] if row else '').strip()
 
@@ -85,6 +86,35 @@ def _ensure_field_translation(env, record, field, lang, label):
         record.with_context(lang=lang).write({field: expected})
     return True
 
+
+def _many2one_target_id(value):
+    if not value:
+        return False
+    return value.id if hasattr(value, 'id') else value
+
+
+def _product_field_differs(product, field, target):
+    current = product[field]
+    if field.endswith('_id'):
+        return _many2one_target_id(current) != _many2one_target_id(target)
+    return current != target
+
+
+def _write_product_card_uom_if_differs(product, vals):
+    changes = {
+        key: val
+        for key, val in vals.items()
+        if _product_field_differs(product, key, val)
+    }
+    if not changes:
+        return False
+    product.write(changes)
+    return True
+
+
+# ---------------------------------------------------------------------------
+# 19.0.1.43.0 — blocs D (fr_FR) et E (UOM masse)
+# ---------------------------------------------------------------------------
 
 def _ensure_public_category_fr_translations(env):
     Category = env['product.public.category'].sudo()
@@ -145,19 +175,6 @@ def _ensure_origin_attribute_fr(env):
     return updated
 
 
-def _many2one_target_id(value):
-    if not value:
-        return False
-    return value.id if hasattr(value, 'id') else value
-
-
-def _product_field_differs(product, field, target):
-    current = product[field]
-    if field.endswith('_id'):
-        return _many2one_target_id(current) != _many2one_target_id(target)
-    return current != target
-
-
 def _ensure_product_card_uom(env, uom_g, uom_kg):
     Product = env['product.template'].sudo()
     updated = 0
@@ -181,29 +198,36 @@ def _ensure_product_card_uom(env, uom_g, uom_kg):
                 'ck_reference_price_uom_id': uom_kg.id,
                 'ck_show_reference_price': show_ref,
             }
-        changes = {
-            key: val
-            for key, val in vals.items()
-            if _product_field_differs(product, key, val)
-        }
-        if not changes:
-            continue
-        product.write(changes)
-        updated += 1
+        if _write_product_card_uom_if_differs(product, vals):
+            updated += 1
     return updated
 
 
-def _write_product_card_uom_if_differs(product, vals):
-    changes = {
-        key: val
-        for key, val in vals.items()
-        if _product_field_differs(product, key, val)
-    }
-    if not changes:
-        return False
-    product.write(changes)
-    return True
+def apply_axe_c_bo_corrections(env):
+    """Applique les corrections BO Axe C scriptables (idempotent)."""
+    uom_g = _card_uom(env, 'g')
+    uom_kg = _card_uom(env, 'kg')
+    if not uom_g or not uom_kg:
+        _logger.error(
+            'Axe C BO sync : UOM card g/kg absentes — bloc E ignoré.',
+        )
+        uom_products = 0
+    else:
+        uom_products = _ensure_product_card_uom(env, uom_g, uom_kg)
 
+    stats = {
+        'public_categories_fr': _ensure_public_category_fr_translations(env),
+        'galettes_fr': int(_ensure_galettes_product_fr(env)),
+        'origin_fr': _ensure_origin_attribute_fr(env),
+        'products_uom': uom_products,
+    }
+    _logger.info('Axe C BO sync 19.0.1.43.0 appliqué : %s', stats)
+    return stats
+
+
+# ---------------------------------------------------------------------------
+# 19.0.1.44.0 — MOA-2 : Jus Mont-Pelé et Pâte de manioc
+# ---------------------------------------------------------------------------
 
 def _ensure_moa2_product_card_uom(env):
     """UOM card MOA-2 — Jus Mont-Pelé (l/l) et Pâte de manioc (kg/kg) uniquement."""
@@ -242,26 +266,4 @@ def apply_moa2_bo_corrections(env):
         'moa2_products_uom': _ensure_moa2_product_card_uom(env),
     }
     _logger.info('MOA-2 BO sync 19.0.1.44.0 appliqué : %s', stats)
-    return stats
-
-
-def apply_axe_c_bo_corrections(env):
-    """Applique les corrections BO Axe C scriptables (idempotent)."""
-    uom_g = _card_uom(env, 'g')
-    uom_kg = _card_uom(env, 'kg')
-    if not uom_g or not uom_kg:
-        _logger.error(
-            'Axe C BO sync : UOM card g/kg absentes — bloc E ignoré.',
-        )
-        uom_products = 0
-    else:
-        uom_products = _ensure_product_card_uom(env, uom_g, uom_kg)
-
-    stats = {
-        'public_categories_fr': _ensure_public_category_fr_translations(env),
-        'galettes_fr': int(_ensure_galettes_product_fr(env)),
-        'origin_fr': _ensure_origin_attribute_fr(env),
-        'products_uom': uom_products,
-    }
-    _logger.info('Axe C BO sync 19.0.1.43.0 appliqué : %s', stats)
     return stats
