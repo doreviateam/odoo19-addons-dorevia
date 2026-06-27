@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Pages rayon éditorialisées P2B — contenu validé MOA, par rayon.
+"""Bannière univers shop — contenu éditorial V1 validé MOA (note V1.1 · 27/06/2026).
 
-P2B est recentré sur Épicerie seul (cf. BRIEF_CONTENU_SHOP_RAYONS_CK_P2B.md
-§2.1, arbitrage MOA 2026-06-23). Boissons / Soin & Bien-être / Artisanat
-n'ont qu'un seul produit publié chacun — ils ne sont volontairement pas
-inscrits dans RAYON_EDITORIAL tant que leur catalogue ne justifie pas un
-traitement éditorial complet (brief §6).
+Chaque univers CK dispose d'une bannière (titre + phrase).  Épicerie bénéficie
+en outre de familles visuelles et de mises en avant lorsque le catalogue atteint
+les seuils définis en §6 du brief P2B.  En deçà des seuils, Épicerie affiche
+la bannière simple (titre + phrase) — dégradé gracieux validé MOA §3.1.
 
-Le contenu ci-dessous reprend mot pour mot la proposition V0 validée
-(brief §9.2). Les sous-familles et mises en avant restent gatées sur les
-mêmes données réelles que le mega-menu header (nav_mega_menu._resolve_families)
-— si le catalogue Épicerie redescend sous le seuil, ce bloc se masque tout
-seul, sans intervention Dev.
+Boissons / Soin & bien-être / Artisanat n'ont qu'un contenu simple en V1 ;
+les familles et highlights sont réservés à une V2 éditoriale.
+
+L'identification de l'univers passe désormais par le champ technique
+`ck_universe` sur `product.public.category` (Option A — robuste aux renommages,
+lisible BO, héritage parent/enfant via `_get_ck_universe()`).
 """
 from .nav_mega_menu import _find_root_category, _match_family_category, _resolve_families
 from .nav_v22_config import EPICERIE_FAMILIES
@@ -19,8 +19,17 @@ from .nav_v22_config import EPICERIE_FAMILIES
 RAYON_EDITORIAL_MIN_FAMILIES = 3
 RAYON_EDITORIAL_MIN_PRODUCTS = 4
 
+# Clé = valeur de ck_universe (code technique).  'boutique' est un fallback
+# interne uniquement — il n'apparaît pas dans la sélection BO (MOA §4.1).
 RAYON_EDITORIAL = {
-    'Épicerie': {
+    'boutique': {
+        'title': 'Boutique C-Kréyòl',
+        'phrase': (
+            'Produits créoles sélectionnés, aux origines identifiées, pour découvrir '
+            'des saveurs, des soins et des savoir-faire issus des territoires.'
+        ),
+    },
+    'epicerie': {
         'title': 'Épicerie créole',
         'phrase': (
             'Confitures, manioc, condiments, cacao, cafés et douceurs créoles '
@@ -49,25 +58,47 @@ RAYON_EDITORIAL = {
             'producteur ou un partenaire connu lorsque l’information est disponible.'
         ),
     },
+    'boissons': {
+        'title': 'Boissons des îles',
+        'phrase': (
+            'Jus, nectars, infusions, sirops et boissons traditionnelles '
+            'inspirées des territoires créoles.'
+        ),
+    },
+    'soin': {
+        'title': 'Soin & bien-être créole',
+        'phrase': (
+            'Savons, huiles et gestes de soin inspirés des plantes, matières '
+            'et savoir-faire des territoires créoles.'
+        ),
+    },
+    'artisanat': {
+        'title': 'Artisanat & culture',
+        'phrase': (
+            'Objets, matières, créations et symboles qui racontent une culture '
+            'vivante, entre maison, usage et transmission.'
+        ),
+    },
 }
 
 
-def get_rayon_editorial(env, category):
-    """Contenu éditorial de rayon pour `category`, ou None si non publiable.
+def get_rayon_editorial(env, category=None):
+    """Bannière shop pour `category` (ou fallback boutique si None).
 
-    `category` doit être une catégorie racine inscrite dans RAYON_EDITORIAL,
-    avec au moins RAYON_EDITORIAL_MIN_FAMILIES familles réelles et
-    RAYON_EDITORIAL_MIN_PRODUCTS produits publiés (règle §6 du brief P2B).
+    Retourne toujours un dict {title, phrase} non None.
+    Pour Épicerie avec catalogue suffisant, ajoute {families, highlights, proof}.
     """
-    if not category or category.parent_id:
-        return None
-    spec = RAYON_EDITORIAL.get(category.name)
-    if not spec:
-        return None
+    universe = category._get_ck_universe() if category else None
+    spec = RAYON_EDITORIAL.get(universe or 'boutique', RAYON_EDITORIAL['boutique'])
 
+    # Univers simples : bannière titre + phrase, aucune condition catalogue
+    if universe != 'epicerie':
+        return {'title': spec['title'], 'phrase': spec['phrase']}
+
+    # Épicerie : familles + highlights si seuils atteints, dégradé gracieux sinon
     families = _resolve_families(env, category.name, spec['family_specs'])
     if len(families) < RAYON_EDITORIAL_MIN_FAMILIES:
-        return None
+        return {'title': spec['title'], 'phrase': spec['phrase']}
 
     Category = env['product.public.category'].sudo()
     Product = env['product.template'].sudo()
@@ -77,7 +108,7 @@ def get_rayon_editorial(env, category):
         ('website_published', '=', True),
     ])
     if published_count < RAYON_EDITORIAL_MIN_PRODUCTS:
-        return None
+        return {'title': spec['title'], 'phrase': spec['phrase']}
 
     slug_by_label = {label: slug for label, slug, *_rest in spec['family_specs']}
     url_by_slug = {
@@ -88,8 +119,7 @@ def get_rayon_editorial(env, category):
 
     # Image de famille = photo du premier produit publié de la sous-catégorie
     # (vraie photo produit, jamais d'image générique inventée — si aucune
-    # photo n'est disponible, le template affiche "Aucune image disponible",
-    # même principe que le repère Sept-Fons fourni par MOA).
+    # photo n'est disponible, le template affiche "Aucune image disponible").
     root = _find_root_category(env, category.name)
     aliases_by_slug = {slug: aliases for _label, slug, aliases, *_rest in spec['family_specs']}
     for fam in families:

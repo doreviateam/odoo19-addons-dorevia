@@ -57,3 +57,4 @@ from . import test_ck_shop_rebound
 from . import test_ck_shop_filter_drawer
 from . import test_ck_shop_sparse_grid
 from . import test_ck_shop_toolbar
+from . import test_ck_shop_universe_banner

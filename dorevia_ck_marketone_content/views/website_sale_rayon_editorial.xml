@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- P2B — header de rayon éditorialisé (Épicerie, seul rayon publiable
-         à ce jour, cf. shop_rayon_editorial.py). Se masque automatiquement
-         sur /shop et sur tout rayon ne réunissant pas les conditions §6. -->
+    <!-- Bannière univers shop — couvre /shop (boutique) + 4 univers racines
+         + sous-catégories par héritage ck_universe (V1 validé MOA 27/06/2026).
+         Retourne toujours un dict {title, phrase} ; familles/highlights en plus
+         pour Épicerie quand les seuils catalogue sont atteints. -->
     <template id="website_sale_rayon_editorial"
               inherit_id="dorevia_ck_theme.products_ck_shop_compose"
-              name="CK Rayon éditorial — P2B">
+              name="CK Bannière univers shop — V1">
         <xpath expr="//t[@t-call='dorevia_ck_theme.s_ck_shop_intro']" position="attributes">
             <attribute name="t-if">not ck_rayon</attribute>
         </xpath>
         <xpath expr="//t[@t-call='dorevia_ck_theme.s_ck_shop_intro']" position="before">
-            <t t-set="ck_rayon" t-value="category and category.get_ck_rayon_editorial()"/>
+            <t t-set="ck_rayon" t-value="request.env['product.public.category'].sudo().get_ck_shop_banner(category)"/>
 
             <!-- Bannière de rayon — repère MOA (Abbaye de Sept-Fons) : bloc
                  colonne pleine largeur, titre + phrase en clair sur fond couleur. -->
@@ -24,7 +25,7 @@
             <!-- Répertoire visuel des sous-familles — cercles photo produit réel,
                  fallback texte "Aucune image disponible" si aucune photo (jamais
                  d'image générique inventée), même principe que le repère fourni. -->
-            <section t-if="ck_rayon and ck_rayon['families']" class="ck-rayon-families">
+            <section t-if="ck_rayon and ck_rayon.get('families')" class="ck-rayon-families">
                 <div class="container">
                     <div class="row g-4 justify-content-center justify-content-md-start">
                         <div class="col-4 col-md-2" t-foreach="ck_rayon['families']" t-as="ck_family">
@@ -38,11 +39,11 @@
                             </a>
                         </div>
                     </div>
-                    <p class="ck-rayon-families__proof" t-esc="ck_rayon['proof']"/>
+                    <p t-if="ck_rayon.get('proof')" class="ck-rayon-families__proof" t-esc="ck_rayon['proof']"/>
                 </div>
             </section>
 
-            <section t-if="ck_rayon and ck_rayon['highlights']" class="container ck-rayon-header__highlights">
+            <section t-if="ck_rayon and ck_rayon.get('highlights')" class="container ck-rayon-header__highlights">
                 <div class="row g-3">
                     <div class="col-md-4" t-foreach="ck_rayon['highlights']" t-as="ck_highlight">
                         <a t-att-href="ck_highlight['url']" class="ck-rayon-highlight">
@@ -63,10 +64,13 @@
               name="CK Rayon éditorial — masque titre natif dupliqué"
               priority="40">
         <xpath expr="//header[@id='o_wsale_products_header']//h1" position="attributes">
-            <attribute name="t-if">(category or search) and not ck_rayon</attribute>
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//h1[hasclass('o_wsale_shop_title')]" position="attributes">
+            <attribute name="t-if">False</attribute>
         </xpath>
         <xpath expr="//div[@id='category_header']" position="attributes">
-            <attribute name="t-if">not ck_rayon</attribute>
+            <attribute name="t-if">False</attribute>
         </xpath>
     </template>
 </odoo>
