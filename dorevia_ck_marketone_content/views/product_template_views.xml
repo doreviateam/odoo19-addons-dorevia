@@ -55,15 +55,55 @@
                                    string="Unité du prix de référence"
                                    options="{'no_create': True, 'no_open': True}"/>
                         </group>
-                        <group name="ck_ecommerce_description" string="Accroche e-commerce">
+                        <group name="ck_product_hook_badges" string="Accroche &amp; mise en avant">
                             <div class="text-muted mb-2" colspan="2">
-                                Phrase courte affichée en tête de fiche produit sur le site.
-                                Distinct de la description longue et des notes commerciales.
+                                Accroche courte zone haute fiche produit et badges qualifiés MOA.
                             </div>
                             <field name="description_ecommerce"
+                                   string="Accroche courte"
                                    nolabel="1"
                                    colspan="2"
                                    placeholder="Ex. Confiture artisanale de goyave · 320 g · Guadeloupe"/>
+                            <field name="ck_badge_ids"
+                                   widget="many2many_tags"
+                                   options="{'no_create': True}"
+                                   placeholder="Guadeloupe, Producteur identifié…"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group name="ck_origin_producer" string="Origine &amp; producteur">
+                            <div class="text-muted mb-2" colspan="2">
+                                L’origine géographique reste portée par l’attribut « Origines » (onglet Attributs &amp; variantes).
+                            </div>
+                            <field name="ck_producer_id"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group name="ck_product_sheet_content" string="Contenu fiche produit">
+                            <field name="ck_discover_html"
+                                   string="Section Découvrir"
+                                   placeholder="Contenu éditorial section Découvrir."/>
+                            <field name="ck_ingredients" placeholder="Liste des ingrédients."/>
+                            <field name="ck_allergens" placeholder="Allergènes déclarés."/>
+                            <field name="ck_nutrition_html"
+                                   string="Informations nutritionnelles"/>
+                            <field name="ck_conservation_before"/>
+                            <field name="ck_conservation_after"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group name="ck_practical_info" string="Infos pratiques">
+                            <field name="ck_packaging_label"
+                                   placeholder="Pot verre 320 g"/>
+                            <field name="default_code" string="Référence interne"/>
+                            <field name="weight" string="Poids logistique"/>
+                            <field name="public_categ_ids"
+                                   widget="many2many_tags"
+                                   string="Catégories e-commerce"/>
+                        </group>
+                        <group name="ck_ecommerce_description" string="Accroche e-commerce (masqué)">
+                            <field name="description_ecommerce" invisible="1"/>
                         </group>
                     </group>
 

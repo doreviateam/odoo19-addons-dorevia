@@ -1,0 +1,111 @@
+{
+  "desktop": {
+    "overflow": false,
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "hasCategoryChips": true,
+    "hasH1": true,
+    "metaText": "100 g · 36,00 €/kg",
+    "metaHasProducerLink": false,
+    "hasLead": true,
+    "hasBadges": false,
+    "hasAddToCart": true,
+    "hasWishlist": true,
+    "hasCompare": false,
+    "trustText": "\n                    En stock — expédié depuis Nantes\n                    Livraison suivie 2 à 3 jours ouvrables\n                    Retour selon conditions de vente\n                ",
+    "anchorNavSticky": true,
+    "anchorLinks": [
+      {
+        "text": "Découvrir",
+        "href": "#ck-section-discover",
+        "active": true
+      },
+      {
+        "text": "Conservation",
+        "href": "#ck-section-conservation",
+        "active": false
+      },
+      {
+        "text": "Infos pratiques",
+        "href": "#ck-section-practical",
+        "active": false
+      }
+    ],
+    "anchorOrder": [
+      "Découvrir",
+      "Conservation",
+      "Infos pratiques"
+    ],
+    "variantPrices": [
+      "3,50 €"
+    ],
+    "deltaBadges": [],
+    "sections": [
+      "ck-section-discover",
+      "ck-section-conservation",
+      "ck-section-practical"
+    ],
+    "producerSection": false
+  },
+  "mobile": {
+    "overflow": false,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasCategoryChips": true,
+    "hasH1": true,
+    "metaText": "100 g · 36,00 €/kg",
+    "metaHasProducerLink": false,
+    "hasLead": true,
+    "hasBadges": false,
+    "hasAddToCart": true,
+    "hasWishlist": true,
+    "hasCompare": false,
+    "trustText": "\n                    En stock — expédié depuis Nantes\n                    Livraison suivie 2 à 3 jours ouvrables\n                    Retour selon conditions de vente\n                ",
+    "anchorNavSticky": true,
+    "anchorLinks": [
+      {
+        "text": "Découvrir",
+        "href": "#ck-section-discover",
+        "active": true
+      },
+      {
+        "text": "Conservation",
+        "href": "#ck-section-conservation",
+        "active": false
+      },
+      {
+        "text": "Infos pratiques",
+        "href": "#ck-section-practical",
+        "active": false
+      }
+    ],
+    "anchorOrder": [
+      "Découvrir",
+      "Conservation",
+      "Infos pratiques"
+    ],
+    "variantPrices": [
+      "3,50 €"
+    ],
+    "deltaBadges": [],
+    "sections": [
+      "ck-section-discover",
+      "ck-section-conservation",
+      "ck-section-practical"
+    ],
+    "producerSection": false
+  },
+  "checks": {
+    "desktopNoOverflow": true,
+    "mobileNoOverflow": true,
+    "metaHasProducerLink": false,
+    "reassuranceOk": true,
+    "compareHidden": true,
+    "stickyNav": true,
+    "variantAbsolutePrices": false,
+    "noDeltaBadges": true,
+    "anchorOrderOk": false,
+    "producerSectionOk": false
+  },
+  "pass": false
+}

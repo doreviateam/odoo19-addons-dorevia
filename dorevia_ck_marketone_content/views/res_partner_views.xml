@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_ck_producer" model="ir.ui.view">
+        <field name="name">res.partner.form.ck.producer</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">35</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page string="Producteur CK" name="ck_producer">
+                    <group>
+                        <group string="Identité producteur">
+                            <field name="ck_is_producer" widget="boolean_toggle"/>
+                            <field name="ck_producer_location_label"
+                                   placeholder="Abymes, Guadeloupe"/>
+                            <field name="image_1920" widget="image" class="oe_avatar"/>
+                        </group>
+                        <group string="Contenus fiche producteur">
+                            <field name="ck_producer_short_description"
+                                   nolabel="1"
+                                   colspan="2"
+                                   placeholder="Texte court affiché sur la fiche produit."/>
+                            <field name="ck_producer_story_html"
+                                   nolabel="1"
+                                   colspan="2"
+                                   placeholder="Contenu long pour la future fiche producteur dédiée."/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

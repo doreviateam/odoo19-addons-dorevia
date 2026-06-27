@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ck_product_badge_guadeloupe" model="ck.product.badge">
+        <field name="name">Guadeloupe</field>
+        <field name="code">guadeloupe</field>
+        <field name="badge_type">origin</field>
+        <field name="icon">🇬🇵</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="ck_product_badge_farine_manioc" model="ck.product.badge">
+        <field name="name">Farine de manioc</field>
+        <field name="code">farine_manioc</field>
+        <field name="badge_type">ingredient</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="ck_product_badge_producteur_identifie" model="ck.product.badge">
+        <field name="name">Producteur identifié</field>
+        <field name="code">producteur_identifie</field>
+        <field name="badge_type">producer</field>
+        <field name="sequence">30</field>
+    </record>
+</odoo>

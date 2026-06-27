@@ -39,7 +39,9 @@ class TestCkProductSalesTabBo(TransactionCase):
         sales = self._sales_arch()
         row_pairs = [
             ('ck_publication_highlight', 'ck_shop_classification'),
-            ('ck_card_reference_price', 'ck_ecommerce_description'),
+            ('ck_card_reference_price', 'ck_product_hook_badges'),
+            ('ck_origin_producer', 'ck_product_sheet_content'),
+            ('ck_practical_info', 'ck_ecommerce_description'),
             ('ck_ecommerce_media', 'ck_product_recommendations'),
         ]
         for left, right in row_pairs:
@@ -64,6 +66,10 @@ class TestCkProductSalesTabBo(TransactionCase):
             'ck_publication_highlight',
             'ck_shop_classification',
             'ck_card_reference_price',
+            'ck_product_hook_badges',
+            'ck_origin_producer',
+            'ck_product_sheet_content',
+            'ck_practical_info',
             'ck_ecommerce_description',
             'ck_ecommerce_media',
             'ck_product_recommendations',

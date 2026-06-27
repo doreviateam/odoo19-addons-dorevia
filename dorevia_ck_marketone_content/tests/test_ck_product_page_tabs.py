@@ -63,9 +63,9 @@ class TestCkProductPageTabs(TransactionCase):
             'ck_show_reference_price': True,
         })
         blocks = build_ck_product_page_tabs(product)
-        details = next((block for block in blocks if block['key'] == 'details'), None)
+        details = next((block for block in blocks if block['key'] == 'practical'), None)
         self.assertIsNotNone(details)
-        self.assertEqual(details['nav_label'], 'Détails')
+        self.assertEqual(details['nav_label'], 'Infos pratiques')
         labels = [row['label'] for row in details['specs']]
         self.assertIn('Contenance', labels)
 

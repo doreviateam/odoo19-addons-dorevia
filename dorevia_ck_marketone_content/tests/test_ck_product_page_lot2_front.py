@@ -130,8 +130,8 @@ class TestCkProductPageLot2Front(HttpCase):
             'ck_show_reference_price': True,
         })
         html = self._open_product(product)
-        self.assertIn('id="ck-section-details"', html)
-        self.assertIn('Détails produit', html)
+        self.assertIn('id="ck-section-practical"', html)
+        self.assertIn('Infos pratiques', html)
         self.assertIn('ck-product-page__specs', html)
         self.assertIn('Contenance', html)
 

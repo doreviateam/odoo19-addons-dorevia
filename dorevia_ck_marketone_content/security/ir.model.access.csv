@@ -7,3 +7,7 @@ access_ck_mega_menu_visual_block_public,ck.mega.menu.visual.block public,model_c
 access_ck_mega_menu_visual_block_designer,ck.mega.menu.visual.block designer,model_ck_mega_menu_visual_block,website.group_website_designer,1,1,1,1
 access_ck_mega_menu_rayon_visual_public,ck.mega.menu.rayon.visual public,model_ck_mega_menu_rayon_visual,base.group_public,1,0,0,0
 access_ck_mega_menu_rayon_visual_designer,ck.mega.menu.rayon.visual designer,model_ck_mega_menu_rayon_visual,website.group_website_designer,1,1,1,1
+access_ck_product_badge_public,ck.product.badge public,model_ck_product_badge,base.group_public,1,0,0,0
+access_ck_product_badge_user,ck.product.badge user,model_ck_product_badge,base.group_user,1,0,0,0
+access_ck_product_badge_sale,ck.product.badge sale,model_ck_product_badge,sales_team.group_sale_manager,1,1,1,1
+access_ck_product_badge_website_designer,ck.product.badge website designer,model_ck_product_badge,website.group_website_designer,1,1,1,1

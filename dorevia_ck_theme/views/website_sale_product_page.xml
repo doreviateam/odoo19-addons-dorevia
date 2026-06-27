@@ -80,13 +80,14 @@
 
     <template id="product_ck_terms_fr"
               inherit_id="website_sale.product_terms_and_conditions"
-              name="CK Product reassurance FR"
+              name="CK Product reassurance FR V1.1"
               priority="35">
         <xpath expr="//small" position="replace">
             <div class="ck-product-purchase__trust">
                 <ul class="ck-product-purchase__trust-list">
-                    <li>Garantie satisfaction — remboursement sous 30 jours</li>
-                    <li>Livraison 2–3 jours ouvrables</li>
+                    <li>En stock — expédié depuis Nantes</li>
+                    <li>Livraison suivie 2 à 3 jours ouvrables</li>
+                    <li>Retour selon conditions de vente</li>
                 </ul>
                 <p class="ck-product-purchase__trust-legal mb-0">
                     <a href="/terms" class="o_translate_inline">Conditions générales de vente</a>
@@ -146,16 +147,12 @@
                                             <t t-foreach="ck_block.get('sections')" t-as="ck_section">
                                                 <article t-attf-class="ck-product-page__section ck-product-page__section--#{ck_section.get('key')}"
                                                          t-att-data-ck-section="ck_section.get('key')">
-                                                    <h3 class="ck-product-page__section-title"
+                                                    <h3 t-if="ck_section.get('title')"
+                                                        class="ck-product-page__section-title"
                                                         t-out="ck_section.get('title')"/>
                                                     <t t-call="dorevia_ck_theme.product_ck_section_body"/>
                                                 </article>
                                             </t>
-                                        </t>
-                                        <t t-if="ck_block.get('key') == 'conservation'">
-                                            <div class="ck-product-page__delivery-note">
-                                                <p class="mb-0">Livraison 2–3 jours ouvrables en France métropolitaine. Paiement sécurisé.</p>
-                                            </div>
                                         </t>
                                         <t t-if="ck_block.get('specs')">
                                             <dl class="ck-product-page__specs">
@@ -166,6 +163,26 @@
                                                     </div>
                                                 </t>
                                             </dl>
+                                        </t>
+                                        <t t-if="ck_block.get('producer')">
+                                            <div class="ck-product-page__producer-card">
+                                                <div t-if="ck_block.get('producer').get('image_url')"
+                                                     class="ck-product-page__producer-media">
+                                                    <img t-att-src="ck_block.get('producer').get('image_url')"
+                                                         t-att-alt="ck_block.get('producer').get('name')"
+                                                         class="ck-product-page__producer-image"/>
+                                                </div>
+                                                <div class="ck-product-page__producer-body">
+                                                    <p t-if="ck_block.get('producer').get('location_label')"
+                                                       class="ck-product-page__producer-location mb-1"
+                                                       t-out="ck_block.get('producer').get('location_label')"/>
+                                                    <h3 class="ck-product-page__producer-name h5 mb-2"
+                                                        t-out="ck_block.get('producer').get('name')"/>
+                                                    <p t-if="ck_block.get('producer').get('short_description')"
+                                                       class="ck-product-page__producer-teaser mb-0"
+                                                       t-out="ck_block.get('producer').get('short_description')"/>
+                                                </div>
+                                            </div>
                                         </t>
                                     </section>
                                 </t>

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Fiche produit CK — regroupement des sections parser en blocs verticaux + ancres."""
+"""Fiche produit CK — regroupement sections V1.1 + repli parser website_description."""
 
 import re
 
 from markupsafe import Markup
+
+from odoo.tools import html2plaintext
 
 from odoo.addons.dorevia_ck_marketone_content.product_page_details import (
     build_ck_product_page_detail_sections,
@@ -25,22 +27,37 @@ _BLOCK_META = {
         'anchor_id': 'ck-section-composition',
     },
     'conservation': {
-        'title': 'Conservation & livraison',
+        'title': 'Conservation',
         'nav_label': 'Conservation',
         'anchor_id': 'ck-section-conservation',
     },
-    'details': {
-        'title': 'Détails produit',
-        'nav_label': 'Détails',
-        'anchor_id': 'ck-section-details',
+    'practical': {
+        'title': 'Infos pratiques',
+        'nav_label': 'Infos pratiques',
+        'anchor_id': 'ck-section-practical',
+    },
+    'producer': {
+        'title': 'Producteur',
+        'nav_label': 'Producteur',
+        'anchor_id': 'ck-section-producer',
     },
 }
 
 _MARKDOWN_EMPHASIS_RE = re.compile(r'\*([^*\n]+)\*')
 
 
+def _plain_text(value):
+    return re.sub(r'\s+', ' ', html2plaintext(value or '')).strip()
+
+
+def _text_markup(value):
+    text = (value or '').strip()
+    if not text:
+        return Markup('')
+    return Markup(f'<p>{Markup.escape(text)}</p>')
+
+
 def _sanitize_section_body(body):
-    """Retire les artefacts Markdown simples (*Usage :*) sans parser Markdown."""
     if not body:
         return Markup('')
     text = str(body)
@@ -86,57 +103,150 @@ def _format_net_quantity(product):
     )
 
 
-def _is_origin_attribute_line(line):
-    attr_name = (line.attribute_id.name or '').lower()
-    return 'origine' in attr_name or 'origin' in attr_name
+def _visible_public_categories(product):
+    return product.public_categ_ids.filtered(
+        lambda category: (category.name or '').strip().lower() != 'coups de cœur'
+    )
 
 
-def _build_details_specs(product, variant, env, website):
-    """Lignes factuelles section Détails produit — champs existants uniquement."""
+def _build_practical_specs(product, variant, env, website):
+    """Lignes factuelles section Infos pratiques — champs MOA + standards utiles."""
     from odoo.addons.dorevia_ck_marketone_content.ck_product_origin import (
         ck_origin_from_attribute,
     )
 
     rows = []
-    origin = ck_origin_from_attribute(product)
-    if origin:
-        rows.append({'label': 'Origine', 'value': origin})
+    net_qty = _format_net_quantity(product)
+    if net_qty:
+        rows.append({'label': 'Contenance', 'value': net_qty})
 
-    categories = product.public_categ_ids.filtered(
-        lambda c: (c.name or '').strip().lower() != 'coups de cœur'
-    )
+    packaging = (product.ck_packaging_label or '').strip()
+    if packaging:
+        rows.append({'label': 'Conditionnement', 'value': packaging})
+
+    if product.default_code:
+        rows.append({'label': 'Référence', 'value': product.default_code})
+
+    categories = _visible_public_categories(product)
     if categories:
         rows.append({
             'label': 'Catégorie',
             'value': ', '.join(categories.mapped('name')),
         })
 
-    net_qty = _format_net_quantity(product)
-    if net_qty:
-        rows.append({'label': 'Contenance', 'value': net_qty})
+    origin = ck_origin_from_attribute(product)
+    if origin:
+        rows.append({'label': 'Origine', 'value': origin})
+
+    producer = product.ck_producer_id
+    if producer and producer.ck_is_producer:
+        rows.append({'label': 'Producteur', 'value': producer.name})
 
     ref_price = _format_reference_price(env, website, product, variant)
     if ref_price:
         rows.append({'label': 'Prix de référence', 'value': ref_price})
 
-    if product.default_code:
-        rows.append({'label': 'Référence', 'value': product.default_code})
-
-    for line in product.attribute_line_ids:
-        if _is_origin_attribute_line(line):
-            continue
-        values = line.value_ids.mapped('name')
-        if not values:
-            continue
-        rows.append({
-            'label': line.attribute_id.name,
-            'value': ', '.join(values),
-        })
-
     if variant and variant.default_code and variant.default_code != product.default_code:
         rows.append({'label': 'Référence variante', 'value': variant.default_code})
 
     return rows
+
+
+def _build_discover_sections(product):
+    discover_html = (product.ck_discover_html or '').strip()
+    if discover_html and _plain_text(discover_html):
+        return [{
+            'key': 'discover',
+            'title': '',
+            'body': Markup(discover_html),
+            'subtitles': [],
+        }]
+
+    parsed = [
+        _copy_section(section)
+        for section in build_ck_product_page_detail_sections(product)
+        if section.get('key') in _BLOCK_DISCOVER_KEYS
+    ]
+    return parsed
+
+
+def _build_composition_sections(product):
+    sections = []
+    ingredients = (product.ck_ingredients or '').strip()
+    allergens = (product.ck_allergens or '').strip()
+    nutrition = (product.ck_nutrition_html or '').strip()
+
+    if ingredients:
+        sections.append({
+            'key': 'ingredients',
+            'title': 'Ingrédients',
+            'body': _text_markup(ingredients),
+            'subtitles': [],
+        })
+    if allergens:
+        sections.append({
+            'key': 'allergens',
+            'title': 'Allergènes',
+            'body': _text_markup(allergens),
+            'subtitles': [],
+        })
+    if nutrition and _plain_text(nutrition):
+        sections.append({
+            'key': 'nutrition',
+            'title': 'Valeurs nutritionnelles',
+            'body': Markup(nutrition),
+            'subtitles': [],
+        })
+
+    if sections:
+        return sections
+
+    return [
+        _copy_section(section)
+        for section in build_ck_product_page_detail_sections(product)
+        if section.get('key') in _BLOCK_COMPOSITION_KEYS
+    ]
+
+
+def _build_conservation_sections(product):
+    before = (product.ck_conservation_before or '').strip()
+    after = (product.ck_conservation_after or '').strip()
+    if before or after:
+        subtitles = []
+        if before:
+            subtitles.append({
+                'title': 'Avant ouverture',
+                'body': _text_markup(before),
+            })
+        if after:
+            subtitles.append({
+                'title': 'Après ouverture',
+                'body': _text_markup(after),
+            })
+        return [{
+            'key': 'conservation',
+            'title': 'Conservation',
+            'body': Markup(''),
+            'subtitles': subtitles,
+        }]
+
+    return [
+        _copy_section(section)
+        for section in build_ck_product_page_detail_sections(product)
+        if section.get('key') in _BLOCK_CONSERVATION_KEYS
+    ]
+
+
+def _build_producer_block(product):
+    partner = product.ck_producer_id
+    if not partner or not partner.ck_is_producer:
+        return None
+    return {
+        'name': partner.name,
+        'short_description': (partner.ck_producer_short_description or '').strip(),
+        'location_label': (partner.ck_producer_location_label or '').strip(),
+        'image_url': f'/web/image/res.partner/{partner.id}/image_1920' if partner.image_1920 else '',
+    }
 
 
 def _append_block(blocks, key, **extra):
@@ -151,29 +261,31 @@ def _append_block(blocks, key, **extra):
 
 
 def build_ck_product_page_tabs(product, variant=None):
-    """Blocs complémentaires fiche produit — empilement vertical + ancres (API inchangée)."""
+    """Blocs complémentaires fiche produit — empilement vertical + ancres V1.1."""
     product.ensure_one()
     variant = variant or product.product_variant_id
     website = product.env['website'].get_current_website()
     env = product.env
-
-    sections = [_copy_section(section) for section in build_ck_product_page_detail_sections(product)]
     blocks = []
 
-    discover = [s for s in sections if s.get('key') in _BLOCK_DISCOVER_KEYS]
+    discover = _build_discover_sections(product)
     if discover:
         _append_block(blocks, 'discover', sections=discover)
 
-    composition = [s for s in sections if s.get('key') in _BLOCK_COMPOSITION_KEYS]
+    composition = _build_composition_sections(product)
     if composition:
         _append_block(blocks, 'composition', sections=composition)
 
-    conservation = [s for s in sections if s.get('key') in _BLOCK_CONSERVATION_KEYS]
+    conservation = _build_conservation_sections(product)
     if conservation:
         _append_block(blocks, 'conservation', sections=conservation)
 
-    specs = _build_details_specs(product, variant, env, website)
+    specs = _build_practical_specs(product, variant, env, website)
     if specs:
-        _append_block(blocks, 'details', specs=specs)
+        _append_block(blocks, 'practical', specs=specs)
+
+    producer = _build_producer_block(product)
+    if producer:
+        _append_block(blocks, 'producer', producer=producer)
 
     return blocks

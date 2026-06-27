@@ -60,6 +60,47 @@ class ProductTemplate(models.Model):
             'lorsque les règles de mise en avant le permettent.'
         ),
     )
+    ck_producer_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Producteur',
+        domain="[('ck_is_producer', '=', True)]",
+        ondelete='set null',
+    )
+    ck_badge_ids = fields.Many2many(
+        comodel_name='ck.product.badge',
+        relation='product_template_ck_badge_rel',
+        column1='product_template_id',
+        column2='badge_id',
+        string='Badges qualifiés',
+        help='Badges MOA sélectionnés manuellement — affichés en zone haute fiche produit.',
+    )
+    ck_discover_html = fields.Html(
+        string='Section Découvrir',
+        sanitize_overridable=True,
+        sanitize_attributes=False,
+        translate=True,
+    )
+    ck_ingredients = fields.Text(string='Ingrédients', translate=True)
+    ck_allergens = fields.Text(string='Allergènes', translate=True)
+    ck_nutrition_html = fields.Html(
+        string='Informations nutritionnelles',
+        sanitize_overridable=True,
+        sanitize_attributes=False,
+        translate=True,
+    )
+    ck_conservation_before = fields.Text(
+        string='Conservation avant ouverture',
+        translate=True,
+    )
+    ck_conservation_after = fields.Text(
+        string='Conservation après ouverture',
+        translate=True,
+    )
+    ck_packaging_label = fields.Char(
+        string='Conditionnement client',
+        translate=True,
+        help='Libellé conditionnement affiché côté client (ex. Pot verre 320 g).',
+    )
 
     def get_ck_shop_card_metadata_line(self, variant=None):
         """Ligne meta card boutique — origine · tags · format · prix comparatif (canon Home)."""
@@ -95,6 +136,27 @@ class ProductTemplate(models.Model):
         product = self.sudo()
         variant = (variant or product.product_variant_id).sudo()
         return build_ck_product_page_tabs(product, variant)
+
+    def get_ck_product_page_metadata_line(self, variant=None):
+        """Ligne métadonnées zone haute — origine · producteur · poids net · prix réf."""
+        from odoo.addons.dorevia_ck_marketone_content.product_page_v11 import (
+            build_ck_product_page_metadata_line,
+        )
+
+        self.ensure_one()
+        variant = (variant or self.product_variant_id).sudo()
+        if not variant:
+            return ''
+        return build_ck_product_page_metadata_line(self.env, self, variant)
+
+    def get_ck_variant_value_prices(self, attribute_line):
+        """Prix absolus contextualisés par valeur d'attribut (sélecteur variantes CK)."""
+        from odoo.addons.dorevia_ck_marketone_content.product_page_v11 import (
+            build_ck_variant_value_prices,
+        )
+
+        self.ensure_one()
+        return build_ck_variant_value_prices(self.env, self, attribute_line)
 
     def _ck_refresh_home_featured_products(self):
         from odoo.addons.dorevia_ck_marketone_content.home_featured import (
