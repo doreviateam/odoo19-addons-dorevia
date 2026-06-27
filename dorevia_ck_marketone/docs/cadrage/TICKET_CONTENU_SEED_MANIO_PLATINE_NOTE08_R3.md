@@ -7,8 +7,8 @@
 | Réserve | R3 (+ clôture progressive R4) |
 | Priorité | Moyenne |
 | Bloquant | Non (démo MOA enrichie) |
-| Porteur | MOA / rédaction contenu |
-| Produits pivot | **Manio Crackers** · partenaire **La Platine** |
+| Statut | **✅ Clôturé** — seed BO 27 juin 2026 |
+| Produits pivot | **Manio Crackers** (id=4) · **SARL La Platine** (id=1405) |
 
 ## Contexte
 
@@ -16,6 +16,18 @@ La recette QA Note 08 a validé le **socle technique** (champs V1.1, BO, front, 
 R3 consiste à **renseigner le contenu métier dans Odoo** pour rendre la fiche Manio présentable, vendable et cohérente avec la grammaire CK V1.1.
 
 > **Règle gouvernance** : pas de seed technique ni de textes figés dans `dorevia_ck_marketone_content`, sauf demande explicite MOA pour une base démo/test.
+
+---
+
+## Clôture (27 juin 2026)
+
+| Entité | Action réalisée |
+| --- | --- |
+| **SARL La Platine** (id=1405) | `ck_is_producer=True` · `ck_producer_location_label` = Sainte-Anne, Guadeloupe · accroche producteur renseignée |
+| **Badge Fécule de manioc** (id=24) | `code=ingredient_fecule_manioc` · `badge_type=ingredient` · sequence=25 |
+| **Manio Crackers** (id=4) | `description_ecommerce` · `ck_producer_id=1405` · `ck_badge_ids=[1, 24, 3]` · `ck_discover_html` · `ck_ingredients` · `ck_allergens` · `ck_packaging_label` |
+
+**Recette script** `ck_note08_recette_qa.mjs` : `pass: true` · `metaHasProducerLink` · `producerSectionOk` · ancres `Découvrir → Composition → Infos pratiques → Producteur` (Conservation masquée, conforme spec).
 
 ---
 

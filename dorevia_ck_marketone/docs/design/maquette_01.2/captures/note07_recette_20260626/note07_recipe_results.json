@@ -1,0 +1,851 @@
+{
+  "generatedAt": "2026-06-26T15:09:29.202Z",
+  "base": "http://localhost:18079",
+  "db": "dorevia_ck_marketone_01",
+  "out": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626",
+  "pass": false,
+  "checks": {
+    "allHttp200": true,
+    "noOdooError": true,
+    "noOverflow": true,
+    "sidebarHidden": false,
+    "drawerPresent": true,
+    "filterButtonVisible": true
+  },
+  "results": [
+    {
+      "routeName": "shop",
+      "routeUrl": "/shop",
+      "viewportName": "desktop1280",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/shop_desktop1280.png",
+      "finalPath": "/shop?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Products | C-Kreyol",
+      "h1": "Boutique C-Kréyòl",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 1280,
+      "scrollWidth": 1280,
+      "sidebar": {
+        "exists": true,
+        "visible": true,
+        "width": 240,
+        "height": 966,
+        "display": "block",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 942,
+        "height": 1700,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 380,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 101,
+          "height": 35,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 14,
+      "productNames": [
+        "Confiture de goyave",
+        "Manio Crackers",
+        "Galettes de manioc",
+        "Savon vétiver",
+        "Chapeau Panama",
+        "Pâte de manioc",
+        "Jus Mont-Pelé"
+      ],
+      "categoryTileCount": 0,
+      "categoryTiles": [],
+      "filmstrip": {
+        "exists": true,
+        "visible": true,
+        "width": 880,
+        "height": 50,
+        "display": "flex",
+        "classes": "o_wsale_filmstrip_container d-flex align-items-stretch overflow-hidden o_wsale_filmstrip_pills o_wsale_filmstrip_fancy_disabled"
+      },
+      "rebound": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "reboundMessage": null,
+      "addButtonCount": 7,
+      "hasBioBadge": true,
+      "hasNewBadge": true,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "epicerie",
+      "routeUrl": "/shop/category/epicerie-1",
+      "viewportName": "desktop1280",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/epicerie_desktop1280.png",
+      "finalPath": "/shop/category/epicerie-1?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Épicerie | C-Kreyol",
+      "h1": "Épicerie créole",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 1280,
+      "scrollWidth": 1280,
+      "sidebar": {
+        "exists": true,
+        "visible": true,
+        "width": 240,
+        "height": 966,
+        "display": "block",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 942,
+        "height": 1142,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 380,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 101,
+          "height": 35,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 8,
+      "productNames": [
+        "Confiture de goyave",
+        "Manio Crackers",
+        "Galettes de manioc",
+        "Pâte de manioc"
+      ],
+      "categoryTileCount": 3,
+      "categoryTiles": [
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        }
+      ],
+      "filmstrip": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "rebound": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "reboundMessage": null,
+      "addButtonCount": 4,
+      "hasBioBadge": false,
+      "hasNewBadge": true,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "boissons",
+      "routeUrl": "/shop/category/boissons-123",
+      "viewportName": "desktop1280",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/boissons_desktop1280.png",
+      "finalPath": "/shop/category/boissons-123?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Boissons | C-Kreyol",
+      "h1": "Boutique C-Kréyòl",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 1280,
+      "scrollWidth": 1280,
+      "sidebar": {
+        "exists": true,
+        "visible": true,
+        "width": 240,
+        "height": 966,
+        "display": "block",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 942,
+        "height": 966,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 380,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 101,
+          "height": 35,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 2,
+      "productNames": [
+        "Jus Mont-Pelé"
+      ],
+      "categoryTileCount": 1,
+      "categoryTiles": [
+        {
+          "text": "Jus de fruits",
+          "href": "/shop/category/boissons-jus-de-fruits-186"
+        }
+      ],
+      "filmstrip": {
+        "exists": true,
+        "visible": true,
+        "width": 880,
+        "height": 50,
+        "display": "flex",
+        "classes": "o_wsale_filmstrip_container d-flex align-items-stretch overflow-hidden o_wsale_filmstrip_pills o_wsale_filmstrip_fancy_disabled"
+      },
+      "rebound": {
+        "exists": true,
+        "visible": true,
+        "width": 1280,
+        "height": 146,
+        "display": "block",
+        "classes": "ck-shop-rebound"
+      },
+      "reboundMessage": "Cette sélection s'enrichit progressivement. Découvrez d'autres produits créoles sur toute la boutique. Découvrir toute la boutique",
+      "addButtonCount": 1,
+      "hasBioBadge": false,
+      "hasNewBadge": false,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "soin",
+      "routeUrl": "/shop/category/soin-bien-etre-2",
+      "viewportName": "desktop1280",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/soin_desktop1280.png",
+      "finalPath": "/shop/category/soin-bien-etre-2?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Soin & Bien-être | C-Kreyol",
+      "h1": "Boutique C-Kréyòl",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 1280,
+      "scrollWidth": 1280,
+      "sidebar": {
+        "exists": true,
+        "visible": true,
+        "width": 240,
+        "height": 966,
+        "display": "block",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 942,
+        "height": 966,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 380,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 101,
+          "height": 35,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 2,
+      "productNames": [
+        "Savon vétiver"
+      ],
+      "categoryTileCount": 0,
+      "categoryTiles": [],
+      "filmstrip": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "rebound": {
+        "exists": true,
+        "visible": true,
+        "width": 1280,
+        "height": 146,
+        "display": "block",
+        "classes": "ck-shop-rebound"
+      },
+      "reboundMessage": "Cette sélection s'enrichit progressivement. Découvrez d'autres produits créoles sur toute la boutique. Découvrir toute la boutique",
+      "addButtonCount": 1,
+      "hasBioBadge": true,
+      "hasNewBadge": false,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "artisanat",
+      "routeUrl": "/shop/category/artisanat-3",
+      "viewportName": "desktop1280",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/artisanat_desktop1280.png",
+      "finalPath": "/shop/category/artisanat-3?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Artisanat | C-Kreyol",
+      "h1": "Boutique C-Kréyòl",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 1280,
+      "scrollWidth": 1280,
+      "sidebar": {
+        "exists": true,
+        "visible": true,
+        "width": 240,
+        "height": 966,
+        "display": "block",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 942,
+        "height": 966,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 380,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 101,
+          "height": 35,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 2,
+      "productNames": [
+        "Chapeau Panama"
+      ],
+      "categoryTileCount": 0,
+      "categoryTiles": [],
+      "filmstrip": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "rebound": {
+        "exists": true,
+        "visible": true,
+        "width": 1280,
+        "height": 146,
+        "display": "block",
+        "classes": "ck-shop-rebound"
+      },
+      "reboundMessage": "Cette sélection s'enrichit progressivement. Découvrez d'autres produits créoles sur toute la boutique. Découvrir toute la boutique",
+      "addButtonCount": 1,
+      "hasBioBadge": false,
+      "hasNewBadge": true,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "shop",
+      "routeUrl": "/shop",
+      "viewportName": "mobile390",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/shop_mobile390.png",
+      "finalPath": "/shop?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Products | C-Kreyol",
+      "h1": "Boutique C-Kréyòl",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 390,
+      "scrollWidth": 390,
+      "sidebar": {
+        "exists": true,
+        "visible": false,
+        "width": 0,
+        "height": 0,
+        "display": "none",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 388,
+        "height": 1726,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 390,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 98,
+          "height": 38,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 14,
+      "productNames": [
+        "Confiture de goyave",
+        "Manio Crackers",
+        "Galettes de manioc",
+        "Savon vétiver",
+        "Chapeau Panama",
+        "Pâte de manioc",
+        "Jus Mont-Pelé"
+      ],
+      "categoryTileCount": 0,
+      "categoryTiles": [],
+      "filmstrip": {
+        "exists": true,
+        "visible": true,
+        "width": 326,
+        "height": 50,
+        "display": "flex",
+        "classes": "o_wsale_filmstrip_container d-flex align-items-stretch overflow-hidden o_wsale_filmstrip_pills"
+      },
+      "rebound": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "reboundMessage": null,
+      "addButtonCount": 7,
+      "hasBioBadge": true,
+      "hasNewBadge": true,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "epicerie",
+      "routeUrl": "/shop/category/epicerie-1",
+      "viewportName": "mobile390",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/epicerie_mobile390.png",
+      "finalPath": "/shop/category/epicerie-1?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Épicerie | C-Kreyol",
+      "h1": "Épicerie créole",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 390,
+      "scrollWidth": 390,
+      "sidebar": {
+        "exists": true,
+        "visible": false,
+        "width": 0,
+        "height": 0,
+        "display": "none",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 388,
+        "height": 927,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 390,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 98,
+          "height": 38,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 8,
+      "productNames": [
+        "Confiture de goyave",
+        "Manio Crackers",
+        "Galettes de manioc",
+        "Pâte de manioc"
+      ],
+      "categoryTileCount": 3,
+      "categoryTiles": [
+        {
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
+        }
+      ],
+      "filmstrip": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "rebound": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "reboundMessage": null,
+      "addButtonCount": 4,
+      "hasBioBadge": false,
+      "hasNewBadge": true,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "boissons",
+      "routeUrl": "/shop/category/boissons-123",
+      "viewportName": "mobile390",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/boissons_mobile390.png",
+      "finalPath": "/shop/category/boissons-123?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Boissons | C-Kreyol",
+      "h1": "Boutique C-Kréyòl",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 390,
+      "scrollWidth": 390,
+      "sidebar": {
+        "exists": true,
+        "visible": false,
+        "width": 0,
+        "height": 0,
+        "display": "none",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 388,
+        "height": 598,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 390,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 98,
+          "height": 38,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 2,
+      "productNames": [
+        "Jus Mont-Pelé"
+      ],
+      "categoryTileCount": 1,
+      "categoryTiles": [
+        {
+          "text": "Jus de fruits",
+          "href": "/shop/category/boissons-jus-de-fruits-186"
+        }
+      ],
+      "filmstrip": {
+        "exists": true,
+        "visible": true,
+        "width": 326,
+        "height": 50,
+        "display": "flex",
+        "classes": "o_wsale_filmstrip_container d-flex align-items-stretch overflow-hidden o_wsale_filmstrip_pills o_wsale_filmstrip_fancy_disabled"
+      },
+      "rebound": {
+        "exists": true,
+        "visible": true,
+        "width": 390,
+        "height": 146,
+        "display": "block",
+        "classes": "ck-shop-rebound"
+      },
+      "reboundMessage": "Cette sélection s'enrichit progressivement. Découvrez d'autres produits créoles sur toute la boutique. Découvrir toute la boutique",
+      "addButtonCount": 1,
+      "hasBioBadge": false,
+      "hasNewBadge": false,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "soin",
+      "routeUrl": "/shop/category/soin-bien-etre-2",
+      "viewportName": "mobile390",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/soin_mobile390.png",
+      "finalPath": "/shop/category/soin-bien-etre-2?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Soin & Bien-être | C-Kreyol",
+      "h1": "Boutique C-Kréyòl",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 390,
+      "scrollWidth": 390,
+      "sidebar": {
+        "exists": true,
+        "visible": false,
+        "width": 0,
+        "height": 0,
+        "display": "none",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 388,
+        "height": 538,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 390,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 98,
+          "height": 38,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 2,
+      "productNames": [
+        "Savon vétiver"
+      ],
+      "categoryTileCount": 0,
+      "categoryTiles": [],
+      "filmstrip": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "rebound": {
+        "exists": true,
+        "visible": true,
+        "width": 390,
+        "height": 146,
+        "display": "block",
+        "classes": "ck-shop-rebound"
+      },
+      "reboundMessage": "Cette sélection s'enrichit progressivement. Découvrez d'autres produits créoles sur toute la boutique. Découvrir toute la boutique",
+      "addButtonCount": 1,
+      "hasBioBadge": true,
+      "hasNewBadge": false,
+      "hasEmptyLineClue": false
+    },
+    {
+      "routeName": "artisanat",
+      "routeUrl": "/shop/category/artisanat-3",
+      "viewportName": "mobile390",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "screenshot": "/Users/doreviateam/dorevia-saas/odoo19-addons-dorevia/dorevia_ck_marketone/docs/design/maquette_01.2/captures/note07_recette_20260626/artisanat_mobile390.png",
+      "finalPath": "/shop/category/artisanat-3?db=dorevia_ck_marketone_01&qa_ts=note07",
+      "title": "Artisanat | C-Kreyol",
+      "h1": "Boutique C-Kréyòl",
+      "isOdooError": false,
+      "overflow": false,
+      "pageWidth": 390,
+      "scrollWidth": 390,
+      "sidebar": {
+        "exists": true,
+        "visible": false,
+        "width": 0,
+        "height": 0,
+        "display": "none",
+        "classes": "d-none d-lg-block position-sticky align-self-start col clearfix pt-2 ck-shop-sidebar d-none"
+      },
+      "grid": {
+        "exists": true,
+        "visible": true,
+        "width": 388,
+        "height": 504,
+        "display": "block",
+        "classes": "col"
+      },
+      "offcanvas": {
+        "exists": true,
+        "visible": false,
+        "width": 390,
+        "height": 900,
+        "display": "flex",
+        "classes": "o_website_offcanvas offcanvas offcanvas-end p-0"
+      },
+      "visibleFilterButtonCount": 1,
+      "filterButtons": [
+        {
+          "text": "Filtres",
+          "visible": true,
+          "width": 98,
+          "height": 38,
+          "classes": "btn btn-light position-relative d-lg-none  text-nowrap",
+          "target": "#o_wsale_offcanvas"
+        }
+      ],
+      "productCardCount": 2,
+      "productNames": [
+        "Chapeau Panama"
+      ],
+      "categoryTileCount": 0,
+      "categoryTiles": [],
+      "filmstrip": {
+        "exists": false,
+        "visible": false,
+        "width": 0,
+        "height": 0
+      },
+      "rebound": {
+        "exists": true,
+        "visible": true,
+        "width": 390,
+        "height": 146,
+        "display": "block",
+        "classes": "ck-shop-rebound"
+      },
+      "reboundMessage": "Cette sélection s'enrichit progressivement. Découvrez d'autres produits créoles sur toute la boutique. Découvrir toute la boutique",
+      "addButtonCount": 1,
+      "hasBioBadge": false,
+      "hasNewBadge": true,
+      "hasEmptyLineClue": false
+    }
+  ]
+}

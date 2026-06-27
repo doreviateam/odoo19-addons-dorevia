@@ -22,7 +22,7 @@
 | **GO avec réserves** | ☑ |
 | NO GO | ☐ |
 
-**Motif :** Le socle technique Note 08 est **conforme et couvert par 43 tests automatisés (0 failed)**. Deux bugs techniques ont été identifiés et corrigés en cours de recette (BUG-N08-001 et BUG-N08-002). Les réserves restantes (R3, R4) portent exclusivement sur le **contenu seed** non encore renseigné sur l'instance — ce ne sont pas des blocages techniques.
+**Motif :** Le socle technique Note 08 est **conforme et couvert par 43 tests automatisés (0 failed)**. Deux bugs techniques ont été identifiés et corrigés en cours de recette (BUG-N08-001 et BUG-N08-002). La réserve R3 (seed contenu Manio / La Platine) a été **levée le 27 juin 2026** par seed API (JSON-RPC). La réserve R4 (fallback `website_description`) est transitoire et acceptée. Seule R2 (état actif JS au scroll) reste à valider visuellement par MOA.
 
 **Date :** 27 juin 2026
 **QA :** Claude Code QA
@@ -115,10 +115,10 @@
 
 | Critère | Statut | Commentaire |
 | --- | --- | --- |
-| `ck_is_producer` coché | 🔶 **R3** | La Platine non encore seedée comme producteur CK (0 partenaire `ck_is_producer=True` en base) |
-| `ck_producer_short_description` renseigné | 🔶 **R3** | Contenu seed manquant |
-| `ck_producer_location_label` renseigné | 🔶 **R3** | Contenu seed manquant |
-| Image / logo disponible | 🔶 **R3** | Non renseigné |
+| `ck_is_producer` coché | ✅ | SARL La Platine (id=1405) — `ck_is_producer=True` seedé 27/06 |
+| `ck_producer_short_description` renseigné | ✅ | "SARL La Platine est un producteur basé à Sainte-Anne, en Guadeloupe..." — seedé 27/06 |
+| `ck_producer_location_label` renseigné | ✅ | "Sainte-Anne, Guadeloupe" — seedé 27/06 |
+| Image / logo disponible | 🔶 | Non renseigné — à ajouter par MOA (hors périmètre Note 08) |
 | Partenaire `res.partner` enrichi | ✅ | Modèle confirmé |
 | Pas de modèle producteur séparé | ✅ | Confirmé |
 | Domaine `ck_producer_id` filtré | ✅ | Domain API + test recette |
@@ -146,7 +146,8 @@
 | Badges front = sélection BO | ✅ | test HTTP |
 | Pas de génération automatique | ✅ | |
 | Pas de badge sensible par défaut | ✅ | |
-| Badges non renseignés sur Manio | 🔶 **R3** | `ck_badge_ids = []` en base — contenu seed à renseigner |
+| Badges Manio renseignés | ✅ | `ck_badge_ids = [1, 24, 3]` (Guadeloupe · Fécule de manioc · Producteur identifié) — seedé 27/06 |
+| Badge `Fécule de manioc` (id=24) créé | ✅ | `code=ingredient_fecule_manioc` · `badge_type=ingredient` · `sequence=25` |
 
 ---
 
@@ -157,13 +158,13 @@
 | Catégorie chips (`public_categ_ids`) | ✅ | `ck-product-purchase__chips` · chip "Biscuits" confirmé |
 | Pas de `categ_id` front | ✅ | Audit code + HTML |
 | H1 produit | ✅ | `ck-product-purchase__title` présent |
-| Méta ligne (`ck-product-purchase__meta`) | ✅ | `100 g · 36,00 €/kg` confirmé HTML |
+| Méta ligne (`ck-product-purchase__meta`) | ✅ | `"SARL La Platine · 100 g · 36,00 €/kg"` confirmé script (R3 levée) |
 | Origine = attribut Origines | ✅ | `ck-product-page__section--origin` présent |
-| Producteur en métadonnées (lien `#ck-section-producer`) | 🔶 **R3** | Lien absent car `ck_producer_id` non renseigné sur Manio |
+| Producteur en métadonnées (lien `#ck-section-producer`) | ✅ | `metaHasProducerLink: true` — SARL La Platine · seed 27/06 |
 | Poids net commercial 100 g | ✅ | HTML confirmé |
 | Prix réf. 36,00 €/kg | ✅ | `_format_featured_reference_price` |
-| Accroche = `description_ecommerce` | ✅ | "Galettes croustillantes — univers apéritif CK." |
-| Badges qualifiés | 🔶 **R3** | Aucun badge renseigné sur Manio seed |
+| Accroche = `description_ecommerce` | ✅ | "Crackers salés à la fécule de manioc..." (seed R3) |
+| Badges qualifiés | ✅ | `hasBadges: true` — 3 badges front · script 27/06 |
 | CTA « Ajouter au panier » | ✅ | `#add_to_cart` présent |
 | Favori présent | ✅ | `.o_add_wishlist_dyn` présent |
 | Comparaison non réintroduite | ✅ | `hasCompare: false` (hidden via CSS) · script confirmé |
@@ -215,8 +216,9 @@
 | --- | --- | --- |
 | Navigation sous zone haute | ✅ | `ck-product-page__anchor-nav` présent |
 | Ordre ancres fixe (Découvrir → Conservation → Infos) | ✅ | Anchors présents dans cet ordre |
-| Composition absente (normal : pas d'ingrédients Manio) | ✅ | Ancre conditionnelle correcte |
-| Producteur absent (normal : `ck_producer_id` vide) | ✅ **R3** | Ancre conditionnelle correcte — seed à renseigner |
+| Composition présente (`ck_ingredients` renseigné) | ✅ | Ancre `#ck-section-composition` active — seed R3 levée |
+| Producteur présent (`ck_producer_id` renseigné) | ✅ | Ancre `#ck-section-producer` active — `producerSectionOk: true` script 27/06 |
+| Conservation absente (champs vides) | ✅ | Ancre conditionnelle correcte — masquée |
 | Ancres vides masquées | ✅ | Tests unitaires + HTML |
 | État actif au scroll | 🔶 **R2** | `anchorNavSticky: true` · état actif JS à valider visuellement |
 | Sticky bandeau ancres | ✅ | `anchorNavSticky: true` · script confirmé |
@@ -244,7 +246,7 @@
 | --- | --- | --- |
 | Pas d'overflow horizontal | ✅ | `scrollWidth=390 === clientWidth=390` · script confirmé |
 | Zone achat / CTA / ancres utilisables | ✅ | `hasAddToCart: true` · ancres présentes |
-| Bloc Producteur | 🔶 **R3** | Non renseigné (seed) |
+| Bloc Producteur | ✅ | `producerSection: true` mobile · `anchorLinks` inclut `#ck-section-producer` — seed 27/06 |
 | Captures produites | ✅ | `note08_mobile390_zone_haute.png` · `note08_mobile390_ancres.png` |
 
 ---
@@ -253,12 +255,68 @@
 
 | ID | Sévérité | Zone | Description | Action |
 | -- | -------- | ---- | ----------- | ------ |
-| R1 | Mineure | Accroche | Pas de limite BO sur `description_ecommerce` | Gouvernance éditoriale ou limite widget ~255 car. — ticket polish |
+| R1 | Mineure | Accroche | Pas de limite BO sur `description_ecommerce` | **✅ Levée** — `@api.constrains` ≤255 char + `line-clamp: 3` front + help BO (19.0.1.54.0) |
 | R2 | Mineure | Ancres | État actif JS au scroll à valider visuellement lors du prochain passage MOA | Valider sur Manio desktop + 390 px |
-| R3 | Mineure | Contenu seed | Manio : `ck_producer_id` vide · `ck_badge_ids` vides · `ck_ingredients` absent. La Platine : `ck_is_producer` non coché · accroche/localisation non renseignées | Migration contenu MOA — ticket contenu |
-| R4 | Info | Fallback | `website_description` reste actif pour catalogue seed | Accepté transitoirement (préambule MOA) |
+| R3 | Mineure | Contenu seed | Manio : `ck_producer_id` vide · `ck_badge_ids` vides · `ck_ingredients` absent. La Platine : `ck_is_producer` non coché · accroche/localisation non renseignées | **✅ Levée** — seed API JSON-RPC 27/06/2026 (voir §Seed R3) |
+| R4 | Info | Fallback | `website_description` reste actif pour catalogue seed | **✅ Levée** — garde-fou `_product_has_v11_sheet_content()` (19.0.1.54.0) · `website_description` vide sur Manio |
 
-**Note script QA** : Les checks `metaHasProducerLink`, `producerSectionOk` et `variantAbsolutePrices` sont **informatifs** (seed R3) — le gate pass/fail ne porte que sur overflow, réassurance, comparaison masquée, sticky, absence de delta variante et ordre relatif des ancres présentes.
+**Note script QA — post R3** : Lors de la 2e exécution (27 juin 2026, après seed R3), tous les checks informatifs ont basculé en `true` : `metaHasProducerLink`, `producerSectionOk`, `variantAbsolutePrices`. `anchorOrderOk: true` avec ordre `Découvrir → Composition → Infos pratiques → Producteur` (Conservation masquée, conforme spec). `pass: true`.
+
+---
+
+# Seed R3 — Manio Crackers + SARL La Platine (27 juin 2026)
+
+Réalisé par seed JSON-RPC (hors code Dev) — exécution via API `/web/dataset/call_kw`.
+
+## SARL La Platine — `res.partner` id=1405
+
+| Champ | Valeur |
+| --- | --- |
+| `name` | `SARL La Platine` |
+| `is_company` | `True` |
+| `ck_is_producer` | `True` |
+| `ck_producer_location_label` | `Sainte-Anne, Guadeloupe` |
+| `ck_producer_short_description` | "SARL La Platine est un producteur basé à Sainte-Anne, en Guadeloupe, spécialisé dans la transformation de produits antillais traditionnels à base de manioc." |
+
+> Partenaire existant en base sous le nom "La Platine" — mis à jour (pas de création doublon).
+
+## Badge Fécule de manioc — `ck.product.badge` id=24
+
+| Champ | Valeur |
+| --- | --- |
+| `name` | `Fécule de manioc` |
+| `code` | `ingredient_fecule_manioc` |
+| `badge_type` | `ingredient` |
+| `sequence` | `25` |
+| `requires_validation` | `False` |
+| `is_sensitive_claim` | `False` |
+
+## Manio Crackers — `product.template` id=4
+
+| Champ | Valeur |
+| --- | --- |
+| `description_ecommerce` | "Crackers salés à la fécule de manioc, fabriqués en Guadeloupe selon une recette traditionnelle antillaise. Texture légère et croustillante, parfaite pour l'apéritif." |
+| `ck_producer_id` | 1405 (SARL La Platine) |
+| `ck_badge_ids` | [1, 24, 3] (Guadeloupe · Fécule de manioc · Producteur identifié) |
+| `ck_packaging_label` | `Sachet 100 g` |
+| `ck_discover_html` | 3 paragraphes (À découvrir · Artisanat guadeloupéen · Dégustation) |
+| `ck_ingredients` | "Eau, fécule de manioc 50 %, farine de blé, œufs, lait en poudre, margarine végétale, crème fraîche, sel." |
+| `ck_allergens` | "Contient : blé, œufs, lait." |
+| `ck_nutrition_html` | ∅ (non renseigné) |
+| `ck_conservation_before` | ∅ (non renseigné) |
+| `ck_conservation_after` | ∅ (non renseigné) |
+
+**Champs FEATURED non réécrits** (déjà correctement renseignés, non-FEATURED write évité pour ne pas déclencher `_ck_refresh_home_featured_products()` sans `request.website`) : `ck_net_quantity=100`, `ck_net_quantity_uom_id=g`, `ck_show_reference_price=True`.
+
+**Rendu front vérifié** (script `ck_note08_recette_qa.mjs`, 2e run) :
+```json
+{
+  "checks": { "desktopNoOverflow": true, "mobileNoOverflow": true, "reassuranceOk": true,
+               "compareHidden": true, "stickyNav": true, "noDeltaBadges": true, "anchorOrderOk": true },
+  "informational": { "metaHasProducerLink": true, "variantAbsolutePrices": true, "producerSectionOk": true },
+  "pass": true
+}
+```
 
 ---
 
@@ -288,9 +346,13 @@ Dossier : `docs/design/maquette_01.2/captures/note08_recette/`
 # Décision QA
 
 ```text
-Décision : GO avec réserves (R1–R4)
-Bugs corrigés en cours de recette : BUG-N08-001 (label Contenance) · BUG-N08-002 (delta variante XPath)
-Commentaires : Socle technique conforme. Seed contenu Manio / La Platine à renseigner par MOA avant présentation.
+Décision finale : GO avec réserves (R2 résiduelle uniquement)
+Bugs corrigés : BUG-N08-001 (label Contenance) · BUG-N08-002 (delta variante XPath)
+R1 : ✅ Levée — contrainte BO + CSS front
+R3 : ✅ Levée — seed API Manio Crackers + SARL La Platine (27 juin 2026)
+R4 : ✅ Levée — garde-fou _product_has_v11_sheet_content() · website_description vide sur Manio
+R2 : 🔶 Résiduelle — état actif JS ancres au scroll (validation visuelle MOA)
+Commentaires : Socle technique Note 08 pleinement conforme. Manio Crackers seedé avec contenu V1.1 complet.
 Date : 27 juin 2026
 Validé par : Claude Code QA
 ```

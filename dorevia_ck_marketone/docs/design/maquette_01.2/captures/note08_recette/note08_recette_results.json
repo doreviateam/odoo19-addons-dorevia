@@ -5,10 +5,10 @@
     "clientWidth": 1280,
     "hasCategoryChips": true,
     "hasH1": true,
-    "metaText": "100 g · 36,00 €/kg",
-    "metaHasProducerLink": false,
+    "metaText": "SARL La Platine · 100 g · 36,00 €/kg",
+    "metaHasProducerLink": true,
     "hasLead": true,
-    "hasBadges": false,
+    "hasBadges": true,
     "hasAddToCart": true,
     "hasWishlist": true,
     "hasCompare": false,
@@ -21,20 +21,26 @@
         "active": true
       },
       {
-        "text": "Conservation",
-        "href": "#ck-section-conservation",
+        "text": "Composition",
+        "href": "#ck-section-composition",
         "active": false
       },
       {
         "text": "Infos pratiques",
         "href": "#ck-section-practical",
         "active": false
+      },
+      {
+        "text": "Producteur",
+        "href": "#ck-section-producer",
+        "active": false
       }
     ],
     "anchorOrder": [
       "Découvrir",
-      "Conservation",
-      "Infos pratiques"
+      "Composition",
+      "Infos pratiques",
+      "Producteur"
     ],
     "variantPrices": [
       "3,50 €"
@@ -42,10 +48,11 @@
     "deltaBadges": [],
     "sections": [
       "ck-section-discover",
-      "ck-section-conservation",
-      "ck-section-practical"
+      "ck-section-composition",
+      "ck-section-practical",
+      "ck-section-producer"
     ],
-    "producerSection": false
+    "producerSection": true
   },
   "mobile": {
     "overflow": false,
@@ -53,10 +60,10 @@
     "clientWidth": 390,
     "hasCategoryChips": true,
     "hasH1": true,
-    "metaText": "100 g · 36,00 €/kg",
-    "metaHasProducerLink": false,
+    "metaText": "SARL La Platine · 100 g · 36,00 €/kg",
+    "metaHasProducerLink": true,
     "hasLead": true,
-    "hasBadges": false,
+    "hasBadges": true,
     "hasAddToCart": true,
     "hasWishlist": true,
     "hasCompare": false,
@@ -69,20 +76,26 @@
         "active": true
       },
       {
-        "text": "Conservation",
-        "href": "#ck-section-conservation",
+        "text": "Composition",
+        "href": "#ck-section-composition",
         "active": false
       },
       {
         "text": "Infos pratiques",
         "href": "#ck-section-practical",
         "active": false
+      },
+      {
+        "text": "Producteur",
+        "href": "#ck-section-producer",
+        "active": false
       }
     ],
     "anchorOrder": [
       "Découvrir",
-      "Conservation",
-      "Infos pratiques"
+      "Composition",
+      "Infos pratiques",
+      "Producteur"
     ],
     "variantPrices": [
       "3,50 €"
@@ -90,22 +103,25 @@
     "deltaBadges": [],
     "sections": [
       "ck-section-discover",
-      "ck-section-conservation",
-      "ck-section-practical"
+      "ck-section-composition",
+      "ck-section-practical",
+      "ck-section-producer"
     ],
-    "producerSection": false
+    "producerSection": true
   },
   "checks": {
     "desktopNoOverflow": true,
     "mobileNoOverflow": true,
-    "metaHasProducerLink": false,
     "reassuranceOk": true,
     "compareHidden": true,
     "stickyNav": true,
-    "variantAbsolutePrices": false,
     "noDeltaBadges": true,
-    "anchorOrderOk": false,
-    "producerSectionOk": false
+    "anchorOrderOk": true
   },
-  "pass": false
+  "informational": {
+    "metaHasProducerLink": true,
+    "variantAbsolutePrices": true,
+    "producerSectionOk": true
+  },
+  "pass": true
 }

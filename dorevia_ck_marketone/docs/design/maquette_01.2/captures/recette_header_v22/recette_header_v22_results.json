@@ -3,13 +3,12 @@
     "db": "dorevia_ck_marketone_01",
     "base": "http://localhost:18079",
     "qa": "header_v22",
-    "capturedAt": "2026-06-23T11:11:48.844Z"
+    "capturedAt": "2026-06-27T14:50:56.395Z"
   },
   "checks": {
     "desktop_initial": {
       "serviceBar": true,
       "serviceBarText": "Produits sélectionnés · Origines identifiées · Livraison suivie · Stocké/expédié depuis Nantes",
-      "baseline": "épicerie créole",
       "placeholder": "Rechercher un produit, une saveur, une île...",
       "sticky": "sticky",
       "n3": [
@@ -18,10 +17,10 @@
         "Épicerie",
         "Boissons",
         "Boissons",
-        "Maison & Bien-être",
-        "Maison & Bien-être",
+        "Soin & Bien-être",
+        "Soin & Bien-être",
         "Artisanat",
-        "Coups de cœur",
+        "Communauté",
         "Nos producteurs",
         "Espace pro"
       ]
@@ -34,17 +33,26 @@
     "mega_Épicerie": {
       "open": true,
       "panelShow": true,
-      "panelHeight": 226,
+      "panelHeight": 310,
       "panelWidth": 1200,
       "titles": [
+        "Acheter par famille",
         "Origines & producteurs"
       ],
-      "hasFamilies": false,
-      "linkCount": 2,
+      "hasFamilies": true,
+      "linkCount": 4,
       "links": [
         {
-          "text": "Guadeloupe",
-          "href": "/shop?attrib=2-5"
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
         },
         {
           "text": "Voir les producteurs",
@@ -55,22 +63,18 @@
     "mega_Boissons": {
       "open": true,
       "panelShow": true,
-      "panelHeight": 205,
+      "panelHeight": 310,
       "panelWidth": 1200,
       "titles": [
         "Acheter par famille",
         "Origines & producteurs"
       ],
       "hasFamilies": true,
-      "linkCount": 3,
+      "linkCount": 2,
       "links": [
         {
           "text": "Jus & nectars",
           "href": "/shop/category/boissons-jus-de-fruits-186"
-        },
-        {
-          "text": "Guadeloupe",
-          "href": "/shop?attrib=2-5"
         },
         {
           "text": "Voir les producteurs",
@@ -78,26 +82,17 @@
         }
       ]
     },
-    "mega_Maison & Bien-être": {
+    "mega_Soin & Bien-être": {
       "open": true,
       "panelShow": true,
-      "panelHeight": 205,
+      "panelHeight": 257,
       "panelWidth": 1200,
       "titles": [
-        "Acheter par famille",
         "Origines & producteurs"
       ],
-      "hasFamilies": true,
-      "linkCount": 3,
+      "hasFamilies": false,
+      "linkCount": 1,
       "links": [
-        {
-          "text": "Savons & soins solides",
-          "href": "/shop/category/soin-bien-etre-savons-189"
-        },
-        {
-          "text": "Guadeloupe",
-          "href": "/shop?attrib=2-5"
-        },
         {
           "text": "Voir les producteurs",
           "href": "/nos-producteurs"
@@ -105,22 +100,31 @@
       ]
     },
     "mega_hover_bridge": {
-      "pass": true,
-      "phase": "traverse",
-      "after": {
+      "pass": false,
+      "phase": "target",
+      "state": {
         "open": true,
         "panelShow": true,
-        "panelHeight": 226,
+        "panelHeight": 310,
         "panelWidth": 1200,
         "titles": [
+          "Acheter par famille",
           "Origines & producteurs"
         ],
-        "hasFamilies": false,
-        "linkCount": 2,
+        "hasFamilies": true,
+        "linkCount": 4,
         "links": [
           {
-            "text": "Guadeloupe",
-            "href": "/shop?attrib=2-5"
+            "text": "Biscuits & crackers",
+            "href": "/shop/category/epicerie-biscuits-183"
+          },
+          {
+            "text": "Confitures & douceurs",
+            "href": "/shop/category/epicerie-confitures-184"
+          },
+          {
+            "text": "Farines & manioc",
+            "href": "/shop/category/epicerie-farines-manioc-388"
           },
           {
             "text": "Voir les producteurs",
@@ -128,18 +132,14 @@
           }
         ]
       },
-      "hovered": {
-        "tag": "A",
-        "text": "Guadeloupe",
-        "href": "/shop?attrib=2-5"
-      }
+      "linkBox": null
     },
     "mega_hover_switch": {
       "pass": true,
       "labels": [
         "Épicerie",
         "Boissons",
-        "Maison & Bien-être",
+        "Soin & Bien-être",
         "Boissons",
         "Épicerie"
       ],
@@ -151,25 +151,25 @@
             "Épicerie"
           ],
           "panelWidth": 1200,
+          "linkCount": 4
+        },
+        {
+          "label": "Boissons",
+          "pass": true,
+          "openLabels": [
+            "Boissons"
+          ],
+          "panelWidth": 1200,
           "linkCount": 2
         },
         {
-          "label": "Boissons",
+          "label": "Soin & Bien-être",
           "pass": true,
           "openLabels": [
-            "Boissons"
+            "Soin & Bien-être"
           ],
           "panelWidth": 1200,
-          "linkCount": 3
-        },
-        {
-          "label": "Maison & Bien-être",
-          "pass": true,
-          "openLabels": [
-            "Maison & Bien-être"
-          ],
-          "panelWidth": 1200,
-          "linkCount": 3
+          "linkCount": 1
         },
         {
           "label": "Boissons",
@@ -178,7 +178,7 @@
             "Boissons"
           ],
           "panelWidth": 1200,
-          "linkCount": 3
+          "linkCount": 2
         },
         {
           "label": "Épicerie",
@@ -187,7 +187,7 @@
             "Épicerie"
           ],
           "panelWidth": 1200,
-          "linkCount": 2
+          "linkCount": 4
         }
       ]
     },
@@ -212,7 +212,6 @@
     },
     "coups_de_coeur": {
       "directLink": true,
-      "href": "/shop/category/coups-de-cœur-24",
       "noMega": true
     },
     "coffrets": {
@@ -221,17 +220,16 @@
     },
     "mobile_closed": {
       "serviceBar": true,
-      "menuBtn": true,
-      "brand": "C-Kréyòl"
+      "menuBtn": true
     },
     "mobile_drawer": {
       "entries": [
         "Tous nos produits",
         "Épicerie",
         "Boissons",
-        "Maison & Bien-être",
+        "Soin & Bien-être",
         "Artisanat",
-        "Coups de cœur",
+        "Communauté",
         "Nos producteurs",
         "Espace pro Acheter pour mon commerce Demander les conditions pro Devenir partenaire / distributeur Contacter C-Kréyòl"
       ],
@@ -242,13 +240,22 @@
       "panelOpen": true,
       "accordion": true,
       "expandedSections": [
+        "Acheter par famille",
         "Origines & producteurs"
       ],
-      "linkCount": 2,
+      "linkCount": 4,
       "links": [
         {
-          "text": "Guadeloupe",
-          "href": "/shop?attrib=2-5"
+          "text": "Biscuits & crackers",
+          "href": "/shop/category/epicerie-biscuits-183"
+        },
+        {
+          "text": "Confitures & douceurs",
+          "href": "/shop/category/epicerie-confitures-184"
+        },
+        {
+          "text": "Farines & manioc",
+          "href": "/shop/category/epicerie-farines-manioc-388"
         },
         {
           "text": "Voir les producteurs",

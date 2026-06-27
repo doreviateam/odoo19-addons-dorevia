@@ -101,7 +101,7 @@ Avant de passer en conception détaillée, nous attendons :
     Plan de tests de non-régression : liste des pages et scénarios à valider.
     Points de vigilance : tout ce qui pourrait bloquer, ralentir, ou créer de la dette technique.
 
-7. Glossaire
+7. Glossaire SAUL
 Table
 Terme	Définition
 Sidebar	Colonne latérale fixe "Affiner ma sélection" avec les filtres et attributs produits.
