@@ -63,7 +63,8 @@
                                    string="Accroche courte"
                                    nolabel="1"
                                    colspan="2"
-                                   placeholder="Ex. Confiture artisanale de goyave · 320 g · Guadeloupe"/>
+                                   placeholder="Ex. Confiture artisanale de goyave · 320 g · Guadeloupe"
+                                   help="Texte court affiché sous le titre en zone haute fiche produit. Maximum 255 caractères (hors balises HTML)."/>
                             <field name="ck_badge_ids"
                                    widget="many2many_tags"
                                    options="{'no_create': True}"

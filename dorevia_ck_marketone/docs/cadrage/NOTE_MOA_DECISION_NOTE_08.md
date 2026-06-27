@@ -26,7 +26,7 @@ Les corrections **BUG-N08-001** et **BUG-N08-002** identifiées en recette QA so
 | --- | --- | --- | --- |
 | **R1** | Pas de limite BO sur `description_ecommerce` | Ticket polish BO (widget / gouvernance ~255 car.) | [`TICKET_POLISH_ACCROCHE_ECOMMERCE_NOTE08_R1.md`](./TICKET_POLISH_ACCROCHE_ECOMMERCE_NOTE08_R1.md) |
 | **R2** | Ancre active JS au scroll | Validation visuelle MOA (desktop + mobile 390 px) | Prochain passage MOA sur Manio |
-| **R3** | Seed contenu Manio + La Platine incomplet | Ticket contenu MOA | [`TICKET_CONTENU_SEED_MANIO_PLATINE_NOTE08_R3.md`](./TICKET_CONTENU_SEED_MANIO_PLATINE_NOTE08_R3.md) |
+| **R3** | Paramétrage contenu Manio + La Platine incomplet (BO Odoo) | Ticket contenu MOA | [`TICKET_CONTENU_SEED_MANIO_PLATINE_NOTE08_R3.md`](./TICKET_CONTENU_SEED_MANIO_PLATINE_NOTE08_R3.md) |
 | **R4** | Fallback `website_description` actif | Réserve transitoire jusqu’à migration champs dédiés | Suivi dans ticket R3 · pas de NO GO |
 
 ---
@@ -48,7 +48,7 @@ Les corrections **BUG-N08-001** et **BUG-N08-002** identifiées en recette QA so
 
 ```text
 Décision : GO avec réserves (R1–R4)
-Commentaires : Socle technique accepté. Seed contenu et polish accroche à planifier.
+Commentaires : Socle technique accepté. Paramétrage contenu MOA (R3) et polish accroche (R1) à planifier.
 Date : 27 juin 2026
 Validé par : MOA
 ```

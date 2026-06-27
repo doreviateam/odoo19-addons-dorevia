@@ -2,8 +2,12 @@
 import logging
 
 from odoo import api, fields, models, tools
+from odoo.exceptions import ValidationError
+from odoo.tools import html2plaintext
 
 _logger = logging.getLogger(__name__)
+
+CK_ECOMMERCE_LEAD_MAX_CHARS = 255
 
 
 FEATURED_REFRESH_FIELDS = {
@@ -101,6 +105,19 @@ class ProductTemplate(models.Model):
         translate=True,
         help='Libellé conditionnement affiché côté client (ex. Pot verre 320 g).',
     )
+
+    @api.constrains('description_ecommerce')
+    def _check_description_ecommerce_length(self):
+        """R1 — accroche zone haute : texte brut ≤ 255 caractères."""
+        for product in self:
+            plain = html2plaintext(product.description_ecommerce or '').strip()
+            if len(plain) > CK_ECOMMERCE_LEAD_MAX_CHARS:
+                raise ValidationError(self.env._(
+                    'L’accroche e-commerce ne doit pas dépasser %(max)s caractères '
+                    '(actuellement %(count)s).',
+                    max=CK_ECOMMERCE_LEAD_MAX_CHARS,
+                    count=len(plain),
+                ))
 
     def get_ck_shop_card_metadata_line(self, variant=None):
         """Ligne meta card boutique — origine · tags · format · prix comparatif (canon Home)."""

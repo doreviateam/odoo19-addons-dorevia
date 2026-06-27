@@ -35,3 +35,30 @@ class TestCkProductPhase4Hooks(TransactionCase):
         })
         bootstrap_published_products(self.env)
         self.assertEqual(product.website_description, custom)
+
+    def test_bootstrap_skips_website_description_when_v11_fields(self):
+        product = self.env['product.template'].create({
+            'name': 'Confiture de goyave QA v11',
+            'type': 'consu',
+            'list_price': 8.9,
+            'sale_ok': True,
+            'is_published': True,
+            'ck_discover_html': '<p>Contenu V1.1 MOA.</p>',
+        })
+        bootstrap_published_products(self.env)
+        product.invalidate_recordset()
+        self.assertFalse((product.website_description or '').strip())
+
+    def test_bootstrap_does_not_seed_manio_crackers_content(self):
+        product = self.env['product.template'].create({
+            'name': 'Manio Crackers QA bootstrap',
+            'type': 'consu',
+            'list_price': 3.6,
+            'sale_ok': True,
+            'is_published': True,
+        })
+        bootstrap_published_products(self.env)
+        product.invalidate_recordset()
+        self.assertFalse((product.website_description or '').strip())
+        self.assertNotIn('ck-product-enrich', product.website_description or '')
+        self.assertFalse((product.description_ecommerce or '').strip())

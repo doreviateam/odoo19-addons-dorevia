@@ -63,15 +63,6 @@ PRODUCT_WEBSITE_DESCRIPTIONS = {
         '<p>Conserver au sec. Refermer après ouverture.</p>'
         '</div>'
     ),
-    'Manio Crackers': (
-        '<div class="ck-product-enrich">'
-        '<h3 class="h5">Origine &amp; usage</h3>'
-        '<p>Crackers artisanaux Manio — recette créole, texture légère.</p>'
-        '<p><strong>Usage :</strong> apéritif, dip, snack.</p>'
-        '<h3 class="h5 mt-3">Conservation</h3>'
-        '<p>Au sec, à l’abri de l’humidité.</p>'
-        '</div>'
-    ),
     'Savon vétiver': (
         '<div class="ck-product-enrich">'
         '<h3 class="h5">Origine &amp; usage</h3>'
@@ -86,9 +77,22 @@ PRODUCT_WEBSITE_DESCRIPTIONS = {
 PRODUCT_ECOMMERCE_LEADS = {
     'Confiture de goyave': 'Confiture artisanale — sélection épicerie créole CK.',
     'Galettes de manioc': 'Galettes croustillantes — univers apéritif CK.',
-    'Manio Crackers': 'Crackers artisanaux — snack créole CK.',
     'Savon vétiver': 'Savon au vétiver — univers bien-être CK.',
 }
+
+
+def _product_has_v11_sheet_content(product):
+    """True si au moins un champ dédié fiche V1.1 est renseigné (R4 — pas de fallback seed)."""
+    return any([
+        (product.ck_discover_html or '').strip(),
+        (product.ck_ingredients or '').strip(),
+        (product.ck_allergens or '').strip(),
+        (product.ck_nutrition_html or '').strip(),
+        (product.ck_conservation_before or '').strip(),
+        (product.ck_conservation_after or '').strip(),
+        product.ck_producer_id,
+        product.ck_badge_ids,
+    ])
 
 
 def _description_for_product(product):
@@ -110,7 +114,8 @@ def bootstrap_published_products(env):
     updated = 0
     for product in env['product.template'].search([('is_published', '=', True)]):
         vals = {}
-        if not (product.website_description or '').strip():
+        has_v11 = _product_has_v11_sheet_content(product)
+        if not (product.website_description or '').strip() and not has_v11:
             html = _description_for_product(product)
             if html:
                 vals['website_description'] = html

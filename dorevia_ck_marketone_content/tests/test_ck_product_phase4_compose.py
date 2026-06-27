@@ -66,7 +66,7 @@ class TestCkProductPhase4Compose(HttpCase):
     def test_product_page_lot1_reassurance(self):
         html = self.url_open(self.product.website_url).text
         self.assertIn('ck-product-purchase__trust', html)
-        self.assertIn('Livraison 2–3 jours ouvrables', html)
+        self.assertIn('Livraison suivie 2 à 3 jours ouvrables', html)
         self.assertIn('Conditions générales', html)
 
     def test_product_page_metadata_line_when_available(self):

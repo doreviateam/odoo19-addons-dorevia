@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 """Tests note 08 — modèle de données fiche produit CK V1.1."""
 
+from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase, TransactionCase
 
+from odoo.addons.dorevia_ck_marketone_content.models.product_template import (
+    CK_ECOMMERCE_LEAD_MAX_CHARS,
+)
 from odoo.addons.dorevia_ck_marketone_content.product_page_tabs import (
     build_ck_product_page_tabs,
 )
@@ -61,6 +65,28 @@ class TestCkProductPageNote08Models(TransactionCase):
         })
         blocks = build_ck_product_page_tabs(product)
         self.assertFalse(any(block['key'] == 'producer' for block in blocks))
+
+    def test_description_ecommerce_rejects_long_plain_text(self):
+        long_text = 'a' * (CK_ECOMMERCE_LEAD_MAX_CHARS + 1)
+        with self.assertRaises(ValidationError):
+            self.env['product.template'].create({
+                'name': 'Accroche trop longue QA',
+                'type': 'consu',
+                'list_price': 3.0,
+                'sale_ok': True,
+                'description_ecommerce': f'<p>{long_text}</p>',
+            })
+
+    def test_description_ecommerce_allows_max_plain_text(self):
+        text = 'a' * CK_ECOMMERCE_LEAD_MAX_CHARS
+        product = self.env['product.template'].create({
+            'name': 'Accroche limite QA',
+            'type': 'consu',
+            'list_price': 3.0,
+            'sale_ok': True,
+            'description_ecommerce': f'<p>{text}</p>',
+        })
+        self.assertTrue(product.id)
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_product_page_note08')

@@ -214,6 +214,10 @@
         color: $ck-text-muted;
         margin-bottom: 14px;
         max-width: 44ch;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
     }
 
     .ck-product-purchase__badges {
