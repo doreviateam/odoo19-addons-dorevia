@@ -84,6 +84,9 @@
               priority="35">
         <xpath expr="//small" position="replace">
             <div class="ck-product-purchase__trust">
+                <p class="ck-product-purchase__trust-strip">
+                    Paiement sécurisé · Livraison suivie · Expédié depuis Nantes
+                </p>
                 <ul class="ck-product-purchase__trust-list">
                     <li>En stock — expédié depuis Nantes</li>
                     <li>Livraison suivie 2 à 3 jours ouvrables</li>
@@ -192,6 +195,30 @@
                             Vous commandez pour un commerce ou un restaurant ?
                             <a href="/professionnels" class="ck-product-page__pro-gateway-link">Espace professionnel CK</a>
                         </p>
+                        <t t-if="ck_related_products">
+                            <div class="ck-product-page__recommendations">
+                                <h2 class="ck-product-page__recommendations-title">Dans la même famille</h2>
+                                <div class="ck-product-page__recommendations-strip">
+                                    <t t-foreach="ck_related_products" t-as="ck_rel">
+                                        <a t-att-href="ck_rel.website_url"
+                                           class="ck-product-page__recommendations-card">
+                                            <div class="ck-product-page__recommendations-img">
+                                                <img t-attf-src="/web/image/product.template/#{ck_rel.id}/image_512"
+                                                     t-att-alt="ck_rel.name"
+                                                     loading="lazy"/>
+                                            </div>
+                                            <div class="ck-product-page__recommendations-info">
+                                                <p class="ck-product-page__recommendations-name"
+                                                   t-out="ck_rel.name"/>
+                                                <p t-if="ck_rel.get_ck_shop_card_metadata_line()"
+                                                   class="ck-product-page__recommendations-meta"
+                                                   t-out="ck_rel.get_ck_shop_card_metadata_line()"/>
+                                            </div>
+                                        </a>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
                     </div>
                 </div>
             </div>

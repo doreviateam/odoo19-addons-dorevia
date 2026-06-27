@@ -166,6 +166,39 @@ class ProductTemplate(models.Model):
             return ''
         return build_ck_product_page_metadata_line(self.env, self, variant)
 
+    def get_ck_related_products(self):
+        """Produits liés CK — même producteur · même catégorie. 4 max, seulement si ≥ 2."""
+        self.ensure_one()
+        website = self.env['website'].get_current_website()
+        if not website:
+            return self.browse([])
+
+        base_domain = [
+            ('is_published', '=', True),
+            ('sale_ok', '=', True),
+            ('id', '!=', self.id),
+        ]
+
+        candidates = self.browse([])
+
+        if self.ck_producer_id:
+            candidates |= self.sudo().search(
+                base_domain + [('ck_producer_id', '=', self.ck_producer_id.id)],
+                limit=6, order='website_sequence asc',
+            )
+
+        if len(candidates) < 4 and self.public_categ_ids:
+            candidates |= self.sudo().search(
+                base_domain + [
+                    ('public_categ_ids', 'in', self.public_categ_ids.ids),
+                    ('id', 'not in', candidates.ids),
+                ],
+                limit=4, order='website_sequence asc',
+            )
+
+        candidates = candidates[:4]
+        return candidates if len(candidates) >= 2 else self.browse([])
+
     def get_ck_variant_value_prices(self, attribute_line):
         """Prix absolus contextualisés par valeur d'attribut (sélecteur variantes CK)."""
         from odoo.addons.dorevia_ck_marketone_content.product_page_v11 import (

@@ -24,6 +24,8 @@
                t-value="product.get_ck_product_page_tabs(ck_product_variant)"/>
             <t t-set="ck_product_detail_sections"
                t-value="product.get_ck_product_page_detail_sections()"/>
+            <t t-set="ck_related_products"
+               t-value="product.get_ck_related_products()"/>
         </xpath>
         <xpath expr="//div[@id='product_full_description']" position="attributes">
             <attribute name="t-if">not ck_product_page_tabs</attribute>

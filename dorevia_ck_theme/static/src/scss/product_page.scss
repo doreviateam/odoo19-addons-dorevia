@@ -248,11 +248,25 @@
         text-decoration: underline;
         text-underline-offset: 2px;
         text-decoration-color: rgba($ck-primary, 0.35);
+        transition: color 0.2s ease;
 
-        &:hover,
+        &:hover {
+            color: $ck-primary-text;
+            text-decoration-color: currentColor;
+        }
+
         &:focus-visible {
             color: $ck-primary-text;
             text-decoration-color: currentColor;
+            outline: 2px solid $ck-primary;
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 767.98px) {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
         }
     }
 
@@ -476,6 +490,15 @@
                 display: none !important;
             }
         }
+    }
+
+    // S3 — Ligne compacte réassurance CTA (Renforcement confiance V1)
+    .ck-product-purchase__trust-strip {
+        font-size: $ck-text-xs;
+        color: $ck-text-muted;
+        text-align: center;
+        margin-bottom: $ck-space-2;
+        letter-spacing: 0.01em;
     }
 
     .ck-product-purchase__trust {
@@ -901,6 +924,203 @@
         line-height: 1.55;
     }
 
+    // ——— S1 — Encart Allergènes — identité visuelle distincte ———
+    .ck-product-page__block--composition {
+        .ck-product-page__section--allergens {
+            .ck-product-page__section-title {
+                color: $ck-primary;
+
+                &::before {
+                    content: "🌾\00A0";
+                }
+            }
+
+            .ck-product-page__section-body {
+                background: #fff5f0;
+                border-color: #f0d5c8;
+                border-radius: 8px;
+                padding: 16px;
+            }
+        }
+    }
+
+    // ——— S4 — Galerie front — thumbnails carrousel natif Odoo ———
+    .ck-product-layout__gallery {
+        #o-carousel-product {
+            .o_carousel_product_indicators .carousel-indicators,
+            .carousel-indicators {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 12px;
+                padding: 0;
+                justify-content: flex-start;
+                position: static;
+
+                button,
+                li {
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 4px;
+                    border: 2px solid transparent;
+                    box-sizing: border-box;
+                    cursor: pointer;
+                    overflow: hidden;
+                    opacity: 1;
+                    text-indent: initial;
+                    background: $ck-image-zone;
+                    transition: border-color 0.2s ease;
+                    flex-shrink: 0;
+                    margin: 0;
+
+                    > img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                        display: block;
+                    }
+
+                    > div,
+                    > div > img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: inherit;
+                    }
+
+                    > div > img {
+                        object-fit: contain;
+                        display: block;
+                    }
+
+                    &.active,
+                    &[aria-selected="true"],
+                    &[aria-current="true"] {
+                        border-color: $ck-primary;
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .carousel-inner .carousel-item img,
+        .product_detail_img {
+            transition: opacity 0.3s ease;
+        }
+
+        @media (max-width: 767.98px) {
+            #o-carousel-product {
+                .o_carousel_product_indicators .carousel-indicators,
+                .carousel-indicators {
+                    overflow-x: auto;
+                    flex-wrap: nowrap;
+                    scrollbar-width: none;
+
+                    &::-webkit-scrollbar { display: none; }
+
+                    button,
+                    li {
+                        width: 60px;
+                        height: 60px;
+                    }
+                }
+            }
+        }
+    }
+
+    // ——— S5 — Bloc Recommandations — bas de fiche ———
+    .ck-product-page__recommendations {
+        margin-top: $ck-space-4;
+        padding-top: $ck-space-4;
+        border-top: 1px solid rgba($ck-border, 0.4);
+    }
+
+    .ck-product-page__recommendations-title {
+        font-family: $ck-font-display;
+        font-size: $ck-text-xl;
+        font-weight: $ck-font-weight-display;
+        color: $ck-text;
+        margin: 0 0 $ck-space-4;
+        letter-spacing: -0.01em;
+    }
+
+    .ck-product-page__recommendations-strip {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        padding-bottom: $ck-space-2;
+
+        &::-webkit-scrollbar { display: none; }
+    }
+
+    .ck-product-page__recommendations-card {
+        flex: 0 0 200px;
+        scroll-snap-align: start;
+        background: $ck-surface;
+        border-radius: $ck-radius-lg;
+        border: 1px solid rgba($ck-border, 0.65);
+        box-shadow: $ck-shadow-card;
+        text-decoration: none;
+        color: inherit;
+        overflow: hidden;
+        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+        &:hover {
+            box-shadow: $ck-shadow-card-hover;
+            border-color: rgba($ck-primary, 0.25);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        @media (max-width: 767.98px) {
+            flex: 0 0 160px;
+        }
+    }
+
+    .ck-product-page__recommendations-img {
+        height: 160px;
+        background: $ck-image-zone;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @media (max-width: 767.98px) {
+            height: 120px;
+        }
+    }
+
+    .ck-product-page__recommendations-info {
+        padding: $ck-space-3;
+    }
+
+    .ck-product-page__recommendations-name {
+        font-size: $ck-text-sm;
+        font-weight: $ck-font-weight-semibold;
+        color: $ck-text;
+        margin: 0 0 4px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .ck-product-page__recommendations-meta {
+        font-size: $ck-text-xs;
+        color: $ck-text-muted;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     @media (max-width: 575.98px) {
         .ck-product-layout {
             gap: $ck-space-4;
@@ -942,6 +1162,10 @@
             grid-template-columns: 1fr;
             gap: 0.2rem;
             padding: $ck-space-2;
+        }
+
+        .ck-product-page__recommendations-card {
+            flex: 0 0 148px;
         }
     }
 }
