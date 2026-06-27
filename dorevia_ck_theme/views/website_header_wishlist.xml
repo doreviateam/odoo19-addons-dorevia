@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Accès wishlist header CK — lien toujours visible, badge si count &gt; 0. -->
+
+    <record id="website_sale_wishlist.header_hide_empty_wishlist_link" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- Placement desktop géré par CK (H1.2) — évite doublon après panier natif. -->
+    <record id="website_sale_wishlist.template_header_default" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <template id="ck_header_wishlist_link_fr"
+              inherit_id="website_sale_wishlist.header_wishlist_link"
+              name="CK Header — libellé Mes favoris"
+              priority="40">
+        <xpath expr="//a[@href='/shop/wishlist']" position="attributes">
+            <attribute name="title">Mes favoris</attribute>
+            <attribute name="aria-label">Mes favoris</attribute>
+        </xpath>
+        <xpath expr="//span[@t-if='_text']" position="replace">
+            <span t-if="_text" t-attf-class="#{_text_class}">Mes favoris</span>
+        </xpath>
+    </template>
+
+    <!-- Nav-U1 — favoris compact icône H1.2 (entre compte et panier) -->
+    <template id="ck_template_header_h1_2_wishlist"
+              inherit_id="dorevia_ck_theme.ck_template_header_h1_2_three_levels"
+              name="CK H1.2 header wishlist compact"
+              priority="66">
+        <xpath expr="//ul[hasclass('ck-header__actions')]//t[@t-call='website_sale.header_cart_link']" position="before">
+            <t t-call="website_sale_wishlist.header_wishlist_link">
+                <t t-set="_icon" t-value="True"/>
+                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__wish-link'"/>
+                <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Fallback desktop H1 -->
+    <template id="ck_template_header_default_h1_wishlist"
+              inherit_id="dorevia_ck_theme.ck_template_header_default_h1"
+              name="CK H1 header wishlist desktop"
+              priority="55">
+        <xpath expr="//t[@t-call='website_sale.header_cart_link']" position="before">
+            <t t-call="website_sale_wishlist.header_wishlist_link">
+                <t t-set="_icon" t-value="True"/>
+                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__wish-link'"/>
+                <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Mobile — cohérence chrome CK (lien natif Odoo conservé) -->
+    <template id="ck_template_header_mobile_wishlist"
+              inherit_id="website_sale_wishlist.template_header_mobile"
+              name="CK H1 header wishlist mobile"
+              priority="60">
+        <xpath expr="//t[@t-call='website_sale_wishlist.header_wishlist_link']" position="replace">
+            <t t-call="website_sale_wishlist.header_wishlist_link">
+                <t t-set="_icon" t-value="True"/>
+                <t t-set="_link_class" t-value="'o_navlink_background_hover btn position-relative rounded-circle border-0 p-1 text-reset ck-header__wish-link'"/>
+                <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Nav-U1 — Favoris accessibles dans le menu mobile, hors barre haute. -->
+    <template id="ck_template_header_mobile_wishlist_menu"
+              inherit_id="website.template_header_mobile"
+              name="CK Header mobile wishlist menu link"
+              priority="70">
+        <xpath expr="//div[@id='top_menu_collapse_mobile']//t[@t-call='portal.placeholder_user_sign_in']" position="before">
+            <li class="nav-item ck-header-mobile__wishlist-menu-item">
+                <a href="/shop/wishlist"
+                   class="nav-link o_nav_link_btn w-100 border text-center ck-header-mobile__wishlist-menu-link"
+                   title="Mes favoris"
+                   aria-label="Mes favoris">
+                    <i class="fa fa-heart me-2" aria-hidden="true"/>
+                    <span>Mes favoris</span>
+                </a>
+            </li>
+        </xpath>
+    </template>
+</odoo>

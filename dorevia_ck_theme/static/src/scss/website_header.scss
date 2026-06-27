@@ -145,10 +145,8 @@
         }
     }
 
-    // Lot H1 — panier prioritaire sur compte
+    // Nav-U1 — utilitaires compacts : panier, favoris, compte
     .ck-header__cart-link {
-        width: 2.5rem !important;
-        height: 2.5rem !important;
         border-color: rgba($ck-primary, 0.28) !important;
         background-color: rgba($ck-primary, 0.06) !important;
 
@@ -164,7 +162,41 @@
         }
     }
 
-    .o_wsale_my_cart .my_cart_quantity.badge {
+    .ck-header__wish-link {
+        border-color: rgba($ck-border, 0.95) !important;
+        background-color: $ck-bg-soft !important;
+
+        .fa-heart,
+        .fa-heart-o {
+            font-size: 1rem;
+        }
+
+        &:hover,
+        &:focus-visible {
+            border-color: rgba($ck-primary, 0.35) !important;
+            background-color: rgba($ck-primary, 0.06) !important;
+            color: $ck-primary !important;
+        }
+    }
+
+    .ck-header__account-link {
+        border-color: rgba($ck-border, 0.95) !important;
+        background-color: $ck-bg-soft !important;
+
+        .fa-user {
+            font-size: 1rem;
+        }
+
+        &:hover,
+        &:focus-visible {
+            border-color: rgba($ck-primary, 0.35) !important;
+            background-color: rgba($ck-primary, 0.06) !important;
+            color: $ck-primary !important;
+        }
+    }
+
+    .o_wsale_my_cart .my_cart_quantity.badge,
+    .o_wsale_my_wish .my_wish_quantity.badge {
         min-width: 1.125rem;
         font-size: 0.625rem;
         font-weight: 700;
@@ -250,7 +282,10 @@
         #top_menu.top_menu {
             flex: 0 1 auto;
             width: 100%;
-            justify-content: center;
+            // Nav-U1b — boutique à gauche, secondaire à droite via margin-left:auto.
+            // Bootstrap .justify-content-center (ajouté par _nav_class QWeb) est
+            // !important → on doit surcharger avec !important ici.
+            justify-content: flex-start !important;
             margin: 0 !important;
             flex-wrap: nowrap;
             gap: 1.25rem;
@@ -474,8 +509,12 @@
         border: 1px solid $ck-border !important;
         background-color: $ck-bg-soft !important;
         color: $ck-text !important;
-        width: 2.375rem;
-        height: 2.375rem;
+        // Nav-U1 — zone tactile ≥ 44 × 44 px (WCAG 2.5.5)
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
 
         &:hover,
         &:focus-visible {
@@ -555,6 +594,11 @@
 
                 > li.o_wsale_my_cart {
                     order: 2;
+                }
+
+                // Nav-U1 — favoris non prioritaires en mobile (accès via menu)
+                > li.o_wsale_my_wish {
+                    display: none !important;
                 }
             }
         }
@@ -703,16 +747,15 @@
 }
 
 .ck-theme header#top.ck-header {
+    // Nav-U1 — couleurs affinées cart/wish (icônes compacts, non pills)
     .ck-header__cart-link {
-        width: auto !important;
-        height: auto !important;
-        min-height: 2.375rem;
-        border-radius: 999px !important;
-        padding-inline: 0.7rem !important;
-        font-size: $ck-text-sm;
-        font-weight: $ck-font-weight-semibold;
         border-color: rgba($ck-border, 0.95) !important;
         background-color: rgba($ck-primary, 0.04) !important;
+    }
+
+    .ck-header__wish-link {
+        border-color: rgba($ck-border, 0.95) !important;
+        background-color: $ck-surface !important;
     }
 
     @media (min-width: 992px) {
@@ -731,6 +774,13 @@
                 margin-right: 1.35rem;
                 padding-right: 1.35rem;
                 border-right: 1px solid rgba($ck-border, 0.75);
+            }
+
+            // Nav-U1b — premier item du groupe secondaire (Communauté) poussé
+            // à droite : absorbe tout l'espace restant, les items suivants
+            // (Nos producteurs, Espace pro) se regroupent à la suite à droite.
+            > .nav-item.ck-nav-n3-group-end:not(:has(~ .nav-item.ck-nav-n3-rayon)) + .nav-item {
+                margin-left: auto;
             }
 
             > .nav-item.ck-nav-n3-rayon > .nav-link,
@@ -761,18 +811,22 @@
                 letter-spacing: 0.015em;
             }
 
+            // Nav-U1b — Espace pro : suppression capsule → lien texte standard.
+            // !important nécessaires car les overrides Nav-U1 précédents
+            // (padding-inline notamment) utilisaient déjà !important.
+            // padding-block n'est pas surchargé ici : il hérite de la règle
+            // .navbar-nav > .nav-item > .nav-link (padding: 0.5rem 0.75rem).
             > .nav-item.ck-nav-espace-pro > .dropdown-toggle {
-                background-color: rgba($ck-primary, 0.07);
-                border: 1px solid rgba($ck-primary, 0.18);
-                border-radius: 999px;
-                padding-inline: 0.75rem !important;
-                color: $ck-primary-text;
-                font-weight: $ck-font-weight-semibold;
-                font-size: $ck-text-sm;
+                background-color: transparent !important;
+                border: 0 !important;
+                border-radius: $ck-radius-md !important;
+                padding-inline: 0.5rem !important;
+                color: $ck-text-muted;
 
                 &:hover,
                 &:focus-visible {
-                    background-color: rgba($ck-primary, 0.12);
+                    background-color: $ck-bg-soft !important;
+                    color: $ck-text;
                 }
             }
         }
@@ -1005,6 +1059,116 @@
 
             &::before {
                 display: none;
+            }
+        }
+    }
+}
+
+// ============================================================================
+// Lang-U1 — sélecteur langue compact header desktop + offcanvas mobile
+// ============================================================================
+
+// Desktop — bouton FR/EN dans la zone utilitaires
+.ck-theme header#top.ck-header {
+    .ck-header__lang-item {
+        @media (min-width: 992px) {
+            .js_language_selector {
+                .ck-header__lang-btn {
+                    font-family: "DM Sans", $ck-font-ui;
+                    font-size: $ck-text-xs;
+                    font-weight: $ck-font-weight-semibold;
+                    letter-spacing: 0.06em;
+                    color: $ck-text-muted;
+                    padding: 0.3rem 0.55rem;
+                    // Bootstrap .border-0 est border:0 !important — les deux
+                    // !important ci-dessous sont nécessaires pour l'écraser.
+                    background: transparent !important;
+                    border: 1px solid $ck-border !important;
+                    border-radius: $ck-radius-sm;
+                    transition: color 0.15s ease, border-color 0.15s ease;
+                    min-height: 2.25rem;
+
+                    &:hover,
+                    &:focus-visible {
+                        color: $ck-text;
+                        border-color: rgba($ck-primary, 0.35) !important;
+                        background: transparent !important;
+                        box-shadow: none;
+                    }
+                }
+
+                .dropdown-menu {
+                    min-width: 0;
+                    padding: $ck-space-1;
+                    border: 1px solid rgba($ck-border, 0.85);
+                    border-radius: $ck-radius-md;
+                    box-shadow: $ck-shadow-card;
+
+                    .dropdown-item {
+                        font-family: "DM Sans", $ck-font-ui;
+                        font-size: $ck-text-xs;
+                        font-weight: $ck-font-weight-semibold;
+                        letter-spacing: 0.04em;
+                        padding: 0.4rem 0.75rem;
+                        border-radius: $ck-radius-sm;
+                        color: $ck-text-muted;
+
+                        &.active,
+                        &:active {
+                            background-color: rgba($ck-primary, 0.08);
+                            color: $ck-primary-text;
+                        }
+
+                        &:hover:not(.active) {
+                            background-color: $ck-bg-soft;
+                            color: $ck-text;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Mobile — sélecteur inline dans l'offcanvas
+@media (max-width: 991.98px) {
+    .ck-theme {
+        .ck-header-mobile__lang-wrap {
+            border-top: 1px solid rgba($ck-border, 0.65);
+            padding-block: $ck-space-3;
+            margin-top: $ck-space-2;
+        }
+
+        .ck-header-mobile__lang-switch {
+            display: flex;
+            gap: $ck-space-3;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+
+            .list-inline-item {
+                margin: 0;
+
+                a {
+                    font-family: "DM Sans", $ck-font-ui;
+                    font-size: $ck-text-base;
+                    font-weight: $ck-font-weight-semibold;
+                    color: $ck-text-muted;
+                    text-decoration: none;
+
+                    &:hover,
+                    &:focus-visible {
+                        color: $ck-primary-text;
+                    }
+
+                    &.active {
+                        color: $ck-text;
+                    }
+                }
+
+                // Séparateur | natif Odoo — remplacement discret
+                &:not(:last-child) > span[class="list-inline-item"] {
+                    color: rgba($ck-text-muted, 0.45);
+                }
             }
         }
     }

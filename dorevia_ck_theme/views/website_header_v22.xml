@@ -28,32 +28,29 @@
         </xpath>
     </template>
 
-    <!-- Lot Header V2.2 — panier textuel desktop (icône + libellé) -->
+    <!-- Nav-U1 — panier compact icône (H1 fallback) -->
     <template id="ck_template_header_cart_v22"
               inherit_id="dorevia_ck_theme.ck_template_header_default_h1"
-              name="CK Header V2.2 cart label"
+              name="CK Header cart compact H1"
               priority="55">
         <xpath expr="//t[@t-call='website_sale.header_cart_link']" position="replace">
             <t t-call="website_sale.header_cart_link">
                 <t t-set="_icon" t-value="True"/>
-                <t t-set="_text" t-value="True"/>
-                <t t-set="_text_class" t-value="'ms-1 d-none d-xl-inline'"/>
-                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-pill px-3 text-center text-reset ck-header__cart-link'"/>
+                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__cart-link'"/>
                 <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
             </t>
         </xpath>
     </template>
 
+    <!-- Nav-U1 — panier compact icône (H1.2) -->
     <template id="ck_template_header_h1_2_cart_v22"
               inherit_id="dorevia_ck_theme.ck_template_header_h1_2_three_levels"
-              name="CK Header V2.2 cart label H1.2"
+              name="CK Header cart compact H1.2"
               priority="65">
         <xpath expr="//t[@t-call='website_sale.header_cart_link']" position="replace">
             <t t-call="website_sale.header_cart_link">
                 <t t-set="_icon" t-value="True"/>
-                <t t-set="_text" t-value="True"/>
-                <t t-set="_text_class" t-value="'ms-1 d-none d-xl-inline'"/>
-                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-pill px-3 text-center text-reset ck-header__cart-link'"/>
+                <t t-set="_link_class" t-value="'o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__cart-link'"/>
                 <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
             </t>
         </xpath>

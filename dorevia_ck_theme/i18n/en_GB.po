@@ -1,0 +1,152 @@
+# English (United Kingdom) — C-Kreyol Marketone Theme (dorevia_ck_theme)
+# Copyright (C) 2024 Dorevia
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dorevia_ck_theme 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-06-27 00:00+0200\n"
+"Last-Translator: Dorevia <contact@dorevia.fr>\n"
+"Language-Team: English (United Kingdom)\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_chrome
+msgid "Plus de catégories"
+msgstr "More categories"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar
+msgid "Produits créoles sélectionnés"
+msgstr "Selected Creole products"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar
+msgid ""
+"<span class=\"ck-header-service-bar__item\">Produits créoles sélectionnés</span>\n"
+"                        <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                        <span class=\"ck-header-service-bar__item\">Origines identifiées</span>\n"
+"                        <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                        <span class=\"ck-header-service-bar__item\">Livraison suivie</span>"
+msgstr ""
+"<span class=\"ck-header-service-bar__item\">Selected Creole products</span>\n"
+"                        <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                        <span class=\"ck-header-service-bar__item\">Identified origins</span>\n"
+"                        <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                        <span class=\"ck-header-service-bar__item\">Tracked delivery</span>"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar_v22
+msgid "Origines identifiées"
+msgstr "Identified origins"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar_v22
+msgid "Livraison suivie"
+msgstr "Tracked delivery"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar_v22
+msgid "Produits sélectionnés"
+msgstr "Selected products"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar_v22
+msgid "Stocké/expédié depuis Nantes"
+msgstr "Stored & shipped from Nantes"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.layout_ck_header_service_bar_v22
+msgid ""
+"<span class=\"ck-header-service-bar__item\">Produits sélectionnés</span>\n"
+"                <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                <span class=\"ck-header-service-bar__item\">Origines identifiées</span>\n"
+"                <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                <span class=\"ck-header-service-bar__item\">Livraison suivie</span>\n"
+"                <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                <span class=\"ck-header-service-bar__item\">Stocké/expédié depuis Nantes</span>"
+msgstr ""
+"<span class=\"ck-header-service-bar__item\">Selected products</span>\n"
+"                <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                <span class=\"ck-header-service-bar__item\">Identified origins</span>\n"
+"                <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                <span class=\"ck-header-service-bar__item\">Tracked delivery</span>\n"
+"                <span class=\"ck-header-service-bar__sep\" aria-hidden=\"true\">·</span>\n"
+"                <span class=\"ck-header-service-bar__item\">Stored &amp; shipped from Nantes</span>"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.ck_template_header_h1_2_three_levels
+msgid "Se connecter"
+msgstr "Sign in"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.ck_template_header_h1_2_three_levels
+msgid ""
+"<i class=\"fa fa-user\" aria-hidden=\"true\"/>\n"
+"                                <span class=\"visually-hidden\">Se connecter</span>"
+msgstr ""
+"<i class=\"fa fa-user\" aria-hidden=\"true\"/>\n"
+"                                <span class=\"visually-hidden\">Sign in</span>"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.ck_header_wishlist_link_fr
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.ck_template_header_mobile_wishlist_menu
+msgid "Mes favoris"
+msgstr "Favourites"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.ck_template_header_mobile_wishlist_menu
+msgid ""
+"<i class=\"fa fa-heart me-2\" aria-hidden=\"true\"/>\n"
+"                    <span>Mes favoris</span>"
+msgstr ""
+"<i class=\"fa fa-heart me-2\" aria-hidden=\"true\"/>\n"
+"                    <span>Favourites</span>"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
+msgid "Paiement sécurisé · Livraison suivie · Expédié depuis Nantes"
+msgstr "Secure payment · Tracked delivery · Shipped from Nantes"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
+msgid "En stock — expédié depuis Nantes"
+msgstr "In stock — shipped from Nantes"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
+msgid "Livraison suivie 2 à 3 jours ouvrables"
+msgstr "Tracked delivery 2 to 3 working days"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
+msgid "Retour selon conditions de vente"
+msgstr "Returns subject to terms and conditions"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
+msgid ""
+"<a href=\"/terms\" class=\"o_translate_inline\">Conditions générales de "
+"vente</a>"
+msgstr "<a href=\"/terms\" class=\"o_translate_inline\">Terms and conditions</a>"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.s_ck_shop_intro
+msgid "Produits créoles sélectionnés, aux origines identifiées."
+msgstr "Selected Creole products, with identified origins."
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.s_ck_shop_intro
+msgid "produits en rayon"
+msgstr "products available"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.s_ck_shop_intro
+msgid "produit en rayon"
+msgstr "product available"

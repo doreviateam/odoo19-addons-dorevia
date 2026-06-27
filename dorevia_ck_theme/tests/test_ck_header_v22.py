@@ -4,7 +4,7 @@
 import re
 
 from odoo.tests import tagged
-from odoo.tests.common import HttpCase
+from odoo.tests.common import HttpCase, TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.nav_sync import bootstrap_ck_navigation
 from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
@@ -95,7 +95,7 @@ class TestCkHeaderV22Compose(HttpCase):
 
     def test_producteurs_direct_link(self):
         html = self._home_html()
-        self.assertRegex(html, r'href="/nos-producteurs"')
+        self.assertRegex(html, r'href="(?:/[a-z]{2}(?:-[A-Z]{2})?)?/nos-producteurs"')
 
     def test_espace_pro_dropdown_anchors(self):
         html = self._home_html()
@@ -146,3 +146,31 @@ class TestCkHeaderV22Compose(HttpCase):
         html = self._home_html()
         self.assertIn('ck-header__identity-row', html)
         self.assertIn('ck-header__nav-row', html)
+
+    def _desktop_actions_chunk(self, html):
+        if 'ck-header__identity-row' not in html:
+            self.skipTest('Header H1.2 absent')
+        return html.split('ck-header__identity-row', 1)[1].split('ck-header__nav-row', 1)[0]
+
+    def test_wishlist_link_desktop_header(self):
+        html = self._home_html()
+        actions = self._desktop_actions_chunk(html)
+        self.assertIn('o_wsale_my_wish', actions)
+        self.assertIn('/shop/wishlist', actions)
+        self.assertTrue(
+            'Mes favoris' in actions or 'Favourites' in actions,
+            msg='Libellé wishlist FR ou EN attendu dans le header desktop.',
+        )
+        self.assertIn('o_wsale_my_cart', actions)
+        wish_pos = actions.find('o_wsale_my_wish')
+        cart_pos = actions.find('o_wsale_my_cart')
+        self.assertGreater(cart_pos, wish_pos, 'Wishlist doit précéder le panier')
+
+    def test_wishlist_link_mobile_header(self):
+        html = self._home_html()
+        mobile = html.split('o_header_mobile', 1)[-1] if 'o_header_mobile' in html else ''
+        self.assertIn('o_wsale_my_wish', mobile)
+        self.assertIn('/shop/wishlist', mobile)
+        self.assertIn('ck-header-mobile__wishlist-menu-link', mobile)
+        self.assertIn('Mes favoris', mobile)
+        self.assertNotIn('o_wsale_my_wish_hide_empty', mobile)

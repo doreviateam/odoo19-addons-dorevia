@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lang-U1 — codes compacts (FR/EN) sans drapeau, sans libellé complet.
+         Active la variante Odoo native (inactive par défaut) qui passe codes=True
+         à portal.language_selector avant l'appel. -->
+    <record id="website.header_language_selector_code" model="ir.ui.view">
+        <field name="active" eval="True"/>
+    </record>
+
+    <!-- Lang-U1 — classe CK sur le li sélecteur pour override SCSS ciblé.
+         Doit hériter de website.header_language_selector (qui contient le <li>)
+         et non du placeholder vide (qui ne contient aucun nœud). -->
+    <template id="ck_header_language_selector_style"
+              inherit_id="website.header_language_selector"
+              name="CK — sélecteur langue style compact"
+              priority="31">
+        <xpath expr="//li[@data-name='Language Selector']" position="attributes">
+            <attribute name="class" add="ck-header__lang-item" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- Lang-U1 — sélecteur langue dans l'offcanvas mobile (libellés complets) -->
+    <template id="ck_header_mobile_lang_selector"
+              inherit_id="website.template_header_mobile"
+              name="CK — sélecteur langue mobile offcanvas"
+              priority="72">
+        <xpath expr="//div[@id='top_menu_collapse_mobile']//t[@t-call='portal.placeholder_user_sign_in']" position="after">
+            <t t-if="len(frontend_languages) > 1">
+                <div class="ck-header-mobile__lang-wrap">
+                    <t t-call="website.language_selector_inline">
+                        <t t-set="_div_classes" t-value="'ck-header-mobile__lang-switch'"/>
+                    </t>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

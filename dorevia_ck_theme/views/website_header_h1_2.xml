@@ -21,14 +21,26 @@
                         <t t-call="website.placeholder_header_text_element"/>
                         <t t-call="website.placeholder_header_social_links"/>
                         <t t-call="website.placeholder_header_language_selector"
-                            _btn_class="_additional_btn_color or 'nav-link'"
+                            _btn_class.f="ck-header__lang-btn nav-link"
                             _dropdown_menu_class.f="dropdown-menu-end"/>
-                        <t t-call="portal.placeholder_user_sign_in"
-                            _link_class="_additional_btn_color or 'o_nav_link_btn nav-link border px-3'"/>
+                        <!-- Nav-U1 — Se connecter compact : icône seule -->
+                        <li class="nav-item o_no_autohide_item"
+                            groups="base.group_public">
+                            <a t-attf-href="/web/login?redirect={{request.httprequest.path}}"
+                               class="o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__account-link"
+                               title="Se connecter"
+                               aria-label="Se connecter">
+                                <i class="fa fa-user" aria-hidden="true"/>
+                                <span class="visually-hidden">Se connecter</span>
+                            </a>
+                        </li>
+                        <!-- Nav-U1 — Compte connecté compact icône -->
                         <t t-call="portal.user_dropdown"
-                            _user_name="True"
+                            _icon.f="True"
+                            _icon_class.f="fa fa-user"
+                            _no_caret.f="True"
                             _item_class.f="dropdown"
-                            _link_class.f="{{_additional_btn_color or 'nav-link'}} border-0"
+                            _link_class.f="o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__account-link"
                             _dropdown_menu_class.f="dropdown-menu-end"/>
                         <t t-call="website.placeholder_header_call_to_action"/>
                         <t t-call="website_sale.header_cart_link">
@@ -41,7 +53,7 @@
                 <!-- Niveau 2 — exploration catalogue + éditoriale (ligne dédiée pleine largeur) -->
                 <div class="ck-header__nav-row w-100 d-none d-lg-flex justify-content-center">
                     <t t-call="website.navbar_nav"
-                        _nav_class.f="ck-header__top-menu justify-content-center">
+                        _nav_class.f="top_menu ck-header__top-menu justify-content-center">
                         <t t-foreach="website.menu_id.child_id" t-as="submenu">
                             <t t-call="website.submenu"
                                 item_class.f="nav-item"
