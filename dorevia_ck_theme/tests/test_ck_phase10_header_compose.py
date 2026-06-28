@@ -172,7 +172,7 @@ class TestCkPhase10HeaderCompose(HttpCase):
     def test_routes_non_regression_markers(self):
         markers = {
             '/': 'ck-featured-products__grid--stable',
-            '/shop': 's_ck_shop_intro',
+            '/shop': 'ck-shop-intro--title-only',
             '/professionnels': 'ck-pro-page',
             '/contactus': 'ck-contact-page',
             '/a-propos': 'ck-about-page',

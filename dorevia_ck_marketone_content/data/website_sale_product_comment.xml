@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Rating-U1 — Active les avis clients natifs Odoo sur la fiche produit.
+         website_sale.product_comment est active="False" par défaut ; ce record
+         l'active globalement pour l'instance CK Marketone.  Idempotent à l'upgrade. -->
+    <record id="website_sale.product_comment" model="ir.ui.view">
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

@@ -389,6 +389,37 @@
         @include ck-product-card-cta-view-secondary;
     }
 
+    // ——— Rating-U2 — Note compacte (★ 4,8 · 12 avis) ———
+    .ck-card-rating {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        margin: 5px 0 0;
+        font-size: 12px;
+        line-height: 1.4;
+        color: $ck-text-muted;
+
+        .ck-rating-star {
+            color: $ck-secondary;
+            margin-right: 3px;
+            font-size: 11px;
+        }
+
+        .ck-rating-value {
+            font-weight: $ck-font-weight-semibold;
+            color: $ck-text;
+        }
+
+        .ck-rating-separator {
+            opacity: 0.55;
+            margin: 0 3px;
+        }
+
+        .ck-rating-count {
+            opacity: 0.8;
+        }
+    }
+
     // Home — pied desktop en ligne (prix | CTA)
     &--home {
         .ck-product-card__foot,

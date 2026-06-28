@@ -110,7 +110,7 @@ class TestCkPhase9Compose(HttpCase):
 
     def test_shop_phase3_intact(self):
         html = self.url_open('/shop').text
-        self.assertIn('s_ck_shop_intro', html)
+        self.assertIn('ck-shop-intro--title-only', html)
 
     def test_product_phase4_intact(self):
         if not self.product:

@@ -161,6 +161,11 @@ class TestCkProductPageNote08Conditional(TransactionCase):
 
 @tagged('post_install', '-at_install', 'dorevia_ck_product_page_note08')
 class TestCkProductPageNote08Front(HttpCase):
+    FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
+
+    def _open_fr(self, url):
+        return self.url_open(url, headers=self.FR_HEADERS)
+
     def test_reassurance_v1_without_refund_promise(self):
         product = self.env['product.template'].sudo().create({
             'name': 'Réassurance QA',
@@ -170,7 +175,7 @@ class TestCkProductPageNote08Front(HttpCase):
             'is_published': True,
             'ck_discover_html': '<p>Contenu.</p>',
         })
-        html = self.url_open(product.website_url).text
+        html = self._open_fr(product.website_url).text
         self.assertIn('En stock — expédié depuis Nantes', html)
         self.assertIn('Livraison suivie 2 à 3 jours ouvrables', html)
         self.assertNotIn('remboursement sous 30 jours', html.lower())
@@ -198,7 +203,7 @@ class TestCkProductPageNote08Front(HttpCase):
             'ck_badge_ids': [(6, 0, badge.ids)],
             'ck_producer_id': producer.id,
         })
-        html = self.url_open(product.website_url).text
+        html = self._open_fr(product.website_url).text
         self.assertIn('ck-product-purchase__badges', html)
         self.assertIn('Producteur identifié QA', html)
         self.assertIn('id="ck-section-producer"', html)

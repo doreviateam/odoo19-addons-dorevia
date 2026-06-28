@@ -1168,4 +1168,88 @@
             flex: 0 0 148px;
         }
     }
+
+    // ——— Rating-U1 / R1 — Étoiles zone haute + section avis clients ———
+
+    .o_product_page_reviews_link {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: $ck-space-3;
+        color: $ck-text-muted;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: $ck-primary-text;
+            text-decoration: none;
+        }
+
+        .o_website_rating_static {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            line-height: 1;
+
+            .fa-star {
+                color: $ck-secondary;
+            }
+
+            .fa-star-half-o {
+                color: $ck-secondary;
+            }
+
+            .fa-star-o {
+                color: rgba($ck-secondary, 0.32);
+            }
+
+            small {
+                font-size: $ck-text-xs;
+                color: $ck-text-muted;
+                margin-left: 0.2rem;
+            }
+        }
+    }
+
+    .o_shop_discussion_rating {
+        border-top: 1px solid rgba($ck-border, 0.45);
+        margin-top: $ck-space-2;
+    }
+
+    #o_product_page_reviews {
+        .o_product_page_reviews_title {
+            color: $ck-text;
+            padding-top: $ck-space-4;
+            padding-bottom: $ck-space-2;
+
+            h2 {
+                font-family: $ck-font-display;
+                font-size: $ck-text-xl;
+                font-weight: $ck-font-weight-display;
+                line-height: $ck-line-height-heading;
+                letter-spacing: -0.01em;
+                margin-bottom: 0;
+            }
+
+            .oi,
+            .fa {
+                color: $ck-text-muted;
+                font-size: $ck-text-base;
+                transition: transform 0.2s ease;
+            }
+
+            &[aria-expanded="true"] .oi,
+            &[aria-expanded="true"] .fa {
+                transform: rotate(180deg);
+            }
+
+            &:hover h2,
+            &:focus-visible h2 {
+                color: $ck-primary-text;
+            }
+        }
+
+        #o_product_page_reviews_content {
+            padding-bottom: $ck-space-5;
+        }
+    }
 }

@@ -60,13 +60,9 @@ class TestCkShopPhase3Compose(HttpCase):
 
     def test_shop_has_phase3_compose_blocks(self):
         html = self.url_open('/shop').text
-        self.assertIn('s_ck_shop_intro', html)
+        self.assertIn('ck-shop-intro--title-only', html)
         self.assertIn('Boutique C-Kréyòl', html)
-        self.assertIn('Produits créoles sélectionnés, aux origines identifiées.', html)
-        self.assertIn('s_ck_reassurance', html)
-        self.assertIn('Producteurs et transformateurs repérés par CK.', html)
-        self.assertIn('ck-shop-pro-signal', html)
-        self.assertIn('href="/professionnels"', html)
+        self.assertNotIn('ck-rayon-banner', html)
 
     def test_shop_product_links_in_grid(self):
         html = self.url_open('/shop').text
@@ -78,7 +74,7 @@ class TestCkShopPhase3Compose(HttpCase):
 
     def test_home_has_no_shop_intro(self):
         html = self.url_open('/').text
-        self.assertNotIn('s_ck_shop_intro', html, 'Intro shop ne doit pas fuiter sur la home.')
+        self.assertNotIn('ck-shop-intro--title-only', html, 'Intro shop ne doit pas fuiter sur la home.')
 
     def test_category_page_when_epicerie_exists(self):
         slug = self.env['ir.http'].sudo()._slug(self.category)
@@ -95,5 +91,5 @@ class TestCkShopPhase3Compose(HttpCase):
     def test_shop_no_horizontal_overflow_marker(self):
         """Smoke : pas de double composition (legacy + module)."""
         html = self.url_open('/shop').text
-        intro_count = len(re.findall(r'class="[^"]*s_ck_shop_intro', html))
+        intro_count = len(re.findall(r'class="[^"]*ck-shop-intro--title-only', html))
         self.assertEqual(intro_count, 1, 'Intro shop dupliquée — vérifier vues coexistent.')

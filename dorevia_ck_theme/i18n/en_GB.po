@@ -137,6 +137,11 @@ msgid ""
 msgstr "<a href=\"/terms\" class=\"o_translate_inline\">Terms and conditions</a>"
 
 #. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.ck_product_comment_fr
+msgid "Avis clients"
+msgstr "Customer reviews"
+
+#. module: dorevia_ck_theme
 #: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.s_ck_shop_intro
 msgid "Produits créoles sélectionnés, aux origines identifiées."
 msgstr "Selected Creole products, with identified origins."

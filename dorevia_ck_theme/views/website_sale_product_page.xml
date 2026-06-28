@@ -246,6 +246,25 @@
         </xpath>
     </template>
 
+    <!-- Rating-U1-R1 — libellé FR + étoiles zone haute uniquement si avis réels -->
+    <template id="ck_product_title_rating_if_count"
+              inherit_id="website_sale.product_title"
+              name="CK Product title rating when count &gt; 0"
+              priority="35">
+        <xpath expr="//t[a[hasclass('o_product_page_reviews_link')]]" position="attributes">
+            <attribute name="t-if">is_view_active('website_sale.product_comment') and product.rating_count</attribute>
+        </xpath>
+    </template>
+
+    <template id="ck_product_comment_fr"
+              inherit_id="website_sale.product_comment"
+              name="CK Reviews section FR"
+              priority="20">
+        <xpath expr="//section[@id='o_product_page_reviews']//h2" position="replace">
+            <h2 class="fs-4 mb-0">Avis clients</h2>
+        </xpath>
+    </template>
+
     <template id="product_ck_hide_native_blocks"
               inherit_id="website_sale.product"
               name="CK Hide native accordion and documents when tabs"

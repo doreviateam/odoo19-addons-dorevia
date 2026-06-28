@@ -229,6 +229,32 @@ class TestCkProductPageNote08RecetteLogic(TransactionCase):
 
 @tagged('post_install', '-at_install', 'dorevia_ck_product_page_note08_recette')
 class TestCkProductPageNote08RecetteFront(HttpCase):
+    FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
+
+    def _open_fr(self, url):
+        return self.url_open(url, headers=self.FR_HEADERS)
+
+    def _apply_product_rating(self, product, rate=5):
+        partner = self.env['res.partner'].sudo().create({
+            'name': 'Client QA Rating-U1',
+            'email': 'qa-rating-u1@example.test',
+        })
+        rating = self.env['rating.rating'].sudo().create({
+            'res_model_id': self.env['ir.model'].sudo()._get('product.template').id,
+            'res_model': 'product.template',
+            'res_id': product.id,
+            'partner_id': partner.id,
+            'rated_partner_id': self.env.company.partner_id.id,
+            'publisher_id': self.env.company.partner_id.id,
+        })
+        product.sudo().rating_apply(
+            rate,
+            rating=rating,
+            feedback='Avis QA Rating-U1 : produit conforme et apprécié.',
+        )
+        product.invalidate_recordset(['rating_count', 'rating_avg'])
+        return rating
+
     def test_reassurance_and_compare_hidden(self):
         product = self.env['product.template'].sudo().create({
             'name': 'Recette front QA',
@@ -238,7 +264,7 @@ class TestCkProductPageNote08RecetteFront(HttpCase):
             'is_published': True,
             'ck_discover_html': '<p>Section.</p>',
         })
-        html = self.url_open(product.website_url).text
+        html = self._open_fr(product.website_url).text
         self.assertIn('En stock — expédié depuis Nantes', html)
         self.assertIn('Retour selon conditions de vente', html)
         self.assertNotIn('remboursement sous 30 jours', html.lower())
@@ -265,12 +291,55 @@ class TestCkProductPageNote08RecetteFront(HttpCase):
             'ck_discover_html': '<p>OK</p>',
             'ck_badge_ids': [(6, 0, badge.ids)],
         })
-        html = self.url_open(product.website_url).text
+        html = self._open_fr(product.website_url).text
         self.assertIn('Guadeloupe QA recette', html)
         self.assertNotIn('Sans gluten', html)
 
     def test_shop_and_home_non_regression(self):
-        shop = self.url_open('/shop').text
-        home = self.url_open('/').text
+        shop = self._open_fr('/shop').text
+        home = self._open_fr('/').text
         self.assertIn('ck-product-card--shop', shop)
         self.assertIn('ck-product-card--home', home)
+
+    def test_rating_u1_reviews_link_section_and_dom_order(self):
+        product = self.env['product.template'].sudo().create({
+            'name': 'Rating U1 recette QA',
+            'type': 'consu',
+            'list_price': 8.0,
+            'sale_ok': True,
+            'is_published': True,
+            'ck_packaging_label': 'Sachet QA 100 g',
+        })
+        self._apply_product_rating(product)
+
+        html = self._open_fr(product.website_url).text
+
+        self.assertIn('ck-product-purchase__title', html)
+        self.assertIn('o_product_page_reviews_link', html)
+        self.assertIn('(1 avis)', html)
+        self.assertIn('fa-star', html)
+        self.assertIn('id="o_product_page_reviews"', html)
+        self.assertIn('Avis clients', html)
+        self.assertIn('data-bs-target="#o_product_page_reviews_content"', html)
+        self.assertLess(
+            html.index('ck-product-purchase__title'),
+            html.index('o_product_page_reviews_link'),
+        )
+        self.assertLess(
+            html.index('ck-product-page__long-zone'),
+            html.index('id="o_product_page_reviews"'),
+        )
+
+    def test_rating_u1_no_reviews_keeps_title_without_link(self):
+        product = self.env['product.template'].sudo().create({
+            'name': 'Sans avis Rating U1 QA',
+            'type': 'consu',
+            'list_price': 8.0,
+            'sale_ok': True,
+            'is_published': True,
+        })
+
+        html = self._open_fr(product.website_url).text
+
+        self.assertIn('ck-product-purchase__title', html)
+        self.assertNotIn('o_product_page_reviews_link', html)

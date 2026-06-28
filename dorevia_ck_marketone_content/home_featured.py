@@ -667,6 +667,28 @@ def _render_featured_wishlist_button_html(env, template, variant):
     )
 
 
+def _build_featured_rating_html(template):
+    """Ligne note compacte pour cards home (★ 4,8 · 12 avis).
+
+    Rating-U2 — même logique que le QWeb shop.
+    Retourne une chaîne vide si aucun avis enregistré.
+    """
+    if not template.rating_count:
+        return ''
+    fmt = ('%g' % round(template.rating_avg, 1)).replace('.', ',')
+    count = template.rating_count
+    return (
+        '<div class="ck-card-rating">'
+        '<span class="ck-rating-star" aria-hidden="true">★</span>'
+        '<span class="visually-hidden">Note </span>'
+        f'<span class="ck-rating-value">{escape(fmt)}</span>'
+        '<span class="visually-hidden"> sur 5</span>'
+        '<span class="ck-rating-separator" aria-hidden="true"> · </span>'
+        f'<span class="ck-rating-count">{count} avis</span>'
+        '</div>'
+    )
+
+
 def build_featured_product_card_html(env, website, variant):
     """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence.
 
@@ -685,6 +707,7 @@ def build_featured_product_card_html(env, website, variant):
     badge_html = _get_featured_badge_html(variant)
     card_title = escape(display_name)
     card_aria = escape(f'{FEATURED_CARD_CTA} : {display_name}')
+    rating_html = _build_featured_rating_html(template)
 
     labels_block = (
         f'<p class="ck-product-card__meta product-card-labels">{metadata_line}</p>'
@@ -716,6 +739,7 @@ def build_featured_product_card_html(env, website, variant):
     <div class="ck-product-card__body product-card-body">
         <h3 class="ck-product-card__title product-card-title"><a href="{href}" class="ck-product-card__title-link">{card_title}</a></h3>
         {labels_block}
+        {rating_html}
     </div>
     <div class="ck-product-card__foot product-card-foot">
         <div class="ck-product-card__price product-card-pricing">
