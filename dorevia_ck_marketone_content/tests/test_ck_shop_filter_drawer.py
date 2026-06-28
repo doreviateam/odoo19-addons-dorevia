@@ -43,6 +43,7 @@ class TestCkShopFilterGroups(TransactionCase):
 
 @tagged('post_install', '-at_install', 'dorevia_ck_shop_filter_drawer', 'dorevia_ck_shop_s1')
 class TestCkShopFilterDrawerHttp(HttpCase):
+    FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
 
     @classmethod
     def setUpClass(cls):
@@ -50,7 +51,7 @@ class TestCkShopFilterDrawerHttp(HttpCase):
         bootstrap_ck_shop_filter_tags(cls.env)
 
     def _drawer_html(self, path='/shop'):
-        return self.url_open(path).text
+        return self.url_open(path, headers=self.FR_HEADERS).text
 
     def _offcanvas_block(self, html):
         start = html.find('id="o_wsale_offcanvas"')
@@ -105,7 +106,7 @@ class TestCkShopFilterDrawerHttp(HttpCase):
         if not tag:
             self.skipTest('Aucun tag filtrable rattaché à un produit publié.')
         tag = tag[0]
-        response = self.url_open(f'/shop?tags={tag.id}')
+        response = self.url_open(f'/shop?tags={tag.id}', headers=self.FR_HEADERS)
         self.assertEqual(response.status_code, 200)
         html = response.text
         self.assertIn('oe_product', html)

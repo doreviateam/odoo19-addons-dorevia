@@ -41,14 +41,17 @@
         </xpath>
     </template>
 
-    <!-- D4 — masque le filmstrip catégories quand le header rayon P2B est actif.
-         ck_rayon est positionné avant le filmstrip dans le DOM (oe_structure_1
-         précède o_wsale_container) ; le scope est partagé via t-call QWeb. -->
+    <!-- Shop-U3 — l'ancien header rayon P2B n'est plus rendu.
+         Le filmstrip natif reste visible : toolbar / filtres / tri sont préservés. -->
     <template id="website_sale_filmstrip_hide_if_rayon"
               inherit_id="website_sale.filmstrip_categories"
-              name="CK — masque filmstrip si rayon éditorial actif (D4)">
+              name="CK — masque filmstrip si rayon éditorial actif (D4)"
+              active="False">
         <xpath expr="//div[@id='o_wsale_categories_filmstrip']" position="attributes">
             <attribute name="t-if">not ck_rayon</attribute>
         </xpath>
     </template>
+    <record id="website_sale_filmstrip_hide_if_rayon" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
 </odoo>

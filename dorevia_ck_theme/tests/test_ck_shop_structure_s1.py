@@ -12,6 +12,7 @@ from odoo.addons.dorevia_ck_marketone_content.hooks import EPICERIE_CATEGORY_NAM
 @tagged('post_install', '-at_install', 'dorevia_ck_shop_s1')
 class TestCkShopStructureS1(HttpCase):
     """Promesse CK, sidebar, compteur intro, non-régression catalogue."""
+    FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
 
     @classmethod
     def setUpClass(cls):
@@ -30,18 +31,15 @@ class TestCkShopStructureS1(HttpCase):
         )
 
     def _shop_html(self, path='/shop'):
-        resp = self.url_open(path)
+        resp = self.url_open(path, headers=self.FR_HEADERS)
         self.assertEqual(resp.status_code, 200, path)
         return resp.text
 
     def test_shop_intro_promise_and_wording(self):
         html = self._shop_html()
-        self.assertIn('s_ck_shop_intro', html)
+        self.assertIn('ck-shop-intro--title-only', html)
         self.assertIn('Boutique C-Kréyòl', html)
-        self.assertIn(
-            'Produits créoles sélectionnés, aux origines identifiées.',
-            html,
-        )
+        self.assertNotIn('ck-rayon-banner', html)
         self.assertNotIn('Boutique C-Kreyol', html)
         self.assertNotRegex(
             html,
@@ -49,27 +47,8 @@ class TestCkShopStructureS1(HttpCase):
             msg='Intro S1 : pas de promesse logistique',
         )
 
-    def test_shop_counter_in_intro_not_toolbar(self):
+    def test_shop_counter_not_in_toolbar(self):
         html = self._shop_html()
-        intro = re.search(
-            r'class="[^"]*s_ck_shop_intro[^"]*"[\s\S]*?</section>',
-            html,
-        )
-        self.assertTrue(intro, 'Intro shop introuvable')
-        intro_html = intro.group(0)
-        self.assertIn('ck-shop-intro__note', intro_html)
-        self.assertRegex(
-            intro_html,
-            r'\d+\s+produit',
-            msg='Compteur dynamique attendu dans l’intro',
-        )
-        note = re.search(
-            r'class="[^"]*ck-shop-intro__note[^"]*"[\s\S]*?</p>',
-            intro_html,
-        )
-        self.assertTrue(note, 'Note compteur intro introuvable')
-        self.assertIn('en rayon', note.group(0))
-        self.assertNotIn('sélectionnés', note.group(0))
         self.assertNotIn('ck-shop-toolbar__count', html)
 
     def test_shop_sidebar_microcopy(self):
@@ -120,5 +99,7 @@ class TestCkShopStructureS1(HttpCase):
 
     def test_shop_no_horizontal_overflow_marker(self):
         html = self._shop_html()
-        intro_count = len(re.findall(r'class="[^"]*s_ck_shop_intro', html))
-        self.assertEqual(intro_count, 1, 'Intro shop dupliquée')
+        title_only_count = len(re.findall(r'ck-shop-intro--title-only', html))
+        self.assertEqual(title_only_count, 1, 'Titre shop dupliqué')
+        h1_count = len(re.findall(r'<h1\b', html, flags=re.IGNORECASE))
+        self.assertEqual(h1_count, 1, 'H1 shop dupliqué')

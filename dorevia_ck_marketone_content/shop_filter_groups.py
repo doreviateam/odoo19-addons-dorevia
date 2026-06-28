@@ -50,6 +50,46 @@ def _normalize_tag_name(name):
     return (name or '').strip().lower().replace('œ', 'oe')
 
 
+def _find_tag_by_translated_name(env, tag_name):
+    """Retrouve un tag même si seul un libellé localisé est présent."""
+    Tag = env['product.tag'].sudo()
+    tag = Tag.search([('name', '=', tag_name)], limit=1)
+    if tag:
+        return tag
+    for lang in env['res.lang'].sudo().search([('active', '=', True)]):
+        tag = Tag.with_context(lang=lang.code).search([('name', '=', tag_name)], limit=1)
+        if tag:
+            return tag
+    env.cr.execute(
+        """
+        SELECT id
+          FROM product_tag
+         WHERE EXISTS (
+               SELECT 1
+                 FROM jsonb_each_text(name) AS translated(lang, value)
+                WHERE value = %s
+         )
+         ORDER BY id
+         LIMIT 1
+        """,
+        [tag_name],
+    )
+    row = env.cr.fetchone()
+    return Tag.browse(row[0]) if row else Tag.browse()
+
+
+def _ensure_tag_name_in_active_languages(tag, tag_name):
+    """Garantit un libellé sur les langues du site pour éviter les labels vides."""
+    if not tag:
+        return
+    lang_codes = {'en_US'}
+    lang_codes.update(
+        tag.env['res.lang'].sudo().search([('active', '=', True)]).mapped('code')
+    )
+    for lang_code in sorted(lang_codes):
+        tag.with_context(lang=lang_code).write({'name': tag_name})
+
+
 def ck_infer_shop_filter_group(tag_name):
     """Infère le groupe métier d'une étiquette (migration / ops)."""
     normalized = _normalize_tag_name(tag_name)
@@ -117,6 +157,15 @@ def bootstrap_ck_shop_filter_tags(env):
     Tag = env['product.tag'].sudo()
     Product = env['product.template'].sudo()
     Ribbon = env['product.ribbon'].sudo()
+
+    guadeloupe = _find_tag_by_translated_name(env, GUADELOUPE_TAG_NAME)
+    if guadeloupe:
+        _ensure_tag_name_in_active_languages(guadeloupe, GUADELOUPE_TAG_NAME)
+        guadeloupe.write({
+            'ck_shop_filter_group': CK_SHOP_FILTER_GROUP_ORIGIN,
+            'visible_to_customers': True,
+            'sequence': guadeloupe.sequence or 10,
+        })
 
     for tag in Tag.search([]):
         updates = {}

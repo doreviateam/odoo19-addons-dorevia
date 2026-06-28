@@ -15,6 +15,7 @@ from odoo.addons.dorevia_ck_marketone_content.shop_toolbar import (
 
 @tagged('post_install', '-at_install', 'dorevia_ck_shop_s1')
 class TestCkShopToolbarHttp(HttpCase):
+    FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
 
     EXPECTED_FILMSTRIP = (
         'Épicerie',
@@ -35,17 +36,23 @@ class TestCkShopToolbarHttp(HttpCase):
             match.group(0),
         )]
 
+    def _shop_html(self, path='/shop'):
+        return self.url_open(path, headers=self.FR_HEADERS).text
+
     def test_shop_filmstrip_rayons_metier_only(self):
-        page_html = self.url_open('/shop').text
+        page_html = self._shop_html()
         labels = self._filmstrip_aria_labels(page_html)
         self.assertEqual(labels, list(self.EXPECTED_FILMSTRIP))
         self.assertNotIn('CK Sparse Grid QA', page_html)
         self.assertNotIn('ck-sparse-grid-qa', page_html.lower())
 
     def test_shop_counter_wording_en_rayon(self):
-        html = self.url_open('/shop').text
-        self.assertIn('produits en rayon', html)
-        self.assertNotIn('produits sélectionnés', html)
+        page_html = self._shop_html()
+        self.assertNotIn('produits sélectionnés', page_html)
+        if 'ck-shop-intro--title-only' in page_html:
+            self.assertNotIn('produits en rayon', page_html)
+            return
+        self.assertIn('produits en rayon', page_html)
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_shop_s1')

@@ -62,6 +62,8 @@ class TestCkShopProductCardHooks(TransactionCase):
 
 @tagged('post_install', '-at_install', 'dorevia_ck_shop_card')
 class TestCkShopProductCardCompose(HttpCase):
+    FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -87,8 +89,11 @@ class TestCkShopProductCardCompose(HttpCase):
         self.assertGreater(start, 0)
         return html[start:start + 12000]
 
+    def _shop_html(self):
+        return self.url_open('/shop', headers=self.FR_HEADERS).text
+
     def test_shop_card_structure_http(self):
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertIn('ck-product-card__title', chunk)
         self.assertIn('ck-product-card__foot', chunk)
@@ -97,7 +102,7 @@ class TestCkShopProductCardCompose(HttpCase):
         self.assertIn('ck-product-card__image', chunk)
 
     def test_shop_card_ctas_french(self):
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertIn('Ajouter au panier', chunk)
         self.assertIn('card-cart-cta', chunk)
@@ -106,7 +111,7 @@ class TestCkShopProductCardCompose(HttpCase):
 
     def test_shop_card_cta_label_visible(self):
         """Le libellé panier ne doit pas être masqué (CTA unifié Home/Shop)."""
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertRegex(
             chunk,
@@ -116,7 +121,7 @@ class TestCkShopProductCardCompose(HttpCase):
 
     def test_shop_card_product_link_via_title_or_image(self):
         """Accès fiche produit via image / titre — pas de second CTA en pied de card."""
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertRegex(chunk, r'oe_product_image_link|o_wsale_products_item_title')
         foot_start = chunk.find('ck-product-card__foot')
@@ -127,7 +132,7 @@ class TestCkShopProductCardCompose(HttpCase):
 
     def test_shop_card_cart_cta_always_in_dom(self):
         """Le CTA panier ne doit pas dépendre du survol image (actions_onhover Odoo)."""
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertRegex(
             chunk,
@@ -135,13 +140,13 @@ class TestCkShopProductCardCompose(HttpCase):
         )
 
     def test_shop_card_image_zone(self):
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertIn('ck-product-card__image', chunk)
         self.assertRegex(chunk, r'oe_product_image_img|ck-product-card__image')
 
     def test_shop_card_no_description_sale_leak(self):
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         grid_start = html.find('o_wsale_products_grid')
         self.assertGreater(grid_start, 0)
         grid_chunk = html[grid_start:grid_start + 200000]
@@ -149,7 +154,7 @@ class TestCkShopProductCardCompose(HttpCase):
 
     def test_shop_card_no_separate_origin_label(self):
         """Pas de label origine séparé au-dessus du titre (canon Home)."""
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertNotIn('ck-product-card__origin', chunk)
 
@@ -169,13 +174,13 @@ class TestCkShopProductCardCompose(HttpCase):
                 break
         if not product:
             raise unittest.SkipTest('Aucun produit publié avec ligne meta card.')
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertIn('ck-product-card__meta', chunk)
         self.assertIn(expected, html)
 
     def test_shop_home_wishlist_non_regression(self):
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         chunk = self._first_product_card_chunk(html)
         self.assertIn('o_add_wishlist', chunk)
         self.assertIn('data-action="o_wishlist"', chunk)
@@ -190,14 +195,14 @@ class TestCkShopProductCardCompose(HttpCase):
 
     def test_shop_grid_four_columns(self):
         """Grille catalogue — shop_ppr=4 (aligné Home 4 colonnes desktop)."""
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         self.assertRegex(html, r'--o-wsale-ppr:\s*4')
         self.assertIn('g-col-lg-3', html)
         website = self.env['website'].get_current_website()
         self.assertEqual(website.shop_ppr, 4)
 
     def test_shop_page_scope_unchanged(self):
-        html = self.url_open('/shop').text
+        html = self._shop_html()
         self.assertIn('ck-shop-page', html)
-        self.assertIn('s_ck_shop_intro', html)
+        self.assertIn('ck-shop-intro--title-only', html)
         self.assertIn('o_wsale_products_grid', html)
