@@ -28,13 +28,15 @@
 
     <template id="product_ck_title_chips"
               inherit_id="website_sale.product_title"
-              name="CK Product category chips in buy block"
+              name="CK Product chips — zone titre fiche produit"
               priority="30">
+        <!-- Odoo 19 récent (≥ mars 2026) : titre dans website_sale.product_title.
+             Le div chips est toujours rendu (pas de t-if) pour ancrer product_ck_card_metadata. -->
         <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_details_content_section_title')]" position="attributes">
             <attribute name="t-attf-class" add="ck-product-purchase__head" separator=" "/>
         </xpath>
-        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_details_content_section_title')]//h1" position="before">
-            <div class="ck-product-purchase__chips" t-if="product.public_categ_ids">
+        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_details_content_section_title')]//h1" position="after">
+            <div class="ck-product-purchase__chips">
                 <t t-foreach="product.public_categ_ids" t-as="categ">
                     <a t-attf-href="/shop/category/{{slug(categ)}}"
                        class="ck-chip"
@@ -260,8 +262,8 @@
               inherit_id="website_sale.product_comment"
               name="CK Reviews section FR"
               priority="20">
-        <xpath expr="//section[@id='o_product_page_reviews']//h3" position="replace">
-            <h3 class="mb32">Avis clients</h3>
+        <xpath expr="//section[@id='o_product_page_reviews']//h2" position="replace">
+            <h2 class="fs-4 mb-0">Avis clients</h2>
         </xpath>
     </template>
 

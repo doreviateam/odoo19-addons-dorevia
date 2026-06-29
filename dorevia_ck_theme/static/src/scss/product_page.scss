@@ -173,6 +173,10 @@
         gap: 6px;
         margin-bottom: 10px;
 
+        &:empty {
+            display: none;
+        }
+
         .ck-chip {
             display: inline-block;
             padding: 2px 10px;

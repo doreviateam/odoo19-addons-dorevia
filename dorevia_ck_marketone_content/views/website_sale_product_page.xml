@@ -5,11 +5,14 @@
     <template id="product_ck_card_metadata"
               inherit_id="dorevia_ck_theme.product_ck_title_chips"
               name="CK Product page metadata line"
-              priority="40">
-        <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_details_content_section_title')]//h1" position="after">
+              priority="34">
+        <!-- Ancre = chips div injecté par product_ck_title_chips (priority 30).
+             Si le produit n'a pas de catégorie, le chips div est vide (hidden :empty)
+             mais reste dans le DOM — la metadata s'affiche toujours juste sous le titre. -->
+        <xpath expr="//div[hasclass('ck-product-purchase__chips')]" position="after">
             <t t-set="ck_product_variant" t-value="product_variant or product._create_first_product_variant()"/>
             <p t-if="product.get_ck_shop_card_metadata_line(ck_product_variant)"
-               class="ck-product-purchase__meta ck-product-card__meta product-card-labels mb-0"
+               class="ck-product-purchase__meta mb-0"
                t-out="product.get_ck_shop_card_metadata_line(ck_product_variant)"/>
         </xpath>
     </template>
