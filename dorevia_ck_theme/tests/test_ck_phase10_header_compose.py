@@ -170,7 +170,7 @@ class TestCkPhase10HeaderCompose(HttpCase):
     def test_header_nos_producteurs_when_v22(self):
         html = self._home_html()
         if 'Nos producteurs' in html:
-            self.assertIn('/nos-producteurs', html)
+            self.assertIn('/producteurs', html)
 
     def test_header_mega_split_when_product_mega(self):
         html = self._home_html()

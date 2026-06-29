@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ck_producers_list_page" name="CK Producteurs — Liste">
+        <t t-call="website.layout">
+            <t t-set="title">Nos producteurs créoles partenaires | C-Kréyòl</t>
+            <t t-set="website_meta_description">Découvrez les producteurs et artisans créoles qui façonnent les saveurs C-Kréyòl.</t>
+            <div id="wrap" class="ck-producers-page">
+                <div class="container py-5">
+                    <h1 class="ck-producers-page__title mb-1">Nos producteurs</h1>
+                    <p class="ck-producers-page__subtitle mb-5">Artisans et producteurs partenaires C-Kréyòl</p>
+
+                    <t t-if="producers">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                            <t t-foreach="producers" t-as="producer">
+                                <div class="col">
+                                    <a t-att-href="producer.get_ck_producer_url()"
+                                       class="ck-producer-card text-decoration-none d-flex flex-column h-100">
+                                        <div class="ck-producer-card__media">
+                                            <img t-if="producer.image_1920"
+                                                 t-attf-src="/web/image/res.partner/#{producer.id}/image_512"
+                                                 t-att-alt="producer.name"
+                                                 class="ck-producer-card__img"
+                                                 loading="lazy"
+                                                 decoding="async"/>
+                                            <div t-else="" class="ck-producer-card__placeholder" aria-hidden="true">
+                                                <i class="fa fa-leaf fa-2x"/>
+                                            </div>
+                                        </div>
+                                        <div class="ck-producer-card__body d-flex flex-column flex-grow-1">
+                                            <h2 class="ck-producer-card__title" t-esc="producer.name"/>
+                                            <p t-if="producer.ck_producer_location_label"
+                                               class="ck-producer-card__origin"
+                                               t-esc="producer.ck_producer_location_label"/>
+                                            <t t-set="product_count" t-value="producer_counts.get(producer.id, 0)"/>
+                                            <p class="ck-producer-card__count">
+                                                <t t-if="product_count == 1">1 produit</t>
+                                                <t t-else=""><t t-esc="product_count"/> produits</t>
+                                            </p>
+                                            <span class="ck-producer-card__cta mt-auto">Découvrir le producteur</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <p class="text-muted">Aucun producteur disponible pour le moment.</p>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -123,7 +123,7 @@ class TestCkHeaderV22Compose(HttpCase):
 
     def test_producteurs_direct_link(self):
         html = self._home_html()
-        self.assertRegex(html, r'href="(?:/[a-z]{2}(?:-[A-Z]{2})?)?/nos-producteurs"')
+        self.assertRegex(html, r'href="(?:/[a-z]{2}(?:-[A-Z]{2})?)?/producteurs"')
 
     def test_espace_pro_dropdown_anchors(self):
         html = self._home_html()

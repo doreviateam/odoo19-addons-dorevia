@@ -17,6 +17,10 @@
                        t-attf-href="/shop/category/{{slug(chip['categ'])}}"
                        class="ck-chip"
                        t-esc="chip['name']"/>
+                    <a t-elif="chip.get('producer_url')"
+                       t-att-href="chip['producer_url']"
+                       class="ck-chip ck-chip--producer"
+                       t-esc="chip['name']"/>
                     <span t-else=""
                           class="ck-chip"
                           t-esc="chip['name']"/>

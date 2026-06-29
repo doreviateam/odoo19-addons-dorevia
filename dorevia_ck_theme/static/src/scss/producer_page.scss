@@ -1,0 +1,261 @@
+// =============================================================================
+// C-Kréyòl — Pages producteurs (/producteurs + /producteur/<slug>)
+// Sprint Producteurs V1
+// =============================================================================
+
+// --- Page liste /producteurs --------------------------------------------------
+
+.ck-producers-page {
+    background-color: $ck-bg;
+    min-height: 60vh;
+
+    &__title {
+        font-family: $ck-font-display;
+        font-weight: $ck-font-weight-display;
+        color: $ck-text;
+        font-size: $ck-text-3xl;
+        line-height: $ck-line-height-heading;
+    }
+
+    &__subtitle {
+        font-family: $ck-font-ui;
+        color: $ck-text-muted;
+        font-size: $ck-text-base;
+    }
+}
+
+// --- Carte producteur (liste) -------------------------------------------------
+
+.ck-producer-card {
+    background-color: $ck-surface;
+    border: 1px solid $ck-border;
+    border-radius: $ck-radius-md;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+    color: $ck-text;
+
+    &:hover,
+    &:focus-visible {
+        box-shadow: $ck-shadow-card-hover;
+        transform: translateY(-2px);
+        color: $ck-text;
+        text-decoration: none;
+    }
+
+    &__media {
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        background-color: $ck-image-zone;
+    }
+
+    &__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    &__placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $ck-border;
+    }
+
+    &__body {
+        padding: $ck-space-4;
+    }
+
+    &__title {
+        font-family: $ck-font-display;
+        font-weight: $ck-font-weight-display;
+        font-size: $ck-text-lg;
+        color: $ck-text;
+        margin-bottom: $ck-space-1;
+        line-height: $ck-line-height-heading;
+    }
+
+    &__origin {
+        font-family: $ck-font-ui;
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+        margin-bottom: $ck-space-2;
+    }
+
+    &__count {
+        font-family: $ck-font-ui;
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+        margin-bottom: $ck-space-3;
+    }
+
+    &__cta {
+        display: inline-block;
+        padding: $ck-space-2 $ck-space-4;
+        border: 1px solid $ck-primary;
+        border-radius: $ck-radius-sm;
+        font-family: $ck-font-ui;
+        font-size: $ck-text-sm;
+        font-weight: $ck-font-weight-semibold;
+        color: $ck-primary-text;
+        background: transparent;
+        transition: background-color 0.15s ease, color 0.15s ease;
+
+        .ck-producer-card:hover &,
+        .ck-producer-card:focus-visible & {
+            background-color: $ck-primary;
+            color: $ck-surface;
+        }
+    }
+}
+
+// --- Fiche producteur /producteur/<slug> -------------------------------------
+
+.ck-producer-detail {
+    background-color: $ck-bg;
+    min-height: 60vh;
+
+    &__back {
+        display: inline-flex;
+        align-items: center;
+        font-family: $ck-font-ui;
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+        text-decoration: none;
+        transition: color 0.15s ease;
+
+        &:hover {
+            color: $ck-primary-text;
+        }
+    }
+
+    &__media {
+        border-radius: $ck-radius-md;
+        overflow: hidden;
+        background-color: $ck-image-zone;
+        aspect-ratio: 1 / 1;
+    }
+
+    &__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    &__img-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $ck-border;
+        min-height: 200px;
+    }
+
+    &__title {
+        font-family: $ck-font-display;
+        font-weight: $ck-font-weight-display;
+        color: $ck-text;
+        line-height: $ck-line-height-heading;
+        font-size: $ck-text-2xl;
+        margin-bottom: $ck-space-2;
+    }
+
+    &__origin {
+        font-family: $ck-font-ui;
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+        margin-bottom: $ck-space-3;
+    }
+
+    &__short-desc {
+        font-family: $ck-font-ui;
+        font-size: $ck-text-lg;
+        color: $ck-text;
+        font-style: italic;
+        margin-bottom: $ck-space-4;
+        line-height: $ck-line-height-body;
+    }
+
+    &__story {
+        font-family: $ck-font-ui;
+        font-size: $ck-text-base;
+        color: $ck-text;
+        line-height: $ck-line-height-body;
+        margin-bottom: $ck-space-4;
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__website-link {
+        display: inline-flex;
+        align-items: center;
+        font-family: $ck-font-ui;
+        font-size: $ck-text-sm;
+        color: $ck-primary-text;
+        text-decoration: none;
+        word-break: break-all;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &__products-section {
+        border-top: 1px solid $ck-border;
+        padding-top: $ck-space-5;
+    }
+
+    &__products-title {
+        font-family: $ck-font-display;
+        font-weight: $ck-font-weight-display;
+        color: $ck-text;
+        line-height: $ck-line-height-heading;
+    }
+
+    &__product {
+        color: $ck-text;
+
+        &:hover {
+            color: $ck-text;
+        }
+    }
+
+    &__product-media {
+        border-radius: $ck-radius-sm;
+        overflow: hidden;
+        background-color: $ck-image-zone;
+    }
+
+    &__product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__product-name {
+        font-family: $ck-font-ui;
+        font-size: $ck-text-sm;
+        color: $ck-text;
+        margin-top: $ck-space-2;
+        margin-bottom: 0;
+        line-height: $ck-line-height-body;
+    }
+}
+
+// --- Chip producteur cliquable (fiche produit) --------------------------------
+
+.ck-chip--producer {
+    text-decoration: none;
+
+    &:hover {
+        background-color: $ck-primary;
+        color: $ck-surface;
+        text-decoration: none;
+    }
+}

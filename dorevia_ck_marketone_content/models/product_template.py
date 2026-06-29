@@ -157,9 +157,10 @@ class ProductTemplate(models.Model):
         if producer:
             producer_name = (producer.name or '').strip()
             if producer_name:
-                chips.append({'name': producer_name, 'categ': None})
+                producer_url = producer.get_ck_producer_url() if producer.ck_is_producer else None
+                chips.append({'name': producer_name, 'categ': None, 'producer_url': producer_url})
         elif has_producer_signal:
-            chips.append({'name': _CK_PRODUCER_SIGNAL_RAW, 'categ': None})
+            chips.append({'name': _CK_PRODUCER_SIGNAL_RAW, 'categ': None, 'producer_url': None})
 
         return chips
 

@@ -81,6 +81,12 @@ class TestCkNavSync(TransactionCase):
         self.assertTrue(self._menu_by_name('Nos producteurs'))
         self.assertTrue(self._menu_by_name('Espace pro'))
 
+    def test_nos_producteurs_menu_points_to_producteurs(self):
+        bootstrap_ck_navigation(self.env)
+        menu = self._menu_by_name('Nos producteurs')
+        self.assertTrue(menu)
+        self.assertEqual(menu.url, '/producteurs')
+
     def test_legacy_top_level_professionnels_hidden(self):
         bootstrap_ck_navigation(self.env)
         legacy = self.Menu.search([

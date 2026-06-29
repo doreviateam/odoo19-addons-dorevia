@@ -44,7 +44,7 @@ NAV_RELATION_SEQUENCE = {
     NAV_ESPACE_PRO_LABEL: 70,
 }
 
-NAV_PRODUCTEURS_URL = '/nos-producteurs'
+NAV_PRODUCTEURS_URL = '/producteurs'
 NAV_PRO_PAGE_URL = '/professionnels'
 
 # Mega-menu keys (sélection bloc visuel BO)

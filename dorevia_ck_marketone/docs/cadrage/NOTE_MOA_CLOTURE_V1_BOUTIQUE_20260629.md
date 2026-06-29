@@ -124,11 +124,12 @@ Actions Axe C back-office — voir [`NOTE_MOA_LIVRAISON_20260626.md`](NOTE_MOA_L
 
 ## Prochain sprint
 
-| Option | Description |
-| --- | --- |
-| **Éditorial** | Contenu Home, rayons, fiches, producteurs, SEO, traductions |
-| **V1.1 technique** | Dettes D1–D3 si visibles en prod |
-| **Backlog** | D4 réseau header |
+| Option | Description | Statut |
+| --- | --- | --- |
+| **Producteurs V1** | Annuaire `/producteurs` + fiches + chips cliquables | ✅ **GO QA 30/06** — [`RECETTE_QA_PRODUCTEURS_V1_VERDICT_20260630.md`](RECETTE_QA_PRODUCTEURS_V1_VERDICT_20260630.md) |
+| **Éditorial** | Contenu Home, rayons, fiches, SEO, traductions EN | En cours / backlog |
+| **V1.1 technique** | Dettes D1–D3 si visibles en prod | Backlog |
+| **Backlog** | D4 réseau header | Backlog |
 
 ---
 

@@ -63,3 +63,4 @@ from . import test_ck_shop_sparse_grid
 from . import test_ck_shop_toolbar
 from . import test_ck_shop_universe_banner
 from . import test_ck_website_cookies_config
+from . import test_ck_producers

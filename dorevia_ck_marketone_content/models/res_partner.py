@@ -24,5 +24,19 @@ class ResPartner(models.Model):
     ck_producer_location_label = fields.Char(
         string='Libellé géographique',
         translate=True,
-        help='Libellé marketing libre (ex. Abymes, Guadeloupe). Non dérivé de l’adresse Odoo.',
+        help="Libellé marketing libre (ex. Abymes, Guadeloupe). Non dérivé de l'adresse Odoo.",
     )
+
+    def get_ck_producer_url(self):
+        """URL publique canonique de la fiche producteur."""
+        self.ensure_one()
+        return f"/producteur/{self.env['ir.http']._slug(self)}"
+
+    def get_ck_producer_products(self):
+        """Produits CK publiés et vendables liés à ce producteur."""
+        self.ensure_one()
+        return self.env['product.template'].sudo().search([
+            ('ck_producer_id', '=', self.id),
+            ('is_published', '=', True),
+            ('sale_ok', '=', True),
+        ], order='website_sequence asc, name asc')

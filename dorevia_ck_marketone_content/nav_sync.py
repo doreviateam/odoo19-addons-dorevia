@@ -367,7 +367,7 @@ def _coffrets_child_links(env):
 
 
 def _sync_producteurs(env, website, root, Menu):
-    """Entrée stratégique MOA — lien direct /nos-producteurs."""
+    """Entrée stratégique MOA — lien direct annuaire producteurs dynamique."""
     _upsert_menu(
         Menu,
         website=website,
