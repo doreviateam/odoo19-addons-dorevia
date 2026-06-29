@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Case CGV checkout Odoo 19 — active par défaut à l'install / -u module. -->
+    <record id="website_sale.accept_terms_and_conditions" model="ir.ui.view">
+        <field name="active">True</field>
+    </record>
+</odoo>
