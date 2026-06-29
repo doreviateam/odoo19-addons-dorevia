@@ -6,7 +6,7 @@
 # migration sont donc normaux (bumps « assets-only »).
 {
     "name": "C-Kreyol Marketone — Thème CK",
-    "version": "19.0.1.98.0",
+    "version": "19.0.1.103.1",
     "category": "Theme/eCommerce",
     "summary": "Thème CK générique — tokens, layout, snippets Website Builder",
     "description": """
@@ -57,6 +57,7 @@
         "views/website_nav_ck_v1.xml",
         "views/website_sale_templates.xml",
         "views/website_sale_product_card.xml",
+        "views/website_sale_cart.xml",
         "views/website_sale_product_page.xml",
         "views/website_sale_shop_compose.xml",
         "views/website_sale_filmstrip_pills.xml",

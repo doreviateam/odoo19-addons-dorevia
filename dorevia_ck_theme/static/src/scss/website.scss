@@ -681,30 +681,19 @@
         }
     }
 
-    // Variante compacte — cards homepage « Coups de cœur » uniquement (pas /shop)
+    // Polish-U1 — densité Home (typo/pied) ; image = socle commun 1:1 cover (parité Shop).
     .ck-product-card--home {
-        &:hover {
-            transform: translateY(-2px);
-        }
-
         .ck-product-card__image,
         .ck-product-card__media,
         .product-card-media {
-            aspect-ratio: unset;
-            height: 240px;
-            max-height: 260px;
+            aspect-ratio: 1 / 1;
+            height: auto;
             min-height: 0;
-            padding: $ck-space-2 $ck-space-3;
+            padding: 0;
             background-color: $ck-image-zone;
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: contain;
-        }
-
-        &:hover .ck-product-card__image,
-        &:hover .ck-product-card__media,
-        &:hover .product-card-media {
-            transform: none;
+            background-size: cover;
         }
 
         .ck-product-card__body,
@@ -776,13 +765,34 @@
             }
         }
 
-        @media (max-width: 479.98px) {
-            .ck-product-card__image,
-            .ck-product-card__media,
-            .product-card-media {
-                height: 200px;
-                max-height: 220px;
-                padding: $ck-space-2;
+        // Polish-U3 — CTA panier mobile : parité confort Shop (≤575 px).
+        @media (max-width: 575.98px) {
+            .ck-product-card__foot,
+            .product-card-foot {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 10px;
+            }
+
+            .ck-product-card__price,
+            .product-card-pricing {
+                flex: none;
+                width: 100%;
+            }
+
+            .ck-product-card__actions,
+            .product-card-actions {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                width: 100%;
+            }
+
+            .card-cart-cta {
+                width: 100%;
+                min-height: 44px;
+                padding: 8px 14px;
+                font-size: 12px;
+                white-space: normal;
             }
         }
     }

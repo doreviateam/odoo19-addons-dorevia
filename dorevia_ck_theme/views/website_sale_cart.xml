@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Polish-U4 P0 — Panier vide éditorialisé CK (canon cart_lines). -->
+    <template id="cart_lines_ck_empty"
+              inherit_id="website_sale.cart_lines"
+              name="CK Shopping cart empty state"
+              priority="40">
+        <xpath expr="//div[@t-if='not website_sale_order or not website_sale_order.website_order_line']/h5" position="replace">
+            <h5 class="mb-3 o_translate_inline" style="text-align: center;">Votre panier est vide. Découvrez nos produits créoles sélectionnés.</h5>
+        </xpath>
+        <xpath expr="//div[@t-if='not website_sale_order or not website_sale_order.website_order_line']/p/a[@href='/shop']" position="replace">
+            <a href="/shop" class="btn btn-primary o_translate_inline">Découvrir la sélection</a>
+        </xpath>
+    </template>
+
+    <!-- Polish-U4 P2 — Confirmation commande : message chaleureux + réassurance. -->
+    <template id="confirmation_ck_wording"
+              inherit_id="website_sale.confirmation"
+              name="CK Order confirmation wording"
+              priority="40">
+        <xpath expr="//div[contains(@t-if, 'tx_sudo.state')]/h3" position="replace">
+            <div class="ck-order-confirmation__head">
+                <h3 class="mb-1 o_translate_inline">Merci ! Votre commande est confirmée. Vous recevrez un e-mail récapitulatif sous peu.</h3>
+            </div>
+        </xpath>
+        <xpath expr="//div[contains(@class, 'ck-order-confirmation__head')]/h3" position="after">
+            <p class="ck-order-confirmation__reassurance text-muted mb-0 o_translate_inline">Livraison suivie · Expédié depuis Nantes</p>
+        </xpath>
+    </template>
+</odoo>

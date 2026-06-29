@@ -42,6 +42,19 @@
         </xpath>
     </template>
 
+    <!-- Polish-U2 — Rubans grille Shop : classes CK + pas de style inline BO. -->
+    <template id="products_item_ck_card_ribbon"
+              inherit_id="website_sale.products_item"
+              name="CK Shop product card ribbon"
+              priority="46">
+        <xpath expr="//span[@t-att-data-ribbon-id='ribbon.id']" position="replace">
+            <span t-if="ribbon"
+                  t-att-data-ribbon-id="ribbon.id"
+                  t-attf-class="o_ribbons o_not_editable ck-product-card__badge badge badge-float #{ribbon.sudo().get_ck_card_badge_class()}"
+                  t-out="ribbon.name or ''"/>
+        </xpath>
+    </template>
+
     <!-- Rating-U2 — Note compacte sur cards shop (★ 4,8 · 12 avis).
          XPath sur o_wsale_product_information_text (natif Odoo 19, fiable).
          Conditionnel : rien si rating_count == 0 → pas d'espace mort.

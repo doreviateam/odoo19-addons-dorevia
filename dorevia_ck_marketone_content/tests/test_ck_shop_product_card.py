@@ -30,6 +30,20 @@ class TestCkShopProductCardHooks(TransactionCase):
         self.assertIn('ck-product-card__foot', arch)
         self.assertIn('ck-product-card__actions', arch)
 
+        ribbon_view = self.env['ir.ui.view'].search([
+            ('key', '=', 'dorevia_ck_theme.products_item_ck_card_ribbon'),
+        ], limit=1)
+        self.assertTrue(ribbon_view)
+        ribbon_arch = (
+            ribbon_view.arch_db
+            if isinstance(ribbon_view.arch_db, str)
+            else str(ribbon_view.arch_db)
+        )
+        self.assertIn('ck-product-card__badge', ribbon_arch)
+        self.assertIn('get_ck_card_badge_class', ribbon_arch)
+        self.assertNotIn('t-attf-style', ribbon_arch)
+        self.assertNotIn('bg_color', ribbon_arch)
+
         buttons = self.env['ir.ui.view'].search([
             ('key', '=', 'dorevia_ck_theme.shop_product_buttons_ck_card'),
         ], limit=1)
@@ -111,6 +125,8 @@ class TestCkShopProductCardHooks(TransactionCase):
 @tagged('post_install', '-at_install', 'dorevia_ck_shop_card')
 class TestCkShopProductCardCompose(HttpCase):
     FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
+
+    MOBILE_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
 
     @classmethod
     def setUpClass(cls):
@@ -380,3 +396,62 @@ class TestCkShopProductCardCompose(HttpCase):
         card_html = build_featured_product_card_html(self.env, website, variant)
         self.assertNotIn('ck-card-rating', card_html)
         self.assertIn('ck-product-card__title', card_html)
+
+    def _ribbon_span_in_card(self, chunk):
+        match = re.search(
+            r'<span[^>]*o_ribbons[^>]*ck-product-card__badge[^>]*>',
+            chunk,
+        )
+        self.assertTrue(match, 'Ruban CK absent de la card shop')
+        return match.group(0)
+
+    def test_polish_u2_shop_ribbon_semantic_classes(self):
+        """Polish-U2 — badge-new / badge-heart selon libellé ruban BO."""
+        html = self._shop_html()
+        nouveau_chunk = self._card_chunk_for_product(html, 'Confiture de goyave')
+        manio_chunk = self._card_chunk_for_product(html, 'Manio Crackers')
+        self.assertRegex(self._ribbon_span_in_card(nouveau_chunk), r'badge-new')
+        self.assertRegex(self._ribbon_span_in_card(manio_chunk), r'badge-heart')
+
+    def test_polish_u2_shop_ribbon_no_inline_bo_colors(self):
+        """Polish-U2 — pas de couleurs inline BO sur les rubans grille."""
+        html = self._shop_html()
+        for product_name in ('Confiture de goyave', 'Manio Crackers', 'Savon vétiver'):
+            chunk = self._card_chunk_for_product(html, product_name)
+            ribbon_tag = self._ribbon_span_in_card(chunk)
+            self.assertNotIn('background-color', ribbon_tag, product_name)
+            self.assertNotIn('color:', ribbon_tag, product_name)
+            self.assertNotIn('style=', ribbon_tag, product_name)
+
+    def test_polish_u2_shop_ribbon_position_and_meta_non_regression(self):
+        """Polish-U2 — ruban sans o_right ; meta inchangée ; pas de badge stock."""
+        html = self._shop_html()
+        manio_chunk = self._card_chunk_for_product(html, 'Manio Crackers')
+        ribbon_tag = self._ribbon_span_in_card(manio_chunk)
+        self.assertNotIn('o_right', ribbon_tag)
+        self.assertNotIn('o_wsale_badge', ribbon_tag)
+        self.assertIn('ck-product-card__meta', manio_chunk)
+        self.assertNotIn('En stock', manio_chunk)
+        self.assertNotIn('Rupture', manio_chunk)
+
+    def test_polish_u3_home_mobile_cart_cta_markup(self):
+        """Polish-U3 — CTA panier vedettes Home présent en SSR mobile (confort ≤575px)."""
+        html = self.url_open('/', headers={
+            **self.MOBILE_HEADERS,
+            'User-Agent': (
+                'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) '
+                'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 '
+                'Mobile/15E148 Safari/604.1'
+            ),
+        }).text
+        idx = html.find('ck-featured-products')
+        self.assertGreater(idx, 0, 'Section vedettes absente.')
+        featured = html[idx:idx + 120000]
+        self.assertIn('ck-product-card--home', featured)
+        foot_start = featured.find('ck-product-card__foot')
+        self.assertGreater(foot_start, 0, 'Pied card home absent.')
+        foot = featured[foot_start:foot_start + 2500]
+        self.assertIn('card-cart-cta', foot)
+        self.assertIn('Ajouter au panier', foot)
+        self.assertIn('ck-product-card__badge', featured, 'Non-régression rubans U2.')
+        self.assertIn('ck-product-card__meta', featured, 'Non-régression meta-line.')

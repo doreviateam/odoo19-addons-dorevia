@@ -177,8 +177,8 @@ class TestCkProductPageNote08Front(HttpCase):
             'ck_discover_html': '<p>Contenu.</p>',
         })
         html = self._open_fr(product.website_url).text
-        self.assertIn('En stock — expédié depuis Nantes', html)
-        self.assertIn('Livraison suivie 2 à 3 jours ouvrables', html)
+        self.assertIn('En stock · Expédié depuis Nantes', html)
+        self.assertIn('Livraison suivie · 2 à 3 jours ouvrables', html)
         self.assertNotIn('remboursement sous 30 jours', html.lower())
 
     def test_badges_and_producer_section(self):

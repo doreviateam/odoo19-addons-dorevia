@@ -124,8 +124,8 @@ class TestCkRecetteU3(HttpCase):
         self.assertRegex(html, r'oe_currency_value|product_price')
         if self.product.ck_producer_id:
             self.assertIn(self.product.ck_producer_id.name, html)
-        self.assertIn('En stock — expédié depuis Nantes', html)
-        self.assertIn('Livraison suivie 2 à 3 jours ouvrables', html)
+        self.assertIn('En stock · Expédié depuis Nantes', html)
+        self.assertIn('Livraison suivie · 2 à 3 jours ouvrables', html)
         self.assertIn('ck-product-layout__gallery', html)
         self.assertTrue(
             'product_detail_img' in html or 'o-carousel-product' in html,

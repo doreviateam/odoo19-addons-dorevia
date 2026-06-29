@@ -598,13 +598,12 @@ def _safe_css_color(value):
 
 
 def _featured_ribbon_badge_class(ribbon):
-    """Classes maquette CK pour les libellés ruban courants."""
-    name = (ribbon.name or '').lower()
-    if 'nouveau' in name or 'new' in name:
-        return 'badge-new'
-    if any(token in name for token in ('coup', 'cœur', 'coeur', 'vente', 'sale', 'promo')):
-        return 'badge-heart'
-    return 'badge-ribbon'
+    """Classes maquette CK — délégué au mapping partagé thème (Polish-U2)."""
+    from odoo.addons.dorevia_ck_theme.product_card_ribbon import (
+        ck_product_ribbon_badge_class,
+    )
+
+    return ck_product_ribbon_badge_class(ribbon)
 
 
 def _featured_variant_allows_quick_add(env, website, variant):

@@ -265,8 +265,8 @@ class TestCkProductPageNote08RecetteFront(HttpCase):
             'ck_discover_html': '<p>Section.</p>',
         })
         html = self._open_fr(product.website_url).text
-        self.assertIn('En stock — expédié depuis Nantes', html)
-        self.assertIn('Retour selon conditions de vente', html)
+        self.assertIn('En stock · Expédié depuis Nantes', html)
+        self.assertIn('Retour selon CGV', html)
         self.assertNotIn('remboursement sous 30 jours', html.lower())
         self.assertNotIn('qty_available', html)
         self.assertNotIn('virtual_available', html)

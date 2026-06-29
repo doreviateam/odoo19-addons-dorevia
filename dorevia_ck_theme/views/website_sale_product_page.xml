@@ -90,9 +90,9 @@
                     Paiement sécurisé · Livraison suivie · Expédié depuis Nantes
                 </p>
                 <ul class="ck-product-purchase__trust-list">
-                    <li>En stock — expédié depuis Nantes</li>
-                    <li>Livraison suivie 2 à 3 jours ouvrables</li>
-                    <li>Retour selon conditions de vente</li>
+                    <li>En stock · Expédié depuis Nantes</li>
+                    <li>Livraison suivie · 2 à 3 jours ouvrables</li>
+                    <li>Retour selon CGV</li>
                 </ul>
                 <p class="ck-product-purchase__trust-legal mb-0">
                     <a href="/terms" class="o_translate_inline">Conditions générales de vente</a>

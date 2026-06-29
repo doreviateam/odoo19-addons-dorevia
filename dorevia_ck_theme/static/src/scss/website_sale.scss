@@ -266,23 +266,28 @@
         }
     }
 
-    // Badge — position standard haut-gauche (favori haut-droite)
-    .ck-product-card__image .o_ribbons,
-    .ck-product-card__badge {
+    // Polish-U2 — Rubans grille : haut-gauche, charte CK (inline BO neutralisé en QWeb).
+    .ck-product-card__image .o_ribbons.ck-product-card__badge,
+    .ck-product-card__image .ck-product-card__badge {
         @include ck-product-card-badge;
+        top: 10px !important;
+        left: 10px !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        width: auto !important;
 
-        &.o_wsale_badge.o_left,
-        &.o_wsale_badge.o_right,
-        &.o_wsale_ribbon {
-            top: 10px;
-            left: 10px;
-            right: auto;
-            bottom: auto;
+        &.badge-new {
+            @include ck-product-card-badge-new-style;
         }
-    }
 
-    .o_ribbons.o_wsale_ribbon {
-        @include ck-product-card-badge-new-style;
+        &.badge-heart {
+            @include ck-product-card-badge-heart-style;
+        }
+
+        &.badge-ribbon {
+            @include ck-product-card-badge-heart-style;
+        }
     }
 
     .ck-product-card__favorite,
@@ -347,7 +352,7 @@
         margin-top: auto;
         margin-bottom: 0;
         gap: 6px;
-        padding: 8px 12px 10px;
+        padding: 8px 12px 6px;
         border-top: 1px solid $ck-border !important;
 
         .product_price,

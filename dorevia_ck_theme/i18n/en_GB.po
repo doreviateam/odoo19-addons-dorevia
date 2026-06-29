@@ -110,23 +110,59 @@ msgstr ""
 "                    <span>Favourites</span>"
 
 #. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.cart_lines_ck_empty
+msgid ""
+"<h5 class=\"mb-3 o_translate_inline\" style=\"text-align: center;\">Votre "
+"panier est vide. Découvrez nos produits créoles sélectionnés.</h5>"
+msgstr ""
+"<h5 class=\"mb-3 o_translate_inline\" style=\"text-align: center;\">Your "
+"cart is empty. Discover our selected Creole products.</h5>"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.cart_lines_ck_empty
+msgid ""
+"<a href=\"/shop\" class=\"btn btn-primary o_translate_inline\">Découvrir la "
+"sélection</a>"
+msgstr ""
+"<a href=\"/shop\" class=\"btn btn-primary o_translate_inline\">Discover the "
+"selection</a>"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.confirmation_ck_wording
+msgid ""
+"<h3 class=\"mb-1 o_translate_inline\">Merci ! Votre commande est confirmée. "
+"Vous recevrez un e-mail récapitulatif sous peu.</h3>"
+msgstr ""
+"<h3 class=\"mb-1 o_translate_inline\">Thank you! Your order is confirmed. "
+"You will receive a summary email shortly.</h3>"
+
+#. module: dorevia_ck_theme
+#: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.confirmation_ck_wording
+msgid ""
+"<p class=\"ck-order-confirmation__reassurance text-muted mb-0 "
+"o_translate_inline\">Livraison suivie · Expédié depuis Nantes</p>"
+msgstr ""
+"<p class=\"ck-order-confirmation__reassurance text-muted mb-0 "
+"o_translate_inline\">Tracked delivery · Shipped from Nantes</p>"
+
+#. module: dorevia_ck_theme
 #: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
 msgid "Paiement sécurisé · Livraison suivie · Expédié depuis Nantes"
 msgstr "Secure payment · Tracked delivery · Shipped from Nantes"
 
 #. module: dorevia_ck_theme
 #: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
-msgid "En stock — expédié depuis Nantes"
-msgstr "In stock — shipped from Nantes"
+msgid "En stock · Expédié depuis Nantes"
+msgstr "In stock · Shipped from Nantes"
 
 #. module: dorevia_ck_theme
 #: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
-msgid "Livraison suivie 2 à 3 jours ouvrables"
-msgstr "Tracked delivery 2 to 3 working days"
+msgid "Livraison suivie · 2 à 3 jours ouvrables"
+msgstr "Tracked delivery · 2 to 3 working days"
 
 #. module: dorevia_ck_theme
 #: model_terms:ir.ui.view,arch_db:dorevia_ck_theme.product_ck_terms_fr
-msgid "Retour selon conditions de vente"
+msgid "Retour selon CGV"
 msgstr "Returns subject to terms and conditions"
 
 #. module: dorevia_ck_theme
