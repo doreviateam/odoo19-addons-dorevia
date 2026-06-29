@@ -260,8 +260,8 @@
               inherit_id="website_sale.product_comment"
               name="CK Reviews section FR"
               priority="20">
-        <xpath expr="//section[@id='o_product_page_reviews']//h2" position="replace">
-            <h2 class="fs-4 mb-0">Avis clients</h2>
+        <xpath expr="//section[@id='o_product_page_reviews']//h3" position="replace">
+            <h3 class="mb32">Avis clients</h3>
         </xpath>
     </template>
 

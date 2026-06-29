@@ -320,6 +320,7 @@ class TestCkProductPageNote08RecetteFront(HttpCase):
         self.assertIn('fa-star', html)
         self.assertIn('id="o_product_page_reviews"', html)
         self.assertIn('Avis clients', html)
+        self.assertNotIn('Customer Reviews', html)
         self.assertIn('data-bs-target="#o_product_page_reviews_content"', html)
         self.assertLess(
             html.index('ck-product-purchase__title'),
