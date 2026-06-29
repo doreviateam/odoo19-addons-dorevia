@@ -32,6 +32,7 @@ Le parcours client complet est validé :
 
 - Parcours Home → Shop → fiche → panier → checkout → confirmation (FR/EN)
 - CGV checkout (vue `accept_terms_and_conditions` activée + bootstrap XML)
+- Barre cookies native (`website.cookies_bar` + `/cookie-policy`) — bootstrap content 19.0.1.64.0
 - SMTP confirmation email (Mailpit local, template `sale_confirmation` actif)
 - Polish visuel U1–U4 (cards Home/Shop, rubans sémantiques, mobile 390px, wording)
 - i18n `en_GB` panier vide et confirmation (U4b)

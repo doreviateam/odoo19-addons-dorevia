@@ -63,6 +63,7 @@ Sprints antérieurs inclus dans le gel :
 - Cards produit canon Home / Shop, favoris, breadcrumb, rating, chips producteur.
 - Fiche produit CK (layout, galerie, onglets, réassurance).
 - CGV : vue `accept_terms_and_conditions` activée + bootstrap XML.
+- **Barre cookies** : `website.cookies_bar` activée (natif Odoo) + page `/cookie-policy` (bootstrap `website_cookies_config.xml`, content **19.0.1.64.0**).
 - Parcours panier → adresse → livraison → paiement → confirmation.
 
 ---

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Barre cookies Odoo native — active par défaut à l'install / -u module.
+         Déclenche la création automatique de /cookie-policy (website.write). -->
+    <function model="website" name="write">
+        <value eval="[ref('website.default_website')]"/>
+        <value eval="{'cookies_bar': True}"/>
+    </function>
+</odoo>
