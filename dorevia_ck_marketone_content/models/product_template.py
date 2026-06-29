@@ -9,6 +9,15 @@ _logger = logging.getLogger(__name__)
 
 CK_ECOMMERCE_LEAD_MAX_CHARS = 255
 
+# Libellé normalisé de la catégorie signal "producteur identifié".
+# Comparaison insensible à la casse et aux accents (é/e).
+_CK_PRODUCER_SIGNAL_RAW = 'Producteur identifié'
+_CK_PRODUCER_SIGNAL_NORM = 'producteur identifie'
+
+
+def _norm_categ_name(name):
+    return (name or '').strip().lower().replace('é', 'e').replace('è', 'e')
+
 
 FEATURED_REFRESH_FIELDS = {
     'name',
@@ -118,6 +127,41 @@ class ProductTemplate(models.Model):
                     max=CK_ECOMMERCE_LEAD_MAX_CHARS,
                     count=len(plain),
                 ))
+
+    def get_ck_product_page_chips(self):
+        """Chips zone titre fiche produit — catégories + chip producteur nommé.
+
+        Règle Chips-U2 :
+        - La catégorie signal « Producteur identifié » est filtrée.
+        - Si ck_producer_id est renseigné → chip avec le nom du producteur.
+        - Sinon si le signal existait → fallback libellé générique.
+        - Sinon → pas de chip producteur.
+
+        Retourne une liste de dicts : {'name': str, 'categ': product.public.category | None}.
+        ``categ`` non-None = lien /shop/category/ ; None = chip non cliquable.
+        """
+        self.ensure_one()
+        product = self.sudo()
+
+        chips = []
+        has_producer_signal = False
+
+        for categ in product.public_categ_ids:
+            name = (categ.name or '').strip()
+            if _norm_categ_name(name) == _CK_PRODUCER_SIGNAL_NORM:
+                has_producer_signal = True
+                continue
+            chips.append({'name': name, 'categ': categ})
+
+        producer = product.ck_producer_id
+        if producer:
+            producer_name = (producer.name or '').strip()
+            if producer_name:
+                chips.append({'name': producer_name, 'categ': None})
+        elif has_producer_signal:
+            chips.append({'name': _CK_PRODUCER_SIGNAL_RAW, 'categ': None})
+
+        return chips
 
     def get_ck_shop_card_metadata_line(self, variant=None):
         """Ligne meta card boutique — origine · tags · format · prix comparatif (canon Home)."""

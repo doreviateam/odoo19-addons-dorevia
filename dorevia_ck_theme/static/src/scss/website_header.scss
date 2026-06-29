@@ -197,6 +197,10 @@
 
     .o_wsale_my_cart .my_cart_quantity.badge,
     .o_wsale_my_wish .my_wish_quantity.badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(25%, -25%);
         min-width: 1.125rem;
         font-size: 0.625rem;
         font-weight: 700;

@@ -7,6 +7,7 @@ from odoo.tests.common import HttpCase, TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.models.product_template import (
     CK_ECOMMERCE_LEAD_MAX_CHARS,
+    _CK_PRODUCER_SIGNAL_RAW,
 )
 from odoo.addons.dorevia_ck_marketone_content.product_page_tabs import (
     build_ck_product_page_tabs,
@@ -210,3 +211,83 @@ class TestCkProductPageNote08Front(HttpCase):
         self.assertIn('Producteur Front QA', html)
         self.assertIn('href="#ck-section-producer"', html)
         self.assertNotIn('qty_available', html)
+
+
+@tagged('post_install', '-at_install', 'dorevia_ck_chips_u2')
+class TestCkChipsU2(TransactionCase):
+    """Chips-U2 — get_ck_product_page_chips() : producteur nommé remplace le signal générique."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.signal_categ = cls.env['product.public.category'].create({
+            'name': 'Producteur identifié',
+        })
+        cls.other_categ = cls.env['product.public.category'].create({
+            'name': 'Guadeloupe',
+        })
+        cls.producer = cls.env['res.partner'].create({
+            'name': 'La Platine',
+            'ck_is_producer': True,
+        })
+
+    def _make_product(self, categs=(), producer=None):
+        vals = {
+            'name': 'Chips-U2 QA',
+            'type': 'consu',
+            'list_price': 5.0,
+            'sale_ok': True,
+        }
+        if categs:
+            vals['public_categ_ids'] = [(6, 0, [c.id for c in categs])]
+        if producer:
+            vals['ck_producer_id'] = producer.id
+        return self.env['product.template'].create(vals)
+
+    def test_producer_name_replaces_signal_category(self):
+        """Si ck_producer_id est renseigné, le chip affiche le nom — pas le libellé générique."""
+        product = self._make_product(
+            categs=[self.other_categ, self.signal_categ],
+            producer=self.producer,
+        )
+        chips = product.get_ck_product_page_chips()
+        names = [c['name'] for c in chips]
+        self.assertIn('La Platine', names)
+        self.assertNotIn(_CK_PRODUCER_SIGNAL_RAW, names)
+        self.assertIn('Guadeloupe', names)
+
+    def test_fallback_when_no_producer_id(self):
+        """Sans ck_producer_id mais avec la catégorie signal, le libellé générique persiste."""
+        product = self._make_product(categs=[self.other_categ, self.signal_categ])
+        chips = product.get_ck_product_page_chips()
+        names = [c['name'] for c in chips]
+        self.assertIn(_CK_PRODUCER_SIGNAL_RAW, names)
+        self.assertIn('Guadeloupe', names)
+
+    def test_no_producer_chip_without_signal_or_producer(self):
+        """Sans catégorie signal et sans ck_producer_id, aucun chip producteur."""
+        product = self._make_product(categs=[self.other_categ])
+        chips = product.get_ck_product_page_chips()
+        names = [c['name'] for c in chips]
+        self.assertNotIn(_CK_PRODUCER_SIGNAL_RAW, names)
+        producer_chips = [c for c in chips if c['categ'] is None]
+        self.assertFalse(producer_chips)
+
+    def test_signal_category_filtered_from_linked_chips(self):
+        """La catégorie 'Producteur identifié' ne doit pas apparaître dans les chips catégorie."""
+        product = self._make_product(
+            categs=[self.signal_categ],
+            producer=self.producer,
+        )
+        chips = product.get_ck_product_page_chips()
+        categ_chips = [c for c in chips if c['categ'] is not None]
+        categ_names = [c['name'] for c in categ_chips]
+        self.assertNotIn(_CK_PRODUCER_SIGNAL_RAW, categ_names)
+
+    def test_producer_chip_has_no_categ_link(self):
+        """Le chip producteur est un span non lié (categ=None)."""
+        product = self._make_product(producer=self.producer)
+        chips = product.get_ck_product_page_chips()
+        producer_chip = next((c for c in chips if c['name'] == 'La Platine'), None)
+        self.assertIsNotNone(producer_chip)
+        self.assertIsNone(producer_chip['categ'])
