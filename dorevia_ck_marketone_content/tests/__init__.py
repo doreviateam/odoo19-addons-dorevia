@@ -47,6 +47,7 @@ from . import test_ck_product_page_note08_recette
 from . import test_ck_recette_u3
 from . import test_ck_recette_u4
 from . import test_ck_recette_u5
+from . import test_ck_recette_u6
 from . import test_ck_product_origin_unification
 from . import test_ck_home_section3_curation
 from . import test_ck_home_section3_featured_field
