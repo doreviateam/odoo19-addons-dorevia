@@ -40,6 +40,21 @@ class TestCkPhase10HeaderCompose(HttpCase):
         self.assertEqual(resp.status_code, 200)
         return resp.text
 
+    def _assert_contains_fr_or_en(self, html, fr, en):
+        self.assertTrue(fr in html or en in html, msg=f'Texte FR ou EN attendu: {fr!r} / {en!r}')
+
+    def _assert_shop_root_accessible_label(self, html):
+        self.assertTrue(
+            'aria-label="Boutique - Tous les produits"' in html
+            or 'aria-label="Shop - All products"' in html,
+            msg='Libellé accessible FR ou EN attendu sur l’icône racine boutique',
+        )
+        self.assertTrue(
+            'title="Boutique - Tous les produits"' in html
+            or 'title="Shop - All products"' in html,
+            msg='Title FR ou EN attendu sur l’icône racine boutique',
+        )
+
     def test_header_ck_chrome_on_home(self):
         html = self._home_html()
         self.assertIn('ck-header', html)
@@ -65,7 +80,9 @@ class TestCkPhase10HeaderCompose(HttpCase):
         self.assertNotIn('fonts.googleapis.com', html)
         self.assertNotRegex(html, r'family=DM\+Sans|family=Fraunces')
         self.assertNotIn('ck-header__brand-accent', html)
-        self.assertIn('Tous nos produits', html)
+        self.assertNotRegex(html, r'>\s*Tous nos produits\s*<')
+        self.assertIn('ck-nav-shop-root', html)
+        self._assert_shop_root_accessible_label(html)
         self.assertIn('Espace pro', html)
         if 'ck-mega-menu' in html:
             self.assertIn('o_mega_menu', html)
@@ -75,9 +92,9 @@ class TestCkPhase10HeaderCompose(HttpCase):
     def test_header_h1_service_bar_global(self):
         html = self._home_html()
         self.assertIn('ck-header-service-bar', html)
-        self.assertIn('Produits sélectionnés', html)
-        self.assertIn('Origines identifiées', html)
-        self.assertIn('Livraison suivie', html)
+        self._assert_contains_fr_or_en(html, 'Produits sélectionnés', 'Selected products')
+        self._assert_contains_fr_or_en(html, 'Origines identifiées', 'Identified origins')
+        self._assert_contains_fr_or_en(html, 'Livraison suivie', 'Tracked delivery')
         for path in ('/shop', '/contactus'):
             with self.subTest(path=path):
                 resp = self.url_open(f'{path}?qa_ts=phase10')

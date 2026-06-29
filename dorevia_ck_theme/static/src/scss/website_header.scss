@@ -724,6 +724,24 @@
             color: $ck-text;
         }
 
+        .top_menu > .nav-item.ck-nav-shop-root > .ck-nav-shop-root__link {
+            display: inline-flex;
+            align-items: center;
+            min-height: 2.75rem;
+            width: 100%;
+            color: $ck-text-muted;
+
+            &.active {
+                color: $ck-text;
+                background-color: rgba($ck-primary, 0.08);
+            }
+        }
+
+        .ck-nav-shop-root__icon {
+            width: 1.25rem;
+            text-align: center;
+        }
+
         .top_menu > .nav-item.ck-nav-producteurs .nav-link {
             font-weight: $ck-font-weight-semibold;
             letter-spacing: 0.01em;
@@ -803,6 +821,26 @@
 
             > .nav-item.ck-nav-n3-rayon.ck-nav-n3-group-end + .nav-item.ck-nav-n3-selection {
                 margin-left: 0.15rem;
+            }
+
+            > .nav-item.ck-nav-shop-root > .ck-nav-shop-root__link {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 2.5rem;
+                min-height: 2.5rem;
+                padding-inline: 0.65rem;
+                line-height: 1;
+
+                &.active {
+                    color: $ck-text;
+                    background-color: rgba($ck-primary, 0.08);
+                }
+            }
+
+            .ck-nav-shop-root__icon {
+                font-size: 1rem;
+                line-height: 1;
             }
 
             > .nav-item.ck-nav-producteurs > .nav-link {

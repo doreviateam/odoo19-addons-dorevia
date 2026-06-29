@@ -11,6 +11,7 @@ from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
     NAV_CSS_DESKTOP_UNIVERSE,
     NAV_CSS_DESKTOP_UNIVERSE_CHILD,
     NAV_CSS_NO_AUTOHIDE,
+    NAV_CSS_SHOP_ROOT,
     NAV_DECOUVRIR_LABEL,
     NAV_MOBILE_UNIVERS_LABEL,
     NAV_SHOP_ALL_LABEL,
@@ -126,6 +127,7 @@ class TestCkNavSync(TransactionCase):
         sync_ck_navigation_for_website(self.env, self.website)
         shop_all = self._menu_by_name(NAV_SHOP_ALL_LABEL)
         self.assertIn(NAV_CSS_NO_AUTOHIDE, (shop_all.ck_nav_css_class or '').split())
+        self.assertIn(NAV_CSS_SHOP_ROOT, (shop_all.ck_nav_css_class or '').split())
 
     def test_nav_shop_l2_seed_creates_subcategories(self):
         from odoo.addons.dorevia_ck_marketone_content.nav_shop_l2_seed import seed_nav_shop_l2_categories

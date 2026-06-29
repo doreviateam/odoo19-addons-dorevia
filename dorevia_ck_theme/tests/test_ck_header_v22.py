@@ -36,10 +36,13 @@ class TestCkHeaderV22Compose(HttpCase):
         self.assertEqual(resp.status_code, 200)
         return resp.text
 
+    def _assert_contains_fr_or_en(self, html, fr, en):
+        self.assertTrue(fr in html or en in html, msg=f'Texte FR ou EN attendu: {fr!r} / {en!r}')
+
     def test_service_bar_v22_four_promises(self):
         html = self._home_html()
-        self.assertIn('Produits sélectionnés', html)
-        self.assertIn('Stocké/expédié depuis Nantes', html)
+        self._assert_contains_fr_or_en(html, 'Produits sélectionnés', 'Selected products')
+        self._assert_contains_fr_or_en(html, 'Stocké/expédié depuis Nantes', 'Stored & shipped from Nantes')
 
     def test_baseline_epicerie_creole_desktop(self):
         html = self._home_html()
@@ -55,17 +58,32 @@ class TestCkHeaderV22Compose(HttpCase):
         self.assertTrue(match, msg='header#top introuvable')
         return match.group(1)
 
+    def _assert_shop_root_accessible_label(self, html):
+        self.assertTrue(
+            'aria-label="Boutique - Tous les produits"' in html
+            or 'aria-label="Shop - All products"' in html,
+            msg='Libellé accessible FR ou EN attendu sur l’icône racine boutique',
+        )
+        self.assertTrue(
+            'title="Boutique - Tous les produits"' in html
+            or 'title="Shop - All products"' in html,
+            msg='Title FR ou EN attendu sur l’icône racine boutique',
+        )
+
     def test_n3_nine_entries_present(self):
         html = self._home_html()
         nav = self._header_nav_chunk(html)
         for label in (
-            'Tous nos produits',
             'Épicerie',
             'Communauté',
             NAV_PRODUCTEURS_LABEL,
             NAV_ESPACE_PRO_LABEL,
         ):
             self.assertIn(label, nav, label)
+        self.assertNotRegex(nav, r'>\s*Tous nos produits\s*<')
+        self.assertIn('ck-nav-shop-root', nav)
+        self._assert_shop_root_accessible_label(nav)
+        self.assertIn('fa-th-large', nav)
         boissons = self.env['website.menu'].sudo().search([
             ('name', '=', 'Boissons'),
             ('parent_id', '!=', False),
@@ -85,6 +103,16 @@ class TestCkHeaderV22Compose(HttpCase):
         self.assertIn('ck-nav-n3-rayon', html)
         self.assertIn('ck-nav-n3-selection', html)
         self.assertIn('ck-nav-n3-relation', html)
+
+    def test_shop_root_icon_active_on_shop_pages(self):
+        resp = self.url_open('/shop?qa_ts=header_v22_nav_u2')
+        self.assertEqual(resp.status_code, 200)
+        nav = self._header_nav_chunk(resp.text)
+        self.assertRegex(
+            nav,
+            r'class="[^"]*ck-nav-shop-root__link[^"]*active[^"]*"',
+            msg='Icône racine boutique active attendue sur /shop',
+        )
 
     def test_mega_menu_grammar_markup(self):
         html = self._home_html()
@@ -172,5 +200,8 @@ class TestCkHeaderV22Compose(HttpCase):
         self.assertIn('o_wsale_my_wish', mobile)
         self.assertIn('/shop/wishlist', mobile)
         self.assertIn('ck-header-mobile__wishlist-menu-link', mobile)
-        self.assertIn('Mes favoris', mobile)
+        self.assertTrue(
+            'Mes favoris' in mobile or 'Favourites' in mobile,
+            msg='Libellé wishlist FR ou EN attendu dans le header mobile.',
+        )
         self.assertNotIn('o_wsale_my_wish_hide_empty', mobile)

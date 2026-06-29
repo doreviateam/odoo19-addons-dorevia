@@ -10,6 +10,7 @@ NAV_CSS_N3_GROUP_END = 'ck-nav-n3-group-end'
 NAV_CSS_PRODUCTEURS = 'ck-nav-producteurs'
 NAV_CSS_ESPACE_PRO = 'ck-nav-espace-pro'
 NAV_CSS_MEGA_PRODUCT = 'ck-nav-mega-product'
+NAV_CSS_SHOP_ROOT = 'ck-nav-shop-root'
 
 # Entrées racine N3 — séquences MOA
 NAV_ALL_LABEL = 'Tous nos produits'

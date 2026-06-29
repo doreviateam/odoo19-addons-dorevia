@@ -35,6 +35,7 @@ from .nav_v22_config import (
     NAV_CSS_N3_SELECTION,
     NAV_CSS_NO_AUTOHIDE,
     NAV_CSS_PRODUCTEURS,
+    NAV_CSS_SHOP_ROOT,
     NAV_EPICERIE_LABEL,
     NAV_ESPACE_PRO_LABEL,
     NAV_MAISON_LABEL,
@@ -157,7 +158,7 @@ def _sync_shop_all(env, website, root, Menu):
             name=NAV_ALL_LABEL,
             url=NAV_ALL_URL,
             sequence=NAV_ALL_SEQUENCE,
-            css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_RAYON}',
+            css_class=f'{NAV_CSS_NO_AUTOHIDE} {NAV_CSS_N3_RAYON} {NAV_CSS_SHOP_ROOT}',
         )
     else:
         menu = Menu.search([
@@ -293,6 +294,24 @@ def sync_communaute_header(env):
         if sync_communaute_header_for_website(env, website):
             synced += 1
     _logger.info('Nav Communauté : entrée synchronisée pour %s site(s)', synced)
+    return synced
+
+
+def sync_shop_root_icon_header(env):
+    """Nav-U2 — resynchronise uniquement l'entrée racine boutique /shop."""
+    synced = 0
+    Menu = env['website.menu'].sudo()
+    for website in env['website'].sudo().search([]):
+        root = website.menu_id
+        if not root:
+            _logger.warning(
+                'Nav-U2 racine boutique : website %s sans menu racine — skip',
+                website.id,
+            )
+            continue
+        _sync_shop_all(env, website, root, Menu)
+        synced += 1
+    _logger.info('Nav-U2 racine boutique : entrée synchronisée pour %s site(s)', synced)
     return synced
 
 

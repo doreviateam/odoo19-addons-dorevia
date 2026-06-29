@@ -105,7 +105,21 @@
                     </div>
                 </li>
             </t>
-            <t t-if="submenu.is_visible and not (submenu.child_id or submenu.is_mega_menu) and not (is_vertical_nav and submenu._ck_nav_is_mobile_universe_child() and submenu._ck_nav_has_eligible_l2())">
+            <t t-if="submenu.is_visible and not (submenu.child_id or submenu.is_mega_menu) and submenu._ck_nav_is_shop_root()">
+                <li t-attf-class="#{item_class or ''} #{submenu.ck_nav_css_class or ''} #{is_vertical_nav and 'px-0'}" role="presentation">
+                    <a t-att-href="submenu._ck_nav_category_shop_url()"
+                        t-attf-class="#{link_class or ''} ck-nav-shop-root__link #{submenu._ck_nav_shop_root_is_active() and 'active'}"
+                        role="menuitem"
+                        t-ignore="true"
+                        aria-label="Boutique - Tous les produits"
+                        title="Boutique - Tous les produits"
+                        t-att-target="'_blank' if submenu.new_window else None">
+                        <i class="fa fa-th-large ck-nav-shop-root__icon" aria-hidden="true"/>
+                        <span class="visually-hidden">Boutique - Tous les produits</span>
+                    </a>
+                </li>
+            </t>
+            <t t-if="submenu.is_visible and not (submenu.child_id or submenu.is_mega_menu) and not submenu._ck_nav_is_shop_root() and not (is_vertical_nav and submenu._ck_nav_is_mobile_universe_child() and submenu._ck_nav_has_eligible_l2())">
                 <li t-attf-class="#{item_class or ''} #{submenu.ck_nav_css_class or ''} #{is_vertical_nav and 'px-0'}" role="presentation">
                     <a t-att-href="submenu._ck_nav_category_shop_url()"
                         t-attf-class="#{link_class or ''} #{submenu._is_active() and 'active'}"

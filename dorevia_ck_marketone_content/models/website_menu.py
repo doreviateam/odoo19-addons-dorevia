@@ -31,6 +31,28 @@ class WebsiteMenu(models.Model):
         self.ensure_one()
         return 'ck-nav-mobile-universe-child' in (self.ck_nav_css_class or '').split()
 
+    def _ck_nav_is_shop_root(self):
+        self.ensure_one()
+        return 'ck-nav-shop-root' in (self.ck_nav_css_class or '').split()
+
+    def _ck_nav_shop_root_is_active(self):
+        self.ensure_one()
+        if not self._ck_nav_is_shop_root():
+            return self._is_active()
+        from odoo.http import request
+
+        path = request.httprequest.path or ''
+        clean_url = self._clean_url()
+        return bool(
+            clean_url == '/shop'
+            and (
+                path == clean_url
+                or path.startswith(clean_url + '/')
+                or path.endswith(clean_url)
+                or (clean_url + '/') in path
+            )
+        )
+
     def _ck_nav_eligible_l2_categories(self):
         """Enfants L2 éligibles pour le menu mobile (source BO, hors website.menu)."""
         from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
