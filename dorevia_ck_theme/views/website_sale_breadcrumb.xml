@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Breadcrumb-U1 — Icône maison à la place de "Products" / "All Products"
+         sur les pages shop, catégorie et fiche produit.
+         Le lien continue de pointer vers /shop (racine catalogue, pas la home). -->
+
+    <!-- Shop + catégories : website_sale.products_breadcrumb.
+         Structure native : <li class="breadcrumb-item"><a t-att-href="keep(shop_path)">Products</a></li>
+         Condition t-if="category" sur l'<ol> — l'override s'applique uniquement
+         quand le breadcrumb est rendu (c'est-à-dire quand une catégorie est active). -->
+    <template id="ck_breadcrumb_shop_root"
+              inherit_id="website_sale.products_breadcrumb"
+              name="CK Breadcrumb — icône maison racine shop"
+              priority="20">
+        <xpath expr="//li[hasclass('breadcrumb-item')][1]" position="replace">
+            <li class="breadcrumb-item">
+                <a href="/shop"
+                   class="ck-breadcrumb-root"
+                   aria-label="Tous les produits"
+                   title="Tous les produits">
+                    <i class="fa fa-home" aria-hidden="true"/>
+                    <span class="visually-hidden">Tous les produits</span>
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <!-- Fiche produit : breadcrumb inline dans website_sale.product.
+         Structure native : <li class="breadcrumb-item d-none d-lg-inline-block">
+                               <a t-att-href="keep(shop_path)">All Products</a>
+                            </li>
+         L'href statique /shop est intentionnel (MOA §3 : racine catalogue propre). -->
+    <template id="ck_breadcrumb_product_root"
+              inherit_id="website_sale.product"
+              name="CK Breadcrumb fiche produit — icône maison racine shop"
+              priority="20">
+        <xpath expr="//ol[hasclass('o_wsale_breadcrumb')]/li[hasclass('breadcrumb-item')][1]" position="replace">
+            <li class="breadcrumb-item">
+                <a href="/shop"
+                   class="ck-breadcrumb-root"
+                   aria-label="Tous les produits"
+                   title="Tous les produits">
+                    <i class="fa fa-home" aria-hidden="true"/>
+                    <span class="visually-hidden">Tous les produits</span>
+                </a>
+            </li>
+        </xpath>
+    </template>
+</odoo>

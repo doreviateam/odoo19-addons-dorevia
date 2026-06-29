@@ -916,3 +916,34 @@
         }
     }
 }
+
+// ---------------------------------------------------------------------------
+// Breadcrumb-U1 — icône maison à la place de "Products" / "All Products"
+// ---------------------------------------------------------------------------
+
+.ck-breadcrumb-root {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+        color: $ck-primary;
+        text-decoration: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $ck-primary;
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+
+    .fa-home {
+        font-size: 0.95em;
+        line-height: 1;
+        vertical-align: middle;
+    }
+}
