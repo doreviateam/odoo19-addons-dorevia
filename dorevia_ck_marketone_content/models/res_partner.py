@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models
 
-_CK_PRODUCER_IMAGE_FIELDS = frozenset({
-    'image_128', 'image_256', 'image_512', 'image_1024', 'image_1920',
-})
+_CK_PRODUCER_IMAGE_SIZES = {
+    'image_128': 128,
+    'image_256': 256,
+    'image_512': 512,
+    'image_1024': 1024,
+    'image_1920': 1920,
+}
 
 
 class ResPartner(models.Model):
@@ -30,6 +34,13 @@ class ResPartner(models.Model):
         translate=True,
         help="Libellé marketing libre (ex. Abymes, Guadeloupe). Non dérivé de l'adresse Odoo.",
     )
+    ck_producer_website_image = fields.Image(
+        string='Photo producteur (site web)',
+        max_width=1920,
+        max_height=1920,
+        help='Visuel publié sur /producteurs et la fiche producteur. '
+             'Indépendant du logo société (avatar contact).',
+    )
 
     def get_ck_producer_url(self):
         """URL publique canonique de la fiche producteur."""
@@ -37,11 +48,11 @@ class ResPartner(models.Model):
         return f"/producteur/{self.env['ir.http']._slug(self)}"
 
     def get_ck_producer_image_url(self, field='image_512'):
-        """URL image publique — contourne le placeholder /web/image pour les visiteurs."""
+        """URL image publique — champ ck_producer_website_image, pas le logo contact."""
         self.ensure_one()
-        if field not in _CK_PRODUCER_IMAGE_FIELDS:
+        if field not in _CK_PRODUCER_IMAGE_SIZES:
             field = 'image_512'
-        if not self.image_1920:
+        if not self.ck_producer_website_image:
             return ''
         return f'/ck/producteur/{self.id}/image/{field}'
 

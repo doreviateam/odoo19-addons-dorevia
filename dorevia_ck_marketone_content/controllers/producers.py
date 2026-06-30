@@ -6,12 +6,9 @@ from collections import defaultdict
 from odoo import http
 from odoo.http import request
 
+from odoo.addons.dorevia_ck_marketone_content.models.res_partner import _CK_PRODUCER_IMAGE_SIZES
 from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import NAV_PRODUCTEURS_URL
 from odoo.addons.dorevia_ck_marketone_content.nos_producteurs_page import NOS_PRODUCTEURS_PAGE_URL
-
-_CK_PRODUCER_IMAGE_FIELDS = frozenset({
-    'image_128', 'image_256', 'image_512', 'image_1024', 'image_1920',
-})
 
 
 class CkProducersController(http.Controller):
@@ -30,12 +27,18 @@ class CkProducersController(http.Controller):
     )
     def ck_producer_image(self, producer_id, field, **kwargs):
         """Image producteur accessible au visiteur anonyme (ck_is_producer uniquement)."""
-        if field not in _CK_PRODUCER_IMAGE_FIELDS:
+        size = _CK_PRODUCER_IMAGE_SIZES.get(field)
+        if not size:
             raise request.not_found()
         producer = request.env['res.partner'].sudo().browse(producer_id)
-        if not producer.exists() or not producer.ck_is_producer or not producer.image_1920:
+        if not producer.exists() or not producer.ck_is_producer or not producer.ck_producer_website_image:
             raise request.not_found()
-        stream = request.env['ir.binary'].sudo()._get_image_stream_from(producer, field)
+        stream = request.env['ir.binary'].sudo()._get_image_stream_from(
+            producer,
+            'ck_producer_website_image',
+            width=size,
+            height=size,
+        )
         return stream.get_response()
 
     @http.route('/producteurs', type='http', auth='public', website=True, sitemap=True)

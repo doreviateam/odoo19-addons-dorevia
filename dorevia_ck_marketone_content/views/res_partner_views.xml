@@ -13,7 +13,10 @@
                             <field name="ck_is_producer" widget="boolean_toggle"/>
                             <field name="ck_producer_location_label"
                                    placeholder="Abymes, Guadeloupe"/>
-                            <field name="image_1920" widget="image" class="oe_avatar"/>
+                            <field name="ck_producer_website_image"
+                                   widget="image"
+                                   class="oe_avatar"
+                                   options="{'size': [192, 192]}"/>
                         </group>
                         <group string="Contenus fiche producteur">
                             <field name="ck_producer_short_description"

@@ -52,12 +52,18 @@ class TestCkProducersModel(TransactionCase):
 
     def test_get_ck_producer_image_url(self):
         """URL image publique via route CK dédiée."""
-        self.producer.image_1920 = CK_CREAM_PLACEHOLDER_PNG_B64
+        self.producer.ck_producer_website_image = CK_CREAM_PLACEHOLDER_PNG_B64
         url = self.producer.get_ck_producer_image_url('image_512')
         self.assertEqual(url, f'/ck/producteur/{self.producer.id}/image/image_512')
 
     def test_get_ck_producer_image_url_empty_without_image(self):
-        """Sans image_1920, pas d'URL image."""
+        """Sans ck_producer_website_image, pas d'URL image."""
+        self.assertEqual(self.producer.get_ck_producer_image_url(), '')
+
+    def test_producer_website_image_independent_from_logo(self):
+        """Logo contact et photo site web sont des champs distincts."""
+        self.producer.image_1920 = CK_CREAM_PLACEHOLDER_PNG_B64
+        self.assertFalse(self.producer.ck_producer_website_image)
         self.assertEqual(self.producer.get_ck_producer_image_url(), '')
 
     def test_get_ck_producer_url_contains_id_suffix(self):
@@ -148,7 +154,7 @@ class TestCkProducersHttp(HttpCase):
             'ck_is_producer': True,
             'ck_producer_location_label': 'Guadeloupe',
             'ck_producer_short_description': 'Rhums et sirops artisanaux.',
-            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
+            'ck_producer_website_image': CK_CREAM_PLACEHOLDER_PNG_B64,
         })
         cls.product = cls.env['product.template'].sudo().create({
             'name': 'Rhum Vieux 7 ans',
