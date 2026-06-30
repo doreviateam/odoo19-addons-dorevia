@@ -245,7 +245,7 @@ def _build_producer_block(product):
         'name': partner.name,
         'short_description': (partner.ck_producer_short_description or '').strip(),
         'location_label': (partner.ck_producer_location_label or '').strip(),
-        'image_url': f'/web/image/res.partner/{partner.id}/image_1920' if partner.image_1920 else '',
+        'image_url': partner.get_ck_producer_image_url('image_1920'),
     }
 
 

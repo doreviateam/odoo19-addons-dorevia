@@ -4,6 +4,10 @@
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase, TransactionCase
 
+from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
+)
+
 
 # ---------------------------------------------------------------------------
 # Helpers de fixtures partagés
@@ -45,6 +49,16 @@ class TestCkProducersModel(TransactionCase):
         self.assertTrue(url.startswith('/producteur/'))
         self.assertTrue(url.endswith(f'-{self.producer.id}'))
         self.assertIn('sarl-la-platine', url)
+
+    def test_get_ck_producer_image_url(self):
+        """URL image publique via route CK dédiée."""
+        self.producer.image_1920 = CK_CREAM_PLACEHOLDER_PNG_B64
+        url = self.producer.get_ck_producer_image_url('image_512')
+        self.assertEqual(url, f'/ck/producteur/{self.producer.id}/image/image_512')
+
+    def test_get_ck_producer_image_url_empty_without_image(self):
+        """Sans image_1920, pas d'URL image."""
+        self.assertEqual(self.producer.get_ck_producer_image_url(), '')
 
     def test_get_ck_producer_url_contains_id_suffix(self):
         """L'ID extrait du suffixe correspond bien au partner.id."""
@@ -134,6 +148,7 @@ class TestCkProducersHttp(HttpCase):
             'ck_is_producer': True,
             'ck_producer_location_label': 'Guadeloupe',
             'ck_producer_short_description': 'Rhums et sirops artisanaux.',
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
         })
         cls.product = cls.env['product.template'].sudo().create({
             'name': 'Rhum Vieux 7 ans',
@@ -155,6 +170,21 @@ class TestCkProducersHttp(HttpCase):
         """Le nom du producteur est présent sur la page liste."""
         html = self._get('/producteurs').text
         self.assertIn('SARL La Platine', html)
+
+    def test_producers_list_uses_ck_image_route(self):
+        """La liste utilise la route image publique CK, pas /web/image/res.partner."""
+        html = self._get('/producteurs').text
+        self.assertIn(f'/ck/producteur/{self.producer.id}/image/image_512', html)
+        self.assertNotIn(f'/web/image/res.partner/{self.producer.id}/image_512', html)
+
+    def test_producer_image_public_route_200(self):
+        """GET /ck/producteur/<id>/image/image_512 → image réelle (pas placeholder Odoo)."""
+        url = self.producer.get_ck_producer_image_url('image_512')
+        resp = self._get(url)
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.headers.get('Content-Type', '').startswith('image/'))
+        self.assertNotIn('placeholder.png', resp.headers.get('Content-Disposition', ''))
+        self.assertGreater(len(resp.content), 50)
 
     def test_producers_list_contains_location(self):
         """Le libellé géographique est présent sur la page liste."""

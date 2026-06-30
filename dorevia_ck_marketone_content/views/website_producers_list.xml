@@ -16,8 +16,8 @@
                                     <a t-att-href="producer.get_ck_producer_url()"
                                        class="ck-producer-card text-decoration-none d-flex flex-column h-100">
                                         <div class="ck-producer-card__media">
-                                            <img t-if="producer.image_1920"
-                                                 t-attf-src="/web/image/res.partner/#{producer.id}/image_512"
+                                            <img t-if="producer.get_ck_producer_image_url()"
+                                                 t-att-src="producer.get_ck_producer_image_url('image_512')"
                                                  t-att-alt="producer.name"
                                                  class="ck-producer-card__img"
                                                  loading="lazy"

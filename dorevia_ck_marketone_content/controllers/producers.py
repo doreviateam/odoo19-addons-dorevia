@@ -9,6 +9,10 @@ from odoo.http import request
 from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import NAV_PRODUCTEURS_URL
 from odoo.addons.dorevia_ck_marketone_content.nos_producteurs_page import NOS_PRODUCTEURS_PAGE_URL
 
+_CK_PRODUCER_IMAGE_FIELDS = frozenset({
+    'image_128', 'image_256', 'image_512', 'image_1024', 'image_1920',
+})
+
 
 class CkProducersController(http.Controller):
 
@@ -16,6 +20,23 @@ class CkProducersController(http.Controller):
     def ck_nos_producteurs_legacy_redirect(self, **kwargs):
         """301 — ancienne page CMS /nos-producteurs vers l'annuaire dynamique."""
         return request.redirect(NAV_PRODUCTEURS_URL, code=301)
+
+    @http.route(
+        '/ck/producteur/<int:producer_id>/image/<string:field>',
+        type='http',
+        auth='public',
+        website=True,
+        sitemap=False,
+    )
+    def ck_producer_image(self, producer_id, field, **kwargs):
+        """Image producteur accessible au visiteur anonyme (ck_is_producer uniquement)."""
+        if field not in _CK_PRODUCER_IMAGE_FIELDS:
+            raise request.not_found()
+        producer = request.env['res.partner'].sudo().browse(producer_id)
+        if not producer.exists() or not producer.ck_is_producer or not producer.image_1920:
+            raise request.not_found()
+        stream = request.env['ir.binary'].sudo()._get_image_stream_from(producer, field)
+        return stream.get_response()
 
     @http.route('/producteurs', type='http', auth='public', website=True, sitemap=True)
     def ck_producers_list(self, **kwargs):

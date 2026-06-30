@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models
 
+_CK_PRODUCER_IMAGE_FIELDS = frozenset({
+    'image_128', 'image_256', 'image_512', 'image_1024', 'image_1920',
+})
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -31,6 +35,15 @@ class ResPartner(models.Model):
         """URL publique canonique de la fiche producteur."""
         self.ensure_one()
         return f"/producteur/{self.env['ir.http']._slug(self)}"
+
+    def get_ck_producer_image_url(self, field='image_512'):
+        """URL image publique — contourne le placeholder /web/image pour les visiteurs."""
+        self.ensure_one()
+        if field not in _CK_PRODUCER_IMAGE_FIELDS:
+            field = 'image_512'
+        if not self.image_1920:
+            return ''
+        return f'/ck/producteur/{self.id}/image/{field}'
 
     def get_ck_producer_products(self):
         """Produits CK publiés et vendables liés à ce producteur."""
