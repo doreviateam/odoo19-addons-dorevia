@@ -55,26 +55,32 @@
         </xpath>
     </template>
 
-    <!-- Rating-U2 — Note compacte sur cards shop (★ 4,8 · 12 avis).
-         XPath sur o_wsale_product_information_text (natif Odoo 19, fiable).
-         Conditionnel : rien si rating_count == 0 → pas d'espace mort.
+    <!-- Rating-U2/U3 — Note compacte (★ 4,8 · 12 avis), socle partagé cards Home/Boutique + fiche produit.
+         Conditionnel : rien si rating_count == 0 → pas de fausse note / espace mort.
          Formatage FR : '%g' supprime le trailing zero (5.0 → 5). -->
+    <template id="ck_compact_rating_widget" name="CK Compact rating widget (★ 4,8 · N avis)">
+        <!-- sudo: product.template — visiteur public peut lire la note moyenne (canon Odoo 19 tile) -->
+        <t t-if="ck_rating_product.rating_count > 0">
+            <t t-set="ck_rating_fmt" t-value="('%g' % round(ck_rating_product.sudo().rating_avg, 1)).replace('.', ',')"/>
+            <div class="ck-card-rating">
+                <span class="ck-rating-star" aria-hidden="true">★</span>
+                <span class="visually-hidden">Note </span>
+                <span class="ck-rating-value" t-esc="ck_rating_fmt"/>
+                <span class="visually-hidden"> sur 5</span>
+                <span class="ck-rating-separator" aria-hidden="true"> · </span>
+                <span class="ck-rating-count"><t t-esc="ck_rating_product.rating_count"/> avis</span>
+            </div>
+        </t>
+    </template>
+
+    <!-- Rating-U2 — Note compacte sur cards shop. XPath sur o_wsale_product_information_text (natif Odoo 19, fiable). -->
     <template id="products_item_ck_card_rating"
               inherit_id="website_sale.products_item"
               name="CK Shop product card rating"
               priority="48">
         <xpath expr="//div[hasclass('o_wsale_product_information_text')]" position="inside">
-            <!-- sudo: product.template — visiteur public peut lire la note moyenne (canon Odoo 19 tile) -->
-            <t t-if="product.rating_count > 0">
-                <t t-set="ck_rating_fmt" t-value="('%g' % round(product.sudo().rating_avg, 1)).replace('.', ',')"/>
-                <div class="ck-card-rating">
-                    <span class="ck-rating-star" aria-hidden="true">★</span>
-                    <span class="visually-hidden">Note </span>
-                    <span class="ck-rating-value" t-esc="ck_rating_fmt"/>
-                    <span class="visually-hidden"> sur 5</span>
-                    <span class="ck-rating-separator" aria-hidden="true"> · </span>
-                    <span class="ck-rating-count"><t t-esc="product.rating_count"/> avis</span>
-                </div>
+            <t t-call="dorevia_ck_theme.ck_compact_rating_widget">
+                <t t-set="ck_rating_product" t-value="product"/>
             </t>
         </xpath>
     </template>

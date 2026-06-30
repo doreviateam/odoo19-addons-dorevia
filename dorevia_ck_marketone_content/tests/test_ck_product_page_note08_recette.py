@@ -316,8 +316,11 @@ class TestCkProductPageNote08RecetteFront(HttpCase):
 
         self.assertIn('ck-product-purchase__title', html)
         self.assertIn('o_product_page_reviews_link', html)
-        self.assertIn('(1 avis)', html)
-        self.assertIn('fa-star', html)
+        self.assertIn('ck-card-rating', html)
+        self.assertIn('ck-rating-value', html)
+        self.assertIn('1 avis', html)
+        self.assertNotIn('rating_widget_stars_static', html)
+        self.assertNotIn('o_website_rating_static', html)
         self.assertIn('id="o_product_page_reviews"', html)
         self.assertIn('Avis clients', html)
         self.assertNotIn('Customer Reviews', html)

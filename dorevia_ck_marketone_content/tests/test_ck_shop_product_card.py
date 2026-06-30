@@ -85,9 +85,16 @@ class TestCkShopProductCardHooks(TransactionCase):
         ], limit=1)
         self.assertTrue(view)
         arch = view.arch_db if isinstance(view.arch_db, str) else str(view.arch_db)
-        self.assertIn('ck-card-rating', arch)
-        self.assertIn('rating_count', arch)
-        self.assertIn('visually-hidden', arch)
+        self.assertIn('ck_compact_rating_widget', arch)
+        self.assertIn('ck_rating_product', arch)
+        widget = self.env['ir.ui.view'].search([
+            ('key', '=', 'dorevia_ck_theme.ck_compact_rating_widget'),
+        ], limit=1)
+        self.assertTrue(widget)
+        widget_arch = widget.arch_db if isinstance(widget.arch_db, str) else str(widget.arch_db)
+        self.assertIn('ck-card-rating', widget_arch)
+        self.assertIn('rating_count', widget_arch)
+        self.assertIn('visually-hidden', widget_arch)
 
     def test_rating_u2_featured_rating_html(self):
         product = self.env['product.template'].create({

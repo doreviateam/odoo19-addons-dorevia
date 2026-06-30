@@ -248,13 +248,26 @@
         </xpath>
     </template>
 
-    <!-- Rating-U1-R1 — libellé FR + étoiles zone haute uniquement si avis réels -->
+    <!-- Rating-U1-R1 — libellé FR + rating zone haute uniquement si avis réels -->
     <template id="ck_product_title_rating_if_count"
               inherit_id="website_sale.product_title"
               name="CK Product title rating when count &gt; 0"
               priority="35">
         <xpath expr="//t[a[hasclass('o_product_page_reviews_link')]]" position="attributes">
             <attribute name="t-if">is_view_active('website_sale.product_comment') and product.rating_count</attribute>
+        </xpath>
+    </template>
+
+    <!-- Rating-U3 — fiche produit : rating compact (★ 4,8 · N avis) mutualisé avec les cards Home/Boutique,
+         au lieu des étoiles natives sans valeur numérique. Conserve le lien d'ancrage vers les avis. -->
+    <template id="ck_product_title_rating_compact"
+              inherit_id="website_sale.product_title"
+              name="CK Product title compact rating (aligned with shop/home cards)"
+              priority="36">
+        <xpath expr="//a[hasclass('o_product_page_reviews_link')]/t[@t-call='portal_rating.rating_widget_stars_static']" position="replace">
+            <t t-call="dorevia_ck_theme.ck_compact_rating_widget">
+                <t t-set="ck_rating_product" t-value="product"/>
+            </t>
         </xpath>
     </template>
 

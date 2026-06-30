@@ -64,6 +64,37 @@
     gap: 8px;
 }
 
+// Rating-U2/U3 — note compacte (★ 4,8 · 12 avis), partagée cards Home/Boutique + fiche produit.
+@mixin ck-card-rating-block {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 5px 0 0;
+    font-size: 12px;
+    line-height: 1.4;
+    color: $ck-text-muted;
+
+    .ck-rating-star {
+        color: $ck-secondary;
+        margin-right: 3px;
+        font-size: 11px;
+    }
+
+    .ck-rating-value {
+        font-weight: $ck-font-weight-semibold;
+        color: $ck-text;
+    }
+
+    .ck-rating-separator {
+        opacity: 0.55;
+        margin: 0 3px;
+    }
+
+    .ck-rating-count {
+        opacity: 0.8;
+    }
+}
+
 @mixin ck-product-card-cta-cart {
     padding: 8px 14px;
     border-radius: $ck-radius-md;
@@ -391,33 +422,7 @@
 
     // ——— Rating-U2 — Note compacte (★ 4,8 · 12 avis) ———
     .ck-card-rating {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        margin: 5px 0 0;
-        font-size: 12px;
-        line-height: 1.4;
-        color: $ck-text-muted;
-
-        .ck-rating-star {
-            color: $ck-secondary;
-            margin-right: 3px;
-            font-size: 11px;
-        }
-
-        .ck-rating-value {
-            font-weight: $ck-font-weight-semibold;
-            color: $ck-text;
-        }
-
-        .ck-rating-separator {
-            opacity: 0.55;
-            margin: 0 3px;
-        }
-
-        .ck-rating-count {
-            opacity: 0.8;
-        }
+        @include ck-card-rating-block;
     }
 
     // Home — pied desktop en ligne (prix | CTA)

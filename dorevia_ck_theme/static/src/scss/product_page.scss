@@ -1177,44 +1177,29 @@
         }
     }
 
-    // ——— Rating-U1 / R1 — Étoiles zone haute + section avis clients ———
+    // ——— Rating-U1/U3 — Note compacte zone haute (★ 4,8 · N avis) + section avis clients ———
+    // Rating-U3 : rendu mutualisé avec les cards Home/Boutique via ck-card-rating-block
+    // (alignement visuel/informationnel fiche produit ↔ cards, cf. ticket Rating-U3).
 
     .o_product_page_reviews_link {
         display: inline-flex;
         align-items: center;
         margin-bottom: $ck-space-3;
-        color: $ck-text-muted;
         text-decoration: none;
 
         &:hover,
         &:focus-visible {
-            color: $ck-primary-text;
             text-decoration: none;
+
+            .ck-rating-value,
+            .ck-rating-count {
+                color: $ck-primary-text;
+            }
         }
 
-        .o_website_rating_static {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.2rem;
-            line-height: 1;
-
-            .fa-star {
-                color: $ck-secondary;
-            }
-
-            .fa-star-half-o {
-                color: $ck-secondary;
-            }
-
-            .fa-star-o {
-                color: rgba($ck-secondary, 0.32);
-            }
-
-            small {
-                font-size: $ck-text-xs;
-                color: $ck-text-muted;
-                margin-left: 0.2rem;
-            }
+        .ck-card-rating {
+            @include ck-card-rating-block;
+            margin-top: 0;
         }
     }
 
