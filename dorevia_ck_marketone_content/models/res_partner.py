@@ -57,10 +57,23 @@ class ResPartner(models.Model):
         return f'/ck/producteur/{self.id}/image/{field}'
 
     def get_ck_producer_products(self):
-        """Produits CK publiés et vendables liés à ce producteur."""
+        """Variantes vendables publiées liées à ce producteur (product.product).
+
+        Chaque variante correspond à une référence achetable ; les templates
+        multi-variantes (ex. Manio Crackers) produisent plusieurs cartes.
+        """
         self.ensure_one()
-        return self.env['product.template'].sudo().search([
-            ('ck_producer_id', '=', self.id),
-            ('is_published', '=', True),
+        variants = self.env['product.product'].sudo().search([
+            ('product_tmpl_id.ck_producer_id', '=', self.id),
+            ('product_tmpl_id.is_published', '=', True),
+            ('product_tmpl_id.sale_ok', '=', True),
             ('sale_ok', '=', True),
-        ], order='website_sequence asc, name asc')
+            ('active', '=', True),
+        ], order='product_tmpl_id asc, id asc')
+        return variants.sorted(
+            key=lambda variant: (
+                variant.product_tmpl_id.website_sequence,
+                (variant.product_tmpl_id.name or '').lower(),
+                variant.id,
+            ),
+        )

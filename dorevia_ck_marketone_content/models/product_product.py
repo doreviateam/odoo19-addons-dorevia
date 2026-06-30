@@ -25,6 +25,37 @@ _VARIANT_FEATURED_REFRESH_FIELDS = frozenset({
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
+    def get_ck_producer_card_name(self):
+        """Nom commercial lisible sur la fiche producteur (libellé variante si multi)."""
+        self.ensure_one()
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import _get_featured_display_name
+        return _get_featured_display_name(self)
+
+    def get_ck_producer_card_image_url(self):
+        """URL image card fiche producteur — image variante en priorité."""
+        self.ensure_one()
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+            _get_featured_image_url,
+            _variant_has_valid_image,
+        )
+        if not _variant_has_valid_image(self):
+            return ''
+        return _get_featured_image_url(self)
+
+    def get_ck_producer_card_price_label(self):
+        """Prix public B2C formaté (même pipeline que les cartes vedettes)."""
+        self.ensure_one()
+        from odoo.addons.dorevia_ck_marketone_content.home_featured import _get_featured_price_label
+        website = self.env['website'].get_current_website()
+        if not website:
+            return ''
+        return _get_featured_price_label(self.env, website, self)
+
+    def get_ck_producer_shop_url(self):
+        """Lien fiche boutique — variante présélectionnée si URL variante disponible."""
+        self.ensure_one()
+        return self.website_url or self.product_tmpl_id.website_url or '/shop'
+
     def _ck_sync_variant_fixed_pricelist_items(self):
         """Aligne les règles pricelist « fixed » variante sur le prix catalogue BO."""
         Item = self.env['product.pricelist.item'].sudo()

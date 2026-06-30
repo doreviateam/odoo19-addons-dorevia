@@ -73,25 +73,57 @@ class TestCkProducersModel(TransactionCase):
         self.assertEqual(extracted_id, self.producer.id)
 
     def test_get_ck_producer_products_returns_published(self):
-        """Seuls les produits publiés et vendables sont retournés."""
-        published = _make_product(self.env, self.producer, name='Publié', published=True)
+        """Seules les variantes de produits publiés et vendables sont retournées."""
+        template = _make_product(self.env, self.producer, name='Publié', published=True)
+        variant = template.product_variant_id
         _make_product(self.env, self.producer, name='Non publié', published=False)
-        products = self.producer.get_ck_producer_products()
-        self.assertIn(published, products)
+        variants = self.producer.get_ck_producer_products()
+        self.assertIn(variant, variants)
 
     def test_get_ck_producer_products_excludes_unpublished(self):
-        """Les produits non publiés sont exclus."""
+        """Les variantes de templates non publiés sont exclues."""
         _make_product(self.env, self.producer, name='Brouillon exclu', published=False)
-        products = self.producer.get_ck_producer_products()
-        for p in products:
-            self.assertTrue(p.is_published)
+        variants = self.producer.get_ck_producer_products()
+        for variant in variants:
+            self.assertTrue(variant.product_tmpl_id.is_published)
 
     def test_get_ck_producer_products_excludes_not_for_sale(self):
-        """Les produits avec sale_ok=False sont exclus."""
+        """Les variantes avec sale_ok=False sont exclues."""
         _make_product(self.env, self.producer, name='Non vendable', published=True, sale_ok=False)
-        products = self.producer.get_ck_producer_products()
-        for p in products:
-            self.assertTrue(p.sale_ok)
+        variants = self.producer.get_ck_producer_products()
+        for variant in variants:
+            self.assertTrue(variant.sale_ok)
+
+    def test_get_ck_producer_products_multi_variant(self):
+        """Un template multi-variantes produit une carte par variante vendable."""
+        attr = self.env['product.attribute'].sudo().create({'name': 'Goût Producteur QA'})
+        val_a = self.env['product.attribute.value'].sudo().create({
+            'name': 'Salé QA',
+            'attribute_id': attr.id,
+        })
+        val_b = self.env['product.attribute.value'].sudo().create({
+            'name': 'Sucré QA',
+            'attribute_id': attr.id,
+        })
+        template = self.env['product.template'].sudo().create({
+            'name': 'Crackers Multi QA',
+            'type': 'consu',
+            'list_price': 4.0,
+            'sale_ok': True,
+            'is_published': True,
+            'ck_producer_id': self.producer.id,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
+            'attribute_line_ids': [(0, 0, {
+                'attribute_id': attr.id,
+                'value_ids': [(6, 0, [val_a.id, val_b.id])],
+            })],
+        })
+        variants = self.producer.get_ck_producer_products().filtered(
+            lambda v: v.product_tmpl_id == template
+        )
+        self.assertEqual(len(variants), 2)
+        names = {v.get_ck_producer_card_name() for v in variants}
+        self.assertEqual(names, {'Salé QA', 'Sucré QA'})
 
     def test_chips_producer_url_present_when_ck_is_producer(self):
         """get_ck_product_page_chips() inclut producer_url quand ck_is_producer=True."""
@@ -218,9 +250,44 @@ class TestCkProducersHttp(HttpCase):
         self.assertIn('Rhums et sirops artisanaux.', html)
 
     def test_producer_detail_shows_product(self):
-        """Le produit publié lié apparaît dans la grille produits de la fiche."""
+        """La variante publiée liée apparaît dans la grille produits de la fiche."""
         html = self._get(self.producer.get_ck_producer_url()).text
         self.assertIn('Rhum Vieux 7 ans', html)
+
+    def test_producer_detail_shows_multi_variant_products(self):
+        """Chaque variante vendable apparaît comme une card distincte."""
+        attr = self.env['product.attribute'].sudo().create({'name': 'Goût HTTP QA'})
+        val_a = self.env['product.attribute.value'].sudo().create({
+            'name': 'Salé HTTP',
+            'attribute_id': attr.id,
+        })
+        val_b = self.env['product.attribute.value'].sudo().create({
+            'name': 'Sucré HTTP',
+            'attribute_id': attr.id,
+        })
+        template = self.env['product.template'].sudo().create({
+            'name': 'Crackers HTTP QA',
+            'type': 'consu',
+            'list_price': 3.5,
+            'sale_ok': True,
+            'is_published': True,
+            'ck_producer_id': self.producer.id,
+            'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
+            'attribute_line_ids': [(0, 0, {
+                'attribute_id': attr.id,
+                'value_ids': [(6, 0, [val_a.id, val_b.id])],
+            })],
+        })
+        for variant in template.product_variant_ids:
+            variant.image_1920 = CK_CREAM_PLACEHOLDER_PNG_B64
+        html = self._get(self.producer.get_ck_producer_url()).text
+        self.assertIn('Salé HTTP', html)
+        self.assertIn('Sucré HTTP', html)
+        sale = template.product_variant_ids.filtered(
+            lambda v: 'Salé HTTP' in (v.display_name or '')
+        )[:1]
+        self.assertTrue(sale)
+        self.assertIn(sale.website_url.replace('&', '&amp;'), html)
 
     def test_producer_detail_back_link(self):
         """Le lien retour vers /producteurs est présent."""

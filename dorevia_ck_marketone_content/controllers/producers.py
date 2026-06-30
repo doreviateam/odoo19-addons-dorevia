@@ -47,14 +47,16 @@ class CkProducersController(http.Controller):
             [('ck_is_producer', '=', True)],
             order='name asc',
         )
-        published_products = request.env['product.template'].sudo().search([
-            ('ck_producer_id', 'in', producers.ids),
-            ('is_published', '=', True),
+        published_variants = request.env['product.product'].sudo().search([
+            ('product_tmpl_id.ck_producer_id', 'in', producers.ids),
+            ('product_tmpl_id.is_published', '=', True),
+            ('product_tmpl_id.sale_ok', '=', True),
             ('sale_ok', '=', True),
+            ('active', '=', True),
         ])
         producer_counts = defaultdict(int)
-        for product in published_products:
-            producer_counts[product.ck_producer_id.id] += 1
+        for variant in published_variants:
+            producer_counts[variant.product_tmpl_id.ck_producer_id.id] += 1
 
         return request.render(
             'dorevia_ck_marketone_content.ck_producers_list_page',
@@ -79,7 +81,7 @@ class CkProducersController(http.Controller):
         if producer_slug != canonical_slug:
             return request.redirect(f'/producteur/{canonical_slug}', code=301)
 
-        products = producer.get_ck_producer_products()
+        variants = producer.get_ck_producer_products()
         meta_description = (
             producer.ck_producer_short_description
             or f'Découvrez {producer.name}, producteur partenaire C-Kréyòl.'
@@ -88,7 +90,7 @@ class CkProducersController(http.Controller):
             'dorevia_ck_marketone_content.ck_producer_detail_page',
             {
                 'producer': producer,
-                'products': products,
+                'variants': variants,
                 'meta_description': meta_description,
             },
         )

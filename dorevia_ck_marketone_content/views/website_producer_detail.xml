@@ -51,23 +51,31 @@
                         </div>
                     </div>
 
-                    <!-- Produits associés -->
-                    <section class="ck-producer-detail__products-section mt-5" t-if="products">
+                    <!-- Produits associés (variantes vendables) -->
+                    <section class="ck-producer-detail__products-section mt-5" t-if="variants">
                         <h2 class="ck-producer-detail__products-title h4 mb-4">Produits de ce producteur</h2>
                         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-                            <t t-foreach="products" t-as="product">
+                            <t t-foreach="variants" t-as="variant">
                                 <div class="col">
-                                    <a t-att-href="product.website_url"
+                                    <a t-att-href="variant.get_ck_producer_shop_url()"
                                        class="ck-producer-detail__product text-decoration-none d-block h-100">
                                         <div class="ck-producer-detail__product-media ratio ratio-1x1">
-                                            <img t-attf-src="/web/image/product.template/#{product.id}/image_512"
-                                                 t-att-alt="product.name"
+                                            <img t-if="variant.get_ck_producer_card_image_url()"
+                                                 t-att-src="variant.get_ck_producer_card_image_url()"
+                                                 t-att-alt="variant.get_ck_producer_card_name()"
                                                  class="ck-producer-detail__product-img"
                                                  loading="lazy"
                                                  decoding="async"/>
+                                            <div t-else="" class="ck-producer-detail__product-placeholder" aria-hidden="true">
+                                                <i class="fa fa-leaf"/>
+                                                <span class="ck-producer-detail__product-placeholder-label">Image à venir</span>
+                                            </div>
                                         </div>
                                         <p class="ck-producer-detail__product-name"
-                                           t-esc="product.name"/>
+                                           t-esc="variant.get_ck_producer_card_name()"/>
+                                        <p t-if="variant.get_ck_producer_card_price_label()"
+                                           class="ck-producer-detail__product-price"
+                                           t-esc="variant.get_ck_producer_card_price_label()"/>
                                     </a>
                                 </div>
                             </t>
