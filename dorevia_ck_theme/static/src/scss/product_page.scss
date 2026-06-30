@@ -908,7 +908,11 @@
     .ck-product-page__producer-image {
         width: 4.5rem;
         height: 4.5rem;
-        object-fit: cover;
+        object-fit: contain;
+        object-position: center;
+        padding: $ck-space-1;
+        background: $ck-surface;
+        border: 1px solid rgba($ck-border, 0.45);
         border-radius: $ck-radius-sm;
     }
 
