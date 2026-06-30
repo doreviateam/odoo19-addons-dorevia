@@ -11,6 +11,23 @@ from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import NAV_PRODUCTE
 from odoo.addons.dorevia_ck_marketone_content.nos_producteurs_page import NOS_PRODUCTEURS_PAGE_URL
 
 
+def ck_sitemap_producers(env, rule, qs):
+    """URLs canoniques des fiches producteurs CK avec au moins un produit publié."""
+    producers = env['res.partner'].sudo().search([
+        ('ck_is_producer', '=', True),
+    ], order='name asc')
+    for producer in producers:
+        if not producer.get_ck_producer_products():
+            continue
+        loc = producer.get_ck_producer_url()
+        if qs and qs.lower() not in loc.lower():
+            continue
+        entry = {'loc': loc}
+        if producer.write_date:
+            entry['lastmod'] = producer.write_date.date()
+        yield entry
+
+
 class CkProducersController(http.Controller):
 
     @http.route(NOS_PRODUCTEURS_PAGE_URL, type='http', auth='public', website=True, sitemap=False)
@@ -66,7 +83,13 @@ class CkProducersController(http.Controller):
             },
         )
 
-    @http.route('/producteur/<string:producer_slug>', type='http', auth='public', website=True, sitemap=False)
+    @http.route(
+        '/producteur/<string:producer_slug>',
+        type='http',
+        auth='public',
+        website=True,
+        sitemap=ck_sitemap_producers,
+    )
     def ck_producer_detail(self, producer_slug, **kwargs):
         try:
             producer_id = int(producer_slug.rsplit('-', 1)[-1])

@@ -87,4 +87,5 @@ def bootstrap_nos_producteurs_page(env):
         view_name='Nos producteurs CK V2.2',
         page_name=NOS_PRODUCTEURS_PAGE_NAME,
         arch=build_nos_producteurs_page_arch(env),
+        website_indexed=False,
     )

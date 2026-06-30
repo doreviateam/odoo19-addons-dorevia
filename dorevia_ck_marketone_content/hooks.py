@@ -541,7 +541,7 @@ def _resolve_cms_view(View, view_key, legacy_view_key=None):
     return View.browse()
 
 
-def _bootstrap_cms_page(env, *, page_url, view_key, view_name, page_name, arch, legacy_view_key=None):
+def _bootstrap_cms_page(env, *, page_url, view_key, view_name, page_name, arch, legacy_view_key=None, website_indexed=True):
     """Crée ou met à jour une page CMS website (idempotent)."""
     website = env['website'].search([], limit=1)
     if not website:
@@ -588,7 +588,7 @@ def _bootstrap_cms_page(env, *, page_url, view_key, view_name, page_name, arch, 
         'website_id': website.id,
         'view_id': view.id,
         'is_published': True,
-        'website_indexed': True,
+        'website_indexed': website_indexed,
     }
     if page:
         page.write(page_vals)
