@@ -15,7 +15,7 @@
                                 <div class="col">
                                     <a t-att-href="producer.get_ck_producer_url()"
                                        class="ck-producer-card text-decoration-none d-flex flex-column h-100">
-                                        <div class="ck-producer-card__media">
+                                        <div class="ck-producer-card__media ck-producer-card__image">
                                             <img t-if="producer.get_ck_producer_image_url()"
                                                  t-att-src="producer.get_ck_producer_image_url('image_512')"
                                                  t-att-alt="producer.name"

@@ -16,7 +16,7 @@
                     <!-- En-tête producteur -->
                     <div class="ck-producer-detail__header row align-items-start g-4 mt-3">
                         <div class="col-12 col-md-4 col-lg-3">
-                            <div class="ck-producer-detail__media">
+                            <div class="ck-producer-detail__media ck-producer-hero__image">
                                 <img t-if="producer.get_ck_producer_image_url()"
                                      t-att-src="producer.get_ck_producer_image_url('image_1920')"
                                      t-att-alt="producer.name"
