@@ -286,10 +286,11 @@
         #top_menu.top_menu {
             flex: 0 1 auto;
             width: 100%;
-            // Nav-U1b — boutique à gauche, secondaire à droite via margin-left:auto.
-            // Bootstrap .justify-content-center (ajouté par _nav_class QWeb) est
-            // !important → on doit surcharger avec !important ici.
-            justify-content: flex-start !important;
+            // CK-NAV-004 — centrage desktop. Bootstrap .justify-content-center
+            // (ajouté par _nav_class QWeb) est !important → on doit surcharger
+            // avec !important ici. On rejoint la valeur Bootstrap plutôt que de
+            // la contrecarrer.
+            justify-content: center !important;
             margin: 0 !important;
             flex-wrap: nowrap;
             gap: 1.25rem;
