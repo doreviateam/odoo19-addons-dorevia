@@ -1,0 +1,399 @@
+# -*- coding: utf-8 -*-
+"""CK-NAV-003 — Navigation catalogue dynamique depuis product.public.category."""
+
+from odoo.tests import tagged
+from odoo.tests.common import TransactionCase
+
+from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
+    bootstrap_ck_catalogue_navigation,
+    sync_ck_catalogue_navigation_for_website,
+)
+from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
+    MANAGED_V22_ROOT_NAMES,
+    NAV_CATALOGUE_BOUTIQUE_LABEL,
+    NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
+    NAV_CATALOGUE_BOUTIQUE_URL,
+    NAV_CATALOGUE_PRODUCTEURS_LABEL,
+    NAV_CATALOGUE_PRODUCTEURS_URL,
+    NAV_CATALOGUE_PROFESSIONNELS_URL,
+)
+
+
+@tagged('post_install', '-at_install', 'dorevia_ck_nav_catalogue')
+class TestCkNavCatalogueSync(TransactionCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.website = cls.env['website'].search([], limit=1)
+        cls.Menu = cls.env['website.menu'].sudo()
+        cls.root = cls.website.menu_id
+
+        Category = cls.env['product.public.category'].sudo()
+
+        # Catégorie racine A — avec produit publié + deux sous-catégories
+        cls.cat_a = Category.create({'name': 'TestCat NAV003 Rayon A', 'sequence': 900})
+        cls.cat_a_child1 = Category.create({
+            'name': 'TestCat NAV003 Child A1',
+            'parent_id': cls.cat_a.id,
+            'sequence': 10,
+        })
+        cls.cat_a_child2 = Category.create({
+            'name': 'TestCat NAV003 Child A2',
+            'parent_id': cls.cat_a.id,
+            'sequence': 20,
+        })
+
+        # Catégorie racine B — avec produit publié, pas de sous-catégories
+        cls.cat_b = Category.create({'name': 'TestCat NAV003 Rayon B', 'sequence': 910})
+
+        # Catégorie racine vide — sans produit publié
+        cls.cat_vide = Category.create({'name': 'TestCat NAV003 Vide', 'sequence': 920})
+
+        # Sous-catégorie de niveau 3 — ne doit pas apparaître dans le header
+        cls.cat_l3 = Category.create({
+            'name': 'TestCat NAV003 Level 3',
+            'parent_id': cls.cat_a_child1.id,
+            'sequence': 10,
+        })
+
+        Product = cls.env['product.template'].sudo()
+
+        # Produit dans cat_a et cat_a_child1
+        cls.prod_a = Product.create({
+            'name': 'Test Produit NAV003 A',
+            'sale_ok': True,
+            'is_published': True,
+            'website_published': True,
+            'public_categ_ids': [(4, cls.cat_a.id), (4, cls.cat_a_child1.id)],
+        })
+
+        # Produit dans cat_a_child2
+        cls.prod_a2 = Product.create({
+            'name': 'Test Produit NAV003 A2',
+            'sale_ok': True,
+            'is_published': True,
+            'website_published': True,
+            'public_categ_ids': [(4, cls.cat_a_child2.id)],
+        })
+
+        # Produit dans cat_b (pas de sous-catégorie)
+        cls.prod_b = Product.create({
+            'name': 'Test Produit NAV003 B',
+            'sale_ok': True,
+            'is_published': True,
+            'website_published': True,
+            'public_categ_ids': [(4, cls.cat_b.id)],
+        })
+
+        # Produit dans cat_l3 uniquement (niveau 3)
+        cls.prod_l3 = Product.create({
+            'name': 'Test Produit NAV003 L3',
+            'sale_ok': True,
+            'is_published': True,
+            'website_published': True,
+            'public_categ_ids': [(4, cls.cat_l3.id)],
+        })
+
+    def _root_menu(self, name):
+        return self.Menu.search([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.root.id),
+            ('name', '=', name),
+        ], limit=1)
+
+    def _sync(self):
+        sync_ck_catalogue_navigation_for_website(self.env, self.website)
+
+    def _ensure_page(self, url, published=True):
+        page = self.env['website.page'].sudo().search([('url', '=', url)], limit=1)
+        if page:
+            page.write({'is_published': published})
+        else:
+            view = self.env['ir.ui.view'].sudo().create({
+                'name': f'Test Page {url}',
+                'type': 'qweb',
+                'key': f'test.ck_nav003_{url.strip("/").replace("/", "_")}',
+                'arch': f'<t t-name="test.ck_nav003"><div>{url}</div></t>',
+            })
+            self.env['website.page'].sudo().create({
+                'name': f'Test {url}',
+                'url': url,
+                'is_published': published,
+                'website_id': self.website.id,
+                'view_id': view.id,
+            })
+
+    # --- Boutique fixe ---
+
+    def test_catalogue_nav_boutique_fixed(self):
+        self._sync()
+        menu = self._root_menu(NAV_CATALOGUE_BOUTIQUE_LABEL)
+        self.assertTrue(menu, 'Boutique doit exister')
+        self.assertEqual(menu.url, NAV_CATALOGUE_BOUTIQUE_URL)
+        self.assertEqual(menu.sequence, NAV_CATALOGUE_BOUTIQUE_SEQUENCE)
+        self.assertFalse(menu.is_mega_menu)
+
+    # --- Catégories racines éligibles ---
+
+    def test_catalogue_nav_root_categories_present(self):
+        self._sync()
+        self.assertTrue(
+            self._root_menu(self.cat_a.name),
+            f'{self.cat_a.name} doit être en racine nav',
+        )
+        self.assertTrue(
+            self._root_menu(self.cat_b.name),
+            f'{self.cat_b.name} doit être en racine nav',
+        )
+
+    def test_catalogue_nav_empty_category_hidden(self):
+        self._sync()
+        self.assertFalse(
+            self._root_menu(self.cat_vide.name),
+            'Catégorie sans produit publié doit être absente',
+        )
+
+    # --- Sous-catégories (niveau 2) ---
+
+    def test_catalogue_nav_child_categories(self):
+        self._sync()
+        parent = self._root_menu(self.cat_a.name)
+        self.assertTrue(parent)
+
+        child1 = self.Menu.search([
+            ('parent_id', '=', parent.id),
+            ('name', '=', self.cat_a_child1.name),
+        ], limit=1)
+        child2 = self.Menu.search([
+            ('parent_id', '=', parent.id),
+            ('name', '=', self.cat_a_child2.name),
+        ], limit=1)
+        self.assertTrue(child1, 'Sous-catégorie A1 doit être enfant du menu parent')
+        self.assertTrue(child2, 'Sous-catégorie A2 doit être enfant du menu parent')
+
+    def test_catalogue_nav_child_sequence_order(self):
+        self._sync()
+        parent = self._root_menu(self.cat_a.name)
+        self.assertTrue(parent)
+        child1 = self.Menu.search([('parent_id', '=', parent.id), ('name', '=', self.cat_a_child1.name)], limit=1)
+        child2 = self.Menu.search([('parent_id', '=', parent.id), ('name', '=', self.cat_a_child2.name)], limit=1)
+        self.assertTrue(child1 and child2)
+        self.assertLess(child1.sequence, child2.sequence, 'A1 doit précéder A2 (sequence)')
+
+    def test_catalogue_nav_no_children_for_simple_category(self):
+        """Catégorie sans sous-catégorie éligible : lien simple, pas de dropdown."""
+        self._sync()
+        parent = self._root_menu(self.cat_b.name)
+        self.assertTrue(parent)
+        self.assertFalse(parent.child_id, f'{self.cat_b.name} ne doit pas avoir de sous-menus')
+
+    # --- Profondeur maximale 2 ---
+
+    def test_catalogue_nav_depth_limited_to_2(self):
+        self._sync()
+        # Le niveau 3 (cat_l3) ne doit pas apparaître dans website.menu
+        l3_in_menu = self.Menu.search([
+            ('website_id', '=', self.website.id),
+            ('name', '=', self.cat_l3.name),
+        ])
+        self.assertFalse(l3_in_menu, 'Les catégories niveau 3 ne doivent pas être dans le header')
+
+    # --- Méga-menu et CSS ---
+
+    def test_catalogue_nav_no_megamenu(self):
+        self._sync()
+        root_menus = self.Menu.search([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.root.id),
+        ])
+        mega = root_menus.filtered('is_mega_menu')
+        self.assertFalse(mega, 'Aucun mega-menu en racine après catalogue sync')
+
+    def test_catalogue_nav_no_legacy_css(self):
+        self._sync()
+        all_nav_menus = self.Menu.search([('website_id', '=', self.website.id)])
+        legacy_css = all_nav_menus.filtered(
+            lambda m: m.ck_nav_css_class and 'ck-nav-' in m.ck_nav_css_class
+        )
+        self.assertFalse(legacy_css, 'Pas de classe CSS ck-nav-* après catalogue sync')
+
+    # --- Séquences ---
+
+    def test_catalogue_nav_boutique_before_categories(self):
+        self._sync()
+        boutique = self._root_menu(NAV_CATALOGUE_BOUTIQUE_LABEL)
+        cat_a = self._root_menu(self.cat_a.name)
+        self.assertTrue(boutique and cat_a)
+        self.assertLess(boutique.sequence, cat_a.sequence, 'Boutique doit précéder les catégories')
+
+    # --- Producteurs fixe (route contrôleur, pas de website.page) ---
+
+    def test_catalogue_nav_producteurs_fixed(self):
+        self._sync()
+        menu = self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL)
+        self.assertTrue(menu, 'Producteurs doit toujours être présent en nav catalogue')
+        self.assertEqual(menu.url, NAV_CATALOGUE_PRODUCTEURS_URL)
+        self.assertFalse(menu.is_mega_menu)
+        self.assertFalse(
+            menu.ck_nav_css_class and 'ck-nav-' in menu.ck_nav_css_class,
+            'Producteurs sans CSS legacy',
+        )
+
+    # --- Professionnels conditionnel ---
+
+    def test_catalogue_nav_professionnels_present_if_page_published(self):
+        self._ensure_page(NAV_CATALOGUE_PROFESSIONNELS_URL, published=True)
+        self._sync()
+        self.assertTrue(
+            self._root_menu('Professionnels'),
+            'Professionnels doit être présent si /professionnels est publiée',
+        )
+
+    def test_catalogue_nav_professionnels_absent_if_page_unpublished(self):
+        self._ensure_page(NAV_CATALOGUE_PROFESSIONNELS_URL, published=False)
+        self._sync()
+        self.assertFalse(
+            self._root_menu('Professionnels'),
+            'Professionnels doit être absent si /professionnels non publiée',
+        )
+
+    # --- Nettoyage V2.2 ---
+
+    def test_catalogue_nav_removes_nav002_stale_items(self):
+        # Injecter des entrées V2.2 style en racine
+        stale_menu_ids = []
+        for name in list(MANAGED_V22_ROOT_NAMES)[:3]:
+            stale_menu = self.Menu.create({
+                'name': name,
+                'url': '#',
+                'website_id': self.website.id,
+                'parent_id': self.root.id,
+                'sequence': 999,
+                'is_mega_menu': True,
+                'ck_nav_css_class': 'ck-nav-test-stale',
+            })
+            stale_menu_ids.append(stale_menu.id)
+        self._sync()
+        self.assertFalse(
+            self.Menu.browse(stale_menu_ids).exists(),
+            'Les anciennes entrées V2.2 injectées doivent être supprimées',
+        )
+        for name in list(MANAGED_V22_ROOT_NAMES)[:3]:
+            # Un libellé V2.2 peut aussi être une catégorie catalogue valide
+            # (ex. Artisanat) et être recréé proprement après purge.
+            menu = self._root_menu(name)
+            if not menu:
+                continue
+            self.assertFalse(menu.is_mega_menu, f'Entrée recréée « {name} » sans mega-menu')
+            self.assertFalse(
+                menu.ck_nav_css_class and 'ck-nav-' in menu.ck_nav_css_class,
+                f'Entrée recréée « {name} » sans CSS legacy',
+            )
+
+    def test_catalogue_nav_removes_communaute(self):
+        self.Menu.create({
+            'name': 'Communauté',
+            'url': '#',
+            'website_id': self.website.id,
+            'parent_id': self.root.id,
+            'sequence': 999,
+        })
+        self._sync()
+        self.assertFalse(
+            self._root_menu('Communauté'),
+            'Communauté doit être absente après NAV-003 sync',
+        )
+
+    def test_catalogue_nav_removes_espace_pro(self):
+        self.Menu.create({
+            'name': 'Espace pro',
+            'url': '#',
+            'website_id': self.website.id,
+            'parent_id': self.root.id,
+            'sequence': 999,
+        })
+        self._sync()
+        self.assertFalse(
+            self._root_menu('Espace pro'),
+            'Espace pro doit être absent après NAV-003 sync',
+        )
+
+    # --- Idempotence ---
+
+    def test_catalogue_nav_idempotent(self):
+        self._sync()
+        self._sync()
+        boutique_count = self.Menu.search_count([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.root.id),
+            ('name', '=', NAV_CATALOGUE_BOUTIQUE_LABEL),
+        ])
+        self.assertEqual(boutique_count, 1, 'Une seule entrée Boutique après double sync')
+
+        cat_count = self.Menu.search_count([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.root.id),
+            ('name', '=', self.cat_a.name),
+        ])
+        self.assertEqual(cat_count, 1, 'Une seule entrée catégorie A après double sync')
+
+    def test_catalogue_nav_idempotent_children(self):
+        self._sync()
+        self._sync()
+        parent = self._root_menu(self.cat_a.name)
+        self.assertTrue(parent)
+        child1_count = self.Menu.search_count([
+            ('parent_id', '=', parent.id),
+            ('name', '=', self.cat_a_child1.name),
+        ])
+        self.assertEqual(child1_count, 1, 'Une seule sous-catégorie A1 après double sync')
+
+    # --- Nettoyage stale sur resync ---
+
+    def test_catalogue_nav_removes_stale_category_on_resync(self):
+        """Une catégorie dépubliée (plus de produits) doit disparaître au resync."""
+        self._sync()
+        self.assertTrue(self._root_menu(self.cat_a.name))
+
+        # Dépublier les produits de cat_a (mais pas cat_a_child1/child2)
+        # On crée une catégorie temporaire publiée puis la dépublie
+        cat_tmp = self.env['product.public.category'].sudo().create({
+            'name': 'TestCat NAV003 Tmp',
+            'sequence': 930,
+        })
+        prod_tmp = self.env['product.template'].sudo().create({
+            'name': 'Test Produit NAV003 Tmp',
+            'sale_ok': True,
+            'is_published': True,
+            'website_published': True,
+            'public_categ_ids': [(4, cat_tmp.id)],
+        })
+        self._sync()
+        self.assertTrue(self._root_menu(cat_tmp.name))
+
+        # Dépublier le produit
+        prod_tmp.write({'is_published': False, 'website_published': False})
+        self._sync()
+        self.assertFalse(
+            self._root_menu(cat_tmp.name),
+            'Catégorie devenue vide doit disparaître au resync',
+        )
+
+    # --- Bootstrap ---
+
+    def test_catalogue_nav_bootstrap_returns_count(self):
+        count = bootstrap_ck_catalogue_navigation(self.env)
+        self.assertGreaterEqual(count, 1, 'bootstrap doit retourner >= 1 site synchronisé')
+
+    # --- category_id sur menus catalogue ---
+
+    def test_catalogue_nav_category_id_set_on_root_entries(self):
+        self._sync()
+        cat_menu = self._root_menu(self.cat_a.name)
+        self.assertTrue(cat_menu)
+        self.assertEqual(
+            cat_menu.ck_nav_category_id.id,
+            self.cat_a.id,
+            'ck_nav_category_id doit être renseigné sur les entrées catalogue racines',
+        )

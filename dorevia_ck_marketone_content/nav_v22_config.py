@@ -194,3 +194,25 @@ MANAGED_V1_ROOT_NAMES = frozenset({
     NAV_V1_PRODUCTEURS_LABEL,
     NAV_V1_PROFESSIONNELS_LABEL,
 })
+
+# ---------------------------------------------------------------------------
+# NAV-003 — Navigation catalogue dynamique (product.public.category)
+# ---------------------------------------------------------------------------
+
+NAV_CATALOGUE_BOUTIQUE_LABEL = 'Boutique'
+NAV_CATALOGUE_PRODUCTEURS_LABEL = 'Producteurs'
+NAV_CATALOGUE_PROFESSIONNELS_LABEL = 'Professionnels'
+
+NAV_CATALOGUE_BOUTIQUE_URL = '/shop'
+NAV_CATALOGUE_PRODUCTEURS_URL = '/producteurs'
+NAV_CATALOGUE_PROFESSIONNELS_URL = '/professionnels'
+
+NAV_CATALOGUE_BOUTIQUE_SEQUENCE = 10
+NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE = 20
+NAV_CATALOGUE_SEQUENCE_STEP = 10
+
+MANAGED_CATALOGUE_FIXED_ROOT_NAMES = frozenset({
+    NAV_CATALOGUE_BOUTIQUE_LABEL,
+    NAV_CATALOGUE_PRODUCTEURS_LABEL,
+    NAV_CATALOGUE_PROFESSIONNELS_LABEL,
+})

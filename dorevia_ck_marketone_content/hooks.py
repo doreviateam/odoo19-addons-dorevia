@@ -1061,12 +1061,12 @@ def bootstrap_all_marketone_content(env):
     bootstrap_terms_page(env)
     bootstrap_footer_legal_links(env)
     from .nav_shop_l2_seed import seed_nav_shop_l2_categories
-    from .nav_sync import bootstrap_ck_navigation_v1
+    from .nav_sync import bootstrap_ck_catalogue_navigation
     from .nos_producteurs_page import bootstrap_nos_producteurs_page
 
     seed_nav_shop_l2_categories(env)
     bootstrap_nos_producteurs_page(env)
-    bootstrap_ck_navigation_v1(env)
+    bootstrap_ck_catalogue_navigation(env)
 
 
 def post_init_hook(env):

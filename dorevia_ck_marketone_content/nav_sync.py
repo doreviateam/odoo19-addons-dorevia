@@ -17,6 +17,7 @@ from .nav_v22_config import (
     ARTISANAT_MEGA_MIN_FAMILIES,
     LEGACY_NAV_MAISON_LABEL,
     LEGACY_ROOT_MENU_NAMES,
+    MANAGED_CATALOGUE_FIXED_ROOT_NAMES,
     MANAGED_V1_ROOT_NAMES,
     MANAGED_V22_ROOT_NAMES,
     NAV_ALL_LABEL,
@@ -24,6 +25,15 @@ from .nav_v22_config import (
     NAV_ALL_URL,
     NAV_ARTISANAT_LABEL,
     NAV_BOISSONS_LABEL,
+    NAV_CATALOGUE_BOUTIQUE_LABEL,
+    NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
+    NAV_CATALOGUE_BOUTIQUE_URL,
+    NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE,
+    NAV_CATALOGUE_PRODUCTEURS_LABEL,
+    NAV_CATALOGUE_PRODUCTEURS_URL,
+    NAV_CATALOGUE_PROFESSIONNELS_LABEL,
+    NAV_CATALOGUE_PROFESSIONNELS_URL,
+    NAV_CATALOGUE_SEQUENCE_STEP,
     NAV_COFFRETS_LABEL,
     LEGACY_NAV_COUPS_LABEL,
     NAV_COMMUNAUTE_LABEL,
@@ -574,6 +584,177 @@ def build_shop_nav_trees(env, Category):
             'children': children,
         })
     return trees
+
+
+# ---------------------------------------------------------------------------
+# Nav V3 / CK-NAV-003 — Navigation catalogue dynamique (product.public.category)
+# ---------------------------------------------------------------------------
+
+def _category_visible_on_website(category, website):
+    """Catégorie visible sur le website courant (globale ou affectée au site)."""
+    cat_website = getattr(category, 'website_id', None)
+    if cat_website and cat_website.id and cat_website.id != website.id:
+        return False
+    return True
+
+
+def _eligible_level2_children(env, parent_category):
+    """Sous-catégories directes éligibles (avec produits publiés) — utilisé par WebsiteMenu."""
+    return [
+        c for c in parent_category.child_id.sorted(key=lambda c: (c.sequence, c.name or ''))
+        if _category_has_published_products(env, c)
+    ]
+
+
+def _get_ck_nav_root_categories(env, website):
+    """Catégories e-commerce racines éligibles pour la navigation catalogue."""
+    Category = env['product.public.category'].sudo()
+    root_cats = Category.search([('parent_id', '=', False)], order='sequence, name')
+    return root_cats.filtered(
+        lambda c: _category_visible_on_website(c, website)
+        and _category_has_published_products(env, c)
+    )
+
+
+def _get_ck_nav_child_categories(env, website, parent):
+    """Sous-catégories directes éligibles (niveau 2) pour la navigation catalogue."""
+    children = parent.child_id.sorted(key=lambda c: (c.sequence, c.name or ''))
+    return [
+        c for c in children
+        if _category_visible_on_website(c, website)
+        and _category_has_published_products(env, c)
+    ]
+
+
+def _cleanup_ck_catalogue_root_menus(env, website, root, Menu):
+    """Purge les entrées V2.2, mega-menus et orphelins legacy avant sync NAV-003."""
+    # 1. Supprimer toutes les entrées gérées par V2.2 (par nom)
+    for name in MANAGED_V22_ROOT_NAMES:
+        for m in Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', name),
+        ]):
+            _unlink_menu(m)
+
+    # 2. Supprimer les entrées catalogue dynamiques antérieures (ck_nav_category_id défini)
+    # Les sous-menus enfants sont supprimés par cascade ORM (parent_id ondelete='cascade').
+    for m in Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('ck_nav_category_id', '!=', False),
+    ]):
+        _unlink_menu(m)
+
+    # 3. Supprimer les orphelins legacy hors cibles V3 (Communauté, Espace pro, etc.)
+    for m in Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+    ]):
+        if m.name in MANAGED_CATALOGUE_FIXED_ROOT_NAMES:
+            continue
+        if m.name in LEGACY_ROOT_MENU_NAMES:
+            _unlink_menu(m)
+        elif m.is_mega_menu:
+            _unlink_menu(m)
+        elif m.ck_nav_css_class and 'ck-nav-' in (m.ck_nav_css_class or ''):
+            _unlink_menu(m)
+
+
+def sync_ck_catalogue_navigation_for_website(env, website):
+    """CK-NAV-003 — Sync navigation catalogue dynamique depuis product.public.category."""
+    root = website.menu_id
+    if not root:
+        _logger.warning(
+            'CK-NAV-003 : website %s sans menu racine — skip', website.id,
+        )
+        return False
+
+    Menu = env['website.menu'].sudo()
+
+    # 1. Nettoyage V2.2 / mega-menus / orphelins legacy
+    _cleanup_ck_catalogue_root_menus(env, website, root, Menu)
+
+    # 2. Boutique — entrée fixe
+    _upsert_menu(
+        Menu,
+        website=website,
+        parent=root,
+        name=NAV_CATALOGUE_BOUTIQUE_LABEL,
+        url=NAV_CATALOGUE_BOUTIQUE_URL,
+        sequence=NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
+    )
+
+    # 3. Catégories e-commerce racines éligibles avec sous-catégories
+    root_categories = _get_ck_nav_root_categories(env, website)
+    sequence = NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE
+
+    for category in root_categories:
+        child_categories = _get_ck_nav_child_categories(env, website, category)
+        url = _category_shop_url(env, category) or NAV_CATALOGUE_BOUTIQUE_URL
+
+        # Niveau 2 uniquement — pas de niveau 3 dans le header
+        child_specs = [
+            {
+                'name': child.name,
+                'url': _category_shop_url(env, child) or url,
+                'sequence': (idx + 1) * NAV_CATALOGUE_SEQUENCE_STEP,
+            }
+            for idx, child in enumerate(child_categories)
+        ]
+
+        _upsert_menu(
+            Menu,
+            website=website,
+            parent=root,
+            name=category.name,
+            url=url,
+            sequence=sequence,
+            category_id=category.id,
+            child_menus=child_specs,
+        )
+        sequence += NAV_CATALOGUE_SEQUENCE_STEP
+
+    # 4. Producteurs — route contrôleur stratégique, toujours visible
+    _upsert_menu(
+        Menu,
+        website=website,
+        parent=root,
+        name=NAV_CATALOGUE_PRODUCTEURS_LABEL,
+        url=NAV_CATALOGUE_PRODUCTEURS_URL,
+        sequence=sequence,
+    )
+    sequence += NAV_CATALOGUE_SEQUENCE_STEP
+
+    # 5. Professionnels — conditionnel si page publiée
+    if _page_url_visible(env, website, NAV_CATALOGUE_PROFESSIONNELS_URL):
+        _upsert_menu(
+            Menu,
+            website=website,
+            parent=root,
+            name=NAV_CATALOGUE_PROFESSIONNELS_LABEL,
+            url=NAV_CATALOGUE_PROFESSIONNELS_URL,
+            sequence=sequence,
+        )
+    else:
+        for m in Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', NAV_CATALOGUE_PROFESSIONNELS_LABEL),
+        ]):
+            _unlink_menu(m)
+
+    return True
+
+
+def bootstrap_ck_catalogue_navigation(env):
+    """CK-NAV-003 — Bootstrap navigation catalogue pour tous les sites."""
+    synced = 0
+    for website in env['website'].sudo().search([]):
+        if sync_ck_catalogue_navigation_for_website(env, website):
+            synced += 1
+    _logger.info('CK-NAV-003 : navigation catalogue synchronisée pour %s site(s)', synced)
+    return synced
 
 
 def get_nav_category_mapping(env):
