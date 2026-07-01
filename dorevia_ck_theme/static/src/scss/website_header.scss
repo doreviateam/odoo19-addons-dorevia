@@ -297,15 +297,14 @@
         }
 
         // CK-NAV-004 — Boutique : substitution iconographique desktop
-        // FA4 n'a pas fa-storefront ; fa-shopping-bag (\f290) = glyphe boutique
-        // (distinct du panier fa-shopping-cart sur .ck-header__cart-link).
+        // fa-home (\f015) — racine catalogue, aligné Breadcrumb-U1.
         // font-size: 0 masque le texte visuellement ; les AT lisent le DOM.
         #top_menu.top_menu > .nav-item > .nav-link[href="/shop"] {
             font-size: 0;
             padding-inline: 0.65rem;
 
             &::before {
-                content: '\f290';
+                content: '\f015';
                 font-family: FontAwesome;
                 font-size: 1rem;
                 line-height: 1;
