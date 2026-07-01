@@ -17,6 +17,7 @@ from .nav_v22_config import (
     ARTISANAT_MEGA_MIN_FAMILIES,
     LEGACY_NAV_MAISON_LABEL,
     LEGACY_ROOT_MENU_NAMES,
+    MANAGED_V1_ROOT_NAMES,
     MANAGED_V22_ROOT_NAMES,
     NAV_ALL_LABEL,
     NAV_ALL_SEQUENCE,
@@ -45,6 +46,12 @@ from .nav_v22_config import (
     NAV_RAYON_SEQUENCE,
     NAV_RELATION_SEQUENCE,
     NAV_SELECTION_SEQUENCE,
+    NAV_V1_BOUTIQUE_LABEL,
+    NAV_V1_BOUTIQUE_SEQUENCE,
+    NAV_V1_PRODUCTEURS_LABEL,
+    NAV_V1_PRODUCTEURS_SEQUENCE,
+    NAV_V1_PROFESSIONNELS_LABEL,
+    NAV_V1_PROFESSIONNELS_SEQUENCE,
 )
 
 _logger = logging.getLogger(__name__)
@@ -464,6 +471,79 @@ def bootstrap_ck_navigation(env):
         if sync_ck_navigation_for_website(env, website):
             synced += 1
     _logger.info('Nav sync V2.2 : navigation synchronisée pour %s site(s)', synced)
+    return synced
+
+
+# ---------------------------------------------------------------------------
+# Nav V1 — navigation simplifiée (3 liens plats, mega-menus mis en réserve)
+# ---------------------------------------------------------------------------
+
+def sync_ck_navigation_v1_for_website(env, website):
+    root = website.menu_id
+    if not root:
+        _logger.warning('Nav V1 : website %s sans menu racine — skip', website.id)
+        return False
+    Menu = env['website.menu'].sudo()
+
+    # Purge toutes les entrées V2.2 gérées (sans limit=1 pour couvrir les doublons)
+    for name in MANAGED_V22_ROOT_NAMES:
+        menus = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', name),
+        ])
+        _unlink_menu(menus)
+
+    # Purge orphelins legacy — en exemptant les cibles V1
+    # (ne PAS appeler _prune_unmanaged_root_menus : elle supprimerait 'Boutique' et
+    #  'Professionnels' qui sont dans LEGACY_ROOT_MENU_NAMES pour des raisons historiques)
+    for menu in Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+    ]):
+        if menu.name in MANAGED_V1_ROOT_NAMES:
+            continue
+        if menu.name in LEGACY_ROOT_MENU_NAMES or menu.url in ('/contactus',):
+            _unlink_menu(menu)
+        elif menu.ck_nav_css_class and any(
+            c in (menu.ck_nav_css_class or '').split()
+            for c in (NAV_CSS_DESKTOP_UNIVERSE_CHILD, NAV_CSS_MOBILE_UNIVERS_GROUP, NAV_CSS_MOBILE_UNIVERSE_CHILD)
+        ):
+            _unlink_menu(menu)
+
+    # Entrées V1 — sans CSS spéciaux → rendu Bootstrap nav-link standard
+    # _upsert_menu avec css_class='' remet is_mega_menu=False et ck_nav_css_class=False
+    _upsert_menu(
+        Menu, website=website, parent=root,
+        name=NAV_V1_BOUTIQUE_LABEL, url=NAV_ALL_URL,
+        sequence=NAV_V1_BOUTIQUE_SEQUENCE,
+    )
+    _upsert_menu(
+        Menu, website=website, parent=root,
+        name=NAV_V1_PRODUCTEURS_LABEL, url=NAV_PRODUCTEURS_URL,
+        sequence=NAV_V1_PRODUCTEURS_SEQUENCE,
+    )
+    if _page_url_visible(env, website, NAV_PRO_PAGE_URL):
+        _upsert_menu(
+            Menu, website=website, parent=root,
+            name=NAV_V1_PROFESSIONNELS_LABEL, url=NAV_PRO_PAGE_URL,
+            sequence=NAV_V1_PROFESSIONNELS_SEQUENCE,
+        )
+    else:
+        _unlink_menu(Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', NAV_V1_PROFESSIONNELS_LABEL),
+        ]))
+    return True
+
+
+def bootstrap_ck_navigation_v1(env):
+    synced = 0
+    for website in env['website'].sudo().search([]):
+        if sync_ck_navigation_v1_for_website(env, website):
+            synced += 1
+    _logger.info('Nav V1 : navigation synchronisée pour %s site(s)', synced)
     return synced
 
 

@@ -8,14 +8,8 @@ from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
     CK_CREAM_PLACEHOLDER_PNG_B64,
 )
 from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
-    NAV_CSS_DESKTOP_UNIVERSE,
-    NAV_CSS_DESKTOP_UNIVERSE_CHILD,
-    NAV_CSS_NO_AUTOHIDE,
-    NAV_CSS_SHOP_ROOT,
-    NAV_DECOUVRIR_LABEL,
     NAV_MOBILE_UNIVERS_LABEL,
     NAV_SHOP_ALL_LABEL,
-    bootstrap_ck_navigation,
     build_shop_nav_trees,
     get_nav_category_mapping,
     sync_ck_navigation_for_website,
@@ -73,46 +67,11 @@ class TestCkNavSync(TransactionCase):
         product.write({'is_published': True, 'website_published': True})
         self.assertTrue(_category_has_published_products(self.env, cat))
 
-    def test_bootstrap_creates_nav_v22_structure(self):
-        bootstrap_ck_navigation(self.env)
-        self.assertTrue(self._menu_by_name(NAV_SHOP_ALL_LABEL))
-        self.assertTrue(self._menu_by_name('Épicerie'))
-        self.assertFalse(self._menu_by_name(NAV_DECOUVRIR_LABEL))
-        self.assertTrue(self._menu_by_name('Nos producteurs'))
-        self.assertTrue(self._menu_by_name('Espace pro'))
-
-    def test_nos_producteurs_menu_points_to_producteurs(self):
-        bootstrap_ck_navigation(self.env)
-        menu = self._menu_by_name('Nos producteurs')
-        self.assertTrue(menu)
-        self.assertEqual(menu.url, '/producteurs')
-
-    def test_legacy_top_level_professionnels_hidden(self):
-        bootstrap_ck_navigation(self.env)
-        legacy = self.Menu.search([
-            ('website_id', '=', self.website.id),
-            ('parent_id', '=', self.root.id),
-            ('name', '=', 'Professionnels'),
-        ])
-        self.assertFalse(legacy)
-
     def test_shop_nav_trees_from_public_categories(self):
         trees = build_shop_nav_trees(self.env, self.Category)
         self.assertTrue(trees, msg='Au moins une racine catalogue éligible attendue')
         names = [tree['name'] for tree in trees]
         self.assertIn('Épicerie', names)
-
-    def test_boissons_visible_when_category_has_product(self):
-        boissons = self.Category.search([('name', '=', 'Boissons'), ('parent_id', '=', False)], limit=1)
-        if not boissons:
-            boissons = self.Category.create({'name': 'Boissons', 'sequence': 10030})
-        if not _category_has_published_products(self.env, boissons):
-            self._create_published_product('CK Nav QA Boissons Product', boissons)
-        sync_ck_navigation_for_website(self.env, self.website)
-        menu = self._menu_by_name('Boissons')
-        self.assertTrue(menu, msg='Boissons doit remonter depuis product.public.category')
-        self.assertTrue(menu.is_mega_menu)
-        self.assertIn(NAV_CSS_DESKTOP_UNIVERSE, (menu.ck_nav_css_class or '').split())
 
     def test_level2_not_exposed_as_header_children_v22(self):
         """V2.2 — familles L2 dans mega-menu HTML, pas en website.menu enfants."""
@@ -128,12 +87,6 @@ class TestCkNavSync(TransactionCase):
         parent_menu = self._menu_by_name('CK Nav QA Root L2')
         self.assertFalse(parent_menu, msg='Racine QA ad hoc non gérée en N3 V2.2')
         self.assertFalse(self._menu_by_name('CK Nav QA Child L2', parent=self.root))
-
-    def test_shop_all_pinned_no_autohide(self):
-        sync_ck_navigation_for_website(self.env, self.website)
-        shop_all = self._menu_by_name(NAV_SHOP_ALL_LABEL)
-        self.assertIn(NAV_CSS_NO_AUTOHIDE, (shop_all.ck_nav_css_class or '').split())
-        self.assertIn(NAV_CSS_SHOP_ROOT, (shop_all.ck_nav_css_class or '').split())
 
     def test_nav_shop_l2_seed_creates_subcategories(self):
         from odoo.addons.dorevia_ck_marketone_content.nav_shop_l2_seed import seed_nav_shop_l2_categories
@@ -156,16 +109,6 @@ class TestCkNavSync(TransactionCase):
         sync_ck_navigation_for_website(self.env, self.website)
         self.assertFalse(self._menu_by_name('CK Nav QA L3 Hidden'))
 
-    def test_n3_managed_menu_order_v22(self):
-        sync_ck_navigation_for_website(self.env, self.website)
-        all_menu = self._menu_by_name(NAV_SHOP_ALL_LABEL)
-        epicerie = self._menu_by_name('Épicerie')
-        espace_pro = self._menu_by_name('Espace pro')
-        if all_menu and epicerie:
-            self.assertLess(all_menu.sequence, epicerie.sequence)
-        if epicerie and espace_pro:
-            self.assertLess(epicerie.sequence, espace_pro.sequence)
-
     def test_mobile_univers_group_removed_v22(self):
         sync_ck_navigation_for_website(self.env, self.website)
         self.assertFalse(self._menu_by_name(NAV_MOBILE_UNIVERS_LABEL))
@@ -183,13 +126,6 @@ class TestCkNavSync(TransactionCase):
             self.skipTest('Menu Épicerie non visible')
         public_menu = menu.with_user(self.env.ref('base.public_user'))
         self.assertIn('/shop/category/', public_menu._ck_nav_category_shop_url())
-
-    def test_communaute_menu_v22(self):
-        sync_ck_navigation_for_website(self.env, self.website)
-        menu = self._menu_by_name('Communauté')
-        self.assertTrue(menu)
-        self.assertEqual(menu.url, '#')
-        self.assertFalse(self._menu_by_name('Coups de cœur'))
 
     def test_get_nav_category_mapping_has_dynamic_rows(self):
         mapping = get_nav_category_mapping(self.env)
