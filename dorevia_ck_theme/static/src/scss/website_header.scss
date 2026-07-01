@@ -296,6 +296,23 @@
             gap: 1.25rem;
         }
 
+        // CK-NAV-004 — Boutique : substitution iconographique desktop
+        // font-size: 0 masque le texte visuellement ; les AT lisent le DOM
+        // (libellé « Boutique » reste dans l'arbre d'accessibilité).
+        #top_menu.top_menu > .nav-item > .nav-link[href="/shop"] {
+            font-size: 0;
+            padding-inline: 0.65rem;
+
+            &::before {
+                content: '\f015';
+                font-family: FontAwesome;
+                font-size: 1rem;
+                line-height: 1;
+                display: inline-block;
+                color: inherit;
+            }
+        }
+
         // Nav-Shop — desktop : racine navigable + toggle L2 (frères directs du <li>)
         #top_menu.top_menu > .nav-item:has(> .ck-nav-universe-split__toggle) {
             display: inline-flex;
