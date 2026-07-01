@@ -114,6 +114,15 @@ class ProductTemplate(models.Model):
         translate=True,
         help='Libellé conditionnement affiché côté client (ex. Pot verre 320 g).',
     )
+    ck_availability_mode = fields.Selection(
+        selection=[
+            ('stock', 'En stock'),
+            ('order', 'Sur commande'),
+            ('soon', 'Bientôt disponible'),
+        ],
+        default='stock',
+        string='Disponibilité CK',
+    )
 
     @api.constrains('description_ecommerce')
     def _check_description_ecommerce_length(self):

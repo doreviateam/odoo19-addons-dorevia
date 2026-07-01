@@ -25,6 +25,9 @@ def build_ck_product_page_metadata_line(env, product, variant):
 
     parts = []
     origin = ck_origin_from_attribute(product)
+    # Ne pas afficher l'origine en texte si un badge origine couvre déjà ce territoire.
+    if origin and any(b.badge_type == 'origin' for b in product.ck_badge_ids):
+        origin = ''
     if origin:
         parts.append(Markup.escape(origin))
 

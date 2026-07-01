@@ -18,6 +18,7 @@
                             <field name="is_published"
                                    widget="boolean_toggle"
                                    string="Est publié"/>
+                            <field name="ck_availability_mode" widget="radio"/>
                             <field name="website_ribbon_id"
                                    string="Ruban"
                                    options="{'no_quick_create': True}"/>

@@ -577,6 +577,31 @@
         }
     }
 
+    // CK-PROD-001 — micro-ligne "sur commande" sous le prix
+    .ck-product-purchase__order-note {
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+        font-style: italic;
+        margin-bottom: $ck-space-2;
+    }
+
+    // CK-PROD-001 — ligne éditoriale producteur (rem. chip producteur)
+    .ck-product-purchase__producer-line {
+        font-size: $ck-text-sm;
+        color: $ck-text-muted;
+        margin-bottom: $ck-space-1;
+    }
+
+    .ck-product-purchase__producer-link {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+
+        &:hover {
+            color: $ck-primary;
+        }
+    }
+
     @media (min-width: 992px) {
         #product_detail {
             padding-bottom: $ck-space-3;

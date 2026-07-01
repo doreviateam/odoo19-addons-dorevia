@@ -30,6 +30,74 @@
         </xpath>
     </template>
 
+    <!-- CK-PROD-001 — Micro-ligne "sur commande" sous le prix -->
+    <template id="product_ck_order_note"
+              inherit_id="website_sale.product"
+              name="CK Order note under price"
+              priority="46">
+        <xpath expr="//div[hasclass('o_wsale_product_details_content_section_price')]"
+               position="after">
+            <p t-if="product.ck_availability_mode == 'order'"
+               class="ck-product-purchase__order-note">
+                Pièce artisanale proposée sur commande
+            </p>
+        </xpath>
+    </template>
+
+    <!-- CK-PROD-001 — Bloc réassurance conditionnel (hérite theme, ne modifie pas le thème) -->
+    <template id="product_ck_availability_reassurance"
+              inherit_id="dorevia_ck_theme.product_ck_terms_fr"
+              name="CK Availability-aware reassurance"
+              priority="36">
+        <xpath expr="//div[hasclass('ck-product-purchase__trust')]" position="replace">
+            <div class="ck-product-purchase__trust">
+                <t t-if="product.ck_availability_mode == 'order'">
+                    <p class="ck-product-purchase__trust-strip">
+                        Paiement sécurisé · Commande suivie · Accompagnement C-Kréyòl
+                    </p>
+                    <ul class="ck-product-purchase__trust-list">
+                        <li>Sur commande · délai confirmé avant expédition</li>
+                        <li>Livraison suivie avec emballage adapté</li>
+                        <li>
+                            <a href="/terms" class="o_translate_inline">
+                                Conditions de retour applicables
+                            </a>
+                        </li>
+                    </ul>
+                </t>
+                <t t-else="">
+                    <p class="ck-product-purchase__trust-strip">
+                        Paiement sécurisé · Livraison suivie · Expédié depuis Nantes
+                    </p>
+                    <ul class="ck-product-purchase__trust-list">
+                        <li>En stock · Expédié depuis Nantes</li>
+                        <li>Livraison suivie · 2 à 3 jours ouvrables</li>
+                        <li>Retour selon CGV</li>
+                    </ul>
+                    <p class="ck-product-purchase__trust-legal mb-0">
+                        <a href="/terms" class="o_translate_inline">Conditions générales de vente</a>
+                    </p>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- CK-PROD-001 — CTA conditionnel (hérite theme, ne modifie pas le thème) -->
+    <template id="product_ck_availability_cta"
+              inherit_id="dorevia_ck_theme.product_ck_add_to_cart_fr"
+              name="CK Availability-aware CTA label"
+              priority="36">
+        <xpath expr="//span[hasclass('ck-product-purchase__cart-label')]" position="replace">
+            <span class="ck-product-purchase__cart-label"
+                  t-if="product.ck_availability_mode == 'order'">
+                Commander cette pièce
+            </span>
+            <span class="ck-product-purchase__cart-label" t-else="">
+                Ajouter au panier
+            </span>
+        </xpath>
+    </template>
+
     <template id="product_ck_variant_absolute_price_badge"
               inherit_id="website_sale.badge_extra_price"
               name="CK Product variant absolute price badge"

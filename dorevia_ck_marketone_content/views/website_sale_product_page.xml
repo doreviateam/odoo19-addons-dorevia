@@ -8,8 +8,9 @@
          par la metadata avant que Chips-U2 ne remplace son contenu. -->
     <template id="product_ck_chips_u2"
               inherit_id="dorevia_ck_theme.product_ck_title_chips"
-              name="CK Chips-U2 — producteur nommé"
+              name="CK Chips-U2 — chips catégories + ligne éditoriale producteur"
               priority="50">
+        <!-- Chips catégories uniquement — le producteur est rendu en ligne éditoriale ci-dessous -->
         <xpath expr="//div[hasclass('ck-product-purchase__chips')]" position="replace">
             <div class="ck-product-purchase__chips">
                 <t t-foreach="product.get_ck_product_page_chips()" t-as="chip">
@@ -17,15 +18,24 @@
                        t-attf-href="/shop/category/{{slug(chip['categ'])}}"
                        class="ck-chip"
                        t-esc="chip['name']"/>
-                    <a t-elif="chip.get('producer_url')"
-                       t-att-href="chip['producer_url']"
-                       class="ck-chip ck-chip--producer"
-                       t-esc="chip['name']"/>
-                    <span t-else=""
-                          class="ck-chip"
-                          t-esc="chip['name']"/>
                 </t>
             </div>
+        </xpath>
+        <!-- CK-PROD-001 — producteur comme ligne éditoriale "Par {name} · {city}" -->
+        <xpath expr="//div[hasclass('ck-product-purchase__chips')]" position="after">
+            <t t-set="ck_producer" t-value="product.ck_producer_id"/>
+            <p t-if="ck_producer and ck_producer.ck_is_producer and ck_producer.name"
+               class="ck-product-purchase__producer-line">
+                <a t-if="ck_producer.get_ck_producer_url()"
+                   t-att-href="ck_producer.get_ck_producer_url()"
+                   class="ck-product-purchase__producer-link">
+                    Par <t t-esc="ck_producer.name"/>
+                </a>
+                <span t-else="">Par <t t-esc="ck_producer.name"/></span>
+                <t t-if="ck_producer.city">
+                    · <t t-esc="ck_producer.city"/>
+                </t>
+            </p>
         </xpath>
     </template>
 
