@@ -8,7 +8,7 @@
 | Statut | **GO recette / GO commit / GO push** |
 | Commits de référence | `c01a2be7` (centrage) · commit icône Boutique · `ef53451d` (note initiale) |
 | Module | `dorevia_ck_theme` |
-| Version livrée | `19.0.1.112.0` |
+| Version livrée | `19.0.1.113.0` |
 | Base recette | `dorevia_ck_marketone_01` — http://localhost:18079 |
 
 ---
@@ -18,7 +18,7 @@
 Après NAV-003 (navigation catalogue dynamique sans classes `ck-nav-*`), la bande N3 desktop doit :
 
 1. **Centrer** les items de navigation.
-2. **Substituer visuellement** le libellé « Boutique » par une icône maison (FA4 `\f015`), tout en conservant le texte dans le DOM pour l'accessibilité.
+2. **Substituer visuellement** le libellé « Boutique » par une icône sac boutique FA4 (`fa-shopping-bag`, `\f290`), tout en conservant le texte dans le DOM pour l'accessibilité.
 
 Doctrine validée :
 
@@ -35,8 +35,8 @@ Doctrine validée :
 | Fichier | Modification |
 | --- | --- |
 | `website_header.scss:293` | `justify-content: flex-start !important` → `center !important` sur `#top_menu.top_menu` |
-| `website_header.scss:302-314` | Icône Boutique desktop via `[href="/shop"]` + `::before` FA4 |
-| `__manifest__.py` | `19.0.1.111.0` → `19.0.1.112.0` |
+| `website_header.scss:302-314` | Icône Boutique desktop via `[href="/shop"]` + `::before` FA4 `fa-shopping-bag` |
+| `__manifest__.py` | `19.0.1.112.0` → `19.0.1.113.0` (icône storefront) |
 
 ### Arbitrages icône Boutique
 
@@ -47,21 +47,21 @@ Doctrine validée :
 | `display: inline-block` | Reste dans le flux inline ; padding du lien = zone de clic |
 | Scoped `@media (min-width: 992px)` | Mobile offcanvas garde le texte |
 | Sélecteur CSS pur `[href="/shop"]` | Pas de `ck-nav-*` sur les entrées menu BO |
-| `\f015` FontAwesome 4 | Déjà disponible (Breadcrumb-U1) |
+| `\f290` `fa-shopping-bag` FontAwesome 4 | Pas de `fa-storefront` en FA4 ; glyphe boutique distinct du panier `fa-shopping-cart` |
 
 ---
 
 ## Recette
 
-Contrôles effectués sur `19.0.1.112.0` (centrage + icône).
+Contrôles effectués sur `19.0.1.113.0` (centrage + icône `fa-shopping-bag`).
 
 | Contrôle | Résultat |
 | --- | --- |
 | Upgrade `-u dorevia_ck_theme` | OK, sans exception bloquante |
-| Version DB `dorevia_ck_theme` | `19.0.1.112.0` |
-| Tests `dorevia_ck_nav_catalogue,dorevia_ck_nav_v1,dorevia_ck_phase10_header,dorevia_ck_header_v22` | 50 post-tests, 0 failed, 0 error |
+| Version DB `dorevia_ck_theme` | `19.0.1.113.0` |
+| Tests `dorevia_ck_nav_catalogue,dorevia_ck_breadcrumb_u1` | 24 post-tests, 0 failed, 0 error |
 | CSS compilé — centrage | `#top_menu.top_menu { justify-content: center !important }` |
-| CSS compilé — icône | `nav-link[href="/shop"] { font-size: 0 }` + `::before { content: '\f015'; font-family: FontAwesome }` |
+| CSS compilé — icône | `nav-link[href="/shop"] { font-size: 0 }` + `::before { content: '\f290'; font-family: FontAwesome }` |
 | HTML desktop `/shop` | `<span>Boutique</span>` présent dans le DOM ; icône rendue via CSS |
 | HTML mobile offcanvas | Texte « Boutique » conservé (`nav-link p-3 text-wrap`) |
 | Nav complète desktop | `Boutique(icon) · Épicerie · Soin & Bien-être · Artisanat · Boissons · Producteurs · Professionnels` |
