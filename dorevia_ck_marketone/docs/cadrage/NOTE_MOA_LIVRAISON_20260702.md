@@ -24,7 +24,7 @@ Depuis le gel boutique V1, **six chantiers complémentaires** ont été livrés 
 3. **Home — hygiène visible (CK-HOME-001C)** — marque, newsletter FR, 4ᵉ carte Boissons.
 4. **Home — hero (CK-HOME-001A)** — promesse repositionnée produits + producteurs + savoir-faire · recette mobile 390 px (CA6) documentée.
 5. **Home — polish UX (CK-HOME-POLISH-001)** — newsletter retirée de la Home, header favoris/panier clarifié, hero/prix/trust-bar/bloc Pro renforcés.
-6. **Navigation — catégories racine cliquables (CK-NAV-005)** — Épicerie, Boissons, Artisanat : lien direct vers la page catégorie + toggle sous-menu séparé (desktop et mobile).
+6. **Navigation — catégories racine cliquables (CK-NAV-005)** — Épicerie, Boissons, Soin & Bien-être et Artisanat : le libellé mène vers la page du rayon ; chevron / accordéon séparé si sous-catégories (desktop et mobile).
 
 Le parcours acheteur reste intact : **Home → Shop → fiche produit → panier → checkout**. Aucun changement sur le tunnel de commande.
 
@@ -52,7 +52,7 @@ Boutique · Épicerie · Boissons · Soin & Bien-être · Artisanat · Producteu
 | **CK-NAV-003** | Navigation catalogue depuis le BO Odoo, sans mega-menu legacy. |
 | **CK-NAV-003b** | Un ordre de menu ajusté manuellement en BO **n’est plus écrasé** au prochain resync catalogue. |
 | **CK-NAV-004** | Bande de navigation centrée en desktop · icône Boutique. |
-| **CK-NAV-005** | Catégories racine **cliquables** (Épicerie, Boissons, Artisanat) : le libellé mène vers `/shop/category/...` ; le chevron / accordéon ouvre les sous-catégories **sans changer d’URL**. |
+| **CK-NAV-005** | Catégories racines du header — Épicerie, Boissons, Soin & Bien-être et Artisanat — **cliquables** : le libellé mène vers `/shop/category/...` ; si le rayon a des sous-catégories, le chevron / accordéon les ouvre **sans changer d’URL** ni neutraliser le lien parent. |
 | Réalignement séquences (2 juil.) | Ordre Option C appliqué sur catégories e-commerce et menus website. |
 
 ### Comment changer l’ordre demain
@@ -67,10 +67,15 @@ Boutique · Épicerie · Boissons · Soin & Bien-être · Artisanat · Producteu
 
 ### CK-NAV-005 — ce que change le clic (desktop et mobile)
 
+Les catégories racines du header — **Épicerie, Boissons, Soin & Bien-être et Artisanat** — sont désormais traitées comme des entrées de navigation marchandes : le libellé mène vers la page du rayon correspondant (`/shop/category/...`).
+
+Lorsqu’un rayon possède des sous-catégories, le chevron desktop ou l’accordéon mobile ouvre le sous-menu **sans quitter la page en cours** et **sans neutraliser le lien parent**. Soin & Bien-être, sans sous-menu sur l’instance de recette, reste un lien direct simple — conforme à la règle : tout item de niveau 0 avec destination est cliquable.
+
 | Action | Résultat attendu |
 | --- | --- |
 | Clic sur **« Épicerie »** (libellé) | Navigation vers `/shop/category/epicerie-1` |
 | Clic sur le **chevron** Épicerie (desktop) | Ouvre le dropdown des sous-catégories · **URL inchangée** |
+| Clic sur **« Soin & Bien-être »** (libellé) | Navigation vers la page catégorie du rayon |
 | Clic sur **« Boissons »** (libellé mobile, drawer) | Navigation vers la page catégorie Boissons |
 | Clic sur le **toggle accordéon** Boissons (mobile) | Ouvre le panneau sous-catégories · **URL inchangée** |
 
@@ -171,7 +176,7 @@ Micro-lot de **corrections UX ciblées** sur la Home, sans remise en cause de la
 Sur l’URL démo ou `localhost:18079` :
 
 1. **Hero** : kicker « Produits créoles… » · titre « C-Kréyòl — les saveurs créoles en Europe » · CTA producteurs.
-2. **Header** : ordre Option C · icône Boutique · **clic Épicerie → page catégorie** · chevron ouvre sous-menu sans changer d’URL.
+2. **Header** : ordre Option C · icône Boutique · **clic sur tout rayon racine (Épicerie, Boissons, Soin & Bien-être, Artisanat) → page catégorie** · chevron ouvre sous-menu sans changer d’URL.
 3. **Home** : 4 cartes univers · intro « Quatre univers » · **pas de newsletter** · bloc Pro seul en bas.
 4. **Header favoris** : cœur **gris/contour** à vide · badge rouge seulement après ajout d’un favori.
 5. **Footer** : © **C-Kréyòl** (avec accent).
