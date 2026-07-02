@@ -227,6 +227,64 @@ class TestCkNavCatalogueSync(TransactionCase):
         self.assertTrue(boutique and cat_a)
         self.assertLess(boutique.sequence, cat_a.sequence, 'Boutique doit précéder les catégories')
 
+    def test_catalogue_nav_preserves_admin_sequence_on_resync(self):
+        """CK-NAV-003b : une séquence modifiée en BO ne doit pas être écrasée au resync."""
+        self._sync()
+        cat_a_menu = self._root_menu(self.cat_a.name)
+        self.assertTrue(cat_a_menu)
+
+        cat_a_menu.write({'sequence': 12345})
+        self._sync()
+
+        cat_a_menu_reloaded = self._root_menu(self.cat_a.name)
+        self.assertEqual(
+            cat_a_menu_reloaded.sequence, 12345,
+            'La séquence modifiée manuellement en BO doit survivre au resync',
+        )
+        # name/url restent pilotés par la catégorie source
+        self.assertEqual(cat_a_menu_reloaded.name, self.cat_a.name)
+
+    def test_catalogue_nav_producteurs_preserves_admin_sequence_on_resync(self):
+        """CK-NAV-003b : Producteurs suit la même règle de non-régression."""
+        self._sync()
+        producteurs_menu = self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL)
+        self.assertTrue(producteurs_menu)
+
+        producteurs_menu.write({'sequence': 54321})
+        self._sync()
+
+        producteurs_menu_reloaded = self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL)
+        self.assertEqual(
+            producteurs_menu_reloaded.sequence, 54321,
+            'La séquence Producteurs modifiée manuellement en BO doit survivre au resync',
+        )
+
+    def test_catalogue_nav_new_category_gets_default_sequence_without_disturbing_existing(self):
+        """CK-NAV-003b : une nouvelle catégorie prend sa séquence par défaut sans perturber les autres."""
+        self._sync()
+        cat_a_menu = self._root_menu(self.cat_a.name)
+        cat_a_menu.write({'sequence': 12345})
+
+        Category = self.env['product.public.category'].sudo()
+        cat_new = Category.create({'name': 'TestCat NAV003 Rayon Nouveau', 'sequence': 905})
+        self.env['product.template'].sudo().create({
+            'name': 'Test Produit NAV003 Nouveau',
+            'sale_ok': True,
+            'is_published': True,
+            'website_published': True,
+            'public_categ_ids': [(4, cat_new.id)],
+        })
+
+        self._sync()
+
+        cat_a_menu_reloaded = self._root_menu(self.cat_a.name)
+        self.assertEqual(
+            cat_a_menu_reloaded.sequence, 12345,
+            'La catégorie existante ne doit pas être perturbée par un nouvel item',
+        )
+        cat_new_menu = self._root_menu(cat_new.name)
+        self.assertTrue(cat_new_menu, 'La nouvelle catégorie doit apparaître au menu')
+
     # --- Producteurs fixe (route contrôleur, pas de website.page) ---
 
     def test_catalogue_nav_producteurs_fixed(self):

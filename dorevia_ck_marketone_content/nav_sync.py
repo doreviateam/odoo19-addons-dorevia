@@ -101,7 +101,14 @@ def _unlink_menu(menu):
 
 
 def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
-                 is_mega=False, mega_content='', category_id=None, child_menus=None):
+                 is_mega=False, mega_content='', category_id=None, child_menus=None,
+                 preserve_existing_sequence=False):
+    """Crée ou met à jour un website.menu.
+
+    CK-NAV-003b : si ``preserve_existing_sequence`` est vrai et que le menu
+    existe déjà, la ``sequence`` administrée en BO n'est pas écrasée par la
+    valeur calculée — seule la création applique la séquence par défaut.
+    """
     menu = Menu.search([
         ('website_id', '=', website.id),
         ('parent_id', '=', parent.id),
@@ -120,6 +127,8 @@ def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
         if is_mega and menu.child_id:
             for child in menu.child_id:
                 _unlink_menu(child)
+        if preserve_existing_sequence:
+            vals.pop('sequence')
         menu.write(vals)
     else:
         menu = Menu.create({
@@ -140,6 +149,7 @@ def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
                 url=child_spec['url'],
                 sequence=child_spec.get('sequence', 10),
                 css_class=child_spec.get('css_class', ''),
+                preserve_existing_sequence=preserve_existing_sequence,
             )
         for child in menu.child_id:
             if child.name not in managed:
@@ -626,7 +636,7 @@ def _get_ck_nav_child_categories(env, website, parent):
     ]
 
 
-def _cleanup_ck_catalogue_root_menus(env, website, root, Menu):
+def _cleanup_ck_catalogue_root_menus(env, website, root, Menu, eligible_category_ids):
     """Purge les entrées V2.2, mega-menus et orphelins legacy avant sync NAV-003."""
     # 1. Supprimer toutes les entrées gérées par V2.2 (par nom)
     for name in MANAGED_V22_ROOT_NAMES:
@@ -637,14 +647,18 @@ def _cleanup_ck_catalogue_root_menus(env, website, root, Menu):
         ]):
             _unlink_menu(m)
 
-    # 2. Supprimer les entrées catalogue dynamiques antérieures (ck_nav_category_id défini)
-    # Les sous-menus enfants sont supprimés par cascade ORM (parent_id ondelete='cascade').
+    # 2. Supprimer les entrées catalogue devenues obsolètes (catégorie supprimée
+    # ou plus éligible). CK-NAV-003b : les entrées encore éligibles sont laissées
+    # intactes ici — _upsert_menu() les met à jour ensuite sans écraser leur
+    # séquence administrée en BO. Les sous-menus enfants d'une entrée supprimée
+    # sont supprimés par cascade ORM (parent_id ondelete='cascade').
     for m in Menu.search([
         ('website_id', '=', website.id),
         ('parent_id', '=', root.id),
         ('ck_nav_category_id', '!=', False),
     ]):
-        _unlink_menu(m)
+        if m.ck_nav_category_id.id not in eligible_category_ids:
+            _unlink_menu(m)
 
     # 3. Supprimer les orphelins legacy hors cibles V3 (Communauté, Espace pro, etc.)
     for m in Menu.search([
@@ -673,7 +687,8 @@ def sync_ck_catalogue_navigation_for_website(env, website):
     Menu = env['website.menu'].sudo()
 
     # 1. Nettoyage V2.2 / mega-menus / orphelins legacy
-    _cleanup_ck_catalogue_root_menus(env, website, root, Menu)
+    root_categories = _get_ck_nav_root_categories(env, website)
+    _cleanup_ck_catalogue_root_menus(env, website, root, Menu, set(root_categories.ids))
 
     # 2. Boutique — entrée fixe
     _upsert_menu(
@@ -686,7 +701,6 @@ def sync_ck_catalogue_navigation_for_website(env, website):
     )
 
     # 3. Catégories e-commerce racines éligibles avec sous-catégories
-    root_categories = _get_ck_nav_root_categories(env, website)
     sequence = NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE
 
     for category in root_categories:
@@ -712,6 +726,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
             sequence=sequence,
             category_id=category.id,
             child_menus=child_specs,
+            preserve_existing_sequence=True,
         )
         sequence += NAV_CATALOGUE_SEQUENCE_STEP
 
@@ -723,6 +738,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         name=NAV_CATALOGUE_PRODUCTEURS_LABEL,
         url=NAV_CATALOGUE_PRODUCTEURS_URL,
         sequence=sequence,
+        preserve_existing_sequence=True,
     )
     sequence += NAV_CATALOGUE_SEQUENCE_STEP
 
@@ -735,6 +751,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
             name=NAV_CATALOGUE_PROFESSIONNELS_LABEL,
             url=NAV_CATALOGUE_PROFESSIONNELS_URL,
             sequence=sequence,
+            preserve_existing_sequence=True,
         )
     else:
         for m in Menu.search([
