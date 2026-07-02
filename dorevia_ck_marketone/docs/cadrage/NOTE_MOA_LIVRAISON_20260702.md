@@ -9,23 +9,26 @@
 | Base | `dorevia_ck_marketone_01` |
 | URL locale | http://localhost:18079 |
 | URL démo publique | https://assure-violation-markets-factors.trycloudflare.com |
-| Version contenu | `dorevia_ck_marketone_content` **19.0.1.75.0** |
-| Version thème | `dorevia_ck_theme` **19.0.1.114.0** (navigation desktop) |
+| Version contenu | `dorevia_ck_marketone_content` **19.0.1.81.0** |
+| Version thème | `dorevia_ck_theme` **19.0.1.119.0** |
+| Commit de référence | `68a0283b` — `feat(ck): CK-NAV-005 liens catégorie racine + polish Home et header wishlist` |
 
 ---
 
 ## Synthèse exécutive
 
-Depuis le gel boutique V1, quatre chantiers complémentaires ont été livrés et validés :
+Depuis le gel boutique V1, **six chantiers complémentaires** ont été livrés et validés :
 
 1. **Navigation header** — catalogue dynamique stabilisé, ordre MOA confirmé, icône Boutique desktop.
 2. **Démo en ligne** — boutique accessible via tunnel public pour présentation MOA / acheteur.
 3. **Home — hygiène visible (CK-HOME-001C)** — marque, newsletter FR, 4ᵉ carte Boissons.
 4. **Home — hero (CK-HOME-001A)** — promesse repositionnée produits + producteurs + savoir-faire · recette mobile 390 px (CA6) documentée.
+5. **Home — polish UX (CK-HOME-POLISH-001)** — newsletter retirée de la Home, header favoris/panier clarifié, hero/prix/trust-bar/bloc Pro renforcés.
+6. **Navigation — catégories racine cliquables (CK-NAV-005)** — Épicerie, Boissons, Artisanat : lien direct vers la page catégorie + toggle sous-menu séparé (desktop et mobile).
 
 Le parcours acheteur reste intact : **Home → Shop → fiche produit → panier → checkout**. Aucun changement sur le tunnel de commande.
 
-**Commit de référence 001A** : `57eb3725` — `feat(ck-home): CK-HOME-001A repositionner le hero`
+**Commits de référence** : `57eb3725` (hero 001A) · `68a0283b` (NAV-005 + polish Home + header wishlist)
 
 ---
 
@@ -49,6 +52,7 @@ Boutique · Épicerie · Boissons · Soin & Bien-être · Artisanat · Producteu
 | **CK-NAV-003** | Navigation catalogue depuis le BO Odoo, sans mega-menu legacy. |
 | **CK-NAV-003b** | Un ordre de menu ajusté manuellement en BO **n’est plus écrasé** au prochain resync catalogue. |
 | **CK-NAV-004** | Bande de navigation centrée en desktop · icône Boutique. |
+| **CK-NAV-005** | Catégories racine **cliquables** (Épicerie, Boissons, Artisanat) : le libellé mène vers `/shop/category/...` ; le chevron / accordéon ouvre les sous-catégories **sans changer d’URL**. |
 | Réalignement séquences (2 juil.) | Ordre Option C appliqué sur catégories e-commerce et menus website. |
 
 ### Comment changer l’ordre demain
@@ -59,7 +63,20 @@ Boutique · Épicerie · Boissons · Soin & Bien-être · Artisanat · Producteu
 | Nouveau rayon dans le header | Publier catégorie + produits → resync catalogue ; position initiale selon séquence catégorie BO. |
 | Boutique | Reste en première position (comportement technique fixe). |
 
-> Détail technique : [`NOTE_MOA_CLOTURE_CK_NAV_003_20260701.md`](NOTE_MOA_CLOTURE_CK_NAV_003_20260701.md) · [`NOTE_MOA_CLOTURE_CK_NAV_003B_SEQUENCE_BO_RESYNC_20260701.md`](NOTE_MOA_CLOTURE_CK_NAV_003B_SEQUENCE_BO_RESYNC_20260701.md) · [`NOTE_MOA_CLOTURE_CK_NAV_004_20260701.md`](NOTE_MOA_CLOTURE_CK_NAV_004_20260701.md)
+> Détail technique : [`NOTE_MOA_CLOTURE_CK_NAV_003_20260701.md`](NOTE_MOA_CLOTURE_CK_NAV_003_20260701.md) · [`NOTE_MOA_CLOTURE_CK_NAV_003B_SEQUENCE_BO_RESYNC_20260701.md`](NOTE_MOA_CLOTURE_CK_NAV_003B_SEQUENCE_BO_RESYNC_20260701.md) · [`NOTE_MOA_CLOTURE_CK_NAV_004_20260701.md`](NOTE_MOA_CLOTURE_CK_NAV_004_20260701.md) · [`NOTE_MOA_CLOTURE_CK_NAV_005_20260702.md`](NOTE_MOA_CLOTURE_CK_NAV_005_20260702.md)
+
+### CK-NAV-005 — ce que change le clic (desktop et mobile)
+
+| Action | Résultat attendu |
+| --- | --- |
+| Clic sur **« Épicerie »** (libellé) | Navigation vers `/shop/category/epicerie-1` |
+| Clic sur le **chevron** Épicerie (desktop) | Ouvre le dropdown des sous-catégories · **URL inchangée** |
+| Clic sur **« Boissons »** (libellé mobile, drawer) | Navigation vers la page catégorie Boissons |
+| Clic sur le **toggle accordéon** Boissons (mobile) | Ouvre le panneau sous-catégories · **URL inchangée** |
+
+**Pourquoi ce changement** : avant NAV-005, un rayon avec sous-catégories ne permettait pas d’accéder directement à sa page « toutes les produits du rayon » — seul le sous-menu était actionnable. C’est corrigé sans toucher à l’ordre des menus ni au back-office.
+
+**Recette validée** : desktop 1280 px · mobile 390 px · routes catégorie en HTTP 200 · 43 tests auto, 0 échec.
 
 ---
 
@@ -105,7 +122,7 @@ Parcours validé : Home → navigation → Shop → fiche produit → Producteur
 
 ### Ce qui ne change pas (001C)
 
-- Section « Nos coups de cœur », coffrets découverte, bloc pro / newsletter (structure).
+- Section « Nos coups de cœur », coffrets découverte, bloc pro (structure).
 - Tunnel achat, fiches produit, Producteurs.
 
 > Détail 001C : [`NOTE_MOA_CLOTURE_CK_HOME_001C_20260702.md`](NOTE_MOA_CLOTURE_CK_HOME_001C_20260702.md)
@@ -127,22 +144,45 @@ Capture : [`ck_home_001a_hero_mobile_390.png`](../design/maquette_01.2/captures/
 
 ---
 
-## 4. Contrôles rapides MOA (5 minutes)
+## 4. Home — CK-HOME-POLISH-001 — polish avant ouverture
+
+Micro-lot de **corrections UX ciblées** sur la Home, sans remise en cause de la structure validée (hero, vedettes, univers, coffrets, footer).
+
+### Ce que voit le visiteur
+
+| Sujet | Avant | Après |
+| --- | --- | --- |
+| **Newsletter (Home)** | Bloc dual Pro + newsletter · message « Merci pour votre inscription ! » visible au chargement | **Bloc Pro seul** · pas de formulaire newsletter sur la Home |
+| **Header desktop** | Favoris / panier peu distincts | Icônes **cœur** et **panier** séparées · badges compteur masqués à zéro |
+| **Icône favoris** | Cœur rouge en permanence | **Cœur contour neutre** par défaut (comme compte/panier) · rouge CK au survol · badge rouge uniquement si favoris présents |
+| **Hero** | Wording MOA inchangé | Lisibilité renforcée (fond semi-opaque desktop, CTA principal plus visible) |
+| **Prix vedettes** | — | Prix TTC **15 px / graisse 700** sur « Nos coups de cœur » |
+| **Trust-bar** | — | Icônes et hiérarchie renforcées (livraison, paiement, producteurs, service) |
+| **Bloc Pro** | — | Wording B2B clarifié · CTA « Demander un accès professionnel » |
+
+**Hors périmètre Home** : newsletter conservée sur `/contactus` et `/professionnels`. Stratégie Email Marketing / RGPD → lot futur.
+
+> Détail : [`NOTE_MOA_LIVRAISON_CK_HOME_POLISH_001_20260702.md`](NOTE_MOA_LIVRAISON_CK_HOME_POLISH_001_20260702.md) · clôture [`NOTE_MOA_CLOTURE_CK_HOME_POLISH_001_20260702.md`](NOTE_MOA_CLOTURE_CK_HOME_POLISH_001_20260702.md)
+
+---
+
+## 5. Contrôles rapides MOA (5 minutes)
 
 Sur l’URL démo ou `localhost:18079` :
 
 1. **Hero** : kicker « Produits créoles… » · titre « C-Kréyòl — les saveurs créoles en Europe » · CTA producteurs.
-2. **Header** : ordre Option C · icône Boutique · dropdowns Épicerie / Boissons / Artisanat.
-3. **Home** : 4 cartes univers · intro « Quatre univers » · bloc newsletter en FR.
-4. **Footer** : © **C-Kréyòl** (avec accent).
-5. **Shop** : `/shop` charge · fiche produit témoin OK.
-6. **Producteurs** : `/producteurs` — photos chargées.
-7. **Mobile 390 px — header** : menu drawer · pas de débordement horizontal (cf. démo CK-DEMO-ONLINE-001).
-8. **Mobile 390 px — hero 001A (CA6)** : textes et CTA conformes · empilement vertical · capture archivée (§ 3).
+2. **Header** : ordre Option C · icône Boutique · **clic Épicerie → page catégorie** · chevron ouvre sous-menu sans changer d’URL.
+3. **Home** : 4 cartes univers · intro « Quatre univers » · **pas de newsletter** · bloc Pro seul en bas.
+4. **Header favoris** : cœur **gris/contour** à vide · badge rouge seulement après ajout d’un favori.
+5. **Footer** : © **C-Kréyòl** (avec accent).
+6. **Shop** : `/shop` charge · fiche produit témoin OK.
+7. **Producteurs** : `/producteurs` — photos chargées.
+8. **Mobile 390 px — header** : drawer · lien catégorie séparé du toggle accordéon · pas de débordement horizontal.
+9. **Mobile 390 px — hero 001A (CA6)** : textes et CTA conformes · empilement vertical · capture archivée (§ 3).
 
 ---
 
-## 5. Rappel contexte V1 boutique
+## 6. Rappel contexte V1 boutique
 
 La **V1 boutique reste gelée** (tag `v1.0.0-boutique`). Les lots ci-dessus sont des **compléments post-gel** : navigation, démo, hygiène home.
 
@@ -150,12 +190,13 @@ Dettes V1.1 et backlog inchangés — cf. [`NOTE_MOA_CLOTURE_V1_BOUTIQUE_2026062
 
 ---
 
-## 6. Suite backlog
+## 7. Suite backlog
 
-Les lots home **001C** et **001A** sont **clôturés GO** (2 juillet 2026). Prochaines pistes, par priorité produit :
+Les lots **001C**, **001A**, **CK-HOME-POLISH-001** et **CK-NAV-005** sont **clôturés GO** (2 juillet 2026). Prochaines pistes :
 
 | Lot / thème | Objectif | Statut |
 | --- | --- | --- |
+| **CK-NAV-005** | Catégories racine cliquables (lien + toggle) | **Clôturé GO** — [`NOTE_MOA_CLOTURE_CK_NAV_005_20260702.md`](NOTE_MOA_CLOTURE_CK_NAV_005_20260702.md) |
 | **CK-HOME-POLISH-001** | Polish UX Home (newsletter, header, hero, prix…) | **Clôturé GO** — [`NOTE_MOA_CLOTURE_CK_HOME_POLISH_001_20260702.md`](NOTE_MOA_CLOTURE_CK_HOME_POLISH_001_20260702.md) |
 | **CK-HOME-001B** | Vedettes E1 + coffret E2 (visuel) | **GO Dev** — [`TICKET_DEV_HOME_VISUAL_CK_HOME_001B.md`](TICKET_DEV_HOME_VISUAL_CK_HOME_001B.md) |
 | **CK-HOME-002** (ex-001B producteurs) | Bloc producteurs / transformateurs en home | Backlog — cadrage à ouvrir |
@@ -172,9 +213,11 @@ Les lots home **001C** et **001A** sont **clôturés GO** (2 juillet 2026). Proc
 ## Verdict MOA proposé
 
 ```text
-Navigation Option C · démo tunnel · home CK-HOME-001C · hero CK-HOME-001A (CA6 mobile documenté)
+Navigation Option C · NAV-005 catégories cliquables · démo tunnel
+· home 001C + hero 001A + polish Home · header favoris neutre
 → GO exploitation démo
 → Prochaine étape : **exécution CK-HOME-001B** (vedettes + coffret) — ticket Dev ouvert
+→ Code livré sur main : commit 68a0283b
 ```
 
 ---
