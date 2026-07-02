@@ -2,6 +2,7 @@
 """Home Lot 4 — Bloc double Pro / Newsletter (MOA maquette V1)."""
 import re
 
+from .home_discovery_pack import _homepage_has_leaked_section_markup
 from .hooks import (
     NEWSLETTER_RGPD_NOTE,
     PRO_DUAL_TITLE,
@@ -104,6 +105,8 @@ def _patch_homepage_dual_arch(arch, dual_arch, *, remove_pro_banner=True):
 
 def dual_engage_home_arch_is_valid(arch, env):
     """Recette Lot 4 : dual compact · Pro · newsletter BO · sans bannière Pro redondante."""
+    if _homepage_has_leaked_section_markup(arch):
+        return False
     if 'ck-dual-engage--compact' not in arch:
         return False
     chunk_start = arch.find(DUAL_ENGAGE_SECTION_MARKER)
@@ -156,7 +159,7 @@ def bootstrap_home_dual_engage(env, *, remove_pro_banner=True):
     if not arch.strip():
         return False
 
-    if dual_engage_home_arch_is_valid(arch, env):
+    if dual_engage_home_arch_is_valid(arch, env) and not _homepage_has_leaked_section_markup(arch):
         return True
 
     dual_arch = build_home_dual_engage_arch(env)

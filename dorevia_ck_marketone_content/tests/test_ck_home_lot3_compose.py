@@ -2,6 +2,7 @@
 """Tests HTTP Lot 3 — Coffrets découverte home · non-régression Lot 2."""
 
 import re
+from urllib.parse import parse_qs, urlparse
 
 from odoo.tests import tagged
 from odoo.tests.common import HttpCase
@@ -24,6 +25,8 @@ _KITS_HREF_RE = re.compile(r'href="(?:/[a-z]{2})?/kits"')
 
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_home_lot3')
 class TestCkHomeLot3Compose(HttpCase):
+    FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -45,6 +48,8 @@ class TestCkHomeLot3Compose(HttpCase):
         self.assertNotIn('website.s_cover_default_image', chunk)
         self.assertNotIn('s_cover_default', chunk)
         self.assertNotIn('ck-discovery-pack__visual--editorial', chunk)
+        self.assertNotIn('stretched-link', chunk)
+        self.assertIn('ck-discovery-pack__cta', chunk)
         self.assertTrue(
             '/web/image/product.' in chunk or 'ck_discovery_pack.jpg' in chunk,
             'visuel coffret qualifié attendu',
@@ -85,12 +90,10 @@ class TestCkHomeLot3Compose(HttpCase):
         self.assertEqual(len(_KITS_HREF_RE.findall(chunk)), 1)
 
     def test_kits_route_when_marketone_installed(self):
-        """Porte /kits — 200 ou 301 si module Chantier B actif sur l'instance."""
-        marketone = self.env['ir.module.module'].search([
-            ('name', '=', 'dorevia_ckreyol_marketone'),
-            ('state', '=', 'installed'),
-        ], limit=1)
-        if not marketone:
-            self.skipTest('dorevia_ckreyol_marketone non installé — lien /kits vérifié en HTML uniquement.')
-        response = self.url_open(DISCOVERY_PACK_CTA_URL, allow_redirects=False)
-        self.assertIn(response.status_code, (200, 301, 302, 303, 307, 308))
+        """Porte /kits — 301 vers collection pack (content module)."""
+        response = self.url_open('/kits', headers=self.FR_HEADERS, allow_redirects=False)
+        self.assertEqual(response.status_code, 301)
+        location = response.headers.get('Location', '')
+        qs = parse_qs(urlparse(location).query)
+        self.assertEqual(qs.get('marketone_mode'), ['pack'])
+        self.assertIn('/shop', urlparse(location).path)

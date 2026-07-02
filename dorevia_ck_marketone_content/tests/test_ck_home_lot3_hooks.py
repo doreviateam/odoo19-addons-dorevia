@@ -39,6 +39,8 @@ class TestCkHomeLot3Hooks(TransactionCase):
         self.assertIn('ck-discovery-pack--polish-v1', arch)
         self.assertIn('pt48 pb48', arch)
         self.assertNotIn('ck-discovery-pack__visual--editorial', arch)
+        self.assertNotIn('stretched-link', arch)
+        self.assertIn('ck-discovery-pack__actions', arch)
         self.assertNotIn('ck-discovery-pack__visual-icon', arch)
         self.assertNotIn('fa-3x', arch)
         self.assertNotIn('website.s_cover_default_image', arch)
@@ -51,6 +53,7 @@ class TestCkHomeLot3Hooks(TransactionCase):
         self.assertTrue(bootstrap_home_discovery_pack(self.env))
         arch = self._homepage_arch()
         self.assertTrue(discovery_pack_arch_is_valid(arch))
+        self.assertNotIn('</section>\nclass="s_text_block ck-dual-engage', arch)
         univers_pos = arch.find('ck-univers-cards')
         if univers_pos < 0:
             univers_pos = arch.find('s_ck_category_links')

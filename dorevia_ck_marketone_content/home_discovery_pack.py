@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Home Lot 3 — Coffrets découverte (MOA maquette V1)."""
+import re
 from xml.sax.saxutils import escape
 
 DISCOVERY_PACK_SECTION_MARKER = 'ck-discovery-pack'
@@ -58,13 +59,20 @@ def get_discovery_pack_product(env):
 def _discovery_visual_html(product):
     if product and product.image_1920:
         alt = escape(product.name or DISCOVERY_PACK_EDITORIAL_NAME)
-        return (
-            f'<div class="ck-discovery-pack__visual ratio ratio-4x3 rounded overflow-hidden h-100" '
-            f'style="min-height: 180px;">'
+        inner = (
             f'<img src="/web/image/product.template/{product.id}/image_512" '
             f'class="object-fit-cover w-100 h-100" alt="{alt}" loading="lazy"/>'
-            f'</div>'
         )
+        visual = (
+            f'<div class="ck-discovery-pack__visual ratio ratio-4x3 rounded overflow-hidden h-100" '
+            f'style="min-height: 180px;">{inner}</div>'
+        )
+        if product.website_url:
+            return (
+                f'<a href="{escape(product.website_url)}" class="d-block h-100 text-decoration-none">'
+                f'{visual}</a>'
+            )
+        return visual
     alt = escape(DISCOVERY_PACK_EDITORIAL_NAME)
     return (
         f'<div class="ck-discovery-pack__visual ratio ratio-4x3 rounded overflow-hidden h-100" '
@@ -92,7 +100,7 @@ def build_discovery_pack_arch(env):
     product_link = ''
     if product and product.website_url:
         product_link = (
-            f'<a href="{escape(product.website_url)}" class="stretched-link text-decoration-none text-reset">'
+            f'<a href="{escape(product.website_url)}" class="text-decoration-none text-reset">'
             f'{name}</a>'
         )
     else:
@@ -112,9 +120,9 @@ def build_discovery_pack_arch(env):
                     <span class="badge ck-discovery-pack__badge rounded-pill align-self-start mb-2">{DISCOVERY_PACK_BADGE}</span>
                     <h3 class="h5 mb-2">{product_link}</h3>
                     <p class="text-muted mb-3 mb-md-4">{teaser}</p>
-                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-auto">
+                    <div class="ck-discovery-pack__actions d-flex flex-wrap align-items-center justify-content-between gap-3 mt-auto">
                         {price_block}
-                        <a href="{DISCOVERY_PACK_CTA_URL}" class="btn btn-primary">{DISCOVERY_PACK_CTA_LABEL}</a>
+                        <a href="{DISCOVERY_PACK_CTA_URL}" class="btn btn-primary ck-discovery-pack__cta">{DISCOVERY_PACK_CTA_LABEL}</a>
                     </div>
                 </div>
             </div>
@@ -124,23 +132,60 @@ def build_discovery_pack_arch(env):
 """.strip()
 
 
+def _dual_engage_boundary(arch, after=0):
+    """Index de début du bloc dual / pro suivant (y compris fuite ``</section> class=``)."""
+    leaked = re.search(
+        r'</section>\s*(class="s_text_block ck-dual-engage)',
+        arch[after:],
+    )
+    if leaked:
+        return after + leaked.start(1)
+    for needle in (
+        '<section class="s_text_block ck-dual-engage',
+        '<section class="s_ck_pro_banner',
+        'class="s_text_block ck-dual-engage',
+        'class="s_ck_pro_banner',
+        'data-name="CK Dual Pro Newsletter',
+    ):
+        pos = arch.find(needle, after + 1)
+        if pos >= 0:
+            return pos
+    return -1
+
+
+def _discovery_pack_section_opens(arch):
+    return re.findall(
+        r'<section class="s_text_block ck-discovery-pack',
+        arch,
+    )
+
+
 def _find_discovery_pack_bounds(arch):
-    start = arch.find(f'class="s_text_block {DISCOVERY_PACK_SECTION_MARKER}')
-    if start < 0:
-        marker = arch.find(f'data-name="{DISCOVERY_PACK_DATA_NAME}"')
+    from .home_univers import find_univers_section_end_index
+
+    univers_end = find_univers_section_end_index(arch)
+    search_after = univers_end if univers_end >= 0 else 0
+    end = _dual_engage_boundary(arch, search_after)
+    if end < 0:
+        return -1, -1
+
+    needs_sweep = (
+        _homepage_has_leaked_section_markup(arch)
+        or len(_discovery_pack_section_opens(arch)) > 1
+    )
+    if needs_sweep and univers_end >= 0:
+        return univers_end, end
+
+    start = arch.find(
+        f'<section class="s_text_block {DISCOVERY_PACK_SECTION_MARKER}',
+        search_after,
+    )
+    if start < 0 or start >= end:
+        marker = arch.find(f'data-name="{DISCOVERY_PACK_DATA_NAME}"', search_after)
         if marker >= 0:
-            start = arch.rfind('<section', 0, marker)
-    end = -1
-    if start >= 0:
-        end = arch.find('class="s_text_block ck-dual-engage', start)
-        if end < 0:
-            end = arch.find('data-name="CK Dual Pro Newsletter', start)
-            if end >= 0:
-                end = arch.rfind('<section', start, end)
-        if end < 0:
-            end = arch.find('class="s_ck_pro_banner', start)
-            if end >= 0:
-                end = arch.rfind('<section', start, end)
+            start = arch.rfind('<section', search_after, marker)
+    if start < 0 or start >= end:
+        start = search_after
     return start, end
 
 
@@ -176,9 +221,21 @@ def _patch_homepage_discovery_pack_arch(arch, discovery_arch):
     return new_arch, True
 
 
+def _homepage_has_leaked_section_markup(arch):
+    """True si une section home perd son ``<section`` ouvrant (fuite markup visible)."""
+    return bool(re.search(
+        r'</section>\s*class="s_text_block ck-(?:dual-engage|discovery-pack|home-editorial)',
+        arch,
+    ))
+
+
 def discovery_pack_arch_is_valid(arch):
     """Recette : bloc présent · CTA /kits · pas de placeholder Odoo image."""
     if DISCOVERY_PACK_SECTION_MARKER not in arch:
+        return False
+    if _homepage_has_leaked_section_markup(arch):
+        return False
+    if len(_discovery_pack_section_opens(arch)) > 1:
         return False
     chunk_start = arch.find(DISCOVERY_PACK_SECTION_MARKER)
     chunk = arch[chunk_start:chunk_start + 8000]
@@ -189,6 +246,10 @@ def discovery_pack_arch_is_valid(arch):
     if 'ck-discovery-pack--polish-v1' not in chunk:
         return False
     if 'pt48 pb48' not in chunk:
+        return False
+    if 'stretched-link' in chunk:
+        return False
+    if 'ck-discovery-pack__actions' not in chunk:
         return False
     if 'fa-3x' in chunk:
         return False
@@ -224,7 +285,13 @@ def bootstrap_home_discovery_pack(env):
     if not discovery_arch:
         return False
 
-    if discovery_pack_arch_is_valid(arch):
+    if _homepage_has_leaked_section_markup(arch):
+        from .home_dual_engage import bootstrap_home_dual_engage
+
+        bootstrap_home_dual_engage(env)
+        arch = _arch_as_string(view.arch_db or view.arch)
+
+    if discovery_pack_arch_is_valid(arch) and not _homepage_has_leaked_section_markup(arch):
         return True
 
     new_arch, patched = _patch_homepage_discovery_pack_arch(arch, discovery_arch)
@@ -232,4 +299,9 @@ def bootstrap_home_discovery_pack(env):
         return patched
 
     view.write({'arch_db': new_arch})
-    return discovery_pack_arch_is_valid(new_arch)
+    if _homepage_has_leaked_section_markup(new_arch):
+        from .home_dual_engage import bootstrap_home_dual_engage
+
+        bootstrap_home_dual_engage(env)
+        arch = _arch_as_string(view.arch_db or view.arch)
+    return discovery_pack_arch_is_valid(arch) and not _homepage_has_leaked_section_markup(arch)
