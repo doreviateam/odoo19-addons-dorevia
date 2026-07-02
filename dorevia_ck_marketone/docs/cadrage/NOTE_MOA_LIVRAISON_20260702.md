@@ -156,14 +156,14 @@ Les lots home **001C** et **001A** sont **clôturés GO** (2 juillet 2026). Proc
 
 | Lot / thème | Objectif | Statut |
 | --- | --- | --- |
-| **CK-HOME-001B** | Autres blocs home (éditorial, coups de cœur, dual Pro/Newsletter…) — **non ticketé** | Backlog produit — cadrage MOA à ouvrir |
+| **CK-HOME-001B** | Réserves visuelles home (vedettes E1, coffret E2, arbitrage `/promotions` E3) | **Cadrage ouvert** — [`NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md`](NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md) |
 | **SEO / canonical démo** | `web.base.url` ou override canonical sur URL tunnel / prod | Réserve CK-DEMO-ONLINE-001 |
 | **V1.1 technique** | Dettes D1–D3 (cards Manio, ruban fallback, breakpoint 480–575 px) | Backlog — cf. clôture V1 |
 | **D4 réseau header** | Appel `/shop/wishlist?count=1` sur `#top_menu` | Backlog technique |
 | **Éditorial / i18n** | Rayons, fiches, traductions EN, contenu CMS | En cours / backlog |
 | **Hors périmètre court terme** | Refonte `/producteurs`, communauté, forum, blog, déploiement prod | Non engagé |
 
-**Recommandation MOA** : avant d’ouvrir **CK-HOME-001B**, valider le périmètre bloc par bloc (maquette vs existant) — le hero et l’hygiène visible sont stabilisés ; le reste de la home V1 (vedettes, coffrets, dual Pro) est inchangé depuis le gel boutique.
+**Recommandation MOA** : valider le cadrage [`NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md`](NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md) — priorité **vedettes + coffret** (E1/E2) ; hero et hygiène visible déjà stabilisés.
 
 ---
 
