@@ -5,7 +5,7 @@
 | Date | 2 juillet 2026 |
 | Projet | C-Kréyòl Marketone — home |
 | Destinataires | MOA, Produit, QA, Dev |
-| Statut | **Cadrage ouvert — en attente arbitrage MOA** |
+| Statut | **GO ticket Dev** — périmètre 001B-a + 001B-b validé MOA |
 | Module | `dorevia_ck_marketone_content` (+ `dorevia_ck_theme` si correctif CSS vedettes) |
 | Version contenu de référence | **19.0.1.75.0** (post CK-HOME-001A) |
 | Base recette | `dorevia_ck_marketone_01` — http://localhost:18079 |
@@ -56,6 +56,25 @@ Contrôle rapide post-upgrade :
 | Hero kicker / titre / CTA producteurs | Présents |
 | Blocs `ck-featured`, `ck-discovery`, `ck-dual` | Présents |
 | Version module | `19.0.1.75.0` |
+
+---
+
+## Gouvernance — renommage lot producteurs
+
+L’ancienne intention « **CK-HOME-001B = bloc producteurs / transformateurs** » est **abandonnée** pour éviter toute confusion documentaire.
+
+| Référence | Nouveau sens |
+| --- | --- |
+| **CK-HOME-001B** (ce cadrage) | Réserves visuelles home post-001A — vedettes · coffret · (promotions P2) |
+| **Futur lot producteurs home** | **`CK-HOME-002`** ou **`CK-HOME-PRODUCERS-001`** — à cadrer séparément |
+
+---
+
+## Ticket Dev
+
+**GO rédaction** — [`TICKET_DEV_HOME_VISUAL_CK_HOME_001B.md`](TICKET_DEV_HOME_VISUAL_CK_HOME_001B.md)
+
+Périmètre ticket initial : **001B-a + 001B-b uniquement**. `/promotions` (001B-c) reste P2 hors ticket.
 
 ---
 
@@ -153,10 +172,9 @@ Scripts réutilisables : `ck_lot2_*`, `ck_lot3_*`, `ck_lot4_*` dans `docs/design
 
 ```text
 CK-HOME-001A / 001C → clôturés GO
-Sandbox post-upgrade → OK
-CK-HOME-001B → ouvrir sur E1 + E2 (vedettes + coffret) en priorité P1
-E3 promotions → arbitrage MOA avant ou après 001B
-→ Feu vert MOA requis pour rédaction TICKET_DEV_CK_HOME_001B
+CK-HOME-001B → GO ticket Dev (001B-a vedettes + 001B-b coffret)
+001B-c /promotions → P2 hors ticket initial
+Bloc producteurs home → renommer CK-HOME-002 ou CK-HOME-PRODUCERS-001
 ```
 
 ---

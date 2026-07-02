@@ -156,7 +156,8 @@ Les lots home **001C** et **001A** sont **clôturés GO** (2 juillet 2026). Proc
 
 | Lot / thème | Objectif | Statut |
 | --- | --- | --- |
-| **CK-HOME-001B** | Réserves visuelles home (vedettes E1, coffret E2, arbitrage `/promotions` E3) | **Cadrage ouvert** — [`NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md`](NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md) |
+| **CK-HOME-001B** | Vedettes E1 + coffret E2 (visuel) | **GO Dev** — [`TICKET_DEV_HOME_VISUAL_CK_HOME_001B.md`](TICKET_DEV_HOME_VISUAL_CK_HOME_001B.md) |
+| **CK-HOME-002** (ex-001B producteurs) | Bloc producteurs / transformateurs en home | Backlog — cadrage à ouvrir |
 | **SEO / canonical démo** | `web.base.url` ou override canonical sur URL tunnel / prod | Réserve CK-DEMO-ONLINE-001 |
 | **V1.1 technique** | Dettes D1–D3 (cards Manio, ruban fallback, breakpoint 480–575 px) | Backlog — cf. clôture V1 |
 | **D4 réseau header** | Appel `/shop/wishlist?count=1` sur `#top_menu` | Backlog technique |
@@ -172,7 +173,7 @@ Les lots home **001C** et **001A** sont **clôturés GO** (2 juillet 2026). Proc
 ```text
 Navigation Option C · démo tunnel · home CK-HOME-001C · hero CK-HOME-001A (CA6 mobile documenté)
 → GO exploitation démo
-→ Prochaine étape : cadrage CK-HOME-001B ou dette SEO tunnel selon priorité MOA
+→ Prochaine étape : **exécution CK-HOME-001B** (vedettes + coffret) — ticket Dev ouvert
 ```
 
 ---
