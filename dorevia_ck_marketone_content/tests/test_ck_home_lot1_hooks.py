@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape
 from odoo.addons.dorevia_ck_marketone_content.home_hero import (
     HERO_CAROUSEL_INTERVAL_MS,
     HERO_CAROUSEL_MARKER,
-    HERO_CTA_PRO_LABEL,
+    HERO_CTA_PRODUCTEURS_LABEL,
     HERO_CTA_SHOP_LABEL,
     HERO_EDITABLE_MEDIA_MARKER,
     HERO_KICKER,
@@ -40,8 +40,8 @@ class TestCkHomeLot1Hooks(TransactionCase):
         self.assertIn(escape(HERO_KICKER), arch)
         self.assertIn('href="/shop"', arch)
         self.assertIn(HERO_CTA_SHOP_LABEL, arch)
-        self.assertIn('href="/professionnels"', arch)
-        self.assertIn(HERO_CTA_PRO_LABEL, arch)
+        self.assertIn('href="/producteurs"', arch)
+        self.assertIn(HERO_CTA_PRODUCTEURS_LABEL, arch)
         self.assertNotIn('website.s_cover_default_image', arch)
         self.assertIn('ck-hero__grid', arch)
         self.assertIn(HERO_CAROUSEL_MARKER, arch)

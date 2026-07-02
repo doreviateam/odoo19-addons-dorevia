@@ -11,15 +11,14 @@ _HERO_LEGACY_FOCAL_CLASS = ' ck-hero__slide-media--focal-product'
 
 HERO_VARIANT_MARKER = 'ck-hero--marketone-v1'
 HERO_DATA_NAME = 'CK Hero home V1'
-HERO_KICKER = 'Boutique créole · Livraison France & Europe'
-HERO_TITLE = 'Les saveurs créoles, prêtes à commander.'
+HERO_KICKER = 'Produits créoles · Producteurs · Savoir-faire'
+HERO_TITLE = 'C-Kréyòl — les saveurs créoles en Europe'
 HERO_LEAD = (
-    'Épicerie, boissons, coffrets et bien-être — prix visibles, '
-    'producteurs sélectionnés dans les territoires créolophones, '
-    'achat en confiance.'
+    "Une sélection de produits, producteurs et savoir-faire créoles, "
+    "à découvrir depuis la France et l'Europe."
 )
-HERO_CTA_SHOP_LABEL = 'Voir la boutique'
-HERO_CTA_PRO_LABEL = 'Espace professionnel'
+HERO_CTA_SHOP_LABEL = 'Découvrir la boutique'
+HERO_CTA_PRODUCTEURS_LABEL = 'Voir les producteurs'
 HERO_VISUAL_ALT = 'Sélection de produits créoles — épicerie et condiments'
 HERO_CAROUSEL_ID = 'ckHeroVisualCarousel'
 HERO_CAROUSEL_MARKER = 'ck-hero__visual-carousel'
@@ -124,7 +123,7 @@ def build_home_hero_arch(env):
     title = escape(HERO_TITLE)
     lead = escape(HERO_LEAD)
     cta_shop = escape(HERO_CTA_SHOP_LABEL)
-    cta_pro = escape(HERO_CTA_PRO_LABEL)
+    cta_producteurs = escape(HERO_CTA_PRODUCTEURS_LABEL)
     visual = _hero_visual_html()
     return f"""
 <section class="s_ck_hero ck-hero {HERO_VARIANT_MARKER} o_colored_level" data-snippet="s_ck_hero" data-name="{HERO_DATA_NAME}">
@@ -136,7 +135,7 @@ def build_home_hero_arch(env):
                 <p class="ck-hero__lead">{lead}</p>
                 <div class="ck-hero__cta">
                     <a href="/shop" class="btn btn-primary">{cta_shop}</a>
-                    <a href="/professionnels" class="btn btn-secondary">{cta_pro}</a>
+                    <a href="/producteurs" class="btn btn-secondary">{cta_producteurs}</a>
                 </div>
             </div>
             <div class="ck-hero__visual-col">
@@ -190,8 +189,8 @@ def hero_home_arch_is_valid(arch):
         HERO_LEAD[:40] in chunk,
         'href="/shop"' in chunk,
         HERO_CTA_SHOP_LABEL in chunk,
-        'href="/professionnels"' in chunk,
-        HERO_CTA_PRO_LABEL in chunk,
+        'href="/producteurs"' in chunk,
+        HERO_CTA_PRODUCTEURS_LABEL in chunk,
         'ck-hero__visual' in chunk,
         'ck-hero__grid' in chunk,
         HERO_CAROUSEL_MARKER in chunk,

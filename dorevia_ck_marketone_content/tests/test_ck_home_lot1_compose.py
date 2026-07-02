@@ -13,7 +13,7 @@ from odoo.addons.dorevia_ck_marketone_content.home_editorial import (
 from odoo.addons.dorevia_ck_marketone_content.home_hero import (
     HERO_CAROUSEL_INTERVAL_MS,
     HERO_CAROUSEL_MARKER,
-    HERO_CTA_PRO_LABEL,
+    HERO_CTA_PRODUCTEURS_LABEL,
     HERO_CTA_SHOP_LABEL,
     HERO_KICKER,
     HERO_TITLE,
@@ -47,10 +47,10 @@ class TestCkHomeLot1Compose(HttpCase):
         html = self.url_open('/').text
         chunk = self._hero_chunk(html)
         self.assertIn(HERO_TITLE, chunk)
-        self.assertIn('Boutique créole', chunk)
-        self.assertIn('Livraison France', chunk)
+        self.assertIn('Produits créoles', chunk)
+        self.assertIn('Producteurs', chunk)
         self.assertIn(HERO_CTA_SHOP_LABEL, chunk)
-        self.assertIn(HERO_CTA_PRO_LABEL, chunk)
+        self.assertIn(HERO_CTA_PRODUCTEURS_LABEL, chunk)
 
     def test_home_hero_no_cover_default_image(self):
         html = self.url_open('/').text
@@ -60,7 +60,7 @@ class TestCkHomeLot1Compose(HttpCase):
 
     def test_home_hero_ctas_http_200(self):
         self.assertEqual(self.url_open('/shop').status_code, 200)
-        self.assertEqual(self.url_open('/professionnels').status_code, 200)
+        self.assertEqual(self.url_open('/producteurs').status_code, 200)
 
     def test_home_hero_before_featured(self):
         html = self.url_open('/').text
