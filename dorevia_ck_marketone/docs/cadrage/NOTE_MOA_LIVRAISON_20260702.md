@@ -9,7 +9,7 @@
 | Base | `dorevia_ck_marketone_01` |
 | URL locale | http://localhost:18079 |
 | URL démo publique | https://assure-violation-markets-factors.trycloudflare.com |
-| Version contenu | `dorevia_ck_marketone_content` **19.0.1.74.0** |
+| Version contenu | `dorevia_ck_marketone_content` **19.0.1.75.0** |
 | Version thème | `dorevia_ck_theme` **19.0.1.114.0** (navigation desktop) |
 
 ---
@@ -21,11 +21,11 @@ Depuis le gel boutique V1, quatre chantiers complémentaires ont été livrés e
 1. **Navigation header** — catalogue dynamique stabilisé, ordre MOA confirmé, icône Boutique desktop.
 2. **Démo en ligne** — boutique accessible via tunnel public pour présentation MOA / acheteur.
 3. **Home — hygiène visible (CK-HOME-001C)** — marque, newsletter FR, 4ᵉ carte Boissons.
-4. **Home — hero (CK-HOME-001A)** — promesse repositionnée produits + producteurs + savoir-faire.
+4. **Home — hero (CK-HOME-001A)** — promesse repositionnée produits + producteurs + savoir-faire · recette mobile 390 px (CA6) documentée.
 
 Le parcours acheteur reste intact : **Home → Shop → fiche produit → panier → checkout**. Aucun changement sur le tunnel de commande.
 
-**Version contenu** : `dorevia_ck_marketone_content` **19.0.1.75.0**
+**Commit de référence 001A** : `57eb3725` — `feat(ck-home): CK-HOME-001A repositionner le hero`
 
 ---
 
@@ -119,6 +119,10 @@ Parcours validé : Home → navigation → Shop → fiche produit → Producteur
 | CTA principal | `Découvrir la boutique` → `/shop` |
 | CTA secondaire | `Voir les producteurs` → `/producteurs` |
 
+**Recette mobile (CA6)** : viewport **390 px** — pas d'overflow (`390/390`), textes 001A présents, 2 CTA empilés, visuel carrousel visible.
+
+Capture : [`ck_home_001a_hero_mobile_390.png`](../design/maquette_01.2/captures/ck_home_001a_20260702/ck_home_001a_hero_mobile_390.png)
+
 > Détail 001A : [`NOTE_MOA_CLOTURE_CK_HOME_001A_20260702.md`](NOTE_MOA_CLOTURE_CK_HOME_001A_20260702.md)
 
 ---
@@ -130,10 +134,11 @@ Sur l’URL démo ou `localhost:18079` :
 1. **Hero** : kicker « Produits créoles… » · titre « C-Kréyòl — les saveurs créoles en Europe » · CTA producteurs.
 2. **Header** : ordre Option C · icône Boutique · dropdowns Épicerie / Boissons / Artisanat.
 3. **Home** : 4 cartes univers · intro « Quatre univers » · bloc newsletter en FR.
-3. **Footer** : © **C-Kréyòl** (avec accent).
-4. **Shop** : `/shop` charge · fiche produit témoin OK.
-5. **Producteurs** : `/producteurs` — photos chargées.
-6. **Mobile** (390 px) : menu drawer · pas de débordement horizontal.
+4. **Footer** : © **C-Kréyòl** (avec accent).
+5. **Shop** : `/shop` charge · fiche produit témoin OK.
+6. **Producteurs** : `/producteurs` — photos chargées.
+7. **Mobile 390 px — header** : menu drawer · pas de débordement horizontal (cf. démo CK-DEMO-ONLINE-001).
+8. **Mobile 390 px — hero 001A (CA6)** : textes et CTA conformes · empilement vertical · capture archivée (§ 3).
 
 ---
 
@@ -147,17 +152,27 @@ Dettes V1.1 et backlog inchangés — cf. [`NOTE_MOA_CLOTURE_V1_BOUTIQUE_2026062
 
 ## 6. Suite backlog
 
-| Lot | Objectif | Statut |
+Les lots home **001C** et **001A** sont **clôturés GO** (2 juillet 2026). Prochaines pistes, par priorité produit :
+
+| Lot / thème | Objectif | Statut |
 | --- | --- | --- |
-| CK-HOME-001B / suivants | Autres blocs home si planifiés | Backlog produit |
+| **CK-HOME-001B** | Autres blocs home (éditorial, coups de cœur, dual Pro/Newsletter…) — **non ticketé** | Backlog produit — cadrage MOA à ouvrir |
+| **SEO / canonical démo** | `web.base.url` ou override canonical sur URL tunnel / prod | Réserve CK-DEMO-ONLINE-001 |
+| **V1.1 technique** | Dettes D1–D3 (cards Manio, ruban fallback, breakpoint 480–575 px) | Backlog — cf. clôture V1 |
+| **D4 réseau header** | Appel `/shop/wishlist?count=1` sur `#top_menu` | Backlog technique |
+| **Éditorial / i18n** | Rayons, fiches, traductions EN, contenu CMS | En cours / backlog |
+| **Hors périmètre court terme** | Refonte `/producteurs`, communauté, forum, blog, déploiement prod | Non engagé |
+
+**Recommandation MOA** : avant d’ouvrir **CK-HOME-001B**, valider le périmètre bloc par bloc (maquette vs existant) — le hero et l’hygiène visible sont stabilisés ; le reste de la home V1 (vedettes, coffrets, dual Pro) est inchangé depuis le gel boutique.
 
 ---
 
 ## Verdict MOA proposé
 
 ```text
-Navigation Option C · démo tunnel · home CK-HOME-001C · hero CK-HOME-001A
+Navigation Option C · démo tunnel · home CK-HOME-001C · hero CK-HOME-001A (CA6 mobile documenté)
 → GO exploitation démo
+→ Prochaine étape : cadrage CK-HOME-001B ou dette SEO tunnel selon priorité MOA
 ```
 
 ---
