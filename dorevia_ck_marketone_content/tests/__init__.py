@@ -54,6 +54,7 @@ from . import test_ck_home_section3_featured_field
 from . import test_ck_home_section3_featured_pricelist
 from . import test_ck_home_section4_univers
 from . import test_ck_home_section4_univers_compose
+from . import test_ck_home_001c
 from . import test_ck_contactus_a11y_rgpd
 from . import test_ck_footer_legal_links
 from . import test_ck_shop_category_tiles

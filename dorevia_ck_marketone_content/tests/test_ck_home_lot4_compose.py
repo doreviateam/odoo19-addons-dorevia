@@ -24,6 +24,8 @@ QA_NEWSLETTER_TEST_EMAIL = 'qa-home-lot4-newsletter@test.ck.local'
 
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_home_lot4')
 class TestCkHomeLot4Compose(HttpCase):
+    FR_HEADERS = {'Accept-Language': 'fr-FR,fr;q=0.9'}
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -32,13 +34,16 @@ class TestCkHomeLot4Compose(HttpCase):
         bootstrap_home_discovery_pack(cls.env)
         bootstrap_home_dual_engage(cls.env)
 
+    def _open_fr_home(self):
+        return self.url_open('/', headers=self.FR_HEADERS)
+
     def _dual_chunk(self, html):
         start = html.find('ck-dual-engage--compact')
         self.assertGreater(start, 0)
         return html[start:start + 15000]
 
     def test_home_dual_block_present(self):
-        html = self.url_open('/').text
+        html = self._open_fr_home().text
         chunk = self._dual_chunk(html)
         self.assertIn(PRO_DUAL_TITLE, chunk)
         self.assertIn('href="/professionnels"', chunk)
@@ -48,16 +53,16 @@ class TestCkHomeLot4Compose(HttpCase):
         self.assertIn('Désinscription possible', chunk)
 
     def test_home_dual_two_columns_desktop(self):
-        html = self.url_open('/').text
+        html = self._open_fr_home().text
         chunk = self._dual_chunk(html)
         self.assertGreaterEqual(chunk.count('col-lg-6'), 2)
 
     def test_home_dual_order_after_discovery(self):
-        html = self.url_open('/').text
+        html = self._open_fr_home().text
         self.assertLess(html.find('ck-discovery-pack'), html.find('ck-dual-engage--compact'))
 
     def test_home_pro_banner_removed(self):
-        html = self.url_open('/').text
+        html = self._open_fr_home().text
         self.assertNotIn('s_ck_pro_banner', html)
         self.assertNotIn('ck-pro-banner', html)
 
@@ -92,13 +97,13 @@ class TestCkHomeLot4Compose(HttpCase):
         contact.unlink()
 
     def test_home_lot2_lot3_non_regression(self):
-        html = self.url_open('/').text
+        html = self._open_fr_home().text
         self.assertIn('ck-featured-products__grid--stable', html)
         self.assertIn('ck-discovery-pack', html)
         self.assertIn('href="/kits"', html)
 
     def test_home_no_technical_leaks_in_dual(self):
-        html = self.url_open('/').text
+        html = self._open_fr_home().text
         chunk = self._dual_chunk(html)
         self.assertNotIn('dynamic_snippet', chunk.lower())
         self.assertIsNone(re.search(r'\bTODO\b|\bFIXME\b', chunk))

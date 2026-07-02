@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-"""Home Section 4 — Acheter par univers · 3 cards visuelles catalogue."""
+"""Home Section 4 — Acheter par univers · 4 cards visuelles catalogue."""
 import re
 from xml.sax.saxutils import escape
 
 UNIVERS_SECTION_MARKER = 'ck-univers-cards'
 UNIVERS_DATA_NAME = 'CK Acheter par univers'
 UNIVERS_TITLE = 'Acheter par univers'
-UNIVERS_INTRO = 'Trois univers pour entrer dans la boutique en un clic.'
+UNIVERS_INTRO = 'Quatre univers pour entrer dans la boutique en un clic.'
 UNIVERS_CARD_SNIPPET = 's_ck_univers_card'
 UNIVERS_SECTION_SNIPPET = 's_ck_univers_cards'
 UNIVERS_EDITABLE_MEDIA_MARKER = 'o_editable_media'
 UNIVERS_CARD_EDITABLE_CLASS = 'ck-univers-card'
+UNIVERS_CARD_COUNT = 4
 # Bump à chaque changement des JPG par défaut (force refresh navigateur, cf. §7 note arch).
-UNIVERS_IMAGES_VERSION = '5'
+UNIVERS_IMAGES_VERSION = '6'
 
 
 def _univers_image_src(path):
@@ -40,6 +41,14 @@ _UNIVERS_CARD_SPECS = (
         'description': 'Farines, confitures, condiments et douceurs à découvrir.',
         'cta': "Voir l'épicerie",
         'image': '/dorevia_ck_marketone_content/static/img/ck_univers_epicerie.jpg',
+    },
+    {
+        'code': 'boissons',
+        'category_names': ('Boissons',),
+        'title': 'Boissons',
+        'description': 'Sirops, jus, infusions et boissons créoles pour accompagner les moments du quotidien.',
+        'cta': 'Voir les boissons',
+        'image': '/dorevia_ck_marketone_content/static/img/ck_univers_boissons.jpg',
     },
     {
         'code': 'soin',
@@ -81,7 +90,7 @@ def _find_univers_category(Category, spec):
 
 
 def _resolve_univers_cards(env):
-    """Retourne les 3 cards avec URL catégorie BO (fallback /shop si absente)."""
+    """Retourne les 4 cards avec URL catégorie BO (fallback /shop si absente)."""
     Category = env['product.public.category'].sudo()
     cards = []
     for spec in _UNIVERS_CARD_SPECS:
@@ -118,7 +127,7 @@ def _build_univers_card_html(card):
 
 def build_home_univers_arch(env):
     cards = _resolve_univers_cards(env)
-    if len(cards) != 3:
+    if len(cards) != UNIVERS_CARD_COUNT:
         return ''
     cards_inner = '\n            '.join(_build_univers_card_html(card) for card in cards)
     title = escape(UNIVERS_TITLE)
@@ -221,17 +230,19 @@ def univers_arch_is_valid(arch):
     chunk = arch[chunk_start:chunk_start + 12000]
     if UNIVERS_TITLE not in chunk or UNIVERS_INTRO not in chunk:
         return False
-    if chunk.count('ck-univers-card--') != 3:
+    if chunk.count('ck-univers-card--') != UNIVERS_CARD_COUNT:
         return False
-    if chunk.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"') != 3:
+    if chunk.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"') != UNIVERS_CARD_COUNT:
         return False
-    if chunk.count(UNIVERS_EDITABLE_MEDIA_MARKER) != 3:
+    if chunk.count(UNIVERS_EDITABLE_MEDIA_MARKER) != UNIVERS_CARD_COUNT:
         return False
-    if chunk.count('ck-univers-card__cover') != 3:
+    if chunk.count('ck-univers-card__cover') != UNIVERS_CARD_COUNT:
         return False
     if re.search(r'class="ck-univers-card[^"]*"[^>]*data-href=', chunk):
         return False
     if 'ck-univers-card--epicerie' not in chunk:
+        return False
+    if 'ck-univers-card--boissons' not in chunk:
         return False
     if 'ck-univers-card__media o_editable' not in chunk:
         return False
@@ -260,6 +271,8 @@ def _univers_arch_matches_bo(env, arch):
         return False
     if 'ck-univers-cards__head text-center' in arch:
         return False
+    if UNIVERS_INTRO not in arch:
+        return False
     chunk_start = arch.find(UNIVERS_SECTION_MARKER)
     if chunk_start >= 0:
         chunk = arch[chunk_start:chunk_start + 12000]
@@ -269,7 +282,7 @@ def _univers_arch_matches_bo(env, arch):
 
 
 def bootstrap_home_univers(env):
-    """Section 4 home — injecte la grille 3 univers visuels après Coups de cœur."""
+    """Section 4 home — injecte la grille 4 univers visuels après Coups de cœur."""
     if not env.is_superuser():
         env = env(su=True)
     website = env['website'].search([], limit=1)

@@ -144,6 +144,66 @@ def bootstrap_epicerie_category(env):
     return True
 
 
+BRAND_NAME = 'C-Kréyòl'
+BRAND_NAME_LEGACY = 'C-Kreyol'
+
+
+def bootstrap_brand_name(env):
+    """CK-HOME-001C — harmonise website.name en 'C-Kréyòl' (idempotent).
+
+    res.company.name n'est renommée que si elle porte encore l'ancien nom
+    exact 'C-Kreyol' — garde-fou pour ne jamais écraser une société réelle
+    déjà reconfigurée par ailleurs.
+    """
+    website = env['website'].sudo().search([], limit=1)
+    if not website:
+        return False
+    if website.name == BRAND_NAME_LEGACY:
+        website.write({'name': BRAND_NAME})
+    company = website.company_id.sudo()
+    if company and company.name == BRAND_NAME_LEGACY:
+        company.write({'name': BRAND_NAME})
+    return True
+
+
+FOOTER_COPYRIGHT_BRAND_VIEW_KEYS = (
+    'website.custom_copyright_ck_phase1',
+    'website.footer_copyright_company_name',
+    'website.footer_custom',
+    # /terms est protégé par la garde anti-écrasement de _bootstrap_cms_page
+    # (fingerprint désynchronisée) : on corrige le texte en place plutôt que
+    # de forcer une régénération complète de la page.
+    'dorevia_ck_marketone_content.terms_page',
+)
+
+
+def bootstrap_footer_copyright_brand(env):
+    """CK-HOME-001C — corrige 'C-Kreyol' figé dans des vues hors périmètre bootstrap.
+
+    Ces vues ont été éditées à la main en BO (xpath replace sur
+    ``o_footer_copyright_name`` + bloc "Boutique en ligne...") lors d'une
+    phase antérieure, ou sont protégées par la garde anti-écrasement CMS :
+    dans les deux cas aucun bootstrap existant ne les couvre, le texte y est
+    corrigé en place sans toucher au reste de l'arch.
+    """
+    View = env['ir.ui.view'].sudo()
+    changed = False
+    for key in FOOTER_COPYRIGHT_BRAND_VIEW_KEYS:
+        view = View.search([('key', '=', key)], limit=1)
+        if not view:
+            continue
+        arch_raw = view.arch_db or view.arch or ''
+        if isinstance(arch_raw, dict):
+            arch = next(iter(arch_raw.values()), '')
+        else:
+            arch = arch_raw or ''
+        if BRAND_NAME_LEGACY not in arch:
+            continue
+        view.write({'arch_db': arch.replace(BRAND_NAME_LEGACY, BRAND_NAME)})
+        changed = True
+    return changed
+
+
 PROFESSIONNELS_PAGE_URL = '/professionnels'
 PROFESSIONNELS_VIEW_KEY = 'dorevia_ck_marketone_content.professionnels_page'
 LEGACY_PROFESSIONNELS_VIEW_KEY = 'dorevia_ck_theme.professionnels_page'
@@ -297,14 +357,23 @@ def _localize_newsletter_form_html(form_html):
         flags=re.I,
     )
     form_html = form_html.replace('value="Subscribe"', "value=\"S'inscrire\"")
+    for stale, fr in (
+        ('Thanks for registering!', 'Merci pour votre inscription !'),
+        ('Thanks for registering', 'Merci pour votre inscription !'),
+    ):
+        form_html = form_html.replace(stale, fr)
     return form_html
 
 
 def render_newsletter_subscribe_form(env):
     """Snippet natif website_mass_mailing · list_id BO."""
     mailing_list = bootstrap_newsletter_mailing_list(env)
+    website = env['website'].sudo().search([], limit=1)
+    lang = website.default_lang_id.code if website and website.default_lang_id else 'fr_FR'
     form_html = str(
-        env['ir.qweb']._render('website_mass_mailing.s_newsletter_subscribe_form', {})
+        env['ir.qweb'].with_context(lang=lang)._render(
+            'website_mass_mailing.s_newsletter_subscribe_form', {},
+        )
     )
     form_html = re.sub(
         r'data-list-id="\d+"',
@@ -1034,6 +1103,8 @@ def bootstrap_recipes_page(env):
 
 def bootstrap_all_marketone_content(env):
     """Ensemble des bootstraps contenu CK (post_init · migrations)."""
+    bootstrap_brand_name(env)
+    bootstrap_footer_copyright_brand(env)
     bootstrap_newsletter_mailing_list(env)
     bootstrap_epicerie_category(env)
     bootstrap_published_products(env)

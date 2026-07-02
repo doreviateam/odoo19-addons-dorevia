@@ -4,7 +4,7 @@ from xml.sax.saxutils import escape
 
 EDITORIAL_SECTION_MARKER = 'ck-home-editorial'
 EDITORIAL_DATA_NAME = 'CK Éditorial bas de page'
-EDITORIAL_TITLE = 'C-Kreyol, la boutique des saveurs créoles'
+EDITORIAL_TITLE = 'C-Kréyòl, la boutique des saveurs créoles'
 EDITORIAL_LEAD = (
     'CK met en ligne une sélection d\'agro-produits transformés dans les '
     'territoires créolophones. Notre mission : rendre l\'achat simple, les '

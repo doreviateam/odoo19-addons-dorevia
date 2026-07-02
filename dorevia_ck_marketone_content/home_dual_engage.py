@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Home Lot 4 — Bloc double Pro / Newsletter (MOA maquette V1)."""
+import re
+
 from .hooks import (
     NEWSLETTER_RGPD_NOTE,
     PRO_DUAL_TITLE,
@@ -117,9 +119,11 @@ def dual_engage_home_arch_is_valid(arch, env):
         f'data-list-id="{mailing_list.id}"' in chunk,
         NEWSLETTER_RGPD_NOTE.split('Désinscription')[0].strip()[:20] in chunk,
         'col-lg-6' in chunk,
+        bool(re.search(r'placeholder="[^"]*e-mail"', chunk, re.I)),
         "S'inscrire" in chunk,
-        'Votre adresse e-mail' in chunk,
         'pt48 pb48' in chunk,
+        'Thanks for registering' not in chunk,
+        'Merci pour votre inscription' in chunk,
     ]
     if not all(checks):
         return False

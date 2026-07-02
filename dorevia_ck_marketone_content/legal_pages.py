@@ -30,13 +30,13 @@ LEGAL_PAGE_ARCH = f"""
 <section class="s_title pt64 pb16 o_colored_level" data-snippet="s_title" data-name="Titre mentions légales">
     <div class="container s_allow_columns">
         <h1 class="display-5 fw-bold">Mentions légales</h1>
-        <p class="lead text-muted mb-0">Informations légales relatives à la boutique en ligne <strong>C-Kreyol</strong>, éditée par <strong>Marketone SAS</strong>.</p>
+        <p class="lead text-muted mb-0">Informations légales relatives à la boutique en ligne <strong>C-Kréyòl</strong>, éditée par <strong>Marketone SAS</strong>.</p>
     </div>
 </section>
 <section class="s_text_block pt32 pb16 o_colored_level" data-snippet="s_text_block" data-name="Éditeur">
     <div class="container s_allow_columns">
         <h2 class="h3-fs">Éditeur du site</h2>
-        <p>Le site <strong>C-Kreyol</strong> est édité par&#160;:</p>
+        <p>Le site <strong>C-Kréyòl</strong> est édité par&#160;:</p>
         <p><strong>Marketone SAS</strong>, société par actions simplifiée (SAS), au capital de <strong>10&#160;000&#160;€</strong> <em>[DONNÉE FICTIVE — À REMPLACER AVANT GO-LIVE PUBLIC]</em>, dont le siège social est situé <strong>12 rue Example, 44000 Nantes, France</strong> <em>[DONNÉE FICTIVE — À REMPLACER AVANT GO-LIVE PUBLIC]</em>.</p>
         <p>Immatriculée au <strong>RCS Nantes 123&#160;456&#160;789</strong> <em>[DONNÉE FICTIVE]</em> — <strong>SIREN 123&#160;456&#160;789</strong> <em>[SIREN FICTIF — NON PUBLIABLE]</em>.</p>
         <p>Numéro de TVA intracommunautaire&#160;: <strong>FR&#160;12&#160;123456789</strong> <em>[TVA FICTIVE — NON PUBLIABLE]</em>.</p>
@@ -74,7 +74,7 @@ LEGAL_PAGE_ARCH = f"""
 <section class="s_text_block pt16 pb64 o_colored_level" data-snippet="s_text_block" data-name="CGV renvoi">
     <div class="container s_allow_columns">
         <h2 class="h3-fs">Conditions générales de vente</h2>
-        <p class="mb-0">Les ventes sur la boutique en ligne C-Kreyol sont soumises aux <a href="/terms">conditions générales de vente</a> acceptées électroniquement lors de la commande. Contact SAV&#160;: <a href="mailto:contact.ck@marketone.com">contact.ck@marketone.com</a> — <a href="/contactus">formulaire de contact</a>.</p>
+        <p class="mb-0">Les ventes sur la boutique en ligne C-Kréyòl sont soumises aux <a href="/terms">conditions générales de vente</a> acceptées électroniquement lors de la commande. Contact SAV&#160;: <a href="mailto:contact.ck@marketone.com">contact.ck@marketone.com</a> — <a href="/contactus">formulaire de contact</a>.</p>
     </div>
 </section>
 </div>
@@ -86,7 +86,7 @@ PRIVACY_PAGE_ARCH = f"""
 <section class="s_title pt64 pb16 o_colored_level" data-snippet="s_title" data-name="Titre confidentialité">
     <div class="container s_allow_columns">
         <h1 class="display-5 fw-bold">Politique de confidentialité</h1>
-        <p class="lead text-muted mb-0">Traitement des données personnelles sur la boutique <strong>C-Kreyol</strong> (RGPD · loi «&#160;Informatique et Libertés&#160;»).</p>
+        <p class="lead text-muted mb-0">Traitement des données personnelles sur la boutique <strong>C-Kréyòl</strong> (RGPD · loi «&#160;Informatique et Libertés&#160;»).</p>
     </div>
 </section>
 <section class="s_text_block pt32 pb16 o_colored_level" data-snippet="s_text_block" data-name="Responsable">
@@ -173,7 +173,7 @@ TERMS_PAGE_ARCH = f"""
 <section class="s_title pt64 pb16 o_colored_level" data-snippet="s_title" data-name="Titre CGV">
     <div class="container s_allow_columns">
         <h1 class="display-5 fw-bold">Conditions générales de vente</h1>
-        <p class="lead text-muted mb-0">Ventes sur la boutique en ligne <strong>C-Kreyol</strong>, exploitée par <strong>Marketone SAS</strong>.</p>
+        <p class="lead text-muted mb-0">Ventes sur la boutique en ligne <strong>C-Kréyòl</strong>, exploitée par <strong>Marketone SAS</strong>.</p>
     </div>
 </section>
 <section class="s_text_block pt32 pb16 o_colored_level" data-snippet="s_text_block" data-name="Vendeur">
@@ -186,7 +186,7 @@ TERMS_PAGE_ARCH = f"""
 <section class="s_text_block pt16 pb16 o_colored_level" data-snippet="s_text_block" data-name="Objet">
     <div class="container s_allow_columns">
         <h2 class="h3-fs">Objet</h2>
-        <p class="mb-0">Les présentes CGV définissent les droits et obligations des parties dans le cadre de la vente en ligne de produits proposés sur C-Kreyol.</p>
+        <p class="mb-0">Les présentes CGV définissent les droits et obligations des parties dans le cadre de la vente en ligne de produits proposés sur C-Kréyòl.</p>
     </div>
 </section>
 <section class="s_text_block pt16 pb16 o_colored_level" data-snippet="s_text_block" data-name="Produits et prix">

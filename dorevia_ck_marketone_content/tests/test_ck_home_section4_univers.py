@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Tests hooks Section 4 — Acheter par univers · 3 cards visuelles."""
+"""Tests hooks Section 4 — Acheter par univers · 4 cards visuelles."""
 
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -35,7 +35,7 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
 
         bootstrap_epicerie_category(cls.env)
         Category = cls.env['product.public.category'].sudo()
-        for name in ('Épicerie', 'Maison & bien-être', 'Artisanat'):
+        for name in ('Épicerie', 'Boissons', 'Maison & bien-être', 'Artisanat'):
             if not Category.search([('name', '=', name)], limit=1):
                 Category.create({'name': name})
         bootstrap_epicerie_category(cls.env)
@@ -58,20 +58,24 @@ class TestCkHomeSection4UniversHooks(TransactionCase):
         self.assertIn(UNIVERS_SECTION_MARKER, arch)
         self.assertIn(UNIVERS_TITLE, arch)
         self.assertIn(UNIVERS_INTRO, arch)
-        self.assertEqual(arch.count('ck-univers-card--'), 3)
+        self.assertEqual(arch.count('ck-univers-card--'), 4)
         self.assertIn('Épicerie créole', arch)
+        self.assertIn('Boissons', arch)
         self.assertIn('Soin &amp; bien-être', arch)
         self.assertIn('Artisanat &amp; culture', arch)
         self.assertIn("Voir l'épicerie", arch)
+        self.assertIn('Voir les boissons', arch)
         self.assertNotIn('Packs & découvertes', arch)
         self.assertNotIn('route-hint', arch)
-        self.assertEqual(arch.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"'), 3)
-        self.assertEqual(arch.count(UNIVERS_EDITABLE_MEDIA_MARKER), 3)
-        self.assertEqual(arch.count('ck-univers-card__cover'), 3)
+        self.assertEqual(arch.count(f'data-snippet="{UNIVERS_CARD_SNIPPET}"'), 4)
+        self.assertEqual(arch.count(UNIVERS_EDITABLE_MEDIA_MARKER), 4)
+        self.assertEqual(arch.count('ck-univers-card__cover'), 4)
         self.assertNotIn('data-href=', arch.split('ck-univers-cards__grid')[-1].split('</section>')[0])
-        self.assertIn('ck_univers_epicerie.jpg?v=5', arch)
+        self.assertIn('ck_univers_epicerie.jpg?v=6', arch)
+        self.assertIn('ck_univers_boissons.jpg?v=6', arch)
         self.assertIn('ck-univers-card__media o_editable', arch)
         self.assertIn('ck-univers-card--epicerie', arch)
+        self.assertIn('ck-univers-card--boissons', arch)
         self.assertNotIn('data-snippet="s_ck_univers_cards"', arch.split('ck-univers-cards__grid')[0])
 
     def test_bootstrap_injects_univers_after_featured(self):
