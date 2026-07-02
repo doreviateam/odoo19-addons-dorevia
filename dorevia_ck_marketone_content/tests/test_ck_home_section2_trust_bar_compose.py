@@ -50,5 +50,5 @@ class TestCkHomeSection2TrustBarCompose(HttpCase):
         self.assertIn('data-bs-interval="25000"', html)
         self.assertIn('ck-featured-products__grid--stable', html)
         self.assertIn('ck-discovery-pack', html)
-        self.assertIn('ck-dual-engage--compact', html)
+        self.assertIn('ck-dual-engage--pro-only', html)
         self.assertIn('ck-home-editorial', html)

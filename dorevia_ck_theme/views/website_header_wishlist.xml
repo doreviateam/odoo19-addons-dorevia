@@ -24,6 +24,17 @@
         </xpath>
     </template>
 
+    <!-- CK-HOME-POLISH-001 — icône cœur explicite · contour neutre (badge zéro : natif Odoo 19 via d-none + updateWishlistNavBar) -->
+    <template id="ck_header_wishlist_icon"
+              inherit_id="website_sale_wishlist.header_wishlist_link"
+              name="CK Header — icône cœur favoris"
+              priority="42">
+        <xpath expr="//i[contains(@class, 'fa-heart')]" position="attributes">
+            <attribute name="class">fa fa-heart-o ck-header__wish-icon</attribute>
+            <attribute name="aria-hidden">true</attribute>
+        </xpath>
+    </template>
+
     <!-- Nav-U1 — favoris compact icône H1.2 (entre compte et panier) -->
     <template id="ck_template_header_h1_2_wishlist"
               inherit_id="dorevia_ck_theme.ck_template_header_h1_2_three_levels"

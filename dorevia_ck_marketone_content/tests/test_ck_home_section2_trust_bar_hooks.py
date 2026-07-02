@@ -59,5 +59,5 @@ class TestCkHomeSection2TrustBarHooks(TransactionCase):
         self.assertIn(HERO_VARIANT_MARKER, arch)
         self.assertIn('ck-featured-products__grid--stable', arch)
         self.assertIn('ck-discovery-pack', arch)
-        self.assertIn('ck-dual-engage--compact', arch)
+        self.assertIn('ck-dual-engage--pro-only', arch)
         self.assertIn('ck-home-editorial', arch)

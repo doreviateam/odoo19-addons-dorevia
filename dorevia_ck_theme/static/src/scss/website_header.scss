@@ -150,8 +150,9 @@
         border-color: rgba($ck-primary, 0.28) !important;
         background-color: rgba($ck-primary, 0.06) !important;
 
-        .fa-shopping-cart {
-            font-size: 1rem;
+        .fa-shopping-cart,
+        .ck-header__cart-icon {
+            font-size: 1.05rem;
         }
 
         &:hover,
@@ -167,8 +168,9 @@
         background-color: $ck-bg-soft !important;
 
         .fa-heart,
-        .fa-heart-o {
-            font-size: 1rem;
+        .fa-heart-o,
+        .ck-header__wish-icon {
+            font-size: 1.05rem;
         }
 
         &:hover,
@@ -702,6 +704,28 @@
             .ck-nav-mobile-universe-l2 {
                 padding-left: $ck-space-5 !important;
             }
+        }
+
+        // CK-NAV-005 — racine catalogue avec vrais enfants website.menu :
+        // libellé cliquable + bouton accordéon séparé (offcanvas mobile).
+        .ck-nav-mobile-catalogue-split__header {
+            border-bottom: 1px solid rgba($ck-border, 0.65);
+        }
+
+        .ck-nav-mobile-catalogue-split__link {
+            min-height: 2.75rem;
+            display: flex;
+            align-items: center;
+            padding-left: $ck-space-4;
+            text-decoration: none;
+            color: $ck-text;
+        }
+
+        .ck-nav-mobile-catalogue-split__toggle {
+            width: 2.75rem;
+            min-width: 2.75rem;
+            padding: 0;
+            box-shadow: none;
         }
 
         // Nav V2 mobile — masquer univers desktop · conserver Nos univers

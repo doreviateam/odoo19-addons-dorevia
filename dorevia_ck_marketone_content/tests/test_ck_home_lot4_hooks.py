@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Tests hooks Lot 4 — dual Pro / Newsletter home."""
-
-import re
-
+"""Tests hooks Lot 4 — bloc Pro home."""
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -13,9 +10,7 @@ from odoo.addons.dorevia_ck_marketone_content.home_dual_engage import (
     dual_engage_home_arch_is_valid,
 )
 from odoo.addons.dorevia_ck_marketone_content.hooks import (
-    NEWSLETTER_RGPD_NOTE,
     PRO_DUAL_TITLE,
-    bootstrap_newsletter_mailing_list,
 )
 
 
@@ -31,25 +26,21 @@ class TestCkHomeLot4Hooks(TransactionCase):
 
     def test_build_home_dual_arch_markers(self):
         arch = build_home_dual_engage_arch(self.env)
-        self.assertIn('ck-dual-engage--compact', arch)
+        self.assertIn('ck-dual-engage--pro-only', arch)
         self.assertIn(DUAL_ENGAGE_HOME_DATA_NAME, arch)
         self.assertIn(PRO_DUAL_TITLE, arch)
         self.assertIn('href="/professionnels"', arch)
-        self.assertIn('ck-newsletter-subscribe', arch)
-        mailing_list = bootstrap_newsletter_mailing_list(self.env)
-        self.assertIn(f'data-list-id="{mailing_list.id}"', arch)
-        self.assertIn("S'inscrire", arch)
-        self.assertTrue(re.search(r'placeholder="[^"]*e-mail"', arch, re.I))
-        self.assertIn('pt48 pb48', arch)
-        self.assertIn('Merci pour votre inscription', arch)
+        self.assertNotIn('ck-newsletter-subscribe', arch)
+        self.assertNotIn('s_newsletter_subscribe_form', arch)
+        self.assertNotIn('Merci pour votre inscription', arch)
         self.assertNotIn('Thanks for registering', arch)
+        self.assertIn('pt48 pb48', arch)
 
     def test_bootstrap_replaces_dual_and_removes_pro_banner(self):
         self.assertTrue(bootstrap_home_dual_engage(self.env))
         arch = self._homepage_arch()
         self.assertTrue(dual_engage_home_arch_is_valid(arch, self.env))
         self.assertNotIn('s_ck_pro_banner', arch)
-        self.assertIn(NEWSLETTER_RGPD_NOTE, arch)
 
     def test_bootstrap_order_after_discovery_pack(self):
         bootstrap_home_dual_engage(self.env)

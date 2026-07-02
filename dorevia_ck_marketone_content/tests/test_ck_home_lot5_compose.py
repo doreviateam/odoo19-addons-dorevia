@@ -57,7 +57,7 @@ class TestCkHomeLot5Compose(HttpCase):
 
     def test_home_editorial_order_after_dual(self):
         html = self.url_open('/').text
-        self.assertLess(html.find('ck-dual-engage--compact'), html.find('ck-home-editorial'))
+        self.assertLess(html.find('ck-dual-engage--pro-only'), html.find('ck-home-editorial'))
 
     def test_home_editorial_before_footer(self):
         html = self.url_open('/').text
@@ -87,5 +87,5 @@ class TestCkHomeLot5Compose(HttpCase):
         html = self.url_open('/').text
         self.assertIn('ck-featured-products__grid--stable', html)
         self.assertIn('ck-discovery-pack', html)
-        self.assertIn('ck-dual-engage--compact', html)
+        self.assertIn('ck-dual-engage--pro-only', html)
         self.assertNotIn('s_ck_pro_banner', html)

@@ -82,11 +82,26 @@ class TestCkWishlistU1(HttpCase):
             headers=self.FR_HEADERS,
         ).text
         nav = self._header_nav(html)
-        badges = re.findall(
+        sup_tags = re.findall(
+            r'<sup[^>]*class="[^"]*my_wish_quantity[^"]*"[^>]*>',
+            nav,
+        )
+        visible_badges = [
+            tag for tag in sup_tags
+            if 'd-none' not in tag
+        ]
+        badge_values = re.findall(
             r'<sup[^>]*class="[^"]*my_wish_quantity[^"]*"[^>]*>(\d+)</sup>',
             nav,
         )
-        self.assertTrue(all(int(value) == 0 for value in badges), badges)
+        self.assertTrue(
+            not visible_badges,
+            f'Badge wishlist visible à zéro inattendu : {visible_badges!r}',
+        )
+        self.assertTrue(
+            all(int(value) == 0 for value in badge_values) or not badge_values,
+            badge_values,
+        )
 
     def test_logged_user_wishlist_header_count_after_reload(self):
         """Scénario B — connecté : non-régression (page /shop, évite ACL fiche produit)."""

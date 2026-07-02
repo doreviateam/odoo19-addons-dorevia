@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Home Lot 4 — Bloc double Pro / Newsletter (MOA maquette V1)."""
-import re
+"""Home Lot 4 — Bloc Pro home (newsletter reportée · CK-HOME-POLISH-001)."""
 
 from .home_discovery_pack import _homepage_has_leaked_section_markup
 from .hooks import (
-    NEWSLETTER_RGPD_NOTE,
+    PRO_DUAL_CTA_DEFAULT,
+    PRO_DUAL_LEAD,
     PRO_DUAL_TITLE,
-    bootstrap_newsletter_mailing_list,
-    build_dual_engage_compact_arch,
 )
 
 DUAL_ENGAGE_SECTION_MARKER = 'ck-dual-engage'
@@ -21,17 +19,29 @@ def _arch_as_string(arch):
     return arch or ''
 
 
+def build_home_pro_engage_arch(env, *, pro_cta_href='/professionnels', pro_cta_label=None):
+    """Bloc Pro seul pour la home — newsletter neutralisée (CK-HOME-POLISH-001)."""
+    pro_cta_label = pro_cta_label or PRO_DUAL_CTA_DEFAULT
+    return f"""
+<section class="s_text_block ck-dual-engage ck-dual-engage--pro-only pt48 pb48 o_colored_level" data-snippet="s_text_block" data-name="{DUAL_ENGAGE_HOME_DATA_NAME}">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7 o_colored_level">
+                <div class="ck-dual-engage__pro p-4 p-lg-5 rounded o_cc o_cc1">
+                    <h2 class="h4 mb-3">{PRO_DUAL_TITLE}</h2>
+                    <p class="mb-4">{PRO_DUAL_LEAD}</p>
+                    <a href="{pro_cta_href}" class="btn btn-primary">{pro_cta_label}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+""".strip()
+
+
 def build_home_dual_engage_arch(env):
-    """Dual Pro + newsletter compact pour la home · CTA /professionnels."""
-    dual = build_dual_engage_compact_arch(
-        env,
-        pro_cta_href='/professionnels',
-    )
-    return dual.replace(
-        'data-name="CK Dual Pro Newsletter compact"',
-        f'data-name="{DUAL_ENGAGE_HOME_DATA_NAME}"',
-        1,
-    )
+    """Home — bloc Pro seul (pas de newsletter tant que stratégie CK non cadrée)."""
+    return build_home_pro_engage_arch(env, pro_cta_href='/professionnels')
 
 
 def _find_dual_block_bounds(arch):
@@ -104,29 +114,27 @@ def _patch_homepage_dual_arch(arch, dual_arch, *, remove_pro_banner=True):
 
 
 def dual_engage_home_arch_is_valid(arch, env):
-    """Recette Lot 4 : dual compact · Pro · newsletter BO · sans bannière Pro redondante."""
+    """Recette home Pro — sans newsletter · sans bannière Pro redondante."""
     if _homepage_has_leaked_section_markup(arch):
         return False
-    if 'ck-dual-engage--compact' not in arch:
+    if 'ck-dual-engage--pro-only' not in arch:
         return False
     chunk_start = arch.find(DUAL_ENGAGE_SECTION_MARKER)
     if chunk_start < 0:
         return False
     chunk = arch[chunk_start:chunk_start + 12000]
-    mailing_list = bootstrap_newsletter_mailing_list(env)
     checks = [
         PRO_DUAL_TITLE in chunk,
+        PRO_DUAL_LEAD[:40] in chunk,
         'href="/professionnels"' in chunk,
-        'ck-newsletter-subscribe' in chunk,
-        's_newsletter_subscribe_form' in chunk,
-        f'data-list-id="{mailing_list.id}"' in chunk,
-        NEWSLETTER_RGPD_NOTE.split('Désinscription')[0].strip()[:20] in chunk,
-        'col-lg-6' in chunk,
-        bool(re.search(r'placeholder="[^"]*e-mail"', chunk, re.I)),
-        "S'inscrire" in chunk,
-        'pt48 pb48' in chunk,
+        PRO_DUAL_CTA_DEFAULT in chunk,
+        'ck-dual-engage--pro-only' in chunk,
+        'ck-newsletter-subscribe' not in chunk,
+        's_newsletter_subscribe_form' not in chunk,
+        'Merci pour votre inscription' not in chunk,
         'Thanks for registering' not in chunk,
-        'Merci pour votre inscription' in chunk,
+        'col-lg-8' in chunk,
+        'pt48 pb48' in chunk,
     ]
     if not all(checks):
         return False
@@ -140,12 +148,10 @@ def dual_engage_home_arch_is_valid(arch, env):
 
 
 def bootstrap_home_dual_engage(env, *, remove_pro_banner=True):
-    """Lot 4 home — dual Pro/Newsletter compact · retire bannière Pro redondante."""
+    """Lot 4 home — bloc Pro seul · retire bannière Pro redondante."""
     website = env['website'].search([], limit=1)
     if not website:
         return False
-
-    bootstrap_newsletter_mailing_list(env)
 
     page = env['website.page'].sudo().search([
         ('url', '=', '/'),

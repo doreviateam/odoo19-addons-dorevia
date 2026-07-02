@@ -42,6 +42,17 @@
         </xpath>
     </template>
 
+    <!-- CK-HOME-POLISH-001 — icône panier explicite (badge zéro : natif Odoo 19 via d-none + updateCartNavBar) -->
+    <template id="ck_header_cart_icon"
+              inherit_id="website_sale.header_cart_link"
+              name="CK Header — icône panier"
+              priority="45">
+        <xpath expr="//i[contains(@class, 'fa-shopping-cart')]" position="attributes">
+            <attribute name="class">fa fa-shopping-cart ck-header__cart-icon</attribute>
+            <attribute name="aria-hidden">true</attribute>
+        </xpath>
+    </template>
+
     <!-- Nav-U1 — panier compact icône (H1.2) -->
     <template id="ck_template_header_h1_2_cart_v22"
               inherit_id="dorevia_ck_theme.ck_template_header_h1_2_three_levels"

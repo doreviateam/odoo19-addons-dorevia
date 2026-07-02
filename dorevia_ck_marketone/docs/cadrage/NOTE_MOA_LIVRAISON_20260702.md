@@ -156,6 +156,7 @@ Les lots home **001C** et **001A** sont **clôturés GO** (2 juillet 2026). Proc
 
 | Lot / thème | Objectif | Statut |
 | --- | --- | --- |
+| **CK-HOME-POLISH-001** | Polish UX Home (newsletter, header, hero, prix…) | **Clôturé GO** — [`NOTE_MOA_CLOTURE_CK_HOME_POLISH_001_20260702.md`](NOTE_MOA_CLOTURE_CK_HOME_POLISH_001_20260702.md) |
 | **CK-HOME-001B** | Vedettes E1 + coffret E2 (visuel) | **GO Dev** — [`TICKET_DEV_HOME_VISUAL_CK_HOME_001B.md`](TICKET_DEV_HOME_VISUAL_CK_HOME_001B.md) |
 | **CK-HOME-002** (ex-001B producteurs) | Bloc producteurs / transformateurs en home | Backlog — cadrage à ouvrir |
 | **SEO / canonical démo** | `web.base.url` ou override canonical sur URL tunnel / prod | Réserve CK-DEMO-ONLINE-001 |

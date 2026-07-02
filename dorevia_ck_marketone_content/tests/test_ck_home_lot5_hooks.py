@@ -56,5 +56,5 @@ class TestCkHomeLot5Hooks(TransactionCase):
         arch = self._homepage_arch()
         self.assertIn('ck-featured-products__grid--stable', arch)
         self.assertIn('ck-discovery-pack', arch)
-        self.assertIn('ck-dual-engage--compact', arch)
+        self.assertIn('ck-dual-engage--pro-only', arch)
         self.assertNotIn('s_ck_pro_banner', arch)

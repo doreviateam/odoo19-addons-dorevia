@@ -64,20 +64,29 @@ class TestCkHome001c(TransactionCase):
         self.assertIn(BRAND_NAME, refreshed)
         view.write({'arch_db': backup})
 
-    def test_dual_engage_invalidates_stale_english_newsletter_snapshot(self):
+    def test_dual_engage_invalidates_stale_newsletter_dual(self):
         arch, page = self._homepage_arch()
         if 'ck-dual-engage' not in arch:
             bootstrap_home_dual_engage(self.env)
             arch, page = self._homepage_arch()
 
-        stale = arch.replace('Merci pour votre inscription', 'Thanks for registering!', 1)
+        stale = arch.replace('ck-dual-engage--pro-only', 'ck-dual-engage--compact', 1)
         if stale == arch:
-            stale = arch.replace("S'inscrire", 'Subscribe', 1)
+            stale = arch.replace(
+                'ck-dual-engage__pro',
+                'ck-dual-engage__newsletter',
+                1,
+            )
+        stale = stale.replace(
+            '</section>',
+            '<div id="ck-newsletter-subscribe">Merci pour votre inscription !</div></section>',
+            1,
+        )
         page.view_id.write({'arch_db': stale})
         self.assertFalse(dual_engage_home_arch_is_valid(stale, self.env))
 
         self.assertTrue(bootstrap_home_dual_engage(self.env))
         refreshed = self._homepage_arch()[0]
         self.assertNotIn('Thanks for registering', refreshed)
-        self.assertIn('Merci pour votre inscription', refreshed)
+        self.assertNotIn('Merci pour votre inscription', refreshed)
         self.assertTrue(dual_engage_home_arch_is_valid(refreshed, self.env))

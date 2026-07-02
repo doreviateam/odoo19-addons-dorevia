@@ -318,10 +318,11 @@ NEWSLETTER_RGPD_NOTE = (
 )
 PRO_DUAL_TITLE = 'Vous êtes professionnel ?'
 PRO_DUAL_LEAD = (
-    'Épicerie, boutique créole, restaurant, hôtel, traiteur, distributeur… '
-    'CK étudie votre demande et vous oriente vers une sélection adaptée.'
+    'Vous êtes épicerie, restaurateur ou distributeur ? '
+    'C-Kréyòl vous accompagne dans la sélection et l\'approvisionnement '
+    'de produits créoles pour votre activité.'
 )
-PRO_DUAL_CTA_DEFAULT = 'Faire une demande professionnelle'
+PRO_DUAL_CTA_DEFAULT = 'Demander un accès professionnel'
 
 
 def bootstrap_newsletter_mailing_list(env):
