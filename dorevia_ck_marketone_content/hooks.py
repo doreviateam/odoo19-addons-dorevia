@@ -9,6 +9,7 @@ import re
 from xml.sax.saxutils import escape
 
 from .catalog_manioc_variants import bootstrap_catalog_vedettes_products
+from .catalog_discovery_pack import bootstrap_catalog_discovery_pack_product
 from .home_arch import _arch_fingerprint
 from .home_discovery_pack import bootstrap_home_discovery_pack
 from .home_featured import bootstrap_home_featured_products
@@ -1109,6 +1110,7 @@ def bootstrap_all_marketone_content(env):
     bootstrap_epicerie_category(env)
     bootstrap_published_products(env)
     bootstrap_catalog_vedettes_products(env)
+    bootstrap_catalog_discovery_pack_product(env)
     from .home_hero import bootstrap_home_hero
 
     bootstrap_home_hero(env)

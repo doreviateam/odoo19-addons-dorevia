@@ -46,12 +46,13 @@ class TestCkHomeLot2Hooks(TransactionCase):
     def test_card_fragment_validation(self):
         valid = (
             '<article class="ck-product-card product-card ck-product-card--interactive">'
-            '<a href="/shop/demo-1" class="ck-product-card__cover card-cta" aria-label="Voir le produit : Demo">'
-            '<div class="product-card-media" style="background-image:url(\'/web/image/product.template/1/image_512\')">'
-            '</div></a><div class="product-card-foot">'
+            '<a href="/shop/demo-1" class="ck-product-card__cover" aria-label="Voir le produit : Demo"></a>'
+            '<div class="ck-product-card__image product-card-media" style="background-image:url(\'/web/image/product.template/1/image_512\')">'
+            '<img src="/web/image/product.template/1/image_512" alt="Demo" class="ck-product-card__img"/>'
+            '</div><div class="ck-product-card__foot product-card-foot">'
             '<span class="ck-product-card__price-value price">12,00 €</span>'
-            '<div class="product-card-actions">'
-            '<a href="/shop/demo-1" class="card-cta card-cta--secondary">Voir le produit</a>'
+            '<div class="ck-product-card__actions product-card-actions">'
+            '<button type="button" class="card-cart-cta">Ajouter au panier</button>'
             '</div></div></article>'
         )
         self.assertTrue(card_fragment_is_valid(valid))

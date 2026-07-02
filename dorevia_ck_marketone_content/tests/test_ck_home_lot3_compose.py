@@ -11,10 +11,15 @@ from odoo.addons.dorevia_ck_marketone_content.home_discovery_pack import (
     DISCOVERY_PACK_SECTION_MARKER,
     DISCOVERY_PACK_TITLE,
 )
+from odoo.addons.dorevia_ck_marketone_content.catalog_discovery_pack import (
+    bootstrap_catalog_discovery_pack_product,
+)
 from odoo.addons.dorevia_ck_marketone_content.hooks import (
     bootstrap_home_discovery_pack,
     bootstrap_home_featured_products,
 )
+
+_KITS_HREF_RE = re.compile(r'href="(?:/[a-z]{2})?/kits"')
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_home_lot3')
@@ -22,6 +27,7 @@ class TestCkHomeLot3Compose(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        bootstrap_catalog_discovery_pack_product(cls.env)
         bootstrap_home_featured_products(cls.env)
         bootstrap_home_discovery_pack(cls.env)
 
@@ -35,9 +41,14 @@ class TestCkHomeLot3Compose(HttpCase):
         chunk = self._discovery_chunk(html)
         self.assertIn(DISCOVERY_PACK_TITLE, chunk)
         self.assertIn('Pack', chunk)
-        self.assertIn(f'href="{DISCOVERY_PACK_CTA_URL}"', chunk)
+        self.assertTrue(_KITS_HREF_RE.search(chunk), 'lien /kits attendu dans le bloc coffret')
         self.assertNotIn('website.s_cover_default_image', chunk)
         self.assertNotIn('s_cover_default', chunk)
+        self.assertNotIn('ck-discovery-pack__visual--editorial', chunk)
+        self.assertTrue(
+            '/web/image/product.' in chunk or 'ck_discovery_pack.jpg' in chunk,
+            'visuel coffret qualifié attendu',
+        )
 
     def test_home_discovery_order_after_univers(self):
         html = self.url_open('/').text
@@ -71,7 +82,7 @@ class TestCkHomeLot3Compose(HttpCase):
     def test_kits_link_present_in_block(self):
         html = self.url_open('/').text
         chunk = self._discovery_chunk(html)
-        self.assertEqual(len(re.findall(rf'href="{re.escape(DISCOVERY_PACK_CTA_URL)}"', chunk)), 1)
+        self.assertEqual(len(_KITS_HREF_RE.findall(chunk)), 1)
 
     def test_kits_route_when_marketone_installed(self):
         """Porte /kits — 200 ou 301 si module Chantier B actif sur l'instance."""

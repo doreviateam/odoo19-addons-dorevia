@@ -18,6 +18,12 @@ _CARD_IMAGE_RE = re.compile(
     r"background-image:\s*url\(\s*(?:&#39;|['\"])?/web/image/product\.(?:template|product)/\d+/",
     re.IGNORECASE,
 )
+_CARD_IMG_RE = re.compile(
+    r'class="ck-product-card__img"[^>]*src="[^"]*/web/image/product\.(?:template|product)/\d+/'
+    r'|src="[^"]*/web/image/product\.(?:template|product)/\d+/[^"]*"[^>]*class="ck-product-card__img"',
+    re.IGNORECASE,
+)
+_KITS_HREF_RE = re.compile(r'href="(?:/[a-z]{2})?/kits"')
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_home_lot2')
@@ -56,7 +62,7 @@ class TestCkHomeLot2Compose(HttpCase):
         html = self.url_open('/').text
         grid_start = html.find('ck-featured-products__grid--stable')
         grid_chunk = html[grid_start:grid_start + 120000]
-        links = re.findall(r'href="(/shop/[^"]+)"', grid_chunk)
+        links = re.findall(r'href="(?:/[a-z]{2})?(/shop/[^"]+)"', grid_chunk)
         self.assertGreaterEqual(len(links), FEATURED_TEST_MIN_CARDS)
         for href in links[:FEATURED_TEST_MIN_CARDS]:
             self.assertEqual(self.url_open(href).status_code, 200)
@@ -67,6 +73,7 @@ class TestCkHomeLot2Compose(HttpCase):
         grid_chunk = html[grid_start:grid_start + 120000]
         self.assertGreaterEqual(grid_chunk.count('ck-product-card__price-value'), FEATURED_TEST_MIN_CARDS)
         self.assertGreaterEqual(len(_CARD_IMAGE_RE.findall(grid_chunk)), FEATURED_TEST_MIN_CARDS)
+        self.assertGreaterEqual(len(_CARD_IMG_RE.findall(grid_chunk)), FEATURED_TEST_MIN_CARDS)
         self.assertGreaterEqual(grid_chunk.count('Voir le produit'), FEATURED_TEST_MIN_CARDS)
 
     def test_home_no_carousel_in_featured(self):

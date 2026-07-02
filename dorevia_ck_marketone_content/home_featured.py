@@ -69,6 +69,11 @@ _CARD_IMAGE_RE = re.compile(
     r"background-image:\s*url\(\s*['\"]?/web/image/product\.(?:template|product)/\d+/",
     re.IGNORECASE,
 )
+_CARD_IMG_RE = re.compile(
+    r'class="[^"]*ck-product-card__img[^"]*"[^>]*src="[^"]*/web/image/product\.(?:template|product)/\d+/'
+    r'|src="[^"]*/web/image/product\.(?:template|product)/\d+/[^"]*"[^>]*class="[^"]*ck-product-card__img',
+    re.IGNORECASE,
+)
 _CARD_PRICE_RE = _ck_class_token_re('ck-product-card__price-value')
 _CARD_LINK_RE = _ck_class_token_re('card-cta')
 _CARD_COVER_RE = _ck_class_token_re('ck-product-card__cover')
@@ -733,6 +738,7 @@ def build_featured_product_card_html(env, website, variant):
 <article class="{FEATURED_CARD_MARKER} ck-product-card--home product-card ck-product-card--interactive">
     <a href="{href}" class="ck-product-card__cover" aria-label="{card_aria}"></a>
     <div class="ck-product-card__image product-card-media ck-product-card__media" style="background-image:url('{image_url}')">
+        <img src="{image_url}" alt="{card_title}" class="ck-product-card__img" loading="lazy" decoding="async"/>
         {overlays_html}
     </div>
     <div class="ck-product-card__body product-card-body">
@@ -763,6 +769,8 @@ def card_fragment_is_valid(fragment):
     if any(marker in lowered for marker in _PLACEHOLDER_MARKERS):
         return False
     if not _CARD_IMAGE_RE.search(fragment):
+        return False
+    if not _CARD_IMG_RE.search(fragment):
         return False
     if not _CARD_PRICE_RE.search(fragment):
         return False

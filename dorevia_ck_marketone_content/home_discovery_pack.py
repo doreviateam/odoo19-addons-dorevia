@@ -3,6 +3,7 @@
 from xml.sax.saxutils import escape
 
 DISCOVERY_PACK_SECTION_MARKER = 'ck-discovery-pack'
+DISCOVERY_PACK_STATIC_IMAGE = '/dorevia_ck_marketone_content/static/img/ck_discovery_pack.jpg'
 DISCOVERY_PACK_DATA_NAME = 'CK Coffrets découverte'
 DISCOVERY_PACK_CTA_URL = '/kits'
 DISCOVERY_PACK_CTA_LABEL = 'Découvrir'
@@ -64,13 +65,13 @@ def _discovery_visual_html(product):
             f'class="object-fit-cover w-100 h-100" alt="{alt}" loading="lazy"/>'
             f'</div>'
         )
+    alt = escape(DISCOVERY_PACK_EDITORIAL_NAME)
     return (
-        '<div class="ck-discovery-pack__visual ck-discovery-pack__visual--editorial '
-        'ratio ratio-4x3 rounded overflow-hidden h-100">'
-        '<div class="ck-discovery-pack__visual-inner w-100 h-100 '
-        'd-flex align-items-center justify-content-center">'
-        '<span class="ck-discovery-pack__visual-icon fa fa-gift" aria-hidden="true"></span>'
-        '</div></div>'
+        f'<div class="ck-discovery-pack__visual ratio ratio-4x3 rounded overflow-hidden h-100" '
+        f'style="min-height: 180px;">'
+        f'<img src="{DISCOVERY_PACK_STATIC_IMAGE}" '
+        f'class="object-fit-cover w-100 h-100" alt="{alt}" loading="lazy"/>'
+        f'</div>'
     )
 
 
@@ -190,6 +191,12 @@ def discovery_pack_arch_is_valid(arch):
     if 'pt48 pb48' not in chunk:
         return False
     if 'fa-3x' in chunk:
+        return False
+    if 'ck-discovery-pack__visual--editorial' in chunk:
+        return False
+    if 'ck-discovery-pack__visual-icon' in chunk:
+        return False
+    if '/web/image/product.' not in chunk and DISCOVERY_PACK_STATIC_IMAGE not in chunk:
         return False
     lowered = chunk.lower()
     return not any(marker in lowered for marker in _PLACEHOLDER_IMAGE_MARKERS)

@@ -4,6 +4,9 @@
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
+from odoo.addons.dorevia_ck_marketone_content.catalog_discovery_pack import (
+    bootstrap_catalog_discovery_pack_product,
+)
 from odoo.addons.dorevia_ck_marketone_content.home_discovery_pack import (
     DISCOVERY_PACK_CTA_URL,
     DISCOVERY_PACK_SECTION_MARKER,
@@ -13,6 +16,7 @@ from odoo.addons.dorevia_ck_marketone_content.home_discovery_pack import (
     discovery_pack_arch_is_valid,
     get_discovery_pack_product,
 )
+from odoo.addons.dorevia_ck_marketone_content.home_featured import bootstrap_home_featured_products
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_marketone_home_lot3')
@@ -26,6 +30,7 @@ class TestCkHomeLot3Hooks(TransactionCase):
         return arch
 
     def test_build_discovery_pack_arch_markers(self):
+        bootstrap_catalog_discovery_pack_product(self.env)
         arch = build_discovery_pack_arch(self.env)
         self.assertIn(DISCOVERY_PACK_SECTION_MARKER, arch)
         self.assertIn(DISCOVERY_PACK_TITLE, arch)
@@ -33,13 +38,15 @@ class TestCkHomeLot3Hooks(TransactionCase):
         self.assertIn('Pack', arch)
         self.assertIn('ck-discovery-pack--polish-v1', arch)
         self.assertIn('pt48 pb48', arch)
-        self.assertIn('ck-discovery-pack__visual-icon', arch)
+        self.assertNotIn('ck-discovery-pack__visual--editorial', arch)
+        self.assertNotIn('ck-discovery-pack__visual-icon', arch)
         self.assertNotIn('fa-3x', arch)
         self.assertNotIn('website.s_cover_default_image', arch)
 
     def test_bootstrap_injects_discovery_block(self):
         from odoo.addons.dorevia_ck_marketone_content.home_univers import bootstrap_home_univers
 
+        bootstrap_catalog_discovery_pack_product(self.env)
         bootstrap_home_univers(self.env)
         self.assertTrue(bootstrap_home_discovery_pack(self.env))
         arch = self._homepage_arch()
@@ -66,6 +73,7 @@ class TestCkHomeLot3Hooks(TransactionCase):
             self.assertTrue(product.image_1920)
 
     def test_lot2_featured_non_regression(self):
+        bootstrap_home_featured_products(self.env)
         bootstrap_home_discovery_pack(self.env)
         arch = self._homepage_arch()
         self.assertIn('ck-featured-products__grid--stable', arch)
