@@ -41,6 +41,8 @@
                                    placeholder="Guadeloupe, Épicerie…"
                                    help="Affichées sous le nom du produit sur la card home (ex. Guadeloupe · Épicerie)."/>
                             <field name="ck_is_featured" widget="boolean_toggle"/>
+                            <field name="ck_is_orphan" readonly="1" widget="boolean_toggle"
+                                   help="Publié et vendable mais sans catégorie active ou promesse rattachée — à catégoriser (CATALOG-ARCHI-001)."/>
                         </group>
                     </group>
 
@@ -194,6 +196,19 @@
                     </group>
                 </page>
             </xpath>
+        </field>
+    </record>
+
+    <!-- CATALOG-ARCHI-001 Lot B §7.2 — filtre BO produits orphelins -->
+    <record id="product_template_search_view_ck_orphan" model="ir.ui.view">
+        <field name="name">product.template.search.ck.orphan</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <filter name="filter_to_sell" position="after">
+                <filter string="Orphelins CK (à catégoriser)" name="ck_is_orphan"
+                        domain="[('ck_is_orphan', '=', True)]"/>
+            </filter>
         </field>
     </record>
 </odoo>

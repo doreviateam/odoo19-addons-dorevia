@@ -122,6 +122,10 @@ def get_curated_featured_variants(env, *, max_count=FEATURED_CURATED_MAX):
         ('website_published', '=', True),
         ('sale_ok', '=', True),
     ], order='website_sequence asc, id asc')
+    # CATALOG-ARCHI-001 §7.1 : un produit incomplet (fiche minimale non
+    # remplie) n'est pas éligible aux coups de cœur, même si ck_is_featured
+    # est coché — ne bloque pas sa présence ailleurs (/shop notamment).
+    templates = templates.filtered(lambda t: t._is_ck_qualified_for_public_exposure())
     templates.mapped('product_tag_ids')
     variants = env['product.product'].browse()
     for template in templates:
@@ -574,12 +578,24 @@ def _get_featured_commercial_line(env, website, variant):
     return _join_featured_metadata_parts(qty_part, ref_part)
 
 
+def _get_featured_producer_part(template):
+    """Nom producteur CK — CATALOG-ARCHI-001 Lot B §10 (« Origine · Producteur · ... »).
+
+    Absent des cards jusqu'ici (ck_producer_id n'alimentait que les chips PDP,
+    cf. get_ck_product_page_chips) — segment purement additif : les produits
+    sans producteur renseigné ne changent pas de rendu.
+    """
+    producer = template.ck_producer_id
+    return (producer.name or '').strip() if producer else ''
+
+
 def _get_featured_card_metadata_line(env, website, variant):
-    """Ligne unique sous le titre : origine · tags transversaux · format · prix comparatif."""
+    """Ligne unique sous le titre : origine · producteur · tags transversaux · format · prix comparatif."""
     template = variant.product_tmpl_id
     origin, transversal = _get_featured_origin_and_tag_parts(template, variant)
+    producer_part = _get_featured_producer_part(template)
     qty_part, ref_part = _get_featured_format_and_reference_parts(env, website, variant)
-    return _join_featured_metadata_parts(origin, ' · '.join(transversal), qty_part, ref_part)
+    return _join_featured_metadata_parts(origin, producer_part, ' · '.join(transversal), qty_part, ref_part)
 
 
 def _get_shop_card_secondary_line(env, website, variant):

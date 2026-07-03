@@ -120,6 +120,18 @@
 * Aucun produit artisanal mis en avant sans origine/matière/producteur minimale (§18.14).
 * Ligne meta cohérente avec la famille produit sur `/shop`, catégories et Home (§18.8).
 
+### Livré et validé (3 juillet 2026)
+
+Voir [`RECETTE_LOT_B_CATALOG_ARCHI_001.md`](RECETTE_LOT_B_CATALOG_ARCHI_001.md) pour le détail des bugs
+trouvés/corrigés (BUG-B1/B2/B3) et des points de contrôle vérifiés sur rendu réel.
+
+* `_is_ck_qualified_for_public_exposure()` (méthode, pas un champ stocké — équivalent fonctionnel) + `ck_is_orphan` (champ calculé stocké + filtre BO) sur `product.template`.
+* Qualification branchée sur `get_curated_featured_variants()` — un produit incomplet ne remonte plus en "Coups de cœur" même si `ck_is_featured` est coché.
+* Nom producteur ajouté à la ligne meta canonique (`_get_featured_card_metadata_line`, partagée shop/Home) — additif, aucun impact sur les produits sans producteur configuré.
+* Badges (§11.3/§11.5) : **scope interprété plus étroitement que "chip discret"** — pas de nouvel élément visuel ajouté aux cards dans ce lot (le ribbon existant reste seul élément visuel). Seul le texte de la ligne meta a été enrichi. Motif : ajouter un vrai chip visuel aurait nécessité un travail template/CSS non "déjà compatible avec l'existant", ce que l'arbitrage MOA "sobre, si compatible" ne couvrait pas explicitement. **À confirmer avec le MOA si un chip visuel producteur reste souhaité en V1.1.**
+* §10 (formats par famille) : pas de reconstruction en 5 templates distincts — le mécanisme générique existant (UOM masse/volume configurable + résolution origine attribut/tag) couvre déjà structurellement les formats alimentaire/boisson/soin. Coffret et matière/usage artisanat restent **non couverts** (nécessiteraient de nouveaux champs structurés, hors périmètre "pas de refonte fiche produit" — cf. §4 de la note).
+* Recatégorisation des 6 produits nommés : **toujours hors scope Dev** (tâche QA/BO). Confirmé en conditions réelles que Pâte de manioc affiche toujours "Bien-être" sur `/shop`.
+
 ---
 
 ## Lot C — SEO / sitemap / noindex / routes catégories

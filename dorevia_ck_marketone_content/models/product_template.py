@@ -123,6 +123,14 @@ class ProductTemplate(models.Model):
         default='stock',
         string='Disponibilité CK',
     )
+    ck_is_orphan = fields.Boolean(
+        string='Produit orphelin CK',
+        compute='_compute_ck_is_orphan',
+        store=True,
+        help="Publié et vendable, mais sans catégorie active ou promesse rattachée "
+             "(CATALOG-ARCHI-001 §7.2) — reste visible dans /shop, mais exclu des "
+             "navigations par univers et des mises en avant. À catégoriser en BO.",
+    )
 
     @api.constrains('description_ecommerce')
     def _check_description_ecommerce_length(self):
@@ -252,6 +260,54 @@ class ProductTemplate(models.Model):
 
         candidates = candidates[:4]
         return candidates if len(candidates) >= 2 else self.browse([])
+
+    @api.depends('website_published', 'sale_ok', 'public_categ_ids', 'public_categ_ids.ck_exposure_status')
+    def _compute_ck_is_orphan(self):
+        """CATALOG-ARCHI-001 §7.2 — publié/vendable sans catégorie active ou promise."""
+        for product in self:
+            product.ck_is_orphan = (
+                bool(product.website_published)
+                and product.sale_ok
+                and not product.public_categ_ids.filtered(
+                    lambda c: c.ck_exposure_status in ('active', 'promise')
+                )
+            )
+
+    def _is_ck_qualified_for_public_exposure(self):
+        """CATALOG-ARCHI-001 §7.1/§7.3 — fiche minimale avant mise en avant CK.
+
+        Ne bloque jamais la présence dans /shop (produit publié Odoo) : gate
+        uniquement l'éligibilité aux coups de cœur, univers actifs, blocs
+        éditoriaux marchands et sélections vitrines (§7.1).
+        """
+        self.ensure_one()
+        product = self.sudo()
+        if not (product.name or '').strip():
+            return False
+        if not product.sale_ok or product.list_price <= 0:
+            return False
+        # Vérifie toutes les variantes (pas seulement product_variant_id, qui ne
+        # reflète qu'une seule variante) — évite de disqualifier à tort un
+        # template multi-variantes dont une variante a une image mais pas une autre.
+        has_image = bool(product.image_1920) or any(
+            v.image_1920 or v.image_512 for v in product.product_variant_ids
+        )
+        if not has_image:
+            return False
+        if not product.public_categ_ids:
+            return False
+        # Même résolution d'origine que la card (attribut « Origines », sinon
+        # repli étiquette géographique Option A) — sans quoi un produit tracé
+        # uniquement par tag (ex. Confiture de goyave → tag "Guadeloupe") est
+        # disqualifié à tort alors que sa card affiche bien une origine.
+        from ..home_featured import _get_featured_origin_and_tag_parts
+        origin, _transversal = _get_featured_origin_and_tag_parts(product)
+        has_traceability = bool(origin) or bool(product.ck_producer_id)
+        if not has_traceability:
+            return False
+        if not product.ck_availability_mode:
+            return False
+        return True
 
     def get_ck_variant_value_prices(self, attribute_line):
         """Prix absolus contextualisés par valeur d'attribut (sélecteur variantes CK)."""

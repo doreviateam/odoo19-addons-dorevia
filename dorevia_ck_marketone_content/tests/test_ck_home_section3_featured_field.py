@@ -30,6 +30,16 @@ class TestCkHomeSection3FeaturedField(TransactionCase):
         # saturer le cap et masquer le produit créé par le test (cf. fix
         # identique dans test_ck_home_section3_curation.py).
         clear_ck_is_featured(self.env)
+        # CATALOG-ARCHI-001 Lot B : get_curated_featured_variants() filtre
+        # sur _is_ck_qualified_for_public_exposure() — fixture par défaut
+        # qualifiée (catégorie + producteur) pour ne pas re-tester ce
+        # critère ici (couvert par test_ck_catalog_qualification.py).
+        self._default_categ = self.env['product.public.category'].sudo().create({
+            'name': 'TestCat Section3FeaturedField Défaut',
+        })
+        self._default_producer = self.env['res.partner'].sudo().create({
+            'name': 'Producteur Test Section3FeaturedField', 'ck_is_producer': True,
+        })
 
     def _make_product(self, name, **vals):
         base = {
@@ -39,6 +49,8 @@ class TestCkHomeSection3FeaturedField(TransactionCase):
             'sale_ok': True,
             'list_price': 1.0,
             'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
+            'public_categ_ids': [(4, self._default_categ.id)],
+            'ck_producer_id': self._default_producer.id,
         }
         base.update(vals)
         return self.env['product.template'].sudo().create(base)

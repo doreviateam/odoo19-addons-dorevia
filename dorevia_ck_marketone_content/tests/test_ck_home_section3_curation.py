@@ -43,6 +43,17 @@ class TestCkHomeSection3Curation(TransactionCase):
         # sans effet sur la base réelle) plutôt que de dépendre du nombre de
         # vedettes déjà présentes en seed.
         clear_ck_is_featured(self.env)
+        # CATALOG-ARCHI-001 Lot B : get_curated_featured_variants() filtre
+        # désormais sur _is_ck_qualified_for_public_exposure() (catégorie +
+        # traçabilité origine/producteur requises) — fixture par défaut
+        # qualifiée pour ne pas re-tester ce critère dans chaque test déjà
+        # existant (couvert séparément par test_ck_catalog_qualification.py).
+        self._default_categ = self.env['product.public.category'].sudo().create({
+            'name': 'TestCat Section3 Curation Défaut',
+        })
+        self._default_producer = self.env['res.partner'].sudo().create({
+            'name': 'Producteur Test Section3 Curation', 'ck_is_producer': True,
+        })
 
     def _make_product(self, name, **vals):
         base = {
@@ -52,6 +63,8 @@ class TestCkHomeSection3Curation(TransactionCase):
             'sale_ok': True,
             'list_price': 1.0,
             'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
+            'public_categ_ids': [(4, self._default_categ.id)],
+            'ck_producer_id': self._default_producer.id,
         }
         base.update(vals)
         return self.env['product.template'].sudo().create(base)
@@ -180,7 +193,15 @@ class TestCkHomeSection3Curation(TransactionCase):
 
     def test_category_removal_does_not_unfeature_home(self):
         category = _ensure_featured_category(self.env)
-        product = self._make_product('CK Vedette Remove Prod', ck_is_featured=True, public_categ_ids=[(4, category.id)])
+        # CATALOG-ARCHI-001 : garder aussi _default_categ pour que le produit
+        # reste catégorisé (donc qualifié) après le retrait de `category` —
+        # l'intention du test (le retrait d'UNE catégorie ne doit pas
+        # déféaturer) reste inchangée, indépendante du critère de
+        # qualification (couvert ailleurs).
+        product = self._make_product(
+            'CK Vedette Remove Prod', ck_is_featured=True,
+            public_categ_ids=[(4, category.id), (4, self._default_categ.id)],
+        )
         bootstrap_home_featured_products(self.env)
         page = self.env['website.page'].sudo().search([('url', '=', '/')], limit=1)
         self.assertIn('CK Vedette Remove Prod', page.view_id.arch_db or '')
@@ -223,6 +244,10 @@ class TestCkHomeSection3Curation(TransactionCase):
         })
         product = self._make_product(
             'CK Vedette Labels',
+            # ck_producer_id=False : origine déjà couverte par le tag Guadeloupe
+            # (traçabilité qualification) — évite d'injecter le producteur par
+            # défaut dans la ligne meta et de casser l'assertion exacte ci-dessous.
+            ck_producer_id=False,
             product_tag_ids=[(6, 0, [guadeloupe.id, epicerie.id, excluded.id])],
         )
         line = _get_featured_labels_line(product)
@@ -246,6 +271,7 @@ class TestCkHomeSection3Curation(TransactionCase):
         product = self._make_product(
             'CK Vedette Metadata',
             list_price=3.6,
+            ck_producer_id=False,  # origine déjà couverte par le tag Guadeloupe
             product_tag_ids=[(6, 0, [guadeloupe.id, epicerie.id])],
             ck_net_quantity=100,
             ck_net_quantity_uom_id=self._card_uom('g').id,
@@ -266,6 +292,7 @@ class TestCkHomeSection3Curation(TransactionCase):
     def test_card_metadata_line_skips_orphan_separators(self):
         product = self._make_product(
             'CK Vedette Metadata Labels Only',
+            ck_producer_id=False,  # origine déjà couverte par le tag Réunion
             product_tag_ids=[(6, 0, [self.env['product.tag'].sudo().create({
                 'name': 'Réunion',
                 'sequence': 1,
@@ -497,6 +524,7 @@ class TestCkHomeSection3Curation(TransactionCase):
         product = self._make_product(
             'CK Vedette Stale Labels',
             ck_is_featured=True,
+            ck_producer_id=False,  # origine déjà couverte par le tag Guadeloupe
             product_tag_ids=[(6, 0, [guadeloupe.id, epicerie.id])],
         )
         bootstrap_home_featured_products(self.env)
