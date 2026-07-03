@@ -13,6 +13,7 @@
 | Priorité | P0 (Lot A hors seuil nav + correction data) → P1 (reste Lot A/B) → P1 (Lot C) → P2 (Lot D) |
 | Estimation Lot A | **5–5,5 j-h Dev + 1,5–2 j-h QA** (détail §"Chiffrage Lot A") |
 | Statut | **Lots A, B et C livrés, validés et poussés sur `origin/main` 3 juillet 2026** (commits `a72a5e36`/`95cc19e7`, `abae03f2`/`a4963691`, `e46c700f`). Module `dorevia_ck_marketone_content` v19.0.1.85.0. **Lot D : NO GO immédiat — P2/reportable, à ouvrir seulement si le MOA confirme que les filtres sur catégories pauvres restent gênants après A/B/C.** |
+| Recette finale | [`RECETTE_SUPPORT_CATALOG_ARCHI_001_ABC.md`](RECETTE_SUPPORT_CATALOG_ARCHI_001_ABC.md) — support de recette visuelle/fonctionnelle MOA sur les 6 routes de référence, à dérouler |
 
 ---
 
