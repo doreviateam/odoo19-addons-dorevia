@@ -12,7 +12,7 @@
 | Modules | `dorevia_ck_marketone_content` (principal) · `dorevia_ck_theme` (templates cards/badges) |
 | Priorité | P0 (Lot A hors seuil nav + correction data) → P1 (reste Lot A/B) → P1 (Lot C) → P2 (Lot D) |
 | Estimation Lot A | **5–5,5 j-h Dev + 1,5–2 j-h QA** (détail §"Chiffrage Lot A") |
-| Statut | **Lots A, B et C livrés et validés 3 juillet 2026** (Lots A/B poussés sur `origin/main` ; Lot C committé, push en attente de confirmation). Module `dorevia_ck_marketone_content` v19.0.1.85.0. **Lot D restant.** |
+| Statut | **Lots A, B et C livrés, validés et poussés sur `origin/main` 3 juillet 2026** (commits `a72a5e36`/`95cc19e7`, `abae03f2`/`a4963691`, `e46c700f`). Module `dorevia_ck_marketone_content` v19.0.1.85.0. **Lot D : NO GO immédiat — P2/reportable, à ouvrir seulement si le MOA confirme que les filtres sur catégories pauvres restent gênants après A/B/C.** |
 
 ---
 
@@ -147,7 +147,7 @@ trouvés/corrigés (BUG-B1/B2/B3) et des points de contrôle vérifiés sur rend
 
 **Objectif** : le plus risqué et net-new du découpage — comportement des routes catégories, `noindex` et sitemap selon `ck_exposure_status`.
 
-**Statut (3 juillet 2026)** : **livré et validé** — GO MOA final reçu, code implémenté et vérifié (tests + rendu HTTP réel sur le sandbox). Voir §"Livré et validé" ci-dessous.
+**Statut (3 juillet 2026)** : **livré, validé et poussé** — commit `e46c700f` sur `origin/main`. Voir §"Livré et validé" ci-dessous.
 
 ### Matrice V1 validée en approche (note 11)
 
@@ -189,6 +189,8 @@ Suite de tests complète (upgrade réel + `--test-enable`) : aucune régression 
 ---
 
 ## Lot D — Filtres contextuels et seuils d'affichage
+
+**Statut (3 juillet 2026)** : **NO GO immédiat — P2/reportable.** Arbitrage MOA : Lot C vient de toucher route + SEO + sitemap, préférence pour stabiliser avant d'ajouter la logique de filtres contextuels. À ouvrir seulement si le MOA confirme que les filtres sur catégories pauvres restent gênants après l'observation des Lots A/B/C en usage.
 
 **Objectif** : masquer les filtres non actionnables sous le seuil `CK_CATEGORY_FILTER_MIN_PRODUCTS = 5`. Peut glisser au sprint suivant sans bloquer A/B/C.
 
