@@ -1,228 +1,214 @@
 # Ticket Dev — CK-HOME-001B — Réserves visuelles home (vedettes + coffrets)
 
-Statut : **GO ouverture MOA** — périmètre serré **001B-a + 001B-b uniquement**.
+| Champ | Valeur |
+| --- | --- |
+| Date | 2 juillet 2026 (révision 3 juillet 2026) |
+| Projet | C-Kréyòl Marketone — Home |
+| Périmètre | **001B-a + 001B-b uniquement** |
+| Statut | **Livré technique — en attente recette clôture MOA** |
+| Base recette | `dorevia_ck_marketone_01` — http://localhost:18079 |
+| État des lieux | [`NOTE_ETAT_DES_LIEUX_CK_HOME_001B_20260703.md`](NOTE_ETAT_DES_LIEUX_CK_HOME_001B_20260703.md) |
 
-Base locale : `dorevia_ck_marketone_01` — http://localhost:18079  
-Versions de référence avant lot :
+---
 
-```text
-dorevia_ck_marketone_content : 19.0.1.75.0
-dorevia_ck_theme             : 19.0.1.114.0
-```
+## Versions
 
-Version cible après lot : `dorevia_ck_marketone_content : 19.0.1.76.0` (+ bump thème **uniquement** si correctif SCSS vedettes requis — cf. §3.1).
+| Référence | `dorevia_ck_marketone_content` | `dorevia_ck_theme` |
+| --- | --- | --- |
+| Avant lot (cadrage) | 19.0.1.75.0 | 19.0.1.114.0 |
+| **Livraison 001B** (`43aa89fa`) | **19.0.1.76.0** | **19.0.1.115.0** |
+| **Hotfix coffrets** (`4a7fe568`) | **19.0.1.79.0** | *(inchangé)* |
+| Sandbox actuelle (3 juil. 2026) | **19.0.1.82.0** | **19.0.1.120.0** |
 
-Références MOA : [`NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md`](NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md) · [`RECETTE_QA_RAPPROCHEMENT_HOME_MAQUETTE_V1.md`](../design/maquette_01.2/RECETTE_QA_RAPPROCHEMENT_HOME_MAQUETTE_V1.md) (réserves E1/E2).
+Références MOA : [`NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md`](NOTE_MOA_CADRAGE_CK_HOME_001B_20260702.md) · [`RECETTE_QA_RAPPROCHEMENT_HOME_MAQUETTE_V1.md`](../design/maquette_01.2/RECETTE_QA_RAPPROCHEMENT_HOME_MAQUETTE_V1.md) (réserves E1/E2 d'origine) · [`RECETTE_QA_HOME_20260702.md`](RECETTE_QA_HOME_20260702.md) *(pré-hotfix 79.0 — à compléter par recette clôture post-79)*.
 
 ---
 
 ## Gouvernance — renommage lot « producteurs home »
 
-L’intention initiale « **CK-HOME-001B = bloc producteurs / transformateurs** » est **dépréciée**.
+L'intention initiale « **CK-HOME-001B = bloc producteurs / transformateurs** » est **dépréciée**.
 
 | Ancien sens | Nouveau sens CK-HOME-001B | Futur lot producteurs home |
 | --- | --- | --- |
 | Bloc producteurs / transformateurs en home | **Réserves visuelles** post-001A (vedettes + coffret) | **`CK-HOME-002`** ou **`CK-HOME-PRODUCERS-001`** — à cadrer séparément |
 
-Ne pas mélanger les deux dans ce ticket.
-
 ---
 
 ## 1. Contexte
 
-La home est **stabilisée** sur le fond et la structure :
+La home est **stabilisée** sur le fond et la structure (hero 001A, univers 001C, navigation, tunnel V1 gelé).
 
-| Lot | Statut | Ne pas rouvrir |
+Les réserves P1 E1/E2 (recette QA juin 2026) ont été **traitées en code** le 2 juillet 2026. La **clôture MOA** reste ouverte : recette visuelle post-hotfix `79.0` (desktop 1280 + mobile 390), notamment validation du clic CTA « Découvrir » coffrets.
+
+| ID | Bloc | Constat initial (juin) | État technique (3 juil.) |
+| --- | --- | --- | --- |
+| **E1** | Vedettes | Images non visibles (`0px`) | **Résolu** — `<img class="ck-product-card__img">` + SCSS `product_card.scss` |
+| **E2** | Coffrets | Fallback beige éditorial | **Résolu** — produit seedé + asset statique ; validateur rejette `--editorial` |
+
+---
+
+## 2. Objectif (inchangé)
+
+Rendre **« Nos coups de cœur »** et **« Coffrets découverte »** présentables en démo : images visibles, pas d'impression de catalogue incomplet. Correction visuelle ciblée — **sans refonte globale**.
+
+---
+
+## 3. Livraison technique
+
+### 3.0 — Commits de référence
+
+| Commit | Version | Contenu |
 | --- | --- | --- |
-| CK-HOME-001C | GO | Marque · newsletter FR · 4 univers |
-| CK-HOME-001A | GO | Hero · CTA `/producteurs` · CA6 mobile |
-| Navigation Option C | GO | Header catalogue |
-| Tunnel achat V1 | Gel | Shop → checkout |
+| **`43aa89fa`** | `19.0.1.76.0` | Livraison 001B — vedettes `<img>`, SCSS, seed coffret, asset `ck_discovery_pack.jpg`, tests lot2/lot3, migration `76.0` |
+| **`77.0`** | `19.0.1.77.0` | Hotfix — fuite markup dual, porte `/kits` (`controllers/home_portes.py`) |
+| **`78.0`** | `19.0.1.78.0` | Hotfix — doublons coffrets / réparation dual |
+| **`4a7fe568`** | `19.0.1.79.0` | Hotfix — retrait `stretched-link`, CTA `Découvrir` → `/kits`, captures recette, migration `79.0` |
 
-Il reste deux **réserves visuelles P1** documentées en recette QA (juin 2026), toujours observables en démo :
+Messages de commit :
 
-| ID | Bloc | Constat |
-| --- | --- | --- |
-| **E1** | Vedettes `ck-featured-products` | Produits · prix · liens OK — **zones image non visibles** (hauteur calculée `0px` en recette Playwright) |
-| **E2** | Coffrets `ck-discovery-pack` | Bloc présent · CTA `/kits` OK — **fallback éditorial beige** (`ck-discovery-pack__visual--editorial`) faute de produit pack image en BO |
+```text
+43aa89fa — fix(ck-home): CK-HOME-001B images vedettes visibles et visuel coffret qualifié
+4a7fe568 — fix(ck-home): hotfix CK-HOME-001B coffrets — markup, /kits et CTA Découvrir
+```
 
----
+### 3.1 — CK-HOME-001B-a — Vedettes (E1) — livré
 
-## 2. Objectif
-
-Rendre les sections **« Nos coups de cœur »** et **« Coffrets découverte »** **présentables en démo** : images visibles, pas d’impression de catalogue incomplet.
-
-Correction **visuelle ciblée** de la home existante — **sans refonte globale**.
-
----
-
-## 3. Périmètre
-
-### 3.1 — CK-HOME-001B-a — Vedettes (E1)
-
-**Fichiers principaux**
-
-| Fichier | Rôle |
+| Fichier | Modification livrée |
 | --- | --- |
-| `home_featured.py` | SSR cartes · `build_featured_product_card_html()` · `bootstrap_home_featured_products()` |
-| `dorevia_ck_theme/static/src/scss/website.scss` | Bloc `.ck-featured-products--maquette` · `.ck-product-card--home` · `aspect-ratio` image |
-| `tests/test_ck_home_lot2_hooks.py` | Validation fragments · bootstrap |
-| `tests/test_ck_home_lot2_compose.py` | Rendu HTTP home |
+| `home_featured.py` | Balise `<img class="ck-product-card__img">` + validateur `_CARD_IMG_RE` |
+| `dorevia_ck_theme/static/src/scss/product_card.scss` | Règles `&__img` (`aspect-ratio`, `object-fit`) |
+| `tests/test_ck_home_lot2_*.py` | Assertions image `<img>` renforcées |
+| `migrations/19.0.1.76.0/post-migrate.py` | Re-bootstrap vedettes |
 
-**Diagnostic Dev (point de départ)**
+**Inchangé fonctionnellement** : curation `ck_is_featured` · prix · liens `/shop/...` · panier · wishlist.
 
-- Les cartes SSR portent bien un `background-image:url('/web/image/product…')` (validé par `card_fragment_is_valid` et `_CARD_IMAGE_RE`).
-- Le markup actuel sépare le lien cover (`<a class="ck-product-card__cover">`) de la zone image (`<div class="ck-product-card__image …">`).
-- Le SCSS impose `aspect-ratio: 1 / 1` sur `.ck-product-card__image` (l.684–697 `website.scss`) mais la recette QA a mesuré **hauteur `0px`** en runtime — investiguer collapse grid/flex ou conflit avec `.ck-product-card__cover`.
+### 3.2 — CK-HOME-001B-b — Coffrets (E2) — livré
 
-**Pistes de correction (choix Dev, borne visuelle)**
-
-- Garantir une **hauteur visible** stable sur desktop 1280 et mobile 390 px (SCSS et/ou markup minimal).
-- Alternative acceptable : `<img>` produit à la place du seul `background-image`, si plus fiable — sans changer la logique curation ni les CTA.
-- **Ne pas** refondre la card shop ni la grille catalogue.
-
-**Inchangé fonctionnellement**
-
-- Curation `ck_is_featured` · `get_curated_featured_variants()` · prix · liens `/shop/...` · ajout panier · wishlist.
-
-### 3.2 — CK-HOME-001B-b — Coffrets (E2)
-
-**Fichiers principaux**
-
-| Fichier | Rôle |
+| Fichier | Modification livrée |
 | --- | --- |
-| `home_discovery_pack.py` | `get_discovery_pack_product()` · `_discovery_visual_html()` · `bootstrap_home_discovery_pack()` |
-| `dorevia_ck_theme/static/src/scss/website.scss` | `.ck-discovery-pack__visual--editorial` (fallback beige) |
-| `tests/test_ck_home_lot3_hooks.py` | Bootstrap · validateur arch |
-| `tests/test_ck_home_lot3_compose.py` | Rendu HTTP |
+| `catalog_discovery_pack.py` | Seed produit « Coffret découverte créole » avec image |
+| `static/img/ck_discovery_pack.jpg` | Asset statique de repli |
+| `home_discovery_pack.py` | Validateur rejette `--editorial`, `stretched-link`, `fa-3x` ; layout `ck-discovery-pack--polish-v1` |
+| `controllers/home_portes.py` | `/kits` → 301 `/shop?marketone_mode=pack` |
+| `home_dual_engage.py` | Réparation fuite markup (hotfixes 77–78) |
+| `tests/test_ck_home_lot3_*.py` | Assertions visuel qualifié + absence stretched-link |
+| `migrations/19.0.1.76.0` · `77.0` · `78.0` · `79.0` | Re-bootstrap successifs |
 
-**Diagnostic Dev**
-
-- `get_discovery_pack_product()` cherche un produit publié avec image (`pack_ok=True` ou nom `ilike 'coffret'`).
-- Si aucun produit : `_discovery_visual_html()` retourne le fallback **`ck-discovery-pack__visual--editorial`** (dégradé beige + icône cadeau).
-- Le validateur `discovery_pack_arch_is_valid()` **n’exige pas** une vraie image — d’où la réserve E2.
-
-**Pistes de correction (choix Dev, au moins une)**
-
-1. **Seed catalogue** : produit coffret démo publié avec image BO (content module) — réutiliser `get_discovery_pack_product()` existant.
-2. **Asset statique CK** : image coffret dans `dorevia_ck_marketone_content/static/` ou thème, branchée quand pas de produit BO.
-3. **Renforcer le validateur** : après correction, `discovery_pack_arch_is_valid()` doit **rejeter** le fallback `--editorial` en production home (forcer re-bootstrap).
-
-**Inchangé fonctionnellement**
-
-- CTA `Découvrir` → `/kits` · comportement redirection pack · textes éditoriaux par défaut si pas de produit.
+**Inchangé fonctionnellement** : CTA `Découvrir` → `/kits` · textes éditoriaux par défaut.
 
 ---
 
-## 4. Hors scope (strict)
+## 4. Hors scope (strict — inchangé)
 
-- Hero CK-HOME-001A (`home_hero.py`)
-- Hygiène CK-HOME-001C (newsletter · marque · univers 4 cartes · `home_univers.py`)
-- Navigation header · footer · démo tunnel
-- **`/promotions`** (réserve P2 — **001B-c** — ticket ultérieur)
-- Bloc producteurs / transformateurs home → futur **CK-HOME-002** / **CK-HOME-PRODUCERS-001**
-- Copy éditorial bas de page (`home_editorial.py`)
-- Refonte home complète · Lot 6 polish global
-- SEO canonical · déploiement prod
+- Hero CK-HOME-001A · hygiène CK-HOME-001C · navigation header · footer · démo tunnel
+- **`/promotions`** (réserve P2 — **001B-c** — ticket ultérieur, **NO GO** dans ce lot)
+- Bloc producteurs home → **CK-HOME-002** / **CK-HOME-PRODUCERS-001**
+- **Copy éditorial bas de page** (`home_editorial.py`) — backlog copy dédié
+- Refonte home complète · Lot 6 polish global · SEO canonical · déploiement prod
 - Tunnel achat · fiches produit (hors non-régression)
+- **Développement additionnel 001B** : **NO GO** tant que la recette clôture MOA n'est pas faite
 
 ---
 
-## 5. Critères d’acceptation
+## 5. Critères d'acceptation
 
-### CA1 — Vedettes visibles (001B-a)
+### CA1 — Vedettes (001B-a)
 
-- Chaque carte « Nos coups de cœur » affiche une **image produit visible** (hauteur > 0, pas de zone vide) sur **desktop 1280** et **mobile 390 px**.
-- Les URLs `/web/image/product…` répondent **200** (pas de broken image).
-- Prix, titres, liens fiche produit et CTA panier **inchangés**.
+| Critère | État technique |
+| --- | --- |
+| Image visible desktop 1280 + mobile 390 | **OK** — smoke + tests |
+| URLs `/web/image/product…` en 200 | **OK** — tests compose |
+| Prix, liens, CTA panier inchangés | **OK** |
 
-### CA2 — Coffret qualifié (001B-b)
+### CA2 — Coffret (001B-b)
 
-- Le bloc coffrets n’affiche **plus** le fallback beige `ck-discovery-pack__visual--editorial` sur la home sandbox recettée.
-- Un **visuel qualifié** est visible (`<img src="/web/image/…">` produit seedé **ou** asset statique CK documenté).
-- CTA `/kits` fonctionnel.
+| Critère | État technique |
+| --- | --- |
+| Plus de fallback `ck-discovery-pack__visual--editorial` | **OK** — validateur + smoke |
+| Visuel qualifié (produit BO ou asset statique) | **OK** |
+| Route `/kits` → collection pack | **OK** — 301 |
+| Clic bouton « Découvrir » → `/kits` (pas intercepté) | **À valider MOA** — corrigé en `79.0` |
 
 ### CA3 — Mobile 390 px
 
-- Home complète : `scrollWidth` = `clientWidth` = 390 (pas d’overflow horizontal).
-- Vedettes et coffret lisibles en viewport 390 px.
-- Capture ou métriques JSON archivées (patron CA6 de 001A).
+- **À valider MOA** — captures 2 juil. existent ; repasse formelle post-`79.0` requise.
 
 ### CA4 — Non-régression
 
-- Hero 001A (textes + CTA `/producteurs`) inchangé.
-- Section univers 4 cartes (001C) inchangée.
-- Dual Pro / Newsletter présent et fonctionnel.
-- `/shop` et fiche produit témoin : **200** · ajout panier OK.
-- Ordre blocs home conservé : Hero → Réassurance → Vedettes → Univers → Coffrets → Dual → Éditorial.
+- Hero 001A · univers 001C · dual Pro · ordre blocs · `/shop` : **OK** tests lot1 + smoke.
 
 ### CA5 — Tests automatisés
 
-- Tags existants **verts** : `dorevia_ck_marketone_home_lot2`, `dorevia_ck_marketone_home_lot3`.
-- Smoke home lot1 (`dorevia_ck_marketone_home_lot1`) : **0 failed**.
+- Tags `dorevia_ck_marketone_home_lot1/2/3` : **35/35 verts** (3 juil. 2026, sandbox `82.0`).
 
 ---
 
 ## 6. Recette QA / tests
 
-### 6.1 Tests automatisés (obligatoires)
+### 6.1 Tests automatisés (validés 3 juil. 2026)
 
 ```bash
 docker exec sandbox-odoo19-odoo-1 odoo -c /etc/odoo/odoo.conf \
-  -d dorevia_ck_marketone_01 \
-  --test-tags dorevia_ck_marketone_home_lot2,dorevia_ck_marketone_home_lot3,dorevia_ck_marketone_home_lot1 \
+  -d dorevia_ck_marketone_01 --http-port=8079 \
+  --test-tags dorevia_ck_marketone_home_lot1,dorevia_ck_marketone_home_lot2,dorevia_ck_marketone_home_lot3 \
   --stop-after-init
 ```
 
-### 6.2 Smoke manuel / Playwright
+> Utiliser `--http-port=8079` si le port `8069` est occupé par le serveur sandbox.
 
-| Contrôle | Viewport |
-| --- | --- |
-| Images vedettes visibles | 1280 + **390** |
-| Coffret sans fallback beige | 1280 + **390** |
-| Overflow horizontal | 390 (`scrollWidth`/`clientWidth`) |
-| Hero 001A non régressé | 1280 |
-| `/shop` + fiche témoin | 1280 |
+### 6.2 Recette MOA de clôture — **à prévoir (post-79.0)**
 
-Scripts réutilisables (à adapter si assertions obsolètes) :
+| Contrôle | Viewport | Priorité |
+| --- | --- | --- |
+| Images vedettes visibles | 1280 + **390** | P1 |
+| Coffret sans fallback beige | 1280 + **390** | P1 |
+| **Clic CTA « Découvrir »** → `/kits` (pas fiche produit interceptée) | 1280 + **390** | P1 |
+| Overflow horizontal home | **390** | P1 |
+| Hero 001A non régressé | 1280 | P1 |
+| `/shop` + fiche témoin + ajout panier | 1280 | P1 |
+
+Scripts réutilisables :
 
 - `docs/design/maquette_01.2/scripts/ck_lot2_product_mobile390.mjs`
-- `docs/design/maquette_01.2/scripts/ck_lot3_home_discovery_qa.mjs` (créer si absent — patron lot1/001A)
-- Patron mobile : capture hero 001A (`ck_home_001a_hero_mobile_390.png`)
+- Captures existantes : `docs/cadrage/captures/recette_home_20260702/` *(pré-hotfix 79.0 — à compléter)*
 
-### 6.3 Migration
+**Livrable attendu** : `NOTE_MOA_CLOTURE_CK_HOME_001B_20260703.md` (ou date réelle) + captures desktop + mobile 390 post-79.
 
-- Bump `__manifest__.py` → `19.0.1.76.0`
-- Créer `migrations/19.0.1.76.0/post-migrate.py` sur le patron `19.0.1.75.0` :
-  - `bootstrap_home_featured_products(env)`
-  - `bootstrap_home_discovery_pack(env)`
-  - `cr.commit()` + log métier CK-HOME-001B
+### 6.3 Migrations (livrées)
 
-### 6.4 Livrables documentation
-
-- Note MOA clôture `NOTE_MOA_CLOTURE_CK_HOME_001B_20260702.md` (ou date livraison réelle)
-- Captures desktop + mobile 390 px (vedettes + coffret)
+| Version | Script |
+| --- | --- |
+| `19.0.1.76.0` | Vedettes + coffret + seed catalogue |
+| `19.0.1.77.0` | Dual + discovery re-bootstrap |
+| `19.0.1.78.0` | Réparation fuite / doublons |
+| `19.0.1.79.0` | Coffrets sans `stretched-link` |
 
 ---
 
 ## 7. Implémentation — checklist Dev
 
-- [ ] Reproduire E1/E2 sur sandbox post-upgrade `19.0.1.75.0`
-- [ ] Corriger visibilité images vedettes (SCSS et/ou markup — acte thème si nécessaire)
-- [ ] Remplacer fallback coffret beige par image qualifiée (seed produit et/ou asset statique)
-- [ ] Mettre à jour validateurs / tests lot2 et lot3 si critères visuels renforcés
-- [ ] Migration `19.0.1.76.0` + upgrade sandbox + restart
-- [ ] Recette 1280 + 390 px documentée
-- [ ] Vérifier hero 001A / univers 001C / dual inchangés
+- [x] Reproduire E1/E2 sur sandbox post-upgrade `19.0.1.75.0`
+- [x] Corriger visibilité images vedettes (`<img>` + SCSS `product_card.scss`) — `43aa89fa`
+- [x] Remplacer fallback coffret beige (seed produit + asset statique) — `43aa89fa`
+- [x] Mettre à jour validateurs / tests lot2 et lot3 — `43aa89fa`
+- [x] Migrations `76.0` + upgrade sandbox
+- [x] Hotfixes markup dual / `/kits` / stretched-link — `77.0`–`79.0` / `4a7fe568`
+- [x] Tests automatisés lot1/2/3 verts (3 juil. 2026)
+- [ ] **Recette MOA clôture** desktop 1280 + mobile 390 post-`79.0`
+- [ ] **Note MOA clôture** `NOTE_MOA_CLOTURE_CK_HOME_001B_*.md`
+- [x] Vérifier hero 001A / univers 001C / dual inchangés (smoke + tests)
 
 ---
 
-## 8. Message de commit proposé
+## 8. Verdict ticket
 
 ```text
-fix(ck-home): CK-HOME-001B images vedettes visibles et visuel coffret qualifié
+CK-HOME-001B-a / 001B-b → Livré technique (43aa89fa + hotfixes 77.0–79.0)
+→ GO recette MOA de clôture (desktop 1280 + mobile 390, post-79)
+→ NO GO développement additionnel tant que clôture MOA non faite
+→ 001B-c /promotions et copy éditorial → hors périmètre / backlog
 ```
 
 ---
 
-*Ticket Dev — C-Kréyòl Marketone · CK-HOME-001B — 2 juillet 2026*
+*Ticket Dev — C-Kréyòl Marketone · CK-HOME-001B — révision 3 juillet 2026*
