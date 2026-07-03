@@ -34,3 +34,10 @@ dorevia_ck_marketone/docs/design/maquette_01.2/rapport/captures/
 dorevia_ck_marketone/docs/design/maquette_01.2/rapport/captures_sections/
 dorevia_ck_marketone/docs/design/maquette_01.2/rapport/a1_visuelle_*/
 dorevia_ck_marketone/docs/design/maquette_01.2/rapport/phase10_transversale_*/
+
+# CK cadrage — captures d'écran de recette (churn binaire à chaque run, pas de
+# valeur de diff réelle) : non suivies. Les JSON de résultats/verdicts restent
+# suivis (preuve d'audit QA).
+dorevia_ck_marketone/docs/cadrage/captures/**/*.png
+dorevia_ck_marketone/docs/cadrage/captures/**/*.jpg
+dorevia_ck_marketone/docs/cadrage/captures/**/*.jpeg
