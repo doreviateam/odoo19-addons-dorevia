@@ -1,0 +1,136 @@
+{
+  "date": "2026-07-03",
+  "base": "http://localhost:18079",
+  "db": "dorevia_ck_marketone_01",
+  "routes": {
+    "/": {
+      "status": 200,
+      "finalUrl": "http://localhost:18079/?db=dorevia_ck_marketone_01"
+    },
+    "/shop": {
+      "status": 200,
+      "finalUrl": "http://localhost:18079/shop?db=dorevia_ck_marketone_01"
+    },
+    "/kits": {
+      "status": 200,
+      "finalUrl": "http://localhost:18079/shop?marketone_mode=pack"
+    },
+    "/shop/cart": {
+      "status": 200,
+      "finalUrl": "http://localhost:18079/shop/cart?db=dorevia_ck_marketone_01"
+    },
+    "/producteurs": {
+      "status": 200,
+      "finalUrl": "http://localhost:18079/producteurs?db=dorevia_ck_marketone_01"
+    },
+    "shop_general": {
+      "hasBanner": false,
+      "hasCompact": true,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "h1Count": 1,
+      "bannerOk": true,
+      "status": 200
+    },
+    "epicerie": {
+      "href": "/shop/category/epicerie-1",
+      "finalUrl": "http://localhost:18079/shop/category/epicerie-1",
+      "status": 200
+    }
+  },
+  "viewports": {
+    "desktop_1280": {
+      "home": {
+        "overflow": false,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "heroTitle": "C-Kréyòl — les saveurs créoles en Europe",
+        "newsletterForm": false,
+        "featuredImgs": 4,
+        "featuredImgTotal": 4,
+        "coffretNoFallback": true,
+        "coffretVisual": true,
+        "ctaKits": true,
+        "noStretchedLink": true,
+        "blockOrder": [
+          "hero",
+          "reassurance",
+          "featured",
+          "univers",
+          "coffret",
+          "dual",
+          "editorial"
+        ]
+      },
+      "header": {
+        "hasHeart": true,
+        "hasCart": true,
+        "wishBadgeHiddenAtZero": true,
+        "cartBadgeHiddenAtZero": true,
+        "menuHasBoutique": true,
+        "menuHasEpicerie": true,
+        "menuHasBoissons": false,
+        "menuHasSoin": false,
+        "menuHasArtisanat": false,
+        "mobileDrawer": true
+      }
+    },
+    "mobile_390": {
+      "home": {
+        "overflow": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "heroTitle": "C-Kréyòl — les saveurs créoles en Europe",
+        "newsletterForm": false,
+        "featuredImgs": 4,
+        "featuredImgTotal": 4,
+        "coffretNoFallback": true,
+        "coffretVisual": true,
+        "ctaKits": true,
+        "noStretchedLink": true,
+        "blockOrder": [
+          "hero",
+          "reassurance",
+          "featured",
+          "univers",
+          "coffret",
+          "dual",
+          "editorial"
+        ]
+      },
+      "header": {
+        "hasHeart": true,
+        "hasCart": true,
+        "wishBadgeHiddenAtZero": true,
+        "cartBadgeHiddenAtZero": true,
+        "menuHasBoutique": true,
+        "menuHasEpicerie": true,
+        "menuHasBoissons": false,
+        "menuHasSoin": false,
+        "menuHasArtisanat": false,
+        "mobileDrawer": false
+      }
+    }
+  },
+  "universes": {
+    "epicerie_desktop": {
+      "hasBanner": true,
+      "hasCompact": false,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "h1Count": 1,
+      "bannerOk": true
+    },
+    "epicerie_mobile": {
+      "hasBanner": true,
+      "hasCompact": false,
+      "overflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "h1Count": 1,
+      "bannerOk": true
+    }
+  }
+}
