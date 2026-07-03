@@ -5,7 +5,8 @@
 | Date | 2 juillet 2026 (révision 3 juillet 2026) |
 | Projet | C-Kréyòl Marketone — Home |
 | Périmètre | **001B-a + 001B-b uniquement** |
-| Statut | **Livré technique — en attente recette clôture MOA** |
+| Statut | **Clôturé — GO MOA** (recette 3 juillet 2026) |
+| Clôture | [`NOTE_MOA_CLOTURE_CK_HOME_001B_20260703.md`](NOTE_MOA_CLOTURE_CK_HOME_001B_20260703.md) |
 | Base recette | `dorevia_ck_marketone_01` — http://localhost:18079 |
 | État des lieux | [`NOTE_ETAT_DES_LIEUX_CK_HOME_001B_20260703.md`](NOTE_ETAT_DES_LIEUX_CK_HOME_001B_20260703.md) |
 
@@ -194,8 +195,8 @@ Scripts réutilisables :
 - [x] Migrations `76.0` + upgrade sandbox
 - [x] Hotfixes markup dual / `/kits` / stretched-link — `77.0`–`79.0` / `4a7fe568`
 - [x] Tests automatisés lot1/2/3 verts (3 juil. 2026)
-- [ ] **Recette MOA clôture** desktop 1280 + mobile 390 post-`79.0`
-- [ ] **Note MOA clôture** `NOTE_MOA_CLOTURE_CK_HOME_001B_*.md`
+- [x] **Recette MOA clôture** desktop 1280 + mobile 390 post-`79.0` — 3 juil. 2026
+- [x] **Note MOA clôture** [`NOTE_MOA_CLOTURE_CK_HOME_001B_20260703.md`](NOTE_MOA_CLOTURE_CK_HOME_001B_20260703.md)
 - [x] Vérifier hero 001A / univers 001C / dual inchangés (smoke + tests)
 
 ---
@@ -203,9 +204,8 @@ Scripts réutilisables :
 ## 8. Verdict ticket
 
 ```text
-CK-HOME-001B-a / 001B-b → Livré technique (43aa89fa + hotfixes 77.0–79.0)
-→ GO recette MOA de clôture (desktop 1280 + mobile 390, post-79)
-→ NO GO développement additionnel tant que clôture MOA non faite
+CK-HOME-001B-a / 001B-b → Clôturé GO MOA (3 juillet 2026)
+→ Livraison technique : 43aa89fa + hotfixes 77.0–79.0 (4a7fe568)
 → 001B-c /promotions et copy éditorial → hors périmètre / backlog
 ```
 

@@ -1,0 +1,121 @@
+{
+  "date": "2026-07-03",
+  "base": "http://localhost:18079",
+  "db": "dorevia_ck_marketone_01",
+  "kits": {
+    "status": 200,
+    "finalUrl": "http://localhost:18079/shop?marketone_mode=pack"
+  },
+  "viewports": [
+    {
+      "label": "desktop_1280",
+      "width": 1280,
+      "height": 900,
+      "status": 200,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "featuredPresent": true,
+      "featuredImgCount": 4,
+      "featuredImgsVisible": 4,
+      "featuredImgs": [
+        {
+          "src": "/web/image/product.template/3/image_512",
+          "visible": true,
+          "height": 276
+        },
+        {
+          "src": "/web/image/product.product/21/image_512",
+          "visible": true,
+          "height": 276
+        },
+        {
+          "src": "/web/image/product.product/22/image_512",
+          "visible": true,
+          "height": 276
+        },
+        {
+          "src": "/web/image/product.template/7/image_512",
+          "visible": true,
+          "height": 276
+        }
+      ],
+      "noEditorialFallback": true,
+      "noStretchedLink": true,
+      "discoveryVisualProduct": true,
+      "discoveryStaticFallback": false,
+      "ctaHref": "/kits",
+      "ctaPresent": true,
+      "heroKicker": true,
+      "heroTitle": "C-Kréyòl — les saveurs créoles en Europe",
+      "universCards": 12,
+      "universIntro": true,
+      "dualPresent": true,
+      "newsletterOnHome": false,
+      "blockOrder": [
+        "hero",
+        "reassurance",
+        "featured",
+        "univers",
+        "coffret",
+        "dual",
+        "editorial"
+      ]
+    },
+    {
+      "label": "mobile_390",
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "overflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "featuredPresent": true,
+      "featuredImgCount": 4,
+      "featuredImgsVisible": 4,
+      "featuredImgs": [
+        {
+          "src": "/web/image/product.template/3/image_512",
+          "visible": true,
+          "height": 356
+        },
+        {
+          "src": "/web/image/product.product/21/image_512",
+          "visible": true,
+          "height": 356
+        },
+        {
+          "src": "/web/image/product.product/22/image_512",
+          "visible": true,
+          "height": 356
+        },
+        {
+          "src": "/web/image/product.template/7/image_512",
+          "visible": true,
+          "height": 356
+        }
+      ],
+      "noEditorialFallback": true,
+      "noStretchedLink": true,
+      "discoveryVisualProduct": true,
+      "discoveryStaticFallback": false,
+      "ctaHref": "/kits",
+      "ctaPresent": true,
+      "heroKicker": true,
+      "heroTitle": "C-Kréyòl — les saveurs créoles en Europe",
+      "universCards": 12,
+      "universIntro": true,
+      "dualPresent": true,
+      "newsletterOnHome": false,
+      "blockOrder": [
+        "hero",
+        "reassurance",
+        "featured",
+        "univers",
+        "coffret",
+        "dual",
+        "editorial"
+      ]
+    }
+  ]
+}
