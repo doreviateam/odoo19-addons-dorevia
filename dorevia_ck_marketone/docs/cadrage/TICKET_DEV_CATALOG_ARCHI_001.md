@@ -145,20 +145,33 @@ trouvés/corrigés (BUG-B1/B2/B3) et des points de contrôle vérifiés sur rend
 
 ## Lot C — SEO / sitemap / noindex / routes catégories
 
-**Objectif** : le lot le plus risqué et le plus net-new — aucun mécanisme `noindex` ni sitemap catégorie n'existe aujourd'hui (seul un sitemap producteurs existe, `producer_seo.py`).
+**Objectif** : le plus risqué et net-new du découpage — comportement des routes catégories, `noindex` et sitemap selon `ck_exposure_status`.
 
-### Contenu
+**Statut (3 juillet 2026)** : cadrage préalable fait — [`note_11.md`](note_11.md) (mini-note d'approche MOA) + [`note_11_reponse.md`](note_11_reponse.md) (vérification technique Dev). **NO GO code** — en attente du GO MOA final sur la matrice V1 ci-dessous.
 
-1. Surcharge de la route catégorie du contrôleur `CkWebsiteSaleController` ([`controllers/website_sale.py`](../../dorevia_ck_marketone_content/controllers/website_sale.py)) pour appliquer le tableau §13.2 de la note : `active` → 200, `promise` → 200 éditorialisé ou redirect, `hidden` → 302 `/shop` (ou 404), `draft` → 404, `archived` → 301 vers `ck_replacement_category_id` si renseigné sinon 404. **Défaut retenu (amendement note_10_reponse §2.5) : préférer 301/302 à 404 dès que possible**, pour ne pas casser une URL déjà indexée/partagée.
-2. Champ optionnel `ck_replacement_category_id` (Many2one `product.public.category`) pour le cas `archived`.
-3. Mécanisme `noindex` : balise meta robots conditionnelle sur les pages catégorie non `active` (aucun équivalent existant à réutiliser — à créer via le contexte template ou `website.page`/`ir.http` selon ce que permet la version Odoo 19 CE en place).
-4. Filtrage du sitemap : exclure `hidden`/`draft`/`archived` et toute page `noindex` du sitemap public — garde-fou testable "jamais noindex + présent dans le sitemap" (§13.3, test §20.5).
+### Matrice V1 validée en approche (note 11)
+
+| Statut     | Route directe                                        | Navigation                      | SEO / sitemap           |
+| ---------- | ----------------------------------------------------- | ---------------------------------- | -------------------------- |
+| `active`   | 200 catégorie marchande                              | visible si exposable            | indexable si contenu OK |
+| `promise`  | 302 vers `/shop` (pas de page promesse en V1, sauf validation MOA explicite) | non visible en navigation forte | hors sitemap            |
+| `hidden`   | 302 vers `/shop`                                     | invisible                       | hors sitemap            |
+| `draft`    | 404                                                  | invisible                       | hors sitemap            |
+| `archived` | 301 vers `ck_replacement_category_id` si renseigné, sinon 404 | invisible                       | hors sitemap            |
+
+### Contenu (points d'accroche techniques confirmés — note_11_reponse §1-3)
+
+1. **Redéclaration de la route** `shop()` dans `CkWebsiteSaleController` ([`controllers/website_sale.py`](../../dorevia_ck_marketone_content/controllers/website_sale.py)) — le point d'insertion est confirmé juste après `category = self._validate_and_get_category(category)` dans la méthode standard `website_sale.controllers.main.WebsiteSale.shop()`. Décision route/redirect/404 isolée dans un helper pur (pas de logique dispersée dans le contrôleur, cf. Risque 3 de la note 11).
+2. **Sitemap** : la même redéclaration de route doit fournir sa propre fonction `sitemap=` (le standard Odoo utilise `sitemap_shop`, qui énumère toutes les catégories sans filtre d'exposabilité) — pas de coût séparé, la route et le sitemap se règlent dans la même redéclaration.
+3. **Noindex** : `website.layout` a déjà un mécanisme générique (`main_object.website_indexed` → `<meta name="robots" content="noindex"/>`), mais `product.public.category` n'a pas de champ `website_indexed` (hérite de `website.seo.metadata`, pas de `website.page`). **Moins coûteux qu'estimé initialement** : ajouter un champ équivalent sur la catégorie plutôt que construire un mécanisme noindex de zéro.
+4. Champ `ck_replacement_category_id` (Many2one `product.public.category`) pour le cas `archived`.
+5. Filtrage du sitemap : garde-fou testable "jamais noindex + présent dans le sitemap" (§13.3 de note_10.md, test §20.5).
 
 ### Critères d'acceptation
 
-* Comportement de route stable et documenté par statut, conforme au tableau §13.2 (§18 global).
-* Aucune page `noindex` présente dans le sitemap public (§18.12, test §20.5).
-* Recette sur les 6 routes listées en §19.1 de la note, desktop 1280 px + mobile 390 px.
+* Comportement de route stable et documenté par statut, conforme à la matrice V1 ci-dessus.
+* Aucune page `noindex` présente dans le sitemap public.
+* Recette sur les 6 routes listées en §19.1 de note_10.md, desktop 1280 px + mobile 390 px, cf. tests QA minimaux détaillés dans note_11.md §6.
 
 ---
 
