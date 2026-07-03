@@ -5,7 +5,8 @@
 | Date | 3 juillet 2026 |
 | Projet | C-Kréyòl Marketone — pages univers boutique |
 | Destinataires | MOA, Produit, QA, Dev |
-| Statut | **GO recette fonctionnelle** · **GO clôture technique sous réserve** de commit du correctif test et archivage des captures |
+| Statut | **Clôturé techniquement** — commit `a3567caf` (3 juillet 2026) |
+| Commit de référence | `a3567caf` — `feat(ck): CK-UNIVERSE-BANNER-001 Lot A bannière univers + tests CI stables` |
 | Lot | **CK-UNIVERSE-BANNER-001 Lot A** (banner éditorial niveau 0 — Note 09) |
 | Modules | `dorevia_ck_marketone_content` (modèle + template + tests) · `dorevia_ck_theme` (SCSS) |
 | Versions livrées | `dorevia_ck_marketone_content` **19.0.1.82.0** · `dorevia_ck_theme` **19.0.1.120.0** |
@@ -25,7 +26,7 @@ Le parcours acheteur de référence reste inchangé :
 
 **Verdict QA : GO recette fonctionnelle.** Le comportement est conforme au cadrage : bannière uniquement sur les univers niveau 0, H1 unique, pas de régression sur `/shop` ni sur les sous-catégories. La recette navigateur en sandbox a validé le **mode fallback sans image** ; le mode image + accroche est couvert **structurellement** par test automatisé, mais la **validation visuelle finale** reste à faire après alimentation réelle des images et accroches BO sur les 4 univers.
 
-**Clôture technique : sous réserve** du commit du correctif test (`test_ck_shop_universe_banner.py`) et de l'archivage des captures de recette (cf. § Captures).
+**Clôture technique : confirmée** — commit `a3567caf` inclut l'implémentation Lot A, le correctif test CI et l'archivage des captures (cf. § Captures).
 
 ---
 
@@ -76,7 +77,7 @@ Recette exécutée sur `dorevia_ck_marketone_01` après upgrade OK des modules.
 
 Tag `dorevia_ck_universe_banner` : couverture Q1–Q6 du ticket (présence/absence bannière, H1 unique, fallback sans image, image + accroche en catégorie éphémère).
 
-**Correctif test local (non commité au moment de la recette)** : dans `test_ck_shop_universe_banner.py`, le helper `_create_root_category` crée désormais un produit publié minimal rattaché à la catégorie de test — Odoo masque les catégories publiques vides. Ce correctif **doit être commité avant merge / tag / clôture définitive**.
+**Correctif test CI** (commit `a3567caf`) : dans `test_ck_shop_universe_banner.py`, le helper `_create_root_category` crée un produit publié minimal rattaché à la catégorie de test — Odoo masque les catégories publiques vides.
 
 ### Limite recette — mode image + accroche
 
@@ -102,8 +103,8 @@ Archivées dans [`docs/design/maquette_01.2/captures/ck_universe_banner_20260703
 
 | Acteur | Action | Statut |
 | --- | --- | --- |
-| **Dev** | Committer le correctif fixture dans `dorevia_ck_marketone_content/tests/test_ck_shop_universe_banner.py` | **À faire** |
-| **Dev / QA** | Archiver les captures de recette dans le dossier projet | **Fait** (3 juillet 2026) |
+| **Dev** | Committer l'implémentation Lot A + correctif fixture `test_ck_shop_universe_banner.py` | **Fait** — `a3567caf` (3 juillet 2026) |
+| **Dev / QA** | Archiver les captures de recette dans le dossier projet | **Fait** — `a3567caf` (3 juillet 2026) |
 | **MOA** | Alimenter `image_1920` et `ck_subtitle` des 4 univers en BO (Website → eCommerce → Catégories) | **À faire** pour démo commerciale aboutie |
 | **MOA / QA** | Passe visuelle post-alimentation (image + scrim + accroche sur au moins un univers) | **À faire** après alimentation BO |
 
@@ -125,11 +126,10 @@ Sur `localhost:18079` ou URL démo :
 
 ```text
 CK-UNIVERSE-BANNER-001 Lot A
-→ GO recette fonctionnelle
-→ GO clôture technique sous réserve de commit du correctif test + archivage des captures
+→ Clôturé techniquement (commit a3567caf)
 → Exploitable en sandbox en mode fallback
 → Démo commerciale aboutie après alimentation BO des images et ck_subtitle des 4 univers
-→ Lot B variantes couleur : NO GO à ce stade
+→ Lot B variantes couleur (ck_banner_variant) : NO GO — après recette visuelle Lot A alimenté
 ```
 
 ---
