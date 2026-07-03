@@ -12,7 +12,7 @@
 | Modules | `dorevia_ck_marketone_content` (principal) · `dorevia_ck_theme` (templates cards/badges) |
 | Priorité | P0 (Lot A hors seuil nav + correction data) → P1 (reste Lot A/B) → P1 (Lot C) → P2 (Lot D) |
 | Estimation Lot A | **5–5,5 j-h Dev + 1,5–2 j-h QA** (détail §"Chiffrage Lot A") |
-| Statut | **Lot A livré et validé 3 juillet 2026** — commit `a72a5e36` sur `odoo19-addons-dorevia`, module `dorevia_ck_marketone_content` v19.0.1.83.0. Voir §"Validation Lot A" ci-dessous. |
+| Statut | **Lots A + B livrés, validés et poussés sur GitHub 3 juillet 2026** — commits `a72a5e36`/`95cc19e7` (Lot A) et `abae03f2` (Lot B) sur `origin/main` de `odoo19-addons-dorevia`, module `dorevia_ck_marketone_content` v19.0.1.84.0. **Lot C : NO GO code direct — mini-note d'approche à produire avant démarrage** (cf. arbitrage MOA Lot B ci-dessous). |
 
 ---
 
@@ -128,9 +128,18 @@ trouvés/corrigés (BUG-B1/B2/B3) et des points de contrôle vérifiés sur rend
 * `_is_ck_qualified_for_public_exposure()` (méthode, pas un champ stocké — équivalent fonctionnel) + `ck_is_orphan` (champ calculé stocké + filtre BO) sur `product.template`.
 * Qualification branchée sur `get_curated_featured_variants()` — un produit incomplet ne remonte plus en "Coups de cœur" même si `ck_is_featured` est coché.
 * Nom producteur ajouté à la ligne meta canonique (`_get_featured_card_metadata_line`, partagée shop/Home) — additif, aucun impact sur les produits sans producteur configuré.
-* Badges (§11.3/§11.5) : **scope interprété plus étroitement que "chip discret"** — pas de nouvel élément visuel ajouté aux cards dans ce lot (le ribbon existant reste seul élément visuel). Seul le texte de la ligne meta a été enrichi. Motif : ajouter un vrai chip visuel aurait nécessité un travail template/CSS non "déjà compatible avec l'existant", ce que l'arbitrage MOA "sobre, si compatible" ne couvrait pas explicitement. **À confirmer avec le MOA si un chip visuel producteur reste souhaité en V1.1.**
-* §10 (formats par famille) : pas de reconstruction en 5 templates distincts — le mécanisme générique existant (UOM masse/volume configurable + résolution origine attribut/tag) couvre déjà structurellement les formats alimentaire/boisson/soin. Coffret et matière/usage artisanat restent **non couverts** (nécessiteraient de nouveaux champs structurés, hors périmètre "pas de refonte fiche produit" — cf. §4 de la note).
+* Badges (§11.3/§11.5) : scope interprété plus étroitement que "chip discret" — pas de nouvel élément visuel ajouté aux cards dans ce lot (le ribbon existant reste seul élément visuel). Seul le texte de la ligne meta a été enrichi.
+* §10 (formats par famille) : pas de reconstruction en 5 templates distincts — le mécanisme générique existant (UOM masse/volume configurable + résolution origine attribut/tag) couvre déjà structurellement les formats alimentaire/boisson/soin. Coffret et matière/usage artisanat restent non couverts.
 * Recatégorisation des 6 produits nommés : **toujours hors scope Dev** (tâche QA/BO). Confirmé en conditions réelles que Pâte de manioc affiche toujours "Bien-être" sur `/shop`.
+
+### Arbitrage MOA (3 juillet 2026) — GO push + 2 interprétations Dev confirmées
+
+| Sujet | Décision |
+| --- | --- |
+| Push GitHub Lot B | **GO** — poussé `95cc19e7..abae03f2` sur `origin/main` |
+| Badges V1 | **Confirmé** : option sobre, pas de nouveau chip visuel, pas de pool multi-badges dans CATALOG-ARCHI-001. Multi-badges reste backlog éventuel. |
+| Formats par famille | **Confirmé** : réutilisation du mécanisme générique existant validée pour ce lot. Pas de 5 templates dédiés maintenant. Coffret / artisanat dédiés à traiter plus tard si de nouveaux champs structurés s'avèrent nécessaires. |
+| Démarrage Lot C | **NO GO direct** — une mini-note d'approche routes/noindex/sitemap doit être préparée avant tout code, compte tenu du niveau de risque du lot (net-new intégral, cf. §"Lot C" ci-dessous). |
 
 ---
 
