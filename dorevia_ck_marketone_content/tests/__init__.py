@@ -70,3 +70,5 @@ from . import test_ck_prod_001_availability
 from . import test_ck_nav_v1_sync
 from . import test_ck_nav_catalogue_sync
 from . import test_ck_nav_catalogue_split_link
+from . import test_ck_catalog_exposure
+from . import test_ck_footer_boutique_links

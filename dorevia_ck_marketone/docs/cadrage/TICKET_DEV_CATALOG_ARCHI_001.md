@@ -33,6 +33,13 @@
 
 **Reserve 1 levée → le Dev peut démarrer l'implémentation du Lot A. Reserve 2 ne bloque que le Lot B, pas le Lot A.**
 
+### Arbitrages MOA V1 (3 juillet 2026) — les deux réserves sont levées
+
+1. **Home "Acheter par univers"** : fonctionnement figé accepté pour ce lot. `bootstrap_home_univers()` reste le mécanisme — un changement de `ck_exposure_status` nécessitera un re-bootstrap manuel documenté (procédure à ajouter dans le README/CHANGELOG du module). Le rendu live est **hors périmètre** de CATALOG-ARCHI-001.
+2. **Badges Lot B** : option (a) sobre validée. Pas de pool multi-badges dans ce lot. On conserve le `website_ribbon_id` existant, avec un chip discret origine/producteur en complément si compatible avec l'existant (réutilisation du pattern Chips-U2).
+
+**Les deux réserves sont levées — Lot A et Lot B peuvent démarrer.**
+
 ### Options réserve 2 — scope badges cards (pour arbitrage MOA)
 
 | Option | Contenu | Effort estimé | Recommandation |

@@ -8,6 +8,7 @@ Condition D5/C3 :
     AND pas de recherche active
     AND pas de filtre actif (attrib, tags, prix)
 """
+from .ck_catalog_exposure import CK_CATEGORY_ACTIVE_MIN_PRODUCTS
 
 CK_REBOUND_MESSAGE = (
     "Cette sélection s'enrichit progressivement. "
@@ -42,7 +43,7 @@ def ck_should_show_rebound(values, post):
     if not values.get('category'):
         return False
     count = values.get('search_count', 0)
-    if count == 0 or count >= 3:
+    if count == 0 or count >= CK_CATEGORY_ACTIVE_MIN_PRODUCTS:
         return False
     if values.get('search') or values.get('original_search'):
         return False

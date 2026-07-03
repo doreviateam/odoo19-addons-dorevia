@@ -617,12 +617,16 @@ def _eligible_level2_children(env, parent_category):
 
 
 def _get_ck_nav_root_categories(env, website):
-    """Catégories e-commerce racines éligibles pour la navigation catalogue."""
+    """Catégories e-commerce racines éligibles pour la navigation catalogue.
+
+    CATALOG-ARCHI-001 Lot A : l'éligibilité passe par `_is_ck_exposable()`
+    (statut CK + seuil produits qualifiés), plus stricte que la simple
+    existence d'un produit publié (`_category_has_published_products`).
+    """
     Category = env['product.public.category'].sudo()
     root_cats = Category.search([('parent_id', '=', False)], order='sequence, name')
     return root_cats.filtered(
-        lambda c: _category_visible_on_website(c, website)
-        and _category_has_published_products(env, c)
+        lambda c: _category_visible_on_website(c, website) and c._is_ck_exposable()
     )
 
 
@@ -631,8 +635,7 @@ def _get_ck_nav_child_categories(env, website, parent):
     children = parent.child_id.sorted(key=lambda c: (c.sequence, c.name or ''))
     return [
         c for c in children
-        if _category_visible_on_website(c, website)
-        and _category_has_published_products(env, c)
+        if _category_visible_on_website(c, website) and c._is_ck_exposable()
     ]
 
 

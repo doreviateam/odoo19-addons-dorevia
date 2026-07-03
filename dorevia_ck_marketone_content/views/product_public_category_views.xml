@@ -11,6 +11,7 @@
             <field name="sequence" groups="base.group_no_one" position="after">
                 <field name="ck_universe"/>
                 <field name="ck_subtitle" placeholder="Accroche courte du banner"/>
+                <field name="ck_exposure_status"/>
             </field>
         </field>
     </record>

@@ -86,6 +86,38 @@ class TestCkNavCatalogueSync(TransactionCase):
             'public_categ_ids': [(4, cls.cat_b.id)],
         })
 
+        # CATALOG-ARCHI-001 Lot A : seuil d'exposition = 3 produits qualifiés
+        # (CK_CATEGORY_ACTIVE_MIN_PRODUCTS), évalué via _is_ck_exposable() sur
+        # CHAQUE catégorie individuellement (racine ET sous-catégories, cf.
+        # _get_ck_nav_child_categories). Les extras doivent donc être ajoutés
+        # sur cat_a_child1/child2 (pas seulement sur cat_a) pour que les deux
+        # sous-catégories restent éligibles dans les tests structurels
+        # ci-dessous (idempotence, séquences, etc.) qui ne portent pas sur le
+        # seuil lui-même (couvert par test_ck_catalog_exposure.py). cat_b n'a
+        # pas de sous-catégorie : ses extras vont directement dessus.
+        for idx in range(2):
+            Product.create({
+                'name': f'Test Produit NAV003 A1 extra {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, cls.cat_a_child1.id)],
+            })
+            Product.create({
+                'name': f'Test Produit NAV003 A2 extra {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, cls.cat_a_child2.id)],
+            })
+            Product.create({
+                'name': f'Test Produit NAV003 B extra {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, cls.cat_b.id)],
+            })
+
         # Produit dans cat_l3 uniquement (niveau 3)
         cls.prod_l3 = Product.create({
             'name': 'Test Produit NAV003 L3',
@@ -267,13 +299,15 @@ class TestCkNavCatalogueSync(TransactionCase):
 
         Category = self.env['product.public.category'].sudo()
         cat_new = Category.create({'name': 'TestCat NAV003 Rayon Nouveau', 'sequence': 905})
-        self.env['product.template'].sudo().create({
-            'name': 'Test Produit NAV003 Nouveau',
-            'sale_ok': True,
-            'is_published': True,
-            'website_published': True,
-            'public_categ_ids': [(4, cat_new.id)],
-        })
+        Product = self.env['product.template'].sudo()
+        for idx in range(3):
+            Product.create({
+                'name': f'Test Produit NAV003 Nouveau {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, cat_new.id)],
+            })
 
         self._sync()
 
@@ -420,18 +454,21 @@ class TestCkNavCatalogueSync(TransactionCase):
             'name': 'TestCat NAV003 Tmp',
             'sequence': 930,
         })
-        prod_tmp = self.env['product.template'].sudo().create({
-            'name': 'Test Produit NAV003 Tmp',
-            'sale_ok': True,
-            'is_published': True,
-            'website_published': True,
-            'public_categ_ids': [(4, cat_tmp.id)],
-        })
+        Product = self.env['product.template'].sudo()
+        prods_tmp = Product.browse()
+        for idx in range(3):
+            prods_tmp |= Product.create({
+                'name': f'Test Produit NAV003 Tmp {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, cat_tmp.id)],
+            })
         self._sync()
         self.assertTrue(self._root_menu(cat_tmp.name))
 
-        # Dépublier le produit
-        prod_tmp.write({'is_published': False, 'website_published': False})
+        # Dépublier tous les produits (catégorie redevient vide)
+        prods_tmp.write({'is_published': False, 'website_published': False})
         self._sync()
         self.assertFalse(
             self._root_menu(cat_tmp.name),

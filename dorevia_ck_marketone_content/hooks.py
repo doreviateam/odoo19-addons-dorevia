@@ -1141,6 +1141,9 @@ def bootstrap_all_marketone_content(env):
     seed_nav_shop_l2_categories(env)
     bootstrap_nos_producteurs_page(env)
     bootstrap_ck_catalogue_navigation(env)
+    from .footer_boutique import bootstrap_footer_boutique_links
+
+    bootstrap_footer_boutique_links(env)
 
 
 def post_init_hook(env):

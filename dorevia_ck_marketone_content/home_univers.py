@@ -90,14 +90,22 @@ def _find_univers_category(Category, spec):
 
 
 def _resolve_univers_cards(env):
-    """Retourne les 4 cards avec URL catégorie BO (fallback /shop si absente)."""
+    """Retourne les 4 cards avec URL catégorie BO (fallback /shop si absente).
+
+    CATALOG-ARCHI-001 Lot A §12.2 : le CTA d'un univers non exposable
+    (`ck_exposure_status` != active, ou sous le seuil produits) est réorienté
+    vers /shop plutôt que vers sa page catégorie — les 4 cards restent
+    toujours affichées (contenu Home figé, cf. build_home_univers_arch),
+    seul le lien change. Pas de page de promesse dédiée par univers dans ce lot.
+    """
     Category = env['product.public.category'].sudo()
     cards = []
     for spec in _UNIVERS_CARD_SPECS:
         category = _find_univers_category(Category, spec)
+        exposable = bool(category and category._is_ck_exposable())
         cards.append({
             **spec,
-            'href': _category_shop_url(env, category),
+            'href': _category_shop_url(env, category) if exposable else '/shop',
         })
     return cards
 
@@ -278,7 +286,15 @@ def _univers_arch_matches_bo(env, arch):
         chunk = arch[chunk_start:chunk_start + 12000]
         if 'pt48 pb48' not in chunk:
             return False
-    return all(card['href'] in arch for card in _resolve_univers_cards(env))
+    # CATALOG-ARCHI-001 : comparaison du bloc HTML complet de chaque card, pas
+    # seulement de son href — plusieurs cards peuvent désormais partager la
+    # même valeur de repli '/shop', qu'une simple recherche de sous-chaîne
+    # `href in arch` ne suffit plus à distinguer (elle serait trivialement
+    # vraie via le préfixe d'un autre href du type /shop/category/...).
+    return all(
+        _build_univers_card_html(card) in arch
+        for card in _resolve_univers_cards(env)
+    )
 
 
 def bootstrap_home_univers(env):
