@@ -12,7 +12,7 @@
 | Modules | `dorevia_ck_marketone_content` (principal) · `dorevia_ck_theme` (templates cards/badges) |
 | Priorité | P0 (Lot A hors seuil nav + correction data) → P1 (reste Lot A/B) → P1 (Lot C) → P2 (Lot D) |
 | Estimation Lot A | **5–5,5 j-h Dev + 1,5–2 j-h QA** (détail §"Chiffrage Lot A") |
-| Statut | **Réserve 1 (footer) levée par vérification directe en base 3 juillet 2026 — Lot A prêt à démarrer.** Réserve 2 (scope badges Lot B) toujours ouverte, ne bloque pas le Lot A. |
+| Statut | **Lot A livré et validé 3 juillet 2026** — commit `a72a5e36` sur `odoo19-addons-dorevia`, module `dorevia_ck_marketone_content` v19.0.1.83.0. Voir §"Validation Lot A" ci-dessous. |
 
 ---
 
@@ -157,6 +157,17 @@
 * Tri simple toujours disponible même filtres masqués.
 
 ---
+
+## Validation Lot A (3 juillet 2026)
+
+Implémenté et vérifié sur le sandbox `dorevia_ck_marketone_01` (module upgrade réel, pas de simulation) :
+
+* Migration `19.0.1.83.0` appliquée sans erreur. État réel constaté après migration : Épicerie 4 produits qualifiés (comptage via sous-catégories) → exposable ; Boissons 1, Soin & Bien-être 1, Artisanat 2 → non exposables. La nav a immédiatement supprimé 4 entrées de menu devenues non exposables.
+* Footer : colonne Boutique vérifiée en base — ne contient plus que "Tous les produits" + "Épicerie" (les 2 liens statiques Boissons/Soin/Artisanat d'origine ont disparu).
+* Home "Acheter par univers" : après re-bootstrap manuel (`bootstrap_home_univers`), les 3 univers non exposables pointent vers `/shop`, Épicerie garde son lien spécifique — conforme à l'amendement §12.2.
+* **Bug trouvé et corrigé pendant l'implémentation** : le garde-fou anti-régénération de `home_univers.py` (`_univers_arch_matches_bo`) comparait les hrefs par sous-chaîne, ce qui devenait un faux positif dès que plusieurs cards partagent la valeur de repli `/shop` — corrigé par comparaison du bloc HTML complet de chaque card.
+* Suite de tests complète exécutée avant/après (avec isolation via `git stash` pour distinguer les échecs pré-existants des régressions réelles) : **aucune régression introduite par le Lot A**. 2 bugs trouvés dans mes propres fichiers de test ont été corrigés (structure XML du footer de test, produits de fixture mal répartis sur les sous-catégories) — tous les tests du Lot A et de non-régression nav passent au final (37/37 sur la portée ciblée).
+* Correction apportée en cours de route à la note MOA : `product.public.category` standard Odoo 19 n'a pas de champ `website_published` (vérifié dans le code source `website_sale`) — `_is_ck_exposable()` ne s'appuie donc que sur `ck_exposure_status` + le comptage de produits qualifiés.
 
 ## Séquencement recommandé
 
