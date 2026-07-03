@@ -8,8 +8,8 @@
 | Statut | **GO démo avec réserves connues** |
 | Base | `dorevia_ck_marketone_01` |
 | URL locale | http://localhost:18079 |
-| URL publique recette | https://assure-violation-markets-factors.trycloudflare.com |
-| Tunnel | Cloudflare — **laisser actif** tant que la démo est ouverte |
+| URL publique recette | https://basename-prev-keith-panels.trycloudflare.com |
+| Tunnel | Cloudflare quick tunnel — **relancé le 3 juillet 2026** (ancienne URL `assure-violation-markets-factors.trycloudflare.com` expirée) · **laisser actif** tant que la démo est ouverte |
 
 ---
 

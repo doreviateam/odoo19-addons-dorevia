@@ -5,7 +5,7 @@
 | Date | 2026-07-02 |
 | Base | `dorevia_ck_marketone_01` |
 | URL locale | `http://localhost:18079` |
-| URL demo | `https://assure-violation-markets-factors.trycloudflare.com` |
+| URL demo | `https://basename-prev-keith-panels.trycloudflare.com` |
 | Versions code controlees | `dorevia_ck_marketone_content 19.0.1.78.0` ; `dorevia_ck_theme 19.0.1.115.0` |
 | Commit de reference demande | `43aa89fa` - `fix(ck-home): CK-HOME-001B images vedettes visibles et visuel coffret qualifie` |
 | Viewports | Desktop 1280 px ; mobile 390 px |

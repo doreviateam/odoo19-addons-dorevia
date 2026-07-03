@@ -9,7 +9,7 @@
 | Module | `dorevia_ck_marketone_content` |
 | Version | `19.0.1.74.0` |
 | Base recette | `dorevia_ck_marketone_01` |
-| URL tunnel | https://assure-violation-markets-factors.trycloudflare.com |
+| URL tunnel | https://basename-prev-keith-panels.trycloudflare.com |
 
 ---
 

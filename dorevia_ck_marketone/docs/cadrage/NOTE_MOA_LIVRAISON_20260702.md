@@ -8,7 +8,7 @@
 | Statut | **Livré et recetté — exploitable en démo** |
 | Base | `dorevia_ck_marketone_01` |
 | URL locale | http://localhost:18079 |
-| URL démo publique | https://assure-violation-markets-factors.trycloudflare.com |
+| URL démo publique | https://basename-prev-keith-panels.trycloudflare.com |
 | Version contenu | `dorevia_ck_marketone_content` **19.0.1.81.0** |
 | Version thème | `dorevia_ck_theme` **19.0.1.119.0** |
 | Commit de référence | `68a0283b` — `feat(ck): CK-NAV-005 liens catégorie racine + polish Home et header wishlist` |
@@ -89,7 +89,7 @@ Lorsqu’un rayon possède des sous-catégories, le chevron desktop ou l’accor
 
 ### URL publique
 
-**https://assure-violation-markets-factors.trycloudflare.com**
+**https://basename-prev-keith-panels.trycloudflare.com**
 
 Parcours validé : Home → navigation → Shop → fiche produit → Producteurs → Professionnels.
 
@@ -99,7 +99,7 @@ Parcours validé : Home → navigation → Shop → fiche produit → Producteur
 | --- | --- | --- |
 | Meta / canonical pointent vers `localhost:18079` | Partage réseaux sociaux incorrect si on copie l’URL tunnel | Démo technique interne — URL tunnel à usage présentation, pas SEO prod. |
 | Navigateur FR | OK en français | — |
-| Tunnel Cloudflare | Dépend d’un processus actif côté infra | Ne pas couper le tunnel pendant la démo. |
+| Tunnel Cloudflare | URL **éphémère** — relancer si `DNS_PROBE_FINISHED_NXDOMAIN` · tunnel actif au 3 juil. 2026 | Ne pas couper le processus `cloudflared` pendant la démo. |
 
 > Détail : [`NOTE_MOA_CLOTURE_CK_DEMO_ONLINE_001_20260702.md`](NOTE_MOA_CLOTURE_CK_DEMO_ONLINE_001_20260702.md)
 

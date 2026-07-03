@@ -11,7 +11,7 @@
 | Module thème | `dorevia_ck_theme` **19.0.1.116.0** |
 | Base recette | `dorevia_ck_marketone_01` |
 | URL locale | http://localhost:18079 |
-| URL démo publique | https://assure-violation-markets-factors.trycloudflare.com |
+| URL démo publique | https://basename-prev-keith-panels.trycloudflare.com |
 
 ---
 
