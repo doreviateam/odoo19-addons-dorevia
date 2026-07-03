@@ -17,6 +17,11 @@ class ProductPublicCategory(models.Model):
        help="Univers éditorial de la catégorie racine. Les sous-catégories héritent "
             "automatiquement de l'univers de leur ancêtre — ne pas renseigner sur les enfants.")
 
+    ck_subtitle = fields.Char(
+        string="Accroche banner univers",
+        help="Accroche courte affichée dans le banner d'entrée d'univers "
+             "(catégories niveau 0 uniquement). Laisser vide pour masquer le bloc accroche.")
+
     def _get_ck_universe(self):
         """Remonte l'arborescence pour trouver le premier ck_universe défini."""
         self.ensure_one()

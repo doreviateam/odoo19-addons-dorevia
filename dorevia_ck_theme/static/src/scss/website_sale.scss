@@ -202,6 +202,124 @@
     }
 }
 
+// CK-UNIVERSE-BANNER-001 Lot A — banner éditorial d'entrée d'univers (catégories
+// e-commerce niveau 0 uniquement, cf. website_sale_rayon_editorial.xml).
+// Image native Odoo en <img> réel + scrim CSS, jamais d'overlay noir (valeurs
+// verrouillées MOA/design du 03/07/2026) ; accent terracotta unique en Lot A,
+// variantes par univers reportées au Lot B (ck_banner_variant).
+.ck-univers-banner {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+
+    img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            90deg,
+            rgba(62, 39, 35, 0.78) 0%,
+            rgba(62, 39, 35, 0.45) 45%,
+            transparent 80%
+        );
+    }
+
+    .container {
+        position: relative;
+        padding-block: $ck-space-5;
+    }
+
+    &__eyebrow {
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: $ck-text-xs;
+        font-weight: $ck-font-weight-semibold;
+        color: $ck-surface;
+        margin-bottom: $ck-space-1;
+    }
+
+    &__title {
+        font-family: $ck-font-display;
+        font-size: $ck-text-3xl;
+        font-weight: $ck-font-weight-display;
+        color: $ck-surface;
+        margin-bottom: 0;
+    }
+
+    &__subtitle {
+        font-size: $ck-text-sm;
+        color: $ck-surface;
+        margin-top: $ck-space-2;
+        margin-bottom: 0;
+        max-width: 52ch;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    &__accent {
+        width: 40px;
+        height: 3px;
+        background-color: #C75B3A;
+        margin-top: $ck-space-3;
+    }
+
+    // Fallback sans image catégorie — fond clair chaud CK, pas de scrim
+    // (valeurs verrouillées MOA/design ; l'accent terracotta reste visible).
+    &--no-image {
+        background-color: #F5F0EB;
+        align-items: center;
+
+        .ck-univers-banner__scrim {
+            display: none;
+        }
+
+        .ck-univers-banner__eyebrow,
+        .ck-univers-banner__title,
+        .ck-univers-banner__subtitle {
+            color: #3E2723;
+        }
+    }
+}
+
+@media (max-width: 767.98px) {
+    .ck-univers-banner {
+        height: 180px;
+
+        .container {
+            padding-block: $ck-space-4;
+        }
+
+        &__title {
+            font-size: $ck-text-2xl;
+        }
+
+        &__subtitle {
+            -webkit-line-clamp: 1;
+        }
+
+        &__scrim {
+            background: linear-gradient(
+                to top,
+                rgba(62, 39, 35, 0.80) 0%,
+                rgba(62, 39, 35, 0.40) 50%,
+                transparent 100%
+            );
+        }
+    }
+}
+
 .ck-shop-page {
     background-color: $ck-bg;
 

@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Shop-U3 — titre univers compact sur le parcours shop (plus de bannière
-         terracotta .ck-rayon-banner ni blocs familles/highlights).
-         Données ck_universe, RAYON_EDITORIAL et SCSS conservés pour usage futur. -->
+    <!-- CK-UNIVERSE-BANNER-001 Lot A — banner éditorial complet (image native,
+         accroche, accent terracotta) sur les catégories e-commerce niveau 0 ;
+         titre compact Shop-U3 conservé en fallback pour /shop général et
+         les sous-catégories. -->
     <template id="website_sale_rayon_editorial"
               inherit_id="dorevia_ck_theme.products_ck_shop_compose"
-              name="CK Titre univers shop — Shop-U3">
+              name="CK Banner univers / titre compact — Note 09 Lot A">
         <xpath expr="//t[@t-call='dorevia_ck_theme.s_ck_shop_intro']" position="attributes">
             <attribute name="t-if">not ck_rayon</attribute>
         </xpath>
         <xpath expr="//t[@t-call='dorevia_ck_theme.s_ck_shop_intro']" position="before">
             <t t-set="ck_rayon" t-value="request.env['product.public.category'].sudo().get_ck_shop_banner(category)"/>
+            <t t-set="ck_univers_banner" t-value="bool(ck_rayon and category and not category.parent_id)"/>
 
-            <!-- H1 compact — titre MOA par univers ; héritage ck_universe sur sous-catégories. -->
-            <section t-if="ck_rayon" class="ck-shop-intro ck-shop-intro--title-only">
+            <!-- Banner Univers — catégories e-commerce niveau 0 uniquement. -->
+            <section t-if="ck_univers_banner"
+                     t-attf-class="ck-univers-banner #{'ck-univers-banner--no-image' if not ck_rayon['image_url'] else ''}">
+                <img t-if="ck_rayon['image_url']" t-att-src="ck_rayon['image_url']"
+                     alt="" aria-hidden="true" loading="lazy"/>
+                <div class="ck-univers-banner__scrim"/>
+                <div class="container">
+                    <span class="ck-univers-banner__eyebrow">Univers</span>
+                    <h1 class="ck-univers-banner__title" t-esc="ck_rayon['title']"/>
+                    <p t-if="ck_rayon.get('subtitle')" class="ck-univers-banner__subtitle" t-esc="ck_rayon['subtitle']"/>
+                    <div class="ck-univers-banner__accent"/>
+                </div>
+            </section>
+
+            <!-- H1 compact — fallback /shop général et sous-catégories (inchangé Shop-U3). -->
+            <section t-if="ck_rayon and not ck_univers_banner" class="ck-shop-intro ck-shop-intro--title-only">
                 <div class="container">
                     <h1 class="ck-section-title ck-shop-intro__title mb-0" t-esc="ck_rayon['title']"/>
                 </div>

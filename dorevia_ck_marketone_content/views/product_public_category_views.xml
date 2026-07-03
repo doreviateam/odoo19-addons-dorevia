@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- CK-UNIVERSE-BANNER-001 Lot A — expose ck_universe et ck_subtitle en BO.
+         ck_universe existait déjà (V1 shop banner) mais n'était modifiable
+         qu'en base/migration ; corrigé ici (complément design #4). -->
+    <record id="product_public_category_form_view_ck_universe_banner" model="ir.ui.view">
+        <field name="name">product.public.category.form.ck.universe.banner</field>
+        <field name="model">product.public.category</field>
+        <field name="inherit_id" ref="website_sale.product_public_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="sequence" groups="base.group_no_one" position="after">
+                <field name="ck_universe"/>
+                <field name="ck_subtitle" placeholder="Accroche courte du banner"/>
+            </field>
+        </field>
+    </record>
+</odoo>

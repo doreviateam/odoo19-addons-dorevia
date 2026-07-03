@@ -85,20 +85,31 @@ RAYON_EDITORIAL = {
 def get_rayon_editorial(env, category=None):
     """Bannière shop pour `category` (ou fallback boutique si None).
 
-    Retourne toujours un dict {title, phrase} non None.
+    Retourne toujours un dict {title, phrase, subtitle, image_url} non None
+    (subtitle/image_url valent None si non renseignés — fallback géré côté template).
     Pour Épicerie avec catalogue suffisant, ajoute {families, highlights, proof}.
     """
     universe = category._get_ck_universe() if category else None
     spec = RAYON_EDITORIAL.get(universe or 'boutique', RAYON_EDITORIAL['boutique'])
 
+    # Banner Univers (CK-UNIVERSE-BANNER-001 Lot A) — accroche + image native,
+    # calculés une seule fois et fusionnés dans chaque dict retourné ci-dessous.
+    banner_extra = {
+        'subtitle': category.ck_subtitle or None if category else None,
+        'image_url': (
+            f'/web/image/product.public.category/{category.id}/image_1024'
+            if category and category.image_1920 else None
+        ),
+    }
+
     # Univers simples : bannière titre + phrase, aucune condition catalogue
     if universe != 'epicerie':
-        return {'title': spec['title'], 'phrase': spec['phrase']}
+        return {'title': spec['title'], 'phrase': spec['phrase'], **banner_extra}
 
     # Épicerie : familles + highlights si seuils atteints, dégradé gracieux sinon
     families = _resolve_families(env, category.name, spec['family_specs'])
     if len(families) < RAYON_EDITORIAL_MIN_FAMILIES:
-        return {'title': spec['title'], 'phrase': spec['phrase']}
+        return {'title': spec['title'], 'phrase': spec['phrase'], **banner_extra}
 
     Category = env['product.public.category'].sudo()
     Product = env['product.template'].sudo()
@@ -108,7 +119,7 @@ def get_rayon_editorial(env, category=None):
         ('website_published', '=', True),
     ])
     if published_count < RAYON_EDITORIAL_MIN_PRODUCTS:
-        return {'title': spec['title'], 'phrase': spec['phrase']}
+        return {'title': spec['title'], 'phrase': spec['phrase'], **banner_extra}
 
     slug_by_label = {label: slug for label, slug, *_rest in spec['family_specs']}
     url_by_slug = {
@@ -149,4 +160,5 @@ def get_rayon_editorial(env, category=None):
         'families': families,
         'highlights': highlights,
         'proof': spec['proof'],
+        **banner_extra,
     }
