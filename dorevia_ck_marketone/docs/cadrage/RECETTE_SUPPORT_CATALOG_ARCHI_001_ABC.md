@@ -50,6 +50,26 @@ Le §5 est la grille de contrôle à remplir route par route. Le §6 est le verd
 * [ ] Footer (colonne Boutique) : seuls "Tous les produits" et "Épicerie" apparaissent.
 * [ ] Home "Acheter par univers" : les 4 cartes univers restent visibles (contenu figé), mais les CTA Boissons/Soin/Artisanat pointent vers `/shop` (pas vers leur catégorie spécifique) ; seul le CTA Épicerie pointe vers sa page catégorie.
 * [ ] Sitemap (`/sitemap.xml`) : seule `epicerie-1` apparaît parmi les catégories.
+* [ ] Routes directes Boissons/Soin/Artisanat : tant que ces catégories restent `active`, elles peuvent répondre en `200` marchand, mais doivent être `noindex` et absentes du sitemap. Ce n'est pas un NO GO technique du lot ; c'est la doctrine provisoire "non exposé mais accessible".
+
+### 3.1 Clarification doctrine provisoire — routes directes
+
+Décision provisoire MOA à consigner avant lancement public :
+
+```text
+Les univers Boissons, Soin & Bien-être et Artisanat restent techniquement active
+en environnement de travail, avec pages directes 200 noindex, hors sitemap et
+hors navigation forte.
+
+Avant ouverture publique, la MOA devra arbitrer univers par univers entre :
+- maintien active si rayon marchand assumé ;
+- bascule promise/hidden si univers encore immature.
+```
+
+Lecture métier associée :
+
+* **Court terme démo / travail interne** : `active` + `200 noindex` accepté pour montrer ou contrôler les pages directes sans les pousser publiquement.
+* **Avant lancement public** : basculer en `promise` ou `hidden` les univers qui ne doivent pas exister comme rayons marchands publics ; les routes directes passeront alors en `302` vers `/shop`.
 
 Qualification produit (Lot B) — à vérifier sur `/shop` :
 

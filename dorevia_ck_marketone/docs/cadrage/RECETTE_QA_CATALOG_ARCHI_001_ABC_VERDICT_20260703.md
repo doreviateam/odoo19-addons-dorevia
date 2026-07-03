@@ -20,6 +20,22 @@ Recette visuelle/fonctionnelle CATALOG-ARCHI-001 A+B+C
 → Verdict global : GO, avec réserve BO/QA maintenue sur Pâte de manioc
 ```
 
+## Décision provisoire MOA
+
+La recette technique est GO sur la doctrine actuelle **"non exposé mais accessible"** :
+
+```text
+Les univers Boissons, Soin & Bien-être et Artisanat restent techniquement active
+en environnement de travail, avec pages directes 200 noindex, hors sitemap et
+hors navigation forte.
+
+Avant ouverture publique, la MOA devra arbitrer univers par univers entre :
+- maintien active si rayon marchand assumé ;
+- bascule promise/hidden si univers encore immature.
+```
+
+Conséquence : les routes directes Boissons/Soin/Artisanat en `200 noindex` ne sont pas un bug code immédiat. Elles deviendront `302 /shop` uniquement si la MOA choisit la doctrine plus stricte **"non prêt = non marchand"** et bascule les catégories en `promise` ou `hidden`.
+
 ## Constat immédiat
 
 | Point contrôlé | Verdict | Observation |
