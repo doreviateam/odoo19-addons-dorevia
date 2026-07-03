@@ -1,0 +1,1600 @@
+{
+  "date": "2026-07-03",
+  "base": "http://localhost:18079",
+  "db": "dorevia_ck_marketone_01",
+  "viewports": {
+    "desktop_1280": {
+      "/": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/?db=dorevia_ck_marketone_01",
+        "title": "Home | C-Kréyòl",
+        "h1": [
+          "C-Kréyòl — les saveurs créoles en Europe"
+        ],
+        "robots": "",
+        "noindex": false,
+        "overflow": false,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "headerLinks": [
+          {
+            "text": "Se connecter",
+            "href": "/web/login?redirect=/"
+          },
+          {
+            "text": "0",
+            "href": "/shop/wishlist"
+          },
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Boutique",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Producteurs",
+            "href": "/producteurs"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "?db=dorevia_ck_marketone_01"
+          }
+        ],
+        "mobileDrawer": null,
+        "jsErrors": [],
+        "home": {
+          "universCards": [
+            {
+              "title": "Épicerie créole",
+              "coverHref": "/shop/category/epicerie-1",
+              "ctaHref": "/shop/category/epicerie-1"
+            },
+            {
+              "title": "Boissons",
+              "coverHref": "/shop",
+              "ctaHref": "/shop"
+            },
+            {
+              "title": "Soin & bien-être",
+              "coverHref": "/shop",
+              "ctaHref": "/shop"
+            },
+            {
+              "title": "Artisanat & culture",
+              "coverHref": "/shop",
+              "ctaHref": "/shop"
+            }
+          ],
+          "featuredProducts": [
+            {
+              "text": "Nouveau ! Ajouter à la liste de souhaits Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★Note 4,8 sur 5 · 1 avis 5.50 € Ajouter au panier",
+              "href": "/shop/confiture-de-goyave-3"
+            },
+            {
+              "text": "Coup de cœur Ajouter à la liste de souhaits Manio Crackers Salé Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3.60 € Ajouter au panier",
+              "href": "/shop/manio-crackers-4?attribute_values=2"
+            },
+            {
+              "text": "Coup de cœur Ajouter à la liste de souhaits Manio Crackers Sucré Guadeloupe · SARL La Platine · La Platine · 100 g · 35,00 €/kg 3.50 € Ajouter au panier",
+              "href": "/shop/manio-crackers-4?attribute_values=3"
+            },
+            {
+              "text": "Agriculture Bio Ajouter à la liste de souhaits Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6.30 € Ajouter au panier",
+              "href": "/shop/savon-vetiver-7"
+            }
+          ]
+        },
+        "shop": null
+      },
+      "/shop": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop?db=dorevia_ck_marketone_01",
+        "title": "Products | C-Kréyòl",
+        "h1": [
+          "Boutique C-Kréyòl"
+        ],
+        "robots": "",
+        "noindex": false,
+        "overflow": false,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "headerLinks": [
+          {
+            "text": "Se connecter",
+            "href": "/web/login?redirect=/shop"
+          },
+          {
+            "text": "0",
+            "href": "/shop/wishlist"
+          },
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Boutique",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Producteurs",
+            "href": "/producteurs"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Soin & Bien-être",
+            "href": "/shop/category/soin-bien-etre-2"
+          },
+          {
+            "text": "Artisanat",
+            "href": "/shop/category/artisanat-3"
+          },
+          {
+            "text": "Boissons",
+            "href": "/shop/category/boissons-123"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop?db=dorevia_ck_marketone_01"
+          }
+        ],
+        "mobileDrawer": null,
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/confiture-de-goyave-3"
+            },
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/confiture-de-goyave-3"
+            },
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/confiture-de-goyave-3"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/manio-crackers-4"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/manio-crackers-4"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/manio-crackers-4"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/galettes-de-manioc-20"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/galettes-de-manioc-20"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/galettes-de-manioc-20"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/savon-vetiver-7"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/savon-vetiver-7"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/savon-vetiver-7"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/chapeau-panama-1076"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/chapeau-panama-1076"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/chapeau-panama-1076"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/pate-de-manioc-2336"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/pate-de-manioc-2336"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/pate-de-manioc-2336"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/jus-mont-pele-2593"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/jus-mont-pele-2593"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/jus-mont-pele-2593"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Coffret découverte créole 29,90 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/coffret-decouverte-creole-4583"
+            },
+            {
+              "text": "Coffret découverte créole 29,90 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/coffret-decouverte-creole-4583"
+            },
+            {
+              "text": "Coffret découverte créole 29,90 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/coffret-decouverte-creole-4583"
+            }
+          ]
+        }
+      },
+      "/shop/category/epicerie-1": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop/category/epicerie-1?db=dorevia_ck_marketone_01",
+        "title": "Épicerie | C-Kréyòl",
+        "h1": [
+          "Épicerie créole"
+        ],
+        "robots": "",
+        "noindex": false,
+        "overflow": false,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "headerLinks": [
+          {
+            "text": "Se connecter",
+            "href": "/web/login?redirect=/shop/category/epicerie-1"
+          },
+          {
+            "text": "0",
+            "href": "/shop/wishlist"
+          },
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Boutique",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Producteurs",
+            "href": "/producteurs"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop/category/epicerie-1?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop/category/epicerie-1?db=dorevia_ck_marketone_01"
+          }
+        ],
+        "mobileDrawer": null,
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/confiture-de-goyave-3"
+            },
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/confiture-de-goyave-3"
+            },
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/confiture-de-goyave-3"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/manio-crackers-4"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/manio-crackers-4"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/manio-crackers-4"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/galettes-de-manioc-20"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/galettes-de-manioc-20"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/galettes-de-manioc-20"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/pate-de-manioc-2336"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/pate-de-manioc-2336"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/pate-de-manioc-2336"
+            }
+          ]
+        }
+      },
+      "/shop/category/boissons-123": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop/category/boissons-123?db=dorevia_ck_marketone_01",
+        "title": "Boissons | C-Kréyòl",
+        "h1": [
+          "Boissons des îles"
+        ],
+        "robots": "noindex",
+        "noindex": true,
+        "overflow": false,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "headerLinks": [
+          {
+            "text": "Se connecter",
+            "href": "/web/login?redirect=/shop/category/boissons-123"
+          },
+          {
+            "text": "0",
+            "href": "/shop/wishlist"
+          },
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Boutique",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Producteurs",
+            "href": "/producteurs"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop/category/boissons-123?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop/category/boissons-123?db=dorevia_ck_marketone_01"
+          }
+        ],
+        "mobileDrawer": null,
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/boissons-123/jus-mont-pele-2593"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/boissons-123/jus-mont-pele-2593"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/boissons-123/jus-mont-pele-2593"
+            }
+          ]
+        }
+      },
+      "/shop/category/soin-bien-etre-2": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop/category/soin-bien-etre-2?db=dorevia_ck_marketone_01",
+        "title": "Soin & Bien-être | C-Kréyòl",
+        "h1": [
+          "Soin & bien-être créole"
+        ],
+        "robots": "noindex",
+        "noindex": true,
+        "overflow": false,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "headerLinks": [
+          {
+            "text": "Se connecter",
+            "href": "/web/login?redirect=/shop/category/soin-bien-etre-2"
+          },
+          {
+            "text": "0",
+            "href": "/shop/wishlist"
+          },
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Boutique",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Producteurs",
+            "href": "/producteurs"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop/category/soin-bien-etre-2?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop/category/soin-bien-etre-2?db=dorevia_ck_marketone_01"
+          }
+        ],
+        "mobileDrawer": null,
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/soin-bien-etre-2/savon-vetiver-7"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/soin-bien-etre-2/savon-vetiver-7"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/soin-bien-etre-2/savon-vetiver-7"
+            }
+          ]
+        }
+      },
+      "/shop/category/artisanat-3": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop/category/artisanat-3?db=dorevia_ck_marketone_01",
+        "title": "Artisanat | C-Kréyòl",
+        "h1": [
+          "Artisanat & culture"
+        ],
+        "robots": "noindex",
+        "noindex": true,
+        "overflow": false,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "headerLinks": [
+          {
+            "text": "Se connecter",
+            "href": "/web/login?redirect=/shop/category/artisanat-3"
+          },
+          {
+            "text": "0",
+            "href": "/shop/wishlist"
+          },
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Boutique",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Producteurs",
+            "href": "/producteurs"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop/category/artisanat-3?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop/category/artisanat-3?db=dorevia_ck_marketone_01"
+          }
+        ],
+        "mobileDrawer": null,
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/chapeau-panama-1076"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/chapeau-panama-1076"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/chapeau-panama-1076"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/tambour-gro-ka-4491"
+            }
+          ]
+        }
+      }
+    },
+    "mobile_390": {
+      "/": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/?db=dorevia_ck_marketone_01",
+        "title": "Home | C-Kréyòl",
+        "h1": [
+          "C-Kréyòl — les saveurs créoles en Europe"
+        ],
+        "robots": "",
+        "noindex": false,
+        "overflow": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "headerLinks": [
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "?db=dorevia_ck_marketone_01"
+          }
+        ],
+        "mobileDrawer": {
+          "opened": false,
+          "links": []
+        },
+        "jsErrors": [],
+        "home": {
+          "universCards": [
+            {
+              "title": "Épicerie créole",
+              "coverHref": "/shop/category/epicerie-1",
+              "ctaHref": "/shop/category/epicerie-1"
+            },
+            {
+              "title": "Boissons",
+              "coverHref": "/shop",
+              "ctaHref": "/shop"
+            },
+            {
+              "title": "Soin & bien-être",
+              "coverHref": "/shop",
+              "ctaHref": "/shop"
+            },
+            {
+              "title": "Artisanat & culture",
+              "coverHref": "/shop",
+              "ctaHref": "/shop"
+            }
+          ],
+          "featuredProducts": [
+            {
+              "text": "Nouveau ! Ajouter à la liste de souhaits Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★Note 4,8 sur 5 · 1 avis 5.50 € Ajouter au panier",
+              "href": "/shop/confiture-de-goyave-3"
+            },
+            {
+              "text": "Coup de cœur Ajouter à la liste de souhaits Manio Crackers Salé Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3.60 € Ajouter au panier",
+              "href": "/shop/manio-crackers-4?attribute_values=2"
+            },
+            {
+              "text": "Coup de cœur Ajouter à la liste de souhaits Manio Crackers Sucré Guadeloupe · SARL La Platine · La Platine · 100 g · 35,00 €/kg 3.50 € Ajouter au panier",
+              "href": "/shop/manio-crackers-4?attribute_values=3"
+            },
+            {
+              "text": "Agriculture Bio Ajouter à la liste de souhaits Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6.30 € Ajouter au panier",
+              "href": "/shop/savon-vetiver-7"
+            }
+          ]
+        },
+        "shop": null
+      },
+      "/shop": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop?db=dorevia_ck_marketone_01",
+        "title": "Products | C-Kréyòl",
+        "h1": [
+          "Boutique C-Kréyòl"
+        ],
+        "robots": "",
+        "noindex": false,
+        "overflow": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "headerLinks": [
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Soin & Bien-être",
+            "href": "/shop/category/soin-bien-etre-2"
+          },
+          {
+            "text": "Artisanat",
+            "href": "/shop/category/artisanat-3"
+          },
+          {
+            "text": "Boissons",
+            "href": "/shop/category/boissons-123"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop?db=dorevia_ck_marketone_01"
+          }
+        ],
+        "mobileDrawer": {
+          "opened": false,
+          "links": []
+        },
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/confiture-de-goyave-3"
+            },
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/confiture-de-goyave-3"
+            },
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/confiture-de-goyave-3"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/manio-crackers-4"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/manio-crackers-4"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/manio-crackers-4"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/galettes-de-manioc-20"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/galettes-de-manioc-20"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/galettes-de-manioc-20"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/savon-vetiver-7"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/savon-vetiver-7"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/savon-vetiver-7"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/chapeau-panama-1076"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/chapeau-panama-1076"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/chapeau-panama-1076"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/pate-de-manioc-2336"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/pate-de-manioc-2336"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/pate-de-manioc-2336"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/jus-mont-pele-2593"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/jus-mont-pele-2593"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/jus-mont-pele-2593"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Coffret découverte créole 29,90 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/coffret-decouverte-creole-4583"
+            },
+            {
+              "text": "Coffret découverte créole 29,90 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/coffret-decouverte-creole-4583"
+            },
+            {
+              "text": "Coffret découverte créole 29,90 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/coffret-decouverte-creole-4583"
+            }
+          ]
+        }
+      },
+      "/shop/category/epicerie-1": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop/category/epicerie-1?db=dorevia_ck_marketone_01",
+        "title": "Épicerie | C-Kréyòl",
+        "h1": [
+          "Épicerie créole"
+        ],
+        "robots": "",
+        "noindex": false,
+        "overflow": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "headerLinks": [
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop/category/epicerie-1?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop/category/epicerie-1?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Politique en matière de cookies",
+            "href": "/cookie-policy"
+          }
+        ],
+        "mobileDrawer": {
+          "opened": false,
+          "links": []
+        },
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/confiture-de-goyave-3"
+            },
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/confiture-de-goyave-3"
+            },
+            {
+              "text": "Nouveau ! Confiture de goyave Guadeloupe · Komla · 320 g · 17,19 €/kg ★ Note 4,8 sur 5 · 1 avis 5,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/confiture-de-goyave-3"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/manio-crackers-4"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/manio-crackers-4"
+            },
+            {
+              "text": "Coup de cœur Manio Crackers Guadeloupe · SARL La Platine · La Platine · 100 g · 36,00 €/kg 3,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/manio-crackers-4"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/galettes-de-manioc-20"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/galettes-de-manioc-20"
+            },
+            {
+              "text": "Galettes de manioc Guadeloupe · 130 g · 57,69 €/kg 7,50 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/galettes-de-manioc-20"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/pate-de-manioc-2336"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/pate-de-manioc-2336"
+            },
+            {
+              "text": "Coup de cœur Pâte de manioc Guadeloupe · Bien-être · Sans Gluten · 1 kg · 3,95 €/kg 3,95 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/epicerie-1/pate-de-manioc-2336"
+            }
+          ]
+        }
+      },
+      "/shop/category/boissons-123": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop/category/boissons-123?db=dorevia_ck_marketone_01",
+        "title": "Boissons | C-Kréyòl",
+        "h1": [
+          "Boissons des îles"
+        ],
+        "robots": "noindex",
+        "noindex": true,
+        "overflow": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "headerLinks": [
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop/category/boissons-123?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop/category/boissons-123?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Politique en matière de cookies",
+            "href": "/cookie-policy"
+          }
+        ],
+        "mobileDrawer": {
+          "opened": false,
+          "links": []
+        },
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/boissons-123/jus-mont-pele-2593"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/boissons-123/jus-mont-pele-2593"
+            },
+            {
+              "text": "Jus Mont-Pelé Martinique · 1 l · 5,00 €/l 5,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/boissons-123/jus-mont-pele-2593"
+            }
+          ]
+        }
+      },
+      "/shop/category/soin-bien-etre-2": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop/category/soin-bien-etre-2?db=dorevia_ck_marketone_01",
+        "title": "Soin & Bien-être | C-Kréyòl",
+        "h1": [
+          "Soin & bien-être créole"
+        ],
+        "robots": "noindex",
+        "noindex": true,
+        "overflow": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "headerLinks": [
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop/category/soin-bien-etre-2?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop/category/soin-bien-etre-2?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Politique en matière de cookies",
+            "href": "/cookie-policy"
+          }
+        ],
+        "mobileDrawer": {
+          "opened": false,
+          "links": []
+        },
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/soin-bien-etre-2/savon-vetiver-7"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/soin-bien-etre-2/savon-vetiver-7"
+            },
+            {
+              "text": "Agriculture Bio Savon vétiver Dominique (Ile) · Rwan Ltd · Bio · 125 g · 50,40 €/kg 6,30 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/soin-bien-etre-2/savon-vetiver-7"
+            }
+          ]
+        }
+      },
+      "/shop/category/artisanat-3": {
+        "status": 200,
+        "finalUrl": "http://localhost:18079/shop/category/artisanat-3?db=dorevia_ck_marketone_01",
+        "title": "Artisanat | C-Kréyòl",
+        "h1": [
+          "Artisanat & culture"
+        ],
+        "robots": "noindex",
+        "noindex": true,
+        "overflow": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "headerLinks": [
+          {
+            "text": "0",
+            "href": "/shop/cart"
+          },
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Trier par Trier par: En vedette",
+            "href": "#"
+          }
+        ],
+        "footerLinks": [
+          {
+            "text": "Tous les produits",
+            "href": "/shop"
+          },
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-1"
+          },
+          {
+            "text": "Contact",
+            "href": "/contactus"
+          },
+          {
+            "text": "Mentions légales",
+            "href": "/legal"
+          },
+          {
+            "text": "Confidentialité",
+            "href": "/privacy"
+          },
+          {
+            "text": "CGV",
+            "href": "/terms#cgv"
+          },
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          },
+          {
+            "text": "Accueil",
+            "href": "/"
+          },
+          {
+            "text": "English (UK)",
+            "href": "/en/shop/category/artisanat-3?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Français",
+            "href": "/shop/category/artisanat-3?db=dorevia_ck_marketone_01"
+          },
+          {
+            "text": "Politique en matière de cookies",
+            "href": "/cookie-policy"
+          }
+        ],
+        "mobileDrawer": {
+          "opened": false,
+          "links": []
+        },
+        "jsErrors": [],
+        "home": null,
+        "shop": {
+          "productCards": [
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/chapeau-panama-1076"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/chapeau-panama-1076"
+            },
+            {
+              "text": "Nouveau ! Chapeau Panama 17,60 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/chapeau-panama-1076"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/tambour-gro-ka-4491"
+            },
+            {
+              "text": "Sur commande Tambour Gro Ka Guadeloupe · GoZié Lantan 435,00 € Ajouter au panier Ajouter à la liste de souhaits",
+              "href": "/shop/artisanat-3/tambour-gro-ka-4491"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "sitemap": {
+    "status": 200,
+    "hasEpicerie": true,
+    "hasBoissons": false,
+    "hasSoin": false,
+    "hasArtisanat": false
+  }
+}

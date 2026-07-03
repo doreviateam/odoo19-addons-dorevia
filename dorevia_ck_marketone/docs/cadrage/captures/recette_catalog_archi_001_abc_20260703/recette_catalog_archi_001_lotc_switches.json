@@ -1,0 +1,108 @@
+{
+  "date": "2026-07-03",
+  "db": "dorevia_ck_marketone_01",
+  "categoryId": 123,
+  "categoryUrl": "/shop/category/boissons-123",
+  "original": {
+    "status": "active",
+    "replacementId": null
+  },
+  "scenarios": [
+    {
+      "scenario": "promise",
+      "route": {
+        "status": 302,
+        "location": "/shop",
+        "noindex": false,
+        "bodyLength": 197
+      },
+      "sitemap": {
+        "status": 200,
+        "hasEpicerie": true,
+        "hasBoissons": false,
+        "hasSoin": false,
+        "hasArtisanat": false
+      }
+    },
+    {
+      "scenario": "hidden",
+      "route": {
+        "status": 302,
+        "location": "/shop",
+        "noindex": false,
+        "bodyLength": 197
+      },
+      "sitemap": {
+        "status": 200,
+        "hasEpicerie": true,
+        "hasBoissons": false,
+        "hasSoin": false,
+        "hasArtisanat": false
+      }
+    },
+    {
+      "scenario": "draft",
+      "route": {
+        "status": 404,
+        "location": null,
+        "noindex": false,
+        "bodyLength": 31346
+      },
+      "sitemap": {
+        "status": 200,
+        "hasEpicerie": true,
+        "hasBoissons": false,
+        "hasSoin": false,
+        "hasArtisanat": false
+      }
+    },
+    {
+      "scenario": "archived_with_replacement",
+      "route": {
+        "status": 301,
+        "location": "/shop/category/epicerie-1",
+        "noindex": false,
+        "bodyLength": 237
+      },
+      "sitemap": {
+        "status": 200,
+        "hasEpicerie": true,
+        "hasBoissons": false,
+        "hasSoin": false,
+        "hasArtisanat": false
+      }
+    },
+    {
+      "scenario": "archived_without_replacement",
+      "route": {
+        "status": 404,
+        "location": null,
+        "noindex": false,
+        "bodyLength": 31346
+      },
+      "sitemap": {
+        "status": 200,
+        "hasEpicerie": true,
+        "hasBoissons": false,
+        "hasSoin": false,
+        "hasArtisanat": false
+      }
+    }
+  ],
+  "restored": {
+    "raw": "active",
+    "route": {
+      "status": 200,
+      "location": null,
+      "noindex": true,
+      "bodyLength": 53550
+    },
+    "sitemap": {
+      "status": 200,
+      "hasEpicerie": true,
+      "hasBoissons": false,
+      "hasSoin": false,
+      "hasArtisanat": false
+    }
+  }
+}
