@@ -74,3 +74,5 @@ from . import test_ck_catalog_exposure
 from . import test_ck_footer_boutique_links
 from . import test_ck_catalog_qualification
 from . import test_ck_card_producer_metadata
+from . import test_ck_category_routing
+from . import test_ck_category_routes_http

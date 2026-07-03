@@ -36,6 +36,20 @@ class ProductPublicCategory(models.Model):
         help="Accroche courte affichée dans le banner d'entrée d'univers "
              "(catégories niveau 0 uniquement). Laisser vide pour masquer le bloc accroche.")
 
+    ck_replacement_category_id = fields.Many2one(
+        'product.public.category', string="Catégorie de remplacement",
+        help="CATALOG-ARCHI-001 Lot C — utilisée uniquement pour une catégorie "
+             "'archivée' : cible d'une redirection 301 depuis l'ancienne route "
+             "catégorie. Si non renseignée, la route archivée retourne 404.")
+
+    website_indexed = fields.Boolean(
+        string="Indexable (SEO)", compute='_compute_website_indexed',
+        help="CATALOG-ARCHI-001 Lot C — pilote le mécanisme noindex générique "
+             "de website.layout (main_object.website_indexed), sans surcouche "
+             "SEO parallèle. Calculé (non stocké) pour rester toujours à jour : "
+             "actif uniquement si la catégorie est 'active' ET réellement "
+             "exposable (_is_ck_exposable()).")
+
     def _get_ck_universe(self):
         """Remonte l'arborescence pour trouver le premier ck_universe défini."""
         self.ensure_one()
@@ -105,3 +119,10 @@ class ProductPublicCategory(models.Model):
         if count == 2 and self.show_category_description and (self.website_description or '').strip():
             return True
         return False
+
+    @api.depends('ck_exposure_status')
+    def _compute_website_indexed(self):
+        for category in self:
+            category.website_indexed = (
+                category.ck_exposure_status == 'active' and category._is_ck_exposable()
+            )

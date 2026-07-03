@@ -12,6 +12,10 @@
                 <field name="ck_universe"/>
                 <field name="ck_subtitle" placeholder="Accroche courte du banner"/>
                 <field name="ck_exposure_status"/>
+                <field name="ck_replacement_category_id"
+                       invisible="ck_exposure_status != 'archived'"
+                       options="{'no_create': True}"
+                       placeholder="Catégorie de remplacement (redirection 301)"/>
             </field>
         </field>
     </record>

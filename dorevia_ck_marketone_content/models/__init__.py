@@ -14,3 +14,4 @@ from . import product_template  # noqa: F401
 from . import ck_mega_menu_visual_block  # noqa: F401
 from . import ck_mega_menu_rayon_visual  # noqa: F401
 from . import website_menu  # noqa: F401
+from . import website  # noqa: F401

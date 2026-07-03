@@ -12,7 +12,7 @@
 | Modules | `dorevia_ck_marketone_content` (principal) · `dorevia_ck_theme` (templates cards/badges) |
 | Priorité | P0 (Lot A hors seuil nav + correction data) → P1 (reste Lot A/B) → P1 (Lot C) → P2 (Lot D) |
 | Estimation Lot A | **5–5,5 j-h Dev + 1,5–2 j-h QA** (détail §"Chiffrage Lot A") |
-| Statut | **Lots A + B livrés, validés et poussés sur GitHub 3 juillet 2026** — commits `a72a5e36`/`95cc19e7` (Lot A) et `abae03f2` (Lot B) sur `origin/main` de `odoo19-addons-dorevia`, module `dorevia_ck_marketone_content` v19.0.1.84.0. **Lot C : NO GO code direct — mini-note d'approche à produire avant démarrage** (cf. arbitrage MOA Lot B ci-dessous). |
+| Statut | **Lots A, B et C livrés et validés 3 juillet 2026** (Lots A/B poussés sur `origin/main` ; Lot C committé, push en attente de confirmation). Module `dorevia_ck_marketone_content` v19.0.1.85.0. **Lot D restant.** |
 
 ---
 
@@ -147,7 +147,7 @@ trouvés/corrigés (BUG-B1/B2/B3) et des points de contrôle vérifiés sur rend
 
 **Objectif** : le plus risqué et net-new du découpage — comportement des routes catégories, `noindex` et sitemap selon `ck_exposure_status`.
 
-**Statut (3 juillet 2026)** : cadrage préalable fait — [`note_11.md`](note_11.md) (mini-note d'approche MOA) + [`note_11_reponse.md`](note_11_reponse.md) (vérification technique Dev). **NO GO code** — en attente du GO MOA final sur la matrice V1 ci-dessous.
+**Statut (3 juillet 2026)** : **livré et validé** — GO MOA final reçu, code implémenté et vérifié (tests + rendu HTTP réel sur le sandbox). Voir §"Livré et validé" ci-dessous.
 
 ### Matrice V1 validée en approche (note 11)
 
@@ -172,6 +172,19 @@ trouvés/corrigés (BUG-B1/B2/B3) et des points de contrôle vérifiés sur rend
 * Comportement de route stable et documenté par statut, conforme à la matrice V1 ci-dessus.
 * Aucune page `noindex` présente dans le sitemap public.
 * Recette sur les 6 routes listées en §19.1 de note_10.md, desktop 1280 px + mobile 390 px, cf. tests QA minimaux détaillés dans note_11.md §6.
+
+### Livré et validé (3 juillet 2026)
+
+* `ck_category_route_action(category)` — helper pur ([`ck_category_routing.py`](../../dorevia_ck_marketone_content/ck_category_routing.py)), matrice V1 exacte.
+* Route `shop()` redéclarée dans `CkWebsiteSaleController` — 200/301/302/404 confirmés par tests HTTP réels ET par vérification directe sur le site (redémarrage du serveur + bascule temporaire réelle d'une catégorie en `hidden` → 302 confirmé, remis à `active` ensuite).
+* `website_indexed` (calculé, non stocké) sur `product.public.category` — réutilise tel quel le mécanisme `noindex` générique de `website.layout`, actif seulement si `active` ET `_is_ck_exposable()`.
+* `ck_replacement_category_id` (Many2one) pour le cas `archived`.
+
+**Découverte technique majeure en cours d'implémentation (non anticipée par note_11_reponse) :** un `sitemap=` personnalisé sur la route CK seule ne suffit pas à filtrer le sitemap. `website_sale` enregistre la route `/shop/category/<...>` séparément pour **plusieurs classes contrôleur de sa chaîne d'héritage** (constaté : 3 règles distinctes pour ce même chemin sur ce sandbox, dont 2 pointent vers le `sitemap_shop` d'origine non filtré) ; la génération du sitemap (`website._enumerate_pages`) fusionne les résultats de **toutes** les fonctions sitemap enregistrées pour un chemin donné — un `sitemap=` filtré sur notre seule route se retrouvait donc noyé dans l'union avec le résultat non filtré des autres règles.
+
+**Solution retenue** : filtrage en aval, par surcharge ORM de `Website._enumerate_pages()` ([`models/website.py`](../../dorevia_ck_marketone_content/models/website.py)) — robuste quel que soit le nombre de règles concurrentes, car il s'applique sur le flux déjà fusionné plutôt que de tenter de faire concurrence à chaque règle individuellement. Vérifié réellement : sitemap ne contient plus que `epicerie-1` parmi les catégories (Boissons/Soin/Artisanat/sous-catégories correctement exclues, toutes `website_indexed=False` sur ce catalogue).
+
+Suite de tests complète (upgrade réel + `--test-enable`) : aucune régression réelle au-delà du bruit d'infra déjà identifié (timeouts HTTP, `SerializationFailure` Postgres).
 
 ---
 
