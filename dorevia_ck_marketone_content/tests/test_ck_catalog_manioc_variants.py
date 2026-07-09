@@ -11,6 +11,7 @@ from odoo.addons.dorevia_ck_marketone_content.catalog_manioc_variants import (
     FORMAT_ATTRIBUTE_ALIASES,
     GALETTES_TEMPLATE_NAME,
     MANIO_CRACKERS_PARENT_NAME,
+    _ensure_galettes_separate_product,
     bootstrap_catalog_vedettes_products,
     cracker_format_attribute_line,
 )
@@ -25,6 +26,7 @@ from odoo.addons.dorevia_ck_marketone_content.home_featured import (
 from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import (
     ensure_test_product_image,
     ensure_test_variant_images,
+    is_tiny_product_image,
 )
 
 MOA_FEATURED_TEMPLATE_NAMES = (
@@ -159,3 +161,24 @@ class TestCkCatalogManiocVariants(TransactionCase):
         self.assertIn(GALETTES_TEMPLATE_NAME, chunk)
         self.assertIn('attribute_values=', chunk)
         self.assertNotIn('manio-crackers-sale-5', chunk)
+
+
+@tagged('post_install', '-at_install', 'dorevia_ck_marketone_galettes_image')
+class TestCkGalettesImage(TransactionCase):
+    """Non-régression « zone beige » MOA — indépendant du fixture Manio Crackers.
+
+    _ensure_galettes_separate_product crée « Galettes de manioc » même sans
+    parent Manio Crackers, et doit lui poser une vraie photo
+    (ck_hero_crepe_manioc.webp), pas le placeholder crème.
+    """
+
+    def test_galettes_has_real_image(self):
+        _ensure_galettes_separate_product(self.env)
+        galettes = self.env['product.template'].sudo().search(
+            [('name', '=', GALETTES_TEMPLATE_NAME)], limit=1)
+        self.assertTrue(galettes, 'Galettes de manioc doit être créé')
+        self.assertTrue(galettes.image_1920, 'Galettes doit porter une image')
+        self.assertFalse(
+            is_tiny_product_image(galettes.image_1920),
+            'Galettes ne doit pas afficher un placeholder (régression zone beige MOA)',
+        )
