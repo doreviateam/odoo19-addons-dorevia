@@ -166,6 +166,27 @@ def _find_hero_block_bounds(arch):
     return -1, -1
 
 
+def _inject_into_empty_homepage_wrap(arch, inner_html):
+    """Installe du contenu dans la home vide Odoo 19 (parcours install fraîche)."""
+    if 'oe_empty' not in arch:
+        return arch, False
+    new_arch, count = re.subn(
+        r'<div id="wrap" class="oe_structure oe_empty"\s*/>',
+        f'<div id="wrap" class="oe_structure">\n{inner_html}\n</div>',
+        arch,
+        count=1,
+    )
+    if count:
+        return new_arch, True
+    new_arch, count = re.subn(
+        r'<div id="wrap" class="oe_structure oe_empty">\s*</div>',
+        f'<div id="wrap" class="oe_structure">\n{inner_html}\n</div>',
+        arch,
+        count=1,
+    )
+    return (new_arch, bool(count)) if count else (arch, False)
+
+
 def _patch_homepage_hero_arch(arch, hero_arch):
     start, end = _find_hero_block_bounds(arch)
     if start < 0 or end < 0:
@@ -246,6 +267,8 @@ def bootstrap_home_hero(env):
 
     hero_arch = build_home_hero_arch(env)
     new_arch, patched = _patch_homepage_hero_arch(arch, hero_arch)
+    if not patched:
+        new_arch, patched = _inject_into_empty_homepage_wrap(arch, hero_arch)
     if not patched or new_arch == arch:
         return patched
 
