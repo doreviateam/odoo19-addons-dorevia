@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+      CK Footer Phase 1 — footer de marque reproductible à l'installation.
+
+      Reproduit l'état validé en préproduction (référence sandbox), jusqu'ici
+      construit à la main en BO et donc absent des installs fraîches :
+        - website.footer_custom            → 4 colonnes CK, sans contenu Odoo par défaut
+        - website.footer_copyright_company_name → « © C-Kréyòl » au lieu de « Company name »
+
+      La colonne Boutique est ensuite régénérée dynamiquement par
+      bootstrap_footer_boutique_links (catégories exposables) — les liens
+      statiques ci-dessous ne sont qu'un fallback à l'installation.
+    -->
+
+    <record id="website.footer_custom" model="ir.ui.view">
+        <field name="name">CK Footer Phase 1</field>
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='footer']" position="replace">
+                <div id="footer" class="oe_structure oe_structure_solo border text-break" t-ignore="true" t-if="not no_footer">
+                    <section class="s_text_block pt40 pb16" data-snippet="s_text_block" data-name="Footer CK Phase 1">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 pt24 pb24">
+                                    <h5 class="mb-3">C-Kréyòl</h5>
+                                    <p class="mb-0">Boutique en ligne de produits créoles — épicerie et découvertes.</p>
+                                </div>
+                                <div class="col-lg-3 col-md-6 pt24 pb24">
+                                    <h5 class="mb-3">Boutique</h5>
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><a href="/shop">Tous les produits</a></li>
+                                        <li class="mb-2"><a href="/shop/category/epicerie-1">Épicerie</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-3 col-md-6 pt24 pb24">
+                                    <h5 class="mb-3">Découvrir</h5>
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><a href="/contactus">Contact</a></li>
+                                        <li class="mb-2"><a href="/legal">Mentions légales</a></li>
+                                        <li class="mb-2"><a href="/privacy">Confidentialité</a></li>
+                                        <li class="mb-2"><a href="/terms#cgv">CGV</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-3 col-md-6 pt24 pb24">
+                                    <h5 class="mb-3">CK</h5>
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><a href="/professionnels">Professionnels</a></li>
+                                        <li class="mb-2"><a href="/">Accueil</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="website.footer_copyright_company_name" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <xpath expr="//footer//span[hasclass('o_footer_copyright_name')]" position="replace">
+                <span class="o_footer_copyright_name me-2 small">© C-Kréyòl</span>
+            </xpath>
+            <xpath expr="//div[hasclass('o_footer_copyright')]//div[hasclass('col-sm')]" position="attributes">
+                <attribute name="class" remove="col-sm text-sm-start" add="col-md d-flex flex-column-reverse gap-2 text-md-start" separator=" "/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

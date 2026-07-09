@@ -147,24 +147,45 @@ def bootstrap_epicerie_category(env):
 
 BRAND_NAME = 'C-Kréyòl'
 BRAND_NAME_LEGACY = 'C-Kreyol'
+BRAND_EMAIL = 'noreply@ck-marketone.local'
+
+# Valeurs réputées « par défaut » (non intentionnelles) : seules celles-ci
+# sont remplacées par le branding CK. Toute autre valeur est réputée voulue
+# et n'est jamais écrasée (garde-fou société réelle).
+_DEFAULT_BRAND_NAMES = ('', 'My Company', 'My Website', 'YourCompany', 'Your Company', 'Website', BRAND_NAME_LEGACY)
+_DEFAULT_BRAND_EMAILS = ('', 'info@yourcompany.example.com', 'noreply@yourcompany.example.com')
+
+
+def _is_default_brand_value(value, defaults):
+    return (value or '').strip() in defaults
 
 
 def bootstrap_brand_name(env):
-    """CK-HOME-001C — harmonise website.name en 'C-Kréyòl' (idempotent).
+    """CK-HOME-001C — seed le branding CK (nom site + société + email) sur
+    installation fraîche, de façon gardée et idempotente.
 
-    res.company.name n'est renommée que si elle porte encore l'ancien nom
-    exact 'C-Kreyol' — garde-fou pour ne jamais écraser une société réelle
-    déjà reconfigurée par ailleurs.
+    Remplace uniquement une valeur par défaut Odoo ('My Company',
+    'YourCompany', vide) ou le legacy 'C-Kreyol'. Ne touche jamais un nom ou
+    un email déjà renseigné intentionnellement. Second passage sans effet :
+    les valeurs CK ne figurent pas dans les défauts, donc ne sont pas
+    re-réécrites.
     """
     website = env['website'].sudo().search([], limit=1)
     if not website:
         return False
-    if website.name == BRAND_NAME_LEGACY:
+    changed = False
+    if _is_default_brand_value(website.name, _DEFAULT_BRAND_NAMES) and website.name != BRAND_NAME:
         website.write({'name': BRAND_NAME})
+        changed = True
     company = website.company_id.sudo()
-    if company and company.name == BRAND_NAME_LEGACY:
-        company.write({'name': BRAND_NAME})
-    return True
+    if company:
+        if _is_default_brand_value(company.name, _DEFAULT_BRAND_NAMES) and company.name != BRAND_NAME:
+            company.write({'name': BRAND_NAME})
+            changed = True
+        if _is_default_brand_value(company.email, _DEFAULT_BRAND_EMAILS) and company.email != BRAND_EMAIL:
+            company.write({'email': BRAND_EMAIL})
+            changed = True
+    return changed
 
 
 FOOTER_COPYRIGHT_BRAND_VIEW_KEYS = (
