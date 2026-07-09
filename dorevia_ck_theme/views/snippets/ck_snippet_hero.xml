@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- QA C2 : visuels par défaut servis par dorevia_ck_marketone_content
-         (/dorevia_ck_marketone_content/static/img/ck_hero_home_v*.jpg). Dépendance
-         contenu assumée pour le rendu d'origine ; en thème seul, remplacer les
-         images via l'éditeur Website Builder. -->
+         (MOA sandbox — ck_hero_crepe_manioc / pate_manioc_2 / flag_market). -->
     <template id="s_ck_hero" name="CK Hero">
         <t t-set="ck_hero_content_ready"
            t-value="bool(request.env['ir.module.module'].sudo().search_count([('name', '=', 'dorevia_ck_marketone_content'), ('state', '=', 'installed')]))"/>
@@ -33,21 +31,21 @@
                                     <div class="carousel-item active" data-snippet="s_ck_hero_slide" data-name="Visuel hero 1">
                                         <div class="ck-hero__slide-media o_editable">
                                             <p class="o_not_editable" contenteditable="false">
-                                                <img t-attf-src="#{ck_hero_content_ready and '/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg' or '/dorevia_ck_theme/static/src/img/ck_hero_placeholder.svg'}" class="ck-hero__visual-media o_editable_media d-block w-100" t-attf-alt="#{ck_hero_content_ready and 'Sélection de produits créoles — épicerie et condiments' or 'Visuel à remplacer via l\'éditeur Website Builder'}" width="800" height="500" loading="eager"/>
+                                                <img t-attf-src="#{ck_hero_content_ready and '/dorevia_ck_marketone_content/static/img/ck_hero_crepe_manioc.webp' or '/dorevia_ck_theme/static/src/img/ck_hero_placeholder.svg'}" class="ck-hero__visual-media o_editable_media d-block w-100" t-attf-alt="#{ck_hero_content_ready and 'Galettes de manioc créoles dorées' or 'Visuel à remplacer via l\'éditeur Website Builder'}" width="800" height="500" loading="eager"/>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="carousel-item" data-snippet="s_ck_hero_slide" data-name="Visuel hero 2">
                                         <div class="ck-hero__slide-media o_editable">
                                             <p class="o_not_editable" contenteditable="false">
-                                                <img t-attf-src="#{ck_hero_content_ready and '/dorevia_ck_marketone_content/static/img/ck_hero_home_v2.jpg' or '/dorevia_ck_theme/static/src/img/ck_hero_placeholder.svg'}" class="ck-hero__visual-media o_editable_media d-block w-100" t-attf-alt="#{ck_hero_content_ready and 'Cuisine créole — plats et saveurs des îles' or 'Visuel à remplacer via l\'éditeur Website Builder'}" width="800" height="500" loading="lazy"/>
+                                                <img t-attf-src="#{ck_hero_content_ready and '/dorevia_ck_marketone_content/static/img/ck_hero_pate_manioc_2.webp' or '/dorevia_ck_theme/static/src/img/ck_hero_placeholder.svg'}" class="ck-hero__visual-media o_editable_media d-block w-100" t-attf-alt="#{ck_hero_content_ready and 'Pâte de manioc créole — tradition et savoir-faire' or 'Visuel à remplacer via l\'éditeur Website Builder'}" width="800" height="500" loading="lazy"/>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="carousel-item" data-snippet="s_ck_hero_slide" data-name="Visuel hero 3">
                                         <div class="ck-hero__slide-media o_editable">
                                             <p class="o_not_editable" contenteditable="false">
-                                                <img t-attf-src="#{ck_hero_content_ready and '/dorevia_ck_marketone_content/static/img/ck_hero_home_v3.jpg' or '/dorevia_ck_theme/static/src/img/ck_hero_placeholder.svg'}" class="ck-hero__visual-media o_editable_media d-block w-100" t-attf-alt="#{ck_hero_content_ready and 'Produits frais et épicerie fine créole' or 'Visuel à remplacer via l\'éditeur Website Builder'}" width="800" height="500" loading="lazy"/>
+                                                <img t-attf-src="#{ck_hero_content_ready and '/dorevia_ck_marketone_content/static/img/ck_hero_flag_market.webp' or '/dorevia_ck_theme/static/src/img/ck_hero_placeholder.svg'}" class="ck-hero__visual-media o_editable_media d-block w-100" t-attf-alt="#{ck_hero_content_ready and 'Marché créole — sélection CK' or 'Visuel à remplacer via l\'éditeur Website Builder'}" width="800" height="500" loading="lazy"/>
                                             </p>
                                         </div>
                                     </div>

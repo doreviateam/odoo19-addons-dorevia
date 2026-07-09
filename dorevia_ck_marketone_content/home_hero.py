@@ -25,21 +25,32 @@ HERO_CAROUSEL_MARKER = 'ck-hero__visual-carousel'
 HERO_CAROUSEL_INTERVAL_MS = 25000
 HERO_SLIDE_SNIPPET = 's_ck_hero_slide'
 HERO_EDITABLE_MEDIA_MARKER = 'o_editable_media'
-HERO_VISUAL_STATIC_MARKER = 'ck_hero_home_v1'
+HERO_VISUAL_STATIC_MARKER = 'ck_hero_crepe_manioc'
 HERO_VISUAL_MAX_SLIDES = 3
+# Visuels MOA recettés sandbox dorevia_ck_marketone_01 (localhost:18079).
 HERO_VISUAL_IMAGES = (
     {
-        'src': '/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg',
-        'alt': HERO_VISUAL_ALT,
+        'src': HERO_CREPE_FOCAL_SRC,
+        'alt': HERO_CREPE_FOCAL_ALT,
     },
     {
-        'src': '/dorevia_ck_marketone_content/static/img/ck_hero_home_v2.jpg',
-        'alt': 'Cuisine créole — plats et saveurs des îles',
+        'src': '/dorevia_ck_marketone_content/static/img/ck_hero_pate_manioc_2.webp',
+        'alt': 'Pâte de manioc créole — tradition et savoir-faire',
     },
     {
-        'src': '/dorevia_ck_marketone_content/static/img/ck_hero_home_v3.jpg',
-        'alt': 'Produits frais et épicerie fine créole',
+        'src': '/dorevia_ck_marketone_content/static/img/ck_hero_flag_market.webp',
+        'alt': 'Marché créole — sélection CK',
     },
+)
+_HERO_LEGACY_GENERIC_MARKERS = (
+    'ck_hero_home_v1',
+    'ck_hero_home_v2',
+    'ck_hero_home_v3',
+)
+_HERO_MOA_VISUAL_MARKERS = (
+    'ck_hero_crepe_manioc',
+    'ck_hero_pate_manioc_2',
+    'ck_hero_flag_market',
 )
 
 _COVER_DEFAULT_MARKERS = (
@@ -206,6 +217,10 @@ def _patch_homepage_hero_arch(arch, hero_arch):
     return new_arch, True
 
 
+def _hero_visual_assets_are_moa_canonical(visual_chunk):
+    return all(marker in visual_chunk for marker in _HERO_MOA_VISUAL_MARKERS)
+
+
 def hero_home_arch_is_valid(arch):
     """Recette Lot 1 : wording maquette · dual CTA · carrousel image-only dans cadre visuel."""
     if HERO_VARIANT_MARKER not in arch:
@@ -226,14 +241,15 @@ def hero_home_arch_is_valid(arch):
         'ck-hero__visual' in chunk,
         'ck-hero__grid' in chunk,
         HERO_CAROUSEL_MARKER in chunk,
-        HERO_VISUAL_STATIC_MARKER in chunk,
+        _hero_visual_assets_are_moa_canonical(visual_chunk),
         'ck-hero__visual-media' in chunk,
-        slide_count >= 1,
-        slide_count <= HERO_VISUAL_MAX_SLIDES,
+        slide_count == HERO_VISUAL_MAX_SLIDES,
         visual_chunk.count(HERO_EDITABLE_MEDIA_MARKER) == slide_count,
         visual_chunk.count(f'data-snippet="{HERO_SLIDE_SNIPPET}"') == slide_count,
         'ck-hero__slide-media o_editable' in visual_chunk,
     ]
+    if any(marker in visual_chunk for marker in _HERO_LEGACY_GENERIC_MARKERS):
+        return False
     if slide_count > 1:
         checks.append('ck-hero__visual-pause' in visual_chunk)
     if not all(checks):
