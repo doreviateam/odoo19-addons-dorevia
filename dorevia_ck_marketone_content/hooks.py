@@ -1105,6 +1105,9 @@ def bootstrap_recipes_page(env):
 
 def bootstrap_all_marketone_content(env):
     """Ensemble des bootstraps contenu CK (post_init · migrations)."""
+    from .home_page import bootstrap_website_homepage_binding
+
+    bootstrap_website_homepage_binding(env)
     bootstrap_brand_name(env)
     bootstrap_footer_copyright_brand(env)
     bootstrap_newsletter_mailing_list(env)
@@ -1112,9 +1115,6 @@ def bootstrap_all_marketone_content(env):
     bootstrap_published_products(env)
     bootstrap_catalog_vedettes_products(env)
     bootstrap_catalog_discovery_pack_product(env)
-    from .home_hero import bootstrap_home_hero
-
-    bootstrap_home_hero(env)
     bootstrap_home_featured_products(env)
     from .home_univers import bootstrap_home_univers
 
@@ -1144,6 +1144,10 @@ def bootstrap_all_marketone_content(env):
     from .footer_boutique import bootstrap_footer_boutique_links
 
     bootstrap_footer_boutique_links(env)
+    from .home_hero import bootstrap_home_hero
+
+    bootstrap_home_hero(env)
+    bootstrap_website_homepage_binding(env)
 
 
 def post_init_hook(env):

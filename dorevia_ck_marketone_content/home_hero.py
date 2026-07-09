@@ -187,6 +187,17 @@ def _inject_into_empty_homepage_wrap(arch, inner_html):
     return (new_arch, bool(count)) if count else (arch, False)
 
 
+def _prepend_hero_into_homepage_wrap(arch, inner_html):
+    """Insère le hero en tête du wrap si d'autres blocs home ont déjà été posés."""
+    if HERO_VARIANT_MARKER in arch:
+        return arch, False
+    match = re.search(r'<div id="wrap"[^>]*>', arch)
+    if not match:
+        return arch, False
+    insert_at = match.end()
+    return arch[:insert_at] + '\n' + inner_html + '\n' + arch[insert_at:], True
+
+
 def _patch_homepage_hero_arch(arch, hero_arch):
     start, end = _find_hero_block_bounds(arch)
     if start < 0 or end < 0:
@@ -246,14 +257,13 @@ def hero_home_arch_is_valid(arch):
 
 def bootstrap_home_hero(env):
     """V1 Hero home — remplace le hero existant par la variante maquette compacte."""
+    from .home_page import ensure_website_homepage_page, remove_global_homepage_conflicts
+
     website = env['website'].search([], limit=1)
     if not website:
         return False
 
-    page = env['website.page'].sudo().search([
-        ('url', '=', '/'),
-        ('website_id', '=', website.id),
-    ], limit=1)
+    page = ensure_website_homepage_page(env, website)
     if not page or not page.view_id:
         return False
 
@@ -263,16 +273,22 @@ def bootstrap_home_hero(env):
         return False
 
     if hero_home_arch_is_valid(arch):
+        remove_global_homepage_conflicts(env)
         return True
 
     hero_arch = build_home_hero_arch(env)
     new_arch, patched = _patch_homepage_hero_arch(arch, hero_arch)
     if not patched:
         new_arch, patched = _inject_into_empty_homepage_wrap(arch, hero_arch)
+    if not patched:
+        new_arch, patched = _prepend_hero_into_homepage_wrap(arch, hero_arch)
     if not patched or new_arch == arch:
         return patched
 
     view.write({'arch_db': new_arch})
+    if not page.is_published:
+        page.write({'is_published': True})
+    remove_global_homepage_conflicts(env)
     return hero_home_arch_is_valid(new_arch)
 
 
@@ -314,9 +330,11 @@ def repair_hero_crepe_focal(arch):
 
 def normalize_homepage_hero_crepe(env):
     """Applique ``repair_hero_crepe_focal`` sur la home (sudo, idempotent)."""
+    from .home_page import get_website_homepage_page
+
     if not env.is_superuser():
         env = env(su=True)
-    page = env['website.page'].sudo().search([('url', '=', '/')], limit=1)
+    _website, page = get_website_homepage_page(env)
     if not page or not page.view_id:
         return False
     view = page.view_id.sudo()
