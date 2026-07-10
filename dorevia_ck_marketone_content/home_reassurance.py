@@ -105,8 +105,44 @@ def _patch_homepage_reassurance_arch(arch, reassurance_arch):
     return arch[:start] + reassurance_arch + arch[end:], True
 
 
+def _bootstrap_home_reassurance_lang(env, page):
+    """Patch trust-bar pour la langue courante de ``env``."""
+    view = page.view_id.with_env(env).sudo()
+    arch = _arch_as_string(view.arch_db or view.arch)
+    if not arch.strip():
+        return False
+
+    if REASSURANCE_TRUST_BAR_MARKER in arch:
+        hero_pos = arch.find(HERO_VARIANT_MARKER)
+        reassurance_pos = arch.find(REASSURANCE_TRUST_BAR_MARKER)
+        if hero_pos >= 0 and reassurance_pos > hero_pos:
+            return False
+
+    reassurance_arch = build_home_reassurance_arch()
+    new_arch, patched = _patch_homepage_reassurance_arch(arch, reassurance_arch)
+    if not patched or new_arch == arch:
+        if REASSURANCE_TRUST_BAR_MARKER in arch:
+            return False
+        raise ValueError(
+            'CK home réassurance : impossible d\'insérer le bloc trust-bar après le hero'
+        )
+
+    view.write({'arch_db': new_arch})
+    if REASSURANCE_TRUST_BAR_MARKER not in new_arch:
+        raise ValueError('CK home réassurance : bloc trust-bar absent après insertion')
+    hero_pos = new_arch.find(HERO_VARIANT_MARKER)
+    reassurance_pos = new_arch.find(REASSURANCE_TRUST_BAR_MARKER)
+    if hero_pos < 0 or reassurance_pos < 0 or hero_pos >= reassurance_pos:
+        raise ValueError(
+            'CK home réassurance : trust-bar mal positionnée par rapport au hero'
+        )
+    return True
+
+
 def bootstrap_home_reassurance(env):
     """Section 2 home — remplace le bloc réassurance cartes par la trust-bar maquette."""
+    from .home_featured import _featured_target_langs
+
     website = env['website'].search([], limit=1)
     if not website:
         return False
@@ -118,24 +154,9 @@ def bootstrap_home_reassurance(env):
     if not page or not page.view_id:
         return False
 
-    view = page.view_id.sudo()
-    arch = _arch_as_string(view.arch_db or view.arch)
-    if not arch.strip():
-        return False
-
-    if reassurance_home_arch_is_valid(arch):
-        return True
-
-    reassurance_arch = build_home_reassurance_arch()
-    new_arch, patched = _patch_homepage_reassurance_arch(arch, reassurance_arch)
-    if not patched or new_arch == arch:
-        if reassurance_home_arch_is_valid(arch):
-            return True
-        raise ValueError(
-            'CK home réassurance : impossible d\'insérer le bloc trust-bar après le hero'
-        )
-
-    view.write({'arch_db': new_arch})
-    if not reassurance_home_arch_is_valid(new_arch):
-        raise ValueError('CK home réassurance : arch invalide après insertion trust-bar')
-    return True
+    changed = False
+    for lang in _featured_target_langs(env, website):
+        lang_env = env(context=dict(env.context, lang=lang))
+        if _bootstrap_home_reassurance_lang(lang_env, page):
+            changed = True
+    return changed or True

@@ -22,6 +22,10 @@ from odoo.addons.dorevia_ck_marketone_content.catalog_seed_guard import (
     count_moa_seed_published_products,
 )
 from odoo.addons.dorevia_ck_marketone_content.ck_product_placeholders import is_tiny_product_image
+from odoo.addons.dorevia_ck_marketone_content.home_featured import (
+    bootstrap_home_featured_products,
+    get_curated_featured_variants,
+)
 from odoo.addons.dorevia_ck_marketone_content.home_reassurance import (
     REASSURANCE_TRUST_BAR_MARKER,
     bootstrap_home_reassurance,
@@ -99,12 +103,22 @@ class TestCkMoaSeed(TransactionCase):
         self.assertEqual(website.default_lang_id.code, 'fr_FR')
         self.assertIn(website.name, (BRAND_NAME, 'C-Kréyòl'))
 
+    def test_featured_variants_eligible_for_home(self):
+        variants = get_curated_featured_variants(self.env)
+        self.assertGreaterEqual(len(variants), 4)
+        for template in variants.mapped('product_tmpl_id'):
+            self.assertTrue(template._is_ck_qualified_for_public_exposure())
+
     def test_home_reassurance_trust_bar_present(self):
         self.assertTrue(bootstrap_home_reassurance(self.env))
+        self.assertTrue(bootstrap_home_featured_products(self.env))
+        website = self.env['website'].sudo().search([], limit=1)
+        lang = website.default_lang_id.code if website.default_lang_id else 'fr_FR'
         page = self.env['website.page'].search([('url', '=', '/')], limit=1)
-        arch = page.view_id.arch_db
+        view = page.view_id.with_context(lang=lang)
+        arch = view.arch_db
         if isinstance(arch, dict):
-            arch = next(iter(arch.values()))
+            arch = arch.get(lang) or next(iter(arch.values()))
         self.assertIn(REASSURANCE_TRUST_BAR_MARKER, arch)
         self.assertTrue(reassurance_home_arch_is_valid(arch))
 

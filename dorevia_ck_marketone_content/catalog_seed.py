@@ -133,6 +133,42 @@ MANIO_VARIANT_IMAGES = (
     ('Manio Crackers sucré', 'manio_crackers_sweet.webp'),
 )
 
+# Origine géographique MOA — éligibilité coups de cœur (CATALOG-ARCHI-001 §7.1).
+PRODUCT_ORIGIN_TAG_NAMES = {
+    'Confiture de goyave': 'La Réunion',
+    'Manio Crackers': 'Martinique',
+    'Savon vétiver': 'La Réunion',
+    'Chapeau Panama': 'Guadeloupe',
+    'Pâte de manioc': 'La Réunion',
+    'Tambour Gro Ka': 'Martinique',
+    'Galettes de manioc': 'La Réunion',
+    'Jus Mont-Pelé': 'Martinique',
+    'Coffret découverte créole': 'Guadeloupe',
+}
+
+
+def _ensure_product_origin_tag(env, product, origin_name):
+    if not origin_name:
+        return
+    Tag = env['product.tag'].sudo()
+    tag = Tag.search([('name', '=', origin_name)], limit=1)
+    if not tag:
+        tag = Tag.create({'name': origin_name})
+    if tag not in product.product_tag_ids:
+        product.write({'product_tag_ids': [(4, tag.id)]})
+
+
+def _ensure_product_seed_qualification(env, product):
+    """Traçabilité + disponibilité — gate vedettes home install fraîche."""
+    vals = {}
+    if not product.ck_availability_mode:
+        vals['ck_availability_mode'] = 'stock'
+    if vals:
+        product.write(vals)
+    origin = PRODUCT_ORIGIN_TAG_NAMES.get(product.name)
+    if origin:
+        _ensure_product_origin_tag(env, product, origin)
+
 
 def load_catalog_image_b64(filename):
     """Charge un webp catalogue en base64 pour ``image_1920``."""
@@ -234,6 +270,7 @@ def _ensure_simple_product(env, spec):
     else:
         product.write(vals)
         _write_product_image_if_needed(product, image_b64)
+    _ensure_product_seed_qualification(env, product)
     return product
 
 
@@ -321,6 +358,7 @@ def _ensure_manio_crackers(env):
             _write_product_image_if_needed(variant, load_catalog_image_b64(image_file))
 
     _align_manioc_cracker_prices(parent)
+    _ensure_product_seed_qualification(env, parent)
     return _manio_crackers_variants_ready(parent)
 
 

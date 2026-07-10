@@ -173,7 +173,11 @@ def bootstrap_website_locale_fr(env):
     if not website:
         return False
     lang = env['res.lang']._lang_get('fr_FR')
-    if lang and website.default_lang_id != lang:
+    if not lang:
+        return False
+    if lang not in website.language_ids:
+        website.write({'language_ids': [(4, lang.id)]})
+    if website.default_lang_id != lang:
         website.write({'default_lang_id': lang.id})
     company = website.company_id.sudo()
     phone = (company.phone or '').strip()
@@ -1125,17 +1129,15 @@ def bootstrap_all_marketone_content(env):
     from .home_reassurance import bootstrap_home_reassurance
 
     bootstrap_website_homepage_binding(env)
+    bootstrap_website_locale_fr(env)
     bootstrap_home_hero(env)
     bootstrap_brand_name(env)
-    bootstrap_website_locale_fr(env)
     bootstrap_footer_copyright_brand(env)
     bootstrap_newsletter_mailing_list(env)
     bootstrap_epicerie_category(env)
     bootstrap_published_products(env)
     bootstrap_catalog_vedettes_products(env)
     bootstrap_catalog_discovery_pack_product(env)
-    bootstrap_home_featured_products(env)
-    bootstrap_home_reassurance(env)
     from .home_univers import bootstrap_home_univers
 
     bootstrap_home_univers(env)
@@ -1167,6 +1169,37 @@ def bootstrap_all_marketone_content(env):
 
     bootstrap_home_hero(env)
     bootstrap_website_homepage_binding(env)
+    bootstrap_home_reassurance(env)
+    bootstrap_home_featured_products(env)
+    _assert_home_moa_arch_complete(env)
+
+
+def _assert_home_moa_arch_complete(env):
+    """Gate install fraîche — home hero · réassurance · vedettes dans l'ordre MOA."""
+    from .home_reassurance import reassurance_home_arch_is_valid
+
+    website = env['website'].sudo().search([], limit=1)
+    if not website:
+        raise ValueError('CK home MOA : website introuvable')
+    page = env['website.page'].sudo().search([
+        ('url', '=', '/'),
+        ('website_id', '=', website.id),
+    ], limit=1)
+    if not page or not page.view_id:
+        raise ValueError('CK home MOA : homepage introuvable')
+    lang = 'fr_FR'
+    if website.default_lang_id and website.default_lang_id.code:
+        lang = website.default_lang_id.code
+    if lang != 'fr_FR' and env['res.lang']._lang_get('fr_FR'):
+        lang = 'fr_FR'
+    view = page.view_id.with_context(lang=lang).sudo()
+    arch = view.arch_db or ''
+    if isinstance(arch, dict):
+        arch = arch.get(lang) or next(iter(arch.values()), '')
+    if not reassurance_home_arch_is_valid(arch or ''):
+        raise ValueError(
+            'CK home MOA : réassurance trust-bar absente ou mal ordonnée (hero → réassurance → vedettes)'
+        )
 
 
 def post_init_hook(env):
