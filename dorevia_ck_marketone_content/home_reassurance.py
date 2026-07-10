@@ -5,6 +5,7 @@ from xml.sax.saxutils import escape
 from odoo.addons.dorevia_ck_marketone_content.home_hero import HERO_VARIANT_MARKER
 
 REASSURANCE_TRUST_BAR_MARKER = 'ck-reassurance--trust-bar'
+REASSURANCE_GRID_POC_MARKER = 'ck-grid-poc'
 REASSURANCE_DATA_NAME = 'CK Réassurance trust-bar'
 REASSURANCE_SNIPPET_MARKER = 'data-snippet="s_ck_reassurance"'
 FEATURED_MARKER = 'ck-featured-products'
@@ -42,11 +43,20 @@ def build_home_reassurance_arch():
     """Bandeau horizontal compact — wording client MOA Section 2."""
     items = ''.join(_trust_item_html(*item) for item in TRUST_BAR_ITEMS)
     return (
-        f'<section class="s_ck_reassurance ck-reassurance {REASSURANCE_TRUST_BAR_MARKER} o_colored_level" '
+        f'<section class="s_ck_reassurance ck-reassurance {REASSURANCE_TRUST_BAR_MARKER} '
+        f'{REASSURANCE_GRID_POC_MARKER} ck-grid-spread o_colored_level" '
         f'{REASSURANCE_SNIPPET_MARKER} data-name="{REASSURANCE_DATA_NAME}" '
         f'aria-label="Preuves de confiance">'
-        f'<div class="container">'
-        f'<div class="ck-reassurance__grid">{items}</div>'
+        f'<div class="container ck-grid-wrap">'
+        f'<div class="ck-guides" aria-hidden="true">'
+        f'<div class="ck-guides__cols"></div>'
+        f'<div class="ck-guides__rows"></div>'
+        f'<div class="ck-guides__mline ck-guides__mline--l"></div>'
+        f'<div class="ck-guides__mline ck-guides__mline--r"></div>'
+        f'</div>'
+        f'<div class="ck-grid">'
+        f'<div class="ck-reassurance__grid ck-grid-band">{items}</div>'
+        f'</div>'
         f'</div>'
         f'</section>'
     )
@@ -66,6 +76,8 @@ def _find_reassurance_block_bounds(arch):
 def reassurance_home_arch_is_valid(arch):
     """Recette Section 2 : trust-bar maquette · position entre Hero et Vedettes."""
     if REASSURANCE_TRUST_BAR_MARKER not in arch:
+        return False
+    if REASSURANCE_GRID_POC_MARKER not in arch:
         return False
     if 'Livraison France &amp; Europe' not in arch and 'Livraison France & Europe' not in arch:
         return False

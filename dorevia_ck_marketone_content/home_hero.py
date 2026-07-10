@@ -10,6 +10,7 @@ HERO_CREPE_FOCAL_ALT = 'Galettes de manioc créoles dorées'
 _HERO_LEGACY_FOCAL_CLASS = ' ck-hero__slide-media--focal-product'
 
 HERO_VARIANT_MARKER = 'ck-hero--marketone-v1'
+HERO_GRID_POC_MARKER = 'ck-grid-poc'
 HERO_DATA_NAME = 'CK Hero home V1'
 HERO_KICKER = 'Produits créoles · Producteurs · Savoir-faire'
 HERO_TITLE = 'C-Kréyòl — les saveurs créoles en Europe'
@@ -126,9 +127,16 @@ def build_home_hero_arch(env):
     cta_producteurs = escape(HERO_CTA_PRODUCTEURS_LABEL)
     visual = _hero_visual_html()
     return f"""
-<section class="s_ck_hero ck-hero {HERO_VARIANT_MARKER} o_colored_level" data-snippet="s_ck_hero" data-name="{HERO_DATA_NAME}">
-    <div class="container">
-        <div class="ck-hero__grid">
+<section class="s_ck_hero ck-hero {HERO_VARIANT_MARKER} {HERO_GRID_POC_MARKER} ck-grid-spread o_colored_level" data-snippet="s_ck_hero" data-name="{HERO_DATA_NAME}">
+    <div class="container ck-grid-wrap">
+        <div class="ck-guides" aria-hidden="true">
+            <div class="ck-guides__cols"></div>
+            <div class="ck-guides__rows"></div>
+            <div class="ck-guides__mline ck-guides__mline--l"></div>
+            <div class="ck-guides__mline ck-guides__mline--r"></div>
+        </div>
+        <div class="ck-grid">
+        <div class="ck-hero__grid ck-grid-band">
             <div class="ck-hero__content o_colored_level">
                 <p class="ck-hero__kicker">{kicker}</p>
                 <h1 class="ck-hero__title">{title}</h1>
@@ -141,6 +149,7 @@ def build_home_hero_arch(env):
             <div class="ck-hero__visual-col">
                 {visual}
             </div>
+        </div>
         </div>
     </div>
 </section>
@@ -217,6 +226,8 @@ def hero_home_arch_is_valid(arch):
     slide_count = visual_chunk.count('carousel-item')
     checks = [
         HERO_TITLE in chunk,
+        HERO_GRID_POC_MARKER in chunk,
+        'ck-grid-band' in chunk,
         escape(HERO_KICKER) in chunk,
         HERO_LEAD[:40] in chunk,
         'href="/shop"' in chunk,
