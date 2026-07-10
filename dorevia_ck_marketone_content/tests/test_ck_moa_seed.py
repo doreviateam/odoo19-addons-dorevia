@@ -98,8 +98,22 @@ class TestCkMoaSeed(TransactionCase):
         assert_catalog_seed_complete(self.env)
 
     def test_website_locale_fr(self):
+        # Reproduit la condition install fraîche --without-demo=all : fr_FR
+        # présente mais INACTIVE. Sans activation, l'ancien code laissait en_US.
+        Lang = self.env['res.lang'].sudo().with_context(active_test=False)
+        fr = Lang.search([('code', '=', 'fr_FR')], limit=1)
+        self.assertTrue(fr, 'fr_FR doit exister comme res.lang')
+        website = self.env['website'].sudo().search([], limit=1)
+        if fr.active and website.default_lang_id != fr:
+            try:
+                website.write({'default_lang_id': self.env.ref('base.lang_en').id})
+                fr.write({'active': False})
+            except Exception:  # noqa: BLE001 — best-effort si Odoo protège la désactivation
+                pass
         self.assertTrue(bootstrap_website_locale_fr(self.env))
         website = self.env['website'].sudo().search([], limit=1)
+        fr = Lang.search([('code', '=', 'fr_FR')], limit=1)
+        self.assertTrue(fr.active, 'bootstrap doit ACTIVER fr_FR (pas seulement default)')
         self.assertEqual(website.default_lang_id.code, 'fr_FR')
         self.assertIn(website.name, (BRAND_NAME, 'C-Kréyòl'))
 

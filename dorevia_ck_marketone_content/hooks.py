@@ -168,13 +168,25 @@ def bootstrap_brand_name(env):
 
 
 def bootstrap_website_locale_fr(env):
-    """Install fraîche MOA — site en fr_FR · pas de tel placeholder US."""
+    """Install fraîche MOA — site en fr_FR (langue activée) · pas de tel placeholder US.
+
+    Sur ``--without-demo=all`` fr_FR est présente mais **inactive** : ``_lang_get``
+    (active_test) la renvoyait vide et la fonction ne posait rien (défaut en_US).
+    On active donc la langue (``_activate_lang``) avant de la définir par défaut.
+    """
     website = env['website'].sudo().search([], limit=1)
     if not website:
         return False
-    lang = env['res.lang']._lang_get('fr_FR')
+    Lang = env['res.lang'].sudo()
+    lang = Lang.with_context(active_test=False).search([('code', '=', 'fr_FR')], limit=1)
     if not lang:
         return False
+    if not lang.active:
+        try:
+            Lang._activate_lang('fr_FR')
+        except Exception:  # noqa: BLE001 — fallback défensif si API diffère
+            lang.write({'active': True})
+        lang = Lang.search([('code', '=', 'fr_FR')], limit=1) or lang
     if lang not in website.language_ids:
         website.write({'language_ids': [(4, lang.id)]})
     if website.default_lang_id != lang:
@@ -183,7 +195,7 @@ def bootstrap_website_locale_fr(env):
     phone = (company.phone or '').strip()
     if phone.startswith('+1') or '555' in phone:
         company.write({'phone': False})
-    return True
+    return website.default_lang_id.code == 'fr_FR' and lang.active
 
 
 FOOTER_COPYRIGHT_BRAND_VIEW_KEYS = (
