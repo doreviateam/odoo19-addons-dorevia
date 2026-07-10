@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Phase 2 grille cards shop : overlay 12 cols parallèle à o-wsale-ppr -->
+
+    <template id="shop_ck_grid_poc"
+              inherit_id="website_sale.products"
+              name="CK Shop grid POC Phase 2"
+              priority="25">
+        <xpath expr="//div[@id='products_grid']" position="attributes">
+            <attribute name="class" add="ck-grid-poc ck-shop-grid-spread" separator=" "/>
+        </xpath>
+        <xpath expr="//section[@id='o_wsale_products_grid']" position="before">
+            <div class="ck-guides" aria-hidden="true">
+                <div class="ck-guides__cols"/>
+                <div class="ck-guides__rows"/>
+                <div class="ck-guides__mline ck-guides__mline--l"/>
+                <div class="ck-guides__mline ck-guides__mline--r"/>
+            </div>
+        </xpath>
+        <xpath expr="//section[@id='o_wsale_products_grid']" position="attributes">
+            <attribute name="t-attf-class" add="ck-grid ck-shop-grid-band ck-grid-band" separator=" "/>
+        </xpath>
+    </template>
+</odoo>

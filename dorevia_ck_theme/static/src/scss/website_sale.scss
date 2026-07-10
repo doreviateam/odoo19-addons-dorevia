@@ -722,6 +722,32 @@
     }
 }
 
+// Phase 2 grille POC — overlay 12 cols en parallèle de --o-wsale-ppr
+.ck-shop-page #products_grid.ck-shop-grid-spread {
+    position: relative;
+
+    > .ck-guides {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 60;
+    }
+
+    > .ck-guides .ck-guides__cols,
+    > .ck-guides .ck-guides__rows,
+    > .ck-guides .ck-guides__mline--l,
+    > .ck-guides .ck-guides__mline--r {
+        left: 0;
+        right: 0;
+    }
+
+    #o_wsale_products_grid.ck-grid,
+    section#o_wsale_products_grid.ck-grid {
+        position: relative;
+        z-index: 1;
+    }
+}
+
 // A4 : drawer offcanvas — fond et dimensions CK
 #o_wsale_offcanvas {
     background-color: $ck-bg-soft;

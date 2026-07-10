@@ -62,6 +62,18 @@ $ck-container-max: 1200px;
 $ck-gutter-desktop: 1.5rem;
 $ck-gutter-mobile: 1rem;
 
+// --- Grille responsive (méthode Müller-Brockmann transposée CK) --------------
+// Source unique SCSS → variables CSS --ck-grid-* (voir ck_grid.scss).
+// Gouttières = marges latérales du conteneur ; baseline 8px ; leading 24px.
+$ck-grid-cols: 12;
+$ck-grid-baseline: 8px;
+$ck-grid-leading: 24px; // 3 × baseline — multiple des gouttières 16/24px
+$ck-grid-max-width: $ck-container-max;
+$ck-grid-gutter-desktop: $ck-gutter-desktop;
+$ck-grid-gutter-mobile: $ck-gutter-mobile;
+$ck-grid-margin-desktop: $ck-gutter-desktop;
+$ck-grid-margin-mobile: $ck-gutter-mobile;
+
 // --- Radius & ombres ---------------------------------------------------------
 $ck-radius-sm: 6px;
 $ck-radius-md: 10px;

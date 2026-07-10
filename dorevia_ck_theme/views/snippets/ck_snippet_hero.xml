@@ -7,9 +7,16 @@
     <template id="s_ck_hero" name="CK Hero">
         <t t-set="ck_hero_content_ready"
            t-value="bool(request.env['ir.module.module'].sudo().search_count([('name', '=', 'dorevia_ck_marketone_content'), ('state', '=', 'installed')]))"/>
-        <section class="s_ck_hero ck-hero ck-hero--marketone-v1 o_colored_level" data-snippet="s_ck_hero" data-name="CK Hero V1">
-            <div class="container">
-                <div class="ck-hero__grid">
+        <section class="s_ck_hero ck-hero ck-hero--marketone-v1 ck-grid-poc ck-grid-spread o_colored_level" data-snippet="s_ck_hero" data-name="CK Hero V1">
+            <div class="container ck-grid-wrap">
+                <div class="ck-guides" aria-hidden="true">
+                    <div class="ck-guides__cols"/>
+                    <div class="ck-guides__rows"/>
+                    <div class="ck-guides__mline ck-guides__mline--l"/>
+                    <div class="ck-guides__mline ck-guides__mline--r"/>
+                </div>
+                <div class="ck-grid">
+                <div class="ck-hero__grid ck-grid-band">
                     <div class="ck-hero__content o_editable">
                         <p class="ck-hero__kicker">Boutique créole · Livraison France &amp; Europe</p>
                         <h1 class="ck-hero__title">Les saveurs créoles, prêtes à commander.</h1>
@@ -61,6 +68,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </section>

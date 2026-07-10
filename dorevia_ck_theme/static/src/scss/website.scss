@@ -37,7 +37,7 @@
 }
 
 // Hero V1 — largeur maquette .wrap (1200px utiles, sans gutter Bootstrap)
-.ck-theme #wrapwrap .ck-hero.ck-hero--marketone-v1 > .container {
+.ck-theme #wrapwrap .ck-hero.ck-hero--marketone-v1 > .container:not(.ck-grid-wrap) {
     width: calc(100% - 32px);
     max-width: $ck-container-max;
     margin-inline: auto;
@@ -67,7 +67,7 @@
         padding: 24px 0 20px;
     }
 
-    > .container {
+    > .container:not(.ck-grid-wrap) {
         width: calc(100% - 32px);
         max-width: $ck-container-max;
         margin-inline: auto;
@@ -79,7 +79,40 @@
         }
     }
 
-    .ck-hero__grid {
+    // POC grille 12 colonnes — placement par ligne (7 + 5 ≈ ratio 1.2 / 0.8)
+    &.ck-grid-poc {
+        > .ck-grid-wrap {
+            width: auto;
+            padding-left: var(--ck-grid-margin);
+            padding-right: var(--ck-grid-margin);
+        }
+
+        .ck-hero__grid {
+            grid-template-columns: subgrid;
+
+            @supports not (grid-template-columns: subgrid) {
+                grid-template-columns: repeat(var(--ck-grid-cols), 1fr);
+            }
+        }
+
+        .ck-hero__content {
+            grid-column: 1 / 8;
+
+            @media (max-width: 767.98px) {
+                grid-column: 1 / -1;
+            }
+        }
+
+        .ck-hero__visual-col {
+            grid-column: 8 / 13;
+
+            @media (max-width: 767.98px) {
+                grid-column: 1 / -1;
+            }
+        }
+    }
+
+    .ck-hero__grid:not(.ck-grid-band) {
         display: grid;
         grid-template-columns: 1.2fr 0.8fr;
         gap: 28px;
@@ -655,6 +688,29 @@
         font-size: 12.5px;
         color: $ck-text-muted;
         line-height: 1.4;
+    }
+
+    // POC grille 12 colonnes — 4 × 3 colonnes desktop
+    &.ck-grid-poc {
+        .ck-reassurance__grid {
+            grid-template-columns: subgrid;
+
+            @supports not (grid-template-columns: subgrid) {
+                grid-template-columns: repeat(var(--ck-grid-cols), 1fr);
+            }
+        }
+
+        .ck-reassurance__item {
+            grid-column: span 3;
+
+            @media (max-width: 767.98px) {
+                grid-column: span 6;
+            }
+
+            @media (max-width: 479.98px) {
+                grid-column: 1 / -1;
+            }
+        }
     }
 }
 

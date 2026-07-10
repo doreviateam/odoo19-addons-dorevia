@@ -10,7 +10,7 @@
             <attribute name="t-attf-class" add="ck-product-page" separator=" "/>
         </xpath>
         <xpath expr="//div[@id='product_detail_main']" position="attributes">
-            <attribute name="t-attf-class" add="ck-product-layout" separator=" "/>
+            <attribute name="t-attf-class" add="ck-product-layout ck-grid-band" separator=" "/>
         </xpath>
         <xpath expr="//div[contains(@t-attf-class, 'o_wsale_product_images')]" position="attributes">
             <attribute name="t-attf-class" add="ck-product-layout__gallery" separator=" "/>
@@ -125,10 +125,16 @@
 
     <template id="product_ck_long_zone"
               name="CK Product long zone with anchor nav">
-        <div class="ck-product-page__complement">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-lg-8">
+        <div class="ck-product-page__complement ck-grid-poc ck-grid-spread">
+            <div class="container ck-grid-wrap">
+                <div class="ck-guides" aria-hidden="true">
+                    <div class="ck-guides__cols"/>
+                    <div class="ck-guides__rows"/>
+                    <div class="ck-guides__mline ck-guides__mline--l"/>
+                    <div class="ck-guides__mline ck-guides__mline--r"/>
+                </div>
+                <div class="ck-grid">
+                <div class="ck-product-page__complement-band ck-grid-band">
                         <t t-if="ck_product_page_tabs">
                             <div class="ck-product-page__long-zone">
                                 <nav t-if="len(ck_product_page_tabs) &gt; 1"
@@ -221,7 +227,7 @@
                                 </div>
                             </div>
                         </t>
-                    </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -277,6 +283,27 @@
               priority="20">
         <xpath expr="//section[@id='o_product_page_reviews']//h2" position="replace">
             <h2 class="fs-4 mb-0">Avis clients</h2>
+        </xpath>
+    </template>
+
+    <!-- Phase 2 grille — zone haute : guides + #product_detail_main comme grille 12 cols -->
+    <template id="product_ck_grid_poc"
+              inherit_id="website_sale.product"
+              name="CK Product grid POC Phase 2"
+              priority="33">
+        <xpath expr="//section[@id='product_detail']" position="attributes">
+            <attribute name="t-attf-class" add="ck-grid-poc ck-product-grid-spread" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='product_detail_main']" position="before">
+            <div class="ck-guides" aria-hidden="true">
+                <div class="ck-guides__cols"/>
+                <div class="ck-guides__rows"/>
+                <div class="ck-guides__mline ck-guides__mline--l"/>
+                <div class="ck-guides__mline ck-guides__mline--r"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[@id='product_detail_main']" position="attributes">
+            <attribute name="t-attf-class" add="ck-grid" separator=" "/>
         </xpath>
     </template>
 

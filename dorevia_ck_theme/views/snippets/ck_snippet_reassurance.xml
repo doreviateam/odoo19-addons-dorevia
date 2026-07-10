@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_ck_reassurance" name="CK Réassurance">
-        <section class="s_ck_reassurance ck-reassurance ck-reassurance--trust-bar o_colored_level"
+        <section class="s_ck_reassurance ck-reassurance ck-reassurance--trust-bar ck-grid-poc ck-grid-spread o_colored_level"
                  data-snippet="s_ck_reassurance"
                  data-name="CK Réassurance trust-bar"
                  aria-label="Preuves de confiance">
-            <div class="container">
-                <div class="ck-reassurance__grid">
+            <div class="container ck-grid-wrap">
+                <div class="ck-guides" aria-hidden="true">
+                    <div class="ck-guides__cols"/>
+                    <div class="ck-guides__rows"/>
+                    <div class="ck-guides__mline ck-guides__mline--l"/>
+                    <div class="ck-guides__mline ck-guides__mline--r"/>
+                </div>
+                <div class="ck-grid">
+                <div class="ck-reassurance__grid ck-grid-band">
                     <div class="ck-reassurance__item o_editable">
                         <span class="ck-reassurance__icon fa fa-truck" aria-hidden="true"/>
                         <div class="ck-reassurance__copy">
@@ -35,6 +42,7 @@
                             <p class="ck-reassurance__text">Une question ? CK vous accompagne.</p>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </section>
