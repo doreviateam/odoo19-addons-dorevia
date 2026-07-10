@@ -15,6 +15,11 @@ DISCOVERY_PACK_LIST_PRICE = 29.9
 
 
 def _discovery_pack_image_b64():
+    try:
+        from .catalog_seed import load_catalog_image_b64
+        return load_catalog_image_b64('coffret_decouverte.webp')
+    except OSError:
+        pass
     image_path = Path(__file__).resolve().parent / 'static' / 'img' / 'ck_discovery_pack.jpg'
     return base64.b64encode(image_path.read_bytes())
 

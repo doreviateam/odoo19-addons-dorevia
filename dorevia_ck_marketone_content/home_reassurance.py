@@ -86,6 +86,21 @@ def reassurance_home_arch_is_valid(arch):
 def _patch_homepage_reassurance_arch(arch, reassurance_arch):
     start, end = _find_reassurance_block_bounds(arch)
     if start < 0 or end < 0:
+        if REASSURANCE_TRUST_BAR_MARKER in arch:
+            return arch, False
+        for marker in (
+            HERO_VARIANT_MARKER,
+            'data-snippet="s_ck_hero"',
+            'class="s_ck_hero',
+        ):
+            marker_pos = arch.find(marker)
+            if marker_pos < 0:
+                continue
+            section_end = arch.find('</section>', marker_pos)
+            if section_end < 0:
+                continue
+            insert_at = section_end + len('</section>')
+            return arch[:insert_at] + '\n' + reassurance_arch + '\n' + arch[insert_at:], True
         return arch, False
     return arch[:start] + reassurance_arch + arch[end:], True
 
@@ -114,7 +129,13 @@ def bootstrap_home_reassurance(env):
     reassurance_arch = build_home_reassurance_arch()
     new_arch, patched = _patch_homepage_reassurance_arch(arch, reassurance_arch)
     if not patched or new_arch == arch:
-        return patched
+        if reassurance_home_arch_is_valid(arch):
+            return True
+        raise ValueError(
+            'CK home réassurance : impossible d\'insérer le bloc trust-bar après le hero'
+        )
 
     view.write({'arch_db': new_arch})
-    return reassurance_home_arch_is_valid(new_arch)
+    if not reassurance_home_arch_is_valid(new_arch):
+        raise ValueError('CK home réassurance : arch invalide après insertion trust-bar')
+    return True

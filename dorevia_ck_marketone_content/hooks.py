@@ -34,7 +34,7 @@ from .legal_pages import (
 
 _logger = logging.getLogger(__name__)
 
-EPICERIE_CATEGORY_NAME = 'Épicerie créole'
+EPICERIE_CATEGORY_NAME = 'Épicerie'
 EPICERIE_CATEGORY_DESCRIPTION = (
     '<p>Savons artisanaux, confitures, crackers et galettes de manioc — '
     'une sélection créole issue de nos producteurs et transformateurs.</p>'
@@ -159,11 +159,26 @@ def bootstrap_brand_name(env):
     website = env['website'].sudo().search([], limit=1)
     if not website:
         return False
-    if website.name == BRAND_NAME_LEGACY:
+    if website.name in (BRAND_NAME_LEGACY, 'My Website'):
         website.write({'name': BRAND_NAME})
     company = website.company_id.sudo()
     if company and company.name == BRAND_NAME_LEGACY:
         company.write({'name': BRAND_NAME})
+    return True
+
+
+def bootstrap_website_locale_fr(env):
+    """Install fraîche MOA — site en fr_FR · pas de tel placeholder US."""
+    website = env['website'].sudo().search([], limit=1)
+    if not website:
+        return False
+    lang = env['res.lang']._lang_get('fr_FR')
+    if lang and website.default_lang_id != lang:
+        website.write({'default_lang_id': lang.id})
+    company = website.company_id.sudo()
+    phone = (company.phone or '').strip()
+    if phone.startswith('+1') or '555' in phone:
+        company.write({'phone': False})
     return True
 
 
@@ -1106,9 +1121,13 @@ def bootstrap_recipes_page(env):
 def bootstrap_all_marketone_content(env):
     """Ensemble des bootstraps contenu CK (post_init · migrations)."""
     from .home_page import bootstrap_website_homepage_binding
+    from .home_hero import bootstrap_home_hero
+    from .home_reassurance import bootstrap_home_reassurance
 
     bootstrap_website_homepage_binding(env)
+    bootstrap_home_hero(env)
     bootstrap_brand_name(env)
+    bootstrap_website_locale_fr(env)
     bootstrap_footer_copyright_brand(env)
     bootstrap_newsletter_mailing_list(env)
     bootstrap_epicerie_category(env)
@@ -1116,6 +1135,7 @@ def bootstrap_all_marketone_content(env):
     bootstrap_catalog_vedettes_products(env)
     bootstrap_catalog_discovery_pack_product(env)
     bootstrap_home_featured_products(env)
+    bootstrap_home_reassurance(env)
     from .home_univers import bootstrap_home_univers
 
     bootstrap_home_univers(env)
@@ -1144,11 +1164,13 @@ def bootstrap_all_marketone_content(env):
     from .footer_boutique import bootstrap_footer_boutique_links
 
     bootstrap_footer_boutique_links(env)
-    from .home_hero import bootstrap_home_hero
 
     bootstrap_home_hero(env)
     bootstrap_website_homepage_binding(env)
 
 
 def post_init_hook(env):
+    from .catalog_seed import ensure_catalog_seed
+
+    ensure_catalog_seed(env)
     bootstrap_all_marketone_content(env)

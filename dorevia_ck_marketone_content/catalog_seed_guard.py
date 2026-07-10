@@ -1,18 +1,29 @@
 # -*- coding: utf-8 -*-
-"""Garde-fou catalogue seed MOA — état de référence PROTOCOLE_QA_AXE_C (2026-06-24)."""
+"""Garde-fou catalogue seed MOA — référence install fraîche 18079."""
 
-# Jeu commercial seed sandbox CK — 7 produits publiés de référence.
 MOA_SEED_PUBLISHED_PRODUCT_NAMES = (
     'Chapeau Panama',
+    'Coffret découverte créole',
     'Confiture de goyave',
+    'Galettes de manioc',
     'Jus Mont-Pelé',
     'Manio Crackers',
     'Pâte de manioc',
     'Savon vétiver',
-    'Galettes de manioc',
+    'Tambour Gro Ka',
+)
+
+MOA_SEED_FEATURED_TEMPLATE_NAMES = (
+    'Chapeau Panama',
+    'Confiture de goyave',
+    'Manio Crackers',
+    'Pâte de manioc',
+    'Savon vétiver',
+    'Tambour Gro Ka',
 )
 
 MOA_SEED_MIN_PUBLISHED_COUNT = len(MOA_SEED_PUBLISHED_PRODUCT_NAMES)
+MOA_SEED_MIN_FEATURED_COUNT = len(MOA_SEED_FEATURED_TEMPLATE_NAMES)
 
 
 def count_moa_seed_published_products(env):
@@ -23,6 +34,15 @@ def count_moa_seed_published_products(env):
         ('is_published', '=', True),
         ('website_published', '=', True),
         ('sale_ok', '=', True),
+    ])
+
+
+def count_moa_seed_featured_templates(env):
+    Template = env['product.template'].sudo()
+    return Template.search_count([
+        ('name', 'in', list(MOA_SEED_FEATURED_TEMPLATE_NAMES)),
+        ('ck_is_featured', '=', True),
+        ('is_published', '=', True),
     ])
 
 

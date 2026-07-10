@@ -37,6 +37,7 @@ from . import test_ck_home_section2_trust_bar_hooks
 from . import test_ck_home_section3_featured_compose
 from . import test_ck_home_section3_featured_hooks
 from . import test_ck_catalog_manioc_variants
+from . import test_ck_moa_seed
 from . import test_ck_axe_c_bo_sync
 from . import test_ck_moa2_bo_sync
 from . import test_ck_product_sales_tab_bo
