@@ -69,6 +69,7 @@ from . import test_ck_website_cookies_config
 from . import test_ck_producers
 from . import test_ck_producers_sitemap
 from . import test_ck_prod_001_availability
+from . import test_ck_portal_website_acl
 from . import test_ck_nav_v1_sync
 from . import test_ck_nav_catalogue_sync
 from . import test_ck_nav_catalogue_split_link
