@@ -17,8 +17,5 @@
                 <div class="ck-guides__mline ck-guides__mline--r"/>
             </div>
         </xpath>
-        <xpath expr="//section[@id='o_wsale_products_grid']" position="attributes">
-            <attribute name="t-attf-class" add="ck-grid ck-shop-grid-band ck-grid-band" separator=" "/>
-        </xpath>
     </template>
 </odoo>
