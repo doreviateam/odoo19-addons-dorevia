@@ -1,0 +1,54 @@
+// Phase 3 — panier / checkout · overlay grille parallèle (7+5 natif Bootstrap, sans re-span)
+
+.ck-theme {
+    .ck-cart-grid-spread {
+        position: relative;
+
+        > .ck-guides {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 60;
+        }
+
+        // Référence 12 tracks sans gap — alignée sur la row Bootstrap (pas de double inset gouttière)
+        > .ck-guides .ck-guides__cols,
+        > .ck-cart-grid-ref.ck-grid {
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            column-gap: 0;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+        }
+
+        > .ck-guides .ck-guides__cols {
+            position: absolute;
+            display: grid;
+        }
+
+        > .ck-guides .ck-guides__rows,
+        > .ck-guides .ck-guides__mline--l,
+        > .ck-guides .ck-guides__mline--r {
+            left: 0;
+            right: 0;
+        }
+
+        > .ck-cart-grid-ref.ck-grid {
+            position: absolute;
+            display: grid;
+            pointer-events: none;
+            visibility: hidden;
+            z-index: 0;
+        }
+
+        // Neutralisation offset xxl — appliquée si recette mesure dérive > 1 px @ ≥1400
+        @media (min-width: 1400px) {
+            .o_wsale_shorter_cart_summary.offset-xxl-1,
+            .offset-xxl-1.col-lg-5.col-xxl-4 {
+                margin-left: 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Phase 3 grille panier / checkout — overlay parallèle, layout Bootstrap natif 7+5 conservé -->
+
+    <template id="cart_ck_grid_poc"
+              inherit_id="website_sale.checkout_layout"
+              name="CK Cart checkout grid POC Phase 3"
+              priority="25">
+        <xpath expr="//div[contains(@t-attf-class, 'mb32')][contains(@t-attf-class, 'row')]" position="attributes">
+            <attribute name="t-attf-class" add="ck-cart-grid-spread ck-grid-poc" separator=" "/>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'mb32')][contains(@t-attf-class, 'row')]" position="inside">
+            <div class="ck-guides" aria-hidden="true">
+                <div class="ck-guides__cols"/>
+                <div class="ck-guides__rows"/>
+                <div class="ck-guides__mline ck-guides__mline--l"/>
+                <div class="ck-guides__mline ck-guides__mline--r"/>
+            </div>
+            <div class="ck-cart-grid-ref ck-grid" aria-hidden="true"/>
+        </xpath>
+    </template>
+</odoo>
