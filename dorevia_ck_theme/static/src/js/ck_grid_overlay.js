@@ -18,6 +18,20 @@
         }
     }
 
+    function isEditableTarget(el) {
+        if (!el || el === document.body) {
+            return false;
+        }
+        var tag = el.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") {
+            return true;
+        }
+        if (el.isContentEditable) {
+            return true;
+        }
+        return isEditableTarget(el.parentElement);
+    }
+
     function populateGuides() {
         var cols = getComputedStyle(document.documentElement)
             .getPropertyValue("--ck-grid-cols")
@@ -93,6 +107,10 @@
                 !e.ctrlKey &&
                 !e.altKey
             ) {
+                if (isEditableTarget(e.target)) {
+                    return;
+                }
+                e.preventDefault();
                 setGrid(!document.body.classList.contains("ck-grid-on"));
             }
         });
@@ -111,6 +129,15 @@
             clearTimeout(t);
             t = setTimeout(runOptical, 120);
         });
+
+        try {
+            var params = new URLSearchParams(window.location.search);
+            if (params.get("ck_grid") === "1") {
+                setGrid(true);
+            }
+        } catch (ignore) {
+            // URLSearchParams indisponible — toggle manuel uniquement
+        }
     }
 
     if (document.readyState === "loading") {

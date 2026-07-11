@@ -5,22 +5,24 @@
         pas un attribut class statique. On chaîne ck-theme comme website_sale.
 
         Overlay grille : script injecté uniquement sur hôtes dev/pré-prod autorisés.
-        Jamais chargé en production boutique → pas de bouton, pas de touche G,
-        pas de ?ck_grid=1 exploitable.
+        ck_grid_dev_host DOIT être défini dans //head (avant le script) — un t-set
+        placé avant //body est évalué trop tard (head déjà rendu).
+
+        Jamais chargé en production boutique → pas de bouton, pas de touche G.
     -->
     <template id="layout_ck_theme" inherit_id="website.layout" name="CK Theme layout" priority="20">
-        <xpath expr="//body" position="before">
+        <xpath expr="//head" position="inside">
             <t t-set="ck_grid_dev_host"
                t-value="(request.httprequest.host or '').split(':')[0] in ('localhost', '127.0.0.1')
                         or (request.httprequest.host or '').split(':')[0].startswith('preprod-ck.')"/>
-            <t t-set="body_classname" t-value="((body_classname or '') + ' ck-theme').strip()"/>
-        </xpath>
-        <xpath expr="//head" position="inside">
             <t t-if="ck_grid_dev_host">
                 <script type="text/javascript"
                         src="/dorevia_ck_theme/static/src/js/ck_grid_overlay.js"
                         defer="defer"/>
             </t>
+        </xpath>
+        <xpath expr="//body" position="before">
+            <t t-set="body_classname" t-value="((body_classname or '') + ' ck-theme').strip()"/>
         </xpath>
     </template>
 </odoo>
