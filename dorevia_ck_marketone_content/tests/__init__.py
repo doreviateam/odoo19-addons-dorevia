@@ -28,6 +28,7 @@ from . import test_ck_home_lot2_compose
 from . import test_ck_home_lot2_hooks
 from . import test_ck_home_lot3_compose
 from . import test_ck_home_lot3_hooks
+from . import test_ck_code_004_discovery_pack_opt_out
 from . import test_ck_home_lot4_compose
 from . import test_ck_home_lot4_hooks
 from . import test_ck_home_lot5_compose

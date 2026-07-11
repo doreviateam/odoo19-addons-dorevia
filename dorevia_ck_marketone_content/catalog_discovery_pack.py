@@ -8,6 +8,7 @@ from .home_discovery_pack import (
     DISCOVERY_PACK_EDITORIAL_NAME,
     DISCOVERY_PACK_EDITORIAL_TEASER,
     DISCOVERY_PACK_STATIC_IMAGE,
+    _discovery_pack_bootstrap_enabled,
 )
 
 DISCOVERY_PACK_PRODUCT_NAME = DISCOVERY_PACK_EDITORIAL_NAME
@@ -21,6 +22,8 @@ def _discovery_pack_image_b64():
 
 def bootstrap_catalog_discovery_pack_product(env):
     """Assure un coffret publié avec image — alimente ``get_discovery_pack_product()``."""
+    if not _discovery_pack_bootstrap_enabled(env):
+        return True
     Template = env['product.template'].sudo()
     product = Template.search([('name', '=', DISCOVERY_PACK_PRODUCT_NAME)], limit=1)
     image_b64 = _discovery_pack_image_b64()

@@ -3,6 +3,9 @@
 import re
 from xml.sax.saxutils import escape
 
+from lxml import etree
+
+DISCOVERY_PACK_BOOTSTRAP_ICP = 'ck.marketone.discovery_pack_bootstrap_enabled'
 DISCOVERY_PACK_SECTION_MARKER = 'ck-discovery-pack'
 DISCOVERY_PACK_STATIC_IMAGE = '/dorevia_ck_marketone_content/static/img/ck_discovery_pack.jpg'
 DISCOVERY_PACK_DATA_NAME = 'CK Coffrets découverte'
@@ -23,6 +26,13 @@ _PLACEHOLDER_IMAGE_MARKERS = (
     'website.s_cover_default_image',
     's_cover_default',
 )
+
+
+def _discovery_pack_bootstrap_enabled(env):
+    """True sauf opt-out MOA explicite (chaîne ``'False'``). Absent = legacy True."""
+    raw = env['ir.config_parameter'].sudo().get_param(
+        DISCOVERY_PACK_BOOTSTRAP_ICP, 'True')
+    return raw != 'False'
 
 
 def _arch_as_string(arch):
@@ -132,6 +142,32 @@ def build_discovery_pack_arch(env):
 """.strip()
 
 
+def _remove_discovery_pack_sections(arch):
+    """Retire toutes les sections ``ck-discovery-pack`` (parsing etree XML — CODE-004 R-B)."""
+    if DISCOVERY_PACK_SECTION_MARKER not in arch:
+        return arch, False
+    root = etree.fromstring(f'<ck-root>{arch}</ck-root>')
+    removed = False
+    for section in root.xpath('.//section[contains(@class, "ck-discovery-pack")]'):
+        parent = section.getparent()
+        if parent is not None:
+            parent.remove(section)
+            removed = True
+    if not removed:
+        return arch, False
+    new_arch = ''.join(
+        etree.tostring(child, encoding='unicode') for child in root
+    )
+    return new_arch, True
+
+
+def _discovery_pack_opt_out_arch_is_valid(arch):
+    """Opt-out MOA : section absente, pas de fuite markup."""
+    if DISCOVERY_PACK_SECTION_MARKER in arch:
+        return False
+    return not _homepage_has_leaked_section_markup(arch)
+
+
 def _dual_engage_boundary(arch, after=0):
     """Index de début du bloc dual / pro suivant (y compris fuite ``</section> class=``)."""
     leaked = re.search(
@@ -229,8 +265,10 @@ def _homepage_has_leaked_section_markup(arch):
     ))
 
 
-def discovery_pack_arch_is_valid(arch):
-    """Recette : bloc présent · CTA /kits · pas de placeholder Odoo image."""
+def discovery_pack_arch_is_valid(arch, env=None):
+    """Recette legacy (section présente) ou opt-out MOA (section absente)."""
+    if env is not None and not _discovery_pack_bootstrap_enabled(env):
+        return _discovery_pack_opt_out_arch_is_valid(arch)
     if DISCOVERY_PACK_SECTION_MARKER not in arch:
         return False
     if _homepage_has_leaked_section_markup(arch):
@@ -280,6 +318,18 @@ def bootstrap_home_discovery_pack(env):
     arch = _arch_as_string(view.arch_db or view.arch)
     if not arch.strip():
         return False
+
+    if not _discovery_pack_bootstrap_enabled(env):
+        if _homepage_has_leaked_section_markup(arch):
+            from .home_dual_engage import bootstrap_home_dual_engage
+
+            bootstrap_home_dual_engage(env)
+            arch = _arch_as_string(view.arch_db or view.arch)
+        new_arch, removed = _remove_discovery_pack_sections(arch)
+        if removed and new_arch != arch:
+            view.write({'arch_db': new_arch})
+            arch = new_arch
+        return discovery_pack_arch_is_valid(arch, env=env)
 
     discovery_arch = build_discovery_pack_arch(env)
     if not discovery_arch:
