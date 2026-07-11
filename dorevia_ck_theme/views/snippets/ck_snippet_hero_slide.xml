@@ -9,7 +9,7 @@
         <div class="carousel-item" data-snippet="s_ck_hero_slide" data-name="Visuel hero">
             <div class="ck-hero__slide-media o_editable">
                 <p class="o_not_editable" contenteditable="false">
-                    <img src="/dorevia_ck_marketone_content/static/img/ck_hero_home_v1.jpg" alt="Sélection de produits créoles — épicerie et condiments" class="ck-hero__visual-media o_editable_media d-block w-100" width="800" height="500" loading="eager"/>
+                    <img src="/dorevia_ck_marketone_content/static/img/ck_hero_crepe_manioc.webp" alt="Galettes de manioc créoles dorées" class="ck-hero__visual-media o_editable_media d-block w-100" width="800" height="500" loading="eager"/>
                 </p>
             </div>
         </div>

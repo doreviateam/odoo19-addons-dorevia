@@ -73,10 +73,11 @@ class TestCkHomeLot1Compose(HttpCase):
         self.assertIn('ck-hero__grid', chunk)
         self.assertNotIn('ratio-16x10', chunk)
         self.assertIn(HERO_CAROUSEL_MARKER, chunk)
-        self.assertIn('ck_hero_home_v1', chunk)
+        self.assertIn('ck_hero_crepe_manioc', chunk)
+        self.assertIn('ck_hero_pate_manioc_2', chunk)
+        self.assertIn('ck_hero_flag_market', chunk)
         self.assertIn('ck-hero__visual-media', chunk)
-        self.assertGreaterEqual(chunk.count('carousel-item'), 1)
-        self.assertLessEqual(chunk.count('carousel-item'), HERO_VISUAL_MAX_SLIDES)
+        self.assertEqual(chunk.count('carousel-item'), HERO_VISUAL_MAX_SLIDES)
 
     def test_home_hero_carousel_image_only(self):
         html = self.url_open('/').text

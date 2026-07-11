@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
 """Catalogue CK — modèle MOA vedettes : Manio Crackers (variantes) + Galettes séparées."""
 
-from .ck_product_placeholders import CK_CREAM_PLACEHOLDER_PNG_B64
+import base64
+
+from odoo.tools import file_open
+
+from .ck_product_placeholders import (
+    CK_CREAM_PLACEHOLDER_PNG_B64,
+    is_tiny_product_image,
+)
 
 MANIO_CRACKERS_PARENT_NAME = 'Manio Crackers'
 GALETTES_TEMPLATE_NAME = 'Galettes de manioc'
+# Vraie photo Galettes (webp partagé avec le hero) — évite la zone beige MOA.
+GALETTES_IMAGE_PATH = 'dorevia_ck_marketone_content/static/img/ck_hero_crepe_manioc.webp'
 FORMAT_ATTRIBUTE_NAME = 'Format'
 FORMAT_ATTRIBUTE_ALIASES = (FORMAT_ATTRIBUTE_NAME, 'Saveur')
 CRACKER_FORMAT_VALUES = (
@@ -124,6 +133,26 @@ def _link_epicerie_category(env, template):
         template.write({'public_categ_ids': [(4, category.id)]})
 
 
+def _galettes_image_b64():
+    """Vraie photo Galettes depuis l'asset statique (base64) ; None si absente."""
+    try:
+        with file_open(GALETTES_IMAGE_PATH, 'rb') as fh:
+            return base64.b64encode(fh.read())
+    except OSError:
+        return None
+
+
+def _ensure_galettes_image(galettes):
+    """Pose la vraie photo Galettes via un write dédié (fiable à l'install
+    comme à l'update), sans écraser une vraie photo BO déjà présente.
+    Fallback placeholder crème si l'asset est introuvable."""
+    image = _galettes_image_b64()
+    if image and is_tiny_product_image(galettes.image_1920):
+        galettes.write({'image_1920': image})
+    elif not galettes.image_1920:
+        galettes.write({'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
+
+
 def _ensure_galettes_separate_product(env):
     """Galettes de manioc = template distinct (MOA · pas variante Manio Crackers)."""
     Template = env['product.template'].sudo()
@@ -138,8 +167,7 @@ def _ensure_galettes_separate_product(env):
             'sale_ok': True,
             'website_sequence': GALETTES_WEBSITE_SEQUENCE,
         })
-        if not galettes.image_1920:
-            galettes.write({'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64})
+        _ensure_galettes_image(galettes)
         _link_epicerie_category(env, galettes)
         return True
 
@@ -151,8 +179,8 @@ def _ensure_galettes_separate_product(env):
         'sale_ok': True,
         'list_price': 1.0,
         'website_sequence': GALETTES_WEBSITE_SEQUENCE,
-        'image_1920': CK_CREAM_PLACEHOLDER_PNG_B64,
     })
+    _ensure_galettes_image(galettes)
     _link_epicerie_category(env, galettes)
     return bool(galettes)
 
