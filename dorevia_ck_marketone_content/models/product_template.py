@@ -123,6 +123,23 @@ class ProductTemplate(models.Model):
         default='stock',
         string='Disponibilité CK',
     )
+
+    def _ck_sync_allow_out_of_stock_order(self):
+        """Aligne le paramètre Odoo stock sur ck_availability_mode (CK-CHECKOUT-STOCK-001)."""
+        for product in self:
+            if not product.is_storable or 'allow_out_of_stock_order' not in product._fields:
+                continue
+            if product.ck_availability_mode == 'stock':
+                product.allow_out_of_stock_order = False
+            elif product.ck_availability_mode == 'order':
+                product.allow_out_of_stock_order = True
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        if any('ck_availability_mode' in vals for vals in vals_list):
+            records._ck_sync_allow_out_of_stock_order()
+        return records
     ck_is_orphan = fields.Boolean(
         string='Produit orphelin CK',
         compute='_compute_ck_is_orphan',
@@ -356,6 +373,8 @@ class ProductTemplate(models.Model):
         # Membre des vedettes AVANT écriture (capte une sortie de curation).
         was_featured = self._ck_touches_featured() if touches_featured_fields else False
         result = super().write(vals)
+        if 'ck_availability_mode' in vals:
+            self._ck_sync_allow_out_of_stock_order()
         # ... ou APRÈS écriture (capte une entrée en curation).
         if touches_featured_fields and (was_featured or self._ck_touches_featured()):
             self._ck_refresh_home_featured_products()
