@@ -80,3 +80,4 @@ from . import test_ck_card_producer_metadata
 from . import test_ck_category_routing
 from . import test_ck_category_routes_http
 from . import test_ck_branding_footer
+from . import test_ck_checkout_stock_001

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol Marketone — Contenu démo",
-    "version": "19.0.1.93.0",
+    "version": "19.0.1.94.0",
     "category": "Website/Website",
     "summary": "Seed contenu CK Marketone — pages CMS, catalogue pilote, newsletter",
     "description": """
@@ -19,6 +19,7 @@
         "account",
         "dorevia_ck_theme",
         "website_sale",
+        "website_sale_stock",
         "website_sale_wishlist",
         "website_crm",
         "mass_mailing",
@@ -65,6 +66,7 @@
     "assets": {
         "web.assets_frontend": [
             "dorevia_ck_marketone_content/static/src/js/ck_featured_cart_add.js",
+            "dorevia_ck_marketone_content/static/src/js/ck_cart_stock_warning.js",
             "dorevia_ck_marketone_content/static/src/js/ck_shop_filter_offcanvas.js",
             "dorevia_ck_marketone_content/static/src/js/ck_product_page_anchors.js",
         ],
