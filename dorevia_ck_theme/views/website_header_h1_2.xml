@@ -23,17 +23,9 @@
                         <t t-call="website.placeholder_header_language_selector"
                             _btn_class.f="ck-header__lang-btn nav-link"
                             _dropdown_menu_class.f="dropdown-menu-end"/>
-                        <!-- Nav-U1 — Se connecter compact : icône seule -->
-                        <li class="nav-item o_no_autohide_item"
-                            groups="base.group_public">
-                            <a t-attf-href="/web/login?redirect={{request.httprequest.path}}"
-                               class="o_navlink_background btn position-relative rounded-circle p-1 text-center text-reset ck-header__account-link"
-                               title="Se connecter"
-                               aria-label="Se connecter">
-                                <i class="fa fa-user" aria-hidden="true"/>
-                                <span class="visually-hidden">Se connecter</span>
-                            </a>
-                        </li>
+                        <!-- Nav-U1 — CTA public « Se connecter » retiré (soft-launch / Option B).
+                             Accès BO : basic_auth Caddy + /web/login (hors vitrine).
+                             Compte connecté (user_dropdown) conservé pour sessions internes. -->
                         <!-- Nav-U1 — Compte connecté compact icône -->
                         <t t-call="portal.user_dropdown"
                             _icon.f="True"
