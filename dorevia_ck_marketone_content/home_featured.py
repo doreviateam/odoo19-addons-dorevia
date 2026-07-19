@@ -442,8 +442,21 @@ def _featured_arch_missing_product_labels(env, arch, variants):
 
 
 def _featured_arch_missing_cart_cta(env, website, arch, variants):
-    """True si une vedette éligible au quick-add n'a pas le CTA panier dans l'arch home."""
+    """True si les CTA bas de cartes vedettes ne correspondent plus au mode courant.
+
+    Soft launch : les boutons « Ajouter au panier » sont périmés ; on attend
+    des liens « Voir le produit » (``card-cart-cta--view``).
+    Hors soft launch : chaque vedette quick-add doit avoir son CTA panier.
+    """
     if FEATURED_SECTION_MARKER not in (arch or ''):
+        return False
+    if _ck_soft_launch_runtime_active(website):
+        if FEATURED_CARD_CART_CTA in arch:
+            return True
+        if re.search(r'<button\b[^>]*\bcard-cart-cta\b', arch):
+            return True
+        if variants and 'card-cart-cta--view' not in arch:
+            return True
         return False
     for variant in variants:
         if not _featured_variant_allows_quick_add(env, website, variant):
@@ -709,14 +722,37 @@ def _build_featured_rating_html(template):
     )
 
 
+def _ck_soft_launch_runtime_active(website):
+    """True uniquement si la garde préprod expose le runtime soft-launch.
+
+    Fallback hors requête HTTP (bootstrap SSR home) : même AND base+domaine
+    que ``dorevia_ck_preprod_guard.runtime``, sans dépendre du LocalProxy request.
+    """
+    checker = getattr(website, 'ck_preprod_guard_runtime_active', None)
+    if callable(checker):
+        try:
+            if checker():
+                return True
+        except Exception:
+            pass
+    try:
+        from odoo.addons.dorevia_ck_preprod_guard.runtime import (  # noqa: PLC0415
+            is_ck_preprod_runtime_active,
+        )
+    except Exception:
+        return False
+    try:
+        return bool(is_ck_preprod_runtime_active(website.env, None))
+    except Exception:
+        return False
+
+
 def build_featured_product_card_html(env, website, variant):
     """Carte produit home V1.1 — étiquettes BO, quantité nette, prix de référence.
 
-    Ticket Dev — simplification CTA : le CTA secondaire "Voir le produit" est
-    retiré de la zone basse. La navigation vers la fiche produit est portée
-    par l'image/le reste de la card (lien ``cover`` plein format, déjà
-    existant) et par un lien dédié sur le titre. Seul "Ajouter au panier"
-    reste visible en zone basse, quand l'ajout rapide est possible.
+    Soft launch (préprod CK) : CTA bas = lien « Voir le produit » (pas de panier).
+    Hors soft launch : « Ajouter au panier » si quick-add possible ; sinon aucun
+    CTA bas (navigation via image / titre).
     """
     template = variant.product_tmpl_id
     display_name = _get_featured_display_name(variant)
@@ -733,7 +769,11 @@ def build_featured_product_card_html(env, website, variant):
         f'<p class="ck-product-card__meta product-card-labels">{metadata_line}</p>'
         if metadata_line else ''
     )
-    if _featured_variant_allows_quick_add(env, website, variant):
+    if _ck_soft_launch_runtime_active(website):
+        actions_html = f"""<div class="ck-product-card__actions product-card-actions">
+            <a class="card-cart-cta card-cart-cta--view" href="{href}">{FEATURED_CARD_CTA}</a>
+        </div>"""
+    elif _featured_variant_allows_quick_add(env, website, variant):
         actions_html = f"""<div class="ck-product-card__actions product-card-actions">
             <button type="button" class="card-cart-cta" data-product-id="{variant.id}" data-product-template-id="{template.id}">{FEATURED_CARD_CART_CTA}</button>
         </div>"""

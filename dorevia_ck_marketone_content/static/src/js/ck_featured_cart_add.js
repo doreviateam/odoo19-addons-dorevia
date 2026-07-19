@@ -14,7 +14,8 @@ import { registry } from '@web/core/registry';
  * sur le pattern grille Marketone (RPC + sync header uniquement).
  */
 export class CkFeaturedCartAdd extends Interaction {
-    static selector = '.ck-featured-products .card-cart-cta';
+    // Liens soft-launch « Voir le produit » (.card-cart-cta--view) exclus.
+    static selector = '.ck-featured-products button.card-cart-cta';
 
     dynamicContent = {
         _root: { 't-on-click.prevent': this.onAddClick },
