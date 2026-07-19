@@ -276,8 +276,11 @@ class TestCkNavCatalogueSync(TransactionCase):
         # name/url restent pilotés par la catégorie source
         self.assertEqual(cat_a_menu_reloaded.name, self.cat_a.name)
 
-    def test_catalogue_nav_producteurs_preserves_admin_sequence_on_resync(self):
-        """CK-NAV-003b : Producteurs suit la même règle de non-régression."""
+    def test_catalogue_nav_producteurs_uses_reserved_sequence(self):
+        """S2 : Producteurs occupe le créneau réservé 60 (pas de BO libre sur 60)."""
+        from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
+            NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
+        )
         self._sync()
         producteurs_menu = self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL)
         self.assertTrue(producteurs_menu)
@@ -287,8 +290,9 @@ class TestCkNavCatalogueSync(TransactionCase):
 
         producteurs_menu_reloaded = self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL)
         self.assertEqual(
-            producteurs_menu_reloaded.sequence, 54321,
-            'La séquence Producteurs modifiée manuellement en BO doit survivre au resync',
+            producteurs_menu_reloaded.sequence,
+            NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
+            'Producteurs doit retrouver le créneau réservé 60 au resync',
         )
 
     def test_catalogue_nav_new_category_gets_default_sequence_without_disturbing_existing(self):

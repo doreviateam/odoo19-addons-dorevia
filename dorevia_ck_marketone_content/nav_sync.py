@@ -698,45 +698,37 @@ def _next_catalogue_category_root_sequence(sequence):
     return sequence
 
 
-def _managed_root_canonical_sequences(root_categories, professionnels_visible):
-    """Séquences canoniques MOA des racines gérées (création + réparation collision).
-
-    - Boutique : 10
-    - Catégories exposables : 20, 30, … (en sautant 60/70)
-    - Producteurs : 60
-    - Professionnels : 70 (si page publiée)
-    """
-    by_menu_key = {
-        ('fixed', NAV_CATALOGUE_BOUTIQUE_LABEL): NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
-        ('fixed', NAV_CATALOGUE_PRODUCTEURS_LABEL): NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
-    }
-    if professionnels_visible:
-        by_menu_key[('fixed', NAV_CATALOGUE_PROFESSIONNELS_LABEL)] = (
-            NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE
-        )
-    sequence = NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE
-    for category in root_categories:
-        sequence = _next_catalogue_category_root_sequence(sequence)
-        by_menu_key[('category', category.id)] = sequence
-        sequence += NAV_CATALOGUE_SEQUENCE_STEP
-    return by_menu_key
+def _find_catalogue_category_root_menu(Menu, website, root, category):
+    menu = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('ck_nav_category_id', '=', category.id),
+    ], limit=1)
+    if menu:
+        return menu
+    return Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', category.name),
+    ], limit=1)
 
 
-def _repair_managed_root_sequence_collisions(
+def _assign_managed_root_sequences_atomic(
     env, website, root, Menu, root_categories, professionnels_visible,
 ):
-    """Normalise les collisions de séquence entre racines gérées.
+    """Assigne atomiquement les séquences des racines gérées (un seul passage).
 
-    Doctrine MOA (S2 QA) :
-    - une personnalisation BO *non ambiguë* (séquence unique parmi les racines
-      gérées) est préservée ;
-    - une collision héritée (ex. Épicerie=20 et Producteurs=20) est réparée en
-      réassignant aux valeurs canoniques — jamais de départage par id ORM.
+    Priorité explicite (arbitrage Dev après NO GO Garant sur 6afb44d) :
+
+    1. Les créneaux réservés ``{10, 60, 70}`` appartiennent aux racines fixes
+       Boutique / Producteurs / Professionnels — toujours imposés.
+    2. Une personnalisation BO de *catégorie* est préservée seulement si elle
+       reste unique dans le plan final et hors créneaux réservés.
+    3. Toute collision (y compris cascade du type Producteurs→60 ∩ rayon BO=60)
+       est résolue dans ce même passage — jamais de 2ᵉ sync nécessaire,
+       jamais de départage par id ORM.
     """
-    canonical = _managed_root_canonical_sequences(
-        root_categories, professionnels_visible,
-    )
-    managed = []
+    targets = {}  # menu → sequence
 
     boutique = Menu.search([
         ('website_id', '=', website.id),
@@ -744,22 +736,7 @@ def _repair_managed_root_sequence_collisions(
         ('name', '=', NAV_CATALOGUE_BOUTIQUE_LABEL),
     ], limit=1)
     if boutique:
-        managed.append((boutique, canonical[('fixed', NAV_CATALOGUE_BOUTIQUE_LABEL)]))
-
-    for category in root_categories:
-        menu = Menu.search([
-            ('website_id', '=', website.id),
-            ('parent_id', '=', root.id),
-            ('ck_nav_category_id', '=', category.id),
-        ], limit=1)
-        if not menu:
-            menu = Menu.search([
-                ('website_id', '=', website.id),
-                ('parent_id', '=', root.id),
-                ('name', '=', category.name),
-            ], limit=1)
-        if menu:
-            managed.append((menu, canonical[('category', category.id)]))
+        targets[boutique] = NAV_CATALOGUE_BOUTIQUE_SEQUENCE
 
     producteurs = Menu.search([
         ('website_id', '=', website.id),
@@ -767,10 +744,7 @@ def _repair_managed_root_sequence_collisions(
         ('name', '=', NAV_CATALOGUE_PRODUCTEURS_LABEL),
     ], limit=1)
     if producteurs:
-        managed.append((
-            producteurs,
-            canonical[('fixed', NAV_CATALOGUE_PRODUCTEURS_LABEL)],
-        ))
+        targets[producteurs] = NAV_CATALOGUE_PRODUCTEURS_SEQUENCE
 
     if professionnels_visible:
         professionnels = Menu.search([
@@ -779,31 +753,53 @@ def _repair_managed_root_sequence_collisions(
             ('name', '=', NAV_CATALOGUE_PROFESSIONNELS_LABEL),
         ], limit=1)
         if professionnels:
-            managed.append((
-                professionnels,
-                canonical[('fixed', NAV_CATALOGUE_PROFESSIONNELS_LABEL)],
-            ))
+            targets[professionnels] = NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE
 
-    if not managed:
-        return
+    reserved = set(NAV_CATALOGUE_RESERVED_ROOT_SEQUENCES)
+    if not professionnels_visible:
+        reserved.discard(NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE)
 
-    by_sequence = {}
-    for menu, _canon in managed:
-        by_sequence.setdefault(menu.sequence, []).append(menu)
+    # Créneaux déjà pris par les racines fixes dans le plan final
+    taken = {seq for seq in targets.values()}
 
-    colliding_sequences = {
-        seq for seq, menus in by_sequence.items() if len(menus) > 1
-    }
-    if not colliding_sequences:
-        return
+    category_menus = []
+    for category in root_categories:
+        menu = _find_catalogue_category_root_menu(Menu, website, root, category)
+        if menu:
+            category_menus.append((category, menu))
 
-    for menu, canon_seq in managed:
-        old_seq = menu.sequence
-        if old_seq in colliding_sequences and old_seq != canon_seq:
-            menu.write({'sequence': canon_seq})
+    # 1ʳᵉ passe catégories : conserver la séquence BO si libre et hors réservés
+    pending = []
+    for category, menu in category_menus:
+        candidate = menu.sequence
+        if (
+            candidate not in reserved
+            and candidate not in taken
+            and candidate not in targets.values()
+        ):
+            targets[menu] = candidate
+            taken.add(candidate)
+        else:
+            pending.append((category, menu))
+
+    # 2ᵉ passe : créneaux libres 20, 30, … pour les catégories à réassigner
+    next_seq = NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE
+    for _category, menu in pending:
+        next_seq = _next_catalogue_category_root_sequence(next_seq)
+        while next_seq in taken:
+            next_seq += NAV_CATALOGUE_SEQUENCE_STEP
+            next_seq = _next_catalogue_category_root_sequence(next_seq)
+        targets[menu] = next_seq
+        taken.add(next_seq)
+        next_seq += NAV_CATALOGUE_SEQUENCE_STEP
+
+    for menu, seq in targets.items():
+        if menu.sequence != seq:
+            old_seq = menu.sequence
+            menu.write({'sequence': seq})
             _logger.info(
-                'CK-NAV-003 : collision séquence racine « %s » (%s) → canonique %s',
-                menu.name, old_seq, canon_seq,
+                'CK-NAV-003 : séquence racine « %s » %s → %s (assignation atomique)',
+                menu.name, old_seq, seq,
             )
 
 
@@ -864,7 +860,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         )
         sequence += NAV_CATALOGUE_SEQUENCE_STEP
 
-    # 4. Producteurs — séquence canonique MOA 60 (pas le compteur catégories)
+    # 4. Producteurs — créneau réservé 60 (réaffirmé ensuite par l'assignation atomique)
     _upsert_menu(
         Menu,
         website=website,
@@ -872,10 +868,9 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         name=NAV_CATALOGUE_PRODUCTEURS_LABEL,
         url=NAV_CATALOGUE_PRODUCTEURS_URL,
         sequence=NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
-        preserve_existing_sequence=True,
     )
 
-    # 5. Professionnels — séquence canonique MOA 70, conditionnel si page publiée
+    # 5. Professionnels — créneau réservé 70, conditionnel si page publiée
     professionnels_visible = _page_url_visible(
         env, website, NAV_CATALOGUE_PROFESSIONNELS_URL,
     )
@@ -887,7 +882,6 @@ def sync_ck_catalogue_navigation_for_website(env, website):
             name=NAV_CATALOGUE_PROFESSIONNELS_LABEL,
             url=NAV_CATALOGUE_PROFESSIONNELS_URL,
             sequence=NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE,
-            preserve_existing_sequence=True,
         )
     else:
         for m in Menu.search([
@@ -897,8 +891,8 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         ]):
             _unlink_menu(m)
 
-    # 6. Réparer collisions héritées (ex. Producteurs=20 ∩ Épicerie=20)
-    _repair_managed_root_sequence_collisions(
+    # 6. Assignation atomique : réservés fixes + BO catégories hors collision
+    _assign_managed_root_sequences_atomic(
         env, website, root, Menu, root_categories, professionnels_visible,
     )
 

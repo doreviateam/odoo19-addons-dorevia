@@ -173,20 +173,25 @@ class TestCkNavS2RootSequences(TransactionCase):
         after = snapshot_ck_catalogue_navigation(self.env, self.website)
         self.assertEqual(after, before, 'Idempotence après réparation de collision')
 
-    def test_s2_bo_distinct_sequences_preserved(self):
+    def test_s2_bo_category_sequence_preserved_outside_reserved(self):
+        """BO catégorie hors {10,60,70} préservée ; racines fixes toujours 60/70."""
         self._ensure_pro_page(published=True)
         self._sync()
         epicerie = self._root_menu(self.epicerie.name)
-        producteurs = self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL)
-        professionnels = self._root_menu(NAV_CATALOGUE_PROFESSIONNELS_LABEL)
-        # Séquences distinctes (pas de collision entre racines gérées).
         epicerie.write({'sequence': 22})
-        producteurs.write({'sequence': 55})
-        professionnels.write({'sequence': 85})
+        # Tentative BO sur racines fixes — annulée (créneaux réservés).
+        self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL).write({'sequence': 55})
+        self._root_menu(NAV_CATALOGUE_PROFESSIONNELS_LABEL).write({'sequence': 85})
         self._sync()
         self.assertEqual(self._root_menu(self.epicerie.name).sequence, 22)
-        self.assertEqual(self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL).sequence, 55)
-        self.assertEqual(self._root_menu(NAV_CATALOGUE_PROFESSIONNELS_LABEL).sequence, 85)
+        self.assertEqual(
+            self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL).sequence,
+            NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
+        )
+        self.assertEqual(
+            self._root_menu(NAV_CATALOGUE_PROFESSIONNELS_LABEL).sequence,
+            NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE,
+        )
         self.assertEqual(
             self._ordered_managed_names(),
             [
@@ -196,6 +201,63 @@ class TestCkNavS2RootSequences(TransactionCase):
                 NAV_CATALOGUE_PROFESSIONNELS_LABEL,
             ],
         )
+
+    def test_s2_cascade_collision_resolved_in_one_pass(self):
+        """NO GO Garant 6afb44d : Producteurs=20 ∩ Épicerie=20 + rayon BO=60.
+
+        Un seul sync doit :
+        - lever la collision 20 ;
+        - imposer Producteurs=60 ;
+        - déplacer le rayon BO hors du créneau réservé 60 ;
+        - être idempotent au 2ᵉ sync.
+        """
+        self._ensure_pro_page(published=True)
+        Category = self.env['product.public.category'].sudo()
+        Product = self.env['product.template'].sudo()
+        rayon = Category.create({
+            'name': 'Rayon BO S2 Seq',
+            'sequence': 500,
+            'ck_exposure_status': 'active',
+        })
+        for idx in range(3):
+            Product.create({
+                'name': f'Test S2 rayon BO {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, rayon.id)],
+            })
+        self._sync()
+        epicerie = self._root_menu(self.epicerie.name)
+        producteurs = self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL)
+        rayon_menu = self._root_menu(rayon.name)
+        self.assertTrue(rayon_menu)
+
+        # État Garant : collision 20 + personnalisation BO unique à 60
+        epicerie.write({'sequence': 20})
+        producteurs.write({'sequence': 20})
+        rayon_menu.write({'sequence': 60})
+
+        self._sync()
+        epicerie = self._root_menu(self.epicerie.name)
+        producteurs = self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL)
+        rayon_menu = self._root_menu(rayon.name)
+        self.assertEqual(epicerie.sequence, NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE)
+        self.assertEqual(producteurs.sequence, NAV_CATALOGUE_PRODUCTEURS_SEQUENCE)
+        self.assertNotEqual(rayon_menu.sequence, NAV_CATALOGUE_PRODUCTEURS_SEQUENCE)
+        self.assertNotEqual(rayon_menu.sequence, epicerie.sequence)
+        sequences = {
+            epicerie.sequence,
+            producteurs.sequence,
+            rayon_menu.sequence,
+            self._root_menu(NAV_CATALOGUE_PROFESSIONNELS_LABEL).sequence,
+        }
+        self.assertEqual(len(sequences), 4, 'Aucune collision résiduelle après 1 sync')
+
+        before = snapshot_ck_catalogue_navigation(self.env, self.website)
+        self._sync()
+        after = snapshot_ck_catalogue_navigation(self.env, self.website)
+        self.assertEqual(after, before, 'Idempotence dès le premier sync convergent')
 
     def test_s2_professionnels_absent_and_reappear_deterministic(self):
         self._ensure_pro_page(published=False)
