@@ -1,0 +1,226 @@
+{
+  "commit": "77197a3acecbb832e15c8552f1bdd20ea730d766",
+  "browser": "Google Chrome (Playwright, headless)",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "closedLayout": {
+    "innerWidth": 390,
+    "innerHeight": 844,
+    "documentClientWidth": 390,
+    "documentScrollWidth": 390,
+    "bodyScrollWidth": 390,
+    "horizontalOverflow": false,
+    "mobileHeaderVisible": true,
+    "desktopHeaderVisible": false,
+    "openButtonVisible": true
+  },
+  "drawerOpenLayout": {
+    "topItems": [
+      {
+        "text": "Boutique",
+        "href": "/shop",
+        "html": "\n                        <span>Boutique</span>\n                    ",
+        "iconClasses": [],
+        "ariaLabel": "",
+        "childLinks": [
+          {
+            "text": "Boutique",
+            "href": "/shop"
+          }
+        ]
+      },
+      {
+        "text": "",
+        "href": "",
+        "html": "",
+        "iconClasses": [],
+        "ariaLabel": "",
+        "childLinks": [
+          {
+            "text": "Épicerie",
+            "href": "/shop/category/epicerie-2"
+          },
+          {
+            "text": "",
+            "href": "#"
+          },
+          {
+            "text": "Épicerie sucrée",
+            "href": "/shop/category/epicerie-epicerie-sucree-3"
+          },
+          {
+            "text": "Épicerie salée",
+            "href": "/shop/category/epicerie-epicerie-salee-4"
+          }
+        ]
+      },
+      {
+        "text": "Producteurs",
+        "href": "/producteurs",
+        "html": "\n                        <span>Producteurs</span>\n                    ",
+        "iconClasses": [],
+        "ariaLabel": "",
+        "childLinks": [
+          {
+            "text": "Producteurs",
+            "href": "/producteurs"
+          }
+        ]
+      },
+      {
+        "text": "Professionnels",
+        "href": "/professionnels",
+        "html": "\n                        <span>Professionnels</span>\n                    ",
+        "iconClasses": [],
+        "ariaLabel": "",
+        "childLinks": [
+          {
+            "text": "Professionnels",
+            "href": "/professionnels"
+          }
+        ]
+      }
+    ],
+    "duplicateTopLabels": [],
+    "drawerRect": {
+      "x": 48,
+      "y": 0,
+      "width": 342,
+      "height": 844
+    },
+    "drawerOverflowY": "auto",
+    "drawerScrollable": false,
+    "drawerScrollHeight": 796,
+    "drawerClientHeight": 796,
+    "backdropPresent": true,
+    "emptyNestedLists": 0,
+    "clippedText": []
+  },
+  "childState": {
+    "links": [
+      {
+        "text": "Boutique",
+        "href": "/shop",
+        "visible": true
+      },
+      {
+        "text": "Épicerie",
+        "href": "/shop/category/epicerie-2",
+        "visible": true
+      },
+      {
+        "text": "",
+        "href": "#",
+        "visible": true
+      },
+      {
+        "text": "Épicerie sucrée",
+        "href": "/shop/category/epicerie-epicerie-sucree-3",
+        "visible": true
+      },
+      {
+        "text": "Épicerie salée",
+        "href": "/shop/category/epicerie-epicerie-salee-4",
+        "visible": true
+      },
+      {
+        "text": "Producteurs",
+        "href": "/producteurs",
+        "visible": true
+      },
+      {
+        "text": "Professionnels",
+        "href": "/professionnels",
+        "visible": true
+      },
+      {
+        "text": "+1 555-555-5556",
+        "href": "tel:+1 555-555-5556",
+        "visible": true
+      },
+      {
+        "text": "Mes favoris",
+        "href": "/shop/wishlist",
+        "visible": true
+      },
+      {
+        "text": "Sign in",
+        "href": "/web/login",
+        "visible": true
+      }
+    ],
+    "visibleSweet": true,
+    "visibleSavory": true
+  },
+  "closeButtonWorked": true,
+  "linkResults": [
+    {
+      "name": "Boutique",
+      "href": "/shop",
+      "visible": true,
+      "clicked": true,
+      "destination": "/shop",
+      "drawerClosedAfterSelection": true,
+      "backWorked": true
+    },
+    {
+      "name": "Épicerie",
+      "href": "/shop/category/epicerie-2",
+      "visible": true,
+      "clicked": true,
+      "destination": "/shop/category/epicerie-2",
+      "drawerClosedAfterSelection": true,
+      "backWorked": true
+    },
+    {
+      "name": "Producteurs",
+      "href": "/producteurs",
+      "visible": true,
+      "clicked": true,
+      "destination": "/producteurs",
+      "drawerClosedAfterSelection": true,
+      "backWorked": true
+    },
+    {
+      "name": "Professionnels",
+      "href": "/professionnels",
+      "visible": true,
+      "clicked": true,
+      "destination": "/professionnels",
+      "drawerClosedAfterSelection": true,
+      "backWorked": true
+    },
+    {
+      "name": "Épicerie sucrée",
+      "href": "/shop/category/epicerie-epicerie-sucree-3",
+      "visible": true,
+      "clicked": true,
+      "destination": "/shop/category/epicerie-epicerie-sucree-3",
+      "drawerClosedAfterSelection": true,
+      "backWorked": true
+    },
+    {
+      "name": "Épicerie salée",
+      "href": "/shop/category/epicerie-epicerie-salee-4",
+      "visible": true,
+      "clicked": true,
+      "destination": "/shop/category/epicerie-epicerie-salee-4",
+      "drawerClosedAfterSelection": true,
+      "backWorked": true
+    }
+  ],
+  "overlayAudit": {
+    "backdropPresent": true,
+    "drawerCoversViewport": false,
+    "outsidePoint": {
+      "x": 24,
+      "y": 422,
+      "className": "offcanvas-backdrop fade show",
+      "isBackdrop": true
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}
