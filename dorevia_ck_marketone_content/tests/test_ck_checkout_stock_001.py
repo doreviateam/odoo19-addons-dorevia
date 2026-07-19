@@ -1,11 +1,24 @@
 # -*- coding: utf-8 -*-
-"""Tests CK-CHECKOUT-STOCK-001 — sync stock CK et message panier."""
+"""Tests CK-CHECKOUT-STOCK-001 / S3-B2 — sync stock CK et message panier."""
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
 
-@tagged('post_install', '-at_install')
+@tagged('post_install', '-at_install', 'dorevia_ck_cart_stock')
 class TestCkCheckoutStock001(TransactionCase):
+
+    def _make_line(self):
+        return self.env['sale.order.line'].create({
+            'order_id': self.env['sale.order'].create({
+                'partner_id': self.env.ref('base.public_partner').id,
+            }).id,
+            'product_id': self.env['product.product'].create({
+                'name': 'Warn test',
+                'type': 'consu',
+                'is_storable': True,
+            }).id,
+            'product_uom_qty': 1,
+        })
 
     def test_ck_availability_stock_syncs_allow_out_of_stock_false(self):
         product = self.env['product.template'].create({
@@ -31,16 +44,58 @@ class TestCkCheckoutStock001(TransactionCase):
         product.write({'ck_availability_mode': 'order'})
         self.assertTrue(product.allow_out_of_stock_order)
 
-    def test_shop_warning_stock_message_ck(self):
-        line = self.env['sale.order.line'].create({
-            'order_id': self.env['sale.order'].create({'partner_id': self.env.ref('base.public_partner').id}).id,
-            'product_id': self.env['product.product'].create({
-                'name': 'Warn test',
-                'type': 'consu',
-                'is_storable': True,
-            }).id,
-            'product_uom_qty': 1,
-        })
+    def test_shop_warning_stock_save_false(self):
+        line = self._make_line()
         warning = line._set_shop_warning_stock(10, 2, save=False)
-        self.assertIn('limitée au stock disponible', warning)
+        self.assertFalse(line.shop_warning)
+        self.assertIn('10', warning)
         self.assertIn('2', warning)
+        self.assertIn('requested', warning.lower())
+        self.assertNotIn('unité(s)', warning)
+
+    def test_shop_warning_stock_save_true(self):
+        line = self._make_line()
+        warning = line._set_shop_warning_stock(7, 3, save=True)
+        self.assertEqual(line.shop_warning, warning)
+        self.assertIn('7', warning)
+        self.assertIn('3', warning)
+
+    def test_shop_warning_includes_desired_qty(self):
+        line = self._make_line()
+        warning = line._set_shop_warning_stock(12, 4, save=False)
+        self.assertIn('12', warning)
+        self.assertIn('4', warning)
+
+    def test_shop_warning_no_hardcoded_unites(self):
+        line = self._make_line()
+        warning = line._set_shop_warning_stock(5, 1, save=False)
+        self.assertNotIn('unité(s)', warning)
+        self.assertNotIn('unite(s)', warning.lower())
+
+    def test_shop_warning_english_locale(self):
+        line = self._make_line()
+        warning = line.with_context(lang='en_US')._set_shop_warning_stock(9, 2, save=False)
+        self.assertIn('You requested', warning)
+        self.assertIn('9', warning)
+        self.assertIn('2', warning)
+        self.assertNotIn('demandée', warning)
+
+    def test_shop_warning_french_locale(self):
+        Lang = self.env['res.lang'].with_context(active_test=False)
+        lang = Lang.search([('code', '=', 'fr_FR')], limit=1)
+        if not lang:
+            self.skipTest('Langue fr_FR absente de cette base de test')
+        if not lang.active:
+            lang.active = True
+        line = self._make_line()
+        warning = line.with_context(lang='fr_FR')._set_shop_warning_stock(9, 2, save=False)
+        self.assertIn('9', warning)
+        self.assertIn('2', warning)
+        self.assertNotIn('unité(s)', warning)
+        self.assertTrue(
+            'demandé' in warning.lower() or 'You requested' in warning,
+            msg=f'Message FR attendu (ou repli EN) : {warning!r}',
+        )
+        if 'demandé' in warning.lower():
+            self.assertNotIn('You requested', warning)
+            self.assertIn('disponible', warning.lower())

@@ -18,3 +18,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:dorevia_ck_marketone_content.submenu_ck_nav_shop_mobile_l2_leaf
 msgid "Boutique - Tous les produits"
 msgstr "Shop - All products"
+
+#. module: dorevia_ck_marketone_content
+#: code:addons/dorevia_ck_marketone_content/models/sale_order_line.py:0
+msgid "You requested %(requested_qty)s, but only %(available_qty)s is currently available."
+msgstr "You requested %(requested_qty)s, but only %(available_qty)s is currently available."
