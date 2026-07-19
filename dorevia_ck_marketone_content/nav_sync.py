@@ -35,9 +35,12 @@ from .nav_v22_config import (
     NAV_CATALOGUE_BOUTIQUE_URL,
     NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE,
     NAV_CATALOGUE_PRODUCTEURS_LABEL,
+    NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
     NAV_CATALOGUE_PRODUCTEURS_URL,
     NAV_CATALOGUE_PROFESSIONNELS_LABEL,
+    NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE,
     NAV_CATALOGUE_PROFESSIONNELS_URL,
+    NAV_CATALOGUE_RESERVED_ROOT_SEQUENCES,
     NAV_CATALOGUE_SEQUENCE_STEP,
     NAV_COFFRETS_LABEL,
     LEGACY_NAV_COUPS_LABEL,
@@ -688,6 +691,122 @@ def snapshot_ck_catalogue_navigation(env, website):
     return tuple(rows)
 
 
+def _next_catalogue_category_root_sequence(sequence):
+    """Prochain créneau catégorie en évitant Boutique / Producteurs / Professionnels."""
+    while sequence in NAV_CATALOGUE_RESERVED_ROOT_SEQUENCES:
+        sequence += NAV_CATALOGUE_SEQUENCE_STEP
+    return sequence
+
+
+def _managed_root_canonical_sequences(root_categories, professionnels_visible):
+    """Séquences canoniques MOA des racines gérées (création + réparation collision).
+
+    - Boutique : 10
+    - Catégories exposables : 20, 30, … (en sautant 60/70)
+    - Producteurs : 60
+    - Professionnels : 70 (si page publiée)
+    """
+    by_menu_key = {
+        ('fixed', NAV_CATALOGUE_BOUTIQUE_LABEL): NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
+        ('fixed', NAV_CATALOGUE_PRODUCTEURS_LABEL): NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
+    }
+    if professionnels_visible:
+        by_menu_key[('fixed', NAV_CATALOGUE_PROFESSIONNELS_LABEL)] = (
+            NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE
+        )
+    sequence = NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE
+    for category in root_categories:
+        sequence = _next_catalogue_category_root_sequence(sequence)
+        by_menu_key[('category', category.id)] = sequence
+        sequence += NAV_CATALOGUE_SEQUENCE_STEP
+    return by_menu_key
+
+
+def _repair_managed_root_sequence_collisions(
+    env, website, root, Menu, root_categories, professionnels_visible,
+):
+    """Normalise les collisions de séquence entre racines gérées.
+
+    Doctrine MOA (S2 QA) :
+    - une personnalisation BO *non ambiguë* (séquence unique parmi les racines
+      gérées) est préservée ;
+    - une collision héritée (ex. Épicerie=20 et Producteurs=20) est réparée en
+      réassignant aux valeurs canoniques — jamais de départage par id ORM.
+    """
+    canonical = _managed_root_canonical_sequences(
+        root_categories, professionnels_visible,
+    )
+    managed = []
+
+    boutique = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', NAV_CATALOGUE_BOUTIQUE_LABEL),
+    ], limit=1)
+    if boutique:
+        managed.append((boutique, canonical[('fixed', NAV_CATALOGUE_BOUTIQUE_LABEL)]))
+
+    for category in root_categories:
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('ck_nav_category_id', '=', category.id),
+        ], limit=1)
+        if not menu:
+            menu = Menu.search([
+                ('website_id', '=', website.id),
+                ('parent_id', '=', root.id),
+                ('name', '=', category.name),
+            ], limit=1)
+        if menu:
+            managed.append((menu, canonical[('category', category.id)]))
+
+    producteurs = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', NAV_CATALOGUE_PRODUCTEURS_LABEL),
+    ], limit=1)
+    if producteurs:
+        managed.append((
+            producteurs,
+            canonical[('fixed', NAV_CATALOGUE_PRODUCTEURS_LABEL)],
+        ))
+
+    if professionnels_visible:
+        professionnels = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', NAV_CATALOGUE_PROFESSIONNELS_LABEL),
+        ], limit=1)
+        if professionnels:
+            managed.append((
+                professionnels,
+                canonical[('fixed', NAV_CATALOGUE_PROFESSIONNELS_LABEL)],
+            ))
+
+    if not managed:
+        return
+
+    by_sequence = {}
+    for menu, _canon in managed:
+        by_sequence.setdefault(menu.sequence, []).append(menu)
+
+    colliding_sequences = {
+        seq for seq, menus in by_sequence.items() if len(menus) > 1
+    }
+    if not colliding_sequences:
+        return
+
+    for menu, canon_seq in managed:
+        old_seq = menu.sequence
+        if old_seq in colliding_sequences and old_seq != canon_seq:
+            menu.write({'sequence': canon_seq})
+            _logger.info(
+                'CK-NAV-003 : collision séquence racine « %s » (%s) → canonique %s',
+                menu.name, old_seq, canon_seq,
+            )
+
+
 def sync_ck_catalogue_navigation_for_website(env, website):
     """CK-NAV-003 / S2 — Unique autorité de sync navigation catalogue CK."""
     root = website.menu_id
@@ -717,6 +836,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
     sequence = NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE
 
     for category in root_categories:
+        sequence = _next_catalogue_category_root_sequence(sequence)
         child_categories = _get_ck_nav_child_categories(env, website, category)
         url = _category_shop_url(env, category) or NAV_CATALOGUE_BOUTIQUE_URL
 
@@ -744,27 +864,29 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         )
         sequence += NAV_CATALOGUE_SEQUENCE_STEP
 
-    # 4. Producteurs — route contrôleur stratégique, toujours visible
+    # 4. Producteurs — séquence canonique MOA 60 (pas le compteur catégories)
     _upsert_menu(
         Menu,
         website=website,
         parent=root,
         name=NAV_CATALOGUE_PRODUCTEURS_LABEL,
         url=NAV_CATALOGUE_PRODUCTEURS_URL,
-        sequence=sequence,
+        sequence=NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
         preserve_existing_sequence=True,
     )
-    sequence += NAV_CATALOGUE_SEQUENCE_STEP
 
-    # 5. Professionnels — conditionnel si page publiée
-    if _page_url_visible(env, website, NAV_CATALOGUE_PROFESSIONNELS_URL):
+    # 5. Professionnels — séquence canonique MOA 70, conditionnel si page publiée
+    professionnels_visible = _page_url_visible(
+        env, website, NAV_CATALOGUE_PROFESSIONNELS_URL,
+    )
+    if professionnels_visible:
         _upsert_menu(
             Menu,
             website=website,
             parent=root,
             name=NAV_CATALOGUE_PROFESSIONNELS_LABEL,
             url=NAV_CATALOGUE_PROFESSIONNELS_URL,
-            sequence=sequence,
+            sequence=NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE,
             preserve_existing_sequence=True,
         )
     else:
@@ -774,6 +896,11 @@ def sync_ck_catalogue_navigation_for_website(env, website):
             ('name', '=', NAV_CATALOGUE_PROFESSIONNELS_LABEL),
         ]):
             _unlink_menu(m)
+
+    # 6. Réparer collisions héritées (ex. Producteurs=20 ∩ Épicerie=20)
+    _repair_managed_root_sequence_collisions(
+        env, website, root, Menu, root_categories, professionnels_visible,
+    )
 
     return True
 

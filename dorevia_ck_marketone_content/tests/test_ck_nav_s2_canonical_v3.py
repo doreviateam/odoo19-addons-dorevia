@@ -221,6 +221,11 @@ class TestCkNavS2CanonicalV3(TransactionCase):
             second = Website.create({'name': 'S2 Second Site'})
         else:
             second = Website.search([('id', '!=', self.website.id)], limit=1)
+        if not second.menu_id:
+            second.menu_id = self.Menu.create({
+                'name': 'Top Menu S2 Second Site',
+                'website_id': second.id,
+            })
         self.assertTrue(second.menu_id)
         ok = sync_ck_catalogue_navigation_for_website(self.env, second)
         self.assertTrue(ok)
