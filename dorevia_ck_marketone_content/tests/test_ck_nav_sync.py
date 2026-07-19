@@ -68,13 +68,23 @@ class TestCkNavSync(TransactionCase):
         self.assertTrue(_category_has_published_products(self.env, cat))
 
     def test_shop_nav_trees_from_public_categories(self):
+        # build_shop_nav_trees ne couvre que les libellés NAV_RAYON_SEQUENCE (V2.2 legacy).
+        epicerie = self.Category.search([
+            ('name', '=', 'Épicerie'),
+            ('parent_id', '=', False),
+        ], limit=1)
+        if not epicerie:
+            epicerie = self.Category.create({'name': 'Épicerie', 'sequence': 10000})
+        if not _category_has_published_products(self.env, epicerie):
+            for idx in range(3):
+                self._create_published_product(f'CK Nav QA Epicerie Tree {idx}', epicerie)
         trees = build_shop_nav_trees(self.env, self.Category)
         self.assertTrue(trees, msg='Au moins une racine catalogue éligible attendue')
         names = [tree['name'] for tree in trees]
         self.assertIn('Épicerie', names)
 
-    def test_level2_not_exposed_as_header_children_v22(self):
-        """V2.2 — familles L2 dans mega-menu HTML, pas en website.menu enfants."""
+    def test_level2_not_exposed_without_exposure_threshold(self):
+        """S2/V3 — sans seuil d'exposition, la racine QA n'apparaît pas en header."""
         root_cat = self.Category.create({'name': 'CK Nav QA Root L2', 'sequence': 99990})
         child_cat = self.Category.create({
             'name': 'CK Nav QA Child L2',
@@ -85,7 +95,10 @@ class TestCkNavSync(TransactionCase):
         self._create_published_product('CK Nav QA Child Product', child_cat)
         sync_ck_navigation_for_website(self.env, self.website)
         parent_menu = self._menu_by_name('CK Nav QA Root L2')
-        self.assertFalse(parent_menu, msg='Racine QA ad hoc non gérée en N3 V2.2')
+        self.assertFalse(
+            parent_menu,
+            msg='Racine QA sous-seuil ne doit pas apparaître en nav catalogue',
+        )
         self.assertFalse(self._menu_by_name('CK Nav QA Child L2', parent=self.root))
 
     def test_nav_shop_l2_seed_creates_subcategories(self):
@@ -128,6 +141,15 @@ class TestCkNavSync(TransactionCase):
         self.assertIn('/shop/category/', public_menu._ck_nav_category_shop_url())
 
     def test_get_nav_category_mapping_has_dynamic_rows(self):
+        epicerie = self.Category.search([
+            ('name', '=', 'Épicerie'),
+            ('parent_id', '=', False),
+        ], limit=1)
+        if not epicerie:
+            epicerie = self.Category.create({'name': 'Épicerie', 'sequence': 10000})
+        if not _category_has_published_products(self.env, epicerie):
+            for idx in range(3):
+                self._create_published_product(f'CK Nav QA Epicerie Map {idx}', epicerie)
         mapping = get_nav_category_mapping(self.env)
         self.assertEqual(mapping[0]['menu_label'], NAV_SHOP_ALL_LABEL)
         level1 = [row for row in mapping if row.get('level') == 1]

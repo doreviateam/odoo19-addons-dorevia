@@ -1,0 +1,173 @@
+{
+  "verdictCandidate": "GO QA",
+  "commit": "58327b68faa80404a006df7417809bb3953790ea",
+  "module": "dorevia_ck_marketone_content 19.0.1.99.0",
+  "browser": "Codex In-app Browser (Chromium, Playwright API)",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "upgradeProof": {
+    "before": {
+      "version": "19.0.1.98.0",
+      "boutiqueCssClass": false
+    },
+    "after": {
+      "version": "19.0.1.99.0",
+      "boutiqueCssClass": "ck-nav-shop-root"
+    }
+  },
+  "headerClosed": {
+    "clientWidth": 390,
+    "desktopHeaderVisible": false,
+    "horizontalOverflow": false,
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "menuVisible": true,
+    "mobileHeaderVisible": true,
+    "scrollWidth": 390
+  },
+  "homeItem": {
+    "aria": "Accueil",
+    "href": "/shop",
+    "html": "\n                        <i class=\"fa fa-home ck-nav-shop-root__icon\" aria-hidden=\"true\"></i>\n                        <span class=\"visually-hidden\">Accueil</span>\n                    ",
+    "icon": "fa fa-home ck-nav-shop-root__icon",
+    "title": "Accueil"
+  },
+  "semanticOrder": [
+    {
+      "aria": "Accueil",
+      "href": "/shop",
+      "icon": "fa fa-home ck-nav-shop-root__icon",
+      "text": "Accueil"
+    },
+    {
+      "aria": "",
+      "href": "/shop/category/epicerie-2",
+      "icon": "",
+      "text": "Épicerie"
+    },
+    {
+      "aria": "",
+      "href": "/producteurs",
+      "icon": "",
+      "text": "Producteurs"
+    },
+    {
+      "aria": "",
+      "href": "/professionnels",
+      "icon": "",
+      "text": "Professionnels"
+    }
+  ],
+  "drawer": {
+    "boutiqueVisibleText": false,
+    "backdropPresent": true,
+    "outsidePoint": {
+      "className": "offcanvas-backdrop fade show",
+      "isBackdrop": true,
+      "tag": "DIV"
+    },
+    "horizontalOverflow": false,
+    "clipped": [],
+    "emptyNested": 0,
+    "duplicateHrefs": [],
+    "overflowY": "auto",
+    "closeButtonWorked": true,
+    "overlayInterceptedUnderlyingPage": true,
+    "overlayClickLeftDrawerOpen": true
+  },
+  "children": {
+    "sweet": {
+      "href": "/shop/category/epicerie-epicerie-sucree-3",
+      "text": "Épicerie sucrée",
+      "visible": true
+    },
+    "savory": {
+      "href": "/shop/category/epicerie-epicerie-salee-4",
+      "text": "Épicerie salée",
+      "visible": true
+    }
+  },
+  "linkResults": [
+    {
+      "name": "Accueil (maison)",
+      "href": "/shop",
+      "count": 1,
+      "clicked": true,
+      "destination": "/shop",
+      "drawerClosedAfterSelection": true,
+      "backUrl": "/",
+      "backWorked": true
+    },
+    {
+      "name": "Épicerie",
+      "href": "/shop/category/epicerie-2",
+      "count": 1,
+      "clicked": true,
+      "destination": "/shop/category/epicerie-2",
+      "destinationMatches": true,
+      "drawerClosedAfterSelection": true,
+      "backUrl": "/",
+      "backWorked": true
+    },
+    {
+      "name": "Producteurs",
+      "href": "/producteurs",
+      "count": 1,
+      "clicked": true,
+      "destination": "/producteurs",
+      "destinationMatches": true,
+      "drawerClosedAfterSelection": true,
+      "backUrl": "/",
+      "backWorked": true
+    },
+    {
+      "name": "Professionnels",
+      "href": "/professionnels",
+      "count": 1,
+      "clicked": true,
+      "destination": "/professionnels",
+      "destinationMatches": true,
+      "drawerClosedAfterSelection": true,
+      "backUrl": "/",
+      "backWorked": true
+    },
+    {
+      "name": "Épicerie sucrée",
+      "href": "/shop/category/epicerie-epicerie-sucree-3",
+      "count": 1,
+      "clicked": true,
+      "destination": "/shop/category/epicerie-epicerie-sucree-3",
+      "destinationMatches": true,
+      "drawerClosedAfterSelection": true,
+      "backUrl": "/",
+      "backWorked": true
+    },
+    {
+      "name": "Épicerie salée",
+      "href": "/shop/category/epicerie-epicerie-salee-4",
+      "count": 1,
+      "clicked": true,
+      "destination": "/shop/category/epicerie-epicerie-salee-4",
+      "destinationMatches": true,
+      "drawerClosedAfterSelection": true,
+      "backUrl": "/",
+      "backWorked": true
+    }
+  ],
+  "scrollSupplemental": {
+    "viewport": {
+      "width": 390,
+      "height": 500
+    },
+    "overflowY": "auto",
+    "scrollHeight": 473,
+    "clientHeight": 452,
+    "scrollable": true,
+    "scrollBefore": 0,
+    "scrollAfter": 21,
+    "scrollWorked": true
+  },
+  "consoleErrors": []
+}

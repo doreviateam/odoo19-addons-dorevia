@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Navigation CK V2.2 — sync header / mega-menus (ticket Header & Mega-menus CK V2.2)."""
+"""Navigation CK — sync header.
+
+S2 : ``bootstrap_ck_catalogue_navigation`` / ``sync_ck_catalogue_navigation_for_website``
+sont l'unique autorité. Les entrées V1 / V2.2 délèguent à V3 (compat imports /
+migrations / modèles mega-menu BO).
+"""
 import logging
 
 from .nav_mega_menu import (
@@ -30,9 +35,12 @@ from .nav_v22_config import (
     NAV_CATALOGUE_BOUTIQUE_URL,
     NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE,
     NAV_CATALOGUE_PRODUCTEURS_LABEL,
+    NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
     NAV_CATALOGUE_PRODUCTEURS_URL,
     NAV_CATALOGUE_PROFESSIONNELS_LABEL,
+    NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE,
     NAV_CATALOGUE_PROFESSIONNELS_URL,
+    NAV_CATALOGUE_RESERVED_ROOT_SEQUENCES,
     NAV_CATALOGUE_SEQUENCE_STEP,
     NAV_COFFRETS_LABEL,
     LEGACY_NAV_COUPS_LABEL,
@@ -105,15 +113,28 @@ def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
                  preserve_existing_sequence=False):
     """Crée ou met à jour un website.menu.
 
+    Identité (S2) :
+    - si ``category_id`` est fourni, matching prioritaire sur ``ck_nav_category_id``
+      (renommage BO de la catégorie sans doublon) ;
+    - sinon fallback historique ``name`` + ``parent_id`` + ``website_id``.
+
     CK-NAV-003b : si ``preserve_existing_sequence`` est vrai et que le menu
     existe déjà, la ``sequence`` administrée en BO n'est pas écrasée par la
     valeur calculée — seule la création applique la séquence par défaut.
     """
-    menu = Menu.search([
-        ('website_id', '=', website.id),
-        ('parent_id', '=', parent.id),
-        ('name', '=', name),
-    ], limit=1)
+    menu = Menu.browse()
+    if category_id:
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', parent.id),
+            ('ck_nav_category_id', '=', category_id),
+        ], limit=1)
+    if not menu:
+        menu = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', parent.id),
+            ('name', '=', name),
+        ], limit=1)
     vals = {
         'name': name,
         'url': url,
@@ -138,9 +159,13 @@ def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
         })
 
     if child_menus is not None:
-        managed = set()
+        managed_names = set()
+        managed_category_ids = set()
         for child_spec in child_menus:
-            managed.add(child_spec['name'])
+            managed_names.add(child_spec['name'])
+            child_cat_id = child_spec.get('category_id')
+            if child_cat_id:
+                managed_category_ids.add(child_cat_id)
             _upsert_menu(
                 Menu,
                 website=website,
@@ -149,11 +174,19 @@ def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
                 url=child_spec['url'],
                 sequence=child_spec.get('sequence', 10),
                 css_class=child_spec.get('css_class', ''),
+                category_id=child_cat_id,
                 preserve_existing_sequence=preserve_existing_sequence,
             )
         for child in menu.child_id:
-            if child.name not in managed:
+            keep = child.name in managed_names
+            if child.ck_nav_category_id and child.ck_nav_category_id.id in managed_category_ids:
+                keep = True
+            if not keep:
                 _unlink_menu(child)
+        # Odoo force ``url='#'`` dès qu'un menu a des enfants : rétabli l'URL
+        # catalogue pour l'idempotence et les liens split desktop/mobile.
+        if url and menu.url != url:
+            menu.write({'url': url})
     elif not is_mega and menu.child_id:
         for child in menu.child_id:
             _unlink_menu(child)
@@ -447,124 +480,50 @@ def _remove_decouvrir_and_mobile_univers(website, root, Menu):
 
 
 def sync_ck_navigation_for_website(env, website):
-    root = website.menu_id
-    if not root:
-        _logger.warning('Nav sync V2.2 : website %s sans menu racine — skip', website.id)
-        return False
-    Menu = env['website.menu'].sudo()
+    """HISTORIQUE V2.2 — neutralisé (S2).
 
-    _prune_unmanaged_root_menus(website, root, Menu)
-    _remove_decouvrir_and_mobile_univers(website, root, Menu)
-    _sync_shop_all(env, website, root, Menu)
-
-    _sync_mega_rayon(
-        env, website, root, Menu,
-        NAV_EPICERIE_LABEL,
-        NAV_RAYON_SEQUENCE[NAV_EPICERIE_LABEL],
-        build_epicerie_mega(env),
+    Conservé pour compatibilité des imports / migrations / modèles mega-menu.
+    Délègue exclusivement à la navigation catalogue V3.
+    """
+    _logger.warning(
+        'sync_ck_navigation_for_website (V2.2) is deprecated; '
+        'delegating to sync_ck_catalogue_navigation_for_website (V3)'
     )
-    _sync_mega_rayon(
-        env, website, root, Menu,
-        NAV_BOISSONS_LABEL,
-        NAV_RAYON_SEQUENCE[NAV_BOISSONS_LABEL],
-        build_boissons_mega(env),
-    )
-    _sync_mega_rayon(
-        env, website, root, Menu,
-        NAV_MAISON_LABEL,
-        NAV_RAYON_SEQUENCE[NAV_MAISON_LABEL],
-        build_maison_mega(env),
-        css_extra=NAV_CSS_N3_GROUP_END,
-    )
-    _sync_artisanat(env, website, root, Menu)
-    _sync_communaute(env, website, root, Menu)
-    _sync_coffrets(env, website, root, Menu)
-    _sync_producteurs(env, website, root, Menu)
-    _sync_espace_pro(env, website, root, Menu)
-    return True
+    return sync_ck_catalogue_navigation_for_website(env, website)
 
 
 def bootstrap_ck_navigation(env):
-    Website = env['website'].sudo()
-    synced = 0
-    for website in Website.search([]):
-        if sync_ck_navigation_for_website(env, website):
-            synced += 1
-    _logger.info('Nav sync V2.2 : navigation synchronisée pour %s site(s)', synced)
-    return synced
+    """HISTORIQUE V2.2 — neutralisé (S2). Délègue à V3 catalogue."""
+    _logger.warning(
+        'bootstrap_ck_navigation (V2.2) is deprecated; '
+        'delegating to bootstrap_ck_catalogue_navigation (V3)'
+    )
+    return bootstrap_ck_catalogue_navigation(env)
 
 
 # ---------------------------------------------------------------------------
-# Nav V1 — navigation simplifiée (3 liens plats, mega-menus mis en réserve)
+# Nav V1 — historique (3 liens plats). Neutralisé S2 → délègue à V3.
 # ---------------------------------------------------------------------------
 
 def sync_ck_navigation_v1_for_website(env, website):
-    root = website.menu_id
-    if not root:
-        _logger.warning('Nav V1 : website %s sans menu racine — skip', website.id)
-        return False
-    Menu = env['website.menu'].sudo()
+    """HISTORIQUE V1 — neutralisé (S2).
 
-    # Purge toutes les entrées V2.2 gérées (sans limit=1 pour couvrir les doublons)
-    for name in MANAGED_V22_ROOT_NAMES:
-        menus = Menu.search([
-            ('website_id', '=', website.id),
-            ('parent_id', '=', root.id),
-            ('name', '=', name),
-        ])
-        _unlink_menu(menus)
-
-    # Purge orphelins legacy — en exemptant les cibles V1
-    # (ne PAS appeler _prune_unmanaged_root_menus : elle supprimerait 'Boutique' et
-    #  'Professionnels' qui sont dans LEGACY_ROOT_MENU_NAMES pour des raisons historiques)
-    for menu in Menu.search([
-        ('website_id', '=', website.id),
-        ('parent_id', '=', root.id),
-    ]):
-        if menu.name in MANAGED_V1_ROOT_NAMES:
-            continue
-        if menu.name in LEGACY_ROOT_MENU_NAMES or menu.url in ('/contactus',):
-            _unlink_menu(menu)
-        elif menu.ck_nav_css_class and any(
-            c in (menu.ck_nav_css_class or '').split()
-            for c in (NAV_CSS_DESKTOP_UNIVERSE_CHILD, NAV_CSS_MOBILE_UNIVERS_GROUP, NAV_CSS_MOBILE_UNIVERSE_CHILD)
-        ):
-            _unlink_menu(menu)
-
-    # Entrées V1 — sans CSS spéciaux → rendu Bootstrap nav-link standard
-    # _upsert_menu avec css_class='' remet is_mega_menu=False et ck_nav_css_class=False
-    _upsert_menu(
-        Menu, website=website, parent=root,
-        name=NAV_V1_BOUTIQUE_LABEL, url=NAV_ALL_URL,
-        sequence=NAV_V1_BOUTIQUE_SEQUENCE,
+    Ne purge plus « Épicerie » ni les racines catalogue. Délègue à V3.
+    """
+    _logger.warning(
+        'sync_ck_navigation_v1_for_website (V1) is deprecated; '
+        'delegating to sync_ck_catalogue_navigation_for_website (V3)'
     )
-    _upsert_menu(
-        Menu, website=website, parent=root,
-        name=NAV_V1_PRODUCTEURS_LABEL, url=NAV_PRODUCTEURS_URL,
-        sequence=NAV_V1_PRODUCTEURS_SEQUENCE,
-    )
-    if _page_url_visible(env, website, NAV_PRO_PAGE_URL):
-        _upsert_menu(
-            Menu, website=website, parent=root,
-            name=NAV_V1_PROFESSIONNELS_LABEL, url=NAV_PRO_PAGE_URL,
-            sequence=NAV_V1_PROFESSIONNELS_SEQUENCE,
-        )
-    else:
-        _unlink_menu(Menu.search([
-            ('website_id', '=', website.id),
-            ('parent_id', '=', root.id),
-            ('name', '=', NAV_V1_PROFESSIONNELS_LABEL),
-        ]))
-    return True
+    return sync_ck_catalogue_navigation_for_website(env, website)
 
 
 def bootstrap_ck_navigation_v1(env):
-    synced = 0
-    for website in env['website'].sudo().search([]):
-        if sync_ck_navigation_v1_for_website(env, website):
-            synced += 1
-    _logger.info('Nav V1 : navigation synchronisée pour %s site(s)', synced)
-    return synced
+    """HISTORIQUE V1 — neutralisé (S2). Délègue à V3 catalogue."""
+    _logger.warning(
+        'bootstrap_ck_navigation_v1 (V1) is deprecated; '
+        'delegating to bootstrap_ck_catalogue_navigation (V3)'
+    )
+    return bootstrap_ck_catalogue_navigation(env)
 
 
 def build_shop_nav_trees(env, Category):
@@ -639,37 +598,57 @@ def _get_ck_nav_child_categories(env, website, parent):
     ]
 
 
-def _cleanup_ck_catalogue_root_menus(env, website, root, Menu, eligible_category_ids):
-    """Purge les entrées V2.2, mega-menus et orphelins legacy avant sync NAV-003."""
-    # 1. Supprimer toutes les entrées gérées par V2.2 (par nom)
-    for name in MANAGED_V22_ROOT_NAMES:
-        for m in Menu.search([
-            ('website_id', '=', website.id),
-            ('parent_id', '=', root.id),
-            ('name', '=', name),
-        ]):
-            _unlink_menu(m)
+def _strip_v22_menu_chrome(menu):
+    """Retire mega-menu / CSS V2.2 sans supprimer l'entrée (préparation upsert V3)."""
+    css = menu.ck_nav_css_class or ''
+    if menu.is_mega_menu or (css and 'ck-nav-' in css):
+        menu.write({
+            'is_mega_menu': False,
+            'mega_menu_content': False,
+            'ck_nav_css_class': False,
+        })
 
-    # 2. Supprimer les entrées catalogue devenues obsolètes (catégorie supprimée
-    # ou plus éligible). CK-NAV-003b : les entrées encore éligibles sont laissées
-    # intactes ici — _upsert_menu() les met à jour ensuite sans écraser leur
-    # séquence administrée en BO. Les sous-menus enfants d'une entrée supprimée
-    # sont supprimés par cascade ORM (parent_id ondelete='cascade').
-    for m in Menu.search([
-        ('website_id', '=', website.id),
-        ('parent_id', '=', root.id),
-        ('ck_nav_category_id', '!=', False),
-    ]):
-        if m.ck_nav_category_id.id not in eligible_category_ids:
-            _unlink_menu(m)
 
-    # 3. Supprimer les orphelins legacy hors cibles V3 (Communauté, Espace pro, etc.)
+def _cleanup_ck_catalogue_root_menus(env, website, root, Menu, eligible_categories):
+    """Purge les entrées V2.2 / mega / orphelins sans détruire les racines catalogue.
+
+    S2 : ne plus supprimer aveuglément ``MANAGED_V22_ROOT_NAMES`` (ex. « Épicerie »)
+    quand la catégorie catalogue correspondante est encore éligible — sinon
+    l'upsert recrée l'entrée et casse idempotence / séquences BO.
+    """
+    eligible_category_ids = set(eligible_categories.ids)
+    eligible_names = set(eligible_categories.mapped('name'))
+
     for m in Menu.search([
         ('website_id', '=', website.id),
         ('parent_id', '=', root.id),
     ]):
+        # Racines fixes V3 — conserver, dépouiller le chrome V2.2
         if m.name in MANAGED_CATALOGUE_FIXED_ROOT_NAMES:
+            _strip_v22_menu_chrome(m)
             continue
+
+        # Entrée liée à une catégorie encore éligible
+        if m.ck_nav_category_id and m.ck_nav_category_id.id in eligible_category_ids:
+            _strip_v22_menu_chrome(m)
+            continue
+
+        # Même nom qu'une catégorie éligible (liaison category_id absente / legacy)
+        if m.name in eligible_names:
+            _strip_v22_menu_chrome(m)
+            continue
+
+        # Catégorie liée devenue inéligible / absente
+        if m.ck_nav_category_id and m.ck_nav_category_id.id not in eligible_category_ids:
+            _unlink_menu(m)
+            continue
+
+        # Libellés V2.2 hors catalogue (Tous nos produits, Nos producteurs, Communauté…)
+        if m.name in MANAGED_V22_ROOT_NAMES:
+            _unlink_menu(m)
+            continue
+
+        # Orphelins legacy / mega / CSS ck-nav
         if m.name in LEGACY_ROOT_MENU_NAMES:
             _unlink_menu(m)
         elif m.is_mega_menu:
@@ -678,8 +657,154 @@ def _cleanup_ck_catalogue_root_menus(env, website, root, Menu, eligible_category
             _unlink_menu(m)
 
 
+def snapshot_ck_catalogue_navigation(env, website):
+    """État structuré de la navigation catalogue (pour tests d'idempotence)."""
+    root = website.menu_id
+    if not root:
+        return ()
+    Menu = env['website.menu'].sudo()
+    rows = []
+    for menu in Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+    ], order='sequence, id'):
+        children = tuple(
+            (
+                child.name,
+                child.url or '',
+                child.sequence,
+                child.ck_nav_category_id.id if child.ck_nav_category_id else False,
+                bool(child.is_mega_menu),
+                child.ck_nav_css_class or '',
+            )
+            for child in menu.child_id.sorted(key=lambda c: (c.sequence, c.id))
+        )
+        rows.append((
+            menu.name,
+            menu.url or '',
+            menu.sequence,
+            menu.ck_nav_category_id.id if menu.ck_nav_category_id else False,
+            bool(menu.is_mega_menu),
+            menu.ck_nav_css_class or '',
+            children,
+        ))
+    return tuple(rows)
+
+
+def _next_catalogue_category_root_sequence(sequence):
+    """Prochain créneau catégorie en évitant Boutique / Producteurs / Professionnels."""
+    while sequence in NAV_CATALOGUE_RESERVED_ROOT_SEQUENCES:
+        sequence += NAV_CATALOGUE_SEQUENCE_STEP
+    return sequence
+
+
+def _find_catalogue_category_root_menu(Menu, website, root, category):
+    menu = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('ck_nav_category_id', '=', category.id),
+    ], limit=1)
+    if menu:
+        return menu
+    return Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', category.name),
+    ], limit=1)
+
+
+def _assign_managed_root_sequences_atomic(
+    env, website, root, Menu, root_categories, professionnels_visible,
+):
+    """Assigne atomiquement les séquences des racines gérées (un seul passage).
+
+    Priorité explicite (arbitrage Dev après NO GO Garant sur 6afb44d) :
+
+    1. Les créneaux réservés ``{10, 60, 70}`` appartiennent aux racines fixes
+       Boutique / Producteurs / Professionnels — toujours imposés.
+    2. Une personnalisation BO de *catégorie* est préservée seulement si elle
+       reste unique dans le plan final et hors créneaux réservés.
+    3. Toute collision (y compris cascade du type Producteurs→60 ∩ rayon BO=60)
+       est résolue dans ce même passage — jamais de 2ᵉ sync nécessaire,
+       jamais de départage par id ORM.
+    """
+    targets = {}  # menu → sequence
+
+    boutique = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', NAV_CATALOGUE_BOUTIQUE_LABEL),
+    ], limit=1)
+    if boutique:
+        targets[boutique] = NAV_CATALOGUE_BOUTIQUE_SEQUENCE
+
+    producteurs = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', NAV_CATALOGUE_PRODUCTEURS_LABEL),
+    ], limit=1)
+    if producteurs:
+        targets[producteurs] = NAV_CATALOGUE_PRODUCTEURS_SEQUENCE
+
+    if professionnels_visible:
+        professionnels = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', NAV_CATALOGUE_PROFESSIONNELS_LABEL),
+        ], limit=1)
+        if professionnels:
+            targets[professionnels] = NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE
+
+    reserved = set(NAV_CATALOGUE_RESERVED_ROOT_SEQUENCES)
+    if not professionnels_visible:
+        reserved.discard(NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE)
+
+    # Créneaux déjà pris par les racines fixes dans le plan final
+    taken = {seq for seq in targets.values()}
+
+    category_menus = []
+    for category in root_categories:
+        menu = _find_catalogue_category_root_menu(Menu, website, root, category)
+        if menu:
+            category_menus.append((category, menu))
+
+    # 1ʳᵉ passe catégories : conserver la séquence BO si libre et hors réservés
+    pending = []
+    for category, menu in category_menus:
+        candidate = menu.sequence
+        if (
+            candidate not in reserved
+            and candidate not in taken
+            and candidate not in targets.values()
+        ):
+            targets[menu] = candidate
+            taken.add(candidate)
+        else:
+            pending.append((category, menu))
+
+    # 2ᵉ passe : créneaux libres 20, 30, … pour les catégories à réassigner
+    next_seq = NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE
+    for _category, menu in pending:
+        next_seq = _next_catalogue_category_root_sequence(next_seq)
+        while next_seq in taken:
+            next_seq += NAV_CATALOGUE_SEQUENCE_STEP
+            next_seq = _next_catalogue_category_root_sequence(next_seq)
+        targets[menu] = next_seq
+        taken.add(next_seq)
+        next_seq += NAV_CATALOGUE_SEQUENCE_STEP
+
+    for menu, seq in targets.items():
+        if menu.sequence != seq:
+            old_seq = menu.sequence
+            menu.write({'sequence': seq})
+            _logger.info(
+                'CK-NAV-003 : séquence racine « %s » %s → %s (assignation atomique)',
+                menu.name, old_seq, seq,
+            )
+
+
 def sync_ck_catalogue_navigation_for_website(env, website):
-    """CK-NAV-003 — Sync navigation catalogue dynamique depuis product.public.category."""
+    """CK-NAV-003 / S2 — Unique autorité de sync navigation catalogue CK."""
     root = website.menu_id
     if not root:
         _logger.warning(
@@ -689,11 +814,11 @@ def sync_ck_catalogue_navigation_for_website(env, website):
 
     Menu = env['website.menu'].sudo()
 
-    # 1. Nettoyage V2.2 / mega-menus / orphelins legacy
+    # 1. Nettoyage V2.2 / mega-menus / orphelins legacy (sans détruire le catalogue)
     root_categories = _get_ck_nav_root_categories(env, website)
-    _cleanup_ck_catalogue_root_menus(env, website, root, Menu, set(root_categories.ids))
+    _cleanup_ck_catalogue_root_menus(env, website, root, Menu, root_categories)
 
-    # 2. Boutique — entrée fixe
+    # 2. Boutique — entrée fixe (icône maison via ck-nav-shop-root / QWeb)
     _upsert_menu(
         Menu,
         website=website,
@@ -701,12 +826,14 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         name=NAV_CATALOGUE_BOUTIQUE_LABEL,
         url=NAV_CATALOGUE_BOUTIQUE_URL,
         sequence=NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
+        css_class=NAV_CSS_SHOP_ROOT,
     )
 
     # 3. Catégories e-commerce racines éligibles avec sous-catégories
     sequence = NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE
 
     for category in root_categories:
+        sequence = _next_catalogue_category_root_sequence(sequence)
         child_categories = _get_ck_nav_child_categories(env, website, category)
         url = _category_shop_url(env, category) or NAV_CATALOGUE_BOUTIQUE_URL
 
@@ -716,6 +843,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
                 'name': child.name,
                 'url': _category_shop_url(env, child) or url,
                 'sequence': (idx + 1) * NAV_CATALOGUE_SEQUENCE_STEP,
+                'category_id': child.id,
             }
             for idx, child in enumerate(child_categories)
         ]
@@ -733,28 +861,28 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         )
         sequence += NAV_CATALOGUE_SEQUENCE_STEP
 
-    # 4. Producteurs — route contrôleur stratégique, toujours visible
+    # 4. Producteurs — créneau réservé 60 (réaffirmé ensuite par l'assignation atomique)
     _upsert_menu(
         Menu,
         website=website,
         parent=root,
         name=NAV_CATALOGUE_PRODUCTEURS_LABEL,
         url=NAV_CATALOGUE_PRODUCTEURS_URL,
-        sequence=sequence,
-        preserve_existing_sequence=True,
+        sequence=NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
     )
-    sequence += NAV_CATALOGUE_SEQUENCE_STEP
 
-    # 5. Professionnels — conditionnel si page publiée
-    if _page_url_visible(env, website, NAV_CATALOGUE_PROFESSIONNELS_URL):
+    # 5. Professionnels — créneau réservé 70, conditionnel si page publiée
+    professionnels_visible = _page_url_visible(
+        env, website, NAV_CATALOGUE_PROFESSIONNELS_URL,
+    )
+    if professionnels_visible:
         _upsert_menu(
             Menu,
             website=website,
             parent=root,
             name=NAV_CATALOGUE_PROFESSIONNELS_LABEL,
             url=NAV_CATALOGUE_PROFESSIONNELS_URL,
-            sequence=sequence,
-            preserve_existing_sequence=True,
+            sequence=NAV_CATALOGUE_PROFESSIONNELS_SEQUENCE,
         )
     else:
         for m in Menu.search([
@@ -764,11 +892,16 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         ]):
             _unlink_menu(m)
 
+    # 6. Assignation atomique : réservés fixes + BO catégories hors collision
+    _assign_managed_root_sequences_atomic(
+        env, website, root, Menu, root_categories, professionnels_visible,
+    )
+
     return True
 
 
 def bootstrap_ck_catalogue_navigation(env):
-    """CK-NAV-003 — Bootstrap navigation catalogue pour tous les sites."""
+    """CK-NAV-003 / S2 — Bootstrap navigation catalogue (unique autorité)."""
     synced = 0
     for website in env['website'].sudo().search([]):
         if sync_ck_catalogue_navigation_for_website(env, website):

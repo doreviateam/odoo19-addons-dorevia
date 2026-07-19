@@ -73,6 +73,8 @@ from . import test_ck_portal_website_acl
 from . import test_ck_nav_v1_sync
 from . import test_ck_nav_catalogue_sync
 from . import test_ck_nav_catalogue_split_link
+from . import test_ck_nav_s2_canonical_v3
+from . import test_ck_nav_s2_root_sequences
 from . import test_ck_catalog_exposure
 from . import test_ck_footer_boutique_links
 from . import test_ck_catalog_qualification
