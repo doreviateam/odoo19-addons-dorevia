@@ -4,6 +4,7 @@ import { describe, expect, test } from '@odoo/hoot';
 import { animationFrame } from '@odoo/hoot-dom';
 import { onRpc, patchWithCleanup } from '@web/../tests/web_test_helpers';
 import { setupInteractionWhiteList, startInteractions } from '@web/../tests/public/helpers';
+import { registry } from '@web/core/registry';
 import wSaleUtils from '@website_sale/js/website_sale_utils';
 import {
     assertShowWarningApi,
@@ -14,6 +15,21 @@ import {
 describe.current.tags('interaction_dev');
 
 setupInteractionWhiteList(['website_sale.cart_line']);
+
+/**
+ * Le service réel tire CartNotification OWL (hors bundle unit tests).
+ * On enregistre un stub minimal pour makeMockEnv / CartLine.setup.
+ */
+const serviceRegistry = registry.category('services');
+if (!serviceRegistry.contains('cartNotificationService')) {
+    serviceRegistry.add('cartNotificationService', {
+        start() {
+            return {
+                add() {},
+            };
+        },
+    });
+}
 
 function cartProductHtml(lineId = 1, productId = 10) {
     return `
@@ -33,6 +49,17 @@ function cartProductHtml(lineId = 1, productId = 10) {
             </div>
         </div>
     `;
+}
+
+/**
+ * @param {*} core
+ */
+function getCartLine(core) {
+    const wrapper = core.interactions.find((i) => i.el?.classList?.contains('o_cart_product'));
+    expect(!!wrapper).toBe(true);
+    expect(!!wrapper.interaction).toBe(true);
+    expect(typeof wrapper.interaction._changeQuantity).toBe('function');
+    return wrapper;
 }
 
 test('assertShowWarningApi accepts current website_sale showWarning', () => {
@@ -113,6 +140,7 @@ test('concurrent showWarning calls emit two toasts and zero banners', async () =
 test('CartLine._changeQuantity with data.warning triggers one toast via standard path', async () => {
     const toastCalls = [];
     let rpcCalls = 0;
+    const errors = [];
 
     onRpc('/shop/cart/update', () => {
         rpcCalls += 1;
@@ -136,6 +164,7 @@ test('CartLine._changeQuantity with data.warning triggers one toast via standard
 
     const cartNotificationService = core.env.services.cartNotificationService;
     expect(!!cartNotificationService).toBe(true);
+    expect(typeof cartNotificationService.add).toBe('function');
     patchWithCleanup(cartNotificationService, {
         add(title, props) {
             toastCalls.push({ title, props });
@@ -143,23 +172,29 @@ test('CartLine._changeQuantity with data.warning triggers one toast via standard
     });
     setCartNotificationServiceForTests(cartNotificationService);
 
-    const interaction = core.interactions.find((i) => i.el.classList.contains('o_cart_product'));
-    expect(!!interaction).toBe(true);
-
-    const input = interaction.el.querySelector('input.js_quantity');
+    const wrapper = getCartLine(core);
+    const input = wrapper.el.querySelector('input.js_quantity');
     input.value = '9';
-    await interaction.interaction._changeQuantity(input);
+
+    try {
+        await wrapper.interaction._changeQuantity(input);
+    } catch (error) {
+        errors.push(String(error));
+    }
     await animationFrame();
 
+    expect(errors).toEqual([]);
     expect(rpcCalls).toBe(1);
     expect(toastCalls).toHaveLength(1);
     expect(toastCalls[0].props).toEqual({ warning: 'Only 2 available' });
+    expect(input.value).toBe('2');
     expect(document.querySelectorAll('#data_warning')).toHaveLength(0);
 });
 
 test('CartLine._changeQuantity without warning keeps standard path and emits no toast', async () => {
     const toastCalls = [];
     let rpcCalls = 0;
+    const errors = [];
 
     onRpc('/shop/cart/update', () => {
         rpcCalls += 1;
@@ -180,6 +215,7 @@ test('CartLine._changeQuantity without warning keeps standard path and emits no 
 
     const { core } = await startInteractions(cartProductHtml(2, 20));
     const cartNotificationService = core.env.services.cartNotificationService;
+    expect(!!cartNotificationService).toBe(true);
     patchWithCleanup(cartNotificationService, {
         add(title, props) {
             toastCalls.push({ title, props });
@@ -187,13 +223,20 @@ test('CartLine._changeQuantity without warning keeps standard path and emits no 
     });
     setCartNotificationServiceForTests(cartNotificationService);
 
-    const interaction = core.interactions.find((i) => i.el.classList.contains('o_cart_product'));
-    const input = interaction.el.querySelector('input.js_quantity');
+    const wrapper = getCartLine(core);
+    const input = wrapper.el.querySelector('input.js_quantity');
     input.value = '3';
-    await interaction.interaction._changeQuantity(input);
+
+    try {
+        await wrapper.interaction._changeQuantity(input);
+    } catch (error) {
+        errors.push(String(error));
+    }
     await animationFrame();
 
+    expect(errors).toEqual([]);
     expect(rpcCalls).toBe(1);
     expect(toastCalls).toHaveLength(0);
+    expect(input.value).toBe('3');
     expect(document.querySelectorAll('#data_warning')).toHaveLength(0);
 });

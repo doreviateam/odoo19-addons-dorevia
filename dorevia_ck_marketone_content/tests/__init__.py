@@ -84,3 +84,4 @@ from . import test_ck_category_routes_http
 from . import test_ck_branding_footer
 from . import test_ck_checkout_stock_001
 from . import test_ck_cart_stock_warning_js_guard
+from . import test_ck_cart_stock_warning_hoot
