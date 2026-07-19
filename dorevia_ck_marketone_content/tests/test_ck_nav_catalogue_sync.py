@@ -165,6 +165,11 @@ class TestCkNavCatalogueSync(TransactionCase):
         self.assertEqual(menu.url, NAV_CATALOGUE_BOUTIQUE_URL)
         self.assertEqual(menu.sequence, NAV_CATALOGUE_BOUTIQUE_SEQUENCE)
         self.assertFalse(menu.is_mega_menu)
+        self.assertIn(
+            'ck-nav-shop-root',
+            (menu.ck_nav_css_class or '').split(),
+            'Boutique doit porter ck-nav-shop-root (icône maison header/drawer)',
+        )
 
     # --- Catégories racines éligibles ---
 

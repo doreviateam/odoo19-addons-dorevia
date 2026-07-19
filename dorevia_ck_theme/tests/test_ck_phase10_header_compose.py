@@ -45,14 +45,14 @@ class TestCkPhase10HeaderCompose(HttpCase):
 
     def _assert_shop_root_accessible_label(self, html):
         self.assertTrue(
-            'aria-label="Boutique - Tous les produits"' in html
-            or 'aria-label="Shop - All products"' in html,
-            msg='Libellé accessible FR ou EN attendu sur l’icône racine boutique',
+            'aria-label="Accueil"' in html
+            or 'aria-label="Home"' in html,
+            msg='Libellé accessible Accueil/Home attendu sur l’icône maison',
         )
         self.assertTrue(
-            'title="Boutique - Tous les produits"' in html
-            or 'title="Shop - All products"' in html,
-            msg='Title FR ou EN attendu sur l’icône racine boutique',
+            'title="Accueil"' in html
+            or 'title="Home"' in html,
+            msg='Title Accueil/Home attendu sur l’icône maison',
         )
 
     def test_header_ck_chrome_on_home(self):

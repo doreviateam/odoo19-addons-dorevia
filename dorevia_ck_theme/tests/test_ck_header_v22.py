@@ -60,14 +60,14 @@ class TestCkHeaderV22Compose(HttpCase):
 
     def _assert_shop_root_accessible_label(self, html):
         self.assertTrue(
-            'aria-label="Boutique - Tous les produits"' in html
-            or 'aria-label="Shop - All products"' in html,
-            msg='Libellé accessible FR ou EN attendu sur l’icône racine boutique',
+            'aria-label="Accueil"' in html
+            or 'aria-label="Home"' in html,
+            msg='Libellé accessible Accueil/Home attendu sur l’icône maison',
         )
         self.assertTrue(
-            'title="Boutique - Tous les produits"' in html
-            or 'title="Shop - All products"' in html,
-            msg='Title FR ou EN attendu sur l’icône racine boutique',
+            'title="Accueil"' in html
+            or 'title="Home"' in html,
+            msg='Title Accueil/Home attendu sur l’icône maison',
         )
 
     def test_n3_nine_entries_present(self):
@@ -83,7 +83,8 @@ class TestCkHeaderV22Compose(HttpCase):
         self.assertNotRegex(nav, r'>\s*Tous nos produits\s*<')
         self.assertIn('ck-nav-shop-root', nav)
         self._assert_shop_root_accessible_label(nav)
-        self.assertIn('fa-th-large', nav)
+        self.assertIn('fa-home', nav)
+        self.assertNotRegex(nav, r'>\s*Boutique\s*</')
         boissons = self.env['website.menu'].sudo().search([
             ('name', '=', 'Boissons'),
             ('parent_id', '!=', False),

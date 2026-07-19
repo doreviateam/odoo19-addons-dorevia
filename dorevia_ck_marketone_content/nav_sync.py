@@ -818,7 +818,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
     root_categories = _get_ck_nav_root_categories(env, website)
     _cleanup_ck_catalogue_root_menus(env, website, root, Menu, root_categories)
 
-    # 2. Boutique — entrée fixe
+    # 2. Boutique — entrée fixe (icône maison via ck-nav-shop-root / QWeb)
     _upsert_menu(
         Menu,
         website=website,
@@ -826,6 +826,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         name=NAV_CATALOGUE_BOUTIQUE_LABEL,
         url=NAV_CATALOGUE_BOUTIQUE_URL,
         sequence=NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
+        css_class=NAV_CSS_SHOP_ROOT,
     )
 
     # 3. Catégories e-commerce racines éligibles avec sous-catégories
