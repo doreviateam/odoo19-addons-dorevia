@@ -19,15 +19,18 @@ class TestCkCartStockWarningJsGuard(TransactionCase):
 
     def test_js_does_not_copy_change_quantity_rpc(self):
         source = self._js_source()
-        self.assertNotIn("/shop/cart/update", source)
+        self.assertNotIn('/shop/cart/update', source)
         self.assertNotIn('redirect(', source)
         self.assertNotIn('updateCartNavBar', source)
-        self.assertIn('super._changeQuantity', source)
+        self.assertNotIn('async _changeQuantity', source)
+        self.assertIn('patch(wSaleUtils', source)
         self.assertIn('showWarning', source)
         self.assertIn('cartNotificationService', source)
 
-    def test_js_does_not_call_legacy_banner_alongside_toast(self):
+    def test_js_uses_permanent_showWarning_patch_not_await_swap(self):
         source = self._js_source()
-        # Le bandeau standard passe par previousShowWarning — volontairement omis.
-        self.assertNotIn('previousShowWarning(', source)
-        self.assertIn('Ne pas appeler previousShowWarning', source)
+        # F2 : pas de mutation temporaire du global pendant un await.
+        self.assertNotIn('previousShowWarning', source)
+        self.assertNotIn('wSaleUtils.showWarning =', source)
+        self.assertIn('patch(wSaleUtils', source)
+        self.assertIn('showCartStockWarningToast', source)

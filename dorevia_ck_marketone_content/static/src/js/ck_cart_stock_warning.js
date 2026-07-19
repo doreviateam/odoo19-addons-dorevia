@@ -7,18 +7,24 @@ import wSaleUtils from '@website_sale/js/website_sale_utils';
 /**
  * CK S3-B1 — avertissement stock panier en toast unique.
  *
- * Doctrine : ne pas recopier `_changeQuantity`. Intercepter uniquement
- * `wSaleUtils.showWarning` pendant l'appel standard (`super`), car c'est le
- * seul point où Odoo 19 affiche `data.warning` sur le panier.
+ * Doctrine : ne pas recopier `_changeQuantity`. Remplacer uniquement
+ * `wSaleUtils.showWarning` (seul appelant Odoo 19 : CartLine), car c'est le
+ * seul point où le standard affiche `data.warning` sur le panier.
  *
- * Pourquoi pas un `patch(wSaleUtils, { showWarning })` global ?
- * `showWarning` n'a pas accès à `cartNotificationService` (pas de `this.services`).
- * L'interception scoped sur `CartLine` conserve l'accès propre au service panier
- * sans modifier les autres appelants futurs hors de ce flux.
+ * Patch **permanent** (pas de mutation scoped pendant un `await`) : le verrou
+ * CartLine est par instance, donc deux lignes peuvent entrelacer des RPC et
+ * polluer un swap temporaire du global — réintroduisant le bandeau legacy.
  *
- * Garde upgrade : si `showWarning` disparaît de l'API amont, le module échoue
- * explicitement au chargement / à l'appel (voir `assertShowWarningApi`).
+ * Accès au service : `showWarning` n'a pas de `this.services`. On capture le
+ * singleton `cartNotificationService` au `setup` de CartLine (même `env`),
+ * puis on le résout à l'appel. Un seul appelant → pas d'effet de bord hors panier.
+ *
+ * Garde upgrade : si `showWarning` disparaît de l'API amont, l'appel échoue
+ * explicitement (voir `assertShowWarningApi`).
  */
+
+/** @type {*|null} */
+let cartNotificationServiceRef = null;
 
 export function assertShowWarningApi() {
     if (typeof wSaleUtils.showWarning !== 'function') {
@@ -29,7 +35,6 @@ export function assertShowWarningApi() {
 }
 
 /**
- * Affiche le warning stock via toast panier, sans bandeau legacy Odoo.
  * @param {*} cartNotificationService
  * @param {string} message
  */
@@ -43,24 +48,30 @@ export function showCartStockWarningToast(cartNotificationService, message) {
     cartNotificationService.add('', { warning: message });
 }
 
+export function resolveCartNotificationService() {
+    return cartNotificationServiceRef;
+}
+
+/** @internal — tests uniquement */
+export function setCartNotificationServiceForTests(service) {
+    cartNotificationServiceRef = service;
+}
+
 assertShowWarningApi();
 
 patch(CartLine.prototype, {
+    setup() {
+        super.setup();
+        cartNotificationServiceRef = this.services.cartNotificationService;
+    },
+});
+
+patch(wSaleUtils, {
     /**
-     * @override
+     * @override Toast panier CK — ne pas appeler le bandeau `#data_warning`.
+     * @param {string | null} message
      */
-    async _changeQuantity(...args) {
-        assertShowWarningApi();
-        const previousShowWarning = wSaleUtils.showWarning;
-        const cartNotificationService = this.services.cartNotificationService;
-        wSaleUtils.showWarning = (message) => {
-            // Ne pas appeler previousShowWarning : évite le doublon bandeau + toast.
-            showCartStockWarningToast(cartNotificationService, message);
-        };
-        try {
-            return await super._changeQuantity(...args);
-        } finally {
-            wSaleUtils.showWarning = previousShowWarning;
-        }
+    showWarning(message) {
+        showCartStockWarningToast(resolveCartNotificationService(), message);
     },
 });
