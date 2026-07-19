@@ -421,6 +421,17 @@
         @include ck-product-card-cta-cart;
     }
 
+    // Soft launch home — lien « Voir le produit » (même emplacement que le CTA panier)
+    a.card-cart-cta.card-cart-cta--view {
+        @include ck-product-card-cta-view;
+        align-self: stretch;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px;
+        text-decoration: none;
+    }
+
     .card-cta {
         @include ck-product-card-cta-view;
     }

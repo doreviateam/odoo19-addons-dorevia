@@ -390,7 +390,7 @@
     }
 }
 
-// Home S4 — Acheter par univers · navigation catalogue visuelle (3 cards)
+// Home S4 — Acheter par univers · navigation catalogue visuelle (4 cards)
 .ck-univers-cards {
     background-color: $ck-bg;
 
@@ -412,7 +412,7 @@
 
     .ck-univers-cards__grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: $ck-space-4;
 
         @media (max-width: 991.98px) {

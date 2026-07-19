@@ -694,6 +694,37 @@
     }
 }
 
+// Mobile ≤ 575 px — amorce de scroll horizontal sur le filmstrip catégories
+@media (max-width: 575.98px) {
+    .ck-shop-page #o_wsale_categories_filmstrip {
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 2.25rem;
+            pointer-events: none;
+            background: linear-gradient(
+                to right,
+                rgba($ck-bg, 0),
+                rgba($ck-bg, 0.92)
+            );
+            z-index: 1;
+        }
+
+        .o_wsale_filmstrip {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            flex-wrap: nowrap;
+            padding-inline-end: $ck-space-4;
+            scrollbar-width: thin;
+        }
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Note 07 · Lot A — Boutique pleine largeur + drawer filtres
 // ---------------------------------------------------------------------------
@@ -989,10 +1020,40 @@
 
 // D2 + D3 : mobile ≤ 575 px — 1 colonne + pied colonne (CTA pleine largeur)
 @media (max-width: 575.98px) {
-    // Toolbar : retour à la ligne si les boutons débordent
-    .ck-shop-page #o_wsale_products_header .btn-toolbar {
-        flex-wrap: wrap;
-        row-gap: $ck-space-2;
+    // Toolbar : recherche pleine largeur puis Filtrer + tri
+    .ck-shop-page #o_wsale_products_header {
+        .products_header.btn-toolbar,
+        .btn-toolbar {
+            flex-direction: column;
+            align-items: stretch;
+            flex-wrap: nowrap;
+            row-gap: $ck-space-2;
+            width: 100%;
+        }
+
+        .o_wsale_products_header_search_form_container {
+            flex: 1 1 auto;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .o_wsale_products_header_search_form_container form,
+        .o_wsale_products_header_search_form_container .input-group {
+            width: 100%;
+        }
+
+        .o_wsale_toggle_filter_btn,
+        .o_sortby_dropdown {
+            flex: 1 1 auto;
+        }
+
+        .o_wsale_products_header_extra_aside,
+        .o_wsale_products_main_row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $ck-space-2;
+            width: 100%;
+        }
     }
 
     .ck-shop-page #o_wsale_products_grid {

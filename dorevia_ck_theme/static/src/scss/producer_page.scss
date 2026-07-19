@@ -69,15 +69,26 @@ $ck-producer-visual-padding: 0.75rem;
         text-decoration: none;
     }
 
+    // Liste /producteurs — cadrage cover (évite logos minuscules sur fond « vide »)
     &__media,
     &__image {
         @include ck-producer-visual-frame;
-        min-height: 8.75rem;
-        max-height: 10.5rem;
+        padding: 0;
+        aspect-ratio: 4 / 3;
+        min-height: 0;
+        max-height: none;
+        background-color: $ck-producer-visual-bg;
     }
 
-    &__img {
-        @include ck-producer-visual-img;
+    &__img,
+    &__image img.ck-producer-card__img {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        object-fit: cover !important;
+        object-position: center;
+        display: block;
     }
 
     &__placeholder {
@@ -328,15 +339,25 @@ $ck-producer-visual-padding: 0.75rem;
     }
 }
 
-// Alias sémantique MOA — card annuaire
+// Alias sémantique MOA — card annuaire (aligné cover liste /producteurs)
 .ck-producer-card__image {
     @include ck-producer-visual-frame;
-    min-height: 8.75rem;
-    max-height: 10.5rem;
+    padding: 0;
+    aspect-ratio: 4 / 3;
+    min-height: 0;
+    max-height: none;
+    background-color: $ck-producer-visual-bg;
 
     img,
+    img.ck-producer-card__img,
     .ck-producer-card__img {
-        @include ck-producer-visual-img;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        object-fit: cover !important;
+        object-position: center;
+        display: block;
     }
 }
 
