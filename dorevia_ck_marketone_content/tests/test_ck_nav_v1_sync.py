@@ -130,12 +130,13 @@ class TestCkNavV1Sync(TransactionCase):
         sync_ck_navigation_v1_for_website(self.env, self.website)
         self.assertFalse(self._menu_by_name('Espace pro'))
 
-    def test_v1_boutique_no_special_css(self):
+    def test_v1_boutique_shop_root_css(self):
+        """V1 délègue à V3 : Boutique porte ck-nav-shop-root, pas un mega ni un rayon V2.2."""
         sync_ck_navigation_v1_for_website(self.env, self.website)
         menu = self._menu_by_name(NAV_V1_BOUTIQUE_LABEL)
         self.assertTrue(menu)
         css = (menu.ck_nav_css_class or '').split()
-        self.assertNotIn(NAV_CSS_SHOP_ROOT, css)
+        self.assertIn(NAV_CSS_SHOP_ROOT, css)
         self.assertNotIn(NAV_CSS_N3_RAYON, css)
         self.assertFalse(menu.is_mega_menu)
 

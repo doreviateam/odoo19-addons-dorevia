@@ -9,6 +9,11 @@ from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
     snapshot_ck_catalogue_navigation,
     sync_ck_catalogue_navigation_for_website,
 )
+from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
+    NAV_CSS_DESKTOP_UNIVERSE_CHILD,
+    NAV_CSS_MOBILE_UNIVERS_GROUP,
+    NAV_CSS_MOBILE_UNIVERSE_CHILD,
+)
 from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
     NAV_CATALOGUE_BOUTIQUE_LABEL,
     NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
@@ -16,7 +21,33 @@ from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
     NAV_CATALOGUE_PRODUCTEURS_LABEL,
     NAV_CATALOGUE_PRODUCTEURS_URL,
     NAV_CATALOGUE_PROFESSIONNELS_URL,
+    NAV_CSS_ESPACE_PRO,
+    NAV_CSS_MEGA_PRODUCT,
+    NAV_CSS_N3_GROUP_END,
+    NAV_CSS_N3_RAYON,
+    NAV_CSS_N3_RELATION,
+    NAV_CSS_N3_SELECTION,
+    NAV_CSS_PRODUCTEURS,
+    NAV_CSS_SHOP_ROOT,
 )
+
+# Classes menu canoniques S2 (icône Accueil) — autorisées sur website.menu.
+_CK_NAV_CSS_CANONICAL = frozenset({NAV_CSS_SHOP_ROOT})
+
+# Marqueurs V1 / V2.2 / mega / groupes mobiles — interdits après sync V3.
+_CK_NAV_CSS_LEGACY_FORBIDDEN = frozenset({
+    NAV_CSS_N3_RAYON,
+    NAV_CSS_N3_SELECTION,
+    NAV_CSS_N3_RELATION,
+    NAV_CSS_N3_GROUP_END,
+    NAV_CSS_PRODUCTEURS,
+    NAV_CSS_ESPACE_PRO,
+    NAV_CSS_MEGA_PRODUCT,
+    NAV_CSS_DESKTOP_UNIVERSE_CHILD,
+    NAV_CSS_MOBILE_UNIVERS_GROUP,
+    NAV_CSS_MOBILE_UNIVERSE_CHILD,
+    'ck-nav-desktop-universe',
+})
 
 
 @tagged('post_install', '-at_install', 'dorevia_ck_nav_catalogue')
@@ -248,12 +279,33 @@ class TestCkNavCatalogueSync(TransactionCase):
         self.assertFalse(mega, 'Aucun mega-menu en racine après catalogue sync')
 
     def test_catalogue_nav_no_legacy_css(self):
+        """S2 : ck-nav-shop-root est canonique ; les marqueurs V1/V2.2 restent interdits."""
         self._sync()
         all_nav_menus = self.Menu.search([('website_id', '=', self.website.id)])
-        legacy_css = all_nav_menus.filtered(
-            lambda m: m.ck_nav_css_class and 'ck-nav-' in m.ck_nav_css_class
+        boutique = self._root_menu(NAV_CATALOGUE_BOUTIQUE_LABEL)
+        self.assertTrue(boutique)
+        boutique_tokens = set((boutique.ck_nav_css_class or '').split())
+        self.assertIn(
+            NAV_CSS_SHOP_ROOT,
+            boutique_tokens,
+            'Boutique doit porter ck-nav-shop-root (icône Accueil)',
         )
-        self.assertFalse(legacy_css, 'Pas de classe CSS ck-nav-* après catalogue sync')
+
+        for menu in all_nav_menus:
+            tokens = set((menu.ck_nav_css_class or '').split())
+            forbidden = tokens & _CK_NAV_CSS_LEGACY_FORBIDDEN
+            self.assertFalse(
+                forbidden,
+                f'Menu « {menu.name} » : marqueurs CSS legacy interdits {sorted(forbidden)}',
+            )
+            unexpected = {
+                token for token in tokens
+                if token.startswith('ck-nav-') and token not in _CK_NAV_CSS_CANONICAL
+            }
+            self.assertFalse(
+                unexpected,
+                f'Menu « {menu.name} » : classes ck-nav-* non canoniques {sorted(unexpected)}',
+            )
 
     # --- Séquences ---
 

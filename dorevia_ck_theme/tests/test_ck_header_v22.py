@@ -10,11 +10,9 @@ from odoo.addons.dorevia_ck_marketone_content.nav_sync import bootstrap_ck_navig
 from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
     LEGACY_NAV_COUPS_LABEL,
     LEGACY_NAV_MAISON_LABEL,
-    NAV_COFFRETS_LABEL,
+    NAV_CATALOGUE_PRODUCTEURS_LABEL,
     NAV_COMMUNAUTE_LABEL,
-    NAV_COMMUNAUTE_URL,
     NAV_ESPACE_PRO_LABEL,
-    NAV_PRODUCTEURS_LABEL,
 )
 
 
@@ -70,40 +68,34 @@ class TestCkHeaderV22Compose(HttpCase):
             msg='Title Accueil/Home attendu sur l’icône maison',
         )
 
-    def test_n3_nine_entries_present(self):
+    def test_catalogue_roots_and_home_icon(self):
+        """S2 / V3 : Accueil = icône maison ; racines Producteurs / Professionnels."""
         html = self._home_html()
         nav = self._header_nav_chunk(html)
-        for label in (
-            'Épicerie',
-            'Communauté',
-            NAV_PRODUCTEURS_LABEL,
-            NAV_ESPACE_PRO_LABEL,
-        ):
-            self.assertIn(label, nav, label)
         self.assertNotRegex(nav, r'>\s*Tous nos produits\s*<')
         self.assertIn('ck-nav-shop-root', nav)
         self._assert_shop_root_accessible_label(nav)
         self.assertIn('fa-home', nav)
         self.assertNotRegex(nav, r'>\s*Boutique\s*</')
-        boissons = self.env['website.menu'].sudo().search([
-            ('name', '=', 'Boissons'),
-            ('parent_id', '!=', False),
-        ], limit=1)
-        if boissons:
-            self.assertIn('Boissons', nav)
-        coffrets = self.env['website.menu'].sudo().search([
-            ('name', '=', NAV_COFFRETS_LABEL),
-            ('parent_id', '!=', False),
-        ], limit=1)
-        if coffrets:
-            self.assertIn(NAV_COFFRETS_LABEL, nav)
+        self.assertIn(NAV_CATALOGUE_PRODUCTEURS_LABEL, nav)
+        self.assertRegex(nav, r'href="(?:/[a-z]{2}(?:-[A-Z]{2})?)?/professionnels"')
+        # Entrées V2.2 neutralisées par la délégation V3
+        self.assertNotIn(NAV_COMMUNAUTE_LABEL, nav)
+        self.assertNotIn(NAV_ESPACE_PRO_LABEL, nav)
         self.assertNotRegex(nav, r'>\s*Découvrir\s*</a>')
+        epicerie = self.env['website.menu'].sudo().search([
+            ('name', '=', 'Épicerie'),
+            ('parent_id', '!=', False),
+        ], limit=1)
+        if epicerie:
+            self.assertIn('Épicerie', nav)
 
-    def test_n3_group_css_classes(self):
+    def test_no_v22_n3_group_css_classes(self):
+        """S2 : plus de marqueurs CSS de regroupement N3 V2.2 dans le header."""
         html = self._home_html()
-        self.assertIn('ck-nav-n3-rayon', html)
-        self.assertIn('ck-nav-n3-selection', html)
-        self.assertIn('ck-nav-n3-relation', html)
+        self.assertNotIn('ck-nav-n3-rayon', html)
+        self.assertNotIn('ck-nav-n3-selection', html)
+        self.assertNotIn('ck-nav-n3-relation', html)
 
     def test_shop_root_icon_active_on_shop_pages(self):
         resp = self.url_open('/shop?qa_ts=header_v22_nav_u2')
@@ -126,27 +118,25 @@ class TestCkHeaderV22Compose(HttpCase):
         html = self._home_html()
         self.assertRegex(html, r'href="(?:/[a-z]{2}(?:-[A-Z]{2})?)?/producteurs"')
 
-    def test_espace_pro_dropdown_anchors(self):
+    def test_professionnels_direct_link(self):
+        """S2 / V3 : Professionnels est un lien racine (plus de dropdown Espace pro)."""
         html = self._home_html()
-        self.assertIn('ck-nav-espace-pro', html)
-        self.assertIn('/professionnels#acheter', html)
-        self.assertIn('/professionnels#contact', html)
+        self.assertNotIn('ck-nav-espace-pro', html)
+        self.assertRegex(html, r'href="(?:/[a-z]{2}(?:-[A-Z]{2})?)?/professionnels"')
 
-    def test_communaute_placeholder_link(self):
+    def test_communaute_absent_after_v3(self):
         menu = self.env['website.menu'].sudo().search([
             ('name', '=', NAV_COMMUNAUTE_LABEL),
             ('parent_id', '!=', False),
         ], limit=1)
-        self.assertTrue(menu, 'Communauté doit être présent en N3')
-        self.assertEqual(menu.url, NAV_COMMUNAUTE_URL)
-        self.assertFalse(menu.is_mega_menu)
-        self.assertFalse(menu.child_id)
+        self.assertFalse(menu, 'Communauté doit être absente après sync V3')
 
-    def test_communaute_renders_hash_href(self):
+    def test_communaute_not_rendered_in_header(self):
         html = self._home_html()
-        self.assertRegex(
+        self.assertNotRegex(
             html,
-            r'href="#"\s+class="[^"]*nav-link[^"]*"[^>]*>\s*<span>Communauté</span>',
+            r'>\s*Communauté\s*<',
+            msg='Communauté ne doit plus apparaître dans le header V3',
         )
 
     def test_coups_de_coeur_absent_from_root_nav(self):
@@ -157,10 +147,9 @@ class TestCkHeaderV22Compose(HttpCase):
         ])
         self.assertFalse(legacy, 'Coups de cœur ne doit plus figurer en navigation principale')
 
-    def test_soin_bien_etre_nav_label_desktop(self):
+    def test_legacy_maison_label_absent(self):
         html = self._home_html()
         nav = self._header_nav_chunk(html)
-        self.assertIn('Soin &amp; Bien-être', nav)
         self.assertNotIn('Maison &amp; Bien-être', nav)
         self.assertNotIn(LEGACY_NAV_MAISON_LABEL, nav)
 
