@@ -6,10 +6,10 @@ from odoo.tests.common import TransactionCase
 
 from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
     bootstrap_ck_catalogue_navigation,
+    snapshot_ck_catalogue_navigation,
     sync_ck_catalogue_navigation_for_website,
 )
 from odoo.addons.dorevia_ck_marketone_content.nav_v22_config import (
-    MANAGED_V22_ROOT_NAMES,
     NAV_CATALOGUE_BOUTIQUE_LABEL,
     NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
     NAV_CATALOGUE_BOUTIQUE_URL,
@@ -353,9 +353,10 @@ class TestCkNavCatalogueSync(TransactionCase):
     # --- Nettoyage V2.2 ---
 
     def test_catalogue_nav_removes_nav002_stale_items(self):
-        # Injecter des entrées V2.2 style en racine
+        # Injecter des libellés V2.2 qui ne sont PAS des catégories catalogue éligibles
+        stale_names = ('Tous nos produits', 'Communauté', 'Espace pro', 'Nos producteurs')
         stale_menu_ids = []
-        for name in list(MANAGED_V22_ROOT_NAMES)[:3]:
+        for name in stale_names:
             stale_menu = self.Menu.create({
                 'name': name,
                 'url': '#',
@@ -371,17 +372,8 @@ class TestCkNavCatalogueSync(TransactionCase):
             self.Menu.browse(stale_menu_ids).exists(),
             'Les anciennes entrées V2.2 injectées doivent être supprimées',
         )
-        for name in list(MANAGED_V22_ROOT_NAMES)[:3]:
-            # Un libellé V2.2 peut aussi être une catégorie catalogue valide
-            # (ex. Artisanat) et être recréé proprement après purge.
-            menu = self._root_menu(name)
-            if not menu:
-                continue
-            self.assertFalse(menu.is_mega_menu, f'Entrée recréée « {name} » sans mega-menu')
-            self.assertFalse(
-                menu.ck_nav_css_class and 'ck-nav-' in menu.ck_nav_css_class,
-                f'Entrée recréée « {name} » sans CSS legacy',
-            )
+        for name in stale_names:
+            self.assertFalse(self._root_menu(name), f'« {name} » V2.2 ne doit pas survivre')
 
     def test_catalogue_nav_removes_communaute(self):
         self.Menu.create({
@@ -415,7 +407,10 @@ class TestCkNavCatalogueSync(TransactionCase):
 
     def test_catalogue_nav_idempotent(self):
         self._sync()
+        before = snapshot_ck_catalogue_navigation(self.env, self.website)
         self._sync()
+        after = snapshot_ck_catalogue_navigation(self.env, self.website)
+        self.assertEqual(after, before, 'Deux sync V3 doivent produire le même état structuré')
         boutique_count = self.Menu.search_count([
             ('website_id', '=', self.website.id),
             ('parent_id', '=', self.root.id),
@@ -440,6 +435,27 @@ class TestCkNavCatalogueSync(TransactionCase):
             ('name', '=', self.cat_a_child1.name),
         ])
         self.assertEqual(child1_count, 1, 'Une seule sous-catégorie A1 après double sync')
+
+    def test_catalogue_nav_stable_identity_on_category_rename(self):
+        """S2 : renommage catégorie → même menu (ck_nav_category_id), pas de doublon."""
+        self._sync()
+        menu_before = self._root_menu(self.cat_a.name)
+        self.assertTrue(menu_before)
+        menu_id = menu_before.id
+        self.cat_a.write({'name': 'TestCat NAV003 Rayon A Renamed'})
+        self._sync()
+        menu_after = self.Menu.browse(menu_id)
+        self.assertTrue(menu_after.exists())
+        self.assertEqual(menu_after.name, 'TestCat NAV003 Rayon A Renamed')
+        self.assertEqual(menu_after.ck_nav_category_id.id, self.cat_a.id)
+        self.assertEqual(
+            self.Menu.search_count([
+                ('website_id', '=', self.website.id),
+                ('parent_id', '=', self.root.id),
+                ('ck_nav_category_id', '=', self.cat_a.id),
+            ]),
+            1,
+        )
 
     # --- Nettoyage stale sur resync ---
 

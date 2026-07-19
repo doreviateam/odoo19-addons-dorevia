@@ -22,46 +22,56 @@ from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
 @tagged('post_install', '-at_install', 'dorevia_ck_nav_catalogue')
 class TestCkNavCatalogueSplitLink(HttpCase):
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.website = cls.env['website'].search([], limit=1)
-        Category = cls.env['product.public.category'].sudo()
-        Product = cls.env['product.template'].sudo()
+    def setUp(self):
+        super().setUp()
+        self.website = self.env['website'].search([], limit=1)
+        Category = self.env['product.public.category'].sudo()
+        Product = self.env['product.template'].sudo()
 
         # Racine AVEC sous-catégorie éligible — doit produire le split lien/toggle.
-        cls.cat_root = Category.create({'name': 'TestCat NAV005 Rayon', 'sequence': 950})
-        cls.cat_child = Category.create({
+        self.cat_root = Category.create({'name': 'TestCat NAV005 Rayon', 'sequence': 950})
+        self.cat_child = Category.create({
             'name': 'TestCat NAV005 Child',
-            'parent_id': cls.cat_root.id,
+            'parent_id': self.cat_root.id,
             'sequence': 10,
         })
-        Product.create({
-            'name': 'Test Produit NAV005 Root',
-            'sale_ok': True,
-            'is_published': True,
-            'website_published': True,
-            'public_categ_ids': [(4, cls.cat_root.id)],
-        })
-        Product.create({
-            'name': 'Test Produit NAV005 Child',
-            'sale_ok': True,
-            'is_published': True,
-            'website_published': True,
-            'public_categ_ids': [(4, cls.cat_child.id)],
-        })
+        # CATALOG-ARCHI-001 : seuil d'exposition = 3 produits qualifiés / catégorie.
+        for idx in range(3):
+            Product.create({
+                'name': f'Test Produit NAV005 Root {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, self.cat_root.id)],
+            })
+            Product.create({
+                'name': f'Test Produit NAV005 Child {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, self.cat_child.id)],
+            })
 
         # Racine SANS sous-catégorie — doit rester un lien simple (non-régression).
-        cls.cat_leaf = Category.create({'name': 'TestCat NAV005 Rayon Simple', 'sequence': 960})
-        Product.create({
-            'name': 'Test Produit NAV005 Leaf',
-            'sale_ok': True,
-            'is_published': True,
-            'website_published': True,
-            'public_categ_ids': [(4, cls.cat_leaf.id)],
-        })
+        self.cat_leaf = Category.create({'name': 'TestCat NAV005 Rayon Simple', 'sequence': 960})
+        for idx in range(3):
+            Product.create({
+                'name': f'Test Produit NAV005 Leaf {idx}',
+                'sale_ok': True,
+                'is_published': True,
+                'website_published': True,
+                'public_categ_ids': [(4, self.cat_leaf.id)],
+            })
 
-        sync_ck_catalogue_navigation_for_website(cls.env, cls.website)
+        sync_ck_catalogue_navigation_for_website(self.env, self.website)
+        self.env.flush_all()
+        menu = self.env['website.menu'].sudo().search([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.website.menu_id.id),
+            ('name', '=', self.cat_root.name),
+        ], limit=1)
+        self.assertTrue(menu, 'Précondition : menu TestCat NAV005 Rayon après sync')
+        self.assertTrue(menu.child_id, 'Précondition : enfants L2 sur le menu test')
 
     def _home_html(self):
         resp = self.url_open('/?qa_ts=nav005')

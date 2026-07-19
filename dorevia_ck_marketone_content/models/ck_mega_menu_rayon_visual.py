@@ -42,8 +42,11 @@ class CkMegaMenuRayonVisual(models.Model):
     active = fields.Boolean(default=True)
 
     def _ck_refresh_navigation(self):
-        from odoo.addons.dorevia_ck_marketone_content.nav_sync import bootstrap_ck_navigation
-        bootstrap_ck_navigation(self.env)
+        # S2 : les visuels rayon BO ne reconstruisent plus la nav V2.2 — V3 catalogue.
+        from odoo.addons.dorevia_ck_marketone_content.nav_sync import (
+            bootstrap_ck_catalogue_navigation,
+        )
+        bootstrap_ck_catalogue_navigation(self.env)
 
     def create(self, vals_list):
         records = super().create(vals_list)
