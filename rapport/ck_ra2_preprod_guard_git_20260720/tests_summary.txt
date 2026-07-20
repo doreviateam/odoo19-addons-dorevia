@@ -1,0 +1,30 @@
+# R-A2 test summary — local disposable Odoo 19 only
+
+static:
+  py_compile=OK
+  manifest_version=19.0.1.2.0
+  xml_well_formed=OK
+  guards_unit=OK
+  secret_scan=none
+
+identity:
+  live_module_vs_archive=identical
+  live_vs_git=no_difference
+  archive_vs_git=no_difference
+  archive_sha256=395c793913befd7a47234a9c29cf2402f784a5241a6adec5b7871070823f270c
+  file_count=8
+
+negative_install (db=ck_ra2_neg1, dropped after):
+  no_vars: exit=255 state=uninstalled
+  bad_env: exit=255 state=uninstalled
+  bad_domain: exit=255 state=uninstalled
+  bad_database: exit=255 state=uninstalled
+
+positive_install (local db name ck_marketone_preprod only):
+  exit=0 state=installed version=19.0.1.2.0 xmlids=6
+
+upgrade (-u without CK_SOFT_LAUNCH_*):
+  exit=0
+  pre_init_hook_on_upgrade=not_executed
+  upgrade_result=success
+  p4_guards_after_upgrade=active
