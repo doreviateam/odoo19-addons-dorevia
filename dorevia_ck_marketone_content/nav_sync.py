@@ -47,7 +47,13 @@ from .nav_v22_config import (
     NAV_COFFRETS_LABEL,
     LEGACY_NAV_COUPS_LABEL,
     NAV_COMMUNAUTE_LABEL,
+    NAV_COMMUNAUTE_MAGAZINE_LABEL,
+    NAV_COMMUNAUTE_MAGAZINE_SEQUENCE,
+    NAV_COMMUNAUTE_RECETTES_LABEL,
+    NAV_COMMUNAUTE_RECETTES_SEQUENCE,
     NAV_COMMUNAUTE_URL,
+    XMLID_CK_BLOG_MAGAZINE,
+    XMLID_CK_BLOG_RECETTES,
     NAV_CSS_ESPACE_PRO,
     NAV_CSS_MEGA_PRODUCT,
     NAV_CSS_N3_GROUP_END,
@@ -108,6 +114,33 @@ def _page_url_visible(env, website, url):
 def _unlink_menu(menu):
     if menu:
         menu.unlink()
+
+
+def _resolve_blog_website_url(env, xmlid):
+    """URL publique d'un ``blog.blog`` résolue via ``env.ref(xmlid)`` (jamais d'ID en dur).
+
+    ``blog.blog`` n'override pas ``website_url`` (mixin → ``#``) : on construit la
+    route canonique ``/blog/<slug>`` à partir de l'enregistrement résolu.
+    """
+    blog = env.ref(xmlid)
+    return '/blog/%s' % env['ir.http']._slug(blog)
+
+
+def _communaute_child_menus(env):
+    """Enfants gérés Magazine / Recettes pour l'upsert V3 Communauté (S6-B2-BLOC-1)."""
+    return [
+        {
+            'name': NAV_COMMUNAUTE_MAGAZINE_LABEL,
+            'url': _resolve_blog_website_url(env, XMLID_CK_BLOG_MAGAZINE),
+            'sequence': NAV_COMMUNAUTE_MAGAZINE_SEQUENCE,
+        },
+        {
+            'name': NAV_COMMUNAUTE_RECETTES_LABEL,
+            'url': _resolve_blog_website_url(env, XMLID_CK_BLOG_RECETTES),
+            'sequence': NAV_COMMUNAUTE_RECETTES_SEQUENCE,
+        },
+    ]
+
 
 
 def _upsert_menu(Menu, *, website, parent, name, url, sequence, css_class='',
@@ -899,7 +932,8 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         )
         sequence += NAV_CATALOGUE_SEQUENCE_STEP
 
-    # 3bis. S6-B1 — Communauté (racine éditoriale V3, URL placeholder #)
+    # 3bis. S6-B1/B2 — Communauté (racine éditoriale V3, URL #) + enfants gérés
+    # Magazine / Recettes via child_menus (S6-B2-BLOC-1 : jamais XML/hook seuls).
     _upsert_menu(
         Menu,
         website=website,
@@ -907,6 +941,7 @@ def sync_ck_catalogue_navigation_for_website(env, website):
         name=NAV_COMMUNAUTE_LABEL,
         url=NAV_COMMUNAUTE_URL,
         sequence=NAV_CATALOGUE_COMMUNAUTE_SEQUENCE,
+        child_menus=_communaute_child_menus(env),
     )
 
     # 4. Producteurs — créneau réservé 60 (réaffirmé ensuite par l'assignation atomique)

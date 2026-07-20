@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- S6-B2 — socles blog.blog (sans posts ; contenus = S6-C) -->
+        <record id="ck_blog_magazine" model="blog.blog">
+            <field name="name">Magazine</field>
+        </record>
+        <record id="ck_blog_recettes" model="blog.blog">
+            <field name="name">Recettes</field>
+        </record>
+    </data>
+</odoo>
