@@ -414,8 +414,9 @@ class TestCkNavCatalogueSync(TransactionCase):
     # --- Nettoyage V2.2 ---
 
     def test_catalogue_nav_removes_nav002_stale_items(self):
-        # Injecter des libellés V2.2 qui ne sont PAS des catégories catalogue éligibles
-        stale_names = ('Tous nos produits', 'Communauté', 'Espace pro', 'Nos producteurs')
+        # Injecter des libellés V2.2 qui ne sont PAS des catégories catalogue éligibles.
+        # S6-B1 : Communauté n'est plus un stale — racine éditoriale V3.
+        stale_names = ('Tous nos produits', 'Espace pro', 'Nos producteurs')
         stale_menu_ids = []
         for name in stale_names:
             stale_menu = self.Menu.create({
@@ -436,8 +437,14 @@ class TestCkNavCatalogueSync(TransactionCase):
         for name in stale_names:
             self.assertFalse(self._root_menu(name), f'« {name} » V2.2 ne doit pas survivre')
 
-    def test_catalogue_nav_removes_communaute(self):
-        self.Menu.create({
+    def test_catalogue_nav_keeps_communaute_as_v3_root(self):
+        """S6-B1 : Communauté préexistante reprise, non purgée."""
+        self.Menu.search([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.root.id),
+            ('name', '=', 'Communauté'),
+        ]).unlink()
+        existing = self.Menu.create({
             'name': 'Communauté',
             'url': '#',
             'website_id': self.website.id,
@@ -445,9 +452,18 @@ class TestCkNavCatalogueSync(TransactionCase):
             'sequence': 999,
         })
         self._sync()
-        self.assertFalse(
-            self._root_menu('Communauté'),
-            'Communauté doit être absente après NAV-003 sync',
+        menu = self._root_menu('Communauté')
+        self.assertTrue(menu, 'Communauté doit être présente après NAV-003 sync')
+        self.assertEqual(menu.id, existing.id)
+        self.assertEqual(menu.sequence, 55)
+        self.assertEqual(menu.url, '#')
+        self.assertEqual(
+            self.Menu.search_count([
+                ('website_id', '=', self.website.id),
+                ('parent_id', '=', self.root.id),
+                ('name', '=', 'Communauté'),
+            ]),
+            1,
         )
 
     def test_catalogue_nav_removes_espace_pro(self):

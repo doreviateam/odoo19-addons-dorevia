@@ -78,13 +78,27 @@ class TestCkNavCommunauteRegression(TransactionCase):
             msg='Les 7 produits seed MOA doivent être republiés',
         )
 
-    def test_bootstrap_v3_does_not_restore_v22_selection_menus(self):
-        """S2 : Communauté / Coups de cœur ne doivent pas réapparaître via bootstrap."""
+    def test_bootstrap_v3_communaute_root_and_coups_purged(self):
+        """S6-B1 A1 — révocation S2 : Communauté racine V3 ; Coups de cœur reste purgé.
+
+        Remplace ``test_bootstrap_v3_does_not_restore_v22_selection_menus``
+        (arbitrage MOA 2026-07-20 — mandat S6-B1 amendé). Assertion chirurgicale :
+        un seul des deux libellés S2 change de statut.
+        """
         ensure_moa_seed_catalog_published(self.env)
-        sync_communaute_header(self.env)
+        # Injecter Coups de cœur pour vérifier la purge persistante.
+        self.Menu.create({
+            'name': LEGACY_NAV_COUPS_LABEL,
+            'url': '#',
+            'website_id': self.website.id,
+            'parent_id': self.root.id,
+            'sequence': 999,
+        })
         bootstrap_ck_navigation(self.env)
 
-        self.assertFalse(self._menu_by_name(NAV_COMMUNAUTE_LABEL))
+        communaute = self._menu_by_name(NAV_COMMUNAUTE_LABEL)
+        self.assertTrue(communaute, 'Communauté doit persister comme racine V3')
+        self.assertEqual(communaute.url, '#')
         self.assertFalse(self._menu_by_name(LEGACY_NAV_COUPS_LABEL))
         self.assertTrue(self._menu_by_name(NAV_CATALOGUE_BOUTIQUE_LABEL))
         self.assertTrue(self._menu_by_name(NAV_CATALOGUE_PRODUCTEURS_LABEL))

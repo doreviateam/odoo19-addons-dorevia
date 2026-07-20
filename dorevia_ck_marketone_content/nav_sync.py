@@ -23,6 +23,7 @@ from .nav_v22_config import (
     LEGACY_NAV_MAISON_LABEL,
     LEGACY_ROOT_MENU_NAMES,
     MANAGED_CATALOGUE_FIXED_ROOT_NAMES,
+    MANAGED_EDITORIAL_ROOT_NAMES,
     MANAGED_V1_ROOT_NAMES,
     MANAGED_V22_ROOT_NAMES,
     NAV_ALL_LABEL,
@@ -33,6 +34,7 @@ from .nav_v22_config import (
     NAV_CATALOGUE_BOUTIQUE_LABEL,
     NAV_CATALOGUE_BOUTIQUE_SEQUENCE,
     NAV_CATALOGUE_BOUTIQUE_URL,
+    NAV_CATALOGUE_COMMUNAUTE_SEQUENCE,
     NAV_CATALOGUE_FIRST_CATEGORY_SEQUENCE,
     NAV_CATALOGUE_PRODUCTEURS_LABEL,
     NAV_CATALOGUE_PRODUCTEURS_SEQUENCE,
@@ -197,6 +199,10 @@ def _prune_unmanaged_root_menus(website, root, Menu):
     for menu in Menu.search([('website_id', '=', website.id), ('parent_id', '=', root.id)]):
         if menu.name in MANAGED_V22_ROOT_NAMES:
             continue
+        if menu.name in MANAGED_CATALOGUE_FIXED_ROOT_NAMES:
+            continue
+        if menu.name in MANAGED_EDITORIAL_ROOT_NAMES:
+            continue
         if menu.name in LEGACY_ROOT_MENU_NAMES or menu.url in ('/professionnels', '/contactus'):
             _unlink_menu(menu)
         elif menu.ck_nav_css_class and 'ck-nav-desktop-universe' in menu.ck_nav_css_class.split():
@@ -316,7 +322,13 @@ def _sync_artisanat(env, website, root, Menu):
 
 
 def _sync_communaute(env, website, root, Menu):
-    """Entrée N3 Communauté — placeholder # en attendant blog/forum CK."""
+    """Compat migrations 19.0.1.39.0 / 40.0 uniquement — plus un writer autorisé.
+
+    S6-B1 A2 : l'autorité de la racine Communauté est Navigation V3
+    (``sync_ck_catalogue_navigation_for_website``). Cette fonction est conservée
+    intacte car les scripts de migration historiques l'importent ; ne pas l'appeler
+    depuis le chemin d'exécution courant.
+    """
     legacy = Menu.search([
         ('website_id', '=', website.id),
         ('parent_id', '=', root.id),
@@ -348,7 +360,7 @@ def sync_communaute_header_for_website(env, website):
 
 
 def sync_communaute_header(env):
-    """Sync header Communauté sur tous les sites — périmètre ticket nav uniquement."""
+    """Compat migrations 19.0.1.39.0 / 40.0 — délégué historique, hors chemin V3 actif."""
     synced = 0
     for website in env['website'].sudo().search([]):
         if sync_communaute_header_for_website(env, website):
@@ -609,6 +621,20 @@ def _strip_v22_menu_chrome(menu):
         })
 
 
+def _dedupe_managed_root_menus_by_name(Menu, website, root, names):
+    """Conserve une seule entrée racine par libellé géré (reprise sans doublon)."""
+    for name in names:
+        menus = Menu.search([
+            ('website_id', '=', website.id),
+            ('parent_id', '=', root.id),
+            ('name', '=', name),
+        ], order='id')
+        if len(menus) <= 1:
+            continue
+        for extra in menus[1:]:
+            _unlink_menu(extra)
+
+
 def _cleanup_ck_catalogue_root_menus(env, website, root, Menu, eligible_categories):
     """Purge les entrées V2.2 / mega / orphelins sans détruire les racines catalogue.
 
@@ -618,13 +644,17 @@ def _cleanup_ck_catalogue_root_menus(env, website, root, Menu, eligible_categori
     """
     eligible_category_ids = set(eligible_categories.ids)
     eligible_names = set(eligible_categories.mapped('name'))
+    managed_fixed = MANAGED_CATALOGUE_FIXED_ROOT_NAMES | MANAGED_EDITORIAL_ROOT_NAMES
+
+    # S6-B1 : une seule racine par libellé fixe / éditorial avant conservation.
+    _dedupe_managed_root_menus_by_name(Menu, website, root, managed_fixed)
 
     for m in Menu.search([
         ('website_id', '=', website.id),
         ('parent_id', '=', root.id),
     ]):
-        # Racines fixes V3 — conserver, dépouiller le chrome V2.2
-        if m.name in MANAGED_CATALOGUE_FIXED_ROOT_NAMES:
+        # Racines fixes V3 (catalogue + éditorial) — conserver, dépouiller le chrome V2.2
+        if m.name in managed_fixed:
             _strip_v22_menu_chrome(m)
             continue
 
@@ -643,7 +673,7 @@ def _cleanup_ck_catalogue_root_menus(env, website, root, Menu, eligible_categori
             _unlink_menu(m)
             continue
 
-        # Libellés V2.2 hors catalogue (Tous nos produits, Nos producteurs, Communauté…)
+        # Libellés V2.2 hors catalogue (Tous nos produits, Nos producteurs, Coffrets…)
         if m.name in MANAGED_V22_ROOT_NAMES:
             _unlink_menu(m)
             continue
@@ -720,8 +750,8 @@ def _assign_managed_root_sequences_atomic(
 
     Priorité explicite (arbitrage Dev après NO GO Garant sur 6afb44d) :
 
-    1. Les créneaux réservés ``{10, 60, 70}`` appartiennent aux racines fixes
-       Boutique / Producteurs / Professionnels — toujours imposés.
+    1. Les créneaux réservés ``{10, 55, 60, 70}`` appartiennent aux racines fixes
+       Boutique / Communauté / Producteurs / Professionnels — toujours imposés.
     2. Une personnalisation BO de *catégorie* est préservée seulement si elle
        reste unique dans le plan final et hors créneaux réservés.
     3. Toute collision (y compris cascade du type Producteurs→60 ∩ rayon BO=60)
@@ -737,6 +767,14 @@ def _assign_managed_root_sequences_atomic(
     ], limit=1)
     if boutique:
         targets[boutique] = NAV_CATALOGUE_BOUTIQUE_SEQUENCE
+
+    communaute = Menu.search([
+        ('website_id', '=', website.id),
+        ('parent_id', '=', root.id),
+        ('name', '=', NAV_COMMUNAUTE_LABEL),
+    ], limit=1)
+    if communaute:
+        targets[communaute] = NAV_CATALOGUE_COMMUNAUTE_SEQUENCE
 
     producteurs = Menu.search([
         ('website_id', '=', website.id),
@@ -860,6 +898,16 @@ def sync_ck_catalogue_navigation_for_website(env, website):
             preserve_existing_sequence=True,
         )
         sequence += NAV_CATALOGUE_SEQUENCE_STEP
+
+    # 3bis. S6-B1 — Communauté (racine éditoriale V3, URL placeholder #)
+    _upsert_menu(
+        Menu,
+        website=website,
+        parent=root,
+        name=NAV_COMMUNAUTE_LABEL,
+        url=NAV_COMMUNAUTE_URL,
+        sequence=NAV_CATALOGUE_COMMUNAUTE_SEQUENCE,
+    )
 
     # 4. Producteurs — créneau réservé 60 (réaffirmé ensuite par l'assignation atomique)
     _upsert_menu(
