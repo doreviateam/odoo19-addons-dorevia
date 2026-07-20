@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+      Option B / soft-launch — masquer le CTA public de connexion mobile/natif.
+      Effet actif UNIQUEMENT si website.ck_preprod_guard_runtime_active().
+
+      Le CTA desktop ck-header__account-link est retiré dans le dépôt thème
+      (dorevia_ck_theme / website_header_h1_2.xml).
+
+      Ne pas supprimer portal.placeholder_user_sign_in : ancrage XPath
+      (wishlist mobile, sélecteur langue). On masque uniquement le lien rendu
+      par portal.user_sign_in.
+    -->
+
+    <template id="ck_soft_launch_hide_user_sign_in"
+              inherit_id="portal.user_sign_in"
+              name="CK Soft-launch — hide portal Sign in"
+              priority="99">
+        <!--
+          Le <li> porte déjà groups="base.group_public".
+          On ajoute t-if sous garde runtime (combinaison AND avec groups),
+          plutôt que de remplacer une condition amont sur le <a>.
+          Le nœud portal.placeholder_user_sign_in reste en place (ancrages mobile).
+        -->
+        <xpath expr="//li[.//a[contains(@t-attf-href, '/web/login') or contains(@t-att-href, '/web/login') or contains(@href, '/web/login')]]" position="attributes">
+            <attribute name="t-if">not website.ck_preprod_guard_runtime_active()</attribute>
+        </xpath>
+    </template>
+</odoo>
