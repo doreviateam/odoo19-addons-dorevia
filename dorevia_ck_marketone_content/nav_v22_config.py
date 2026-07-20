@@ -23,6 +23,8 @@ NAV_MAISON_LABEL = 'Soin & Bien-être'
 LEGACY_NAV_MAISON_LABEL = 'Maison & Bien-être'  # ancien libellé N3 — retiré du header
 NAV_ARTISANAT_LABEL = 'Artisanat'
 NAV_COMMUNAUTE_LABEL = 'Communauté'
+# S6-B2bis : libellé technique racine website_blog (purge chirurgicale, pas LEGACY).
+NAV_BLOG_DEFAULT_LABEL = 'Blog'
 NAV_COMMUNAUTE_URL = '#'
 # S6-B2 — enfants gérés de Communauté (child_menus V3)
 NAV_COMMUNAUTE_MAGAZINE_LABEL = 'Magazine'
