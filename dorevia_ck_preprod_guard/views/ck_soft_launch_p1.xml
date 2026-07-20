@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+      R3-3 / P1-A + P1-CTA-ABSENT — garde runtime (r-3a / N-3)
+      Effet actif UNIQUEMENT si website.ck_preprod_guard_runtime_active() == True.
+      Hors préprod CK : rendu CTA standard Odoo/CK, sans bandeau ni bouton désactivé.
+    -->
+    <template id="ck_soft_launch_p1_hide_purchase"
+              inherit_id="website_sale.product"
+              name="CK Soft-launch — bandeau commande en ligne indisponible"
+              priority="99">
+        <xpath expr="//t[@t-call='website_sale.cta_wrapper']" position="replace">
+            <t t-if="website.ck_preprod_guard_runtime_active()">
+                <div class="alert alert-warning text-center ck-soft-launch-banner my-3"
+                     role="status"
+                     data-ck-soft-launch="p1-a">
+                    Vitrine préproduction — commande en ligne indisponible
+                </div>
+                <!-- Stub pour VariantMixin / website_sale_stock (évite classList sur null). -->
+                <div id="o_wsale_cta_wrapper" class="d-none" aria-hidden="true"/>
+            </t>
+            <t t-else="">
+                <!-- Appel standard du template (pas une boucle : le nœud t-call a déjà été remplacé) -->
+                <t t-call="website_sale.cta_wrapper"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!--
+      Filet si cta_wrapper est rendu hors du chemin product ci-dessus.
+      Hors garde : l'ancre #add_to_cart d'origine reste intacte (pas de markup de substitution).
+      En garde : l'ancre est masquée via t-if ; message soft-launch ajouté après.
+    -->
+    <template id="ck_soft_launch_cta_wrapper_guard"
+              inherit_id="website_sale.cta_wrapper"
+              name="CK Soft-launch — neutralise add_to_cart"
+              priority="99">
+        <xpath expr="//a[@id='add_to_cart']" position="attributes">
+            <attribute name="t-if">not website.ck_preprod_guard_runtime_active()</attribute>
+        </xpath>
+        <xpath expr="//a[@id='add_to_cart']" position="after">
+            <div t-if="website.ck_preprod_guard_runtime_active()"
+                 class="ck-soft-launch-no-cart"
+                 data-ck-soft-launch="p1-cta-absent"
+                 role="status">
+                <span class="text-muted">Commande en ligne indisponible</span>
+            </div>
+        </xpath>
+    </template>
+</odoo>
