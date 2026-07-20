@@ -24,6 +24,13 @@ LEGACY_NAV_MAISON_LABEL = 'Maison & Bien-être'  # ancien libellé N3 — retir�
 NAV_ARTISANAT_LABEL = 'Artisanat'
 NAV_COMMUNAUTE_LABEL = 'Communauté'
 NAV_COMMUNAUTE_URL = '#'
+# S6-B2 — enfants gérés de Communauté (child_menus V3)
+NAV_COMMUNAUTE_MAGAZINE_LABEL = 'Magazine'
+NAV_COMMUNAUTE_RECETTES_LABEL = 'Recettes'
+NAV_COMMUNAUTE_MAGAZINE_SEQUENCE = 10
+NAV_COMMUNAUTE_RECETTES_SEQUENCE = 20
+XMLID_CK_BLOG_MAGAZINE = 'dorevia_ck_marketone_content.ck_blog_magazine'
+XMLID_CK_BLOG_RECETTES = 'dorevia_ck_marketone_content.ck_blog_recettes'
 LEGACY_NAV_COUPS_LABEL = 'Coups de cœur'  # ancienne entrée N3 — retirée du header
 NAV_COFFRETS_LABEL = 'Coffrets'
 NAV_PRODUCTEURS_LABEL = 'Nos producteurs'

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "C-Kreyol Marketone — Contenu démo",
-    "version": "19.0.1.102.0",
+    "version": "19.0.1.103.0",
     "category": "Website/Website",
     "summary": "Seed contenu CK Marketone — pages CMS, catalogue pilote, newsletter",
     "description": """
@@ -24,6 +24,7 @@
         "website_crm",
         "mass_mailing",
         "website_mass_mailing",
+        "website_blog",
     ],
     "data": [
         "security/ir.model.access.csv",
@@ -58,6 +59,7 @@
         "data/website_sale_config.xml",
         "data/website_cookies_config.xml",
         "data/ck_cron.xml",
+        "data/ck_blog_communaute.xml",
     ],
     "installable": True,
     "application": False,
