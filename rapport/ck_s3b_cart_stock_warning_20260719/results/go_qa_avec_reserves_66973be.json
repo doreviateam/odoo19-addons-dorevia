@@ -1,0 +1,362 @@
+{
+  "ticket": "S3-B-QA",
+  "generated_at": "2026-07-19T20:50:23Z",
+  "base_url": "http://127.0.0.1:18081",
+  "browser": "Chromium (Playwright)",
+  "identity": {
+    "sha": "66973befa34924fd4c0e2c78c5b661ebb5f86bea",
+    "sha_ok": true,
+    "version": "19.0.1.101.0",
+    "version_ok": true,
+    "js_blob": "121cd439c359b2dab3244db48e471905c9ab7a97",
+    "js_blob_ok": true,
+    "git_status_short": "",
+    "git_clean": true,
+    "identity_gate": true
+  },
+  "scenarios": {
+    "preflight": {
+      "home": {
+        "url": "http://127.0.0.1:18081/",
+        "html_lang": "fr-FR",
+        "status_ok": true,
+        "assertShowWarningApi_in_console": false,
+        "ck_service_error": false
+      },
+      "shop": {
+        "url": "http://127.0.0.1:18081/shop",
+        "html_lang": "fr-FR",
+        "status_ok": true,
+        "assertShowWarningApi_in_console": false,
+        "ck_service_error": false
+      },
+      "product": {
+        "url": "http://127.0.0.1:18081/shop/s3b-qa-product-a-4",
+        "html_lang": "fr-FR",
+        "status_ok": true,
+        "assertShowWarningApi_in_console": false,
+        "ck_service_error": false
+      },
+      "cart_empty": {
+        "url": "http://127.0.0.1:18081/shop/cart",
+        "html_lang": "fr-FR",
+        "status_ok": true,
+        "assertShowWarningApi_in_console": false,
+        "ck_service_error": false
+      }
+    },
+    "preflight_capture": "rapport/ck_s3b_qa_browser_20260719/captures/preflight_cart_empty.png",
+    "main_fr": {
+      "qty_requested": "9",
+      "qty_before": "1",
+      "qty_after": "2",
+      "product_id": 4,
+      "rpc_url": "http://127.0.0.1:18081/shop/cart/update",
+      "rpc_status": 200,
+      "rpc_quantity": 2.0,
+      "rpc_warning": "Vous avez demandé 9, mais seulement 2 est disponible actuellement.",
+      "rpc_cart_quantity": 2,
+      "toast_texts": [
+        "Vous avez demandé 9, mais seulement 2 est disponible actuellement."
+      ],
+      "toast_count_visible": 1,
+      "toast_count": 1,
+      "banner_count": 0,
+      "scenario": "main_existing_line_fr",
+      "product": "A",
+      "stock_available": 2,
+      "html_lang": "fr-FR",
+      "capture_toast": "rapport/ck_s3b_qa_browser_20260719/captures/desktop_fr_toast.png",
+      "capture_no_banner": "rapport/ck_s3b_qa_browser_20260719/captures/desktop_fr_no_banner.png",
+      "no_hardcoded_unites": true,
+      "fr_message": true,
+      "no_english_source": true,
+      "requested_in_text": true,
+      "available_in_text": true,
+      "quantity_capped": true,
+      "input_updated": true
+    },
+    "main_en": {
+      "qty_requested": "9",
+      "qty_before": "1",
+      "qty_after": "2",
+      "product_id": 4,
+      "rpc_url": "http://127.0.0.1:18081/shop/cart/update",
+      "rpc_status": 200,
+      "rpc_quantity": 2.0,
+      "rpc_warning": "You requested 9, but only 2 is currently available.",
+      "rpc_cart_quantity": 2,
+      "toast_texts": [
+        "You requested 9, but only 2 is currently available."
+      ],
+      "toast_count_visible": 1,
+      "toast_count": 1,
+      "banner_count": 0,
+      "scenario": "main_existing_line_en",
+      "lang": "en",
+      "html_lang": "en-US",
+      "capture_toast": "rapport/ck_s3b_qa_browser_20260719/captures/desktop_en_toast.png",
+      "en_message": true,
+      "no_french": true,
+      "requested_in_text": true,
+      "available_in_text": true,
+      "quantity_capped": true
+    },
+    "multiline": {
+      "lines_before": 2,
+      "line_a": {
+        "qty_requested": "9",
+        "qty_before": "1",
+        "qty_after": "2",
+        "product_id": 4,
+        "rpc_url": "http://127.0.0.1:18081/shop/cart/update",
+        "rpc_status": 200,
+        "rpc_quantity": 2.0,
+        "rpc_warning": "Vous avez demandé 9, mais seulement 2 est disponible actuellement.",
+        "rpc_cart_quantity": 3,
+        "toast_texts": [
+          "Vous avez demandé 9, mais seulement 2 est disponible actuellement."
+        ],
+        "toast_count_visible": 1,
+        "toast_count": 1,
+        "banner_count": 0
+      },
+      "line_b": {
+        "qty_requested": "9",
+        "qty_before": "1",
+        "qty_after": "3",
+        "product_id": 5,
+        "rpc_url": "http://127.0.0.1:18081/shop/cart/update",
+        "rpc_status": 200,
+        "rpc_quantity": 3.0,
+        "rpc_warning": "Vous avez demandé 9, mais seulement 3 est disponible actuellement.",
+        "rpc_cart_quantity": 5,
+        "toast_texts": [
+          "Vous avez demandé 9, mais seulement 2 est disponible actuellement.",
+          "Vous avez demandé 9, mais seulement 3 est disponible actuellement."
+        ],
+        "toast_count_visible": 2,
+        "toast_count": 1,
+        "banner_count": 0
+      },
+      "rapid": {
+        "clicks": 0
+      },
+      "capture": "rapport/ck_s3b_qa_browser_20260719/captures/desktop_multiline.png",
+      "banner_count": 0,
+      "toast_a": 1,
+      "toast_b": 1,
+      "lost_warning": false,
+      "duplicate_warning": false,
+      "cross_line_confusion": false,
+      "after_refresh": [
+        {
+          "product_id": "4",
+          "qty": "2"
+        },
+        {
+          "product_id": "5",
+          "qty": "3"
+        }
+      ],
+      "line_A_correct": true,
+      "line_B_correct": true,
+      "server_dom_desync": false
+    },
+    "rapid_same_line": {
+      "rpc_count": 4,
+      "warnings": 2,
+      "last": {
+        "qty_requested": "8",
+        "qty_before": "1",
+        "qty_after": "2",
+        "product_id": 4,
+        "rpc_url": "http://127.0.0.1:18081/shop/cart/update",
+        "rpc_status": 200,
+        "rpc_quantity": 2.0,
+        "rpc_warning": "Vous avez demandé 8, mais seulement 2 est disponible actuellement.",
+        "rpc_cart_quantity": 2,
+        "toast_texts": [
+          "Vous avez demandé 8, mais seulement 2 est disponible actuellement."
+        ],
+        "toast_count_visible": 1,
+        "toast_count": 1,
+        "banner_count": 0
+      },
+      "capture": "rapport/ck_s3b_qa_browser_20260719/captures/desktop_rapid_same_line.png"
+    },
+    "delete": {
+      "lines_before": 1,
+      "lines_after": 0,
+      "toast_parasite": 0,
+      "banner_count": 0,
+      "capture": "rapport/ck_s3b_qa_browser_20260719/captures/desktop_after_delete.png"
+    },
+    "a5_new_product": {
+      "product": "C",
+      "stock": 1,
+      "rpc_warning": "",
+      "rpc_quantity": 1,
+      "toast_texts": [
+        "1\nS3B-QA Product C\n$ 10,00\nVoir le panier",
+        "Vous souhaitez 5 produits mais seulement 1 sont disponibles."
+      ],
+      "banner_count": 0,
+      "capture": "rapport/ck_s3b_qa_browser_20260719/captures/desktop_a5_new_product.png",
+      "message_location": "add_to_cart_flow",
+      "lang": "fr-FR",
+      "qty_in_cart": "1"
+    },
+    "uom_non_unit_test": "not_applicable",
+    "mobile_main": {
+      "qty_requested": "9",
+      "qty_before": "1",
+      "qty_after": "2",
+      "product_id": 4,
+      "rpc_url": "http://127.0.0.1:18081/shop/cart/update",
+      "rpc_status": 200,
+      "rpc_quantity": 2.0,
+      "rpc_warning": "Vous avez demandé 9, mais seulement 2 est disponible actuellement.",
+      "rpc_cart_quantity": 2,
+      "toast_texts": [
+        "Vous avez demandé 9, mais seulement 2 est disponible actuellement."
+      ],
+      "toast_count_visible": 1,
+      "toast_count": 1,
+      "banner_count": 0,
+      "capture": "rapport/ck_s3b_qa_browser_20260719/captures/mobile_390_main.png",
+      "quantity_capped": true
+    },
+    "mobile_multiline": {
+      "lines": 2,
+      "a": {
+        "qty_requested": "9",
+        "qty_before": "1",
+        "qty_after": "2",
+        "product_id": 4,
+        "rpc_url": "http://127.0.0.1:18081/shop/cart/update",
+        "rpc_status": 200,
+        "rpc_quantity": 2.0,
+        "rpc_warning": "Vous avez demandé 9, mais seulement 2 est disponible actuellement.",
+        "rpc_cart_quantity": 3,
+        "toast_texts": [
+          "Vous avez demandé 9, mais seulement 2 est disponible actuellement."
+        ],
+        "toast_count_visible": 1,
+        "toast_count": 1,
+        "banner_count": 0
+      },
+      "b": {
+        "qty_requested": "9",
+        "qty_before": "1",
+        "qty_after": "3",
+        "product_id": 5,
+        "rpc_url": "http://127.0.0.1:18081/shop/cart/update",
+        "rpc_status": 200,
+        "rpc_quantity": 3.0,
+        "rpc_warning": "Vous avez demandé 9, mais seulement 3 est disponible actuellement.",
+        "rpc_cart_quantity": 5,
+        "toast_texts": [
+          "Vous avez demandé 9, mais seulement 2 est disponible actuellement.",
+          "Vous avez demandé 9, mais seulement 3 est disponible actuellement."
+        ],
+        "toast_count_visible": 2,
+        "toast_count": 1,
+        "banner_count": 0
+      },
+      "capture": "rapport/ck_s3b_qa_browser_20260719/captures/mobile_390_multiline.png",
+      "banner_count": 0
+    }
+  },
+  "console_errors": [],
+  "verdict": "GO_QA_AVEC_RESERVES",
+  "context": {
+    "ticket": "S3-B-QA",
+    "generated_at": "2026-07-19T20:31:55Z",
+    "database": "ck_s3b_qa1",
+    "langs": {
+      "fr_FR": true,
+      "en_US": true
+    },
+    "website_id": 1,
+    "products": {
+      "A": {
+        "template_id": 4,
+        "product_id": 4,
+        "name": "S3B-QA Product A",
+        "stock_configured": 2,
+        "free_qty": 2.0,
+        "uom": "Units",
+        "website_url": "/shop/s3b-qa-product-a-4"
+      },
+      "B": {
+        "template_id": 5,
+        "product_id": 5,
+        "name": "S3B-QA Product B",
+        "stock_configured": 3,
+        "free_qty": 3.0,
+        "uom": "Units",
+        "website_url": "/shop/s3b-qa-product-b-5"
+      },
+      "C": {
+        "template_id": 6,
+        "product_id": 6,
+        "name": "S3B-QA Product C",
+        "stock_configured": 1,
+        "free_qty": 1.0,
+        "uom": "Units",
+        "website_url": "/shop/s3b-qa-product-c-6"
+      }
+    }
+  },
+  "console_errors_desktop": [],
+  "stock_reset_mobile": "S3B-QA Product A 2.0\nS3B-QA Product B 3.0\nS3B-QA Product C 1.0\nstock_reset_ok\n",
+  "console_errors_mobile": [],
+  "checks": {
+    "identity": true,
+    "warning_payload": true,
+    "toast_one": true,
+    "no_banner": true,
+    "qty_capped": true,
+    "fr_ok": true,
+    "en_ok": true,
+    "multi_ok": true,
+    "delete_ok": true,
+    "mobile_ok": true,
+    "no_console": true
+  },
+  "reserves": [
+    "uom_non_unit_not_applicable",
+    "a5_formulation_difference",
+    "hoot_reproducibility_backlog"
+  ],
+  "qa_completed_at": "2026-07-19T20:52:44Z",
+  "sealed": {
+    "sha": "66973befa34924fd4c0e2c78c5b661ebb5f86bea",
+    "parent": "e9fd4c6faefd124d9238b0057a950c12d898aa86",
+    "version": "19.0.1.101.0",
+    "js_blob": "121cd439c359b2dab3244db48e471905c9ab7a97",
+    "branch": "refactor/s3-cart-stock-warning"
+  },
+  "environment": {
+    "base_url": "http://127.0.0.1:18081",
+    "database": "ck_s3b_qa1",
+    "container": "ck_s3b_qa_odoo",
+    "browser": "Chromium (Playwright)",
+    "viewports": {
+      "desktop": "1280x800",
+      "mobile": "390x844"
+    },
+    "destroyed_after_qa": true,
+    "destroyed_at": "2026-07-19T20:53:24Z"
+  },
+  "gate_multiline": {
+    "line_A_correct": true,
+    "line_B_correct": true,
+    "cross_line_confusion": false,
+    "lost_warning": false,
+    "duplicate_warning": false,
+    "server_dom_desync": false,
+    "console_errors": 0
+  }
+}

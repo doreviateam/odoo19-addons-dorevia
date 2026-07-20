@@ -1,0 +1,21 @@
+# Translation file for dorevia_ck_marketone_content
+# Copyright (C) 2026 Dorevia
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dorevia_ck_marketone_content 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-07-19 18:00+0200\n"
+"Last-Translator: Dorevia <contact@dorevia.fr>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: dorevia_ck_marketone_content
+#. odoo-python
+#: code:addons/dorevia_ck_marketone_content/models/sale_order_line.py:0
+msgid "You requested %(requested_qty)s, but only %(available_qty)s is currently available."
+msgstr "Vous avez demandé %(requested_qty)s, mais seulement %(available_qty)s est disponible actuellement."

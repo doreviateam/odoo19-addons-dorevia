@@ -1,0 +1,39 @@
+{
+  "ticket": "S3-B-QA",
+  "generated_at": "2026-07-19T20:31:55Z",
+  "database": "ck_s3b_qa1",
+  "langs": {
+    "fr_FR": true,
+    "en_US": true
+  },
+  "website_id": 1,
+  "products": {
+    "A": {
+      "template_id": 4,
+      "product_id": 4,
+      "name": "S3B-QA Product A",
+      "stock_configured": 2,
+      "free_qty": 2.0,
+      "uom": "Units",
+      "website_url": "/shop/s3b-qa-product-a-4"
+    },
+    "B": {
+      "template_id": 5,
+      "product_id": 5,
+      "name": "S3B-QA Product B",
+      "stock_configured": 3,
+      "free_qty": 3.0,
+      "uom": "Units",
+      "website_url": "/shop/s3b-qa-product-b-5"
+    },
+    "C": {
+      "template_id": 6,
+      "product_id": 6,
+      "name": "S3B-QA Product C",
+      "stock_configured": 1,
+      "free_qty": 1.0,
+      "uom": "Units",
+      "website_url": "/shop/s3b-qa-product-c-6"
+    }
+  }
+}
