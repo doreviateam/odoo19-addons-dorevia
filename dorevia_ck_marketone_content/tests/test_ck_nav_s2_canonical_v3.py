@@ -142,6 +142,12 @@ class TestCkNavS2CanonicalV3(TransactionCase):
             self.assertIn('/shop/category/', child.url or '')
 
     def test_s2_no_residual_v22_labels(self):
+        # Nettoyer d'éventuels doublons Communauté avant injection V2.2.
+        self.Menu.search([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.root.id),
+            ('name', '=', NAV_COMMUNAUTE_LABEL),
+        ]).unlink()
         for name in (NAV_COMMUNAUTE_LABEL, NAV_ESPACE_PRO_LABEL, NAV_PRODUCTEURS_LABEL):
             self.Menu.create({
                 'name': name,
@@ -153,10 +159,21 @@ class TestCkNavS2CanonicalV3(TransactionCase):
                 'ck_nav_css_class': 'ck-nav-n3-rayon',
             })
         self._sync()
-        self.assertFalse(self._root_menu(NAV_COMMUNAUTE_LABEL))
+        # S6-B1 : Communauté reprise comme racine éditoriale V3 (chrome V2.2 retiré).
+        communaute = self._root_menu(NAV_COMMUNAUTE_LABEL)
+        self.assertTrue(communaute)
+        self.assertFalse(communaute.is_mega_menu)
         self.assertFalse(self._root_menu(NAV_ESPACE_PRO_LABEL))
         self.assertFalse(self._root_menu(NAV_PRODUCTEURS_LABEL))  # « Nos producteurs »
         self.assertTrue(self._root_menu(NAV_CATALOGUE_PRODUCTEURS_LABEL))
+        self.assertEqual(
+            self.Menu.search_count([
+                ('website_id', '=', self.website.id),
+                ('parent_id', '=', self.root.id),
+                ('name', '=', NAV_COMMUNAUTE_LABEL),
+            ]),
+            1,
+        )
 
     def test_s2_archived_category_absent(self):
         self._sync()

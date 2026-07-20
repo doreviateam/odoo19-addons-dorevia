@@ -75,6 +75,7 @@ from . import test_ck_nav_catalogue_sync
 from . import test_ck_nav_catalogue_split_link
 from . import test_ck_nav_s2_canonical_v3
 from . import test_ck_nav_s2_root_sequences
+from . import test_ck_nav_s6b1_communaute_v3
 from . import test_ck_catalog_exposure
 from . import test_ck_footer_boutique_links
 from . import test_ck_catalog_qualification

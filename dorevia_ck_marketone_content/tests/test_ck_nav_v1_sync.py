@@ -108,8 +108,14 @@ class TestCkNavV1Sync(TransactionCase):
             'Épicerie catalogue doit survivre à bootstrap_ck_navigation_v1',
         )
 
-    def test_v1_communaute_removed(self):
-        self.Menu.create({
+    def test_v1_communaute_kept_as_v3_root(self):
+        """V1 délègue à V3 : Communauté devient racine éditoriale (S6-B1)."""
+        self.Menu.search([
+            ('website_id', '=', self.website.id),
+            ('parent_id', '=', self.root.id),
+            ('name', '=', 'Communauté'),
+        ]).unlink()
+        existing = self.Menu.create({
             'name': 'Communauté',
             'url': '#',
             'website_id': self.website.id,
@@ -117,7 +123,10 @@ class TestCkNavV1Sync(TransactionCase):
             'sequence': 999,
         })
         sync_ck_navigation_v1_for_website(self.env, self.website)
-        self.assertFalse(self._menu_by_name('Communauté'))
+        menu = self._menu_by_name('Communauté')
+        self.assertTrue(menu)
+        self.assertEqual(menu.id, existing.id)
+        self.assertEqual(menu.sequence, 55)
 
     def test_v1_espace_pro_removed(self):
         self.Menu.create({
