@@ -46,6 +46,7 @@ from .nav_v22_config import (
     NAV_CATALOGUE_SEQUENCE_STEP,
     NAV_COFFRETS_LABEL,
     LEGACY_NAV_COUPS_LABEL,
+    NAV_BLOG_DEFAULT_LABEL,
     NAV_COMMUNAUTE_LABEL,
     NAV_COMMUNAUTE_MAGAZINE_LABEL,
     NAV_COMMUNAUTE_MAGAZINE_SEQUENCE,
@@ -709,6 +710,19 @@ def _cleanup_ck_catalogue_root_menus(env, website, root, Menu, eligible_categori
         # Libellés V2.2 hors catalogue (Tous nos produits, Nos producteurs, Coffrets…)
         if m.name in MANAGED_V22_ROOT_NAMES:
             _unlink_menu(m)
+            continue
+
+        # S6-B2bis : purge chirurgicale racine technique Blog → /blog (hors géré CK).
+        # Après conservation fixed/éditorial/catégories ; avant orphelins legacy/mega/CSS.
+        # continue : un Blog /blog marqué CK ne doit pas tomber dans le purge orphelin CSS.
+        if m.name == NAV_BLOG_DEFAULT_LABEL and (m.url or '').rstrip('/') == '/blog':
+            if (
+                not m.ck_nav_category_id
+                and 'ck-nav-' not in (m.ck_nav_css_class or '')
+                and m.name not in MANAGED_CATALOGUE_FIXED_ROOT_NAMES
+                and m.name not in MANAGED_EDITORIAL_ROOT_NAMES
+            ):
+                _unlink_menu(m)
             continue
 
         # Orphelins legacy / mega / CSS ck-nav
