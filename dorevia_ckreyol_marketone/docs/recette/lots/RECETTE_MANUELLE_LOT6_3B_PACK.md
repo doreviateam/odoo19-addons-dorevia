@@ -8,8 +8,8 @@
 | **ADR** | [ADR-034](../../cadrage/DECISIONS.md#adr-034--arbitrage-architecture-cadrage2-socle-odoo-natif) · [ADR-035](../../cadrage/DECISIONS.md#adr-035--activation-product_pack-lot-63b-kits--coffrets) |
 | **Base** | `ckr-marketone-01` |
 | **URL shop** | http://localhost:18079/shop |
-| **Version module** | `19.0.18.0.0` |
-| **Statut recette** | **Clôturée — GO MOA** (2026-06-08) |
+| **Version module** | `19.0.19.0.1` |
+| **Statut recette** | **Clôturée — GO navigateur MOA** (2026-06-14) · voir [`RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md`](./RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md) |
 | **Réception MOA** | [`RECEPTION_MOA_LOT6_3B_PACK.md`](../../cadrage2/RECEPTION_MOA_LOT6_3B_PACK.md) — **GO clôture MOA** |
 
 ---
@@ -63,6 +63,16 @@ docker exec -i sandbox-odoo19-odoo-1 odoo shell -d ckr-marketone-01 --no-http \
 | K8 | Portes promo / featured / origin → 200 · non-régression | **OK** |
 | N1–N3 | Header Kits + Promotions · pas de chip porte dans filtre actif | **OK** |
 | R1–R4 | `/shop`, facettes, images, panier/checkout smoke (pack **7** = 1 ligne) | **OK** |
+
+## Arbitrages MOA — recette navigateur 2026-06-14
+
+| Sujet | Décision |
+|-------|----------|
+| **K6** | Accepté **non rejoué** — manipulation BO `pack_ok` couverte 2026-06-08 |
+| **N2** | Cohabitation chips Promotions + Kits · **OK release 6.3** |
+| **Clôture** | [`RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md`](./RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md) |
+
+---
 
 ## En-tête obligatoire (ADR-034 / ADR-035)
 

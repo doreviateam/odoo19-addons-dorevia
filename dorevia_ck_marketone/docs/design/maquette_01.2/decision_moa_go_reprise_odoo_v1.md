@@ -3,7 +3,7 @@
 | Champ | Valeur |
 |-------|--------|
 | **Projet** | `dorevia_ck_marketone` |
-| **Statut** | **Chantier A : session A1 ouverte · verdict A1 en attente · Chantier B : PR #62 mergée (B1) · recettes navigateur 6.3/SEO en attente · A7 doc validée · GO A7 après A1** |
+| **Statut** | **Chantier A : session A1 ouverte · verdict A1 en attente · Chantier B : navigateur clôturé MOA 2026-06-14 · A7 doc validée · GO A7 après A1** |
 | **Date acte §5decies GO Phase 9** | **2026-06-14** |
 | **Date clôture Phase 9 MOA** | **2026-06-14** |
 | **Date clôture Phase 7 MOA** | **2026-06-14** |
@@ -1646,6 +1646,19 @@ Merge : https://github.com/doreviateam/odoo19-addons-dorevia/pull/62 — MERGED 
 Ne vaut PAS clôture MOA lots 6.3a / 6.3b / SEO.
 Suite : recettes navigateur RECETTE_MANUELLE_LOT6_3A_PROMO · LOT6_3B_PACK · SEO portes shop.
 Indépendant Chantier A · pas de mélange avec Phase 10 CK.
+Validé par : MOA CK · 2026-06-14
+```
+
+### Acte MOA — Chantier B · GO clôture navigateur · **ACTÉ 2026-06-14**
+
+```text
+Chantier B — dorevia_ckreyol_marketone · ckr-marketone-01 · 19.0.19.0.1.
+GO clôture navigateur : 6.3a Promotions · 6.3b Kits & Coffrets · SEO portes/shop.
+Recette : tests 39/39 OK · proxy HTTP 56/56 OK · aucun écart bloquant.
+Arbitrages : N2 OK release 6.3 (chips cohabitants) · P4/P6/K6 acceptés non rejoués.
+Rapport : dorevia_ckreyol_marketone/docs/recette/lots/RAPPORT_RECETTE_NAVIGATEUR_CHANTIER_B_20260614.md
+Indépendant Chantier A · lot contenu légal local · pas de dev complémentaire.
+Commit docs : en attente acte MOA dédié.
 Validé par : MOA CK · 2026-06-14
 ```
 
